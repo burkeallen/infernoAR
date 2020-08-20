@@ -3,7 +3,7 @@ let ntarDirectoryCategories = [];
 let ntarDirectoryList = [];
 let ntarCategoryList = [];
 
-const loadScript = src => {
+const loadScript = (src) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script')
     script.type = 'text/javascript'
