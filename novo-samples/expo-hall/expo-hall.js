@@ -1,5 +1,8 @@
-console.log('loading the external JS file');
-alert('hello world');
+
+fetch("test.json")
+  .then(response => response.json())
+  .then(json => console.log(json));
+
 
 var ntarDirectoryCategories = [
   {name: 'Category 1', filter: 'category1'},

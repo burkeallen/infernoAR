@@ -1,10 +1,11 @@
 <!-- Directory Definitions -->
 <!--<script src="expo-hall.js"></script>-->
-<script src="https://raw.githubusercontent.com/novologic/infernoAR/master/novo-samples/expo-hall/expo-hall.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/novologic/infernoAR@master/novo-samples/expo-hall/expo-hall.js"></script>
 <!-- Styles -->
-<!--<link rel="stylesheet" href="expo-hall.css"></link>-->
-<link rel="stylesheet" href="https://raw.githubusercontent.com/novologic/infernoAR/master/novo-samples/expo-hall/expo-hall.css"></link>
+<!--<link rel="stylesheet" href="expo-hall.css" />-->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/novologic/infernoAR@master/novo-samples/expo-hall/expo-hall.css">
 
+<body>
 <!-- Background Frame (No Content) -->
 <div class="ntar-landing-bg"></div>
 <!-- ./ Background Frame -->
@@ -469,91 +470,9 @@
   <!-- <div style="background-color: blue; min-height: 1500px; width: 32px;"></div> -->
 </div>
 <!-- ./ Page Content Container -->
+</body>
 
-<!-- Category Selection and Search -->
-<script>
-  var ntarCategoryList = [];
 
-  function ntarGetItemList() {
-    return landingPageEl.querySelectorAll('.ntar-directory-card');
-  }
-
-  function ntarRefreshFilters() {
-    var cards = ntarGetItemList();
-    var noResultsDiv = landingPageEl.querySelector('#ntar-no-category-results');
-    var resultsCount = 0;
-    for (var x = 0; x < cards.length; x++) {
-      if (x < ntarDirectoryList.length) {
-        if (ntarCategoryList.includes(ntarDirectoryList[x].category)) {
-          cards[x].style.display = 'none';
-        } else {
-          cards[x].style.display = 'block';
-          resultsCount = resultsCount + 1;
-        }
-      } else {
-        cards[x].style.display = 'none';
-      }
-    }
-    if (resultsCount === 0) {
-      noResultsDiv.classList.add('is-active');
-    } else {
-      noResultsDiv.classList.remove('is-active');
-    }
-  }
-
-  function ntarToggleCategoryFilter(categoryNumber) {
-    var ntarCategoryButton = landingPageEl.querySelector('#ntar-cat-btn-' + categoryNumber);
-    if (ntarCategoryList.includes(ntarDirectoryCategories[categoryNumber].filter)) {
-      ntarCategoryList.splice(
-        ntarCategoryList.indexOf(ntarDirectoryCategories[categoryNumber].filter),
-        1
-      );
-      ntarCategoryButton.classList.remove('ntar-is-active');
-    } else {
-      ntarCategoryList.push(ntarDirectoryCategories[categoryNumber].filter);
-      ntarCategoryButton.classList.add('ntar-is-active');
-    }
-    ntarRefreshFilters();
-  }
-
-  function ntarResetCategoryFilter() {
-    ntarCategoryList = [];
-    var buttons = landingPageEl.querySelectorAll('.ntar-category-btn');
-    buttons.forEach(function (button) {
-      button.classList.remove('ntar-is-active');
-    });
-    ntarRefreshFilters();
-  }
-
-  function ntarInitializeCategories() {
-    var buttons = landingPageEl.querySelectorAll('.ntar-category-btn');
-    for (var x = 0; x < buttons.length; x++) {
-      if (x < ntarDirectoryCategories.length) {
-        buttons[x].innerText = ntarDirectoryCategories[x].name.toUpperCase();
-        buttons[x].id = 'ntar-cat-btn-' + x;
-        // ntarCategoryList.push(ntarDirectoryCategories[x].filter);
-      } else {
-        buttons[x].style.display = 'none';
-      }
-    }
-  }
-  function ntarInitializeDirectory() {
-    var cards = ntarGetItemList();
-    for (var x = 0; x < cards.length; x++) {
-      if (x < ntarDirectoryList.length) {
-        cards[x].id = 'ntar-dir-' + x;
-        var img = landingPageEl.querySelector('#ntar-dir-' + x + ' div img');
-        img.src = ntarDirectoryList[x].img;
-      } else {
-        cards[x].style.display = 'none';
-      }
-    }
-  }
-
-  ntarInitializeCategories();
-  setTimeout(ntarInitializeDirectory, 250);
-</script>
-<!-- ./ Category Selection and Search -->
 
 <!-- Banner Carousel Script -->
 <script>
