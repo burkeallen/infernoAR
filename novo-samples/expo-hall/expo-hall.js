@@ -1,3 +1,6 @@
+console.log('loading the external JS file');
+alert('hello world');
+
 var ntarDirectoryCategories = [
   {name: 'Category 1', filter: 'category1'},
   {name: 'Category 2', filter: 'category2'},
