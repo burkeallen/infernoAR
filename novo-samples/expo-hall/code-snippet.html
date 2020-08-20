@@ -1,0 +1,727 @@
+<!-- Directory Definitions -->
+<script src="expo-hall.js"></script>
+<!-- ./Directory Definitions -->
+
+
+
+<!-- Background Frame (No Content) -->
+<div class="ntar-landing-bg"></div>
+<!-- ./ Background Frame -->
+
+<!-- PDF Overlay Container -->
+<div class="ntar-pdf-view" id="pdf-blanket" onclick="javascript:void(closePDF());">
+  <a class="ntar-window-close" href="javascript:void(closePDF());">Close</a>
+  <iframe class="ntar-pdf-viewer" id="pdf-frame"></iframe>
+</div>
+<!-- ./ PDF Overlay Container -->
+
+<!-- Page Content Container -->
+<div class="ntar-landing-content">
+  <div class="ntar-banner-carousel-container">
+    <div id="ntar-banner-left">
+      <div class="ntar-arrow-button ntar-arrow-left">
+        <div class="ntar-arrow" id="ntar-aleft"></div>
+      </div>
+    </div>
+    <div id="ntar-banner-bottom">
+      <div class="ntar-banner-node ntar-is-active"></div>
+      <div class="ntar-banner-node"></div>
+      <div class="ntar-banner-node"></div>
+      <div class="ntar-banner-node"></div>
+    </div>
+    <div id="ntar-banner-right">
+      <div class="ntar-arrow-button ntar-arrow-right">
+        <div class="ntar-arrow" id="ntar-aright"></div>
+      </div>
+    </div>
+    <div class="ntar-banner-card ntar-banner-is-active">
+      <!-- <button class="ntar-banner-button" id="b1-booth-link">Booth Link</button>
+      <button class="ntar-banner-button" id="b1-direct-link">Direct Link</button> -->
+      <img
+          class="ntar-banner-img"
+          src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner1.jpg"
+      />
+    </div>
+    <div class="ntar-banner-card">
+      <img
+          class="ntar-banner-img"
+          src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner2.jpg"
+      />
+    </div>
+    <div class="ntar-banner-card">
+      <img
+          class="ntar-banner-img"
+          src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner3.png"
+      />
+    </div>
+    <div class="ntar-banner-card">
+      <img
+          class="ntar-banner-img"
+          src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner4.webp"
+      />
+    </div>
+    <!-- Leave this one alone! -->
+    <div class="ntar-banner-spacer">
+      <img
+          class="ntar-banner-img"
+          src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner1.jpg"
+      />
+    </div>
+    <!-- ./ Leave this one alone! -->
+  </div>
+  <div class="ntar-exhib-title-container">
+    <span class="ntar-exhib-title">EXHIBITORS DIRECTORY</span>
+    <div class="ntar-directory-search">
+      <input
+          class="ntar-directory-search-input"
+          id="exhib-search"
+          placeholder="Search Exhibitors"
+          oninput="ntarExhibSearchUpdate();"
+      />
+      <img
+          class="ntar-directory-search-icon"
+          alt=""
+          src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjMwLjIzOXB4IiBoZWlnaHQ9IjMwLjIzOXB4IiB2aWV3Qm94PSIwIDAgMzAuMjM5IDMwLjIzOSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzAuMjM5IDMwLjIzOTsiDQoJIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPHBhdGggZD0iTTIwLjE5NCwzLjQ2Yy00LjYxMy00LjYxMy0xMi4xMjEtNC42MTMtMTYuNzM0LDBjLTQuNjEyLDQuNjE0LTQuNjEyLDEyLjEyMSwwLDE2LjczNQ0KCQljNC4xMDgsNC4xMDcsMTAuNTA2LDQuNTQ3LDE1LjExNiwxLjM0YzAuMDk3LDAuNDU5LDAuMzE5LDAuODk3LDAuNjc2LDEuMjU0bDYuNzE4LDYuNzE4YzAuOTc5LDAuOTc3LDIuNTYxLDAuOTc3LDMuNTM1LDANCgkJYzAuOTc4LTAuOTc4LDAuOTc4LTIuNTYsMC0zLjUzNWwtNi43MTgtNi43MmMtMC4zNTUtMC4zNTQtMC43OTQtMC41NzctMS4yNTMtMC42NzRDMjQuNzQzLDEzLjk2NywyNC4zMDMsNy41NywyMC4xOTQsMy40NnoNCgkJIE0xOC4wNzMsMTguMDc0Yy0zLjQ0NCwzLjQ0NC05LjA0OSwzLjQ0NC0xMi40OTIsMGMtMy40NDItMy40NDQtMy40NDItOS4wNDgsMC0xMi40OTJjMy40NDMtMy40NDMsOS4wNDgtMy40NDMsMTIuNDkyLDANCgkJQzIxLjUxNyw5LjAyNiwyMS41MTcsMTQuNjMsMTguMDczLDE4LjA3NHoiLz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"
+      />
+      <img
+          alt="x"
+          class="ntar-directory-clear-icon"
+          onclick="javascript:void(ntarClearExhibSearch());"
+          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJmZWF0aGVyIGZlYXRoZXIteCI+PGxpbmUgeDE9IjE4IiB5MT0iNiIgeDI9IjYiIHkyPSIxOCI+PC9saW5lPjxsaW5lIHgxPSI2IiB5MT0iNiIgeDI9IjE4IiB5Mj0iMTgiPjwvbGluZT48L3N2Zz4="
+      />
+    </div>
+  </div>
+  <div class="ntar-featured-container">
+    <div class="ntar-featured-title">Featured</div>
+    <div class="ntar-featured-row">
+      <div class="ntar-feature-card">
+        <div class="ntar-feature-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/lg-booth-01.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+              onclick="javascript:void(loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/content/exhibition-demo/Inferno%20TradeShow%20Experience%20Condensed%20v2.pdf'));"
+          />
+        </div>
+        <div class="ntar-feature-shadow"></div>
+      </div>
+      <div class="ntar-feature-card">
+        <div class="ntar-feature-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/lg-booth-02.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+              onclick="javascript:void(loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/content/exhibition-demo/Inferno%20TradeShow%20Experience%20Condensed%20v2.pdf'));"
+          />
+        </div>
+        <div class="ntar-feature-shadow"></div>
+      </div>
+      <div class="ntar-feature-card ntar-feature-xl">
+        <div class="ntar-feature-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/xl-booth-01.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+              onclick="javascript:void(loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/content/exhibition-demo/Inferno%20TradeShow%20Experience%20Condensed%20v2.pdf'));"
+          />
+        </div>
+        <div class="ntar-feature-shadow"></div>
+      </div>
+      <div class="ntar-feature-card">
+        <div class="ntar-feature-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/lg-booth-03.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+              onclick="javascript:void(loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/content/exhibition-demo/Inferno%20TradeShow%20Experience%20Condensed%20v2.pdf'));"
+          />
+        </div>
+        <div class="ntar-feature-shadow"></div>
+      </div>
+      <div class="ntar-feature-card">
+        <div class="ntar-feature-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/lg-booth-04.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+              onclick="javascript:void(loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/content/exhibition-demo/Inferno%20TradeShow%20Experience%20Condensed%20v2.pdf'));"
+          />
+        </div>
+        <div class="ntar-feature-shadow"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Directory -->
+  <div class="ntar-directory-container">
+    <div class="ntar-directory-title-row">
+      <div class="ntar-directory-title-text">Directory</div>
+      <div class="ntar-directory-button-row">
+        <a href="javascript:ntarToggleCategoryFilter('0')" class="ntar-category-btn">C1</a>
+        <a href="javascript:ntarToggleCategoryFilter('1')" class="ntar-category-btn">C2</a>
+        <a href="javascript:ntarToggleCategoryFilter('2')" class="ntar-category-btn">C3</a>
+        <a href="javascript:ntarToggleCategoryFilter('3')" class="ntar-category-btn">C4</a>
+        <a href="javascript:ntarToggleCategoryFilter('4')" class="ntar-category-btn">C5</a>
+        <a href="javascript:ntarToggleCategoryFilter('5')" class="ntar-category-btn">C6</a>
+        <a href="javascript:ntarToggleCategoryFilter('6')" class="ntar-category-btn">C7</a>
+        <a href="javascript:ntarToggleCategoryFilter('7')" class="ntar-category-btn">C8</a>
+      </div>
+    </div>
+    <div class="ntar-no-results" id="ntar-no-search-results">
+      <span>No exhibitors found.</span>
+      <a href="javascript:void(ntarClearExhibSearch());" class="ntar-filter-reset"
+      >Clear search</a
+      >
+    </div>
+    <div class="ntar-no-results" id="ntar-no-category-results">
+      <span>No categories selected.</span>
+      <a href="javascript:void(ntarResetCategoryFilter());" class="ntar-filter-reset"
+      >Reset categories</a
+      >
+    </div>
+    <div class="ntar-directory-row">
+      <div
+          class="ntar-directory-card"
+          data-category="category1"
+          data-brandname="Hummingbird Systems"
+          data-keywords="Fully-configurable fault-tolerant groupware"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category2"
+          data-brandname="Hummingbird Systems"
+          data-keywords="Decentralized heuristic paradigm"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category3"
+          data-brandname="Valkyrie Media"
+          data-keywords="Decentralized national functionalities"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category4"
+          data-brandname="Honey Aviation"
+          data-keywords="Cross-platform next generation paradigm"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+
+      <div
+          class="ntar-directory-card"
+          data-category="category1"
+          data-brandname="Cloudlight"
+          data-keywords="	De-engineered systematic capacity"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category2"
+          data-brandname="Freak Navigations"
+          data-keywords="Open-source optimizing hierarchy"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category3"
+          data-brandname="Freacrosystems"
+          data-keywords="Synergized 5th generation circuit"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category4"
+          data-brandname="Raven Brews"
+          data-keywords="Re-engineered attitude-oriented portal"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+
+      <div
+          class="ntar-directory-card"
+          data-category="category1"
+          data-brandname="Herb Industries"
+          data-keywords="	Profit-focused dynamic architecture"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category2"
+          data-brandname="Daydream Electronics"
+          data-keywords="Ameliorated 24/7 workforce"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category3"
+          data-brandname="Saturn Entertainment"
+          data-keywords="Proactive incremental customer loyalty"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category4"
+          data-brandname="Hurricanetworks"
+          data-keywords="	Cross-group upward-trending protocol"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+
+      <div
+          class="ntar-directory-card"
+          data-category="category1"
+          data-brandname="Typhoonavigations"
+          data-keywords="	Customer-focused dynamic website"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category2"
+          data-brandname="Quad Microsystems"
+          data-keywords="Reduced encompassing protocol"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category3"
+          data-brandname="Alphacom"
+          data-keywords="Enhanced bottom-line artificial intelligence"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category4"
+          data-brandname="Sapling Foods"
+          data-keywords="Multi-tiered actuating Graphic Interface"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+
+      <div
+          class="ntar-directory-card"
+          data-category="category1"
+          data-brandname="Ecstatic Enterprises"
+          data-keywords="Ameliorated optimal matrices"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category2"
+          data-brandname="Vortexshadow"
+          data-keywords="Team-oriented systematic capability"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category3"
+          data-brandname="Energence"
+          data-keywords="Ergonomic leading edge collaboration"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+      <div
+          class="ntar-directory-card"
+          data-category="category4"
+          data-brandname="Revelationetworks"
+          data-keywords="	Assimilated dynamic time-frame"
+      >
+        <div class="ntar-directory-img-box">
+          <img
+              src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/sm-booth-05.jpg"
+              alt="Brand name"
+              class="ntar-feature-img"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div style="background-color: blue; min-height: 1500px; width: 32px;"></div> -->
+</div>
+<!-- ./ Page Content Container -->
+
+<!-- Category Selection and Search -->
+<script>
+  var ntarCategoryList = [];
+
+  function ntarGetItemList() {
+    return landingPageEl.querySelectorAll('.ntar-directory-card');
+  }
+
+  function ntarRefreshFilters() {
+    var cards = ntarGetItemList();
+    var noResultsDiv = landingPageEl.querySelector('#ntar-no-category-results');
+    var resultsCount = 0;
+    for (var x = 0; x < cards.length; x++) {
+      if (x < ntarDirectoryList.length) {
+        if (ntarCategoryList.includes(ntarDirectoryList[x].category)) {
+          cards[x].style.display = 'none';
+        } else {
+          cards[x].style.display = 'block';
+          resultsCount = resultsCount + 1;
+        }
+      } else {
+        cards[x].style.display = 'none';
+      }
+    }
+    if (resultsCount === 0) {
+      noResultsDiv.classList.add('is-active');
+    } else {
+      noResultsDiv.classList.remove('is-active');
+    }
+  }
+
+  function ntarToggleCategoryFilter(categoryNumber) {
+    var ntarCategoryButton = landingPageEl.querySelector('#ntar-cat-btn-' + categoryNumber);
+    if (ntarCategoryList.includes(ntarDirectoryCategories[categoryNumber].filter)) {
+      ntarCategoryList.splice(
+        ntarCategoryList.indexOf(ntarDirectoryCategories[categoryNumber].filter),
+        1
+      );
+      ntarCategoryButton.classList.remove('ntar-is-active');
+    } else {
+      ntarCategoryList.push(ntarDirectoryCategories[categoryNumber].filter);
+      ntarCategoryButton.classList.add('ntar-is-active');
+    }
+    ntarRefreshFilters();
+  }
+
+  function ntarResetCategoryFilter() {
+    ntarCategoryList = [];
+    var buttons = landingPageEl.querySelectorAll('.ntar-category-btn');
+    buttons.forEach(function (button) {
+      button.classList.remove('ntar-is-active');
+    });
+    ntarRefreshFilters();
+  }
+
+  function ntarInitializeCategories() {
+    var buttons = landingPageEl.querySelectorAll('.ntar-category-btn');
+    for (var x = 0; x < buttons.length; x++) {
+      if (x < ntarDirectoryCategories.length) {
+        buttons[x].innerText = ntarDirectoryCategories[x].name.toUpperCase();
+        buttons[x].id = 'ntar-cat-btn-' + x;
+        // ntarCategoryList.push(ntarDirectoryCategories[x].filter);
+      } else {
+        buttons[x].style.display = 'none';
+      }
+    }
+  }
+  function ntarInitializeDirectory() {
+    var cards = ntarGetItemList();
+    for (var x = 0; x < cards.length; x++) {
+      if (x < ntarDirectoryList.length) {
+        cards[x].id = 'ntar-dir-' + x;
+        var img = landingPageEl.querySelector('#ntar-dir-' + x + ' div img');
+        img.src = ntarDirectoryList[x].img;
+      } else {
+        cards[x].style.display = 'none';
+      }
+    }
+  }
+
+  ntarInitializeCategories();
+  setTimeout(ntarInitializeDirectory, 250);
+</script>
+<!-- ./ Category Selection and Search -->
+
+<!-- Banner Carousel Script -->
+<script>
+  var ntarBannerCards = landingPageEl.querySelectorAll('.ntar-banner-card');
+  var ntarBannerNodes = landingPageEl.querySelectorAll('.ntar-banner-node');
+  var ntarBannerCurrent = 0;
+  var ignoreClick = false;
+  var autoScrollTime = 15000;
+
+  function triggerClick() {
+    clearInterval(ntarBannerTimer);
+    ignoreClick = true;
+    setTimeout(function () {
+      ignoreClick = false;
+    }, 600);
+    ntarBannerTimer = ntarStartAutoScroll(autoScrollTime);
+  }
+
+  // 1 for forward, -1 for back
+  function ntarGoToBanner(direction) {
+    var dirForward = false;
+    var standby = 'right';
+    var out = 'left';
+    var nextBanner = null;
+    // Do nothing if the carousel should not advance
+    if (direction !== -1 && direction !== 1) return;
+    // Direction Forward
+    if (direction === 1) {
+      dirForward = true;
+      standby = 'left';
+      out = 'right';
+      if (ntarBannerCurrent === ntarBannerCards.length - 1) {
+        nextBanner = 0;
+      } else {
+        nextBanner = ntarBannerCurrent + 1;
+      }
+    }
+    // Direction Backward
+    if (direction === -1) {
+      if (ntarBannerCurrent === 0) {
+        nextBanner = ntarBannerCards.length - 1;
+      } else {
+        nextBanner = ntarBannerCurrent - 1;
+      }
+    }
+
+    // Preposition next banner
+    ntarBannerCards[nextBanner].className =
+      'ntar-banner-card ntar-banner-is-standby-' + standby;
+
+    // Reset z-Indexes
+    for (var x = 0; x < ntarBannerCards.length; x++) {
+      if (x === nextBanner) {
+        ntarBannerCards[x].style.zIndex = 8;
+        continue;
+      }
+      if (x === ntarBannerCurrent) {
+        ntarBannerCards[x].style.zIndex = 7;
+        continue;
+      }
+      ntarBannerCards[x].style.zIndex = 6;
+    }
+
+    // Set new styles
+    setTimeout(function () {
+      ntarBannerCards[ntarBannerCurrent].className =
+        'ntar-banner-card ntar-banner-is-out-' + out;
+      ntarBannerCards[nextBanner].className = 'ntar-banner-card ntar-banner-is-active';
+      ntarBannerNodes[ntarBannerCurrent].className = 'ntar-banner-node';
+      ntarBannerNodes[nextBanner].className = 'ntar-banner-node ntar-is-active';
+      ntarBannerCurrent = nextBanner;
+    }, 150);
+  }
+
+  function ntarStartAutoScroll(autoScrollDelay = 10000) {
+    return setInterval(function () {
+      ntarGoToBanner(1);
+      console.log('Timer: ', ntarBannerTimer);
+    }, autoScrollDelay);
+  }
+
+  if (ntarBannerTimer) {
+    console.log('Unloading:', ntarBannerTimer);
+    clearInterval(ntarBannerTimer);
+  }
+
+  var ntarBannerTimer = ntarStartAutoScroll(autoScrollTime);
+  console.log('Starting:', ntarBannerTimer);
+
+  // Register Click Handlers
+  landingPageEl.querySelector('#ntar-aleft').addEventListener('click', function (e) {
+    if (ignoreClick) return;
+    triggerClick();
+    ntarGoToBanner(-1);
+  });
+
+  landingPageEl.querySelector('#ntar-aright').addEventListener('click', function (e) {
+    if (ignoreClick) return;
+    triggerClick();
+    ntarGoToBanner(1);
+  });
+</script>
+<!-- ./ Banner Carousel Script -->
+
+<!-- PDF Overlay Script -->
+
+<script>
+  function loadPDF(url) {
+    var x = landingPageEl.getElementById('pdf-frame');
+    x.src = url;
+    var y = landingPageEl.getElementById('pdf-blanket');
+    y.style.display = 'block';
+  }
+
+  function closePDF() {
+    var x = landingPageEl.getElementById('pdf-frame');
+    x.src = '';
+    var y = landingPageEl.getElementById('pdf-blanket');
+    y.style.display = 'none';
+  }
+</script>
+
+<!-- ./ PDF Overlay Script -->
+
+<!-- Search Exhibitors Script -->
+<script>
+  // Define searchbox here
+
+  function ntarExhibSearchUpdate() {
+    // Get Elements
+    var ntarExhibSearchDiv = landingPageEl.querySelector('.ntar-directory-search');
+    var ntarExhibSearchInput = landingPageEl.querySelector('#exhib-search');
+    if (ntarCategoryList !== []) {
+      ntarResetCategoryFilter();
+    }
+    var resultCount = 0;
+    var exhibCards = ntarGetItemList();
+    var noResultsDiv = landingPageEl.querySelector('#ntar-no-search-results');
+    var searchString = ntarExhibSearchInput.value.toLowerCase();
+    // Set Input Status
+    if (searchString === '') {
+      ntarExhibSearchDiv.classList.remove('is-active');
+    } else {
+      ntarExhibSearchDiv.classList.add('is-active');
+    }
+    // Filter Directory
+    ntarDirectoryList.forEach(function (item, index) {
+      if (
+        item.brand.toLowerCase().includes(searchString) ||
+        item.keywords.toLowerCase().includes(searchString)
+      ) {
+        exhibCards[index].style.display = 'block';
+        resultCount += 1;
+      } else {
+        exhibCards[index].style.display = 'none';
+      }
+    });
+    // Display No Result Div
+    if (resultCount === 0) {
+      noResultsDiv.classList.add('is-active');
+    } else {
+      noResultsDiv.classList.remove('is-active');
+    }
+  }
+
+  function ntarClearExhibSearch() {
+    var ntarExhibSearchInput = landingPageEl.querySelector('#exhib-search');
+    ntarExhibSearchInput.value = '';
+    ntarExhibSearchUpdate();
+  }
+</script>
+<!-- ./ Search Exhibitors Script -->

@@ -1,0 +1,795 @@
+/* Background Styles */
+.ntar-landing-bg {
+  /* Image */
+  background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/avc-2020-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  /* Cover height minus 55px header */
+  min-height: calc(100vh - 55px);
+
+  /* Stick to Jolokia content frame */
+  position: fixed;
+  top: -20px;
+  left: 280px;
+  right: 0;
+  bottom: 0;
+
+  /* Fix hamburger menu issues */
+  position: absolute;
+  left: 0px;
+  margin-bottom: -64px;
+}
+
+@media only screen and (max-width: 768px) {
+  .ntar-landing-bg {
+    /* Cover height minus 55px header */
+    min-height: calc(100vh - 55px);
+
+    /* Stick to Jolokia content frame */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+/* ./ Background Styles */
+
+/* Page Content Container Styles */
+.ntar-landing-content {
+  /* background-color: chartreuse; */
+
+  /* Scale to full width and height + footer space */
+  width: 100%;
+  height: calc(100% + 50px);
+
+  /* Stick to Jolokia content frame and scroll y */
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden scroll;
+
+  /* Pad Content */
+  padding: 0px;
+
+  /* Display Type */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ./ Page Content Container Styles */
+
+/* Layout Styles */
+.ntar-banner-carousel-container {
+  width: 100%;
+  position: relative;
+}
+
+.ntar-exhib-title-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 55px;
+  min-height: 55px;
+  padding: 8px 16px;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+}
+
+.ntar-featured-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  overflow-y: visible;
+  padding: 8px 16px;
+  margin-bottom: calc(-7vw - 40px);
+}
+
+.ntar-directory-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 48px 16px;
+  z-index: 10;
+}
+
+/* ./ Layout Styles */
+
+/* Banner Carousel Styles */
+.ntar-banner-img {
+  width: 100%;
+}
+
+.ntar-banner-card {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+}
+
+.ntar-banner-is-active {
+  display: block;
+  transition: transform 1s;
+}
+
+.ntar-banner-is-out-left {
+  display: block;
+  transform: translateX(-100%);
+  transition: transform 1s;
+}
+
+.ntar-banner-is-standby-right {
+  display: block;
+  transform: translateX(100%);
+}
+
+.ntar-banner-is-standby-left {
+  display: block;
+  transform: translateX(-100%);
+}
+
+.ntar-banner-is-out-right {
+  display: block;
+  transform: translateX(100%);
+  transition: transform 1s;
+}
+
+.ntar-banner-spacer {
+  position: relative;
+  opacity: 0;
+  z-index: -5;
+}
+
+#ntar-banner-left {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  min-height: 100%;
+  z-index: 10;
+}
+
+#ntar-banner-right {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  min-height: 100%;
+  z-index: 10;
+}
+
+#ntar-banner-bottom {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 64px);
+  width: 128px;
+  min-height: 24px;
+  background-color: transparent;
+  z-index: 10;
+}
+
+.ntar-banner-node {
+  display: flex;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(68, 68, 68, 0.5);
+  background-color: rgb(133, 133, 133);
+  opacity: 0.3;
+  margin: 4px;
+  transition: 0.6s;
+}
+
+.ntar-banner-node.ntar-is-active {
+  border: 1px solid rgba(68, 68, 68, 0.5);
+  background-color: rgb(255, 255, 255);
+  opacity: 0.6;
+  -webkit-box-shadow: 0px 0px 6px 2px rgba(255, 255, 255, 0.5);
+  box-shadow: 0px 0px 6px 2px rgba(255, 255, 255, 0.5);
+  transition: 0.6s;
+}
+
+.ntar-arrow-button {
+  position: absolute;
+  top: calc(50% - 14px);
+  width: 28px;
+  height: 28px;
+}
+
+.ntar-arrow {
+  position: relative;
+  display: inline-block;
+  margin: 0px;
+  padding: 14px;
+  box-shadow: 6px -6px 0 0 rgb(255, 255, 255) inset;
+  cursor: pointer;
+  opacity: 0.2;
+}
+
+.ntar-arrow:hover {
+  box-shadow: 6px -6px 0 0 rgb(86, 207, 255) inset;
+  opacity: 0.6;
+}
+
+.ntar-arrow:active {
+  box-shadow: 6px -6px 0 0 rgb(255, 255, 255) inset;
+  opacity: 1;
+}
+
+.ntar-arrow-left {
+  transform: rotate(45deg);
+  left: 16px;
+}
+
+.ntar-arrow-right {
+  transform: rotate(225deg);
+  right: 16px;
+}
+
+.ntar-banner-button {
+  position: absolute;
+  background-color: white;
+  border: none;
+  outline: none;
+  color: #c31f5e;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+#b1-booth-link {
+  height: 20%;
+  width: 15%;
+  min-height: 24px;
+  min-width: 80px;
+  bottom: 15%;
+  left: 6%;
+}
+
+#b1-direct-link {
+  height: 20%;
+  width: 15%;
+  min-height: 24px;
+  min-width: 80px;
+  bottom: 15%;
+  left: 33%;
+}
+
+@media only screen and (max-width: 767px) {
+  .ntar-arrow-button {
+    position: absolute;
+    top: calc(50%);
+    width: 16px;
+    height: 16px;
+  }
+
+  .ntar-arrow {
+    position: relative;
+    display: inline-block;
+    margin: 0px;
+    padding: 8px;
+    box-shadow: 4px -4px 0 0 rgb(255, 255, 255) inset;
+    cursor: pointer;
+    opacity: 0.2;
+  }
+
+  .ntar-arrow:hover {
+    box-shadow: 4px -4px 0 0 rgb(86, 207, 255) inset;
+    opacity: 0.6;
+  }
+
+  .ntar-arrow:active {
+    box-shadow: 4px -4px 0 0 rgb(255, 255, 255) inset;
+    opacity: 1;
+  }
+
+  #ntar-banner-bottom {
+    min-height: 16px;
+  }
+
+  .ntar-banner-node {
+    display: flex;
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(68, 68, 68, 0.5);
+    background-color: rgb(133, 133, 133);
+    opacity: 0.3;
+    margin: 4px;
+    transition: 0.6s;
+  }
+
+  .ntar-banner-node.ntar-is-active {
+    border: 1px solid rgba(68, 68, 68, 0.5);
+    background-color: rgb(255, 255, 255);
+    opacity: 0.6;
+    -webkit-box-shadow: 0px 0px 3px 2px rgba(255, 255, 255, 0.5);
+    box-shadow: 0px 0px 3px 2px rgba(255, 255, 255, 0.5);
+    transition: 0.6s;
+  }
+}
+
+/* ./ Banner Carousel Styles */
+
+/* Exhib Title/Search Styles */
+.ntar-exhib-title {
+  display: flex;
+  flex-shrink: 0;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 39px;
+  color: white;
+}
+
+.ntar-directory-search {
+  padding-left: 16px;
+  display: flex;
+  flex-shrink: 1;
+  width: 50%;
+  max-width: 450px;
+}
+
+.ntar-directory-search-input {
+  height: 39px;
+  width: 100%;
+  margin-right: -50px;
+  min-width: 150px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: 3px solid black;
+  outline: none;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  color: black;
+}
+
+.ntar-directory-search-input::placeholder {
+  font-style: italic;
+}
+
+.ntar-directory-search-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  right: -16px;
+  top: 9px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.ntar-directory-search.is-active > .ntar-directory-search-icon {
+  display: none;
+}
+
+.ntar-directory-clear-icon {
+  display: none;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  right: -10px;
+  top: 5px;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: transform 0.5s;
+}
+
+.ntar-directory-search.is-active > .ntar-directory-clear-icon {
+  display: block;
+}
+
+.ntar-directory-clear-icon:hover {
+  transform: scale(1.2);
+  opacity: 0.6;
+  transition: transform 0.2s;
+}
+
+@media only screen and (max-width: 1200px) {
+  .ntar-exhib-title {
+    font-size: 32px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .ntar-exhib-title {
+    font-size: 28px;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .ntar-exhib-title-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    min-height: 110px;
+  }
+
+  .ntar-exhib-title {
+    font-size: 32px;
+    justify-content: center;
+  }
+
+  .ntar-directory-search {
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    padding: 8px 0 0 0;
+    flex-grow: 1 0;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .ntar-exhib-title {
+    font-size: 6vw;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .ntar-exhib-title {
+    font-weight: 500;
+  }
+}
+
+/* ./ Directory Title/Search Styles */
+
+/* Featured Styles */
+.ntar-featured-title {
+  display: flex;
+  width: 100%;
+  color: white;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.ntar-featured-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  max-width: 100%;
+  padding: 8px 0px;
+  margin: 0px 36px;
+  overflow: visible;
+}
+
+.ntar-feature-card {
+  display: flex;
+  flex-direction: column;
+  max-width: 160px;
+  height: 100%;
+  margin: 0 8px;
+  overflow: visible;
+  border-radius: 16px;
+  transition: 0.8s;
+}
+
+.ntar-feature-card:hover {
+  transform: scale(1.05);
+  transition: 0.8s;
+}
+
+.ntar-feature-xl {
+  max-width: 350px;
+}
+
+.ntar-feature-img-box {
+  width: 100%;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: 0.8s;
+}
+
+.ntar-feature-img-box:hover {
+  -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.6);
+  box-shadow: 0px 0px 15px 5px rgba(255, 255, 255, 0.6);
+  transition: 0.8s;
+}
+
+.ntar-feature-img {
+  max-width: 100%;
+  opacity: 1;
+  border-radius: 16px;
+}
+
+.ntar-feature-shadow {
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  height: 7vw;
+  width: 100%;
+  border-radius: 16px 16px 0 0;
+  filter: blur(3px);
+}
+
+@media only screen and (max-width: 1200px) {
+  .ntar-featured-row {
+    margin: 0px 0px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+  .ntar-featured-container {
+    margin-bottom: -48px;
+  }
+
+  .ntar-featured-row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ntar-feature-card {
+    margin: 8px;
+    height: unset;
+    order: 2;
+    flex-shrink: 0.7;
+  }
+
+  .ntar-feature-xl {
+    order: 1;
+  }
+
+  .ntar-feature-shadow {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .ntar-featured-container {
+    margin-bottom: -48px;
+  }
+
+  .ntar-featured-title {
+    font-size: 26px;
+    line-height: 26px;
+    justify-content: center;
+  }
+
+  .ntar-featured-row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .ntar-feature-card {
+    margin: 8px;
+    height: unset;
+    order: 2;
+    flex-shrink: 4;
+    max-width: 100px;
+  }
+
+  .ntar-feature-xl {
+    order: 1;
+    flex-shrink: 2;
+    max-width: 230px;
+  }
+
+  .ntar-feature-shadow {
+    display: none;
+  }
+}
+
+/* ./Featured Styles */
+
+/* Directory Styles */
+
+.ntar-no-results {
+  display: none;
+  width: 100%;
+  height: 128px;
+  padding: 72px;
+  text-align: center;
+  line-height: 32px;
+  font-size: 24px;
+  color: white;
+}
+
+.ntar-no-results.is-active {
+  display: block;
+}
+
+.ntar-filter-reset {
+  display: block;
+  font-size: 16px;
+  text-shadow: 0 0 8px 8px rgba(0, 0, 0, 0.5);
+}
+
+.ntar-directory-title-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.ntar-directory-title-text {
+  display: flex;
+  justify-self: flex-start;
+  color: white;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 32px;
+  flex-grow: 1;
+  flex-shrink: 0;
+  padding-right: 32px;
+}
+
+.ntar-directory-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 100%;
+  padding: 8px 0px;
+  margin: 0px 36px;
+  overflow: visible;
+}
+
+.ntar-directory-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 4;
+  width: 100%;
+}
+
+.ntar-category-btn {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 300;
+  white-space: nowrap;
+  padding: 4px 16px;
+  border: 2px solid white;
+  border-radius: 16px;
+  margin: 4px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ntar-category-btn.ntar-is-active {
+  text-decoration: none;
+  color: grey;
+  font-size: 14px;
+  font-weight: 300;
+  white-space: nowrap;
+  padding: 4px 16px;
+  border: 2px solid grey;
+  border-radius: 16px;
+  margin: 4px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ntar-category-btn:focus {
+  text-decoration: none;
+  color: white;
+}
+
+.ntar-is-active:focus {
+  text-decoration: none;
+  color: grey;
+}
+
+.ntar-category-btn:hover {
+  color: rgb(118, 212, 255);
+  border: 2px solid rgb(118, 212, 255);
+  text-decoration: none;
+}
+
+.ntar-directory-card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 2;
+  max-width: 130px;
+  margin: 8px;
+  overflow: visible;
+  border-radius: 16px;
+}
+
+.ntar-directory-xl {
+  max-width: 350px;
+}
+
+.ntar-directory-img-box {
+  width: 100%;
+}
+
+.ntar-directory-img {
+  max-width: 100%;
+  opacity: 1;
+  border-radius: 16px;
+}
+
+@media only screen and (max-width: 1200px) {
+  .ntar-directory-row {
+    margin: 0px 0px;
+  }
+
+  .ntar-directory-card {
+    max-width: 120px;
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1000px) {
+}
+
+@media only screen and (max-width: 600px) {
+  .ntar-directory-title-text {
+    font-size: 26px;
+    line-height: 26px;
+    justify-content: center;
+  }
+
+  .ntar-directory-card {
+    margin: 6px;
+    flex-shrink: 2;
+    max-width: 96px;
+  }
+
+  .ntar-directory-title-row {
+    flex-direction: column;
+  }
+
+  .ntar-directory-button-row {
+    justify-content: center;
+    margin-top: 16px;
+  }
+}
+
+/* ./ Directory Styles */
+a.ntar-window-close {
+  padding: 0.55rem;
+  width: 11rem;
+  font-size: 1.3rem;
+  font-weight: 100;
+  line-height: 1;
+  color: #333;
+  background-color: #fff;
+  border-radius: 4rem;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin: 20px 0px 0px 30px;
+}
+
+a.ntar-window-close:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.ntar-pdf-view {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 20;
+  display: none;
+}
+
+.ntar-pdf-viewer {
+  position: absolute;
+  top: 60px;
+  left: 30px;
+  right: 30px;
+  width: calc(100% - 60px);
+  height: calc(100% - 90px);
+  bottom: 30px;
+  border: none;
+}
+
+.dark-button {
+  background-color: #333 !important;
+  color: #fff !important;
+}
+
+/* PDF Overlay Styles */
+
+/* ./ PDF Overlay Styles */
