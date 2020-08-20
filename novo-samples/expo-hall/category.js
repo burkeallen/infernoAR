@@ -1,7 +1,5 @@
 <!-- Category Selection and Search -->
 
-let ntarCategoryList = [];
-
 function ntarGetItemList() {
   return landingPageEl.querySelectorAll('.ntar-directory-card');
 }
@@ -54,12 +52,12 @@ function ntarResetCategoryFilter() {
 }
 
 function ntarInitializeCategories() {
+  console.log('ntarDirectoryCategories', ntarDirectoryCategories);
   const buttons = landingPageEl.querySelectorAll('.ntar-category-btn');
   for (let x = 0; x < buttons.length; x++) {
     if (x < ntarDirectoryCategories.length) {
       buttons[x].innerText = ntarDirectoryCategories[x].name.toUpperCase();
       buttons[x].id = 'ntar-cat-btn-' + x;
-      // ntarCategoryList.push(ntarDirectoryCategories[x].filter);
     } else {
       buttons[x].style.display = 'none';
     }
@@ -68,6 +66,7 @@ function ntarInitializeCategories() {
 
 function ntarInitializeDirectory() {
   const cards = ntarGetItemList();
+  console.log('ntarDirectoryList', ntarDirectoryList);
   for (let x = 0; x < cards.length; x++) {
     if (x < ntarDirectoryList.length) {
       cards[x].id = 'ntar-dir-' + x;
@@ -79,10 +78,56 @@ function ntarInitializeDirectory() {
   }
 }
 
-// after document is loaded initialize the categories
-document.addEventListener("DOMContentLoaded", function(event) {
-  ntarInitializeCategories();
-  setTimeout(ntarInitializeDirectory, 250);
-});
 
-<!-- ./ Category Selection and Search -->
+function ntarExhibSearchUpdate() {
+  // Get Elements
+  const ntarExhibSearchDiv = landingPageEl.querySelector('.ntar-directory-search');
+  const ntarExhibSearchInput = landingPageEl.querySelector('#exhib-search');
+
+  if (ntarCategoryList !== []) {
+    ntarResetCategoryFilter();
+  }
+
+  let resultCount = 0;
+  const exhibCards = ntarGetItemList();
+  const noResultsDiv = landingPageEl.querySelector('#ntar-no-search-results');
+  const searchString = ntarExhibSearchInput.value.toLowerCase();
+
+  // Set Input Status
+  if (searchString === '') {
+    ntarExhibSearchDiv.classList.remove('is-active');
+  } else {
+    ntarExhibSearchDiv.classList.add('is-active');
+  }
+
+  // Filter Directory
+  ntarDirectoryList.forEach( (item, index) => {
+    if (
+      item.brand.toLowerCase().includes(searchString) ||
+      item.keywords.toLowerCase().includes(searchString)
+    ) {
+      exhibCards[index].style.display = 'block';
+      resultCount += 1;
+    } else {
+      exhibCards[index].style.display = 'none';
+    }
+  });
+
+  // Display No Result Div
+  if (resultCount === 0) {
+    noResultsDiv.classList.add('is-active');
+  } else {
+    noResultsDiv.classList.remove('is-active');
+  }
+}
+
+function ntarClearExhibSearch() {
+  const ntarExhibSearchInput = landingPageEl.querySelector('#exhib-search');
+  ntarExhibSearchInput.value = '';
+  ntarExhibSearchUpdate();
+}
+
+
+ntarInitializeCategories();
+setTimeout(ntarInitializeDirectory, 250);
+
