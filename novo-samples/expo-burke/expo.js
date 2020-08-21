@@ -43,18 +43,20 @@ class Expo {
     });
   }
 
-  init() {
+  init(title, placeholder) {
     Promise.all([
       this.loadScript('https://unpkg.com/swiper/swiper-bundle.min.js'),
-      this.loadStyleSheet('https://unpkg.com/swiper/swiper-bundle.min.css'),
-      this.loadStyleSheet('expo.css'),
       this.loadScript('swiper.js'),
-      this.loadStyleSheet('swiper.css'),
+      this.loadScript('searchbar.js'),
     ])
       .then(() => {
         new NovoSwiper(this.data.slides);
+        new NovoSearchBar(this.data, title, placeholder);
       });
 
+    this.loadStyleSheet('https://unpkg.com/swiper/swiper-bundle.min.css');
+    this.loadStyleSheet('expo.css');
+    this.loadStyleSheet('swiper.css');
   }
 
 
