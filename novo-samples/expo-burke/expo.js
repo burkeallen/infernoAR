@@ -48,10 +48,13 @@ class Expo {
       this.loadScript('https://unpkg.com/swiper/swiper-bundle.min.js'),
       this.loadScript('swiper.js'),
       this.loadScript('searchbar.js'),
+      this.loadScript('sponsor.js'),
     ])
       .then(() => {
         new NovoSwiper(this.data.slides);
         new NovoSearchBar(this.data.sponsors, title, placeholder);
+        const sponsor = new NovoSponsor();
+        sponsor.displayList(this.data.sponsors);
       });
 
     this.loadStyleSheet('https://unpkg.com/swiper/swiper-bundle.min.css');
