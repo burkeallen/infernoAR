@@ -51,7 +51,7 @@ class Expo {
     ])
       .then(() => {
         new NovoSwiper(this.data.slides);
-        new NovoSearchBar(this.data, title, placeholder);
+        new NovoSearchBar(this.data.sponsors, title, placeholder);
       });
 
     this.loadStyleSheet('https://unpkg.com/swiper/swiper-bundle.min.css');
