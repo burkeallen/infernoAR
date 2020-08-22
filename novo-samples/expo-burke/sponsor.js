@@ -1,3 +1,8 @@
+// Copyright 2020 NovoLogic, Inc.
+/**
+ * @author Burke Allen - NovoLogic, Inc.
+ */
+
 class NovoSponsor {
   constructor() {
     this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;

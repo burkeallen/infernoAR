@@ -1,3 +1,7 @@
+// Copyright 2020 NovoLogic, Inc.
+/**
+ * @author Burke Allen - NovoLogic, Inc.
+ */
 
 class Expo {
   constructor(baseURL) {

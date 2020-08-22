@@ -1,3 +1,8 @@
+// Copyright 2020 NovoLogic, Inc.
+/**
+ * @author Burke Allen - NovoLogic, Inc.
+ */
+
 class NovoSearchBar {
   constructor(data, title, placeholder) {
     this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;

@@ -1,3 +1,8 @@
+// Copyright 2020 NovoLogic, Inc.
+/**
+ * @author Burke Allen - NovoLogic, Inc.
+ */
+
 class NovoSwiper {
   constructor(slides) {
     this.initCarousel(slides);
