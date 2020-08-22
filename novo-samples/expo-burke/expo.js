@@ -3,7 +3,7 @@
  * @author Burke Allen - NovoLogic, Inc.
  */
 
-class Expo {
+class NovoExpo {
   constructor(baseURL) {
     this.data = {};
     this.baseURL = baseURL ? baseURL : location.href.replace(/[^/]*$/, '');
@@ -50,7 +50,7 @@ class Expo {
     });
   }
 
-  init(title, placeholder) {
+  init(labels) {
     Promise.all([
       this.loadScript(this.baseURL + 'grid.js'),
       this.loadScript(this.baseURL + 'sponsor.js'),
@@ -59,9 +59,11 @@ class Expo {
       this.loadScript(this.baseURL + 'swiper.js'),
     ])
       .then(() => {
+        console.log('labels', labels);
+
         new NovoSwiper(this.data.slides);
-        new NovoSearchBar(this.data.sponsors, title, placeholder);
-        const sponsor = new NovoSponsor();
+        new NovoSearchBar(this.data.sponsors, labels.expoTitle, labels.searchPlaceholder);
+        const sponsor = new NovoSponsor(labels.featuredTitle, labels.standardTitle);
         sponsor.displayList(this.data.sponsors);
       });
 

@@ -4,7 +4,7 @@
  */
 
 class NovoSponsor {
-  constructor() {
+  constructor(featuredTitle, standardTitle) {
     this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;
     this.featureContainer = null;
     this.standardContainer = null;
@@ -12,6 +12,8 @@ class NovoSponsor {
     this.standardGridContainer = null;
     this.featureGrid = null;
     this.standardGrid = null;
+    this.featuredTitle = featuredTitle ? featuredTitle : 'Featured';
+    this.standardTitle = standardTitle ? standardTitle : 'Others';
     this.init();
   }
 
@@ -40,7 +42,7 @@ class NovoSponsor {
 
   displayFeatured(featured) {
     const title = this.landingPageEl.createElement('h1');
-    title.innerHTML = "Featured";
+    title.innerText =  this.featuredTitle ;
     this.featureContainer.appendChild(title);
     this.featureContainer.appendChild(this.featureGridContainer);
 
@@ -53,7 +55,7 @@ class NovoSponsor {
 
   displayStandard(standard) {
     const title = this.landingPageEl.createElement('h1');
-    title.innerHTML = "Exhibitors";
+    title.innerText =  this.standardTitle;
     this.standardContainer.appendChild(title);
     this.standardContainer.appendChild(this.standardGridContainer);
 

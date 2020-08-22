@@ -20,10 +20,16 @@
 <script src="expo.js"></script>
 <script>
   const novodataURL = 'https://script.google.com/a/novologic.com/macros/s/AKfycbyLJ03QjUYsF0flwym3FpszcUCc2qWYr10kOgzgoj0h4JEpE3U/exec?client=';
-  const expoClient = 'novo';
+  const novoExpoClient = 'demo1';
+  const novoLabels ={
+    "expoTitle" : "EXHIBITORS DIRECTORY",
+    "searchPlaceholder": "Search Exhibitors",
+    "featuredTitle": "Featured",
+    "standardTitle": "Other Exhibitors"
+  };
   // expo = new Expo('https://inferno.novohosting.com/demo1/'); // add trailing slash
-  expo = new Expo(); // add trailing slash
-  let novodata = expo.fetchData(novodataURL + expoClient)
+  const novoExpo = new NovoExpo(); // add trailing slash
+  let novodata = novoExpo.fetchData(novodataURL + novoExpoClient)
     .then(data => data)
-    .then(() => expo.init('EXHIBITORS DIRECTORY', 'Search Exhibitors'));
+    .then(() => novoExpo.init(novoLabels));
 </script>
