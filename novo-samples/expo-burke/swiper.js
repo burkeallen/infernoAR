@@ -5,11 +5,12 @@ class NovoSwiper {
 
   initCarousel(slides) {
     const carousel = new Swiper('.swiper-container', {
-      autoHeight: true,
       loop: true,
       slidesPerView: 1,
       spaceBetween: 30,
       grabCursor: true,
+      preventClicks: false,
+      preventClicksPropagation: false,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,

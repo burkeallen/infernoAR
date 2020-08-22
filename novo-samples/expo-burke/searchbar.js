@@ -1,10 +1,8 @@
 class NovoSearchBar {
   constructor(data, title, placeholder) {
-    this.data = data;
-    console.log(this.data);
-    this.init(title, placeholder);
     this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;
-
+    this.data = data;
+    this.init(title, placeholder);
   }
 
   search() {
@@ -29,7 +27,6 @@ class NovoSearchBar {
   displayFound(listData) {
     listData.forEach(item => {
       const el = this.landingPageEl.querySelector(this.getElementId(item.name));
-      console.log('display ' + item.name, el);
       el.style.display = 'block';
     })
 
@@ -38,7 +35,6 @@ class NovoSearchBar {
   hideAll() {
     this.data.forEach(item => {
       const el = this.landingPageEl.querySelector(this.getElementId(item.name));
-      console.log('hide ' + item.name, el);
       el.style.display = 'none';
     })
   }
@@ -48,7 +44,6 @@ class NovoSearchBar {
     const searchRegExp = /\s/g;
     const replaceWith = '-';
     const id = '#novo-' + name.replace(searchRegExp, replaceWith);
-    console.log('element id ', id);
     return id;
   }
 
@@ -64,7 +59,6 @@ class NovoSearchBar {
     searchBarInput.placeholder = placeholder;
     searchBarInput.addEventListener('input',
       (event) => {
-        console.log('event', event);
         this.search(event.data);
       });
 

@@ -1,6 +1,22 @@
 class NovoSponsor {
   constructor() {
     this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;
+    this.featureContainer = null;
+    this.standardContainer = null;
+    this.featureGridContainer = null;
+    this.standardGridContainer = null;
+    this.featureGrid = null;
+    this.standardGrid = null;
+    this.init();
+  }
+
+  init() {
+    this.featureContainer = this.landingPageEl.querySelector('#novo-featured-container');
+    this.standardContainer = this.landingPageEl.querySelector('#novo-standard-container');
+    this.featureGrid = new NovoGrid(this.featureContainer);
+    this.standardGrid = new NovoGrid(this.standardContainer);
+    this.featureGridContainer = this.featureGrid.buildGrid();
+    this.standardGridContainer = this.standardGrid.buildGrid();
   }
 
   displayList(data) {
@@ -18,30 +34,28 @@ class NovoSponsor {
   }
 
   displayFeatured(featured) {
-    const parent = this.landingPageEl.querySelector('#novo-featured-container');
     const title = this.landingPageEl.createElement('h1');
     title.innerHTML = "Featured";
-    parent.appendChild(title);
+    this.featureContainer.appendChild(title);
+    this.featureContainer.appendChild(this.featureGridContainer);
 
     featured.forEach(item => {
-      const sponsor = this.landingPageEl.createElement('h3');
+      const sponsor = this.featureGrid.buildSponsorCard(item);
       sponsor.id = this.setElementId(item.name);
-      sponsor.innerHTML = item.name;
-      parent.appendChild(sponsor)
+      this.featureGridContainer.appendChild(sponsor);
     });
   }
 
   displayStandard(standard) {
-    const parent = this.landingPageEl.querySelector('#novo-sponsor-list-container');
     const title = this.landingPageEl.createElement('h1');
     title.innerHTML = "Exhibitors";
-    parent.appendChild(title);
+    this.standardContainer.appendChild(title);
+    this.standardContainer.appendChild(this.standardGridContainer);
 
     standard.forEach(item => {
-      const sponsor = this.landingPageEl.createElement('h3');
-      sponsor.innerHTML = item.name;
+      const sponsor = this.standardGrid.buildSponsorCard(item);
       sponsor.id = this.setElementId(item.name);
-      parent.appendChild(sponsor)
+      this.standardGridContainer.appendChild(sponsor);
     });
   }
 
@@ -49,7 +63,6 @@ class NovoSponsor {
     const searchRegExp = /\s/g;
     const replaceWith = '-';
     const id = 'novo-' + name.replace(searchRegExp, replaceWith);
-    console.log('element id ', id);
     return id;
   }
 

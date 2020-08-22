@@ -48,10 +48,11 @@ class Expo {
 
   init(title, placeholder) {
     Promise.all([
+      this.loadScript(this.baseURL + 'grid.js'),
+      this.loadScript(this.baseURL + 'sponsor.js'),
+      this.loadScript(this.baseURL + 'searchbar.js'),
       this.loadScript('https://unpkg.com/swiper/swiper-bundle.min.js'),
       this.loadScript(this.baseURL + 'swiper.js'),
-      this.loadScript(this.baseURL + 'searchbar.js'),
-      this.loadScript(this.baseURL + 'sponsor.js'),
     ])
       .then(() => {
         new NovoSwiper(this.data.slides);
@@ -63,6 +64,7 @@ class Expo {
     this.loadStyleSheet('https://unpkg.com/swiper/swiper-bundle.min.css');
     this.loadStyleSheet(this.baseURL + 'expo.css');
     this.loadStyleSheet(this.baseURL + 'swiper.css');
+    this.loadStyleSheet(this.baseURL + 'grid.css');
 
     this.setBackground();
   }
