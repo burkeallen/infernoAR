@@ -1,28 +1,31 @@
+
 class Expo {
-  constructor() {
+  constructor(baseURL) {
     this.data = {};
+    this.baseURL = baseURL ? baseURL : location.href.replace(/[^/]*$/, '');
+    this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;
   }
 
   loadScript(src) {
     return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
+      const script = this.landingPageEl.createElement('script');
       script.type = 'text/javascript';
       script.onload = resolve;
       script.onerror = reject;
       script.src = src;
-      document.head.append(script);
+      this.landingPageEl.head.append(script);
     });
   }
 
   loadStyleSheet(src) {
     return new Promise((resolve, reject) => {
-      const styleSheet = document.createElement('link');
+      const styleSheet = this.landingPageEl.createElement('link');
       styleSheet.type = 'text/css';
       styleSheet.rel = 'stylesheet';
       styleSheet.onload = resolve;
       styleSheet.onerror = reject;
       styleSheet.href = src;
-      document.head.append(styleSheet);
+      this.landingPageEl.head.append(styleSheet);
       resolve(true);
     });
   }
@@ -46,9 +49,9 @@ class Expo {
   init(title, placeholder) {
     Promise.all([
       this.loadScript('https://unpkg.com/swiper/swiper-bundle.min.js'),
-      this.loadScript('swiper.js'),
-      this.loadScript('searchbar.js'),
-      this.loadScript('sponsor.js'),
+      this.loadScript(this.baseURL + 'swiper.js'),
+      this.loadScript(this.baseURL + 'searchbar.js'),
+      this.loadScript(this.baseURL + 'sponsor.js'),
     ])
       .then(() => {
         new NovoSwiper(this.data.slides);
@@ -58,9 +61,19 @@ class Expo {
       });
 
     this.loadStyleSheet('https://unpkg.com/swiper/swiper-bundle.min.css');
-    this.loadStyleSheet('expo.css');
-    this.loadStyleSheet('swiper.css');
+    this.loadStyleSheet(this.baseURL + 'expo.css');
+    this.loadStyleSheet(this.baseURL + 'swiper.css');
+
+    this.setBackground();
   }
 
+  setBackground(url) {
+    url = url ? url : './bkg.jpg';
+    const container = this.landingPageEl.querySelector('#novo-container');
+    if(container) {
+      container.style.backgroundImage = "url('" + url + "')";
+    }
+
+  }
 
 }

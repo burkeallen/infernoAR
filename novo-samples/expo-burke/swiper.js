@@ -10,8 +10,6 @@ class NovoSwiper {
       slidesPerView: 1,
       spaceBetween: 30,
       grabCursor: true,
-      preventClicks: false,
-      preventClicksPropagation: false,
       pagination: {
         el: '.swiper-pagination',
         clickable: true,

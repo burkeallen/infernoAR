@@ -1,5 +1,6 @@
 class NovoSponsor {
   constructor() {
+    this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;
   }
 
   displayList(data) {
@@ -17,13 +18,13 @@ class NovoSponsor {
   }
 
   displayFeatured(featured) {
-    const parent = document.querySelector('#novo-featured-container');
-    const title = document.createElement('h1');
+    const parent = this.landingPageEl.querySelector('#novo-featured-container');
+    const title = this.landingPageEl.createElement('h1');
     title.innerHTML = "Featured";
     parent.appendChild(title);
 
     featured.forEach(item => {
-      const sponsor = document.createElement('h3');
+      const sponsor = this.landingPageEl.createElement('h3');
       sponsor.id = this.setElementId(item.name);
       sponsor.innerHTML = item.name;
       parent.appendChild(sponsor)
@@ -31,13 +32,13 @@ class NovoSponsor {
   }
 
   displayStandard(standard) {
-    const parent = document.querySelector('#novo-sponsor-list-container');
-    const title = document.createElement('h1');
+    const parent = this.landingPageEl.querySelector('#novo-sponsor-list-container');
+    const title = this.landingPageEl.createElement('h1');
     title.innerHTML = "Exhibitors";
     parent.appendChild(title);
 
     standard.forEach(item => {
-      const sponsor = document.createElement('h3');
+      const sponsor = this.landingPageEl.createElement('h3');
       sponsor.innerHTML = item.name;
       sponsor.id = this.setElementId(item.name);
       parent.appendChild(sponsor)
