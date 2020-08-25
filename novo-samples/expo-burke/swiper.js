@@ -3,36 +3,50 @@
  * @author Burke Allen - NovoLogic, Inc.
  */
 
-class NovoSwiper {
-  constructor(slides) {
-    this.initCarousel(slides);
+window.NovoSwiper = (window.NovoSwiper || (class NovoSwiper {
+  constructor(config) {
+    this.container = config.shadowRoot.querySelector(config.container);
+    this.swiperContainer = this.createSwiperContainer();
+    this.initCarousel(config.slides);
+  }
+
+  createSwiperContainer() {
+    const swiperContainer = document.createElement('div');
+    swiperContainer.className = 'swiper-container';
+    swiperContainer.innerHTML = `
+      <div class="swiper-wrapper"></div>
+      <div class="swiper-pagination"></div>
+    `;
+    return this.container.appendChild(swiperContainer);
   }
 
   initCarousel(slides) {
-    const carousel = new Swiper('.swiper-container', {
+    const container = this.container.querySelector('.swiper-container');
+    const carousel = new Swiper(container, {
       loop: true,
       slidesPerView: 1,
       spaceBetween: 30,
       grabCursor: true,
       preventClicks: false,
       preventClicksPropagation: false,
+      uniqueNavElements: false,
       pagination: {
-        el: '.swiper-pagination',
+        el: this.container.querySelector('.swiper-pagination'),
         clickable: true,
       },
       autoplay: {
         delay: 4500,
         disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
       }
     });
 
+    let swiperSlides = [];
     slides.forEach(item => {
-      carousel.appendSlide([this.buildSlide(item.image, item.url)]);
+      swiperSlides.push(this.buildSlide(item.image, item.url));
     });
+
+    carousel.appendSlide(swiperSlides);
+
   }
 
   buildSlide(image, url) {
@@ -47,7 +61,7 @@ class NovoSwiper {
     return '<div class="swiper-slide"><img alt="sponsor banner" class="novo-swiper-image" src="' + image + '"></div>';
   }
 
-}
+}));
 
 
 

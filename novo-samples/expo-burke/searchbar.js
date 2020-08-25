@@ -2,16 +2,53 @@
 /**
  * @author Burke Allen - NovoLogic, Inc.
  */
+window.NovoSearchBar = (window.NovoSearchBar || (class NovoSearchBar {
+  constructor(config) {
+    this.config = config;
+    this.shadowRoot = config.shadowRoot;
+    this.container = this.shadowRoot.querySelector(config.container);
+    this.data = config.sponsors;
+    this.init();
+  }
 
-class NovoSearchBar {
-  constructor(data, title, placeholder) {
-    this.landingPageEl = (typeof landingPageEl === 'undefined') ? document : landingPageEl;
-    this.data = data;
-    this.init(title, placeholder);
+  init() {
+    const searchBar = this.createSearchBarContainer();
+    const searchTitle = this.createSearchTitle(this.config.title);
+    const searchInput = this.createSearchInput(this.config.placeholder);
+    searchBar.appendChild(searchTitle);
+    searchBar.appendChild(searchInput);
+    this.container.appendChild(searchBar);
+  }
+
+  createSearchBarContainer() {
+    const searchContainer = document.createElement('div');
+    searchContainer.id = 'novo-search-bar-container';
+    return searchContainer;
+  }
+
+  createSearchTitle(title) {
+    const searchTitle = document.createElement('div');
+    searchTitle.id = 'novo-search-title';
+    searchTitle.innerHTML = '<span class="novo-search-title">' + title + '</span>';
+    return searchTitle;
+  }
+
+  createSearchInput(placeholder) {
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.name = 'novosearch';
+    searchInput.id = 'novosearch';
+    searchInput.className = 'novo-search-input';
+    searchInput.placeholder = placeholder;
+    searchInput.addEventListener('input',
+      (event) => {
+        this.search(event.data);
+      });
+    return searchInput;
   }
 
   search() {
-    const input = this.landingPageEl.querySelector('#novosearch');
+    const input = this.shadowRoot.querySelector('#novosearch');
 
     if (!input) {
       this.displayFound(this.data);
@@ -31,7 +68,7 @@ class NovoSearchBar {
 
   displayFound(listData) {
     listData.forEach(item => {
-      const el = this.landingPageEl.querySelector(this.getElementId(item.name));
+      const el = this.shadowRoot.querySelector(this.getElementId(item.name));
       el.style.display = 'block';
     })
 
@@ -39,7 +76,7 @@ class NovoSearchBar {
 
   hideAll() {
     this.data.forEach(item => {
-      const el = this.landingPageEl.querySelector(this.getElementId(item.name));
+      const el = this.shadowRoot.querySelector(this.getElementId(item.name));
       el.style.display = 'none';
     })
   }
@@ -52,23 +89,4 @@ class NovoSearchBar {
     return id;
   }
 
-  init(title, placeholder) {
-    const searchTitle = this.landingPageEl.querySelector('#novo-search-title');
-    searchTitle.innerHTML = '<span class="novo-search-title">' + title + '</span>';
-
-    const searchBarInput = this.landingPageEl.createElement('input');
-    searchBarInput.type = 'text';
-    searchBarInput.name = 'novosearch';
-    searchBarInput.id = 'novosearch';
-    searchBarInput.className = 'novo-search-input';
-    searchBarInput.placeholder = placeholder;
-    searchBarInput.addEventListener('input',
-      (event) => {
-        this.search(event.data);
-      });
-
-    const searchContainer = this.landingPageEl.querySelector('#novo-search-container');
-    searchContainer.appendChild(searchBarInput)
-
-  }
-}
+}));

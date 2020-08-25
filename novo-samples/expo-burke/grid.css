@@ -2,7 +2,7 @@
 .novo-grid {
   display: grid;
   grid-gap: 2rem;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 16fr));
+  grid-template-columns: repeat(auto-fit, minmax(130px, 130px));
   align-items: center;
   -webkit-justify-content: center;
   -webkit-align-items: center;
@@ -12,9 +12,8 @@
 }
 
 #novo-featured-container .novo-grid {
-  grid-template-columns: repeat(auto-fit, minmax(200px, 16fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 140px));
 }
-
 
 .novo-card-img {
   visibility: hidden;
@@ -24,9 +23,13 @@
   width: 100%;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  height: 235px;
+  height: 150px;
+  border-bottom: #868686 solid 1px;
 }
 
+#novo-standard-container .novo-card-img {
+  height: 140px;
+}
 
 .novo-card-info-hover {
   position: absolute;
@@ -38,6 +41,7 @@
   max-width: 90%;
 }
 
+
 .novo-card-img-hover {
   transition: 0.2s all ease-out;
   background-size: cover;
@@ -45,12 +49,16 @@
   background-repeat: no-repeat;
   width: 100%;
   position: absolute;
-  height: 235px;
+  height: 150px;
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
   top: 0;
-
 }
+
+#novo-standard-container .novo-card-img-hover {
+  height: 140px;
+}
+
 
 .novo-card {
   transition: all .4s cubic-bezier(0.175, 0.885, 0, 1);
@@ -60,11 +68,19 @@
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0px 13px 10px -7px rgba(0, 0, 0, 0.1);
-  max-height: 327px;
+  max-height: 235px;
 }
 
 .novo-card {
   width: 100%;
+}
+
+.novo-card.novo-large-sponsor {
+  grid-column: span 2;
+}
+
+#novo-featured-container .novo-card.novo-large-sponsor {
+  grid-column: span 2;
 }
 
 .novo-card:hover {
@@ -72,19 +88,25 @@
   transform: scale(1.10, 1.10);
 }
 
+
 .novo-card-info {
   z-index: 2;
   background-color: #fff;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  padding: 16px 24px 24px 24px;
+  padding: 8px;
 }
 
 .novo-card-desc {
+  font-size: .75em;
   color: #000000;
   overflow: hidden;
+  max-height: 135px;
 }
 
+#novo-standard-container .novo-card-desc {
+  max-height: 125px;
+}
 .novo-card-category {
   font-family: 'Raleway', sans-serif;
   text-transform: uppercase;
@@ -101,9 +123,13 @@
   color: #333333;
 }
 
+#novo-standard-container .novo-card-title {
+  font-size: .8em;
+}
+
 .novo-card:hover .novo-card-img-hover {
   height: 100%;
-  opacity: 0.3;
+  opacity: 0.2;
 }
 
 .novo-card:hover .novo-card-info {
@@ -125,10 +151,13 @@
   #novo-featured-container > .novo-grid {
     margin: 40px;
   }
+}
 
-  #novo-featured-container > .novo-grid > .novo-card {
-    grid-column: span 2;
+@media only screen and (max-width: 900px) {
+  #novo-featured-container .novo-card, #novo-featured-container .novo-card.novo-large-sponsor  {
+    grid-column: span 3;
+    margin-left: 0px;
+    margin-right: 20px;
   }
-
 }
 
