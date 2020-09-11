@@ -15,7 +15,7 @@ window.NovoExpo = (window.NovoExpo || (class NovoExpo {
 
   init() {
     this.shadowRoot = this.config.shadowRoot;
-    this.page = this.shadowRoot.querySelector('#novo-page');
+    this.page = this.shadowRoot.querySelector('novo-widget');
     this.expoContainer = this.createContainer();
     this.sayHello();
     this.loadStyles();
