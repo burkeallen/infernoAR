@@ -1,4 +1,6 @@
 const CopyPlugin = require('copy-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
+
 const isProduction = process.env.NODE_ENV === 'production';
 console.log('is production build', isProduction);
 
@@ -42,6 +44,7 @@ const config = {
     filename: 'widget.js'
   },
   plugins: [
+    new CompressionPlugin(),
      new CopyPlugin({
       patterns: [
         {from: './index.html', to: './index.html'},

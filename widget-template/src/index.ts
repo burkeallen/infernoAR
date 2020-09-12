@@ -1,29 +1,38 @@
 import axios from 'axios'
-import {Header, Slides} from './header'
-// @ts-ignore
+
 import styles from './styles.scss'
+import {Header, Slides} from './header'
 import {Body} from './body';
 import {Footer} from './footer';
 
 interface Config {
+  debug?: string;
   title?: string;
   url?: string;
 }
 
 class NovoWidget {
   private config: Config;
-  private widget: Element;
+  private readonly widget: Element;
+  private readonly debug: boolean
 
   constructor() {
     this.widget = window['landingPageEl'].querySelector('novo-widget');
     this.config = this.getConfig();
+    this.debug = this.config.debug.toString().toLowerCase() === 'true';
     this.loadStyles();
   }
 
   init() {
     const protocol = this.isHTTPS() ? 'https://' : 'http://';
     const URL = protocol + this.config.url + this.config.title;
+    if(this.debug) {
+      console.log('URL', URL);
+    }
     axios.get(URL).then(res => {
+      if (this.debug) {
+        console.log('data', res.data);
+      }
       this.build(res.data);
     });
   }
@@ -44,7 +53,9 @@ class NovoWidget {
       const property = tag.replace('data-', '');
       config[property] = this.widget.getAttribute(tag);
     })
-    console.log(config);
+    if (this.debug) {
+      console.log('config', config);
+    }
     return config;
   }
 
