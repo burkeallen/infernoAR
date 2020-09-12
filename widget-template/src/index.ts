@@ -1,7 +1,9 @@
 import axios from 'axios'
-import {Banner} from './banner'
+import {Header, Slides} from './header'
 // @ts-ignore
 import styles from './styles.scss'
+import {Body} from './body';
+import {Footer} from './footer';
 
 interface Config {
   title?: string;
@@ -47,10 +49,32 @@ class NovoWidget {
   }
 
   build(data: any) {
-    const banner = new Banner(this.widget);
+    const slides: Slides = [
+      {
+        image: 'https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner1.jpg'
+      },
+      {
+        image: 'https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner2.jpg'
+      },
+      {
+        image: 'https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner3.png'
+      }
+    ]
+
     const title = `<h1>${this.config.title}</h1>`;
-    this.widget.innerHTML = title + banner.build(data);
-    banner.init();
+    this.widget.innerHTML = title;
+
+    const header = new Header(this.widget, slides);
+    this.widget.innerHTML += header.build(data);
+    header.init();
+
+    const body = new Body();
+    this.widget.innerHTML += body.build();
+
+    const footer = new Footer();
+    this.widget.innerHTML += footer.build();
+
+
   }
 
   private isHTTPS() {

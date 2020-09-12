@@ -2,12 +2,22 @@ import {Autoplay, Navigation, Pagination, Swiper} from 'swiper'
 
 Swiper.use([Autoplay, Navigation, Pagination]);
 
-class Banner {
+interface Slide {
+  image?: String;
+  link?: String;
+}
+interface Slides extends Array<Slide>{}
+export {Slide}
+export {Slides}
+
+class Header {
   swiper: Swiper;
   widget: Element;
+  slides: Slides;
 
-  constructor(widget: Element) {
+  constructor(widget: Element, slides: Slides) {
     this.widget = widget;
+    this.slides = slides;
   }
 
   init() {
@@ -18,26 +28,33 @@ class Banner {
 
   build(data: any) {
     return `
+    <div class="widget-header">
     <div class="swiper-container">
-    <div class="swiper-wrapper">
-        <div class="swiper-slide"><img alt="sponsor banner" class="novo-swiper-image" src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner1.jpg"></div>
-        <div class="swiper-slide"><img alt="sponsor banner" class="novo-swiper-image" src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner2.jpg"></div>
-        <div class="swiper-slide"><img alt="sponsor banner" class="novo-swiper-image" src="https://studio304nextechar.freetls.fastly.net/infernoAR/avc/assets/placeholder/banner3.png"></div>
+      <div class="swiper-wrapper">
+        ${this.buildSlides()}
+      </div>
+      <div class="swiper-pagination"></div>
+      <span class="swiper-button-prev"></span>
+      <span class="swiper-button-next"></span>
+      <div class="swiper-scrollbar"></div>
     </div>
-    <div class="swiper-pagination"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
     </div>
    `
   }
 
+  buildSlides() {
+    let slideHTML = '';
+    this.slides.forEach(slide => {
+      slideHTML += this.buildStatic(slide.image);
+    });
+    return slideHTML;
+  }
 
   buildStatic(image) {
-    return '<div class="swiper-slide"><img alt="sponsor banner" class="novo-swiper-image" src="' + image + '"></div>';
+    return `<div class="swiper-slide"><img alt="sponsor image" src="${image}"></div>`;
   }
 
   swiperConfig() {
-
     return {
       loop: true,
       slidesPerView: 1,
@@ -45,7 +62,6 @@ class Banner {
       grabCursor: true,
       preventClicks: false,
       preventClicksPropagation: false,
-      uniqueNavElements: false,
       pagination: {
         el: this.widget.querySelector('.swiper-pagination'),
         clickable: true,
@@ -61,4 +77,4 @@ class Banner {
   }
 }
 
-export {Banner}
+export {Header}

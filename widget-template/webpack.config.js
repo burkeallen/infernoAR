@@ -19,7 +19,7 @@ const config = {
         exclude: /node_modules/,
       },
       {
-        test: /\.(scss)$/,
+        test: /\.(scss|css)$/,
         exclude: /node_modules/,
         use: [
           "sass-to-string",
@@ -36,7 +36,7 @@ const config = {
     ]
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.json', '.scss'],
+    extensions: ['.ts', '.tsx', '.js', '.json', '.scss', '.css'],
   },
   output: {
     filename: 'widget.js'
