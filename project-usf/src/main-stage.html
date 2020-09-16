@@ -17,57 +17,101 @@
 <div id="approot" class="app-root layout-fixed">
   <div id="wrapper" class="wrapper" layout="column">
     <div class="topnavbar-wrapper">
-      <div
-          class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
+      <div class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
     </div>
     <div id="sidemenu" class="aside" onclick="openCloseMenu()"></div>
     <section class="IE-FlexAuto" flex>
       <div class="content-wrapper">
         <div id="landing-page">
 
-          <div id="landing" mutationobserver="" >
+          <div id="landing" mutationobserver="">
 
             <!-- code snippet goes here -->
             <style>
-              .usf--landing-bg {
-                background-image: url(assets/main-stage_1936x1080.jpg);
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-position: center center;
-                min-height: calc(100vh - 35px);
-                position: absolute;
-                top: -20px;
-                left: 0;
-                right: 0;
-                bottom: 0;
-              }
+                .usf-landing-bg {
+                    background-image: url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/mainstage-background.jpg);
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    min-height: calc(100vh - 55px);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
 
-              .usf-main-stage {
-                  padding: 5vh 10vw;
-                  color: #fff;
-                  font-family: 'avenirNext', sans-serif;
-              }
-              .usf-main-stage .usf-main-stage-video {
-                  height: 60vh;
-                  width: 50vw;
-                  background: #000;
-                  margin: 0 auto;
-                  border-radius: 4px;
-                  overflow: hidden;
-                  box-shadow: 0 5px 8px rgba(0,0,0,.5);
-              }
+                .grid-container {
+                    display: grid;
+                    text-align: center;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1.5fr 0.5fr;
+                    gap: 30px 1px;
+                    grid-template-areas:"video" "footer";
+                    padding-top: 10%;
+                }
+
+                .video {
+                    grid-area: video;
+                }
+
+                .footer {
+                    grid-area: footer;
+                }
+
+                .usf-btn {
+                    color: #EEFCFE;
+                    background: #445F67;
+                    letter-spacing: 2px;
+                    text-align: center;
+                    text-decoration: none;
+                    border: 0;
+                    outline: 0;
+                    font-size: 2vmax;
+                    padding: 2px 35px;
+                    display: inline-block;
+                    -webkit-transform: skew(-21deg);
+                    transform: skew(-21deg);
+                    box-shadow: 0 0 20px 5px #444444;
+                }
+
+                .usf-btn span {
+                    display: inline-block;
+                    transform: skewX(20deg);
+                }
+
+                .ntar-video-container {
+                    background-color: black;
+                    min-height: 100px;
+                    min-width: 100px;
+                    max-width: 900px;
+                    width: 100%;
+                    display: inline-block;
+                }
 
             </style>
 
-            <div class="usf--landing-bg">
+            <div class="usf-landing-bg"></div>
 
-              <div class="usf-main-stage">
-                <div class="usf-main-stage-video" id="inferno-video-player"></div>
+            <div class="grid-container">
+              <div class="video">
+                <div class="ntar-video-container">
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <div id="inferno-video-player">
+                      <iframe width="640" height="360" src="" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="footer">
+                <a href="#" class="usf-btn">
+                  <span>Enter post-presentation Q&A Session</span></a>
               </div>
 
             </div>
+            <!-- code snippet goes here -->
           </div>
-
         </div>
       </div>
     </section>
@@ -75,9 +119,9 @@
 </div>
 
 <script>
-    const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
-    const landing = landingPageEl.appendChild(document.getElementById('landing'));
-    landingPageEl.appendChild(landing);
+  const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+  const landing = landingPageEl.appendChild(document.getElementById('landing'));
+  landingPageEl.appendChild(landing);
 </script>
 
 </body>

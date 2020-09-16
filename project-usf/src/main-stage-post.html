@@ -17,107 +17,101 @@
 <div id="approot" class="app-root layout-fixed">
   <div id="wrapper" class="wrapper" layout="column">
     <div class="topnavbar-wrapper">
-      <div
-          class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
+      <div class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
     </div>
     <div id="sidemenu" class="aside" onclick="openCloseMenu()"></div>
     <section class="IE-FlexAuto" flex>
       <div class="content-wrapper">
         <div id="landing-page">
 
-          <div id="landing" mutationobserver="" >
+          <div id="landing" mutationobserver="">
 
             <!-- code snippet goes here -->
             <style>
-              .usf-landing-bg {
-                background-image: url(assets/main-stage_1936x1080.jpg);
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-position: center center;
-                min-height: calc(100vh - 55px);
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-              }
+                .usf-landing-bg {
+                    background-image: url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/mainstage-background.jpg);
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    min-height: calc(100vh - 55px);
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
 
-              usf-container-grid {
-                  min-height: 100%;
-                  display: grid;
-                  grid-template-rows: auto 1fr auto;
-                  grid-template-columns: 100%;
-              }
+                .grid-container {
+                    display: grid;
+                    text-align: center;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1.5fr 0.5fr;
+                    gap: 30px 1px;
+                    grid-template-areas:"video" "footer";
+                    padding-top: 10%;
+                }
 
-              usf-header {
-                  padding: 1rem;
-              }
+                .video {
+                    grid-area: video;
+                }
 
-              usf-main {
-                  padding: 1rem;
-              }
+                .footer {
+                    grid-area: footer;
+                }
 
-              usf-footer {
-                  text-align: center;
-                  padding: 1rem;
-              }
+                .usf-btn {
+                    color: #EEFCFE;
+                    background: #445F67;
+                    letter-spacing: 2px;
+                    text-align: center;
+                    text-decoration: none;
+                    border: 0;
+                    outline: 0;
+                    font-size: 2vmax;
+                    padding: 2px 35px;
+                    display: inline-block;
+                    -webkit-transform: skew(-21deg);
+                    transform: skew(-21deg);
+                    box-shadow: 0 0 20px 5px #444444;
+                }
 
-              .usf-btn {
-                  color: #EEFCFE;
-                  background: #445F67;
-                  letter-spacing: 2px;
-                  text-align: center;
-                  text-decoration: none;
-                  border: 0;
-                  outline: 0;
-                  font-size: 2vmax;
-                  padding: 2px 35px;
-                  display: inline-block;
-                  -webkit-transform: skew(-21deg);
-                  transform: skew(-21deg);
-                  box-shadow: 0 0 20px 5px #444444;
-              }
+                .usf-btn span {
+                    display: inline-block;
+                    transform: skewX(20deg);
+                }
 
-              /* used for main-post-presentation link to Q&A Session */
-              .usf-button-default {
-                  margin:auto;
-                  width: 50%;
-                  color: #EEFCFE;
-                  background-color: #445F67;
-                  text-align: center;
-              }
-              .usf-button-slanted {
-                  -ms-transform: skewX(-20deg);
-                  -webkit-transform: skewX(-20deg);
-                  transform: skewX(-20deg);
-              }
-              .usf-button-slanted-content {
-                  letter-spacing: 2px;
-                  font-family: 'Gotham', 'Arial', sans-serif;
-                  font-size: 2vmax;
-                  -ms-transform: skewX(20deg);
-                  -webkit-transform: skewX(20deg);
-                  transform: skewX(20deg);
-                  display: inline-block;
-              }
+                .ntar-video-container {
+                    background-color: black;
+                    min-height: 100px;
+                    min-width: 100px;
+                    max-width: 900px;
+                    width: 100%;
+                    display: inline-block;
+                }
+
             </style>
 
-            <div class="usf-landing-bg">
+            <div class="usf-landing-bg"></div>
 
-              <usf-container-grid>
-                <usf-header></usf-header>
-                <usf-main></usf-main>
-                <usf-footer>
-                  <div class="each">
-                    <a href="#" class="usf-btn"> <span style="display: inline-block; transform: skewX(20deg)">Enter post-presentation Q&A Session</span></a>
+            <div class="grid-container">
+              <div class="video">
+                <div class="ntar-video-container">
+                  <div class="embed-responsive embed-responsive-16by9">
+                    <div id="inferno-video-player">
+                      <iframe width="640" height="360" src="" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                    </div>
+
                   </div>
-                </usf-footer>
-               </usf-container-grid>
-
+                </div>
+              </div>
+              <div class="footer">
+                <a href="#" class="usf-btn">
+                  <span>Enter post-presentation Q&A Session</span></a>
+              </div>
 
             </div>
+            <!-- code snippet goes here -->
           </div>
-
         </div>
       </div>
     </section>
@@ -125,9 +119,9 @@
 </div>
 
 <script>
-    const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
-    const landing = landingPageEl.appendChild(document.getElementById('landing'));
-    landingPageEl.appendChild(landing);
+  const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+  const landing = landingPageEl.appendChild(document.getElementById('landing'));
+  landingPageEl.appendChild(landing);
 </script>
 
 </body>
