@@ -1,0 +1,94 @@
+<h1>Liquid Data Object</h1>
+<hr>
+<pre id="novo-liquid" style="color:black; font-family: 'Lucida Console', Monaco, monospace; font-size: 16px; font-weight: bold;"></pre>
+
+<div>
+  <script>
+
+  </script>
+
+  <script>
+    var novoOut = landingPageEl.querySelector('#novo-liquid');
+    var liquidData = {{data | json }};
+    novoOut.innerHTML = `${JSON.stringify(liquidData, undefined, 4)}`;
+  </script>
+
+</div>
+
+{% assign eventsByDate = data.Events | sort: "StartTime" %}
+
+{% assign dateFilterStart = '2019-04-25 00:00:00' | date: '%s' | plus: 0 %}
+{% assign dateFilterEnd = '2019-04-25 23:59:59' | date: '%s' | plus: 0 %}
+
+{% assign todaysEvents = data.Events | sort: "StartTime" %}
+
+
+<h1>Users</h1>
+{% for user in data.UserProfiles %}
+<p>{{ user.FirstName }} {{ user.LastName }} - 
+{{ user.Bio }}</p>
+{%endfor%}
+
+<h1>Events on 2019-04-25</h1> 
+<table style="width: 100%">
+  <tr>
+  <th>
+    Name
+  </th>
+  <th>
+    Time
+  </th>
+  <th>
+    Image
+  <th/>
+  <th>
+    Duration
+  </th>
+    <th>
+      Link
+    </th>
+  </tr>
+{% for event in eventsByDate %}
+  {% assign eventTimeInEpoch = event.StartTime | date : '%s' | plus: 0 %}
+  {% if eventTimeInEpoch >= dateFilterStart and eventTimeInEpoch <= dateFilterEnd %}
+  <tr>
+    <td>
+      {{ event.Name }} 
+    </td>
+    <td>
+      {{ event.StartTime | date : '%H:%M' }}
+    </td>
+    <td>
+      <img src="{{ event.VideoThumbnail}} " style="width: 100px;"/>
+    </td>
+    <td>
+      {{ event.VideoDuration }} 
+    </td>
+    <td>
+      <a href="/videos/{{data.CurrentlyViewedCategory.Id}}/detail/{{event.Id}}">Open Video</a>
+    </td>
+  </tr>
+  {% endif %}
+{% endfor %}
+</table>
+
+<h1>All Events</h1> 
+<table>
+  <tr>
+  <th>
+    Name
+  </th>
+  <th>
+    Time
+  </th>
+  </tr>
+{% for event in eventsByDate %}
+<tr>
+  <td>
+    {{ event.Name }} 
+  </td>
+  <td>
+    {{ event.StartTime }}
+</tr>
+{% endfor %}
+</table>
