@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"/>
+  <title>USF Agenda</title>
+  <link rel="stylesheet" href="./assets/inferno.css">
+  <script>
+    function openCloseMenu() {
+      document.getElementById('approot').classList.toggle('aside-open');
+      document.getElementById('videos-sidebar').classList.toggle('aside-open');
+    }
+  </script>
+</head>
+<body style="margin:0;padding:0px;">
+
+<div id="approot" class="app-root layout-fixed">
+  <div id="wrapper" class="wrapper" layout="column">
+    <div class="topnavbar-wrapper">
+      <div
+          class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
+    </div>
+    <div id="videos-sidebar" class="aside" onclick="openCloseMenu()"></div>
+    <section class="IE-FlexAuto" flex>
+      <div class="content-wrapper">
+        <div id="landing-page">
+          <div id="landing" mutationobserver="">
+            <script>
+              const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+              const landing = landingPageEl.appendChild(document.getElementById('landing'));
+              landingPageEl.appendChild(landing);
+            </script>
+
+            <!-- code snippet goes here -->
+            <div>
+              <style>
+                /* Background Styles */
+                .landing-bg {
+                  /* Image */
+                  background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-agenda.jpg');
+                  background-size: cover;
+                  background-repeat: no-repeat;
+                  background-position: center center;
+                  min-height: calc(100vh - 55px);
+                  position: absolute;
+                  top: -20px;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                }
+
+                .title {
+                  color: #fff;
+
+                }
+
+                .grid-container {
+                  position: relative;
+                  display: grid;
+                  grid-template-columns: 1fr 2fr;
+                  grid-template-rows: repeat(auto-fill, 1fr);
+                  gap: 0px 2em;
+                  grid-template-areas: "left-col right-col";
+                  margin-bottom: 30px;
+                  padding-bottom: 20px;
+                  border-bottom: solid 1px #868686;
+                }
+
+                .left-col {
+                  grid-area: left-col;
+                }
+
+                .left-col > img {
+                  width: 330px;
+                  margin-left: 40px;
+                  margin-top: 32px;
+                }
+
+                .right-col {
+                  grid-area: right-col;
+                  display: grid;
+                  grid-template-columns: 1fr;
+                  grid-template-rows: 0.2fr 1.8fr;
+                  gap: 1px 1px;
+                  grid-template-areas:  "title"  "agenda";
+                }
+
+                .title {
+                  grid-area: title;
+                }
+
+                .agenda {
+                  grid-area: agenda;
+                  display: grid;
+                  grid-template-columns: 0.6fr 1.4fr;
+                  grid-template-rows: repeat(auto-fill, 1fr);
+                  gap: 1px 1px;
+                }
+
+                .time-slot {
+                  position: relative;
+                  background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-arrow.png');
+                  background-repeat: no-repeat;
+                  background-position: center center;
+                  background-size: 140px 140px;
+                  /* Cover height minus 55px header */
+                  height: 200px;
+                }
+
+                .time {
+                  margin: 0;
+                  position: absolute;
+                  top: 54%;
+                  left: 40%;
+                  -ms-transform: translate(-57%, -65%);
+                  transform: translate(-57%, -65%);
+                  color: #ffffff;
+                  font-size: 1.5em;
+                  font-weight: bold;
+                  line-height: .95em;
+                  text-align: center;
+                }
+
+                .time > span {
+                  font-size: .75em;
+                  font-weight: normal;
+                }
+
+                .session {
+                  padding-right: 50px;
+                }
+
+                .session > .session-heading {
+                  color: var(--branding-primary);
+                  text-transform: uppercase;
+                  font-size: 1.25em;
+                }
+
+                .session > .session-sub-heading {
+                  margin-bottom: 14px;
+                  font-weight: bolder;
+                  font-size: 1.2em;
+                }
+
+                .session > .session-content {
+                  color: #ffffff;
+                  padding-right: 40px;
+                }
+
+                .session > .session-content h4 {
+                  text-align: center;
+                }
+
+                .session > .session-content table {
+                  width: 100%;
+                  border: none;
+
+                }
+
+                .session > .session-content td {
+                  vertical-align: top;
+                  padding-top: 8px;
+                  padding-bottom: 8px;
+                  border-bottom: 1px solid #6c8080;
+                }
+
+                .session > .session-content tr:nth-child(1) td {
+                  border-bottom: none;
+                }
+
+                .session > .session-content td:nth-child(1) {
+                  width: 200px;
+                  font-weight: bold;
+                }
+
+                .session > .session-content td > span {
+                  font-style: italic;
+                  font-size: .8em;
+                }
+
+                @media only screen and (max-width: 767px) {
+                  .landing-bg {
+                    /* Cover height minus 55px header */
+                    min-height: calc(100vh - 55px);
+
+                    /* Stick to Jolokia content frame */
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                  }
+
+                  .grid-container {
+                    display: block;
+                  }
+
+                  .left-col {
+                    margin-left: 0;
+                    text-align: center;
+                  }
+
+                  .agenda {
+                    text-align: center;
+                    margin-top: 40px;
+                  }
+
+                  .title {
+                    text-align: center;
+                    width: 100%;
+                  }
+                }
+              </style>
+              <div class="landing-bg"></div>
+
+              <!--    FRIDAY     -->
+              <div class="grid-container">
+                <div class="left-col">
+                  <img
+                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-main-header.png"/>
+                </div>
+
+                <div class="right-col">
+                  <div class="title"><h1>Friday, September 25</h1></div>
+                  <div class="agenda">
+                    <div class="time-slot">
+                      <div class="time">1:00 PM<br><span>Until</span><br>2:45 PM</div>
+                    </div>
+                    <div class="session">
+                      <div class="session-heading">Expanding the Boundaries of Organizational Communication:<br>
+                                                   Imagining New Directions for Theory and Method
+                      </div>
+                      <div class="session-sub-heading">Moderators: Beatriz Nieto Fernandez and Zhenyu Tian</div>
+                      <div class="session-content">
+                        <table>
+                          <tr>
+                            <td colspan="2"><h4>Workshop Presentations</h4></td>
+                          </tr>
+                          <tr>
+                            <td>Zhuo Ban<br><span>University of Cincinnati</span></td>
+                            <td>Expanding the boundaries of knowledge: SEWA as a subaltern knowledge community</td>
+                          </tr>
+                          <tr>
+                            <td>Joëlle Cruz<br><span>University of Colorado Boulder</span></td>
+                            <td>Decolonizing Organizational Communication: Tentative Steps</td>
+                          </tr>
+                          <tr>
+                            <td>Virginia Sánchez Sánchez<br><span>Auburn University</span></td>
+                            <td>Rethinking “Calling” Research</td>
+                          </tr>
+                          <tr>
+                            <td>James McDonald<br><span>University of Texas at San Antonio</span></td>
+                            <td>Difference and Intersectionality as Constitutive Features of Organizing: Expanding the
+                                Boundaries of Organizational Communication
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Patricia S. Parker<br><span>University of North Carolina at Chapel Hill</span></td>
+                            <td>Expanding Boundaries through Community Engagement and Communication for Social Justice
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>Jane Jorgenson<br><span>University of South Florida</span></td>
+                            <td>Using Photo-Interviewing in The Research Process: Expanding Methodological Boundaries
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!--    SATURDAY   -->
+              <div class="grid-container">
+                <div class="left-col">
+                </div>
+
+                <div class="right-col">
+                  <div class="title"><h1>Saturday, September 26</h1></div>
+                  <div class="agenda">
+                    <div class="time-slot">
+                      <div class="time">5:15 PM<br><span>Until</span><br>5:45 PM</div>
+                    </div>
+                    <div class="session">
+                      <div class="session-heading">Lightning Presentations</div>
+                      <div class="session-sub-heading">Poster Session #1</div>
+                      <div class="session-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                   eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                                                   ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                   aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                   reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                   pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                   culpa qui officia deserunt mollit anim id est laborum.
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              <!--    SUNDAY     -->
+              <div class="grid-container">
+                <div class="left-col">
+                </div>
+
+                <div class="right-col">
+                  <div class="title"><h1>Sunday, September 27</h1></div>
+                  <div class="agenda">
+                    <div class="time-slot">
+                      <div class="time">5:15 PM<br><span>Until</span><br>5:45 PM</div>
+                    </div>
+                    <div class="session">
+                      <div class="session-heading">Lightning Presentations</div>
+                      <div class="session-sub-heading">Poster Session #1</div>
+                      <div class="session-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                   eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+                                                   ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                                                   aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                                   reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                                   pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                                   culpa qui officia deserunt mollit anim id est laborum.
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- code snippet goes here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+</body>
+</html>
