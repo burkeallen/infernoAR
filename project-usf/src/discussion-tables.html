@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"/>
+  <title>USF Agenda</title>
+  <link rel="stylesheet" href="./assets/inferno.css">
+  <script>
+    function openCloseMenu() {
+      document.getElementById('approot').classList.toggle('aside-open');
+      document.getElementById('videos-sidebar').classList.toggle('aside-open');
+    }
+  </script>
+</head>
+<body>
+
+<div id="approot" class="app-root layout-fixed">
+  <div id="wrapper" class="wrapper" layout="column">
+    <div class="topnavbar-wrapper">
+      <div
+          class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
+    </div>
+    <div id="videos-sidebar" class="aside" onclick="openCloseMenu()"></div>
+    <section class="IE-FlexAuto" flex>
+      <div class="content-wrapper">
+        <div id="landing-page">
+          <div id="landing">
+            <script>
+              const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+              const landing = landingPageEl.appendChild(document.getElementById('landing'));
+              landingPageEl.appendChild(landing);
+            </script>
+
+            <!-- code snippet goes here -->
+
+            <style>
+              :host {
+                --dGray: #466169;
+                --dGrayDark: #374b51;
+              }
+
+              .landing-bg {
+                background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-agenda.jpg');
+                background-size: cover;
+                background-position: left top;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+              }
+
+              .grid-container {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                grid-template-rows: 0.6fr;
+                gap: 1px 1px;
+                grid-template-areas:  "left-col right-col";
+                margin-top: 30px;
+                z-index: 99;
+              }
+
+              .left-col {
+                grid-area: left-col;
+                z-index: 99;
+              }
+
+              .right-col {
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 0.8fr 1.2fr;
+                gap: 1px 1px;
+                grid-template-areas: "header" "discussions";
+                grid-area: right-col;
+                z-index: 99;
+              }
+
+              .header {
+                grid-area: header;
+                z-index: 99;
+              }
+
+              .header .title {
+                color: #ffffff;
+                font-size: 1.75em;
+                font-weight: bold;
+                margin-bottom: 0;
+              }
+
+              .header .subTitle {
+                color: #ffffff;
+                font-size: 1.25em;
+                margin-top: 4px;
+                transform: scale(1, 1.5);
+              }
+
+              .header hr {
+                border: 1px solid var(--branding-primary);
+                max-width: 89%;
+                margin: 0px;
+              }
+
+              .discussions {
+                display: grid;
+                grid-template-rows: 1fr 1fr;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px 20px;
+                grid-template-areas: "table1 table2"  "table3 table4";
+                grid-area: discussions;
+                z-index: 99;
+              }
+
+              a {
+                text-decoration: none;
+              }
+
+              .discussion-table {
+                width: 100%;
+                max-width: 450px;
+                border: solid 2px var(--dGrayDark);
+                transition: all .2s ease-in-out;
+                background-color: var(--dGray);
+              }
+
+              .discussion-table:hover {
+                transform: scale(1.05);
+                filter: brightness(130%);
+              }
+
+              .table1 {
+                grid-area: table1;
+              }
+
+              .table2 {
+                grid-area: table2;
+              }
+
+              .table3 {
+                grid-area: table3;
+              }
+
+              .table4 {
+                grid-area: table4;
+              }
+
+              .slanted-btn {
+                color: #616262;
+                font-weight: bold;
+                background: var(--branding-primary);
+                text-align: center;
+                text-decoration: none;
+                text-transform: uppercase;
+                border: 0;
+                outline: 0;
+                font-size: 1.75em;
+                padding: 2px 35px;
+                display: inline-block;
+                transform: skew(-21deg);
+              }
+
+              .slanted-btn span {
+                display: inline-block;
+                transform: skewX(20deg);
+              }
+
+              .full-btn {
+                color: #616262;
+                font-weight: bold;
+                background: var(--branding-primary);
+                text-align: center;
+                text-decoration: none;
+                text-transform: uppercase;
+                border: 0;
+                outline: 0;
+                font-size: 1.75em;
+                padding: 4px 35px;
+                display: inline-block;
+                filter: brightness(80%);
+                width: 100%;
+              }
+
+              .dtable {
+                position: relative;
+                text-align: center;
+                min-height: 240px;
+                padding-left: 8px;
+                padding-right: 8px;
+                color: #ffffff;
+              }
+
+              .dtable .slanted-btn {
+                position: absolute;
+                bottom: 0;
+                margin-top: auto;
+                left: 33%;
+                font-size: 1.25em;
+                border: solid 3px var(--dGrayDark);
+              }
+
+              .dtitle {
+                margin-top: 8px;
+                margin-bottom: 2px;
+                font-weight: bold;
+                font-size: 1.2em;
+              }
+
+              .dsub {
+                margin-top: 0;
+                margin-bottom: 30px;
+                font-weight: lighter;
+                font-size: 1em;
+                letter-spacing: .1em;
+                transform: scale(1, 1.2);
+              }
+
+              .dcontent {
+                text-align: left;
+                margin-bottom: 20px;
+                font-style: italic;
+                font-size: 1em;
+                margin-bottom: auto;
+              }
+
+              @media only screen and (max-width: 875px) {
+                .grid-container {
+                  display: block;
+                }
+
+                .left-col {
+                  display: none;
+                }
+
+                .discussions {
+                  display: block;
+                }
+
+                .discussion-table {
+                  margin-bottom: 20px;
+                  max-width: 99%;
+                }
+              }
+
+
+            </style>
+
+            <div class="landing-bg"></div>
+
+            <div class="grid-container">
+              <div class="left-col">
+                <img
+                    src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-main-header-sm.png">
+              </div>
+
+              <div class="right-col">
+                <div class="header">
+                  <div class="slanted-btn"><span>Discussion Tables</span></div>
+                  <div style="margin-top: 44px;">
+                    <p class="title">Saturday, September 26 1:00 PM - 2:00 PM</p>
+                    <hr/>
+                    <p class="subTitle">Join one of the tables below</p>
+                  </div>
+                  <div class="discussions">
+                    <div class="table1">
+                      <div class="discussion-table">
+                        <a href="">
+                          <div class="dtable">
+                            <p class="dtitle">Discussion Table 1</p>
+                            <p class="dsub">Alternatives to Academic Career Paths</p>
+                            <p class="dcontent">Panelist: Dr Robyn Remke, Dr Abigail Selzer King, Dr. Travis Thompson,
+                                                Dr.
+                                                Cerise Glenn Maniagluat, Dr. Sarah McGhee</p>
+                            <p class="dcontent">Moderators: Cayla Lanier, Lize Baranowicz</p>
+                          </div>
+                          <button class="full-btn"><span>join</span></button>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="table2">
+                      <div class="discussion-table">
+                        <a href="">
+                          <div class="dtable">
+                            <p class="dtitle">Discussion Table 2</p>
+                            <p class="dsub">Future of Academe</p>
+                            <p class="dcontent">Panelist: Dr. Eric Eisenberg, Dr. Kevin Barge, Dr. Rebecca Meisenbach,
+                                                Dr. Michelle Shumate, Dr. Seungyoon Lee, Dr. Eric Waters</p>
+                            <p class="dcontent">Moderators: Jonathan Baker and Nivethitha Ketheeswaran</p>
+                          </div>
+                          <button class="full-btn"><span>join</span></button>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="table3">
+                      <div class="discussion-table">
+                        <a href="">
+                          <div class="dtable">
+                            <p class="dtitle">Discussion Table 3</p>
+                            <p class="dsub">Living Whole Lives During a Pandemic</p>
+                            <div class="content">
+                              <p>Dr. Heather Zoller, Dr. Angela N. Gist-Mackey, Dr. Heewon Kim,
+                                 Dr. Laura Ellingson, Dr. Peter Jensen</p>
+                              <p>Moderators: Jessica Lolli and Parameswari Mukherjee </p>
+                            </div>
+                          </div>
+                          <button class="full-btn"><span>join</span></button>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="table4">
+                      <div class="discussion-table">
+                        <a href="">
+                          <div class="dtable">
+                            <p class="dtitle">Discussion Table 4</p>
+                            <p class="dsub">Preparing for Academic Jobs</p>
+                            <p class="dcontent">Dr. Dajung (DJ) Woo, Dr. Emilly Martinez, Dr. Rahul Mitra, Dr.
+                                                Chigozirim
+                                                U. Sodeke, Dr. Debbie S. Dougherty, Dr. Kristen Lucas</p>
+                            <p class="dcontent">Moderators: Timothy Betts and Rebecca Todd </p>
+                          </div>
+                          <button class="full-btn"><span>join</span></button>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+</body>
+</html>
