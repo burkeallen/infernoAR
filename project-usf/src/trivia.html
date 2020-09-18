@@ -1,130 +1,256 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"/>
-  <title>Trivia</title>
-  <link rel="stylesheet" href="./assets/inferno.css">
-  <script>
-    function openCloseMenu() {
-      document.getElementById('approot').classList.toggle('aside-open');
-      document.getElementById('sidemenu').classList.toggle('aside-open');
+
+<style>
+    /* Background Styles */
+    .ntar-landing-bg {
+        /* Image */
+        background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-mainstage.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+
+        /* Cover height minus 55px header */
+        min-height: calc(100vh - 55px);
+
+        /* Stick to Jolokia content frame */
+        position: fixed;
+        top: -20px;
+        left: 280px;
+        right: 0;
+        bottom: 0;
+
+        /* Modifying style to fix hamburger menu issue */
+        position: absolute;
+        left: 0px;
+        margin-bottom: -64px;
     }
-  </script>
-</head>
-<body style="margin:0;padding:0px;">
+    #inferno-video-player {
+        max-width: 100% !important;
+    }
+    @media only screen and (max-width: 768px) {
+        .ntar-landing-bg {
+            /* Cover height minus 55px header */
+            min-height: calc(100vh - 55px);
 
-<div id="approot" class="app-root layout-fixed">
-  <div id="wrapper" class="wrapper" layout="column">
-    <div class="topnavbar-wrapper">
-      <div class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
-    </div>
-    <div id="sidemenu" class="aside" onclick="openCloseMenu()"></div>
-    <section class="IE-FlexAuto" flex>
-      <div class="content-wrapper">
-        <div id="landing-page">
+            /* Stick to Jolokia content frame */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
 
-          <div id="landing" mutationobserver="">
+    /* ./ Background Styles */
 
-            <!-- code snippet goes here -->
-            <style>
-                .ntar-landing-bg {
-                    background-image: url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-mainstage.jpg);
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    background-position: center center;
-                    min-height: calc(100vh - 35px);
-                    position: absolute;
-                    top: -20px;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                }
+    /* Page Content Container Styles */
+    .ntar-landing-content {
+        /* Scale to full width and height + footer space */
+        width: 100%;
+        height: calc(100% + 50px);
 
-                .grid-container {
-                    display: grid;
-                    text-align: center;
-                    grid-template-columns: 1fr;
-                    grid-template-rows: 1.5fr 0.5fr;
-                    gap: 30px 1px;
-                    grid-template-areas:"video" "footer";
-                    margin-top: 100px;
-                }
+        /* Stick to Jolokia content frame and scroll y */
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden scroll;
 
-                .video {
-                    grid-area: video;
-                }
+        /* Pad Content */
+        padding: 0px;
 
-                .footer {
-                    grid-area: footer;
-                }
+        /* Display Type */
+        display: flex;
+        flex-direction: column;
+    }
+    /* ./ Page Content Container Styles */
 
-                .chat-main {
-                    float:right;
-                    padding-right: 200px;
-                }
+    /* Video Poll QA Styles */
+    .ntar-vpqa-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 64px;
+        margin-top: 16px;
+    }
+    .ntar-vqa-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex: 1 1 65%;
+    }
 
-                .chat-main iframe {
-                    border: none;
-                    height: 70vh;
-                    width: 24%;
-                    margin: 0;
-                    position: absolute;
-                    top: 69%;
-                    -webkit-transform: translate(-50%, -50%);
-                    -ms-transform: translate(-50%, -50%);
-                    transform: translate(-50%, -50%);
-                    overflow: hidden;
-                    display: block;
-                }
+    .ntar-qa-container {
+        display: flex;
+        flex-direction: row;
+        background-color: white;
+        min-height: 64px;
+        width: 100%;
+        margin: 16px 0;
+        flex: 4 4 64px;
+        max-height: 95px
+    }
 
-                .video-container {
-                    margin-top: 130px;
-                    margin-right: 100px;
-                    background-color: black;
-                    min-height: 100px;
-                    min-width: 100px;
-                    max-width: 640px;
-                    width: 100%;
-                    display: inline-block;
-                }
+    .ntar-title-container {
+        min-height: 80px;
+    }
 
-            </style>
+    .chat-main {
+        background-color: transparent;
+        flex: 1 1 35%;
+        object-fit: contain;
+    }
 
-            <div class="ntar-landing-bg"></div>
+    .chat-main iframe {
+        border: none;
+        height: 70vh;
+        max-height: 70vh;
+        margin: 0;
+        overflow: hidden;
+        display: block;
+    }
 
-            <div class="grid-container">
-              <div class="video">
-                <div class="video-container">
-                  <div class="embed-responsive embed-responsive-16by9">
-                    <div id="inferno-video-player">
-                      <iframe width="640" height="360" src="/embed/aafafe97-d3c6-4aa8-aa8b-7dc71c3b4292" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                    </div>
-                  </div>
-                </div>
+    .ntar-poll-container img {
+        width: 100%;
+    }
 
-                <div class="chat-main">
-                  <iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=startupLounge&chatroomname=Startup%20Lounge"></iframe>
-                </div>
+    @media only screen and (max-width: 1000px) {
+        .ntar-vpqa-container {
+            flex-direction: column;
+        }
+        .ntar-vqa-container {
+            display: block;
+        }
+    }
+    @media only screen and (max-width: 500px) {
+        .ntar-vpqa-container {
+            padding: 0 24px;
+        }
+    }
+    /* ./ Video Poll QA Styles */
 
-              </div>
+    /* Question Box */
+    .question-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        font-size: 2em;
+        text-align: left;
+        width: 100%;
+        height: 100%;
+    }
 
-              <div class="footer"></div>
-            </div>
-            <!-- code snippet goes here -->
+    .question-prompt {
+        padding: 8px 16px;
+        background-color: #d9d9d9;
+        color: #808080;
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
 
-          </div>
+        flex: 1 1 25%;
+    }
+
+    .question-input {
+        background-color: #ffffff;
+        padding: 0;
+
+        flex: 2 1 50%;
+    }
+
+    .question-submit {
+        text-align: center;
+        vertical-align: bottom;
+        flex: 1 1 25%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    #question-input-control {
+        border: none;
+        outline: none;
+        background-color: white;
+        margin: 0;
+        padding: 0.5em;
+        height: 100%;
+        width: 100%;
+        color: black;
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    #question-submit-button {
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        margin: 0.5em 1em;
+        height: 32px;
+        border: none;
+        outline: none;
+        border-radius: 20px;
+        background-color: #27608e;
+        color: #ffffff;
+        padding: 4px 1em;
+        font-size: 16px;
+        line-height: 16px;
+        cursor: pointer;
+    }
+
+    #question-submit-button:hover {
+        background-color: #3375ac;
+    }
+
+    #question-submit-button:active {
+        background-color: #193d5a;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .question-box {
+            flex-direction: column;
+        }
+    }
+    /* ./Question Box */
+
+
+</style>
+
+<!-- Background Frame (No Content) -->
+<div class="ntar-landing-bg"></div>
+<!-- ./ Background Frame -->
+
+<!-- Page Content Container -->
+<div class="ntar-landing-content">
+  <div class="ntar-title-container"></div>
+
+  <!-- Video Poll QA Container -->
+  <div class="ntar-vpqa-container">
+
+    <div class="ntar-vqa-container">
+      <div class="ntar-video-container">
+        <div class="embed-responsive embed-responsive-16by9">
+          <div id="inferno-video-player"></div>
         </div>
       </div>
-    </section>
+      <div class="ntar-qa-container">
+        <div class="question-box">
+          <span class="question-prompt">Ask a question:</span>
+          <span class="question-input">
+                  <textarea id="question-input-control"></textarea>
+                </span>
+          <span class="question-submit"
+          ><button
+            id="question-submit-button"
+            onclick="landingPageEl.querySelector('#question-input-control').value=''"
+          >
+                    Submit
+                  </button>
+                </span>
+        </div>
+      </div>
+    </div>
+    <div class="chat-main">
+      <iframe width="100%" src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=trivia&chatroomname=Trivia"></iframe>
+    </div>
   </div>
+  <!-- ./Video Poll QA Container -->
+
 </div>
-
-<script>
-  const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
-  const landing = landingPageEl.appendChild(document.getElementById('landing'));
-  landingPageEl.appendChild(landing);
-</script>
-
-</body>
-</html>
+<!-- ./ Page Content Container -->
