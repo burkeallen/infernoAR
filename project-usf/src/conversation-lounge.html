@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"/>
+  <title>USF Agenda</title>
+  <link rel="stylesheet" href="./assets/inferno.css">
+  <script>
+    function openCloseMenu() {
+      document.getElementById('approot').classList.toggle('aside-open');
+      document.getElementById('videos-sidebar').classList.toggle('aside-open');
+    }
+  </script>
+</head>
+<body>
+
+<div id="approot" class="app-root layout-fixed">
+  <div id="wrapper" class="wrapper" layout="column">
+    <div class="topnavbar-wrapper">
+      <div class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"></div>
+    </div>
+    <div id="videos-sidebar" class="aside" onclick="openCloseMenu()"></div>
+    <section class="IE-FlexAuto" flex>
+      <div class="content-wrapper">
+        <div id="landing-page">
+          <div id="landing">
+            <script>
+              const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+              const landing = landingPageEl.appendChild(document.getElementById('landing'));
+              landingPageEl.appendChild(landing);
+            </script>
+
+            <!-- code snippet goes here -->
+
+            <style>
+                :host {
+                    --dGray: #466169;
+                    --dGrayDark: #374b51;
+                }
+
+                .landing-bg {
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-lounge.jpg');
+                    background-size: cover;
+                    background-position: left top;
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                }
+
+                .grid-container {
+                    display: grid;
+                    grid-template-columns: 1fr 2fr;
+                    grid-template-rows: 0.6fr;
+                    gap: 1px 1px;
+                    grid-template-areas:  "left-col right-col";
+                    margin-top: 30px;
+                    z-index: 99;
+                }
+
+                .left-col {
+                    grid-area: left-col;
+                    z-index: 99;
+                }
+
+                .right-col {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 0.8fr 1.2fr;
+                    gap: 1px 1px;
+                    grid-template-areas: "header" "lounge";
+                    grid-area: right-col;
+                    z-index: 99;
+                }
+
+                .header {
+                    grid-area: header;
+                    z-index: 99;
+                }
+
+                .header .title {
+                    color: #ffffff;
+                    font-size: 1.75em;
+                    font-weight: bold;
+                    margin-bottom: 0;
+                    text-shadow: 1px 1px 2px black, 0 0 25px darkgrey, 0 0 5px darkgrey;
+                }
+
+                .header hr {
+                    border: 1px solid var(--branding-primary);
+                    max-width: 89%;
+                    margin: 0px;
+                }
+
+                .lounge {
+                    display: grid;
+                    margin-top: 20px;
+                    grid-template-rows: 1fr;
+                    grid-template-columns: 1fr;
+                    gap: 20px 20px;
+                    grid-template-areas: "table1";
+                    grid-area: lounge;
+                    z-index: 99;
+                }
+
+                a {
+                    text-decoration: none;
+                }
+
+                .lounge-table {
+                    width: 100%;
+                    max-width: 450px;
+                    border: solid 2px var(--dGrayDark);
+                    transition: all .2s ease-in-out;
+                    background-color: var(--dGray);
+                }
+
+                .lounge-table:hover {
+                    transform: scale(1.05);
+                    filter: brightness(130%);
+                }
+
+                .table1 {
+                    margin-left: 100px;
+                    max-width: 200px;
+                    grid-area: table1;
+                }
+
+                .slanted-btn {
+                    color: #616262;
+                    font-weight: bold;
+                    background: var(--branding-primary);
+                    text-align: center;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    border: 0;
+                    outline: 0;
+                    font-size: 1.75em;
+                    padding: 2px 35px;
+                    display: inline-block;
+                    transform: skew(-21deg);
+                }
+
+                .slanted-btn span {
+                    display: inline-block;
+                    transform: skewX(20deg);
+                }
+
+                .full-btn {
+                    color: #616262;
+                    font-weight: bold;
+                    background: var(--branding-primary);
+                    text-align: center;
+                    text-decoration: none;
+                    text-transform: uppercase;
+                    border: 0;
+                    outline: 0;
+                    font-size: 1.75em;
+                    padding: 4px 35px;
+                    display: inline-block;
+                    filter: brightness(80%);
+                    width: 100%;
+                }
+
+                .dtable {
+                    position: relative;
+                    text-align: center;
+                    min-height: 110px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    color: #ffffff;
+                }
+
+                .dtable .slanted-btn {
+                    position: absolute;
+                    bottom: 0;
+                    margin-top: auto;
+                    left: 33%;
+                    font-size: 1.25em;
+                    border: solid 3px var(--dGrayDark);
+                }
+
+
+                .dcontent {
+                    text-align: left;
+                    margin-bottom: 20px;
+                    font-size: 1em;
+                    margin-bottom: auto;
+                }
+
+                @media only screen and (max-width: 875px) {
+                    .grid-container {
+                        display: block;
+                    }
+
+                    .left-col {
+                        display: none;
+                    }
+
+                    .lounge {
+                        display: block;
+                    }
+
+                    .lounge-table {
+                        margin-bottom: 20px;
+                        max-width: 99%;
+                    }
+                }
+            </style>
+
+            <div class="landing-bg"></div>
+
+            <div class="grid-container">
+              <div class="left-col">
+                <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-main-header-sm.png">
+              </div>
+
+              <div class="right-col">
+                <div class="header">
+                  <div class="slanted-btn"><span>Conversation Lounge</span></div>
+                  <div style="margin-top: 25px;">
+                    <p class="title">Need a Break? Relax and Chat on the USF Campus Beach </p>
+                  </div>
+                  <hr/>
+                  <div class="lounge">
+                    <div class="table1">
+                      <div class="lounge-table">
+                        <a href="">
+                          <div class="dtable">
+                            <p class="dcontent">
+                              Think of this space as a virtual hallway. Bump into someone you know, or make a <b>new connection!</b>
+                            </p>
+                          </div>
+                          <button class="full-btn"><span>join</span></button>
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+
+</body>
+</html>
