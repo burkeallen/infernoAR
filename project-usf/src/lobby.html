@@ -12,8 +12,7 @@
     }
   </script>
 </head>
-<body style="margin:0;padding:0px;">
-
+<body>
 <div id="approot" class="app-root layout-fixed">
   <div id="wrapper" class="wrapper" layout="column">
     <div class="topnavbar-wrapper">
@@ -32,15 +31,16 @@
             </script>
 
             <!-- code snippet goes here -->
-            <div>
+
               <style>
                 /* Background Styles */
                 .landing-bg {
                   /* Image */
                   background-color: #457964;
-                  background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-agenda-spot.jpg');
-                  background-repeat: repeat;
-                  min-height: calc(100vh - 95px);
+                  background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-lobby.jpg');
+                  background-repeat: no-repeat;
+                  background-size: cover;
+                  min-height: calc(100vh);
                   position: absolute;
                   top: -20px;
                   left: 0;
@@ -48,697 +48,119 @@
                   bottom: 0;
                 }
 
-                img.sticky {
-                  position: -webkit-sticky; /* Safari */
-                  position: sticky;
-                  top: 0;
-                  z-index:1;
-               }
-
-                .title {
-                  color: #fff;
-
-                }
-
                 .grid-container {
-                  position: relative;
                   display: grid;
-                  grid-template-columns: 1fr 2fr;
-                  grid-template-rows: repeat(auto-fill, 1fr);
-                  gap: 0px 2em;
-                  grid-template-areas: "left-col right-col";
-                  margin-bottom: 30px;
-                  padding-bottom: 20px;
-                  border-bottom: solid 1px #868686;
-                  z-index: 99;
-                }
-
-                .left-col {
-                  grid-area: left-col;
-                }
-
-                .left-col > img {
-                  width: 330px;
-                  margin-left: 40px;
-                  margin-top: 32px;
-                }
-
-                .right-col {
-                  grid-area: right-col;
-                  display: grid;
+                  text-align: center;
+                  justify-items: center;
+                  justify-content: center;
+                  align-content: center;
                   grid-template-columns: 1fr;
-                  grid-template-rows: 0.2fr 1.8fr;
-                  gap: 1px 1px;
-                  grid-template-areas:  "title"  "agenda";
+                  grid-template-rows: 0.1fr 1fr;
+                  gap: 0 0;
+                  grid-template-areas: "menu";
                 }
 
-                .title {
-                  grid-area: title;
+                .menu {
+                  grid-area: menu;
+                  z-index: 99;
+                  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.85);
+
                 }
 
-                .agenda {
-                  grid-area: agenda;
-                  display: grid;
-                  grid-template-columns: 0.6fr 1.4fr;
-                  grid-template-rows: repeat(auto-fill, 1fr);
-                  gap: 1px 1px;
-                }
-
-                .time-slot {
-                  position: relative;
-                  background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-arrow.png');
-                  background-repeat: no-repeat;
-                  background-position: center center;
-                  background-size: 170px 140px;
-                  /* Cover height minus 55px header */
-                  height: 200px;
-                  width: 200px;
-                  white-space: nowrap;
-                }
-
-                .time-slot:before {
-                  content: '';
-                  position: absolute;
-                  border-radius: 80px;
-                  top: 0;
-                  left: -9px;
+                .header img {
                   width: 100%;
-                  height: 100%;
-                  background-image: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.65) 0%, #48796a 100%);
-                  opacity: 0.5;
-                }
-
-                .time {
-                  margin: 0;
-                  position: absolute;
-                  top: 54%;
-                  left: 40%;
-                  -ms-transform: translate(-57%, -65%);
-                  transform: translate(-57%, -65%);
-                  color: #ffffff;
-                  font-size: 1.5em;
-                  font-weight: bold;
-                  line-height: .95em;
-                  text-align: center;
-                  white-space: nowrap;
-                }
-
-                .time > span {
-                  font-size: .75em;
-                  font-weight: normal;
-                }
-
-                .session {
-                  padding-right: 50px;
-                  margin-bottom: 60px;
-                }
-
-                .session > .session-heading {
-                  color: var(--branding-primary);
-                  text-transform: uppercase;
-                  font-size: 1.25em;
-                }
-
-                .session-sub-heading {
-                  color: #000;
-                  font-weight: bolder;
-                }
-
-                .discussion-title {
-                  color: var(--branding-primary);
-                  font-size: 1.25em;
-                  font-weight: bold;
-                }
-
-                .session > .session-sub-heading {
-                  margin-bottom: 14px;
-                  font-size: 1.2em;
-                }
-
-                .session > .session-content {
-                  color: #ffffff;
-                  padding-right: 40px;
-                }
-
-                .session > .session-content > .discussion-content {
-                  padding-bottom: 20px;
-                  border-bottom: 1px solid #6c8080;
-                }
-
-                .session > .session-content > .discussion-content:last-child {
+                  max-width: 400px;
+                  border: 1px solid #fff;
                   border-bottom: none;
                 }
 
-                .session > .session-content h4 {
+                .menu-items {
+                  grid-area: menu-items;
                   text-align: center;
+                  max-width: 400px;
+                  background-color: #466169;
+                  border: 1px solid #fff;
+                  border-top: none;
+                  margin-top: -5px;
+                  padding-top: 25px;
                 }
 
-                .session > .session-content table {
-                  width: 100%;
-                  border: none;
-
+                .menu-buttons {
+                  display: inline-block;
                 }
 
-                .session > .session-content td {
-                  vertical-align: top;
-                  padding-top: 8px;
-                  padding-bottom: 8px;
-                  border-bottom: 1px solid #6c8080;
+                .menu-buttons a {
+                  color: #ffffff;
+                  text-decoration: none;
+                  font-size: 16px;
                 }
 
-                .session > .session-content a {
+                .menu-btn {
+                  margin-bottom: 12px;
+                  width: 300px;
+                  border-radius: 28px;
+                  box-shadow: 0 1px 6px #000;
+                  color: #ffffff;
+                  background: #0f6849;
+                  padding: 10px 20px 10px 20px;
+                  transition: all .2s ease-in-out;
+                }
+
+                .menu-btn:hover {
                   color: var(--branding-primary);
-                  text-decoration-line: none;
-                }
-
-                .session > .session-content tr:nth-child(1) td {
-                  border-bottom: none;
-                }
-
-                .session > .session-content td:nth-child(1) {
-                  width: 200px;
                   font-weight: bold;
+                  text-decoration: none;
+                  font-size: 16px;
+                  background: #31875d;
+                  transform: scale(1.1);
                 }
 
-                .session > .session-content td > span {
-                  font-style: italic;
-                  font-size: .8em;
-                }
 
-                @media only screen and (max-width: 767px) {
-                  .landing-bg {
-                    /* Cover height minus 55px header */
-                    min-height: calc(100vh - 55px);
-
-                    /* Stick to Jolokia content frame */
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                  }
-
-                  .grid-container {
-                    display: block;
-                  }
-
-                  .left-col {
-                    margin-left: 0;
-                    text-align: center;
-                  }
-
-                  .agenda {
-                    text-align: center;
-                    margin-top: 40px;
-                  }
-
-                  .title {
-                    text-align: center;
-                    width: 100%;
-                  }
-                }
               </style>
+
               <div class="landing-bg"></div>
-              <!--    FRIDAY     -->
 
               <div class="grid-container">
-                <div class="left-col">
-                  <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-main-header.png"/>
-                </div>
-
-                <div class="right-col">
-                  <div class="title"><h1>Friday, September 25</h1></div>
-                  <div class="agenda">
-
-                    <div class="time-slot">
-                      <div class="time">1:00 PM<br><span>Until</span><br>2:45 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Expanding the Boundaries of Organizational Communication:<br>
-                                                   Imagining New Directions for Theory and Method
-                      </div>
-                      <div class="session-sub-heading">Moderators: Beatriz Nieto Fernandez and Zhenyu Tian</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Workshop Presentations</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Zhuo Ban<br><span>University of Cincinnati</span></td>
-                            <td>Expanding the boundaries of knowledge: SEWA as a subaltern knowledge community</td>
-                          </tr>
-                          <tr>
-                            <td>Joëlle Cruz<br><span>University of Colorado Boulder</span></td>
-                            <td>Decolonizing Organizational Communication: Tentative Steps</td>
-                          </tr>
-                          <tr>
-                            <td>Virginia Sánchez Sánchez<br><span>Auburn University</span></td>
-                            <td>Rethinking “Calling” Research</td>
-                          </tr>
-                          <tr>
-                            <td>James McDonald<br><span>University of Texas at San Antonio</span></td>
-                            <td>Difference and Intersectionality as Constitutive Features of Organizing: Expanding the
-                                Boundaries of Organizational Communication
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Patricia S. Parker<br><span>University of North Carolina at Chapel Hill</span></td>
-                            <td>Expanding Boundaries through Community Engagement and Communication for Social Justice
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Jane Jorgenson<br><span>University of South Florida</span></td>
-                            <td>Using Photo-Interviewing in The Research Process: Expanding Methodological Boundaries
-                            </td>
-                          </tr>
-                        </table>
+                <div class="menu">
+                  <div class="header">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/lobby-header.png"/>
+                  </div>
+                  <div class="menu-items">
+                    <div class="menu-buttons">
+                      <a href="https://usf.infernoar.com/videos/0a695989-b223-4ce5-5078-08d8584f6b08/landing/e65bbcc6-6f25-44d2-b294-86b66c672401">
+                        <div class="menu-btn">Agenda</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/a6e075dd-1cc7-48aa-5079-08d8584f6b08/landing/0e3a2b1e-1c1e-471b-9d3c-8f9f4c08d22d">
+                        <div class="menu-btn">Auditorium</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/3339aa47-3c65-4ad7-cce9-08d858d29add/landing/37f4afa3-1bad-452d-8080-fa12dbdf85f0">
+                        <div class="menu-btn">Poster Room</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/e9ff7de4-2e54-44ca-507b-08d8584f6b08/landing/e08c0216-e27c-4a87-b1e4-eda215309dfd">
+                        <div class="menu-btn">Discussion Tables</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/a24a12a8-51e6-4bca-af1f-08d85821b42c/landing/5d4fd972-b8d1-41bc-8a34-e99d3189118d">
+                        <div class="menu-btn">Conversation Lounge</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/a8880548-92d7-40ac-1776-08d85903b77d/landing/18913895-6dd3-42eb-b818-41bef1ca3243">
+                        <div class="menu-btn">Organizers</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/f4e9bd48-631d-41f8-1777-08d85903b77d/landing/ea9d1403-afb9-4299-a96d-07b2ad0c6b57">
+                        <div class="menu-btn">Presenters</div>
+                      </a>
+                      <a href="https://usf.infernoar.com/videos/0d330b65-9990-46ac-507c-08d8584f6b08/landing/b8caef0f-9c24-47d3-b887-5bcecb8fe5d1">
+                        <div class="menu-btn">Attendees</div>
+                      </a>
+                      <div>
                       </div>
                     </div>
 
-                    <div class="time-slot">
-                      <div class="time">3:00 PM<br><span>Until</span><br>3:45 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Workshop Discussion Breakouts</div>
-                      <div class="session-sub-heading">Breakouts run simultaneously</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Workshop Breakouts</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Group #1<br><span>Zhuo Ban</span></td>
-                            <td><a href="/#">Click here to join</a></td>
-                          </tr>
-                          <tr>
-                            <td>Group #2<br><span>Joëlle Cruz</span></td>
-                            <td><a href="/#">Click here to join</a></td>
-                          </tr>
-                          <tr>
-                            <td>Group #3<br><span>Virginia Sánchez Sánchez</span></td>
-                            <td><a href="/#">Click here to join</a></td>
-                          </tr>
-                          <tr>
-                            <td>Group #4<br><span>James McDonald</span></td>
-                            <td><a href="/#">Click here to join</a></td>
-                          </tr>
-                          <tr>
-                            <td>Group #5<br><span>Patricia S. Parker</span></td>
-                            <td><a href="/#">Click here to join</a></td>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Group #6<br><span>Jane Jorgenson</span></td>
-                            <td><a href="/#">Click here to join</a></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">5:00 PM<br><span>Until</span><br>5:30 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Welcome</div>
-                      <div class="session-sub-heading">Dean Eric Eisenberg and Department Chair Patrice M. Buzzanell
-                      </div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                        </table>
-                        <p>A Taste of Tampa | Sangria from Columbia Restaurant</p>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">5:30 PM<br><span>Until</span><br>6:00 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Lightning Presentations</div>
-                      <div class="session-sub-heading">PhD Students on the Market</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">6:00 PM<br><span>Until</span><br>7:00 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Poster Session #1</div>
-                      <div class="session-sub-heading">PhD Students on the Market</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Poster Room</h4></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
+                    <!-- code snippet goes here -->
                   </div>
                 </div>
               </div>
 
-              <!--    SATURDAY   -->
-              <div class="grid-container">
-                <div class="left-col">
-                </div>
 
-                <div class="right-col">
-                  <div class="title"><h1>Saturday, September 26</h1></div>
-                  <div class="agenda">
-
-                    <div class="time-slot">
-                      <div class="time">9:00 AM<br><span>Until</span><br>10:30 AM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Negotiating Boundaries</div>
-                      <div class="session-sub-heading">Moderators: Timothy Betts and Jessica Lolli</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Meghana Rawat<br><span>Purdue University</span></td>
-                            <td>Proposing a Communication Typology to Evaluate Local Community Networks: An Exploration
-                                of County Level Public Health Departments in Indiana
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Beatriz Nieto Fernandez<br><span>University of South Florida</span></td>
-                            <td>A postcolonial analysis of Direct-To-Consumer genetic testing organizational websites
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Rebecca Constantini<br><span>Texas A&M University</span></td>
-                            <td>The Constitution of Reproductive Health: Understanding the Geographic and Discursive
-                                Tensions of Space, Place, and Organizing
-                            </td>
-                          </tr>
-                        </table>
-
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">10:45 AM<br><span>Until</span><br>12:15 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Membership and Belongingness</div>
-                      <div class="session-sub-heading">Moderators: Cayla Lanier and Sherin Farhana Moni</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Melinda Aley<br><span>Michigan State University</span></td>
-                            <td>The Perception of Vocational Anticipatory Socialization Barriers: An Examination of
-                                Information Barriers Affecting First Generation Male and Female College Students
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Courtney Hook<br><span>Ohio University</span></td>
-                            <td>Expanding Understandings of Involuntary Membership and Organizational (Dis)Engagement: A
-                                Dialectical Analysis of Constructions of Rehabilitation
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Shelley Hepler<br><span>University of Kansas</span></td>
-                            <td>I belong, but don't belong: A phenomenological analysis of contingent group membership
-                                in higher education
-
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">1:00 PM<br><span>Until</span><br>2:00 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Discussion Tables</div>
-                      <div class="session-sub-heading"></div>
-                      <div class="session-content">
-                        <div class="discussion-content">
-                          <p class="discussion-title">Alternatives to Academic Career Paths</p>
-                          <p class="session-sub-heading">Moderators: Liz Baranowicz and Cayla Lanier</p>
-                          <p><strong>Dr. Robyn Remke, Dr. Abigail Selzer King, Dr. Travis Thompson,
-                                     Dr. Cerise Glenn Maniaglaut, Dr. Sarah McGhee </strong></p>
-                        </div>
-
-                        <div class="discussion-content">
-                          <p class="discussion-title">Future of Academe</p>
-                          <p class="session-sub-heading">Moderators: Jonathan Baker and Nivethitha Ketheeswaran</p>
-                          <p><strong>Dr. Eric Eisenberg, Dr. Kevin Barge, Dr. Rebecca Meisenbach,
-                                     Dr. Michelle Shumate, Dr. Seungyoon Lee, Dr. Eric Waters </strong></p>
-                        </div>
-
-                        <div class="discussion-content">
-                          <p class="discussion-title">Living Whole Lives During a Pandemic</p>
-                          <p class="session-sub-heading">Moderators: Jessica Lolli and Parameswari Mukherjee </p>
-                          <p><strong>Dr. Heather Zoller, Dr. Angela N. Gist-Mackey, Dr. Heewon Kim,
-                                     Dr. Laura Ellingson, Dr. Peter Jensen </strong></p>
-                        </div>
-
-                        <div class="discussion-content">
-                          <p class="discussion-title">Preparing for Academic Jobs</p>
-                          <p class="session-sub-heading">Moderators: Timothy Betts and Rebecca Todd </p>
-                          <p><strong>Dr. Dajung (DJ) Woo, Dr. Emilly Martinez, Dr. Rahul Mitra, Dr. Chigozirim U.
-                                     Sodeke, Dr. Debbie S. Dougherty, Dr. Kristen Lucas</strong></p>
-                        </div>
-
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">2:15 PM<br><span>Until</span><br>3:45 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Diversity, Equity, and Inclusion</div>
-                      <div class="session-sub-heading">Moderators: Parameswari Mukherjee and Rebecca Todd</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Tianna Cobb<br><span>University of Oklahoma </span></td>
-                            <td>What is the Real Meaning of Diversity?
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Darvelle Hutchins<br><span>University of Missouri </span></td>
-                            <td>All of the Doors Are Closed: Exploring Black Gay Male Experiences of Stigma in Black
-                                Church Organizing
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Greta Underhill<br><span>University of Kansas </span></td>
-                            <td>Working with autism: A grounded theory analysis of disclosure and negotiation for
-                                disability-related accommodations at work
-                            </td>
-                          </tr>
-
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">4:00 PM<br><span>Until</span><br>5:30 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Imagining Agency</div>
-                      <div class="session-sub-heading">Moderators: Jonathan Baker and Nivethitha Ketheeswaran</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Jing Jiang<br><span>University of North Carolina at Chapel Hill </span></td>
-                            <td>Constrained imagination: Interrogating infrastructures of thinking in apparel
-                                manufacturing
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Zhenyu Tian<br><span>University of South Florida</span></td>
-                            <td>Women entrepreneurs in China: Dialectical discourses, situated activities, and the
-                                (Re)production of gender and entrepreneurship
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Cris J Tietsort<br><span>Arizona State University</span></td>
-                            <td>Can I Really Say How I’m Doing? Discursive Leadership, Expressed Suffering, and
-                                Compassion at Work
-                            </td>
-                          </tr>
-
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-
-                    <div class="time-slot">
-                      <div class="time">5:45 PM<br><span>Until</span><br>6:15 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Lightning Presentations</div>
-                      <div class="session-sub-heading">Graduate Student Research in Progress</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">6:15 PM<br><span>Until</span><br>7:15 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Poster Session #2</div>
-                      <div class="session-sub-heading">Graduate Student Research in Progress</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Poster Room</h4></td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">7:15 PM<br><span>Until</span><br>8:30 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Trivia Night!</div>
-                      <div class="session-sub-heading">Hosted by Liz Baranowicz and Nivethitha Ketheeswaran</div>
-                      <div class="session-content">
-                        <p>Join us for a virtual trivia game where you can meet new friends and reconnect with old ones!
-                           Please arrive promptly at 7:15 PM for instructions and to be placed in a Team.
-                        </p>
-                        </table>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!--    SUNDAY     -->
-              <div class="grid-container">
-                <div class="left-col">
-                </div>
-
-                <div class="right-col">
-                  <div class="title"><h1>Sunday, September 27</h1></div>
-                  <div class="agenda">
-
-                    <div class="time-slot">
-                      <div class="time">9:00 AM<br><span>Until</span><br>11:00 AM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Organizing Online and Offline</div>
-                      <div class="session-sub-heading">Moderators: Liz Baranowicz and Zhenyu Tian</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Elizabeth Marquis<br><span>University of Michigan</span></td>
-                            <td>YouTube: An Emerging Profession?</td>
-                          </tr>
-                          <tr>
-                            <td>Kyosuke Tanaka<br><span>Northwestern University</span></td>
-                            <td>Positional and Dispositional Factors That Predict Who Commits Social Network
-                                RoutingErrors and Who Learns from Them
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Bailey C. Benedict<br><span>Purdue University</span></td>
-                            <td>Facebook Groups after the Camp Fire: Online Community Organizing for Resilience
-                                Enactment and Disaster Recovery
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Jingyi Sun<br><span>University of Southern California</span></td>
-                            <td>The Evolution of Multi-level and Multi-Dimensional Networks
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">11:15 AM<br><span>Until</span><br>1:15 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">Technology at Work</div>
-                      <div class="session-sub-heading">Moderators: Beatriz Nieto Fernandez and Sherin Farhana Moni</div>
-                      <div class="session-content">
-                        <table>
-                          <tr>
-                            <td colspan="2"><h4>Main Stage</h4></td>
-                          </tr>
-                          <tr>
-                            <td>Lindsay Larson<br><span>Northwestern University</span></td>
-                            <td>Leading Teams in the digital age: Socializing the AI Teammate
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Camille Endacott<br><span>University of California Santa Barbara</span></td>
-                            <td>Managing Identity with and around artificially intelligent scheduling technologies<
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Courtney Powers<br><span>The University of Texas at Austin</span></td>
-                            <td>Navigating Boundaries and Imagining Audiences: Exploring Communicative Behaviors of Job Seekers in the Age of Cybervetting
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Chang Mao<br><span>The University of Texas at Austin</span></td>
-                            <td>Theorizing Affordances Employee Voice: To Explore Boundary Conditions of How Affordances Influence Employees’ Intention to Voice
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-                    </div>
-
-                    <div class="time-slot">
-                      <div class="time">1:15 PM<br><span>Until</span><br>1:30 PM</div>
-                    </div>
-                    <div class="session">
-                      <div class="session-heading">&nbsp;</div>
-                      <div class="session-sub-heading">&nbsp;</div>
-                      <div class="session-content">
-                        <div class="closing-remarks"><h1>Closing Remarks</h1></div>
-                      </div>
-                    </div>
-
-                  </div>
-                </div>
-
-
-
-              </div>
-
-            </div>
-
-
-            <!-- code snippet goes here -->
           </div>
         </div>
       </div>
