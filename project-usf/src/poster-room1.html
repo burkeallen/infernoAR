@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, minimal-ui"/>
+  <title>USF Poster Room 1</title>
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet"/>
+  <link rel="stylesheet" href="./assets/inferno.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="landing-page">
+  <div id="landing">
+    <script>
+      const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+      const landing = landingPageEl.appendChild(document.getElementById('landing'));
+      landingPageEl.appendChild(landing);
+    </script>
+    <!-- code snippet goes here -->
+
+
+    <!-- Background Style -->
+    <style>
+      .content {
+        background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-poster.jpg');
+        height: calc(100vh - 56px);
+        margin: -20px;
+        padding-top: 50px;
+        padding-left: 24px;
+        padding-right: 24px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        overflow-y: scroll;
+        z-index: 1;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        .content {
+          padding-top: 50px;
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+      }
+    </style>
+
+    <!-- Card Carousel Styles -->
+    <style>
+
+      .cc-card {
+        box-sizing: content-box !important;
+        width: 25%;
+        min-width: 160px;
+        background-color: white;
+        color: white;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        -khtml-border-radius: 0px;
+        border-radius: 0px;
+        text-align: center;
+        font-size: 50px;
+        position: absolute;
+        left: calc(50% - 100px);
+        opacity: 1;
+        transition: transform 1s, opacity 1s, filter 1s;
+        overflow: hidden;
+        -webkit-box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.6);
+        box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.6);
+      }
+
+      .cc-card img {
+        border-radius: inherit;
+        position: relative;
+        width: 100%;
+        z-index: 60;
+      }
+
+      .cc-info {
+        background: #ffffff;
+        min-height: 50px;
+        color: #000000;
+        font-size: .5em;
+        text-align: center;
+      }
+
+      .cc-info h4 {
+        font-size: .75em;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      .cc-info p {
+        font-size: .65em;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      .cc-hidden {
+        z-index: 5;
+        transform: translateX(0) scale(0.4);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p1 {
+        transform: translateX(-18vw) scale(0.6);
+        z-index: 10;
+        -webkit-filter: blur(8px);
+        filter: blur(8px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p2 {
+        transform: translateX(-10vw) scale(0.8);
+        z-index: 20;
+        -webkit-filter: blur(6px);
+        filter: blur(6px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p3 {
+        transform: translateX(0) scale(1);
+        z-index: 30;
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p4 {
+        transform: translateX(10vw) scale(0.8);
+        z-index: 20;
+        -webkit-filter: blur(6px);
+        filter: blur(6px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p5 {
+        transform: translateX(18vw) scale(0.6);
+        z-index: 10;
+        -webkit-filter: blur(8px);
+        filter: blur(8px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-container {
+        position: relative;
+        width: 100%;
+        height: 70%;
+        background-color: transparent;
+        opacity: 1;
+        transition: opacity 0.5s;
+      }
+
+      .preload {
+        opacity: 0;
+      }
+
+      .cc-arrow-button {
+        position: absolute;
+        top: calc(50% - 28px);
+        width: 56px;
+        height: 56px;
+        background-color: transparent;
+        z-index: 25;
+      }
+
+      .cc-arrow {
+        position: relative;
+        display: inline-block;
+        margin: 12px;
+
+        padding: 20px;
+
+        box-shadow: 12px -12px 0 0 rgb(255, 255, 255) inset;
+        cursor: pointer;
+      }
+
+      .cc-arrow:hover {
+        box-shadow: 12px -12px 0 0 rgb(86, 207, 255) inset;
+      }
+
+      .cc-left {
+        transform: rotate(45deg);
+        left: 5%;
+      }
+
+      .cc-right {
+        transform: rotate(225deg);
+        right: 5%;
+      }
+
+      /* End Card Carousel Styles */
+
+    </style>
+
+    <!-- Landing Page Layout Grid Styles -->
+    <style>
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.4fr 1.6fr;
+        gap: 1px 1px;
+        grid-template-areas: "top" "bottom";
+      }
+
+      .top {
+        grid-area: top;
+        min-height: 300px;
+      }
+
+      .bottom {
+        grid-area: bottom;
+      }
+    </style>
+
+    <div class="content">
+
+      <div class="grid-container">
+        <div class="top"></div>
+        <div class="bottom">
+
+          <!-- Card Carousel Container -->
+          <div class="cc-container preload">
+            <div class="cc-arrow-button cc-left">
+              <div class="cc-arrow" id="cc-aleft"></div>
+            </div>
+            <div class="cc-arrow-button cc-right">
+              <div class="cc-arrow" id="cc-aright"></div>
+            </div>
+          </div>
+          <!-- End Card Carousel Container -->
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Carousel Script -->
+    <script>
+      /* Poster Session 1 data */
+      const cardData = [
+        {
+          image: '1.jpg',
+          name: 'Abigail N. Kingsford, M.A.',
+          org: 'University of Kansas',
+          desc: 'Face-Threatening Speech Acts in Mentoring Relationships'
+        },
+        {
+          image: '2.jpg',
+          name: 'Arden Roeder',
+          org: 'University of Oklahoma',
+          desc: 'Unforeseen Distributed Work: Individual and Team Resilience Amidst Organizational Disruption'
+        },
+        {
+          image: '3.jpg',
+          name: 'Delaney Harness',
+          org: 'University of Texas at Austin',
+          desc: 'The Transparency Paradox: Reimagining Visibility and Opacity'
+        },
+        {
+          image: '4.jpg',
+          name: 'Diego Gomez-Zara',
+          org: 'Northwestern University',
+          desc: 'Do I know you? The effects of social capital on self-assembled teams online'
+        },
+        {
+          image: '5.jpg',
+          name: 'Jack E. Appleman, APR',
+          org: 'State University of New York at Albany',
+          desc: 'Cultivating Employee Engagement'
+        },
+        {
+          image: '6.jpg',
+          name: 'Julien A. Sperling, MA',
+          org: 'University of Kansas',
+          desc: 'Haters: A case-study exploration of stigma management communication from student athletes in a failing athletic program'
+        }
+      ]
+
+      function buildCards() {
+        const baseURL = 'https://studio304nextechar.freetls.fastly.net//infernoAR/029-usf/assets/samples/people/'
+        const cardContainer = landingPageEl.querySelector('.cc-container');
+        cardData.forEach((card) => {
+          const c = document.createElement('div');
+          c.className = 'cc-card';
+          const img = '<img src="' + baseURL + card.image + '">';
+          c.innerHTML = '<div class="cc-header">'
+            + img
+            + cardInfo(card)
+            + '</div> <!-- end of cc-card -->';
+          cardContainer.append(c);
+        })
+      }
+
+      buildCards();
+
+      function cardInfo(card) {
+        return '<div class="cc-info">'
+          + '<h4>' + card.name + '</h4>'
+          + '<p>' +  card.org + '</p>'
+          + '<p>' +  card.desc + '</p>'
+          + '</div> <!-- end of cc-info -->';
+      }
+
+
+
+      function cardShift(currentCard, cards) {
+        var cardCount = 0;
+        index = currentCard - 2;
+        if (index < 0) {
+          index = cards.length + index;
+        }
+        while (cardCount < cards.length) {
+          cards[index].className = 'cc-card';
+          if (cardCount < 5) {
+            cards[index].classList.add('cc-p' + (cardCount + 1));
+          } else {
+            cards[index].classList.add('cc-hidden');
+          }
+          cardCount = cardCount + 1;
+          index = index + 1;
+          if (index > cards.length - 1) {
+            index = 0;
+          }
+        }
+      }
+
+      var card = 0;
+      var cards = landingPageEl.querySelectorAll('.cc-card');
+
+      var ignoreClick = false;
+
+      function triggerClick(card) {
+        cardShift(card, cards);
+        ignoreClick = true;
+        setTimeout(function () {
+          ignoreClick = false;
+        }, 400);
+      }
+
+      function setCardCenter(cards) {
+        var centerCard = landingPageEl.querySelectorAll('.cc-p3')[0];
+
+        if (!centerCard) {
+          centerCard = landingPageEl.querySelectorAll('.cc-card')[0];
+        }
+
+        var cardContainer = landingPageEl.querySelectorAll('.cc-container')[0];
+        var cardHeight = centerCard.clientHeight;
+        var containerHeight = cardContainer.clientHeight;
+        var cardTop = containerHeight / 2 - cardHeight / 2;
+        var cardWidth = centerCard.clientWidth;
+        var containerWidth = cardContainer.clientWidth;
+        var cardLeft = containerWidth / 2 - cardWidth / 2;
+        for (x = 0; x < cards.length; x++) {
+          cards[x].style.top = cardTop + 'px';
+          cards[x].style.left = cardLeft + 'px';
+          // cards[x].style.borderRadius = cardWidth / 6.5 + 'px';
+        }
+      }
+
+      // Wait for card images to load
+      var img = landingPageEl.querySelectorAll('.cc-card img')[cards.length - 1];
+
+      function ccLoaded() {
+        cardShift(card, cards);
+        setTimeout(function () {
+          setCardCenter(cards);
+        }, 250);
+        setTimeout(function () {
+          landingPageEl.querySelectorAll('.preload')[0].classList.remove('preload');
+        }, 400);
+      }
+
+      if (img.complete) {
+        ccLoaded();
+      } else {
+        img.addEventListener('load', ccLoaded);
+        img.addEventListener('error', ccLoaded);
+      }
+
+      landingPageEl.querySelector('#cc-aleft').addEventListener('click', function (e) {
+        if (ignoreClick) return;
+        card = card - 1;
+        if (card < 0) {
+          card = cards.length - 1;
+        }
+        triggerClick(card);
+      });
+
+      landingPageEl.querySelector('#cc-aright').addEventListener('click', function (e) {
+        if (ignoreClick) return;
+        card = card + 1;
+        if (card > cards.length - 1) {
+          card = 0;
+        }
+        triggerClick(card);
+      });
+
+      window.addEventListener('resize', function () {
+        setCardCenter(cards);
+      });
+    </script>
+    <!-- End Card Carousel Script -->
+
+
+    <!-- code snippet ends here -->
+  </div>
+</div>
+</body>
+</html>
