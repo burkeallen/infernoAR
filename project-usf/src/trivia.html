@@ -1,0 +1,256 @@
+
+<style>
+    /* Background Styles */
+    .ntar-landing-bg {
+        /* Image */
+        background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-mainstage.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+
+        /* Cover height minus 55px header */
+        min-height: calc(100vh - 55px);
+
+        /* Stick to Jolokia content frame */
+        position: fixed;
+        top: -20px;
+        left: 280px;
+        right: 0;
+        bottom: 0;
+
+        /* Modifying style to fix hamburger menu issue */
+        position: absolute;
+        left: 0px;
+        margin-bottom: -64px;
+    }
+    #inferno-video-player {
+        max-width: 100% !important;
+    }
+    @media only screen and (max-width: 768px) {
+        .ntar-landing-bg {
+            /* Cover height minus 55px header */
+            min-height: calc(100vh - 55px);
+
+            /* Stick to Jolokia content frame */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
+
+    /* ./ Background Styles */
+
+    /* Page Content Container Styles */
+    .ntar-landing-content {
+        /* Scale to full width and height + footer space */
+        width: 100%;
+        height: calc(100% + 50px);
+
+        /* Stick to Jolokia content frame and scroll y */
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden scroll;
+
+        /* Pad Content */
+        padding: 0px;
+
+        /* Display Type */
+        display: flex;
+        flex-direction: column;
+    }
+    /* ./ Page Content Container Styles */
+
+    /* Video Poll QA Styles */
+    .ntar-vpqa-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 64px;
+        margin-top: 16px;
+    }
+    .ntar-vqa-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex: 1 1 65%;
+    }
+
+    .ntar-qa-container {
+        display: flex;
+        flex-direction: row;
+        background-color: white;
+        min-height: 64px;
+        width: 100%;
+        margin: 16px 0;
+        flex: 4 4 64px;
+        max-height: 95px
+    }
+
+    .ntar-title-container {
+        min-height: 80px;
+    }
+
+    .chat-main {
+        background-color: transparent;
+        flex: 1 1 35%;
+        object-fit: contain;
+    }
+
+    .chat-main iframe {
+        border: none;
+        height: 70vh;
+        max-height: 70vh;
+        margin: 0;
+        overflow: hidden;
+        display: block;
+    }
+
+    .ntar-poll-container img {
+        width: 100%;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        .ntar-vpqa-container {
+            flex-direction: column;
+        }
+        .ntar-vqa-container {
+            display: block;
+        }
+    }
+    @media only screen and (max-width: 500px) {
+        .ntar-vpqa-container {
+            padding: 0 24px;
+        }
+    }
+    /* ./ Video Poll QA Styles */
+
+    /* Question Box */
+    .question-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        font-size: 2em;
+        text-align: left;
+        width: 100%;
+        height: 100%;
+    }
+
+    .question-prompt {
+        padding: 8px 16px;
+        background-color: #d9d9d9;
+        color: #808080;
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
+
+        flex: 1 1 25%;
+    }
+
+    .question-input {
+        background-color: #ffffff;
+        padding: 0;
+
+        flex: 2 1 50%;
+    }
+
+    .question-submit {
+        text-align: center;
+        vertical-align: bottom;
+        flex: 1 1 25%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    #question-input-control {
+        border: none;
+        outline: none;
+        background-color: white;
+        margin: 0;
+        padding: 0.5em;
+        height: 100%;
+        width: 100%;
+        color: black;
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    #question-submit-button {
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        margin: 0.5em 1em;
+        height: 32px;
+        border: none;
+        outline: none;
+        border-radius: 20px;
+        background-color: #27608e;
+        color: #ffffff;
+        padding: 4px 1em;
+        font-size: 16px;
+        line-height: 16px;
+        cursor: pointer;
+    }
+
+    #question-submit-button:hover {
+        background-color: #3375ac;
+    }
+
+    #question-submit-button:active {
+        background-color: #193d5a;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .question-box {
+            flex-direction: column;
+        }
+    }
+    /* ./Question Box */
+
+
+</style>
+
+<!-- Background Frame (No Content) -->
+<div class="ntar-landing-bg"></div>
+<!-- ./ Background Frame -->
+
+<!-- Page Content Container -->
+<div class="ntar-landing-content">
+  <div class="ntar-title-container"></div>
+
+  <!-- Video Poll QA Container -->
+  <div class="ntar-vpqa-container">
+
+    <div class="ntar-vqa-container">
+      <div class="ntar-video-container">
+        <div class="embed-responsive embed-responsive-16by9">
+          <div id="inferno-video-player"></div>
+        </div>
+      </div>
+      <div class="ntar-qa-container">
+        <div class="question-box">
+          <span class="question-prompt">Ask a question:</span>
+          <span class="question-input">
+                  <textarea id="question-input-control"></textarea>
+                </span>
+          <span class="question-submit"
+          ><button
+            id="question-submit-button"
+            onclick="landingPageEl.querySelector('#question-input-control').value=''"
+          >
+                    Submit
+                  </button>
+                </span>
+        </div>
+      </div>
+    </div>
+    <div class="chat-main">
+      <iframe width="100%" src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=trivia&chatroomname=Trivia"></iframe>
+    </div>
+  </div>
+  <!-- ./Video Poll QA Container -->
+
+</div>
+<!-- ./ Page Content Container -->
