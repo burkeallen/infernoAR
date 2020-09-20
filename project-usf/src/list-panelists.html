@@ -1,7 +1,7 @@
 <!-- Import Fonts -->
 <script type="text/javascript">
   // Load custom fonts
-  let customFontThin = new FontFace(
+  var customFontNovo4Thin = new FontFace(
     'Trade Gothic',
     'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT-Light.woff)',
     {
@@ -9,7 +9,7 @@
       weight: '300'
     }
   );
-  customFontThin
+  customFontNovo4Thin
     .load()
     .then(loadedFont => {
       document.fonts.add(loadedFont);
@@ -19,7 +19,7 @@
       console.log('Error loading Trade Gothic thin: ', error);
     });
 
-  let customFontLight = new FontFace(
+  var customFontNovo4Light = new FontFace(
     'Trade Gothic',
     'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT-Light.woff)',
     {
@@ -27,7 +27,7 @@
       weight: 'normal'
     }
   );
-  customFontLight
+  customFontNovo4Light
     .load()
     .then(loadedFont => {
       document.fonts.add(loadedFont);
@@ -37,7 +37,7 @@
       console.log('Error loading Trade Gothic Light: ', error);
     });
 
-  let customFontMedium = new FontFace(
+  var customFontNovo4Medium = new FontFace(
     'Trade Gothic',
     'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT.woff)',
     {
@@ -45,7 +45,7 @@
       weight: '500'
     }
   );
-  customFontMedium
+  customFontNovo4Medium
     .load()
     .then(loadedFont => {
       document.fonts.add(loadedFont);
@@ -55,15 +55,15 @@
       console.log('Error loading Trade Gothic Medium: ', error);
     });
 
-  let customFontBold = new FontFace(
+  var customFontNovo4Bold = new FontFace(
     'Trade Gothic',
-    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLTBold.woff)',
+    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT-Bold.woff)',
     {
       style: 'normal',
       weight: 'bold'
     }
   );
-  customFontBold
+  customFontNovo4Bold
     .load()
     .then(loadedFont => {
       document.fonts.add(loadedFont);
@@ -471,9 +471,9 @@
           <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/event-logo.png" alt="University of South Florida">
         </div>
         <div class="banner-info">
-            <h1>Attendee List</h1>
-            <hr />
-            <p>Reach out and connect with others here. Send messages, emails, and request meetings all in one spot.</p>
+          <h1>Panelists List</h1>
+          <hr />
+          <p>Reach out and connect with our panelists here. Send messages, emails, and request meetings all in one spot.</p>
         </div>
       </div>
     </div>
@@ -481,16 +481,16 @@
     <div class="search-attendees-divider">
       <div class="filter-options">
         <div class="search-wrapper">
-          <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)" />
+          <input id="search-attendees" placeholder="Search Panelists" oninput="searchAttendeesNovo4(event)" />
           <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/search-icon.png" />
         </div>
 
-        <button id="all-grouping" onclick="allAttendees()">All</button>
-        <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
-        <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
-        <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
-        <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
-        <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
+        <button id="all-grouping" onclick="allattendeesNovo4()">All</button>
+        <button id="ae-grouping" onclick="filterAttendeesAENovo4()">A - E</button>
+        <button id="fj-grouping" onclick="filterAttendeesFJNovo4()">F - J</button>
+        <button id="ko-grouping" onclick="filterattendeesKONovo4()">K - O</button>
+        <button id="pt-grouping" onclick="filterAttendeesPTNovo4()">P - T</button>
+        <button id="uz-grouping" onclick="filterattendeesUZNovo4()">U - Z</button>
       </div>
     </div>
 
@@ -515,7 +515,7 @@
             <div class="a-row a-footer">
               <div class="contact">
                 <img id="organization-image"
-                    src=" https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/attendees/business-card-icon.png"/>
+                     src=" https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/attendees/business-card-icon.png"/>
                 <span id="organization">Organization</span>
               </div>
               <div class="contact">
@@ -536,7 +536,7 @@
         </div>
       </template>
 
-      <h1 id="no-attendees-message" class="no-attendees-message" style="display:none;">No attendees found.</h1>
+      <h1 id="no-attendees-message" class="no-attendees-message" style="display:none;">No people found.</h1>
 
     </div>
 
@@ -548,8 +548,8 @@
 
 <script>
 
-  let hasGroup = (groups, groupName) => {
-    let inGroup = false;
+  var hasGroupNovo4 = (groups, groupName) => {
+    var inGroup = false;
     groups.forEach(group => {
       if (group.Name.toLowerCase().trim() === groupName.toLowerCase().trim()) {
         inGroup = true;
@@ -558,18 +558,18 @@
     return inGroup;
   }
 
-  let attendeesBaseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/attendees/";
-  let messaging = "";
-  let people = {{ data.UserProfiles | json }} ;
-  let attendees = people.filter(user => {
-    return hasGroup(user.UserGroups, 'Attendees');
+  var attendeesNovo4BaseUrlNovo4 = "https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/attendees/";
+  var messagingNovo4 = "";
+  var peopleNovo4 = {{ data.UserProfiles | json }} ;
+  var attendeesNovo4 = peopleNovo4.filter(user => {
+    return hasGroupNovo4(user.UserGroups, 'Panelists');
   })
 
-  let buildAttendeeList = () => {
+  var buildAttendeeListNovo4 = () => {
     const attendeeList = landingPageEl.getElementById("attendee-list");
     const attendeeTemplate = landingPageEl.getElementById("attendee-template");
 
-    for (let at of attendees) {
+    for (var at of attendeesNovo4) {
 
       const clone = attendeeTemplate.content.cloneNode(true);
 
@@ -582,11 +582,9 @@
       }
 
       const avatar = clone.getElementById("avatar");
-      avatar.onload = function () {
-        console.log('Image Loaded');
-      }
       avatar.onerror = function () {
-        console.log('Image Load Failed');
+        // prevent an infinite loop is second image does not load
+        avatar.onerror = null;
         avatar.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/attendees/generic-avatar.jpg';
       }
       avatar.src = 'https://api.infernocore.jolokia.com/api/ProfileImage/' + at.UserId + '/250/250';
@@ -626,16 +624,16 @@
 
   }
 
-  buildAttendeeList();
+  buildAttendeeListNovo4();
 
-  let updateAttendees = () => {
+  var updateAttendeesNovo4 = () => {
 
-    let empty = true;
+    var empty = true;
 
-    for (let at of attendees) {
+    for (var at of attendeesNovo4) {
 
-      let id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
-      let el = landingPageEl.getElementById(id);
+      var id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
+      var el = landingPageEl.getElementById(id);
 
       if (el) {
         if (at.visible) {
@@ -647,7 +645,7 @@
       }
     }
 
-    let emptyMessage = landingPageEl.getElementById("no-attendees-message");
+    var emptyMessage = landingPageEl.getElementById("no-attendees-message");
 
     if (empty) {
       emptyMessage.style.display = "";
@@ -656,10 +654,10 @@
     }
   }
 
-  const searchAttendees = e => {
+  var searchAttendeesNovo4 = e => {
     const query = e.currentTarget.value.toLowerCase();
 
-    for (let at of attendees) {
+    for (var at of attendeesNovo4) {
       const fName = at.FirstName ? at.FirstName.toLowerCase() : '';
       const lName = at.Lastname ? at.Lastname.toLowerCase() : '';
       const email = at.ContactInfoEmail ? at.ContactInfoEmail.toLowerCase() : '';
@@ -676,21 +674,21 @@
 
     }
 
-    // clearIndustrySelect();
-    clearLetterGroupings();
-    updateAttendees();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
+    updateAttendeesNovo4();
 
   }
 
-  let filterAttendeesByIndustry = e => {
-    let query = e.currentTarget.value;
+  var filterAttendeesNovo4ByIndustry = e => {
+    var query = e.currentTarget.value;
 
     if (query === "") {
-      for (let at of attendees) {
+      for (var at of attendeesNovo4) {
         at.visible = true;
       }
     } else {
-      for (let at of attendees) {
+      for (var at of attendeesNovo4) {
         if (at.industry.toLowerCase() === query) {
           at.visible = true;
         } else {
@@ -699,12 +697,12 @@
       }
     }
 
-    clearSearchValue();
-    clearLetterGroupings();
-    updateAttendees();
+    clearSearchValueNovo4();
+    clearLetterGroupingsNovo4();
+    updateAttendeesNovo4();
   }
 
-  let letterGroupings = [
+  var letterGroupingsNovo4 = [
     "all-grouping",
     "ae-grouping",
     "fj-grouping",
@@ -713,48 +711,48 @@
     "uz-grouping",
   ];
 
-  let clearLetterGroupings = () => {
-    for (let group of letterGroupings) {
-      let el = landingPageEl.getElementById(group);
+  var clearLetterGroupingsNovo4 = () => {
+    for (var group of letterGroupingsNovo4) {
+      var el = landingPageEl.getElementById(group);
       el.style.color = "";
       el.style.backgroundColor = "";
     }
 
   }
 
-  let clearIndustrySelect = () => {
-    let select = landingPageEl.getElementById("select-attendees-industry");
+  var clearIndustrySelectNovo4 = () => {
+    var select = landingPageEl.getElementById("select-attendees-industry");
     select.selectedIndex = 0;
   }
 
-  let clearSearchValue = () => {
-    let search = landingPageEl.getElementById("search-attendees")
+  var clearSearchValueNovo4 = () => {
+    var search = landingPageEl.getElementById("search-attendees")
     search.value = "";
   }
 
-  let allAttendees = () => {
+  var allattendeesNovo4 = () => {
 
-    for (let at of attendees) {
+    for (var at of attendeesNovo4) {
       at.visible = true;
     }
 
-    clearSearchValue();
-    // clearIndustrySelect();
-    clearLetterGroupings();
+    clearSearchValueNovo4();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
 
     landingPageEl.getElementById("all-grouping").style.color = "white";
     landingPageEl.getElementById("all-grouping").style.backgroundColor = "#41578B";
 
-    updateAttendees();
+    updateAttendeesNovo4();
 
   }
 
-  let AE = "abcde";
-  let filterAttendeesAE = () => {
 
-    let filtered = []
+  var filterAttendeesAENovo4 = () => {
+    var AE = "abcde";
+    var filtered = []
 
-    for (let at of attendees) {
+    for (var at of attendeesNovo4) {
 
       if (AE.includes(at.FirstName[0].toLowerCase()) || AE.includes(at.Lastname[0].toLowerCase())) {
         at.visible = true;
@@ -764,21 +762,20 @@
 
     }
 
-    clearSearchValue();
-    // clearIndustrySelect();
-    clearLetterGroupings();
+    clearSearchValueNovo4();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
 
     landingPageEl.getElementById("ae-grouping").style.color = "white";
     landingPageEl.getElementById("ae-grouping").style.backgroundColor = "#41578B";
 
-    updateAttendees();
+    updateAttendeesNovo4();
 
   }
 
-  let FJ = "fghij";
-  let filterAttendeesFJ = () => {
-
-    for (let at of attendees) {
+  var filterAttendeesFJNovo4 = () => {
+    var FJ = "fghij";
+    for (var at of attendeesNovo4) {
 
       if (FJ.includes(at.FirstName[0].toLowerCase()) || FJ.includes(at.Lastname[0].toLowerCase())) {
         at.visible = true;
@@ -788,21 +785,20 @@
 
     }
 
-    clearSearchValue();
-    // clearIndustrySelect();
-    clearLetterGroupings();
+    clearSearchValueNovo4();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
 
     landingPageEl.getElementById("fj-grouping").style.color = "white";
     landingPageEl.getElementById("fj-grouping").style.backgroundColor = "#41578B";
 
-    updateAttendees();
+    updateAttendeesNovo4();
 
   }
 
-  let KO = "klmno";
-  let filterAttendeesKO = () => {
-
-    for (let at of attendees) {
+  var filterattendeesKONovo4 = () => {
+    var KO = "klmno";
+    for (var at of attendeesNovo4) {
 
       if (KO.includes(at.FirstName[0].toLowerCase()) || KO.includes(at.Lastname[0].toLowerCase())) {
         at.visible = true;
@@ -812,21 +808,20 @@
 
     }
 
-    clearSearchValue();
-    // clearIndustrySelect();
-    clearLetterGroupings();
+    clearSearchValueNovo4();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
 
     landingPageEl.getElementById("ko-grouping").style.color = "white";
     landingPageEl.getElementById("ko-grouping").style.backgroundColor = "#41578B";
 
-    updateAttendees();
+    updateAttendeesNovo4();
 
   }
 
-  let PT = "pqrst";
-  let filterAttendeesPT = () => {
-
-    for (let at of attendees) {
+  var filterAttendeesPTNovo4 = () => {
+    var PT = "pqrst";
+    for (var at of attendeesNovo4) {
 
       if (PT.includes(at.FirstName[0].toLowerCase()) || PT.includes(at.Lastname[0].toLowerCase())) {
         at.visible = true;
@@ -836,22 +831,20 @@
 
     }
 
-    clearSearchValue();
-    // clearIndustrySelect();
-    clearLetterGroupings();
+    clearSearchValueNovo4();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
 
     landingPageEl.getElementById("pt-grouping").style.color = "white";
     landingPageEl.getElementById("pt-grouping").style.backgroundColor = "#41578B";
 
-    updateAttendees();
+    updateAttendeesNovo4();
 
   }
 
-
-  let UZ = "uvwxyz";
-  let filterAttendeesUZ = () => {
-
-    for (let at of attendees) {
+  var filterattendeesUZNovo4 = () => {
+    var UZ = "uvwxyz";
+    for (var at of attendeesNovo4) {
 
       if (UZ.includes(at.FirstName[0].toLowerCase()) || UZ.includes(at.Lastname[0].toLowerCase())) {
         at.visible = true;
@@ -861,14 +854,14 @@
 
     }
 
-    clearSearchValue();
-    // clearIndustrySelect();
-    clearLetterGroupings();
+    clearSearchValueNovo4();
+    // clearIndustrySelectNovo4();
+    clearLetterGroupingsNovo4();
 
     landingPageEl.getElementById("uz-grouping").style.color = "white";
     landingPageEl.getElementById("uz-grouping").style.backgroundColor = "#41578B";
 
-    updateAttendees();
+    updateAttendeesNovo4();
 
   }
 

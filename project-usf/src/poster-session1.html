@@ -54,10 +54,8 @@
 
       .cc-card {
         box-sizing: content-box !important;
-        width: 25%;
-        min-width: 160px;
+        width: 300px;
         background-color: white;
-        color: white;
         -webkit-border-radius: 0px;
         -moz-border-radius: 0px;
         -khtml-border-radius: 0px;
@@ -76,7 +74,8 @@
       .cc-card img {
         border-radius: inherit;
         position: relative;
-        width: 100%;
+        width: 300px;
+        height: 300px;
         z-index: 60;
       }
 
@@ -240,48 +239,76 @@
     <!-- Card Carousel Script -->
     <script>
       /* Poster Session 1 data */
-      const cardData = [
-        {
-          image: '1.jpg',
-          name: 'Abigail N. Kingsford, M.A.',
-          org: 'University of Kansas',
-          desc: 'Face-Threatening Speech Acts in Mentoring Relationships'
-        },
-        {
-          image: '2.jpg',
-          name: 'Arden Roeder',
-          org: 'University of Oklahoma',
-          desc: 'Unforeseen Distributed Work: Individual and Team Resilience Amidst Organizational Disruption'
-        },
-        {
-          image: '3.jpg',
-          name: 'Delaney Harness',
-          org: 'University of Texas at Austin',
-          desc: 'The Transparency Paradox: Reimagining Visibility and Opacity'
-        },
-        {
-          image: '4.jpg',
-          name: 'Diego Gomez-Zara',
-          org: 'Northwestern University',
-          desc: 'Do I know you? The effects of social capital on self-assembled teams online'
-        },
-        {
-          image: '5.jpg',
-          name: 'Jack E. Appleman, APR',
-          org: 'State University of New York at Albany',
-          desc: 'Cultivating Employee Engagement'
-        },
-        {
-          image: '6.jpg',
-          name: 'Julien A. Sperling, MA',
-          org: 'University of Kansas',
-          desc: 'Haters: A case-study exploration of stigma management communication from student athletes in a failing athletic program'
-        }
-      ]
+      function getCardData() {
+        return [
+          {
+            image: '01.jpg',
+            name: 'Abigail N. Kingsford, M.A.',
+            org: 'University of Kansas',
+            desc: 'Face-Threatening Speech Acts in Mentoring Relationships'
+          },
+          {
+            image: '02.jpg',
+            name: 'Arden Roeder',
+            org: 'University of Oklahoma',
+            desc: 'Unforeseen Distributed Work: Individual and Team Resilience Amidst Organizational Disruption'
+          },
+          {
+            image: '03.jpg',
+            name: 'Delaney Harness',
+            org: 'University of Texas at Austin',
+            desc: 'The Transparency Paradox: Reimagining Visibility and Opacity'
+          },
+          {
+            image: '04.jpg',
+            name: 'Diego Gomez-Zara',
+            org: 'Northwestern University',
+            desc: 'Do I know you? The effects of social capital on self-assembled teams online'
+          },
+          {
+            image: '05.jpg',
+            name: 'Jack E. Appleman, APR',
+            org: 'State University of New York at Albany',
+            desc: 'Cultivating Employee Engagement'
+          },
+          {
+            image: '06.jpg',
+            name: 'Julien A. Sperling, MA',
+            org: 'University of Kansas',
+            desc: 'Haters: A case-study exploration of stigma management communication from student athletes in a failing athletic program'
+          },
+          {
+            image: '07.jpg',
+            name: 'Maria Clara Martucci',
+            org: 'Wayne State University',
+            desc: 'The Right Way to Enforce Diversity and Inclusion in the Workplace: A Cultural Humility Approach.'
+          },
+          {
+            image: '08.jpg',
+            name: 'Matt Giles ',
+            org: 'University of California, Santa Barbara',
+            desc: 'Recruiting for the Blue Team in the Context Of #Blacklivesmatter: A Mixed Methods Content Analysis of Policing Identity Online'
+          },
+          {
+            image: '09.jpg',
+            name: 'Michael W. Major',
+            org: 'Wayne State University / U. S. Naval Academy',
+            desc: 'Exploring the Cognitive “Black Box” of Resume Screeners: Relationship of Resume Content, Attributional Confidence, and Offering an Interview '
+          },
+
+          {
+            image: '10.jpg',
+            name: 'Taylor M. Walker ',
+            org: 'Ohio University, Scripps College of Communication',
+            desc: 'Practicing Medicine in Underserved Areas: Differences that Make a Difference in Vocational Anticipatory Socialization'
+          }
+        ]
+      }
 
       function buildCards() {
-        const baseURL = 'https://studio304nextechar.freetls.fastly.net//infernoAR/029-usf/assets/samples/people/'
+        const baseURL = 'https://studio304nextechar.freetls.fastly.net//infernoAR/029-usf/assets/poster-people/'
         const cardContainer = landingPageEl.querySelector('.cc-container');
+        const cardData = getCardData();
         cardData.forEach((card) => {
           const c = document.createElement('div');
           c.className = 'cc-card';
@@ -299,11 +326,9 @@
       function cardInfo(card) {
         return '<div class="cc-info">'
           + '<h4>' + card.name + '</h4>'
-          + '<p>' +  card.org + '</p>'
-          + '<p>' +  card.desc + '</p>'
+          + '<p>' + card.org + '</p>'
           + '</div> <!-- end of cc-info -->';
       }
-
 
 
       function cardShift(currentCard, cards) {
