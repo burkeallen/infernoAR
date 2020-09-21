@@ -245,62 +245,71 @@
             image: '01.jpg',
             name: 'Abigail N. Kingsford, M.A.',
             org: 'University of Kansas',
-            desc: 'Face-Threatening Speech Acts in Mentoring Relationships'
+            desc: 'Face-Threatening Speech Acts in Mentoring Relationships',
+            url: '/videos/5edf2898-8e53-45bc-da9a-08d85be5e201/landing/895ea027-9554-4118-8c55-9ce98ee87d25'
           },
           {
             image: '02.jpg',
             name: 'Arden Roeder',
             org: 'University of Oklahoma',
-            desc: 'Unforeseen Distributed Work: Individual and Team Resilience Amidst Organizational Disruption'
+            desc: 'Unforeseen Distributed Work: Individual and Team Resilience Amidst Organizational Disruption',
+            url: '/videos/b0a9344a-8c2b-4dde-5539-08d85cce04b8/landing/6266b750-9c73-4b77-8e49-09d775405491'
           },
           {
             image: '03.jpg',
             name: 'Delaney Harness',
             org: 'University of Texas at Austin',
-            desc: 'The Transparency Paradox: Reimagining Visibility and Opacity'
+            desc: 'The Transparency Paradox: Reimagining Visibility and Opacity',
+            url: '/videos/e0fadd89-154a-4de1-553a-08d85cce04b8/landing/af12374f-3433-47e1-9a7a-ac10f8c7e834'
           },
           {
             image: '04.jpg',
             name: 'Diego Gomez-Zara',
             org: 'Northwestern University',
-            desc: 'Do I know you? The effects of social capital on self-assembled teams online'
+            desc: 'Do I know you? The effects of social capital on self-assembled teams online',
+            url: '/videos/ca2d3511-2361-46b3-8b5f-08d85ccf2269/landing/58626b51-e9e4-4d07-8dfa-f406699c945d'
           },
           {
             image: '05.jpg',
             name: 'Jack E. Appleman, APR',
             org: 'State University of New York at Albany',
-            desc: 'Cultivating Employee Engagement'
+            desc: 'Cultivating Employee Engagement',
+            url: '/videos/ab51a0e5-8d0b-43c7-8b60-08d85ccf2269/landing/181f4bee-88b6-4a32-92e5-4145c762e412'
           },
           {
             image: '06.jpg',
             name: 'Julien A. Sperling, MA',
             org: 'University of Kansas',
-            desc: 'Haters: A case-study exploration of stigma management communication from student athletes in a failing athletic program'
+            desc: 'Haters: A case-study exploration of stigma management communication from student athletes in a failing athletic program',
+            url: '/videos/f66360e1-514a-4212-553b-08d85cce04b8/landing/ed62d0a5-6f95-4020-b154-9a9ff7e541b9'
           },
           {
             image: '07.jpg',
             name: 'Maria Clara Martucci',
             org: 'Wayne State University',
-            desc: 'The Right Way to Enforce Diversity and Inclusion in the Workplace: A Cultural Humility Approach.'
+            desc: 'The Right Way to Enforce Diversity and Inclusion in the Workplace: A Cultural Humility Approach.',
+            url: '/videos/02602df7-c97c-446c-553c-08d85cce04b8/landing/20d5164f-5183-4a0d-9025-74b105fee619'
           },
           {
             image: '08.jpg',
             name: 'Matt Giles ',
             org: 'University of California, Santa Barbara',
-            desc: 'Recruiting for the Blue Team in the Context Of #Blacklivesmatter: A Mixed Methods Content Analysis of Policing Identity Online'
+            desc: 'Recruiting for the Blue Team in the Context Of #Blacklivesmatter: A Mixed Methods Content Analysis of Policing Identity Online',
+            url: '/videos/ef8cc6c7-29c9-4af9-553d-08d85cce04b8/landing/e8b6261d-6665-4553-9c97-2f0e749cdf5b'
           },
           {
             image: '09.jpg',
             name: 'Michael W. Major',
             org: 'Wayne State University / U. S. Naval Academy',
-            desc: 'Exploring the Cognitive “Black Box” of Resume Screeners: Relationship of Resume Content, Attributional Confidence, and Offering an Interview '
+            desc: 'Exploring the Cognitive “Black Box” of Resume Screeners: Relationship of Resume Content, Attributional Confidence, and Offering an Interview ',
+            url: '/videos/2a15aec8-7a35-47fc-553e-08d85cce04b8/landing/a7d16064-9e7a-4ebb-8644-b1940b16a6d9'
           },
-
           {
             image: '10.jpg',
             name: 'Taylor M. Walker ',
             org: 'Ohio University, Scripps College of Communication',
-            desc: 'Practicing Medicine in Underserved Areas: Differences that Make a Difference in Vocational Anticipatory Socialization'
+            desc: 'Practicing Medicine in Underserved Areas: Differences that Make a Difference in Vocational Anticipatory Socialization',
+            url: '/videos/9b715564-b54f-4e4d-553f-08d85cce04b8/landing/966dbb1c-bffb-4432-b789-8a31007ff283'
           }
         ]
       }
@@ -312,11 +321,18 @@
         cardData.forEach((card) => {
           const c = document.createElement('div');
           c.className = 'cc-card';
+          const linkBeg = '<a href="'+ card.url + '">';
+          const linkEnd = '</a>';
           const img = '<img src="' + baseURL + card.image + '">';
-          c.innerHTML = '<div class="cc-header">'
+          const headerBeg = '<div class="cc-header">';
+          const headerEnd = '</div>';
+          c.innerHTML =
+            linkBeg
+            + headerBeg
             + img
             + cardInfo(card)
-            + '</div> <!-- end of cc-card -->';
+            + headerEnd
+            + linkEnd;
           cardContainer.append(c);
         })
       }
