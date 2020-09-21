@@ -76,6 +76,10 @@ class InfernoAR {
       console.log('matched group', groupName);
       return '22581604-f059-4082-a447-08d858b3bd5f';
     }
+    if (groupName.includes('ARCHIVE')) {
+      console.log('matched group', groupName);
+      return 'f6e3ecd8-d7ee-40cc-922b-08d85e2f0fa1';
+    }
     console.log('matched group', 'NONE');
     return '';
 
@@ -172,6 +176,36 @@ class InfernoAR {
 
   }
 
+  replaceUserGroup(user, groupName) {
+    user = this.getExistingUser(user.email);
+    if (!user.id) {
+      // if user does not exist then we do not need to replace their group
+      return;
+    }
+    const groupId = this.getGroupId(groupName);
+    console.log('REPLACING GROUPS for user ' + user.email + ' => ', groupName)
+
+    const url = this.config.url + `GroupUsers/${user.id}`;
+    const options = {
+      'method': 'PUT',
+      'muteHttpExceptions': true,
+      'contentType': 'application/json',
+      'headers': {
+        'Authorization': this.AccessToken
+      },
+      'payload': JSON.stringify([groupId])
+    };
+
+    const response = UrlFetchApp.fetch(url, options);
+    if (response.getResponseCode() === 200 || response.getResponseCode() === 204) {
+      return true;
+    } else {
+      this.handleResponseError(response, 'PUT', url, 'replaceUserGroup');
+      return false;
+    }
+
+  }
+
   addProfile(id, user) {
 
     // determine if we need to create a profile or update a profile
@@ -253,6 +287,27 @@ class InfernoAR {
   handleResponseError(response, method, url, task) {
     console.error('ERROR ' + method + ' ' + url);
     console.error(response.getResponseCode(), response.getContentText());
+  }
+
+
+  fetchGroups() {
+    const url = this.config.url + 'Groups';
+    const options = {
+      'method': 'GET',
+      'muteHttpExceptions': false,
+      'headers': {
+        'Authorization': this.AccessToken
+      },
+    };
+
+    const response = UrlFetchApp.fetch(url, options);
+    if (response.getResponseCode() === 200) {
+      return JSON.parse(response.getContentText());
+    } else {
+      this.handleResponseError(response, 'GET', url, 'fetchGroups');
+      return [];
+    }
+
   }
 
 }

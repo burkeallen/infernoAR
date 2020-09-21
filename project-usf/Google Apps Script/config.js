@@ -13,7 +13,7 @@ class Config {
   getConfig() {
     let config = {};
     // add spreadhseet id to the config so you do not have to pass it around as well
-    const values = Sheets.Spreadsheets.Values.get(config.sheetId, 'config!A:B').values;
+    const values = Sheets.Spreadsheets.Values.get(this.spreadsheetId, 'config!A:B').values;
     values.forEach( (item) => {
       if (!!item[0]) {
         config[item[0]] = item[1];
@@ -22,7 +22,6 @@ class Config {
 
     config['sheetId'] = this.spreadsheetId;
 
-    console.log('Config', config);
     return config;
   }
 
