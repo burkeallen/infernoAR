@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, height=device-height, user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, minimal-ui"/>
+  <title>USF Poster Room 1</title>
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet"/>
+  <link rel="stylesheet" href="./assets/inferno.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="landing-page">
+  <div id="landing">
+    <script>
+      const landingPageEl = document.getElementById('landing-page').attachShadow({mode: 'open'});
+      const landing = landingPageEl.appendChild(document.getElementById('landing'));
+      landingPageEl.appendChild(landing);
+    </script>
+    <!-- code snippet goes here -->
+
+
+    <!-- Background Style -->
+    <style>
+      .content {
+        background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-poster.jpg');
+        height: calc(100vh - 56px);
+        margin: -20px;
+        padding-top: 50px;
+        padding-left: 24px;
+        padding-right: 24px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        overflow-y: scroll;
+        z-index: 1;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        .content {
+          padding-top: 50px;
+          padding-left: 24px;
+          padding-right: 24px;
+        }
+      }
+    </style>
+
+    <!-- Card Carousel Styles -->
+    <style>
+
+      .cc-card {
+        box-sizing: content-box !important;
+        width: 300px;
+        background-color: white;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        -khtml-border-radius: 0px;
+        border-radius: 0px;
+        text-align: center;
+        font-size: 50px;
+        position: absolute;
+        left: calc(50% - 100px);
+        opacity: 1;
+        transition: transform 1s, opacity 1s, filter 1s;
+        overflow: hidden;
+        -webkit-box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.6);
+        box-shadow: 0px 5px 15px 5px rgba(0, 0, 0, 0.6);
+      }
+
+      .cc-card img {
+        border-radius: inherit;
+        position: relative;
+        width: 300px;
+        height: 300px;
+        z-index: 60;
+      }
+
+      .cc-info {
+        background: #ffffff;
+        min-height: 50px;
+        color: #000000;
+        font-size: .5em;
+        text-align: center;
+      }
+
+      .cc-info h4 {
+        font-size: .75em;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      .cc-info p {
+        font-size: .65em;
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+
+      .cc-hidden {
+        z-index: 5;
+        transform: translateX(0) scale(0.4);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p1 {
+        transform: translateX(-18vw) scale(0.6);
+        z-index: 10;
+        -webkit-filter: blur(8px);
+        filter: blur(8px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p2 {
+        transform: translateX(-10vw) scale(0.8);
+        z-index: 20;
+        -webkit-filter: blur(6px);
+        filter: blur(6px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p3 {
+        transform: translateX(0) scale(1);
+        z-index: 30;
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p4 {
+        transform: translateX(10vw) scale(0.8);
+        z-index: 20;
+        -webkit-filter: blur(6px);
+        filter: blur(6px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-p5 {
+        transform: translateX(18vw) scale(0.6);
+        z-index: 10;
+        -webkit-filter: blur(8px);
+        filter: blur(8px);
+        transition: transform 1s, opacity 1s, filter 1s;
+      }
+
+      .cc-container {
+        position: relative;
+        width: 100%;
+        height: 70%;
+        background-color: transparent;
+        opacity: 1;
+        transition: opacity 0.5s;
+      }
+
+      .preload {
+        opacity: 0;
+      }
+
+      .cc-arrow-button {
+        position: absolute;
+        top: calc(50% - 28px);
+        width: 56px;
+        height: 56px;
+        background-color: transparent;
+        z-index: 25;
+      }
+
+      .cc-arrow {
+        position: relative;
+        display: inline-block;
+        margin: 12px;
+
+        padding: 20px;
+
+        box-shadow: 12px -12px 0 0 rgb(255, 255, 255) inset;
+        cursor: pointer;
+      }
+
+      .cc-arrow:hover {
+        box-shadow: 12px -12px 0 0 rgb(86, 207, 255) inset;
+      }
+
+      .cc-left {
+        transform: rotate(45deg);
+        left: 5%;
+      }
+
+      .cc-right {
+        transform: rotate(225deg);
+        right: 5%;
+      }
+
+      /* End Card Carousel Styles */
+
+    </style>
+
+    <!-- Landing Page Layout Grid Styles -->
+    <style>
+      .grid-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.4fr 1.6fr;
+        gap: 1px 1px;
+        grid-template-areas: "top" "bottom";
+      }
+
+      .top {
+        grid-area: top;
+        min-height: 300px;
+      }
+
+      .bottom {
+        grid-area: bottom;
+      }
+    </style>
+
+    <div class="content">
+
+      <div class="grid-container">
+        <div class="top"></div>
+        <div class="bottom">
+
+          <!-- Card Carousel Container -->
+          <div class="cc-container preload">
+            <div class="cc-arrow-button cc-left">
+              <div class="cc-arrow" id="cc-aleft"></div>
+            </div>
+            <div class="cc-arrow-button cc-right">
+              <div class="cc-arrow" id="cc-aright"></div>
+            </div>
+          </div>
+          <!-- End Card Carousel Container -->
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Card Carousel Script -->
+    <script>
+      /* Poster Session 1 data */
+      const session1 = [
+        {
+          img: '01.jpg',
+          name: 'Abigail N. Kingsford, M.A.',
+          org: 'University of Kansas',
+          desc: 'Face-Threatening Speech Acts in Mentoring Relationships',
+          url: '/videos/5edf2898-8e53-45bc-da9a-08d85be5e201/landing/895ea027-9554-4118-8c55-9ce98ee87d25'
+        },
+        {
+          img: '02.jpg',
+          name: 'Arden Roeder',
+          org: 'University of Oklahoma',
+          desc: 'Unforeseen Distributed Work: Individual and Team Resilience Amidst Organizational Disruption',
+          url: '/videos/b0a9344a-8c2b-4dde-5539-08d85cce04b8/landing/6266b750-9c73-4b77-8e49-09d775405491'
+        },
+        {
+          img: '03.jpg',
+          name: 'Delaney Harness',
+          org: 'University of Texas at Austin',
+          desc: 'The Transparency Paradox: Reimagining Visibility and Opacity',
+          url: '/videos/e0fadd89-154a-4de1-553a-08d85cce04b8/landing/af12374f-3433-47e1-9a7a-ac10f8c7e834'
+        },
+        {
+          img: '04.jpg',
+          name: 'Diego Gomez-Zara',
+          org: 'Northwestern University',
+          desc: 'Do I know you? The effects of social capital on self-assembled teams online',
+          url: '/videos/ca2d3511-2361-46b3-8b5f-08d85ccf2269/landing/58626b51-e9e4-4d07-8dfa-f406699c945d'
+        },
+        {
+          img: '05.jpg',
+          name: 'Jack E. Appleman, APR',
+          org: 'State University of New York at Albany',
+          desc: 'Cultivating Employee Engagement',
+          url: '/videos/ab51a0e5-8d0b-43c7-8b60-08d85ccf2269/landing/181f4bee-88b6-4a32-92e5-4145c762e412'
+        },
+        {
+          img: '06.jpg',
+          name: 'Julien A. Sperling, MA',
+          org: 'University of Kansas',
+          desc: 'Haters: A case-study exploration of stigma management communication from student athletes in a failing athletic program',
+          url: '/videos/f66360e1-514a-4212-553b-08d85cce04b8/landing/ed62d0a5-6f95-4020-b154-9a9ff7e541b9'
+        },
+        {
+          img: '07.jpg',
+          name: 'Maria Clara Martucci',
+          org: 'Wayne State University',
+          desc: 'The Right Way to Enforce Diversity and Inclusion in the Workplace: A Cultural Humility Approach.',
+          url: '/videos/02602df7-c97c-446c-553c-08d85cce04b8/landing/20d5164f-5183-4a0d-9025-74b105fee619'
+        },
+        {
+          img: '08.jpg',
+          name: 'Matt Giles ',
+          org: 'University of California, Santa Barbara',
+          desc: 'Recruiting for the Blue Team in the Context Of #Blacklivesmatter: A Mixed Methods Content Analysis of Policing Identity Online',
+          url: '/videos/ef8cc6c7-29c9-4af9-553d-08d85cce04b8/landing/e8b6261d-6665-4553-9c97-2f0e749cdf5b'
+        },
+        {
+          img: '09.jpg',
+          name: 'Michael W. Major',
+          org: 'Wayne State University / U. S. Naval Academy',
+          desc: 'Exploring the Cognitive “Black Box” of Resume Screeners: Relationship of Resume Content, Attributional Confidence, and Offering an Interview ',
+          url: '/videos/2a15aec8-7a35-47fc-553e-08d85cce04b8/landing/a7d16064-9e7a-4ebb-8644-b1940b16a6d9'
+        },
+        {
+          img: '10.jpg',
+          name: 'Taylor M. Walker ',
+          org: 'Ohio University, Scripps College of Communication',
+          desc: 'Practicing Medicine in Underserved Areas: Differences that Make a Difference in Vocational Anticipatory Socialization',
+          url: '/videos/9b715564-b54f-4e4d-553f-08d85cce04b8/landing/966dbb1c-bffb-4432-b789-8a31007ff283'
+        }
+      ];
+      const session2 =  [
+        {
+          img: "11.jpg",
+          name: "Adrienne Darrah",
+          desc: "A Qualitative Study of Female Fundraisers’ Sexual Harassment Experiences in the Field",
+          org: "Penn State",
+          url: '/videos/7ed535cf-0adc-4175-d1ca-08d85cd056ba/landing/8e3f5c10-ff9c-4358-a61d-634ee8083620'
+        },
+        {
+          img: "12.jpg",
+          name: "Allison P. Mazur",
+          desc: "Perceptions of Cybersexual Harassment Behaviors Among Remote Workers",
+          org: "University of California, Santa Barbara",
+          url: '/videos/f5e6f640-1504-4c6b-d1cb-08d85cd056ba/landing/fa71245c-bcce-4c91-be09-6ccaf21c57c7'
+        },
+        {
+          img: "13.jpg",
+          name: "Amber-Lynn Scott",
+          desc: "COVID-19 and the Aircraft Carrier Crisis: A Case Study of Unfolding Reaction to a U.S. Navy Crisis on Instagram",
+          org: "University of Southern California",
+          url: '/videos/4b51697a-36ef-468f-5542-08d85cce04b8/landing/eef99145-e5ab-4ca8-8a0e-04959762a0aa'
+        },
+        {
+          img: "14.jpg",
+          name: "Anastazja G. Harris",
+          desc: "The Impact of Artificial Intelligence’s Decision-Making Role on Applicants’ Perceived Job Interview Fairness and Behavior",
+          org: "The University of Texas at Austin",
+          url: '/videos/51bcb4d9-14b8-4fd3-5543-08d85cce04b8/landing/a80bfc48-0270-4dc3-9d59-3a0bb26a652b'
+        },
+        {
+          img: "15.jpg",
+          name: "Caitlin Williams",
+          desc: "Social Change and Sport for Development: An ethnographic case study of a faith-based organization in Kenya",
+          org: "Texas A&M University",
+          url: '/videos/7d81b55e-bf6f-4a46-5544-08d85cce04b8/landing/ec382ea0-5689-4f10-b72b-018630fd5411'
+        },
+        {
+          img: "16.jpg",
+          name: "Christine Nyawaga",
+          desc: "Communicating National Identity: Exploring the Role of the Kenyan Bracelet in Providing a Sense of Belonging by Protecting and Enhancing Social Group Identity.",
+          org: "Wayne State University",
+          url: '/videos/699aa1b9-6edb-41d0-d1cc-08d85cd056ba/landing/57fde159-3803-4001-9622-84785c0e62a4'
+        },
+        {
+          img: "17.jpg",
+          name: "Jayne Simpson",
+          desc: "Organizational Identity & Identification as Reactionary and Processual in Organizational Communication Research",
+          org: "University of Colorado at Boulder",
+          url: '/videos/4448d3b8-0e10-401a-d1cd-08d85cd056ba/landing/0c216b7c-0f2d-46a9-8829-cd92c34cc7e1'
+        },
+        {
+          img: "18.jpg",
+          name: "Jenilee Crutcher Williams",
+          desc: "An Interpretive Approach to Workplace Bullying Bystanders",
+          org: "University of Tennessee",
+          url: '/videos/7301cf0d-1277-4d71-d1ce-08d85cd056ba/landing/cfd8cbdc-7723-4393-9088-9701d8e39388'
+        },
+        {
+          img: "19.jpg",
+          name: "Jessica Sage Rauchberg",
+          desc: "Towards a Crip Organizational Communication Framework: A Case Study of LifeTown",
+          org: "McMaster University",
+          url: '/videos/0a431d2e-3f23-4631-5545-08d85cce04b8/landing/8babf271-edf8-4fae-a6c9-a3621225f794'
+        },
+        {
+          img: "20.jpg",
+          name: "Jordan Buuck",
+          desc: "Nonprofit Communication During the COVID-19 Pandemic",
+          org: "University of Nevada, Las Vegas",
+          url: '/videos/fa3ddde4-173e-41d2-5546-08d85cce04b8/landing/1fe39334-ed22-494d-bab5-2c8408bb71b0'
+        },
+        {
+          img: "21.jpg",
+          name: "Joseph Trujillo",
+          desc: "The Embedded, Meteorological System: Interoffice Collaboration and Decision Making of National Weather Service Weather Forecast Offices in a FACETs Paradigm",
+          org: "University of Oklahoma",
+          url: '/videos/74752fda-3a05-4326-5547-08d85cce04b8/landing/0905b107-5953-4db6-afc2-1dc2593c02b5'
+        },
+        {
+          img: "22.jpg",
+          name: "Laura Martinez & Matt Giles",
+          desc: "Religious Conversion and Organizational Identification: Exploring the Process of Organizational Assimilation with the Communication Theory of Identity",
+          org: "Arizona State University",
+          url: '/videos/997d5665-3ce2-47d1-d1d0-08d85cd056ba/landing/2d13c3f8-f0aa-4921-8b76-6d0d9a8cf8ad'
+        },
+        {
+          img: "23.jpg",
+          name: "Leanna Hartsough",
+          desc: "Promoting Mindfulness Training in Organizations Using the Theory of Reasoned Action",
+          org: "University of Kentucky",
+          url: '/videos/3db33d7c-1a1e-4573-3dca-08d85cd082a9/landing/73c838fd-de86-4c11-8047-afcbaebe725f'
+        },
+        {
+          img: "24.jpg",
+          name: "Mary Kiura",
+          desc: "Frontline Workers’ Communication Strategies to Promote Constructive Voice",
+          org: "Arizona State University",
+          url: '/videos/0db3529f-3606-4c44-5548-08d85cce04b8/landing/876502c4-f935-4850-a7f0-068d932d8190'
+        },
+        {
+          img: "25.jpg",
+          name: "Niloufar Izadinia",
+          desc: "NEW METRICS FOR EVALUATING INDIVIDUAL AND TEAM PERFORMANCE IN MULTITEAM SYSTEMS",
+          org: "Northwestern University",
+          url: '/videos/2a257b5b-2ae4-4e96-5549-08d85cce04b8/landing/350332bc-04cf-46ce-8fe4-4d9f7d60993c'
+        },
+        {
+          img: "26.jpg",
+          name: "Nitzan Navick",
+          desc: "Perceptions of Cybersexual Harassment Behaviors Among Remote Workers",
+          org: "University of California, Santa Barbara",
+          url: '/videos/03d52eec-47f1-4553-3dcb-08d85cd082a9/landing/c6f6648e-40a1-48e4-a151-6ccdc0ef0c96'
+        },
+        {
+          img: "27.jpg",
+          name: "Nivethitha Ketheeswaran",
+          desc: "A Metasynthesis of Resistance and Resilience in Organizational Communication Studies",
+          org: "University of South Florida",
+          url: '/videos/23485925-c9c5-46d8-d1d1-08d85cd056ba/landing/a4608daf-c3be-48a4-9994-b506c5533f5a'
+        },
+        {
+          img: "28.jpg",
+          name: "Rebecca Leach",
+          desc: "The Communicative Construction of Workplace Loneliness",
+          org: "Arizona State University",
+          url: '/videos/46c5612f-44df-485b-554a-08d85cce04b8/landing/4285892c-5f98-4642-8037-936454af54ae'
+        },
+        {
+          img: "29.jpg",
+          name: "Susan Metzger",
+          desc: "Meaning Making and Practice Perspectives in Strategic Planning for a Veteran Service Nonprofit Organization",
+          org: "Kansas State University",
+          url: '/videos/f1d12525-0369-4aab-554b-08d85cce04b8/landing/85606519-b7a8-4e50-baec-e73f1bacf1ab'
+        },
+        {
+          img: "30.jpg",
+          name: "Victoria T. Fields",
+          desc: "Colin Kaepernick and Roger Goodell: The Unique Relationship Between the NFL and Black Athletes",
+          org: "University of Illinois",
+          url: '/videos/c009641a-fdec-4858-3dcc-08d85cd082a9/landing/ec74701f-b571-4ab2-a20c-3725250a5dce'
+        },
+        {
+          img: "31.jpg",
+          name: "Y. Jasmine Wu",
+          desc: "Status and Network Mobilization in Organizations During the Times of COVID-19",
+          org: "Northwestern University",
+          url: '/videos/8f79758e-1855-4876-3dcd-08d85cd082a9/landing/3768fde5-4479-4a77-94f8-2951834e2387'
+        }
+      ];
+
+      function buildCards() {
+        const baseURL = 'https://studio304nextechar.freetls.fastly.net//infernoAR/029-usf/assets/poster-people/'
+        const cardContainer = landingPageEl.querySelector('.cc-container');
+        const cardData = session1;
+        cardData.forEach((card) => {
+          const c = document.createElement('div');
+          c.className = 'cc-card';
+          const linkBeg = '<a href="'+ card.url + '">';
+          const linkEnd = '</a>';
+          const img = '<img src="' + baseURL + card.img + '">';
+          const headerBeg = '<div class="cc-header">';
+          const headerEnd = '</div>';
+          c.innerHTML =
+            linkBeg
+            + headerBeg
+            + img
+            + cardInfo(card)
+            + headerEnd
+            + linkEnd;
+          cardContainer.append(c);
+        })
+      }
+
+      buildCards();
+
+      function cardInfo(card) {
+        return '<div class="cc-info">'
+          + '<h4>' + card.name + '</h4>'
+          + '<p>' + card.org + '</p>'
+          + '</div> <!-- end of cc-info -->';
+      }
+
+
+      function cardShift(currentCard, cards) {
+        var cardCount = 0;
+        index = currentCard - 2;
+        if (index < 0) {
+          index = cards.length + index;
+        }
+        while (cardCount < cards.length) {
+          cards[index].className = 'cc-card';
+          if (cardCount < 5) {
+            cards[index].classList.add('cc-p' + (cardCount + 1));
+          } else {
+            cards[index].classList.add('cc-hidden');
+          }
+          cardCount = cardCount + 1;
+          index = index + 1;
+          if (index > cards.length - 1) {
+            index = 0;
+          }
+        }
+      }
+
+      var card = 0;
+      var cards = landingPageEl.querySelectorAll('.cc-card');
+
+      var ignoreClick = false;
+
+      function triggerClick(card) {
+        cardShift(card, cards);
+        ignoreClick = true;
+        setTimeout(function () {
+          ignoreClick = false;
+        }, 400);
+      }
+
+      function setCardCenter(cards) {
+        var centerCard = landingPageEl.querySelectorAll('.cc-p3')[0];
+
+        if (!centerCard) {
+          centerCard = landingPageEl.querySelectorAll('.cc-card')[0];
+        }
+
+        var cardContainer = landingPageEl.querySelectorAll('.cc-container')[0];
+        var cardHeight = centerCard.clientHeight;
+        var containerHeight = cardContainer.clientHeight;
+        var cardTop = containerHeight / 2 - cardHeight / 2;
+        var cardWidth = centerCard.clientWidth;
+        var containerWidth = cardContainer.clientWidth;
+        var cardLeft = containerWidth / 2 - cardWidth / 2;
+        for (x = 0; x < cards.length; x++) {
+          cards[x].style.top = cardTop + 'px';
+          cards[x].style.left = cardLeft + 'px';
+          // cards[x].style.borderRadius = cardWidth / 6.5 + 'px';
+        }
+      }
+
+      // Wait for card images to load
+      var img = landingPageEl.querySelectorAll('.cc-card img')[cards.length - 1];
+
+      function ccLoaded() {
+        cardShift(card, cards);
+        setTimeout(function () {
+          setCardCenter(cards);
+        }, 250);
+        setTimeout(function () {
+          landingPageEl.querySelectorAll('.preload')[0].classList.remove('preload');
+        }, 400);
+      }
+
+      if (img.complete) {
+        ccLoaded();
+      } else {
+        img.addEventListener('load', ccLoaded);
+        img.addEventListener('error', ccLoaded);
+      }
+
+      landingPageEl.querySelector('#cc-aleft').addEventListener('click', function (e) {
+        if (ignoreClick) return;
+        card = card - 1;
+        if (card < 0) {
+          card = cards.length - 1;
+        }
+        triggerClick(card);
+      });
+
+      landingPageEl.querySelector('#cc-aright').addEventListener('click', function (e) {
+        if (ignoreClick) return;
+        card = card + 1;
+        if (card > cards.length - 1) {
+          card = 0;
+        }
+        triggerClick(card);
+      });
+
+      window.addEventListener('resize', function () {
+        setCardCenter(cards);
+      });
+    </script>
+    <!-- End Card Carousel Script -->
+
+
+    <!-- code snippet ends here -->
+  </div>
+</div>
+</body>
+</html>
