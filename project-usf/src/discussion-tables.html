@@ -31,7 +31,84 @@
               landingPageEl.appendChild(landing);
             </script>
 
-            <!-- code snippet goes here -->
+            <!-- Discussion Tables code snippet goes here -->
+
+            <!-- Import Fonts -->
+            <script type="text/javascript">
+              // Load custom fonts
+              var customFontThin = new FontFace(
+                'Trade Gothic',
+                'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT-Light.woff)',
+                {
+                  style: 'normal',
+                  weight: '300'
+                }
+              );
+              customFontThin
+                .load()
+                .then(loadedFont => {
+                  document.fonts.add(loadedFont);
+                })
+                .catch(error => {
+                  // error occurred
+                  console.log('Error loading Trade Gothic thin: ', error);
+                });
+
+              var customFontLight = new FontFace(
+                'Trade Gothic',
+                'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT-Light.woff)',
+                {
+                  style: 'normal',
+                  weight: 'normal'
+                }
+              );
+              customFontLight
+                .load()
+                .then(loadedFont => {
+                  document.fonts.add(loadedFont);
+                })
+                .catch(error => {
+                  // error occurred
+                  console.log('Error loading Trade Gothic Light: ', error);
+                });
+
+              var customFontMedium = new FontFace(
+                'Trade Gothic',
+                'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT.woff)',
+                {
+                  style: 'normal',
+                  weight: '500'
+                }
+              );
+              customFontMedium
+                .load()
+                .then(loadedFont => {
+                  document.fonts.add(loadedFont);
+                })
+                .catch(error => {
+                  // error occurred
+                  console.log('Error loading Trade Gothic Medium: ', error);
+                });
+
+              var customFontBold = new FontFace(
+                'Trade Gothic',
+                'url(https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/fonts/TradeGothicLT-Bold.woff)',
+                {
+                  style: 'normal',
+                  weight: 'bold'
+                }
+              );
+              customFontBold
+                .load()
+                .then(loadedFont => {
+                  document.fonts.add(loadedFont);
+                })
+                .catch(error => {
+                  // error occurred
+                  console.log('Error loading Trade Gothic Bold: ', error);
+                });
+            </script>
+            <!-- ./ Import Fonts -->
 
             <style>
               :host {
@@ -39,17 +116,17 @@
                 --dGrayDark: #374b51;
               }
 
-              .landing-bg {
+              .snippet-content {
                 background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-agenda.jpg');
-                background-size: cover;
-                background-position: left top;
-                background-repeat: no-repeat;
                 background-attachment: fixed;
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                min-height: 100%;
+                margin: -20px;
+                padding: 20px 24px;
+                z-index: 1;
+                font-family: 'Trade Gothic', sans-serif !important;
               }
 
               .grid-container {
@@ -104,12 +181,13 @@
 
               .discussions {
                 display: grid;
+                z-index: 99;
                 grid-template-rows: 1fr 1fr;
                 grid-template-columns: 1fr 1fr;
                 gap: 20px 20px;
                 grid-template-areas: "table1 table2"  "table3 table4";
                 grid-area: discussions;
-                z-index: 99;
+                font-size: 1.1em;
               }
 
               a, a:hover {
@@ -131,18 +209,22 @@
               }
 
               .table1 {
+                z-index: 99;
                 grid-area: table1;
               }
 
               .table2 {
+                z-index: 99;
                 grid-area: table2;
               }
 
               .table3 {
+                z-index: 99;
                 grid-area: table3;
               }
 
               .table4 {
+                z-index: 99;
                 grid-area: table4;
               }
 
@@ -175,7 +257,7 @@
                 text-transform: uppercase;
                 border: 0;
                 outline: 0;
-                font-size: 1.75em;
+                font-size: 1.5em;
                 padding: 4px 35px;
                 display: inline-block;
                 filter: brightness(80%);
@@ -246,93 +328,97 @@
 
             </style>
 
-            <div class="landing-bg"></div>
-
-            <div class="grid-container">
-              <div class="left-col">
-                <img
-                    src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-main-header-sm.png">
-              </div>
-
-              <div class="right-col">
-                <div class="header">
-                  <div class="slanted-block"><span>Discussion Tables</span></div>
-                  <div style="margin-top: 44px;">
-                    <p class="title">Saturday, September 26 1:00 PM - 2:00 PM</p>
-                    <hr/>
-                    <p class="subTitle">Join one of the tables below</p>
-                  </div>
-                  <div class="discussions">
-                    <div class="table1">
-                      <div class="discussion-table">
-                        <a target="_blank" href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MmMxOTExZGQtYWVkNC00ODRhLWEzYzYtYzQ0ZmVlMmFmNjkz%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
-                          <div class="dtable">
-                            <p class="dtitle">Discussion Table 1</p>
-                            <p class="dsub">Alternatives to Academic Career Paths</p>
-                            <p class="content">
-                            <p>Panelist: Dr. Robyn Remke, Dr. Abigail Selzer King, Dr. Travis W. Thompson,
-                               Dr. Cerise Glenn Maniagluat, Dr. Sarah McGhee</p>
-                            <p>Moderators: Cayla Lanier, Lize Baranowicz</p>
-                          </div>
-                          <button class="full-btn"><span>join</span></button>
-                        </a>
-                      </div>
-                    </div>
-
-                    <div class="table2">
-                      <div class="discussion-table">
-                        <a target="_blank" href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MGQzYmM4NzYtYjQ3ZS00NjU4LWI1ZTMtNzQ3NWRkNWI1Njdl%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
-                          <div class="dtable">
-                            <p class="dtitle">Discussion Table 2</p>
-                            <p class="dsub">Future of Academe</p>
-                            <p class="content">
-                            <p>Panelist: Dr. Eric Eisenberg, Dr. Kevin Barge, Dr. Rebecca Meisenbach,
-                               Dr. Michelle Shumate, Dr. Seungyoon Lee, Dr. Eric Waters</p>
-                            <p>Moderators: Jonathan Baker and Nivethitha Ketheeswaran</p>
-                          </div>
-                          <button class="full-btn"><span>join</span></button>
-                        </a>
-                      </div>
-                    </div>
-
-                    <div class="table3">
-                      <div class="discussion-table">
-                        <a target="_blank" href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDVmZWM4NTMtYTQyMS00YmVjLTg0N2UtZTM1MzgzNzQzZjAz%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
-                          <div class="dtable">
-                            <p class="dtitle">Discussion Table 3</p>
-                            <p class="dsub">Living Whole Lives During a Pandemic</p>
-                            <div class="content">
-                              <p>Dr. Heather Zoller, Dr. Angela N. Gist-Mackey, Dr. Heewon Kim,
-                                 Dr. Laura Ellingson, Dr. Peter Jensen</p>
-                              <p>Moderators: Jessica Lolli and Parameswari Mukherjee </p>
-                            </div>
-                          </div>
-                          <button class="full-btn"><span>join</span></button>
-                        </a>
-                      </div>
-                    </div>
-
-                    <div class="table4">
-                      <div class="discussion-table">
-                        <a target="_blank" href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTRjMDMyNTctNmExYS00OWZiLWE1MDktOWYyZTI2Yjk0NTdj%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
-                          <div class="dtable">
-                            <p class="dtitle">Discussion Table 4</p>
-                            <p class="dsub">Preparing for Academic Jobs</p>
-                            <p class="content">
-                            <p>Dr. Dajung (DJ) Woo, Dr. Emilly Martinez, Dr. Rahul Mitra, Dr.
-                               Chigozirim U. Sodeke, Dr. Debbie S. Dougherty, Dr. Kristen Lucas</p>
-                            <p>Moderators: Timothy Betts and Rebecca Todd </p>
-                          </div>
-                          <button class="full-btn"><span>join</span></button>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+            <div class="snippet-content">
+              <div class="grid-container">
+                <div class="left-col">
+                  <img
+                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/agenda-main-header-sm.png">
                 </div>
 
+                <div class="right-col">
+                  <div class="header">
+                    <div class="slanted-block"><span>Discussion Tables</span></div>
+                    <div style="margin-top: 44px;">
+                      <p class="title">Saturday, September 26 1:00 PM - 2:00 PM</p>
+                      <hr/>
+                      <p class="subTitle">Join one of the tables below</p>
+                    </div>
+                    <div class="discussions">
+                      <div class="table1">
+                        <div class="discussion-table">
+                          <a target="_blank"
+                             href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MmMxOTExZGQtYWVkNC00ODRhLWEzYzYtYzQ0ZmVlMmFmNjkz%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
+                            <div class="dtable">
+                              <p class="dtitle">Discussion Table 1</p>
+                              <p class="dsub">Alternatives to Academic Career Paths</p>
+                              <p class="content">
+                              <p>Panelist: Dr. Robyn Remke, Dr. Abigail Selzer King, Dr. Travis W. Thompson,
+                                 Dr. Cerise Glenn Maniagluat, Dr. Sarah McGhee</p>
+                              <p>Moderators: Cayla Lanier, Lize Baranowicz</p>
+                            </div>
+                            <button class="full-btn"><span>join</span></button>
+                          </a>
+                        </div>
+                      </div>
+
+                      <div class="table2">
+                        <div class="discussion-table">
+                          <a target="_blank"
+                             href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MGQzYmM4NzYtYjQ3ZS00NjU4LWI1ZTMtNzQ3NWRkNWI1Njdl%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
+                            <div class="dtable">
+                              <p class="dtitle">Discussion Table 2</p>
+                              <p class="dsub">Future of Academe</p>
+                              <p class="content">
+                              <p>Panelist: Dr. Eric Eisenberg, Dr. Kevin Barge, Dr. Rebecca Meisenbach,
+                                 Dr. Michelle Shumate, Dr. Seungyoon Lee, Dr. Eric Waters</p>
+                              <p>Moderators: Jonathan Baker and Nivethitha Ketheeswaran</p>
+                            </div>
+                            <button class="full-btn"><span>join</span></button>
+                          </a>
+                        </div>
+                      </div>
+
+                      <div class="table3">
+                        <div class="discussion-table">
+                          <a target="_blank"
+                             href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_ZDVmZWM4NTMtYTQyMS00YmVjLTg0N2UtZTM1MzgzNzQzZjAz%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
+                            <div class="dtable">
+                              <p class="dtitle">Discussion Table 3</p>
+                              <p class="dsub">Living Whole Lives During a Pandemic</p>
+                              <div class="content">
+                                <p>Dr. Heather Zoller, Dr. Angela N. Gist-Mackey, Dr. Heewon Kim,
+                                   Dr. Laura Ellingson, Dr. Peter Jensen</p>
+                                <p>Moderators: Jessica Lolli and Parameswari Mukherjee </p>
+                              </div>
+                            </div>
+                            <button class="full-btn"><span>join</span></button>
+                          </a>
+                        </div>
+                      </div>
+
+                      <div class="table4">
+                        <div class="discussion-table">
+                          <a target="_blank"
+                             href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_YTRjMDMyNTctNmExYS00OWZiLWE1MDktOWYyZTI2Yjk0NTdj%40thread.v2/0?context=%7b%22Tid%22%3a%22741bf7de-e2e5-46df-8d67-82607df9deaa%22%2c%22Oid%22%3a%221fbbb7fa-549c-4cbe-be88-ba06c93122e7%22%7d">
+                            <div class="dtable">
+                              <p class="dtitle">Discussion Table 4</p>
+                              <p class="dsub">Preparing for Academic Jobs</p>
+                              <p class="content">
+                              <p>Dr. Dajung (DJ) Woo, Dr. Emilly Martinez, Dr. Rahul Mitra, Dr.
+                                 Chigozirim U. Sodeke, Dr. Debbie S. Dougherty, Dr. Kristen Lucas</p>
+                              <p>Moderators: Timothy Betts and Rebecca Todd </p>
+                            </div>
+                            <button class="full-btn"><span>join</span></button>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </div>
             </div>
-
+            <!-- code snippet goes here -->
 
           </div>
         </div>
