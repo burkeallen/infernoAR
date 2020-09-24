@@ -6,56 +6,58 @@
 </head>
 <body>
 
+<div>
+  <!-- Get current timestamp by casting NOW to seconds since 1970 -->
+  {% assign currentTime = "now" | date: "%s" %}
+  <!-- Sort events by start time -->
+  {% assign sortedEvents = data.Events | sort: 'StartTime' %}
+  <!-- Set nextEvent so we know if no upcoming event is found -->
+  {% assign nextEvent = 'No Event' %}
+  <!-- Iterate the sorted events -->
+  {% for event in sortedEvents %}
+  <!-- Check the event catgory ID matches this page category ID -->
+  {% if event.FirstCategoryId | downcase != data.CurrentlyViewedCategory.Id | downcase %}
+  <!-- ... and if not, skip iteration -->
+  {% continue %}
+  {% endif %}
+  <!-- The end time is start timestamp added to video duration -->
+  {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
+  <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
+  {% if currentTime | plus: 0 > endTime | plus: 0 %}
+  {% assign nextEvent = event %}
+  <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
+  {% continue %}
+  <!-- ...otherwise... -->
+  {% else %}
+  <!-- ... we set this as our next upcoming event and ... -->
+  {% assign nextEvent = event %} {% endif %}
+  <!-- ...break the iteration loop. -->
+  {% break %} {% endfor %}
+  <!-- If the loop didn't find any upcoming events,... -->
+  {% if nextEvent == 'No Event' %}
+  <!-- ...we'll write 'none' into a hidden div, ... -->
+  <a style="display: none" id="redirect-link" href="#">none</a>
+  {% else %}
+  <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
+  <a style="display: none" id="redirect-link"
+     href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
+    /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+  </a>
+  {% endif %}
+  <script type="text/javascript">
+    // Redirect to the link we grab out of the hidden div
+    if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
+      landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
+    }
+  </script>
 
-<!-- CATEGORY PAGE REDIRECT TO CURRENT EVENT-->
-
-<!-- Get current timestamp by casting NOW to seconds since 1970 -->
-{% assign currentTime = "now" | date: "%s" %}
-{% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
-<!-- Sort events by start time -->
-{% assign sortedEvents = data.Events | sort: 'StartTime' %}
-<!-- Set nextEvent so we know if no upcoming event is found -->
-{% assign nextEvent = 'No Event' %}
-
-<!-- Iterate the sorted events -->
-{% for event in sortedEvents %}
-<!-- Check event category -->
-{% if currentCat != event.FirstCategoryId | downcase %}
-{% continue %}
-{% endif %}
-
-<!-- The end time is start timestamp added to video duration -->
-{% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
-<!-- Force currentTime & endTime to number by adding 0 and compare...  -->
-{% if currentTime | plus: 0 > endTime | plus: 0 %}
-<!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
-{% continue %}
-<!-- ...otherwise... -->
-{% else %}
-<!-- ... we set this as our next upcoming event and ... -->
-{% assign nextEvent = event %} {% endif %}
-<!-- ...break the iteration loop. -->
-{% break %} {% endfor %}
-<!-- If the loop didn't find any upcoming events,... -->
-{% if nextEvent == 'No Event' %}
-<!-- ...we'll write 'none' int
-    o a hidden div, ... -->
-<div style="display: none" id="redirect-link">none</div>
-
-{% else %}
-<!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
-<div style="display: none" id="redirect-link">
-  /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+  <script type="text/javascript">
+    // Redirect to the link we grab out of the hidden div
+    if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
+      window.location.href = landingPageEl.querySelector('#redirect-link').textContent;
+    }
+  </script>
 </div>
-{% endif %}
-
-<script type="text/javascript">
-  // Redirect to the link we grab out of the hidden div
-  if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
-    window.location.href = landingPageEl.querySelector('#redirect-link').textContent;
-  }
-</script>
-
 
 <div style="text-align:center; padding:20%">
   <h1>Checking to see what room to take you too</h1>
