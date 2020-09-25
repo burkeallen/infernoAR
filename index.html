@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
   <title>Inferno Projects</title>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.0/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-timer/lib/moment-timer.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.5.1/gsap.min.js"></script>
   <link rel="icon" href="./favicon.ico">
   <style>
     * {
@@ -64,12 +66,16 @@
     }
 
 
+    .is-live {
+      background: blue;
+    }
+
     .today {
       background: red;
     }
 
     .due {
-      background: orangered;
+      background: #b13102;
     }
 
     .completed {
@@ -103,13 +109,13 @@
 
   const projects = [
     {
-      folder: 'usf', title: 'OCMC 2020', dueDate: '9/25/2020'
+      folder: 'usf', title: 'OCMC 2020', dueDate: '2020-09-25T13:00:00'
     },
     {
-      folder: 'swm', title: 'New Botanical Paper Offerings', dueDate: '10/08/2020'
+      folder: 'swm', title: 'New Botanical Paper Offerings', dueDate: '2020-10-08T08:00'
     },
     {
-      folder: 'tag', title: 'Digital Health Summit', dueDate: '10/12/2020'
+      folder: 'tag', title: 'Digital Health Summit', dueDate: '2020-10-12T08:00'
     }
   ];
 
@@ -120,28 +126,42 @@
     const temp = document.querySelector("template");
     const clone = temp.content.cloneNode(true);
     const card = clone.querySelector('.card');
-    const dueDate = moment(project.dueDate, 'MM-DD-YYYY').startOf('day');
+    const dueDate = moment(project.dueDate, 'YYYY-MM-DDTHH:mm');
     card.querySelector('.folder').innerHTML = project.folder;
     card.querySelector('.title').innerHTML = project.title;
-    card.querySelector('.due-date').innerHTML = dueDate.format('dddd - MMM. DD, YYYY');
+    card.querySelector('.due-date').innerHTML = dueDate.format('LLLL');
     setDueDateDisplay(card, dueDate);
+    setEventTimer(card, project.eventLive);
     card.id = project.folder;
     card.addEventListener('click', function () {
       window.location.href = `./${project.folder}/index.html`;
     })
     grid.appendChild(clone);
+    //check out https://greensock.com/docs/v3/GSAP
+    // for what is going on here
+    gsap.from(card, {duration: 2, y: -400, ease: "bounce"});
 
   });
 
-  function setDueDateDisplay(card, dueDate) {
+  function setDueDateDisplay(card, dueDateTime) {
     const el = card.querySelector('.count-down');
-    const today = moment().startOf('day');
-    if (today.isBefore(dueDate)) {
+    gsap.from(el, {duration: 2, x: 200, ease: "bounce"});
+    const now = moment();
+    const dueDay = dueDateTime.startOf('day');
+    const today = now.startOf('day');
+
+    if (now.isBefore(dueDateTime)) {
       el.classList.add('due');
-      el.innerHTML = 'Due ' + dueDate.fromNow();
+      el.innerHTML = 'Due ' + dueDateTime.fromNow();
       return;
     }
-    if (today.isSame(dueDate)) {
+    if (today.isSame(dueDay) && now.isSameOrAfter(dueDateTime)) {
+      el.classList.add('is-live');
+      el.innerHTML = `<strong>LIVE NOW</strong>`;
+      gsap.fromTo(el, {duration: 2 }, {repeat: -1,  filter: 'brightness(120%)', duration: 2, scale: 1.1});
+      return;
+    }
+    if (now.isSame(dueDateTime)) {
       el.classList.add('today');
       el.innerHTML = `<strong>TODAY</strong>`;
       return;
@@ -149,6 +169,10 @@
 
     el.innerHTML = 'completed';
     el.classList.add('completed');
+  }
+
+  function setEventTimer(card, eventLive) {
+    const eventStart = moment(eventLive, 'MM-DD-YYYY HH:MM:00 ')
   }
 
 </script>
