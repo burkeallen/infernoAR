@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
   <title>Inferno Projects</title>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.0/moment.min.js"></script>
   <link rel="icon" href="./favicon.ico">
   <style>
     * {
@@ -11,8 +12,12 @@
     }
 
     body {
-      background-color: #000000;
+      background-color: #000222;
       color: #cbc9c9;
+    }
+
+    .content {
+      padding: 12px;
     }
 
     .grid-container {
@@ -27,21 +32,49 @@
     }
 
     .card {
-      background-color: darkgray;
+      background-color: #919090;
       border-radius: 12px;
       padding: 12px;
-      color: #000000;
+      color: #000222;
+      cursor: pointer;
     }
 
-    .card .title {
+    .card .folder {
       text-transform: uppercase;
       font-weight: bold;
       line-height: 1.75em;
-      border-bottom: solid 1px #000000;
+      border-bottom: solid 1px #000222;
     }
 
-    .card .event {
+    .card .title {
       line-height: 1.75em;
+    }
+
+    .card .due-date {
+
+    }
+
+    .count-down {
+      border-radius: 12px;
+      padding: 8px;
+      max-width: 139px;
+      text-align: center;
+      color: antiquewhite;
+      margin-top: 12px;
+    }
+
+
+    .today {
+      background: red;
+    }
+
+    .due {
+      background: orangered;
+    }
+
+    .completed {
+      background: darkgreen;
+      text-transform: uppercase;
     }
 
   </style>
@@ -53,49 +86,71 @@
     <h1>Inferno AR Virtual Events</h1>
   </div>
 
+  <div id="grid" class="grid-container"></div>
 
-  <div class="grid-container">
+  <template class="card">
     <div class="card">
-      <div class="title">usf</div>
-      <div class="event">OCMC 2020</div>
-      <div class="time">
-        <li>Friday Sept 25 - 1:00 PM - 7:00 PM EST
-        <li> Saturday Sept 26 - 9:00 AM - 8:30 PM EST
-        <li> Sunday Sept 27 - 9:00 AM - 1:00 PM EST
-      </div>
+      <div class="folder">Project Folder Name</div>
+      <div class="title">Project Title</div>
+      <div class="due-date">Project Due Date or Go Live Date</div>
+      <div class="count-down">Days Remaining</div>
     </div>
-
-      <div class="card">
-      <div class="title">swm</div>
-      <div class="event">Industrial Hemp Paper Conference</div>
-      <div class="time">
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="title">tag</div>
-      <div class="event">Digital Health Summit</div>
-      <div class="time">
-      </div>
-    </div>
-
-  </div>
+  </template>
 
 </div>
 
-
 <script>
-  const projects = document.querySelectorAll('.card');
 
-  projects.forEach(card => {
-    const project = card.querySelectorAll('.title');
-    project.onclick = () => {
-      url = project.textContent + 'index.html';
-      console.log('url', url);
-      window.location = url;
+  const projects = [
+    {
+      folder: 'usf', title: 'OCMC 2020', dueDate: '9/24/2020'
+    },
+    {
+      folder: 'swm', title: 'New Botanical Paper Offerings', dueDate: '10/08/2020'
+    },
+    {
+      folder: 'tag', title: 'Digital Health Summit', dueDate: '10/12/2020'
+    }
+  ];
+
+  const grid = document.getElementById('grid');
+
+  projects.forEach(project => {
+
+    const temp = document.querySelector("template");
+    const clone = temp.content.cloneNode(true);
+    const card = clone.querySelector('.card');
+    const dueDate = moment(project.dueDate, 'MM-DD-YYYY').startOf('day');
+    card.querySelector('.folder').innerHTML = project.folder;
+    card.querySelector('.title').innerHTML = project.title;
+    card.querySelector('.due-date').innerHTML = dueDate.format('dddd - MMM. DD, YYYY');
+    setDueDateDisplay(card, dueDate);
+    card.id = project.folder;
+    card.addEventListener('click', function () {
+      window.location.href = `./${project.folder}/index.html`;
+    })
+    grid.appendChild(clone);
+
+  });
+
+  function setDueDateDisplay(card, dueDate) {
+    const el = card.querySelector('.count-down');
+    const today = moment().startOf('day');
+    let daysLeft = '';
+    if (today.isBefore(dueDate)) {
+      el.classList.add('due');
+      el.innerHTML = 'Due ' + dueDate.fromNow();
+      return;
+    }
+    if (today.isSame(dueDate)) {
+      el.classList.add('today');
+      el.innerHTML = `<strong>TODAY</strong>`;
+      return;
     }
 
-  })
+    el.innerHTML = 'completed';
+    el.classList.add('completed');
+  }
 
 </script>
 </body>
