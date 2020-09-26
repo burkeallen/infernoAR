@@ -78,21 +78,12 @@
                       min-height: calc(100vh - var(--header-footer-height));
                       font-family: 'Trade Gothic', sans-serif !important;
 
-                      /* for category page */
+                      /* use when the background div encompasses the content */
                       max-width: 100vw;
                       margin: -20px;
                       padding: 20px 24px;
-                      /* for category page */
+                      /* use when the background div encompasses the content */
                   }
-
-                  @media only screen and (max-width: 767px) {
-                      .content {
-                          /* for category page */
-                          margin: -15px;
-                      }
-
-                  }
-
 
                   .video-wrapper {
                       width: 100%;
@@ -109,11 +100,76 @@
                       overflow: hidden;
                       box-shadow: 5px 8px 12px rgba(0, 0, 0, .4);
                   }
+
+                  .ask-question {
+                      margin: 0 auto;
+                      position: relative;
+                      margin-top: 40px;
+                      width: 50vw;
+                      text-align: center;
+                      background-color: transparent;
+                      z-index: 98;
+                  }
+
+                  .ask-question span {
+                      color: #fff;
+                  }
+
+                  button {
+                      outline: none;
+                      border: none;
+                      background: transparent;
+                      font-family: 'openSans', sans-serif;
+                  }
+
+                  button:hover {
+                      opacity: .9;
+                      cursor: pointer;
+                  }
+
+                  .inferno-input-group-addon {
+                    display: none;
+                  }
+
+                  .inferno-form-control {
+                      min-height: 40px;
+                      width: Calc(55vw - 30%);
+                      border-radius:  8px 0 0 8px;
+                  }
+
+                  .inferno-btn {
+                      width: 80px;
+                      font-size: 90%;
+                      min-height: 38px;
+                      background-color: #a6192e;
+                      border-radius:  0 8px 8px 0;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                      .content {
+                          /* use when the background div encompasses the entire content */
+                          margin: -15px;
+                      }
+
+                      .inferno-form-control {
+                          border-radius:  8px;
+                      }
+
+                      .inferno-btn {
+                          border-radius: 8px;
+                      }
+
+                  }
+
               </style>
 
               <div class="content">
                 <div class="video-wrapper">
                   <div id="inferno-video-player"></div>
+                </div>
+                <div class="ask-question">
+                  <span>Ask A Question</span>
+                  <div id="inferno-questions-basic"></div>
                 </div>
               </div>
               <!-- SNIPPET CONTENT END -->
@@ -158,12 +214,14 @@
     const videoDiv = landingPageEl.querySelector('#inferno-video-player')
     if (qaDiv) {
       $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`
-      )
-    }
-    if (videoDiv) {
-      $(videoDiv).append(
-        `<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
-    }
+
+          )
+        }
+        if (videoDiv) {
+          $(videoDiv).append(
+
+      `<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
+      }
   }
 
   populateInfernoElements();
