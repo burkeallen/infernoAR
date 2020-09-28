@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
       class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs">
-
-</html>
-
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +41,7 @@
                   </mat-icon>
                 </span>
             </button>
-            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title"> Page Title </div>
+            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title"> Page Title</div>
           </div>
         </mat-toolbar>
       </app-header>
@@ -77,12 +74,6 @@
               <!-- SNIPPET CONTENT START -->
               <codesnippet>
                 <style>
-                  h1 {
-                    color: yellow;
-                    margin: 40px;
-                    font-size: 3em;
-                  }
-
                   .content {
                     background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/bkg-lobby.jpg');
                     background-attachment: fixed;
@@ -96,8 +87,8 @@
                     z-index: 1;
                   }
 
-
                   .banner {
+                    margin-top: 28px;
                     width: 90%;
                     border: solid 8px white;
                     box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
@@ -107,8 +98,96 @@
                     width: 100%;
                     height: auto;
                   }
+                </style>
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: fixed;
+                    background-color: rgba(200, 200, 200, 0.75);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.3s;
+                    -moz-transition: all 0.3s;
+                    transition: all 0.3s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 10% auto;
+                    padding: 2rem;
+                    background: #fff;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    color: #aaa;
+                    line-height: 50px;
+                    font-size: 80%;
+                    position: absolute;
+                    right: 0;
+                    text-align: center;
+                    top: 0;
+                    width: 70px;
+                    text-decoration: none;
+                  }
+
+                  .modal-close:hover {
+                    color: #000;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
 
                 </style>
+
+                <div class="content">
+                  <div class="banner" onclick="toggleModal()">
+                    <img
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/lobby-banner.jpg">
+                  </div>
+
+                  <div id="open-modal" class="modal-window">
+                    <div>
+                      <a href="" onclick="toggleModal()" title="Close" class="modal-close">close &times;</a>
+                      <iframe id="video-frame"
+                              src="https://www.youtube.com/embed/NpEaa2P7qZI"
+                              frameborder="0"
+                              allow="autoplay"
+                              allowfullscreen>
+                      </iframe>
+                    </div>
+                  </div>
+                </div>
+
+                <script>
+                  function toggleModal() {
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                  }
+                </script>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
                   var css = '.mat-toolbar { color: #000 !important; }';
                   var head = document.head || document.getElementsByTagName('head')[0];
@@ -117,13 +196,6 @@
                   style.appendChild(document.createTextNode(css));
                   head.appendChild(style);
                 </script>
-                <div class="content">
-
-                  <div class="banner">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/lobby-banner.jpg">
-                  </div>
-
-                </div>
 
               </codesnippet>
               <!-- SNIPPET CONTENT END -->
@@ -168,15 +240,11 @@
     const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
     const videoDiv = landingPageEl.querySelector('#inferno-video-player')
     if (qaDiv) {
-      $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`
-    ,
-          )
-        }
-        if (videoDiv) {
-          $(videoDiv).append(
-
-      `<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
-      }
+      $(qaDiv).append(`<questions _nghost-qch-c20=""><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`,)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
+    }
   }
 
   populateInfernoElements()
