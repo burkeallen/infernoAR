@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs">
 
 </html>
 
@@ -37,7 +36,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header"></div>
+          <div class="navbar-header">MOCKUP</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()"><span class="mat-button-wrapper">
@@ -52,7 +51,11 @@
       <!-- SIDEBAR -->
       <videos-sidebar class="aside">
         <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close=""></nav>
+          <nav class="sidebar" sidebar-anyclick-close="">
+            <ul class="nav">
+              <li>Menu</li>
+            </ul>
+          </nav>
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -74,30 +77,52 @@
               <!-- SNIPPET CONTENT START -->
               <codesnippet>
                 <style>
-                  :host {
-                    --header-footer-height: 114px;
-                  }
                   h1 {
                     color: yellow;
                     margin: 40px;
                     font-size: 3em;
                   }
+
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/bkg-lobby.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
-                    min-height: calc(100vh - var(--header-footer-height));
+                    min-height: calc(100vh - 114px);
+                    max-width: 100vw;
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
                   }
+
+
+                  .banner {
+                    width: 90%;
+                    border: solid 8px white;
+                    box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
+                  }
+
+                  .banner img {
+                    width: 100%;
+                    height: auto;
+                  }
+
                 </style>
-                <script> console.log('test')</script>
+                <script>
+                  var css = '.mat-toolbar { color: #000 !important; }';
+                  var head = document.head || document.getElementsByTagName('head')[0];
+                  var style = document.createElement('style');
+                  style.type = 'text/css';
+                  style.appendChild(document.createTextNode(css));
+                  head.appendChild(style);
+                </script>
                 <div class="content">
-                  <h1>My Test Snippet</h1>
+
+                  <div class="banner">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/lobby-banner.jpg">
+                  </div>
+
                 </div>
 
               </codesnippet>
@@ -143,11 +168,15 @@
     const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
     const videoDiv = landingPageEl.querySelector('#inferno-video-player')
     if (qaDiv) {
-      $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
-    }
+      $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`
+    ,
+          )
+        }
+        if (videoDiv) {
+          $(videoDiv).append(
+
+      `<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
+      }
   }
 
   populateInfernoElements()
