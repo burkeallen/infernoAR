@@ -74,6 +74,103 @@
 
               <!-- SNIPPET CONTENT START -->
               <codesnippet>
+
+                <!-- Load custom fonts -->
+                <script type="text/javascript">
+
+
+                  var customFontThin = new FontFace(
+                    'Gotham',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/fonts/Gotham-Light.woff)',
+                    {
+                      style: 'normal',
+                      weight: '300'
+                    }
+                  );
+                  customFontThin
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Gotham Thin: ', error);
+                    });
+
+                  var customFontLight = new FontFace(
+                    'Gotham',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/fonts/Gotham-Light.woff)',
+                    {
+                      style: 'normal',
+                      weight: 'normal'
+                    }
+                  );
+                  customFontLight
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Trade Gotham Light: ', error);
+                    });
+
+                  var customFontMedium = new FontFace(
+                    'Gotham',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/fonts/Gotham-Light.woff)',
+                    {
+                      style: 'normal',
+                      weight: '500'
+                    }
+                  );
+                  customFontMedium
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Trade Gotham Medium: ', error);
+                    });
+
+                  var customFontBold = new FontFace(
+                    'Gotham',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/fonts/Gotham-Bold.woff)',
+                    {
+                      style: 'normal',
+                      weight: 'bold'
+                    }
+                  );
+                  customFontBold
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Gotham Bold: ', error);
+                    });
+
+                  var customFontBold2 = new FontFace(
+                    'Gotham',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/fonts/Gotham-Bold2.woff)',
+                    {
+                      style: 'normal',
+                      weight: '800'
+                    }
+                  );
+                  customFontBold2
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Gotham Bold2: ', error);
+                    });
+
+                </script>
+
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -82,8 +179,7 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                    background-attachment: fixed;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/bkg-lobby.jpg');
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
@@ -91,12 +187,54 @@
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: 'Gotham', sans-serif !important;
                   }
+
+                  .header {
+                    margin: -24px;
+                    padding-left: 20px;
+                    height: 64px;
+                    line-height: 64px;
+                    color: #fff;
+                    font-size: 32px;
+                    background-color: #969696;
+                  }
+
+                  .tech-support {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 4rem;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 7% auto 13% auto;
+                    padding: 3em 2rem;
+                    background: #fff;
+                    border-radius: .5em;
+                    border: solid 8px var(--sidebar-bg-color);
+                    box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
+                    font-size: 2em;
+                    color: #000;
+                  }
+
+                  .tech-support a {
+                    white-space: nowrap;
+                  }
+
+                  @media only screen and (max-width: 701px) {
+                    .tech-support {
+                      font-size: 1.5em;
+                    }
+                  }
+
                 </style>
                 <script> console.log('test')</script>
                 <div class="content">
-                  <div style="width: 90%; height: 200px; background: #000; color: #fff; font-size: 3em;">Inferno AR Test Snippet</div>
+                  <div class="header">Technical Support</div>
+                  <div class="tech-support">
+                    <p>If you need tech support</p>
+                    <p>email us at <a href="mailto:support@jolokia.com">support@jolokia.com</a>
+                    <p>or call us at <a href="tel:(866) 330-6655">(866) 330-6655</a></p>
+                  </div>
                 </div>
 
               </codesnippet>
@@ -142,7 +280,7 @@
     const qaDiv = landingPageEl.querySelector('#inferno-questions-basic');
     const videoDiv = landingPageEl.querySelector('#inferno-video-player');
     if (qaDiv) {
-      $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`,
+      $(qaDiv).append(`<questions _nghost-qch-c20=""><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`,
       )
     }
     if (videoDiv) {
