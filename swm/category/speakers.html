@@ -34,7 +34,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header">LOCAL MOCKUP</div>
+          <div class="navbar-header">MOCKUP</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()"><span class="mat-button-wrapper">
@@ -74,11 +74,14 @@
 
               <!-- SNIPPET CONTENT START -->
               <codesnippet>
+
+                <!-- Main Page Styles -->
                 <style>
-                  h1 {
-                    color: yellow;
-                    margin: 40px;
-                    font-size: 3em;
+
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
                   }
 
                   .content {
@@ -93,6 +96,17 @@
                     z-index: 1;
                     font-family: Verdana, sans-serif !important;
                   }
+
+                  .header {
+                    margin: -24px;
+                    padding-left: 20px;
+                    height: 64px;
+                    line-height: 64px;
+                    color: #fff;
+                    font-size: 32px;
+                    background-color: #969696;
+                  }
+
                 </style>
 
                 <!-- Grid Styles -->
@@ -100,121 +114,383 @@
 
                   main {
                     max-width: 500px;
-                    margin: 0 auto;
+                    margin: 50px 0 auto auto;
                   }
 
                   article {
                     margin: 1rem 0;
                   }
 
+                  /* Now lets do a Grid-based layout */
+
                   @supports (display: grid) {
                     main {
                       max-width: 10000px;
-                      margin: 0;
+                      margin: 50px 0 0 0;
                     }
 
                     article {
                       margin: 0;
                     }
 
-                    .card {
+                    .cards {
                       display: grid;
                       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                      grid-gap: 1rem;
+                      grid-gap: 2em;
                     }
                   }
 
-                  .card {
-                    font-family: Roboto, Helvetica, san-serif;
+                  .cards {
+                    font-family: Helvetica, san-serif;
                     font-size: 80%;
                   }
 
                   .profile {
                     display: flex;
                     flex-flow: column;
-                    border: 1px solid black;
-                    border-radius: 1rem;
                     padding: 2rem;
-                    background-color: #F8F8F8;
+                    background-color: white;
+                    color: black;
                   }
 
-                  .person > img {
+                  .profile > p {
+                    margin: 0.25em 1rem 1rem;
+                  }
+
+                  .profile > img {
                     order: -1;
-                    align-self: center;
-                    max-width: 200px;
+                    max-width: 40%;
                     height: auto;
+                    border-radius: .5em;
+                    border: solid 1px #d6d6d6;
+
                   }
 
-                  .person > button {
+                  button {
                     margin-top: auto;
-                    background: teal;
+                    background: #84bd00;
                     color: white;
                     padding: 0.5rem;
                     border: none;
                     border-radius: 1rem;
                     font-size: 1.2rem;
+                    margin-top: 1em;
+                    text-align: center;
+                    transition: all .2s ease-in-out;
+                  }
+
+                  button:hover {
+                    text-decoration: none;
+                    transform: scale(1.1);
+                    filter: brightness(110%);
+                  }
+
+                  .profile h1 {
+                    color: #000;
+                    font-size: 2em;
+                    margin: .5em 0 0 0;
+                    padding-left: 0;
+                  }
+
+                  .profile .event {
+                    font-weight: bold;
+                    font-size: 1.25em;
+                  }
+
+                  .profile p {
+                    margin: 0;
+                    line-height: 2em;
                   }
 
                 </style>
-                <script> console.log('test')</script>
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: -webkit-sticky;
+                    position: sticky;
+                    top: 4rem;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 5% auto 15% auto;
+                    padding: 3em 2rem;
+                    background: #fff;
+                    border-radius: .5em;
+                    font-size: 2em;
+                    color: #000;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: relative;
+                    text-align: center;
+
+                  }
+
+                  .modal-close button {
+                    bottom: 0;
+                    width: 80%;
+                    font-size: .75em;
+                  }
+
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+
+                  .more-info {
+                    position: relative;
+
+                  }
+                </style>
+
                 <div class="content">
-                  <main class="grid">
+                  <div class="header">Speakers</div>
+                  <main id="card-grid" class="cards">
+                    <template id="speakers-template">
+                      <article class="profile">
+                        <img
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/generic-avatar.jpg"
+                            alt="Speaker">
+                        <h1>Speaker Name</h1>
+                        <p class="event">Event Date and Time</p>
+                        <p class="short-desc">A Short Description</p>
+                        <button>more information</button>
+                        <div id="unique-id" class="modal-window">
+                          <div>
+                            <div class="more-info">
+                              <div class="more-info-content">
+                                some length content that will display in modal popup
+                              </div>
+                              <div class="modal-close">
+                                <button>CLOSE</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </article>
+                    </template>
 
-                    <aritcle class="card">
-                      <div class="profile">
-                        <div class="person">
-                          <img
-                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/generic-avatar.jpg">
-                        </div>
-                        <div class="name">John Doe</div>
-                        <div class="event">03:00 PM CES</div>
-                        <div class="short-desc">CEO, Opening Comments</div>
-                        <div class="long-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-                                               fringilla at tortor a facilisis. In consectetur finibus nisi.
-                                               Pellentesque
-                                               commodo tincidunt porttitor. Praesent libero turpis, congue sit amet mi
-                                               at,
-                                               aliquam aliquet erat. Sed euismod laoreet libero, id lacinia nibh. Proin
-                                               augue justo, tristique pharetra interdum in, suscipit a arcu. Mauris
-                                               mollis
-                                               dolor vel nunc feugiat semper. Cras consequat sem purus. Nulla non
-                                               tristique purus, in porttitor turpis. Nam arcu eros, mattis rhoncus
-                                               consectetur quis, fermentum et orci. Quisque vestibulum fringilla urna,
-                                               et
-                                               aliquet purus vestibulum vitae. Vestibulum ac fringilla libero. Nulla
-                                               sollicitudin augue quis arcu congue molestie.
-                        </div>
-                      </div>
-                    </aritcle>
-
-                    <aritcle class="card">
-                      <div class="profile">
-                        <div class="person">
-                          <img
-                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/generic-avatar.jpg">
-                        </div>
-                        <div class="name">Jane Doe</div>
-                        <div class="event">04:00 PM CES</div>
-                        <div class="short-desc">CFO, Closing Comments</div>
-                        <div class="long-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque
-                                               fringilla at tortor a facilisis. In consectetur finibus nisi.
-                                               Pellentesque
-                                               commodo tincidunt porttitor. Praesent libero turpis, congue sit amet mi
-                                               at,
-                                               aliquam aliquet erat. Sed euismod laoreet libero, id lacinia nibh. Proin
-                                               augue justo, tristique pharetra interdum in, suscipit a arcu. Mauris
-                                               mollis
-                                               dolor vel nunc feugiat semper. Cras consequat sem purus. Nulla non
-                                               tristique purus, in porttitor turpis. Nam arcu eros, mattis rhoncus
-                                               consectetur quis, fermentum et orci. Quisque vestibulum fringilla urna,
-                                               et
-                                               aliquet purus vestibulum vitae. Vestibulum ac fringilla libero. Nulla
-                                               sollicitudin augue quis arcu congue molestie.
-                        </div>
-                      </div>
-                    </aritcle>
                   </main>
+
                 </div>
+
+                <script>
+                  function buildSpeakerList() {
+                    const imageBasePath = 'https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/speakers/';
+                    const speakers = [
+                      {
+                        img: 'Willie McKinney nb.jpg',
+                        name: 'Willie McKinney',
+                        event: 'Moderator',
+                        shortDesc: 'Ph. D. diplomate of the American Board of Toxicology',
+                        modal: `
+                        <strong>Ph. D. diplomate of the American Board of Toxicology</strong>
+                            and one of the world’s leading experts on the interface between science
+                            and government regulatory issues. Willie has devoted his career as a
+                            toxicologist in academia and industry to reducing the harm caused by
+                            tobacco. A former industry representative to the FDA’s Tobacco Product
+                            Scientific Advisory Committee (TPSAC) and senior scientist/executive
+                            at global tobacco and vaping companies, he’s intimately familiar with
+                            the workings of regulatory bodies in the United States and around the world.
+                        `
+                      },
+                      {
+                        img: 'Hugo Azinheira nb.jpg',
+                        name: 'Hugo Azinheira',
+                        event: '3:00 PM CET',
+                        shortDesc: 'Global Innovation & Marketing Director, Essentra Filters',
+                        modal: `
+                              <strong>Global Innovation & Marketing Director.</strong> Hugo has more than 15 years of
+                              product innovation experience in the Tobacco industry. Prior to Essentra,  Hugo was most
+                              recently with JT International as Innovation Manager, based in Hong Kong.
+                        `
+                      },
+                      {
+                        img: 'Joe Baumgartner nb.jpg',
+                        name: 'Joe Baumgartner',
+                        event: '3:00 PM CET',
+                        shortDesc: 'Vice President Commercial Affairs & Quality Assurance, Inexto',
+                        modal: `
+                              <strong>Vice President Commercial Affairs & Quality Assurance.</strong>
+                              Joe has over 15 years leadership experience in the FMCG sector;
+                              managing both inbound and outbound supply chains at the global and regional level.
+                              He has extensive experience working on anti-illicit trade issues with inbound supply
+                              chains as well as leading the first global implementation of authentication
+                              technology within one of the world’s most recognized consumer brands.
+
+                        `
+                      },
+                      {
+                        img: 'Alex Boone nb.jpg',
+                        name: 'Alex Boone',
+                        event: '3:00 PM CET',
+                        shortDesc: 'Senior Director Alternative Markets, SWM',
+                        modal: `
+                              <strong>Senior Director Alternative Markets.</strong> Alex has 25+ years of providing solutions
+                              based business development in the Tobacco Industry and a 20-year veteran of SWM International.
+                              He is a results driven leader with a focus on sales, marketing, strategy and business development.
+                              After returning from an international assignment in Luxembourg in late 2018,  Alex’s ambition and
+                              passion for sustainable growth is now leading the company’s effort to bring its knowledge and
+                              expertise to the Cannabis industry.
+
+                        `
+                      },
+                      {
+                        img: 'George Cassels-Smith nb.jpg',
+                        name: 'George Cassels-Smith',
+                        event: '3:00 PM CET',
+                        shortDesc: 'Chief Executive Officer, Tobacco Technology, Inc.',
+                        modal: `
+                              <strong>Chief Executive Officer.</strong> George followed his father’s footsteps, first working as a leaf broker in
+                              South America and the United States.   He started at TTI in 1998, working his way up to CEO in 2003
+                              after a successful run in Sales and as a Senior Vice President.  He is also the current CEO of TTI’s
+                              wholly owned subsidiaries eLiquiTech Inc. and TTI Flavors S.R.L. (Italy). George is also a Director of
+                              Zanoprima Lifesciences Limited, the IP provider of SyNic synthetic nicotine.
+
+                        `
+                      },
+                      {
+                        img: 'bethany_headshot nb.jpg',
+                        name: 'Bethany Goemz',
+                        event: '3:00 PM CET',
+                        shortDesc: 'Managing Director, Brightfield Group',
+                        modal: `
+                              <strong>Managing Director.</strong> Bethany has an extensive background in quantitative research, global policy, and
+                              strategic planning.  Her passion for the CBD and cannabis industries helps drive Brightfield’s
+                              team forward and deliver comprehensive and data-driven answers for each of their customers.
+                              Prior to Brightfield Group Bethany managed market research of key CPG industries in Latin
+                              America with Euromonitor International.
+
+                        `
+                      },
+                      {
+                        img: 'Thomas Gruss nb.jpg',
+                        name: 'Thomas Gruss',
+                        event: '3:00 PM CET',
+                        shortDesc: 'Head of Business Development, HAUNI',
+                        modal: `
+                              <strong>Head of Business Development</strong> for non-tobacco based machine technologies / Hemp applications.
+                              Thomas has been part of HAUNI for 31 years. Prior to this position Thomas was responsible for Sales,
+                              Key Account Manager for BAT and Business Development Manager for alternative tobacco products.
+
+                        `
+                      },
+                      {
+                        img: 'Rob Radke nb.jpg',
+                        name: 'Rob Radke',
+                        event: '3:00 PM CET',
+                        shortDesc: 'President, Method Testing Laboratories',
+                        modal: `
+                              <strong>President.</strong> Prior to founding Method Testing Laboratories, a hemp and cannabis testing services provider
+                              based in Tampa, Florida,  Rob held a series of progressive leadership roles in finance, operations and
+                              product development at Parallel, the largest private vertically integrated cannabis business in
+                              the United States.
+
+                        `
+                      }
+                    ];
+
+                    const grid = landingPageEl.getElementById("card-grid");
+                    const template = landingPageEl.getElementById("speakers-template");
+
+                    speakers.forEach(speaker => {
+                      const clone = template.content.cloneNode(true);
+
+                      // set image
+                      const image = clone.querySelector('img');
+                      image.src = imageBasePath + speaker.img;
+                      image.alt = speaker.name;
+
+                      // set user name
+                      const username = clone.querySelector('h1');
+                      username.innerHTML = speaker.name;
+
+                      // set user name
+                      const event = clone.querySelector('.event');
+                      event.innerHTML = speaker.event;
+
+                      // set short description
+                      const shortDesc = clone.querySelector('.short-desc');
+                      shortDesc.innerHTML = speaker.shortDesc;
+
+                      // set modal
+                      const modal = clone.querySelector('#unique-id');
+                      modal.id = speaker.name.replaceAll(' ', '-');
+
+                      // set more info content
+                      const moreInfoContent = clone.querySelector('.more-info-content');
+                      moreInfoContent.innerHTML = speaker.modal;
+
+                      // set modal open button
+                      const openBtn = clone.querySelector('article button');
+                      openBtn.onclick = function () {
+                        toggleModal(modal.id);
+                      };
+
+                      // set modal close button
+                      const closeBtn = clone.querySelector('.modal-close button');
+                      closeBtn.onclick = function () {
+                        toggleModal(modal.id);
+                      };
+
+                      grid.appendChild(clone);
+
+                    })
+                  }
+
+
+                  buildSpeakerList();
+                </script>
+
+                <script>
+                  function toggleModal(id) {
+                    landingPageEl.querySelector('#' + id).classList.toggle('open');
+                    window.scroll({
+                      top: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  var css = '.mat-toolbar { color: #000 !important; }';
+                  var head = document.head || document.getElementsByTagName('head')[0];
+                  var style = document.createElement('style');
+                  style.type = 'text/css';
+                  style.appendChild(document.createTextNode(css));
+                  head.appendChild(style);
+                </script>
+
 
               </codesnippet>
               <!-- SNIPPET CONTENT END -->
@@ -242,7 +518,6 @@
     const sideBar = document.querySelector('videos-sidebar')
 
     if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      console.log('collapse')
       appRoot.classList.add('aside-collapsed')
       sideBar.classList.remove('hidden')
     } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
@@ -260,6 +535,7 @@
     const videoDiv = landingPageEl.querySelector('#inferno-video-player');
     if (qaDiv) {
       $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`
+
         ,
       )
     }
