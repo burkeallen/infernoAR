@@ -42,7 +42,7 @@
         <div class="aside-inner">
           <nav class="sidebar" sidebar-anyclick-close="">
             <ul class="nav">
-              <li><a href="../">Menu</a></li>
+              <li>Menu</li>
             </ul>
           </nav>
         </div>
@@ -189,162 +189,38 @@
                         background-color: #969696;
                     }
 
-                    .grid-container {
-                        display: grid;
-                        width: auto;
-                        grid-template-columns: 1fr 1fr 1fr;
-                        grid-template-rows: 1fr;
-                        gap: 0px 10px;
-                        grid-template-areas:
-                        "left center right";
-                        margin: 0 auto;
-                        max-width: 860px;
+                    .chat-container {
+                        margin-top: 40px;
+                        background-color: transparent;
                     }
 
-                    .left {
-                        display: grid;
-                        grid-template-columns: 1fr;
-                        grid-template-rows: .75fr .25fr;
-                        grid-template-areas:
-                        "left-banner-top"
-                        "left-banner-bottom";
-                        grid-area: left;
-                    }
-
-                    .center {
-                        display: grid;
-                        grid-template-columns: 1fr;
-                        grid-template-rows: .75fr .25fr;
-                        grid-template-areas:
-                        "center-banner-top"
-                        "center-banner-bottom";
-                        grid-area: center;
-                    }
-
-                    .right {
-                        display: grid;
-                        grid-template-columns: 1fr;
-                        grid-template-rows: .75fr .25fr;
-                        grid-template-areas:
-                        "right-banner-top"
-                        "right-banner-bottom";
-                        grid-area: right;
-                    }
-
-                    .hanging-banner {
-                        margin-top: 60px;
-                        min-height: 180px;
-                        padding: 20px;
-                        font-size: 12px;
-                        background-color: #fff;
-                    }
-
-                    .hanging-banner-topic {
-                        height: 100px;
-                        color: #fff;
-                        padding: 20px;
-                        font-size: 12px;
-                        background-color: #303030;
-                    }
-
-                    .chatButton {
-                        color: #ffffff;
-                        font-size: 16px;
-                        display: inline-block;
-                        cursor: pointer;
-                        padding: 5px;
-                        min-width: 200px;
-                        border-radius: 8px;
-                        text-decoration: none;
-                        background-color: #86be02;
-                    }
-
-                    .chatButton:hover {
-                        background-color: #00788A;
-                    }
-
-                    .chatButton:active {
-                        position: relative;
-                        top: 1px;
-                    }
-
-                    .top-chat-button {
-                        display: none;
-                        margin-top: 30px;
-                        text-align: center;
-                    }
-
-                    .bottom-chat-button {
-                        margin-top: 30px;
-                        text-align: center;
+                    .chat-container iframe {
+                        border: none;
+                        height: 65vh;
+                        max-height: 65vh;
+                        margin: 0;
+                        overflow: hidden;
+                        display: block;
                     }
 
                     @media only screen and (max-width: 768px) {
-                        .top-chat-button {
-                            display: block;
-                            margin: 30px 0 20px 0;
-                        }
-
-                        .bottom-chat-button {
-                            margin-top: 10px;
-                        }
-
                         .content {
                             /* for category page type */
                             margin: -15px;
                         }
-
-                        .grid-container {
-                            display: block;
-                            width: fit-content;
-                        }
-
-                        .hanging-banner {
-                            width: 300px;
-                            margin-top: 0px;
-                        }
-
-                        .hanging-banner-topic {
-                            width: 300px;
-                            margin-bottom: 20px;
-                        }
-
                     }
-
 
                 </style>
 
                 <div class="content">
-                  <div class="top-banner">Networking Session</div>
-
-                  <div class="top-chat-button">
-                    <a href="/breakout-chat.html" class="chatButton">Join Text Chat Room</a>
-                  </div>
-
-                  <div class="grid-container">
-                    <div class="left">
-                      <div class="hanging-banner"></div>
-                      <div class="hanging-banner-topic"></div>
-                    </div>
-                    <div class="center">
-                      <div class="hanging-banner"></div>
-                      <div class="hanging-banner-topic"></div>
-                    </div>
-                    <div class="right">
-                      <div class="hanging-banner"></div>
-                      <div class="hanging-banner-topic"></div>
-                    </div>
-
-                  </div>
-
-                  <div class="bottom-chat-button">
-                    <a target="_blank" href="/videos/8bc33cb9-b236-4d7e-8805-08d8646764d7/landing/729f3de5-651a-45c1-9b19-948c2b98c147" class="chatButton">Join Text Chat Room</a>
+                  <div class="top-banner">Networking Session Chat</div>
+                  <div class="chat-container">
+                    <iframe width="100%" src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=swm-networking-chat&chatroomname=SWM-Networking-Chat"></iframe>
                   </div>
 
                 </div>
 
               </codesnippet>
-
               <!-- SNIPPET CONTENT END -->
 
             </div>
@@ -386,12 +262,18 @@
     const videoDiv = landingPageEl.querySelector('#inferno-video-player')
     if (qaDiv) {
       $(qaDiv).append(`<questions _nghost-qch-c20=""><!----><!----><div _ngcontent-qch-c20="" novalidate="" class="ng-untouched ng-pristine ng-valid ng-star-inserted"><div _ngcontent-qch-c20="" class="inferno-input-group"><span _ngcontent-qch-c20="" class="inferno-input-group-addon">Ask A Question</span><input _ngcontent-qch-c20="" class="inferno-form-control ng-untouched ng-pristine ng-valid" formcontrolname="question" type="text"><span _ngcontent-qch-c20="" class="inferno-input-group-btn"><button _ngcontent-qch-c20="" class="inferno-btn" type="button">Submit</button></span></div></div></questions>`
-      )
-    }
-    if (videoDiv) {
-      $(videoDiv).append(
-        `<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
-    }
+
+
+
+                  )
+                }
+                if (videoDiv) {
+                  $(videoDiv).append(
+
+
+
+      `<iframe width="640" height="360" src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>`)
+      }
   }
 
   populateInfernoElements();
