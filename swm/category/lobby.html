@@ -293,20 +293,26 @@
                   <div>
                     <a href="javascript:void(0);toggleModal();" onclick="toggleModal()" title="Close"
                        class="modal-close">CLOSE X</a>
-                    <div class="videoWrapper">
-                      <iframe id="video-frame"
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <script>
+                  function toggleModal() {
+                    const video = `
+                    <iframe id="video-frame"
                               src="/embed/0dfead18-bba8-4c2e-8715-5416654d3674"
                               frameborder="0"
                               allowfullscreen="true"
                               webkitallowfullscreen="true"
                               mozallowfullscreen="true">
                       </iframe>
-                    </div>
-                  </div>
-                </div>
+                    `
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    const videoIframe = landingPageEl.querySelector('#video-frame');
 
-                <script>
-                  function toggleModal() {
+                    videoWrapper.innerHTML = videoIframe ? '' : video;
+
                     landingPageEl.querySelector('#open-modal').classList.toggle('open');
                   }
                 </script>
