@@ -130,6 +130,10 @@
                         background-color: #fff;
                     }
 
+                    .library-item:hover img{
+                        cursor: pointer;
+                    }
+
                     .top {
                         margin-top: 5px;
                         font-size: 14px;
@@ -142,6 +146,7 @@
                     }
 
                     .button {
+                        color: #fff;
                         font-size: 14px;
                         display: inline-block;
                         cursor: pointer;
@@ -214,6 +219,82 @@
                         }
                     }
 
+                </style>
+
+                <!-- modal pop-up -->
+                <style>
+                    .modal-window {
+                        position: absolute;
+                        background-color: rgba(0, 0, 0, 0.9);
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        left: 0;
+                        z-index: 999;
+                        opacity: 0;
+                        pointer-events: none;
+                        -webkit-transition: all 0.7s;
+                        -moz-transition: all 0.7s;
+                        transition: all 0.7s;
+                        display: none;
+                    }
+
+                    .modal-window.open {
+                        opacity: 1;
+                        pointer-events: auto;
+                        display: inline-block;
+                        z-index: 99;
+                    }
+
+                    .modal-window > div {
+                        position: relative;
+                        min-width: 400px;
+                        width: 80%;
+                        margin: 2% auto 15% auto;
+                        padding: 2rem;
+                        background: var(--sidebar-highlight-bg-color);
+                        border-radius: .5em;
+                        color: #444;
+                    }
+
+                    .modal-window header {
+                        font-weight: bold;
+                    }
+
+                    .modal-close {
+                        position: absolute;
+                        right: 0;
+                        top: 0;
+                        color: #fff;
+                        font-size: 80%;
+                        width: 70px;
+                        text-align: center;
+                        text-decoration: none;
+                    }
+
+                    .modal-close:hover {
+                        color: #000;
+                    }
+
+                    .modal-window h1 {
+                        font-size: 150%;
+                        margin: 0 0 15px;
+                    }
+
+                    /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                    .videoWrapper {
+                        position: relative;
+                        padding-bottom: 56.5%; /* 16:9 */
+                        height: 0;
+                    }
+
+                    .videoWrapper iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                    }
                 </style>
 
                 <!-- sticky Feedback Button -->
@@ -324,11 +405,28 @@
                         <div class="button"><a href="javascript:void(loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/library/swm-corporate-overview.pdf'));" class="pdfButton">View PDF</a></div>
                       </div>
 
+                      <div class="library-item" onclick="toggleModal();">
+                        <div class="top">
+                          <span class="item-title">New Botanical Paper Offerings</span>
+                            <img style="height: 128px; width: 165px; margin: 0 4px 12px 4px;"  src="https://origin.infernocore.jolokia.com/thumb/clients/740f6125-7b5d-4fa2-db6a-08d8299c0855/56a5f6c9-68d4-429b-b37d-862aa69aafc3/results/encoder/8e72227d-aaf7-41cc-8d24-a677307c4e15/56a5f6c9-68d4-429b-b37d-862aa69a_adaptive6.mp4/thumb-1000.jpg">
+                          <div class="button" onclick="toggleModal();">
+                            View Video
+                          </div>
+                        </div>
+                      </div>
 
                     </div>
 
                   </div>
 
+                </div>
+
+                <div id="open-modal" class="modal-window" onclick="toggleModal()">
+                  <div>
+                    <a href="javascript:void(0);toggleModal();" onclick="toggleModal()" title="Close"
+                      class="modal-close">CLOSE X</a>
+                    <div class="videoWrapper"></div>
+                  </div>
                 </div>
 
                 <div class="feedback-banner">
@@ -350,6 +448,26 @@
                     x.src = '';
                     var y = landingPageEl.getElementById('pdf-blanket');
                     y.style.display = 'none';
+                  }
+                </script>
+
+                <script>
+                  function toggleModal() {
+                    const video = `
+                    <iframe id="video-frame"
+                              src="/embed/56a5f6c9-68d4-429b-b37d-862aa69aafc3"
+                              frameborder="0"
+                              allowfullscreen="true"
+                              webkitallowfullscreen="true"
+                              mozallowfullscreen="true">
+                      </iframe>
+                    `
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    const videoIframe = landingPageEl.querySelector('#video-frame');
+
+                    videoWrapper.innerHTML = videoIframe ? '' : video;
+
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
                   }
                 </script>
 
