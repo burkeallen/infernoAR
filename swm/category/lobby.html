@@ -193,18 +193,82 @@
                     font-family: 'Gotham', sans-serif !important;
                   }
 
-                  .banner {
-                    margin-top: 50px;
-                    margin-left: 5%;
-                    width: 90%;
-                    border: solid 8px white;
+                  .disclaimer {
+                    position: fixed;
+                    bottom: 40px;
+                    left: 300px;
+                  }
+                </style>
+
+                <!-- Sign Banner -->
+                <style>
+                  .grid-container {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 3.8fr 1fr 1fr;
+                    grid-auto-rows: minmax(min-content, max-content);
+                    gap: 8px 8px;
+                    grid-template-areas:
+                        "col1 col2 col3 col4 col5";
+                    max-width: 90%;
+                    background-color: white;
                     box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
-                    cursor: pointer;
+                    padding: 8px;
+                    margin-left: 5%;
                   }
 
-                  .banner img {
+                  .grid-container img {
                     width: 100%;
-                    height: auto;
+
+                  }
+
+                  .col1 {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-auto-rows: minmax(min-content, max-content);
+                    gap: 8px 0px;
+                    grid-template-areas:
+                        "col1-top"
+                        "col1-bottom";
+                    grid-area: col1;
+                  }
+
+                  .col1-top {
+                    grid-area: col1-top;
+                  }
+
+                  .col1-bottom {
+                    grid-area: col1-bottom;
+                  }
+
+                  .col2 {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-auto-rows: minmax(min-content, max-content);
+                    gap: 8px 0px;
+                    grid-template-areas:
+                        "col2-top"
+                        "col2-bottom";
+                    grid-area: col2;
+                  }
+
+                  .col2-top {
+                    grid-area: col2-top;
+                  }
+
+                  .col2-bottom {
+                    grid-area: col2-bottom;
+                  }
+
+                  .col3 {
+                    grid-area: col3;
+                  }
+
+                  .col4 {
+                    grid-area: col4;
+                  }
+
+                  .col5 {
+                    grid-area: col5;
                   }
                 </style>
 
@@ -237,6 +301,7 @@
                     position: relative;
                     min-width: 400px;
                     width: 80%;
+                    max-width: 1024px;
                     margin: 5% auto 15% auto;
                     padding: 2rem;
                     background: var(--sidebar-highlight-bg-color);
@@ -310,10 +375,61 @@
                 </style>
 
                 <div class="content">
-                  <div class="banner" onclick="toggleModal()">
-                    <img
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/lobby-sign-big.png">
+
+                  <!--  Banner -->
+                  <div class="grid-container">
+                    <div class="col1">
+                      <div class="col1-top">
+                        <a id="lobby"
+                           href="/videos/8a2e2417-5fc9-4167-c8b0-08d82e84cdda/landing/1469dc0e-fc60-4179-bf97-a029a06cb172">
+                          <img
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/lobby.png">
+                        </a>
+                      </div>
+                      <div class="col1-bottom">
+                        <a id="agenda"
+                           href="/videos/3848ca34-cdeb-4334-c8b1-08d82e84cdda/landing/70071985-bb21-43e1-b470-82ffb2a4a96e">
+                          <img
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/agenda.png">
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col2">
+                      <div class="col2-top">
+                        <a id="breakout-session"
+                           href="/videos/056d21d5-5662-4fb8-c8b2-08d82e84cdda/landing/d5347015-2bce-4e37-9da4-b20307ad8aff">
+                          <img
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/breakout.png">
+                        </a>
+                      </div>
+                      <div class="col2-bottom">
+                        <a id="main-stage"
+                           href="/videos/7079820a-84d9-42bb-7f30-08d82ea7d37d/landing/758ec261-971c-4692-ac4a-604b2d220d26">
+                          <img
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/main-stage.png">
+                        </a>
+                      </div>
+                    </div>
+                    <div class="col3">
+                      <img onclick="toggleModal()"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/video.png">
+                    </div>
+                    <div class="col4">
+                      <a id="Mid-AR-Booth"
+                         href="/videos/cf16b554-d3e3-4bcd-c8b3-08d82e84cdda/landing/d20be3f8-e33a-4f23-8d45-1383a41a2d1c">
+                        <img
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/booth.png">
+                      </a>
+                    </div>
+                    <div class="col5">
+                      <a id="library"
+                         href="/videos/42ec17c7-96e7-42ef-1077-08d8608a56ce/landing/3333d5d2-a22c-47b9-acbc-43b835806576">
+                        <img
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/library.png">
+                      </a>
+                    </div>
                   </div>
+
                 </div>
 
                 <div id="open-modal" class="modal-window" onclick="toggleModal()">
@@ -355,8 +471,13 @@
                   head.appendChild(style);
                 </script>
 
+                <div class="disclaimer">
+                  Disclaimer : All SWM cannabis products and accessories are derived from industrial hemp that has less
+                  than 0.2% THC.
+                </div>
                 <div class="feedback-banner">
-                  <a id="feedback-button" href="/videos/f769d7b0-883f-4545-880b-08d8646764d7/landing/3ce1a8fd-88cb-4cdd-a61d-fd24071f0a80">
+                  <a id="feedback-button"
+                     href="/videos/f769d7b0-883f-4545-880b-08d8646764d7/landing/3ce1a8fd-88cb-4cdd-a61d-fd24071f0a80">
                     Give Feedback
                   </a>
                 </div>

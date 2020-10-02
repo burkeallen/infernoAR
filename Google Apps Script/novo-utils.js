@@ -9,12 +9,6 @@ class NovoUtils {
    **  be sure to update the range if you add columns of data to your import sheet
    **/
   fetchNewUsers() {
-    const userSheet = activeSheet.getSheetByName('users');
-    if(!userSheet) {
-      SpreadsheetApp.getActiveSpreadsheet().toast('worksheet "users" does not exist', 'Status');
-      return {};
-    }
-
     const data = Sheets.Spreadsheets.Values.get(this.config.sheetId, 'users!A:J').values;
     //remove the header
     data.shift();
@@ -28,12 +22,6 @@ class NovoUtils {
    **  be sure to update the range if you add columns of data to your import sheet
    **/
   fetchArchiveUsers() {
-    const userSheet = activeSheet.getSheetByName('archiveUsers');
-    if(!userSheet) {
-      SpreadsheetApp.getActiveSpreadsheet().toast('worksheet "archiveUsers" does not exist', 'Status');
-      return {};
-    }
-
     const data = Sheets.Spreadsheets.Values.get(this.config.sheetId, 'archiveUsers!A:J').values;
     //remove the header
     data.shift();
@@ -50,25 +38,32 @@ class NovoUtils {
     //Group, Email, First Name, Last Name, University/Business, Position, Bio, Website, LinkedIn, Image
     return {
       groupName: row[0],
-      email: row[1],
-      firstName: row[2],
-      lastName: row[3],
-      org: row[4],
-      position: row[5],
-      bio: row[6],
-      website: row[7],
-      linkedIn: row[8],
-      image: row[9]
+      image: row[1],
+      email: row[2],
+      firstName: row[3],
+      lastName: row[4],
+      bio: row[5],
+      facebook: row[6],
+      twitter: row[7],
+      youtube: row[8],
+      linkedIn: row[9],
+      instagram: row[10],
+      phone: row[11],
+      company: row[12],
+      title: row[13],
+      contactEmail: row[14],
+      calendar: row[15],
+      hideProfile: row[16]
     }
   }
 
   listFolderContents(sheet) {
     sheet.clear();
     sheet.appendRow( ['File Name', 'Google Id', 'Size', 'Type', 'Google Link'] );
-    const folderIds = this.config.imageFolderIds.split(',');
+    const folderIds = this.config.googleFileFolders.split(',');
 
-    folderIds.forEach((id) => {
-      const folder = DriveApp.getFolderById(id);
+    folderIds.forEach((folderLink) => {
+      const folder = DriveApp.getFolderById(this.gDriveFolderId(folderLink));
       console.log('listing files in ', folder.getName());
       const files = folder.getFiles();
       while(files.hasNext()) {
@@ -91,6 +86,11 @@ class NovoUtils {
     sheet.appendRow( ['Group Name', 'id'] );
     groups.forEach((group) => {sheet.appendRow( [group.name, group.id] ) });
 
+  }
+
+  gDriveFolderId(folderLink) {
+    const parts = folderLink.split('/');
+    return parts[5];
   }
 
 }

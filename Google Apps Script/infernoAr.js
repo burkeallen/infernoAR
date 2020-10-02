@@ -4,8 +4,9 @@ class InfernoAR {
     this.config = config
     this.token = this.fetchToken();
     this.AccessToken = 'Bearer ' + this.token.AccessToken;
-    this.users = this.fetchUsers();
     this.clientId = this.token.ClientId;
+    this.groups = this.fetchGroups();
+    this.users = this.fetchUsers();
   }
 
   fetchToken() {
@@ -62,27 +63,14 @@ class InfernoAR {
   }
 
   getGroupId(groupName) {
-    // enhance this to pull all groups from system and match on "name" to get id
-    // hard coding for now
-    if (groupName.includes('Organizer')) {
-      console.log('matched group', groupName);
-      return '241b5022-2db9-4ed2-de05-08d859b74ada';
-    }
-    if (groupName.includes('Panelist')) {
-      console.log('matched group', groupName);
-      return 'd402d1dd-0c9e-40d0-a448-08d858b3bd5f';
-    }
-    if (groupName.includes('Presenter')) {
-      console.log('matched group', groupName);
-      return '22581604-f059-4082-a447-08d858b3bd5f';
-    }
-    if (groupName.includes('ARCHIVE')) {
-      console.log('matched group', groupName);
-      return 'f6e3ecd8-d7ee-40cc-922b-08d85e2f0fa1';
-    }
-    console.log('matched group', 'NONE');
-    return '';
+    const matchingGroups = this.groups.filter( item => {
+      return item.name.toLowerCase() === groupName.toLowerCase();
+    })
 
+    if (matchingGroups.length) {
+      return matchingGroups[0].id;
+    }
+    return null;
   }
 
   fetchProfile(id) {
@@ -114,8 +102,11 @@ class InfernoAR {
   addUser(newUser) {
     const user = this.getExistingUser(newUser.email);
     if (user.id) {
+      console.log(user.email, ' already exists -- updating');
       return user;
     }
+
+    console.log(newUser.email, ' creating');
 
     const payload = {
       id: '00000000-0000-0000-0000-000000000000',
@@ -150,6 +141,10 @@ class InfernoAR {
   }
 
   updateUserGroups(user, groupName) {
+    if (!user.groups) {
+      console.log(user.email, 'has not groups');
+      return {user};
+    }
 
     user.groups.push(this.getGroupId(groupName));
     const groups = this.removeDuplicates(user.groups);
@@ -222,9 +217,10 @@ class InfernoAR {
       "socialLinkedIn": user.linkedIn ? user.linkedIn : null,
       "socialInstagram": user.instagram ? user.instagram : null,
       "contactInfoPhone": user.phone ? user.phone : null,
-      "contactInfoCompany": user.org ? user.org : null,
-      "contactInfoTitle": user.position ? user.position : null,
-      "contactInfoEmail": user.email ? user.email : null,
+      "contactInfoCompany": user.company ? user.company : null,
+      "contactInfoTitle": user.titl ? user.title : null,
+      "contactInfoEmail": user.contactEmail ? user.contactEmail : null,
+      "contactCalendarLink": user.calendar ? user.calendar : null,
       "hideProfilePrivacyOptOut": false,
     }
 
@@ -255,6 +251,10 @@ class InfernoAR {
     }
 
     const url = this.config.url + `ProfileImage/${id}`;
+    const imageId = this.gDriveFileId(newUser.image);
+
+    console.log('attempting to upload image ', newUser.image);
+    console.log('G Drive Id =  ', imageId);
 
     const options = {
       'method': 'PUT',
@@ -263,7 +263,7 @@ class InfernoAR {
         'Authorization': this.AccessToken
       },
       'payload': {
-        file: DriveApp.getFileById(newUser.image).getBlob()
+        file: DriveApp.getFileById(imageId).getBlob()
       }
     };
 
@@ -271,13 +271,18 @@ class InfernoAR {
     if (response.getResponseCode() === 200) {
       return response.getContentText();
     } else {
-      this.handleResponseError(response, 'PUT', url, 'add Profile Image');
+      this.handleResponseError(response, 'PUT', url, 'add Profile Image for user ' + newUser.email);
       return {};
     }
   }
 
+  gDriveFileId(fileLink) {
+    const parts = fileLink.split('/');
+    return parts[5];
+  }
+
   getExistingUser(email) {
-    const existingUser = this.users.filter(user => (user.email === email));
+    const existingUser = this.users.filter(user => (user.email.toLowerCase() === email.toLowerCase()));
     if (existingUser.length) {
       return existingUser[0]
     }
