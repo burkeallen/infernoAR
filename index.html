@@ -111,16 +111,13 @@
 
   const projects = [
     {
-      folder: 'novo', title: 'Test Site', dueDate: '2021-09-25T13:00:00'
-    },
-    {
-      folder: 'usf', title: 'OCMC 2020', dueDate: '2020-09-25T13:00:00'
-    },
-    {
       folder: 'swm', title: 'New Botanical Paper Offerings', dueDate: '2020-10-08T08:00'
     },
     {
-      folder: 'tag', title: 'Digital Health Summit', dueDate: '2020-10-12T08:00'
+      folder: 'grundfos', title: 'GRUNDFOS Pumps Ltd.', dueDate: '2020-10-15T08:00'
+    },
+    {
+      folder: 'tag', title: 'Digital Health Summit', dueDate: '2020-11-12T08:00'
     }
   ];
 
@@ -141,16 +138,14 @@
     card.addEventListener('click', function () {
       window.location.href = `./${project.folder}/index.html`;
     })
+    gsap.fromTo(card, {opacity: .1}, {opacity: 1, duration: 4});
     grid.appendChild(clone);
-    //check out https://greensock.com/docs/v3/GSAP
-    // for what is going on here
-    gsap.from(card, {duration: 2, y: -400, ease: "bounce"});
+
 
   });
 
   function setDueDateDisplay(card, dueDateTime) {
     const el = card.querySelector('.count-down');
-    gsap.from(el, {duration: 2, x: 200, ease: "bounce"});
     const now = moment();
     const dueDay = dueDateTime.startOf('day');
     const today = now.startOf('day');
