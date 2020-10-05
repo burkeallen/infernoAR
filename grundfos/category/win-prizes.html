@@ -108,35 +108,454 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
+              <inferno-snippet-content id="bb235944-3865-4750-a0e4-b5896262a3c3">
 
+                <!-- CSS -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
+
+                  /* Resets */
+                  * {
+                    box-sizing: border-box;
                   }
 
-                  .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                    background-attachment: fixed;
+                  ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                  }
+
+                  h1,h2,h3,h4 {
+                    margin: 0;
+                    padding: 0;
+                    font-weight: 400;
+                  }
+
+                  button {
+                    outline: none;
+                    border: none;
+                    background: transparent;
+                    font-family: 'gothamMed', sans-serif;
+                  }
+
+                  button:hover {
+                    opacity: .9;
+                    cursor: pointer;
+                  }
+
+                  /* End Resets */
+
+
+                  .gf-agenda {
+                    background: #000;
+                    width: calc(100% + 40px);
+                    margin: -20px;
+                    padding: 0;
+                    color: #333;
+                    font-family: 'gothamMed', sans-serif;
+                    position: relative;
+                    overflow: hidden;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bg.jpg');
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
+                    background-position: 50% 50%;
+                    display: flex;
+                    flex-direction: column;
+                  }
+
+                  .gf-agenda-top {
+                    padding: 10vmin 0 5vmin;
+                  }
+
+                  .gf-agenda-header {
+                    background: #222;
                     margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    padding: 5vmin 0;
+                  }
+
+                  .gf-agenda h1, .gf-agenda-header h1 {
+                    font-family: 'gothamBlack', sans-serif;
+                    font-size: 3.5vmin;
+                    line-height: 4vmin;
+                    text-transform: uppercase;
+                    width: 70%;
+                    margin: 0 auto;
+                    text-align: center;
+                    color: #fff;
+                  }
+
+                  .gf-agenda-header h2 {
+                    font-family: 'gothamBook', sans-serif;
+                    font-size: 3vmin;
+                    line-height: 3.5vmin;
+                    color: #fff;
+                    margin: 3vmin auto;
+                    text-align: center;
+                    width: 70%;
+                  }
+
+                  .gf-agenda ul li {
+                    margin: 1vmin 0;
+                    color: #fff;
+                    display: flex;
+                    text-transform: uppercase;
+                  }
+
+                  .gf-agenda ul li h3, .gf-agenda ul li h4 {
+                    font-family: 'gothamMed', sans-serif;
+                    font-size: 2.5vmin;
+                    line-height: 3vmin;
+                  }
+
+                  .gf-agenda ul li h3 {
+                    flex: .75;
+                    display: flex;
+                  }
+
+                  .gf-agenda ul li h3 span {
+                    flex: initial;
+                    width: 33.3%;
+                    text-align: left;
+                  }
+
+                  .gf-agenda ul li h3 span:nth-child(2) {
+                    text-align: center;
+                  }
+
+                  .gf-agenda ul li h4 {
+                    flex: 3;
+                    margin: 0 0 0 3%;
+                  }
+
+                  .gf-agenda-sessions {
+                    display: flex;
+                    width: 90%;
+                    margin: 0 auto;
+                    align-items: center;
+                  }
+
+                  .gf-agenda-sessions-left {
+                    flex: 1.25;
+                    width: 50%;
+                  }
+
+                  .gf-agenda-sessions-right {
+                    flex: 1;
+                    width: 50%;
+                    padding: 0 0 0 5%;
+                  }
+
+                  .gf-agenda-sessions-right img {
+                    max-width: 100%;
+                    object-fit: contain;
+                  }
+
+                  .gf-agenda-bot  {
+                    padding: 0 20%;
+                    background: #fff;
+                    flex: 1;
+                    display: flex;
+                    text-align: center;
+                    color: #113565;
+                    font-family: 'gothamBook', sans-serif;
+                    font-size: 2vmin;
+                    line-height: 2.1vmin;
+                    align-items: flex-end;
+                  }
+
+                  .gf-agenda-bot-section {
+                    width: 33.3%;
+                    padding: 4vmin 2%;
+                  }
+
+                  .gf-agenda-bot-section img {
+                    max-width: 100%;
+                    vertical-align: middle;
+                    margin: 0;
+                  }
+
+                  .gf-agenda-bot-section:last-child img {
+                    display: inline-block;
+                    width: 40%;
+                  }
+
+                  /* Content CTA */
+                  .gf-content {
+                    display: flex;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bg.jpg');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: 50% 50%;
+                    padding: 10vmin 5%;
+                    width: calc(100% + 40px);
+                    margin: -20px;
+                  }
+
+                  .gf-content-section {
+                    width: 16%;
+                    margin: 0 .25%;
+                    background: #fff;
+                    border: 1px solid #fff;
+                    display: flex;
+                    flex-direction: column;
+                  }
+
+                  .gf-content-section h1 {
+                    background: #113565;
+                    color: #fff;
+                    font-family: 'gothamBlack', sans-serif;
+                    font-size: 3vmin;
+                    line-height: 3.5vmin;
+                    min-height: 12vmin;
+                    text-transform: uppercase;
+                    padding: 2vmin;
+                    text-align: center;
+                  }
+
+                  .gf-content-section h2 {
+                    color: #222;
+                    font-family: 'gothamMed', sans-serif;
+                    font-size: 2vmin;
+                    line-height: 3vmin;
+                    padding: 2vmin;
+                  }
+
+                  .gf-content-section img {
+                    display: block;
+                    width: 100%;
+                    margin: auto 0 0 0;
+                  }
+
+                  @media only screen and (max-width: 1200px) {
+                    .gf-agenda-header h2 {
+                      margin: 4vmin auto;
+                    }
+
+                    .gf-agenda-sessions {
+                      flex-direction: column;
+                    }
+
+                    .gf-agenda-sessions-left, .gf-agenda-sessions-right {
+                      width: 100%;
+                    }
+
+                    .gf-agenda-sessions-right {
+                      margin: 3vmin auto 0;
+                      text-align: center;
+                    }
+
+                    .gf-agenda-sessions-right img {
+                      width: 80%;
+                      margin: 2vmin auto;
+                    }
+
+                    .gf-agenda ul li {
+                      margin: 2vmin 0;
+                    }
+
+                    .gf-agenda ul li h3, .gf-agenda ul li h4 {
+                      font-size: 2.75vmin;
+                      line-height: 3.4vmin;
+                    }
+
+                    .gf-agenda ul li h3 {
+                      flex: 1;
+                    }
+
+                    .gf-agenda-bot {
+                      flex-direction: column;
+                      text-align: center;
+                      padding: 4vmin 20%;
+                      font-size: 2.2vmin;
+                      line-height: 3vmin;
+                    }
+
+                    .gf-agenda-bot-section {
+                      width: 100%;
+                      padding: 2vmin 0;
+                    }
+
+                    .gf-agenda-bot-section img {
+                      max-height: 5vmin;
+                      object-fit: contain;
+                    }
+
+                    .gf-agenda-bot-section:last-child img {
+                      width: auto;
+                      margin: 0 1vmin;
+                    }
+
+                    /* Content CTA */
+                    .gf-content {
+                      flex-direction: column;
+                      background-repeat: repeat-y;
+                      background-size: 300%;
+                    }
+
+                    .gf-content-section {
+                      width: 80%;
+                      margin: 4vmin auto;
+                    }
+
+                    .gf-content-section h1 {
+                      font-size: 4.5vmin;
+                      line-height: 5vmin;
+                      min-height: 10vmin;
+                    }
+
+                    .gf-content-section h2 {
+                      font-size: 3vmin;
+                      line-height: 4vmin;
+                    }
+
+                    .gf-content-section img {
+                      height: 20vmin;
+                      width: auto;
+                      object-fit: contain;
+                    }
+                    /* Content CTA */
+                  }
+
+                  @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+                    /* Content CTA */
+                    .gf-content-section h1 {
+                      font-size: 2.2vmin;
+                      line-height: 3vmin;
+                      min-height: 10vmin;
+                    }
+
+                    .gf-content-section h2 {
+                      font-size: 1.75vmin;
+                      line-height: 2.4vmin;
+                    }
+                    /* Content CTA */
+
+                    .gf-agenda-sessions {
+                      padding: 2vmin 0;
+                    }
+
+                    .gf-agenda ul li h3 {
+                      flex: 1.5;
+                    }
                   }
                 </style>
 
-                <div class="content">
+                <!-- Load icons -->
+                <link rel="stylesheet" type="text/css" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/icons.css">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                <!-- JS -->
+                <script type="text/javascript">
+                  // Load custom fonts
+                  var gothamMed = new FontFace('gothamMed', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf)');
+                  gothamMed.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading gothamMed');
+                  });
 
+                  var gothamBlack = new FontFace('gothamBlack', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf)');
+                  gothamBlack.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading gothamBlack');
+                  });
+
+                  var gothamBook = new FontFace('gothamBook', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf)');
+                  gothamBook.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading gothamBook');
+                  });
+
+                  var iconFont = new FontFace('icomoon', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff)');
+                  iconFont.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading icon font set');
+                  });
+                </script>
+
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+                <!-- HTML -->
+                <div class="gf-agenda-header">
+                  <h1>Thank you for registering for the<br>Grundfos plumbing and heating virtual summit.</h1>
+                  <h2>We look forward to welcoming you on Thursday 15th October.</h2>
+                </div>
+
+                <!-- Content CTA -->
+                <div class="gf-content">
+                  <div class="gf-content-section">
+                    <h1>Grundfos 3d Home</h1>
+                    <h2>Visit the Grundfos 3D Home and discover more about the array of Grundfos solutions available for applications around the home. Take a guided tour or walk around at your leisure.</h2>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/home-icon.jpg" alt="icon" />
+                  </div>
+                  <div class="gf-content-section">
+                    <h1>Webinars</h1>
+                    <h2>During the day you will have the opportunity to attend any of our six webinars based around heating and plumbing applications and solutions.
+                        Check out the agenda for timings.</h2>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/edu-icon.jpg" alt="icon" />
+                  </div>
+                  <div class="gf-content-section">
+                    <h1>On demand content</h1>
+                    <h2>Head over to the on demand section where you can watch any sessions that you’ve missed, watch various videos and download product information.
+                    </h2>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/phone-icon.jpg" alt="icon" />
+                  </div>
+                  <div class="gf-content-section">
+                    <h1>Wolseley Zone</h1>
+                    <h2>Need to purchase a Grundfos product?
+                        Head over to the Wolseley zone to exclusive on the day offers and order your Grundfos products.</h2>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/zone-icon.jpg" alt="icon" />
+                  </div>
+                  <div class="gf-content-section">
+                    <h1>HVP Zone</h1>
+                    <h2>Join HVP in their exclusive area to view exclusive content and get the lowdown on the latest industry insights.
+                    </h2>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/news-icon.jpg" alt="icon" />
+                  </div>
+                  <div class="gf-content-section">
+                    <h1>Chance to win prizes</h1>
+                    <h2>There will be various ways to have the chance to win prizes throughout the day.
+                        The more you do and see, the greater chance you’ll have to win!</h2>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/prize-icon.jpg" alt="icon" />
+                  </div>
+                </div>
+                <!-- End Content CTA -->
+
+                <div class="gf-agenda">
+                  <div class="gf-agenda-top">
+                    <div class="gf-agenda-sessions">
+                      <div class="gf-agenda-sessions-left">
+                        <h1>Agenda</h1>
+                        <ul>
+                          <li><h3><span>09:45</span><span>-</span><span>10:00</span></h3><h4>Welcome Speech</h4></li>
+                          <li><h3><span>10:30</span><span>-</span><span>11:00</span></h3><h4>The heart of the heating system</h4></li>
+                          <li><h3><span>11:15</span><span>-</span><span>11:45</span></h3><h4>Grundfos domestic circulators</h4></li>
+                          <li><h3><span>12:00</span><span>-</span><span>12:30</span></h3><h4>Balancing with the grundfos alpha3</h4></li>
+                          <li><h3><span>14:00</span><span>-</span><span>14:30</span></h3><h4>Domestic whole house boosting</h4></li>
+                          <li><h3><span>14:45</span><span>-</span><span>15:15</span></h3><h4>Domestic wastewater</h4></li>
+                          <li><h3><span>15:30</span><span>-</span><span>16:00</span></h3><h4>Grundfos shower pumps</h4></li>
+                        </ul>
+                      </div>
+                      <div class="gf-agenda-sessions-right">
+                        <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/devices.png" alt="devices" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="gf-agenda-bot">
+                    <div class="gf-agenda-bot-section"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/logo.png" alt="logo" /></div>
+                    <div class="gf-agenda-bot-section">
+                      GRUNDFOS Pumps Ltd.<br>Grovebury Road Leighton Buzzard<br>BEDS. LU7 4TL<br>www.grundfos.co.uk
+                    </div>
+                    <div class="gf-agenda-bot-section">
+                      <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/hvp_logo.jpg" alt="hvp" />
+                      <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/wolseley_logo.png" alt="wolseley" />
+                    </div>
+                  </div>
                 </div>
 
               </inferno-snippet-content>
