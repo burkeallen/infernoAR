@@ -127,6 +127,41 @@
 
                 </script>
 
+                <script type="text/javascript">
+                  // Load custom fonts
+                  var gothamMed = new FontFace('gothamMed', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf)');
+                  gothamMed.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading gothamMed');
+                  });
+
+                  var gothamBlack = new FontFace('gothamBlack', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf)');
+                  gothamBlack.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading gothamBlack');
+                  });
+
+                  var gothamBook = new FontFace('gothamBook', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf)');
+                  gothamBook.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading gothamBook');
+                  });
+
+                  var iconFont = new FontFace('icomoon', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff)');
+                  iconFont.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function(error) {
+                    // error occurred
+                    console.log('Error loading icon font set');
+                  });
+                </script>
+
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -149,9 +184,10 @@
 
                   #card-container {
                     display: grid;
-                    max-width: 1000px;
-                    grid-gap: 10px;
-                    grid-template-columns: repeat(auto-fit, 120px);
+                    max-width: 1280px;
+                    grid-gap: 10px 10px;
+                    align-items: center;
+                    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
                     margin: 0 auto;
                   }
 
@@ -174,6 +210,7 @@
                     width: 118px;
                     border-radius: 8px;
                   }
+
                 </style>
 
                 <!-- PDF Overlay  -->
@@ -300,6 +337,14 @@
                   }
                 </style>
                 <!-- Video Overlay -->
+
+                <style>
+                  @media only screen and (max-width: 768px) {
+                    .content {
+                      margin: -15px;
+                    }
+                  }
+                </style>
 
                 <div class="content">
                   <div id="card-container"></div>
