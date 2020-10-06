@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
@@ -60,13 +55,10 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -102,7 +94,7 @@
                 const loginPageEl = landingPageEl;
               </script>
               <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+                  @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
               </style>
               <!-- ********************* -->
               <!-- ********************* -->
@@ -118,7 +110,7 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/coming-soon-bkg.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-library.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
@@ -129,13 +121,265 @@
                     z-index: 1;
                     font-family: Verdana, sans-serif !important;
                   }
+
+                  #card-container {
+                    display: grid;
+                    max-width: 1000px;
+                    grid-gap: 10px;
+                    grid-template-columns: repeat(auto-fit, 120px);
+                    margin: 0 auto;
+                  }
+
+                  .card {
+                    width: 120px;
+                    min-height: 130px;
+                    text-align: center;
+                    border-radius: 8px;
+                    background-color: #fff;
+                    border: 1px solid #c3c3c3;
+                    font-size: 12px;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                  }
+
+                  .card-title {
+                    margin: 5px 0 5px 0;
+                  }
+
+                  .card-img {
+                    width: 118px;
+                    border-radius: 8px;
+                  }
                 </style>
 
+                <!-- PDF Overlay  -->
+                <style>
+                    .pdf-view {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background-color: rgba(0, 0, 0, 0.8);
+                        z-index: 30;
+                        display: none;
+                    }
+
+                    .pdf-viewer {
+                        position: absolute;
+                        top: 60px;
+                        left: 30px;
+                        right: 30px;
+                        width: calc(100% - 60px);
+                        height: calc(100% - 90px);
+                        bottom: 30px;
+                        border: none;
+                    }
+
+                    a.window-close {
+                        padding: 0.55rem;
+                        width: 11rem;
+                        font-size: 1.3rem;
+                        font-weight: 100;
+                        line-height: 1;
+                        color: #333;
+                        background-color: #fff;
+                        border-radius: 4rem;
+                        text-align: center;
+                        cursor: pointer;
+                        text-decoration: none;
+                        display: inline-block;
+                        margin: 20px 0 0 30px;
+                    }
+
+                    a.window-close:hover {
+                        color: #333;
+                        text-decoration: none;
+                    }
+                </style>
+                <!-- PDF Overlay -->
+
+                <!-- Video Overlay -->
+                <style>
+                   .modal-window {
+                     position: absolute;
+                     background-color: rgba(0, 0, 0, 0.9);
+                     top: 0;
+                     right: 0;
+                     bottom: 0;
+                     left: 0;
+                     z-index: 999;
+                     opacity: 0;
+                     pointer-events: none;
+                     -webkit-transition: all 0.7s;
+                     -moz-transition: all 0.7s;
+                     transition: all 0.7s;
+                     display: none;
+                   }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    padding-top: 2px;
+                    color: #fff;
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                  }
+
+                  .modal-close:hover {
+                    color: #000;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+                <!-- Video Overlay -->
+
                 <div class="content">
-
-                  <h2>Library Page Placeholder</h2>
-
+                  <div id="card-container"></div>
                 </div>
+
+                <div class="pdf-view" id="pdf-blanket" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe class="pdf-viewer" id="pdf-frame"></iframe>
+                </div>
+
+                <div id="open-modal" class="modal-window" onclick="toggleModal()">
+                  <div>
+                    <a href="javascript:void(0);toggleModal();" onclick="toggleModal()" title="Close"
+                      class="modal-close">CLOSE X</a>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <!-- Build Card -->
+                <script>
+                  const jsonString = '{"cards" : [ ' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
+                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"}' +
+                    ']}'
+
+                  const jsonObj = JSON.parse(jsonString);
+
+                  const buildCards = () => {
+                    const cardContainer = landingPageEl.getElementById("card-container");
+
+                    cardContainer.innerHTML = "";
+                    jsonObj.cards.forEach(item => {
+                      const loadPdf = `loadPDF("https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/library/` + item.target + `")`;
+                      const loadVideo = `toggleModal("` + item.target +  `")`;
+                      const onClickAction = (item.type === 'pdf' ? loadPdf : loadVideo);
+
+                      cardContainer.innerHTML +=
+                        "<div class='card' onclick=" + onClickAction + ">" +
+                        "<img class='card-img' src='" + item.image + "'>" +
+                        "<div class='card-title'>" + item.title + "</div>" +
+                        "</div>"
+                    })
+
+
+                  };
+
+                  buildCards();
+
+                </script>
+                <!-- Build Card -->
+
+                <!-- Load/Close PDF -->
+                <script>
+                function loadPDF(url) {
+                var x = landingPageEl.getElementById('pdf-frame');
+                x.src = url;
+                var y = landingPageEl.getElementById('pdf-blanket');
+                y.style.display = 'block';
+                }
+
+                function closePDF() {
+                var x = landingPageEl.getElementById('pdf-frame');
+                x.src = '';
+                var y = landingPageEl.getElementById('pdf-blanket');
+                y.style.display = 'none';
+                }
+                </script>
+                <!-- Load/Close PDF -->
+
+                <!-- Load/Close Video -->
+                <script>
+                  function toggleModal(srcUrl) {
+                    const video = `
+                    <iframe id="video-frame"
+                              src="https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4"
+                              frameborder="0"
+                              allowfullscreen="true"
+                              webkitallowfullscreen="true"
+                              mozallowfullscreen="true">
+                      </iframe>`
+
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    const videoIframe = landingPageEl.querySelector('#video-frame');
+                    videoWrapper.innerHTML = videoIframe ? '' : video;
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                  }
+                </script>
+                <!-- Load/Close Video -->
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
