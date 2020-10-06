@@ -222,6 +222,12 @@
 
                   }
 
+                  .recording-message {
+                    text-align: center;
+                    max-width: 90%;
+                    padding: 2em;
+                    margin-left: 5%;
+                  }
                   .col1 {
                     display: grid;
                     grid-template-columns: 1fr;
@@ -435,15 +441,24 @@
                       </div>
                     </div>
                     <div class="col3">
-                        <div class="videoWrapper2" onclick="toggleModal()">
-                          <video autoplay="true" muted="true" loop="" poster="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/booth/vidthumb.png">
-                            <source src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/4520 Omar-Virtual Event Welcome.mp4" type="video/mp4">
-                          </video>
-                        </div>
-                        <div class="video-play-btn" onclick="toggleModal()">
-                          <img
-                              src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE4LjEuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMTcuODA0IDE3LjgwNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTcuODA0IDE3LjgwNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGcgaWQ9ImM5OF9wbGF5Ij4NCgkJPHBhdGggZD0iTTIuMDY3LDAuMDQzQzIuMjEtMC4wMjgsMi4zNzItMC4wMDgsMi40OTMsMC4wODVsMTMuMzEyLDguNTAzYzAuMDk0LDAuMDc4LDAuMTU0LDAuMTkxLDAuMTU0LDAuMzEzDQoJCQljMCwwLjEyLTAuMDYxLDAuMjM3LTAuMTU0LDAuMzE0TDIuNDkyLDE3LjcxN2MtMC4wNywwLjA1Ny0wLjE2MiwwLjA4Ny0wLjI1LDAuMDg3bC0wLjE3Ni0wLjA0DQoJCQljLTAuMTM2LTAuMDY1LTAuMjIyLTAuMjA3LTAuMjIyLTAuMzYxVjAuNDAyQzEuODQ0LDAuMjUsMS45MywwLjEwNywyLjA2NywwLjA0M3oiLz4NCgk8L2c+DQoJPGcgaWQ9IkNhcGFfMV83OF8iPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K" />
-                        </div>
+                      <div class="videoWrapper2"
+                           onclick="toggleModal()"
+                           onmouseover="unMuteVideo()"
+                           onmouseout="muteVideo()">
+                        <video id="vid1" autoplay="true" muted="true" loop=""
+                               poster="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/booth/vidthumb.png">
+                          <source
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/022-swm/assets/sign/4520 Omar-Virtual Event Welcome.mp4"
+                              type="video/mp4">
+                        </video>
+                      </div>
+                      <div class="video-play-btn"
+                           onclick="toggleModal()"
+                           onmouseover="unMuteVideo()"
+                           onmouseout="muteVideo()">
+                        <img
+                            src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE4LjEuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMTcuODA0IDE3LjgwNCIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTcuODA0IDE3LjgwNDsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGcgaWQ9ImM5OF9wbGF5Ij4NCgkJPHBhdGggZD0iTTIuMDY3LDAuMDQzQzIuMjEtMC4wMjgsMi4zNzItMC4wMDgsMi40OTMsMC4wODVsMTMuMzEyLDguNTAzYzAuMDk0LDAuMDc4LDAuMTU0LDAuMTkxLDAuMTU0LDAuMzEzDQoJCQljMCwwLjEyLTAuMDYxLDAuMjM3LTAuMTU0LDAuMzE0TDIuNDkyLDE3LjcxN2MtMC4wNywwLjA1Ny0wLjE2MiwwLjA4Ny0wLjI1LDAuMDg3bC0wLjE3Ni0wLjA0DQoJCQljLTAuMTM2LTAuMDY1LTAuMjIyLTAuMjA3LTAuMjIyLTAuMzYxVjAuNDAyQzEuODQ0LDAuMjUsMS45MywwLjEwNywyLjA2NywwLjA0M3oiLz4NCgk8L2c+DQoJPGcgaWQ9IkNhcGFfMV83OF8iPg0KCTwvZz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjwvc3ZnPg0K"/>
+                      </div>
                     </div>
                     <div class="col4">
                       <a id="Virtual-Booth"
@@ -460,7 +475,7 @@
                       </a>
                     </div>
                   </div>
-
+                  <div class="recording-message">Recorded conference available as from XXX </div>
                 </div>
 
                 <div id="open-modal" class="modal-window" onclick="toggleModal()">
@@ -472,7 +487,17 @@
                 </div>
 
                 <script>
+
+                  function muteVideo() {
+                    landingPageEl.querySelector('#vid1').muted = true;
+                  }
+
+                  function unMuteVideo() {
+                    landingPageEl.querySelector('#vid1').muted = false;
+                  }
+
                   function toggleModal() {
+                    muteVideo();
                     const video = `
                     <iframe id="video-frame"
                               src="/embed/0dfead18-bba8-4c2e-8715-5416654d3674"
