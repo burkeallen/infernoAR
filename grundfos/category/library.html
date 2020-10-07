@@ -189,6 +189,7 @@
                     z-index: 1;
                     font-family: 'gothamMed', sans-serif;
                   }
+
                   .top-banner {
                     margin: -20px;
                     padding-left: 50px;
@@ -205,11 +206,10 @@
                 <style>
                   #card-container {
                     display: grid;
-                    max-width: 1280px;
                     grid-gap: 20px 10px;
                     align-items: center;
                     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    padding: 40px 20px 0 20px;
+                    padding: 5%;
                   }
 
                   .card {
@@ -387,35 +387,103 @@
 
                 <!-- Build Card -->
                 <script>
-                  const jsonString = '{"cards" : [ ' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"PDF", "type":"pdf","target":"sample.pdf","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"},' +
-                    '{"title":"Video", "type":"video","target":"https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4","image":"../grundfos-logo.png"}' +
-                    ']}'
+                  var cards = [
+                    {title: "PDF", type: "pdf", target: "sample.pdf", image: "../grundfos-logo.png"},
+                    {title: "PDF", type: "pdf", target: "sample.pdf", image: "../grundfos-logo.png"},
+                    {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }
+                    , {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "PDF",
+                      type: "pdf",
+                      target: "sample.pdf",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "PDF",
+                      type: "pdf",
+                      target: "sample.pdf",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "PDF",
+                      type: "pdf",
+                      target: "sample.pdf",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "PDF",
+                      type: "pdf",
+                      target: "sample.pdf",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "PDF",
+                      type: "pdf",
+                      target: "sample.pdf",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "PDF",
+                      type: "pdf",
+                      target: "sample.pdf",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }, {
+                      title: "Video",
+                      type: "video",
+                      target: "https://file-examples-com.github.io/uploads/2017/04/file_example_MP4_640_3MG.mp4",
+                      image: "../grundfos-logo.png"
+                    }];
 
-                  const jsonObj = JSON.parse(jsonString);
 
-                  const buildCards = () => {
+                  function buildCards() {
                     const cardContainer = landingPageEl.getElementById("card-container");
 
                     cardContainer.innerHTML = "";
-                    jsonObj.cards.forEach(item => {
+                    cards.forEach(item => {
                       const loadPdf = `loadPDF("https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/library/` + item.target + `")`;
                       const loadVideo = `toggleModal("` + item.target + `")`;
                       const onClickAction = (item.type === 'pdf' ? loadPdf : loadVideo);
