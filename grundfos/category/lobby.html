@@ -174,77 +174,70 @@
                     cursor: pointer;
                   }
 
-                  .welcome {
-                    left: 32.5%;
-                    top: 18.5%;
-                    width: 34%;
-                    height: 30.5%;
-                  }
-
-                  .left-col {
+                  .welcome-speech {
                     left: 11.67%;
-                    top: 14.69%;
-                    width: 12%;
-                    height: 36%;
-                    clip-path: polygon(3% 1%, 94% 15%, 90% 98%, 0% 94%);
+                    top: 15.69%;
+                    width: 13%;
+                    height: 40%;
+                    clip-path: polygon(5% 2%, 90% 16%, 89% 98%, 2% 94%);
                   }
 
                   .play-video {
-                    left: 76.8%;
-                    top: 14%;
+                    left: 77.70%;
+                    top: 16%;
                     width: 12%;
-                    height: 20%;
+                    height: 21.5%;
                     clip-path: polygon(1% 30%, 98% 2%, 100% 82%, 1% 100%);
                   }
 
                   .agenda {
-                    left: 77%;
-                    top: 32%;
+                    left: 78%;
+                    top: 35.5%;
                     width: 13%;
-                    height: 18%;
+                    height: 19%;
                     clip-path: polygon(0 21%, 91% 3%, 93% 90%, 0% 100%);
                   }
 
                   .library {
-                    left: 59.5%;
-                    top: 52%;
+                    left: 60.25%;
+                    top: 57%;
                     width: 15.5%;
-                    height: 6%;
+                    height: 7%;
                   }
 
                   .threedee-home {
-                    left: 42%;
-                    top: 52%;
+                    left: 42.75%;
+                    top: 57%;
                     width: 16%;
-                    height: 6%;
+                    height: 7%;
                   }
 
                   .main-stage {
-                    left: 25.5%;
-                    top: 52%;
+                    left: 26%;
+                    top: 57%;
                     width: 15%;
-                    height: 6%;
+                    height: 7%;
                   }
 
                   .woseley {
                     left: 9%;
-                    top: 50.5%;
+                    top: 55.5%;
                     width: 15.5%;
                     height: 7.5%;
                     transform: rotate(3deg);
                   }
 
                   .hvp {
-                    left: 76%;
-                    top: 50.5%;
+                    left: 77%;
+                    top: 55.5%;
                     width: 15%;
-                    height: 7.5%;
+                    height: 8%;
                     transform: rotate(-3deg);
                   }
 
                   .info-desk {
                     left: 7%;
-                    top: 67%;
+                    top: 74%;
                     width: 23%;
                     height: 24%;
                   }
@@ -330,16 +323,14 @@
 
                 <div class="content">
                   <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/bkg-lobby.jpg">
+                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/bkg-lobby2.jpg">
 
                   <div class="top-row">
-                    <div title="Banner" class="left-col"></div>
-                    <div title="Welcome" class="welcome"></div>
+                    <div title="Welcome Speech Video" class="hotspot welcome-speech" id="cef7417c-6738-47a3-9dfc-e54d89a0f18d" onclick="toggleModal(this)"></div>
                     <a title="Agenda" class="hotspot agenda"
                        href="/videos/f87a4ff4-b162-4a51-b0fc-08d85e1ba99d/landing/29e9cc43-55f8-4019-9fce-fbf2eb1504b3"
                        onclick="toggleNoise('pause')"> </a>
-                    <div title="Play Welcome Video" class="hotspot play-video"
-                         onclick="toggleNoise('pause');toggleModal()"></div>
+                    <div title="How to Navigate Video" class="hotspot play-video" id="2d568dc9-ca1d-4c5f-b119-1a9a160bb453" onclick="toggleModal(this)"></div>
                   </div>
 
                   <div class="bottom-row">
@@ -366,21 +357,13 @@
                   <!--  Background Noise do not display-->
                   <audio autoplay loop>
                     <source
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/lobby-noise1.mp3"
-                        type="audio/mpeg">
-                    <source
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/lobby-noise2.mp3"
-                        type="audio/mpeg">
-                    <source
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/lobby-noise3.mp3"
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/low-noise.mp3"
                         type="audio/mpeg">
                   </audio>
 
-                  <div id="open-modal" class="modal-window" onclick="toggleModal();toggleNoise('play')">
+                  <div id="open-modal" class="modal-window">
                     <div>
-                      <a href="javascript:void(0);toggleModal();toggleNoise('play')"
-                         onclick="toggleModal();toggleNoise('play')" title="Close"
-                         class="modal-close">CLOSE X</a>
+                      <div title="Close" class="modal-close">CLOSE X</div>
                       <div class="videoWrapper"></div>
                     </div>
                   </div>
@@ -399,21 +382,40 @@
                   }
                 </script>
 
+                <!-- Toggle Modal on and off -->
+                <template>
+                  <iframe src="/embed/"
+                          frameborder="0"
+                          allowfullscreen="true"
+                          webkitallowfullscreen="true"
+                          mozallowfullscreen="true">
+                  </iframe>
+                </template>
                 <script>
-                  function toggleModal() {
-                    const video = `
-                    <iframe id="video-frame"
-                              src="/embed/fb7bca6e-d347-46c9-8ee4-f8dd65226542"
-                              frameborder="0"
-                              allowfullscreen="true"
-                              webkitallowfullscreen="true"
-                              mozallowfullscreen="true">
-                      </iframe>`
-
+                  function toggleModal(vidElement) {
                     const videoWrapper = landingPageEl.querySelector('.videoWrapper');
-                    const videoIframe = landingPageEl.querySelector('#video-frame');
-                    videoWrapper.innerHTML = videoIframe ? '' : video;
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      toggleNoise('play');
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('template');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
                     landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                    toggleNoise('pause')
                   }
                 </script>
 
