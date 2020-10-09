@@ -166,13 +166,12 @@
                   }
                 </style>
 
+                <!-- hotspots-->
                 <style>
                   .hotspot {
                     position: absolute;
                     z-index: 99;
                     cursor: pointer;
-                    background: red;
-                    opacity: .5;
                   }
 
                   .welcome {
@@ -242,29 +241,181 @@
                     height: 7.5%;
                     transform: rotate(-3deg);
                   }
+
+                  .info-desk {
+                    left: 7%;
+                    top: 67%;
+                    width: 23%;
+                    height: 24%;
+                  }
+                </style>
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: #fff;
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
                 </style>
 
                 <div class="content">
                   <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/Grundfos_LOBBY_rv2.jpg">
+                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/bkg-lobby.jpg">
 
                   <div class="top-row">
-                    <div title="left-col" class="hotspot left-col"></div>
-                    <div title="Welcome" class="hotspot welcome"></div>
-                    <div title="Agenda" class="hotspot agenda"></div>
-                    <div title="play video" class="hotspot play-video"></div>
+                    <div title="Banner" class="left-col"></div>
+                    <div title="Welcome" class="welcome"></div>
+                    <a title="Agenda" class="hotspot agenda"
+                       href="/videos/f87a4ff4-b162-4a51-b0fc-08d85e1ba99d/landing/29e9cc43-55f8-4019-9fce-fbf2eb1504b3"
+                       onclick="toggleNoise('pause')"> </a>
+                    <div title="Play Welcome Video" class="hotspot play-video"
+                         onclick="toggleNoise('pause');toggleModal()"></div>
                   </div>
 
                   <div class="bottom-row">
-                    <div title="Library" class="hotspot library"></div>
-                    <div title="3d home" class="hotspot threedee-home"></div>
-                    <div title="main stage" class="hotspot main-stage"></div>
-                    <div title="woseley" class="hotspot woseley"></div>
-                    <div title="hvp" class="hotspot hvp"></div>
+                    <a title="Library" class="hotspot library"
+                       href="/videos/f22e0c0a-76fe-467d-4de2-08d85e3841de/landing/db3fa242-9a68-44f6-9eb3-7b1419258f0c"
+                       onclick="toggleNoise('pause')"> </a>
+                    <a title="3D Home Experience" class="hotspot threedee-home"
+                       href="/videos/e5c69e0c-2b22-412e-2ee8-08d85e382ebe/landing/8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b"
+                       onclick="toggleNoise('pause')"> </a>
+                    <a title="Main Stage" class="hotspot main-stage"
+                       href="/videos/7cce824e-97df-41e1-b0fd-08d85e1ba99d/landing/6269e98a-aa97-48b4-82a7-4004f9f1420d"
+                       onclick="toggleNoise('pause')"> </a>
+                    <a title="Woseley Room" class="hotspot woseley"
+                       href="/videos/72ede826-7393-4e68-4de0-08d85e3841de/landing/d8e9e967-2538-4105-bd26-ce8bbf2de070"
+                       onclick="toggleNoise('pause')"> </a>
+                    <a title="HVP Room" class="hotspot hvp"
+                       href="/videos/3b46fa6b-9fe1-4afa-4de1-08d85e3841de/landing/df046e47-1c67-40c9-b48d-a321fbc8f8f6"
+                       onclick="toggleNoise('pause')"> </a>
                   </div>
 
+                  <a title="Information Desk" class="hotspot info-desk"
+                     href="/videos/0f10ef5c-c8a1-4d68-f5f3-08d8671ed8d8/landing/350c298e-ed5d-4489-88c4-1b5ed132ba23"> </a>
+
+                  <!--  Background Noise do not display-->
+                  <audio autoplay loop>
+                    <source
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/lobby-noise1.mp3"
+                        type="audio/mpeg">
+                    <source
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/lobby-noise2.mp3"
+                        type="audio/mpeg">
+                    <source
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/lobby-noise3.mp3"
+                        type="audio/mpeg">
+                  </audio>
+
+                  <div id="open-modal" class="modal-window" onclick="toggleModal();toggleNoise('play')">
+                    <div>
+                      <a href="javascript:void(0);toggleModal();toggleNoise('play')"
+                         onclick="toggleModal();toggleNoise('play')" title="Close"
+                         class="modal-close">CLOSE X</a>
+                      <div class="videoWrapper"></div>
+                    </div>
+                  </div>
 
                 </div>
+
+                <script>
+                  function toggleNoise(action) {
+                    const noise = landingPageEl.querySelector('audio');
+                    if (action === 'play') {
+                      noise.play();
+                    } else {
+                      noise.pause();
+                    }
+
+                  }
+                </script>
+
+                <script>
+                  function toggleModal() {
+                    const video = `
+                    <iframe id="video-frame"
+                              src="/embed/fb7bca6e-d347-46c9-8ee4-f8dd65226542"
+                              frameborder="0"
+                              allowfullscreen="true"
+                              webkitallowfullscreen="true"
+                              mozallowfullscreen="true">
+                      </iframe>`
+
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    const videoIframe = landingPageEl.querySelector('#video-frame');
+                    videoWrapper.innerHTML = videoIframe ? '' : video;
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -222,6 +222,16 @@
                     margin: 20px auto;
                   }
 
+
+                  pre {
+                    color: black;
+                    font-family: 'Lucida Console', Monaco, monospace;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    max-height: 600px;
+                    max-width: 90%;
+                  }
+
                 </style>
 
                 <div class="content">
@@ -249,7 +259,16 @@
                   <div class="bottom-box"></div>
 
 
+                  <pre id="novo-liquid"></pre>
                 </div>
+
+                <script>
+                  var novoOut = landingPageEl.querySelector('#novo-liquid');
+
+                  var data = {{data | json}}; // comment out when running locally;
+
+                  novoOut.innerHTML = `${JSON.stringify(data, undefined, 4)}`;
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

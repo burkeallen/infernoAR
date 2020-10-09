@@ -135,6 +135,7 @@
 
                 </script>
 
+                <!-- Main Page Style -->
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -163,19 +164,235 @@
                     font-size: 32px;
                     background-color: #ffffff;
                   }
-                  .header img {
+
+                  .bottom-banner img {
                     width: 100%;
                     height: auto;
                     margin-top: 20px;
                   }
+
+                  .info-text {
+                    color: #ffffff;
+                    padding: 20px 40px;
+                    font-size: 1.5em;
+                    text-align: center;
+                    margin-top: 40px;
+                    width: 90%;
+                    margin-left: 5%;
+                  }
+
+                  .info-text a:hover {
+                    text-decoration: none;
+                    filter: brightness(130%);
+                    color: #03a9f4;
+                  }
                 </style>
+
+                <!-- grid content-->
+                <style>
+                  .grid-container {
+                    display: grid;
+                    width: 90%;
+                    margin-left: 5%;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 20px 20px;
+                    align-content: center;
+                    padding: 40px;
+                  }
+
+                  .card {
+                    min-width: 250px;
+                    min-height: 260px;
+                    text-align: center;
+                    border-radius: 1em;
+                    background-color: #fff;
+                    border: 1px solid #c3c3c3;
+                    box-shadow: 4px 4px 10px 6px rgba(0, 162, 250, .5);
+                    cursor: pointer;
+                  }
+
+                  .card .thumbnail {
+                    width: 100%;
+                    border-radius: 1em;
+                  }
+
+                  pre {
+                    color: black;
+                    font-family: 'Lucida Console', Monaco, monospace;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    max-height: 600px;
+                    max-width: 90%;
+                  }
+
+                </style>
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: #fff;
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+
 
                 <div class="content">
 
-                  <div class="top-banner">Learning</div>
-                  <div class="header"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/learning/header.jpg"></div>
+                  <div class="top-banner">LEARNING ZONE</div>
+                  <div class="info-text">Welcome to the learning zone. Here we have a variety of short training modules
+                                         that have come
+                                         from ECADEMY the Grundfos online training platform. Take the modules & try the
+                                         short quiz after
+                                         each one. Every answer you get correct will win you an entry to the Summit
+                                         prize draws
+                    <a href="/videos/c820e09c-9a8a-4a40-53ae-08d861d8a48a/landing/bb235944-3865-4750-a0e4-b5896262a3c3">
+                      (see the 'Win Prizes'zone for more information)
+                    </a>
+                                         .
+                  </div>
 
+                  <div class="grid-container">
+                    {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                    {% for event in data.Events %}
+                      {% for category in event.Categories %}
+                        {% assign cat = category.Id | downcase %}
+                        {% if cat == currentCat %}
+                        <div class="card" id="{{event.Id}}" onclick="toggleModal(this)">
+                          <img class="thumbnail" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
+                          <div>{{event.Name}}</div>
+                        </div>
+                        {% endif %}
+                      {% endfor %}
+                    {% endfor %}
+                  </div>
+
+                  <div class="info-text">
+                    If you would like to see more of these bite size training modules – take a trip to
+                    <a href="">Grundfos Ecademy</a> and join today.
+                  </div>
+
+                  <div class="bottom-banner">
+                    <a target="_new" href="https://www.grundfos.com/ecademy.html"><img
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/learning/header.jpg">
+                    </a>
+                  </div>
                 </div>
+
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <template>
+                  <iframe src="/embed/"
+                          frameborder="0"
+                          allowfullscreen="true"
+                          webkitallowfullscreen="true"
+                          mozallowfullscreen="true">
+                  </iframe>
+                </template>
+
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('template');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                  }
+                </script>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
