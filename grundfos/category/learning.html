@@ -192,7 +192,7 @@
                     top: 20%;
                     left: 39%;
                     width: 25%;
-                    height: 25%;
+                    height: 30%;
                   }
                 </style>
 
@@ -207,7 +207,7 @@
                     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                     gap: 20px 20px;
                     align-content: center;
-                    padding: 40px;
+                    padding: 40px 40px 0 40px;
                   }
 
                   .card {
@@ -321,16 +321,16 @@
                                          from ECADEMY the Grundfos online training platform. Take the modules & try the
                                          short quiz after
                                          each one. Every answer you get correct will win you an entry to the Summit
-                                         prize draws
-                    <a href="/videos/c820e09c-9a8a-4a40-53ae-08d861d8a48a/landing/bb235944-3865-4750-a0e4-b5896262a3c3">
+                                         prize draws'
+                    <a style="white-space: nowrap" href="/videos/c820e09c-9a8a-4a40-53ae-08d861d8a48a/landing/bb235944-3865-4750-a0e4-b5896262a3c3">
                       (see the 'Win Prizes'zone for more information)
                     </a>
-                                         .
                   </div>
 
                   <div class="grid-container">
                     {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
-                    {% for event in data.Events | sort: "Name" %}
+                    {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                    {% for event in sortedEvents %}
                     {% for category in event.Categories %}
                     {% assign cat = category.Id | downcase %}
                     {% if cat == currentCat %}
