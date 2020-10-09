@@ -207,7 +207,7 @@
                     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                     gap: 20px 20px;
                     align-content: center;
-                    padding: 40px;
+                    padding: 40px 40px 0 40px;
                   }
 
                   .card {
@@ -329,8 +329,8 @@
 
                   <div class="grid-container">
                     {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
-                    {% assign sortedEvents = data.Events | sort: "Name" %}
-                    {% for event in data.Events %}
+                    {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                    {% for event in sortedEvents %}
                     {% for category in event.Categories %}
                     {% assign cat = category.Id | downcase %}
                     {% if cat == currentCat %}
