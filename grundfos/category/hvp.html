@@ -233,10 +233,10 @@
 
                   #grid-pdf-cards {
                     display: grid;
-                    /*align-items: center;*/
                     grid-gap: 20px 20px;
                     grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
                     grid-template-rows: auto;
+                    align-items: center;
                     text-align: center;
                   }
 
@@ -399,7 +399,11 @@
                     <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/hvp/hvp-header.jpg">
                   </div>
                   <div class="grid-video-cards">
-                    {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %} {% for event in data.Events %} {% for category in event.Categories %} {% assign cat = category.Id | downcase %} {% if cat == currentCat %}
+                    {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                    {% for event in data.Events %}
+                    {% for category in event.Categories %}
+                    {% assign cat = category.Id | downcase %}
+                    {% if cat == currentCat %}
                     <div class="video-card" id="{{event.Id}}" onclick="toggleModal(this)">
                       <img class="thumbnail" title="{{event.Name}}" src="{{event.VideoThumbnail}}"> <img class="playBtn" src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/play-btn.png">
                       <div>{{event.Name}}</div>
