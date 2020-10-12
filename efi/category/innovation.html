@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,25 +108,27 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b">
-
+              <inferno-snippet-content id="1f3e9b29-de0e-4f79-a342-a433177c6049">
+                <!-- Innovation Page -->
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
-                    const font = new FontFace(name, `url(${url})`);
-                    font.load().then(function (loadedFont) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
                       document.fonts.add(loadedFont);
-                      console.log(`Loaded custom font ${name}`);
+                      console.log('Loaded custom font ', name);
                     }).catch(function (error) {
                       // error occurred
-                      console.log(`Error loading ${name}`);
+                      console.log('Error loading ', name);
                     });
+
                   }
 
-                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
-                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
-                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
-                  loadFont('icomoon', 'https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff');
+                               loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
 
                 </script>
 
@@ -138,34 +140,27 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
-                    background-attachment: fixed;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/miami.jpg');
+                    /*background-attachment: fixed;*/
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
+                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
-                  }
-
-                  iframe {
-                    display: block;
-                    border: none;
-                    height: calc(100vh - 114px);
-                    width: 100%;
-                    overflow-y: hidden;
+                    font-family: "CustomFont1", sans-serif !important;
                   }
                 </style>
 
                 <div class="content">
 
-                  <iframe scrolling="no" class="3d"
-                          src="https://cdn.instavr.co/html/G83td5Eg9E9jEfgPQyi8_app.html?bust=zdu4azg0mw9"></iframe>
+                  <h2 style="color:white; padding: 3em;">Innovation Placeholder</h2>
 
                 </div>
 
               </inferno-snippet-content>
+
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->

@@ -108,25 +108,28 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b">
+              <inferno-snippet-content id="24233654-ea0d-49d8-ac88-35340d80a4f7">
 
+                <!-- Public Page -->
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
-                    const font = new FontFace(name, `url(${url})`);
-                    font.load().then(function (loadedFont) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
                       document.fonts.add(loadedFont);
-                      console.log(`Loaded custom font ${name}`);
+                      console.log('Loaded custom font ', name);
                     }).catch(function (error) {
                       // error occurred
-                      console.log(`Error loading ${name}`);
+                      console.log('Error loading ', name);
                     });
+
                   }
 
-                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
-                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
-                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
-                  loadFont('icomoon', 'https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff');
+                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
 
                 </script>
 
@@ -138,32 +141,162 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
-                    background-attachment: fixed;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/bkg1.jpg');
+                    /*background-attachment: fixed;*/
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
+                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: "CustomFont1", sans-serif !important;
+                  }
+                </style>
+
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
                   }
 
-                  iframe {
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                    .stage-grid, .leftCol, .rightCol {
                     display: block;
-                    border: none;
-                    height: calc(100vh - 114px);
+                    }
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  videos-detail {
+                    background-color: black!important;
+                    padding: 28%;
+                  }
+
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                     width: 100%;
-                    overflow-y: hidden;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0 ;
+                  }
+                </style>
+
+                <!-- group chat -->
+                <style>
+                  .group_chat {
+                    position: relative;
+                    width: 100%;
+                    height: 122%;
+                    top: -8px;
+                  }
+
+                  .group_chat iframe {
+                    position: absolute;
+                    border: none;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+
+                    .group_chat {
+                      position: relative;
+                      margin-top: 40px;
+                      width: 100%;
+                      height: 400px;
+                    }
+
+                    .group_chat iframe {
+                      position: relative;
+                      width: 100%;
+                      height: 100%;
+                    }
+                  }
+                </style>
+
+                <!-- QA Question Box -->
+                <style>
+
+                  .inferno-input-group {
+                    border-radius: 0 0 .5em .5em;
+                    padding: 1em;
+                    background-color: var(--branding-primary);
+                  }
+
+
+                  .inferno-input-group input {
+                    width: 60%;
+                  }
+
+                  .inferno-input-group span {
+                    width: 20%;
+                    color: white;
+                  }
+
+                  .inferno-input-group button {
+                    width: 15%;
+                    background-color: white;
+                    color: var(--branding-primary);
+                    border: solid 1px white;
+                    float: right;
+                  }
+
+                  .inferno-input-group button:hover {
+                    filter: brightness(70%);
+                    transform: scale(1.1);
                   }
                 </style>
 
                 <div class="content">
+                  <div class="stage-grid">
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
+                      <div class="ntar-qna-container">
+                        <div id="inferno-questions-basic"></div>
+                      </div>
+                    </div>
+                    <div class="rightCol">
+                      <div class="group_chat">
+                        <iframe
+                            src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=florida-enterprise-main-stage"
+                            class="ntar-chat-iframe"
+                        ></iframe>
+                      </div>
+                    </div>
 
-                  <iframe scrolling="no" class="3d"
-                          src="https://cdn.instavr.co/html/G83td5Eg9E9jEfgPQyi8_app.html?bust=zdu4azg0mw9"></iframe>
-
+                  </div>
                 </div>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
