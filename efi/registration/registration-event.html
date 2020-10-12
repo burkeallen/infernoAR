@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,7 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="b12282ae-fd24-4657-bd9d-20a35f1b7a74">
+              <inferno-snippet-content id="07c5480e-fd65-4eb1-9406-dbec5112019e">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -128,14 +128,10 @@
 
                   }
 
-                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
-                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
-                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
-                  loadFont('icomoon', 'https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff');
+                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
 
                 </script>
 
-                <!-- main page styles-->
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -143,10 +139,13 @@
                     content: none;
                   }
 
+                  h1, h2, h3, h4, h5 {
+                    font-family: "CustomFont1", sans-serif !important;
+                  }
+
                   .content {
-                    background-image: none;
-                    background-color: var(--sidebar-bg-color);
-                    /*background-attachment: fixed;*/
+                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
+                    background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
@@ -154,270 +153,17 @@
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: 'gothamMed', sans-serif;
-                  }
-
-                  .content img {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
-
-                <!-- hotspots-->
-                <style>
-                  .hotspot {
-                    position: absolute;
-                    z-index: 99;
-                    cursor: pointer;
-                  }
-
-                  .welcome-speech {
-                    left: 11.5%;
-                    top: 14.5%;
-                    width: 13%;
-                    height: 36%;
-                    clip-path: polygon(5% 2%, 90% 16%, 89% 98%, 2% 94%);
-                  }
-
-                  .how-to-navigate {
-                    left: 76.75%;
-                    top: 14%;
-                    width: 12%;
-                    height: 20.5%;
-                    clip-path: polygon(1% 30%, 98% 2%, 100% 82%, 1% 100%);
-                  }
-
-                  .agenda {
-                    left: 77%;
-                    top: 31.5%;
-                    width: 13%;
-                    height: 19%;
-                    clip-path: polygon(0 21%, 91% 3%, 93% 90%, 0% 100%);
-                  }
-
-                  .woseley {
-                    left: 9%;
-                    top: 50.5%;
-                    width: 15.5%;
-                    height: 7.5%;
-                    transform: rotate(3deg);
-                  }
-
-                  .main-stage {
-                    left: 25.5%;
-                    top: 51.5%;
-                    width: 15%;
-                    height: 7%;
-                  }
-
-                  .threedee-home {
-                    left: 42.5%;
-                    top: 51.5%;
-                    width: 15%;
-                    height: 7%;
-                  }
-
-                  .library {
-                    left: 59.5%;
-                    top: 51.5%;
-                    width: 15.5%;
-                    height: 7%;
-                  }
-
-                  .hvp {
-                    left: 76%;
-                    top: 50.5%;
-                    width: 15%;
-                    height: 8%;
-                    transform: rotate(-3deg);
-                  }
-
-                  .info-desk {
-                    left: 7%;
-                    top: 65%;
-                    width: 23%;
-                    height: 24%;
-                  }
-                </style>
-
-                <!-- modal pop-up -->
-                <style>
-                  .modal-window {
-                    position: absolute;
-                    background-color: rgba(0, 0, 0, 0.9);
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    z-index: 999;
-                    opacity: 0;
-                    pointer-events: none;
-                    -webkit-transition: all 0.7s;
-                    -moz-transition: all 0.7s;
-                    transition: all 0.7s;
-                    display: none;
-                  }
-
-                  .modal-window.open {
-                    opacity: 1;
-                    pointer-events: auto;
-                    display: inline-block;
-                    z-index: 99;
-                  }
-
-                  .modal-window > div {
-                    position: relative;
-                    min-width: 400px;
-                    width: 80%;
-                    margin: 2% auto 15% auto;
-                    padding: 2rem;
-                    background: var(--sidebar-highlight-bg-color);
-                    border-radius: .5em;
-                    color: #444;
-                  }
-
-                  .modal-window header {
-                    font-weight: bold;
-                  }
-
-                  .modal-close {
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    color: #fff;
-                    font-size: 80%;
-                    width: 70px;
-                    text-align: center;
-                    text-decoration: none;
-                  }
-
-                  .modal-close:hover {
-                    filter: brightness(130%);
-                    text-decoration: none;
-                    color: #fff;
-                  }
-
-                  .modal-window h1 {
-                    font-size: 150%;
-                    margin: 0 0 15px;
-                  }
-
-                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
-                  .videoWrapper {
-                    position: relative;
-                    padding-bottom: 56.5%; /* 16:9 */
-                    height: 0;
-                  }
-
-                  .videoWrapper iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
+                    font-family: "CustomFont1", sans-serif !important;
                   }
                 </style>
 
                 <div class="content">
-                  <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/bkg-lobby.png">
 
-                  <div class="top-row">
-                    <div title="Welcome Speech Video" class="hotspot welcome-speech" id="cef7417c-6738-47a3-9dfc-e54d89a0f18d" onclick="toggleModal(this)"></div>
-                    <a title="Agenda" class="hotspot agenda"
-                       href="/videos/f87a4ff4-b162-4a51-b0fc-08d85e1ba99d/landing/29e9cc43-55f8-4019-9fce-fbf2eb1504b3"
-                       onclick="toggleNoise('pause')"> </a>
-                    <div title="How to Navigate Video" class="hotspot how-to-navigate" id="2d568dc9-ca1d-4c5f-b119-1a9a160bb453" onclick="toggleModal(this)"></div>
-                  </div>
-
-                  <div class="bottom-row">
-                    <a title="Library" class="hotspot library"
-                       href="/videos/f22e0c0a-76fe-467d-4de2-08d85e3841de/landing/db3fa242-9a68-44f6-9eb3-7b1419258f0c"
-                       onclick="toggleNoise('pause')"> </a>
-                    <a title="3D Home Experience" class="hotspot threedee-home"
-                       href="/videos/e5c69e0c-2b22-412e-2ee8-08d85e382ebe/landing/8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b"
-                       onclick="toggleNoise('pause')"> </a>
-                    <a title="Main Stage" class="hotspot main-stage"
-                       href="/videos/7cce824e-97df-41e1-b0fd-08d85e1ba99d/landing/6269e98a-aa97-48b4-82a7-4004f9f1420d"
-                       onclick="toggleNoise('pause')"> </a>
-                    <a title="Woseley Room" class="hotspot woseley"
-                       href="/videos/72ede826-7393-4e68-4de0-08d85e3841de/landing/d8e9e967-2538-4105-bd26-ce8bbf2de070"
-                       onclick="toggleNoise('pause')"> </a>
-                    <a title="HVP Room" class="hotspot hvp"
-                       href="/videos/3b46fa6b-9fe1-4afa-4de1-08d85e3841de/landing/df046e47-1c67-40c9-b48d-a321fbc8f8f6"
-                       onclick="toggleNoise('pause')"> </a>
-                  </div>
-
-                  <a title="Information Desk" class="hotspot info-desk"
-                     href="/videos/0f10ef5c-c8a1-4d68-f5f3-08d8671ed8d8/landing/350c298e-ed5d-4489-88c4-1b5ed132ba23"> </a>
-
-                  <!--  Background Noise do not display-->
-                  <audio autoplay loop>
-                    <source
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/low-noise.mp3"
-                        type="audio/mpeg">
-                  </audio>
-
-                  <div id="open-modal" class="modal-window">
-                    <div>
-                      <div title="Close" class="modal-close">CLOSE X</div>
-                      <div class="videoWrapper"></div>
-                    </div>
-                  </div>
+                  <h2>Liquid Parsing Template</h2>
+                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
+                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
 
                 </div>
-
-                <script>
-                  function toggleNoise(action) {
-                    const noise = landingPageEl.querySelector('audio');
-                    if (action === 'play') {
-                      noise.play();
-                    } else {
-                      noise.pause();
-                    }
-
-                  }
-                </script>
-
-                <!-- Toggle Modal on and off -->
-                <template>
-                  <iframe src="/embed/"
-                          frameborder="0"
-                          allowfullscreen="true"
-                          webkitallowfullscreen="true"
-                          mozallowfullscreen="true">
-                  </iframe>
-                </template>
-                <script>
-                  function toggleModal(vidElement) {
-                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
-                    let video = videoWrapper.querySelector('#video-frame');
-                    const modalClose = landingPageEl.querySelector('.modal-close');
-
-                    modalClose.addEventListener('click', function () {
-                      toggleModal(vidElement);
-                    });
-
-                    if (video) {
-                      video.remove();
-                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
-                      toggleNoise('play');
-                      return;
-                    }
-
-                    const temp = landingPageEl.querySelector('template');
-                    const clone = temp.content.cloneNode(true);
-                    video = clone.querySelector('iframe');
-                    video.id = 'video-frame';
-                    video.src = '/embed/' + vidElement.id;
-                    videoWrapper.appendChild(clone);
-                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
-                    toggleNoise('pause')
-                  }
-                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
