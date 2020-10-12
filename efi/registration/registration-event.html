@@ -58,40 +58,10 @@
 
 <app-root class='layout-fixed has-menu'>
   <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close="">
-            <ul class="nav">
-              <li><a href="../">Menu</a></li>
-            </ul>
-          </nav>
-          </nav>
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
+    <div>
       <!-- LANDING -->
       <section class="IE-FlexAuto" flex="">
-        <div class="content-wrapper">
+        <div>
           <landing-page class="ng-star-inserted">
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
@@ -144,25 +114,193 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/bkg1.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
+                    min-height: 100vh;
+                    padding: 20px;
                     z-index: 1;
                     font-family: "CustomFont1", sans-serif !important;
                   }
                 </style>
 
+                <!-- form -->
+                <style>
+                  .form-grid {
+                    display: grid;
+                    grid-template-columns: auto;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    justify-content: center;
+                    margin-top: 40px;
+                  }
+
+                  .form-card {
+                    background-color: white;
+                    border-radius: .5em;
+                    max-width: 600px;
+                    padding: 1em;
+                  }
+
+                  .form-card .logo {
+                    width: 100%;
+                    margin-bottom: 1em;
+                  }
+
+                  form input, form select, form button, form textarea {
+                    width: 100%;
+                    margin-bottom: .5em;
+                  }
+
+                  form button {
+                    background-color: var(--branding-primary);
+                    border: solid 1px var(--branding-primary);
+                    font-size: 1.25em;
+                    color: white;
+                  }
+
+                  form button:hover {
+                    filter: brightness(110%);
+                  }
+
+                  .field-grid {
+                    display: grid;
+                    grid-template-columns: repeat(2, auto);
+                    grid-template-rows: repeat(auto-fill, auto);
+                    gap: 0px 12px;
+                  }
+
+                  .field-label {
+                    color: var(--branding-primary);
+                    font-family: sans-serif;
+                  }
+                </style>
                 <div class="content">
+                  <!-- public URL for Registration Page -->
+                  <!-- https://enterpriseflorida.infernoar.com/register/attendees/f70e4d78-0b8d-496f-7d3f-08d86c589370/f70e4d78-0b8d-496f-7d3f-08d86c589370 -->
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
 
+                  <div class="form-grid">
+                    <div class="form-card">
+                      <img class="logo"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/logo-bw.jpg"
+                           alt="Enterprise Florida">
+                      <form>
+
+                        <div class="field-grid">
+                          <!-- required fields -->
+
+                          <div class="field" id="field-firstname">
+                            <div class="field-label">First Name: <span class="field-warning"></span></div>
+                            <input type="text" class="field-input" name="firstName"/>
+                          </div>
+
+                          <div class="field" id="field-lastname">
+                            <div class="field-label">Last Name: <span class="field-warning"></span></div>
+                            <input type="text" class="field-input" name="lastName"/>
+                          </div>
+
+                          <div class="field" id="field-email">
+                            <div class="field-label">Email: <span class="field-warning"></span></div>
+                            <input type="text" class="field-input" name="email"/>
+                          </div>
+                          <div class="field" id="field-password">
+                            <div class="field-label">Password: <span class="field-warning"></span></div>
+                            <input type="password" class="field-input" name="password"/>
+                          </div>
+
+                          <!-- optional fields -->
+                          <div class="field" id="field-country">
+                            <div class="field-label">Country: <span class="field-warning"></span></div>
+                            <input type="text" class="field-input" name="userCountry"/>
+                          </div>
+
+                          <div class="field" id="field-job-title">
+                            <div class="field-label">Job Title: <span class="field-warning"></span></div>
+                            <input type="text" class="field-input" name="userDataJobtitle"/>
+                          </div>
+
+                          <div class="field" id="field-company">
+                            <div class="field-label">Company: <span class="field-warning"></span></div>
+                            <input type="text" class="field-input" name="userDataCompany"/>
+                          </div>
+
+                          <div class="field" id="field-company-type">
+                            <div class="field-label">Company Type: <span class="field-warning"></span></div>
+                            <div class="select-field">
+                              <select type="text" class="field-input" name="userDataCompanyType">
+                                <option selected="selected"></option>
+                                <option value="Member">Company Type 1</option>
+                                <option value="Member">Company Type 2</option>
+                                <option value="Member">Company Type 3</option>
+                                <option value="Member">Company Type 4</option>
+                                <option value="Member">Company Type 5</option>
+                                <option value="Member">Company Type 6</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="field" id="field-industry">
+                            <div class="field-label">Industry: <span class="field-warning"></span></div>
+                            <div class="select-field">
+                              <select type="text" class="field-input" name="userDataIndustry">
+                                <option selected="selected"></option>
+                                <option value="Member">Industry 1</option>
+                                <option value="Member">Industry 2</option>
+                                <option value="Member">Industry 3</option>
+                                <option value="Member">Industry 4</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="field" id="field-industry-subsector">
+                            <div class="field-label">Industry Subsector: <span class="field-warning"></span></div>
+                            <div class="select-field">
+                              <select type="text" class="field-input" name="userDataIndustrySubsector">
+                                <option selected="selected"></option>
+                                <option value="Member">Industry Sub A</option>
+                                <option value="Member">Industry Sub B</option>
+                                <option value="Member">Industry Sub C</option>
+                                <option value="Member">Industry Sub D</option>
+                              </select>
+                            </div>
+                          </div>
+
+
+                          <div class="field" id="field-product-description">
+                            <div class="field-label">Product Description: <span class="field-warning"></span></div>
+                            <textarea rows="4" class="field" id="userDataProductDescription"></textarea>
+                          </div>
+                          <!--
+                          Industries of Interest   (text field)
+                          How did you here about us?  (text field)
+                          Country   (text field)
+                          -->
+
+                          <div>
+                            <div class="field" id="field-industry-interest">
+                              <div class="field-label">Industries of Interest: <span class="field-warning"></span></div>
+                              <input type="text" class="field-input" name="userDataIndustryInterest"/>
+                            </div>
+
+                            <div class="field" id="field-hear-about-us">
+                              <div class="field-label">How did you here about us?: <span class="field-warning"></span>
+                              </div>
+                              <input type="text" class="field-input" name="userDataHearAboutUs"/>
+                            </div>
+
+                          </div>
+                        </div>
+
+                        <!-- Submit Buttons -->
+                        <button type="button" id="validate-btn">Submit</button>
+                        <button type="button" class="hidden" id="submit-btn"></button>
+                      </form>
+                    </div>
+
+                  </div>
                 </div>
 
               </inferno-snippet-content>
@@ -175,11 +313,6 @@
         </div>
       </section>
       <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer="" layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
     </div>
   </videos-layout>
 </app-root>
