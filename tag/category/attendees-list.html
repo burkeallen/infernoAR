@@ -127,15 +127,58 @@
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
+                    color: #fff;
+                    background-color: #d6d6d6;
                     font-family: Verdana, sans-serif !important;
                   }
+
+                  #card-container {
+                    display: grid;
+                    padding: 5%;
+                    align-content: center;
+                    grid-gap: 20px 10px;
+                    grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
+                  }
+
+                  .card {
+                    color: #000;
+                    height: 180px;
+                    border-radius: 8px;
+                    background-color: #fff;
+                    border: 1px solid #c3c3c3;
+                    font-size: 12px;
+                    box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
+                  }
+
+                  .card img {
+                    max-width: 140px;
+                    border-radius: 50%;
+                    border: solid 1px #999999;
+                  }
+
+                  .profileImage {
+                    padding-left: 40px;
+                    height: 180px;
+                    line-height: 180px;
+                  }
+
                 </style>
 
                 <div class="content">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  <div id="card-container">
+                  {% for user in data.UserProfiles %}
+                    <div class="card">
+                      <div class="profileImage">
+                        <img class="img-circular" src="https://ingress.infernocore.jolokia.com/api/ProfileImage/{{user.UserId}}/140/140"
+                        onerror="this.src='https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg'">
+                      </div>
+                    </div>
+                    {% endfor %}
+
+                  <!-- <h2>Liquid Parsing Template</h2>-->
+                  <!-- <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>-->
+                  <!-- <p><strong>This is the data object:</strong> {{ data.UserProfiles.UserGroups | json }} </p> -->
 
                 </div>
 
