@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,8 +108,9 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
+              <inferno-snippet-content id="24233654-ea0d-49d8-ac88-35340d80a4f7">
 
+                <!-- Public Page -->
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
@@ -128,7 +129,7 @@
 
                   }
 
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2');
+                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
 
                 </script>
 
@@ -140,8 +141,8 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                    background-attachment: fixed;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/bkg1.jpg');
+                    /*background-attachment: fixed;*/
                     background-repeat: no-repeat;
                     background-size: cover;
                     background-position: center;
@@ -153,13 +154,127 @@
                   }
                 </style>
 
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
+                  }
+
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  videos-detail {
+                    background-color: black!important;
+                    padding: 28%;
+                  }
+
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0 ;
+                  }
+                </style>
+
+                <!-- group chat -->
+                <style>
+                  .group_chat {
+                    position: relative;
+                    width: 100%;
+                    height: 122%;
+                    top: -8px;
+                  }
+
+                  .group_chat iframe {
+                    position: absolute;
+                    border: none;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+
+                <!-- QA Question Box -->
+                <style>
+
+                  .inferno-input-group {
+                    border-radius: 0 0 .5em .5em;
+                    padding: 1em;
+                    background-color: var(--branding-primary);
+                  }
+
+
+                  .inferno-input-group input {
+                    width: 60%;
+                  }
+
+                  .inferno-input-group span {
+                    width: 20%;
+                    color: white;
+                  }
+
+                  .inferno-input-group button {
+                    width: 15%;
+                    background-color: white;
+                    color: var(--branding-primary);
+                    border: solid 1px white;
+                    float: right;
+                  }
+
+                  .inferno-input-group button:hover {
+                    filter: brightness(70%);
+                    transform: scale(1.1);
+                  }
+                </style>
+
                 <div class="content">
+                  <div class="stage-grid">
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
+                      <div class="ntar-qna-container">
+                        <div id="inferno-questions-basic"></div>
+                      </div>
+                    </div>
+                    <div class="rightCol">
+                      <div class="group_chat">
+                        <iframe
+                            src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=florida-enterprise-main-stage"
+                            class="ntar-chat-iframe"
+                        ></iframe>
+                      </div>
+                    </div>
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
-
+                  </div>
                 </div>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
