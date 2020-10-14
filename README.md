@@ -182,5 +182,45 @@ not conducive to how it is being used at the moment.
 }
 ````
  
+ #Local Templates
+ use inferno generate {project} {new file path}  to create a new tempalte file
+ 
+ - templates support "most of the liquid JS capability with some caveates"
+   - filters - only seem to work when displaying output or in varaible assignment
+        - ```{{ "ABC" | downcase }}``` - woks and results in "abc"
+        - ```{% assign myVar = "ABC" | downcase %}``` - works and results in myVar = "abc"
+        - ```{% if  myVar = "ABC" | downcase = "abc" %}``` does not work
+       
+write the code like below to make it compatible both locally and one server
+````
+  {% assign myVar = "ABC" | downcase %}
+  {% if  myVar = "abc" %}
+     <p>true</p>
+  {% endif %} 
+           
+````
 
+do not use standard local template for the following Email Snippets as they do not use Shadow Dom, Liquid,  
+  and be sure to include full <html><body></body></html> tags inside the code snippet area for 
+  email templates when pushing up the code snippet via the inferno CLI   
+  
+- Registration snippets
+    - do not use Shadow Dom
+    - include this script before any other script that is referencing elements
+
+```
+  <script type="text/javascript">
+      var landingElement ?? landingPageEl : document
+  </script>
+```
+
+then reference **landingElement** instead of **landingPageEl** when querying for elements on the page
+
+this will allow the code to work in existing local tempaltes and on the platform as well
+
+
+
+    
+      
+  
 
