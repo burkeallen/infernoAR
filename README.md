@@ -156,11 +156,31 @@ not conducive to how it is being used at the moment.
         - last name
         - password
         - email
-        
-        
-- Chat
-- QA - a simple input box that can be made available on a player page
+        - then up to 9 custom fields named "userData1Name ... userData9Name"
+- Chat 
+    - there is a "built in" chat feature, though requires custom code to activate
+    - also use pigeonhole 3rd party
+    - also use WeChat 3rd party app
+    - could use any other 3rd party app  
+- QA - a simple input box that can be made available on a player page, "customer admins" can view the input from within the platform
+     - requires checking the QA box on the "event" object and then including some custom code on the Player Page Code Snippet
+- Client Profile - used to set branding colors, logo, enable public registration link or not   
+ 
+- Access User Profile Image
+  - https://ingress.infernocore.jolokia.com/api/ProfileImage/{{user.UserId}}/250/250
+  - where user.UserId is retrieved from Liquid JSON object data.UserProfiles or data.CurrentViewingUser.Id
+  - where 250/250  is the image size you want returned in pixels width/height
    
+- Basic Liquid JSON Data Object
+````
+{
+	"CurrentViewingUser": {},
+	"CurrentlyViewedCategory": {},
+	"Events": [],
+	"Categories": [],
+	"UserProfiles": []
+}
+````
  
 
 
