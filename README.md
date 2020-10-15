@@ -12,7 +12,8 @@ tool that lets you
 #Resources
 - user editor 
   - https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/usereditor/index.html
-  - this combined with bulk user import in the platform removes the need for the google sheet script we wer using to 
+  - this combined with bulk user import in the platform removes the need for the google sheet script we wer using to
+  - public url - https://studio304nextechar.freetls.fastly.net/infernoAR/ 
 import users and manage their profile data via the inferno APIs
 - Static Asset Server (FTP) 
   - ec2-18-219-156-215.us-east-2.compute.amazonaws.com

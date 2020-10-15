@@ -27,7 +27,7 @@
 <!-- ********************* -->
 <!-- ********************* -->
 <!-- SNIPPET CONTENT START -->
-<inferno-snippet-content id="eddfd2c3-0fa0-4ef2-8966-f7f2594bad3d">
+<inferno-snippet-content id="07c5480e-fd65-4eb1-9406-dbec5112019e">
 
   <!--  Load custom fonts -->
   <script type="text/javascript">
@@ -59,17 +59,19 @@
     }
 
     h1, h2, h3, h4, h5 {
-      /*font-family: "CustomFont1", sans-serif !important;*/
+      font-family: "CustomFont1", sans-serif !important;
     }
 
     .content {
-      background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/bkg-registration.png');
+      background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/bkg1.jpg');
       background-attachment: fixed;
       background-repeat: no-repeat;
       background-size: cover;
       background-position: center;
       min-height: 100vh;
+      padding: 20px;
       z-index: 1;
+      font-family: "CustomFont1", sans-serif !important;
     }
   </style>
 
@@ -106,17 +108,27 @@
 
     .form-card {
       background-color: rgba(0, 0, 0, .5);
-      height: calc(100vh + 40px);
+      height: 100%;
       padding: 60px 40px;
       text-align: center;
       color: white;
     }
 
-    form input, form select, form button {
+    .form-card h1 {
+      margin: 0;
+    }
+
+    .form-card button {
+      margin-top: 2em;
+    }
+
+    form input, form button {
       width: 80%;
       font-size: 1.2em;
       line-height: 2em;
       color: black;
+      border: none;
+      padding: 4px;
     }
 
     input::placeholder {
@@ -140,77 +152,99 @@
     }
   </style>
 
+  <!--  Select Box Style-->
   <style>
-    .info {
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -ms-appearance: none;
+      appearance: none;
+      outline: 0;
+      box-shadow: none;
+      border: 0 !important;
+      background: white;
+      background-image: none;
+      font-size: 1.2em;
+      line-height: 2em;
+    }
+
+    /* Remove IE arrow */
+    select::-ms-expand {
+      display: none;
+    }
+
+    /* Custom Select */
+    .select-field {
+      position: relative;
+      display: flex;
       width: 80%;
-      text-align: center;
-      margin: 20px 40px;
+      height: 3em;
+      line-height: 3;
+      background: #2c3e50;
+      overflow: hidden;
+      border-radius: .25em;
+      margin-left: 10% !important;
     }
 
-    .event-logo {
-      width: 60%;
-      margin: 7% auto 5% auto;
-      background-color: rgba(255, 255, 255, .7);
-      padding: 40px;
-      text-align: center;
+    select {
+      flex: 1;
+      padding: 0 .5em;
+      color: #696969;
+      cursor: pointer;
     }
 
-    .event-logo div {
+    /* Arrow */
+    .select-field::after {
+      content: '\25BC';
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0 1em;
+      background: var(--branding-primary);
+      cursor: pointer;
+      pointer-events: none;
+      -webkit-transition: .25s all ease;
+      -o-transition: .25s all ease;
+      transition: .25s all ease;
+    }
+
+    /* Transition */
+    .select-field:hover::after {
+      color: #f39c12;
+    }
+  </style>
+
+  <!--  info card style -->
+  <style>
+    .info-card {
+      display: grid;
+      justify-content: center;
+      align-content: center;
+      color: white;
+    }
+
+    .info-card img {
+      width: 50%;
+      margin: 20px auto;
+      filter: brightness(80%);
+    }
+
+    .info-text {
+      background-color: rgba(0, 0, 0, .5);
+      padding: 20px;
+      width: 50%;
+      margin: 0 auto;
       font-size: 1.2em;
     }
-    .event-logo img {
-      width: 80%;
+
+    .info-text a {
+      color: white;
+      text-decoration: underline;
     }
 
-    .sponsor-container {
-      width: 90%;
-      margin: 0 auto;
-      background-color: rgba(255, 255, 255, .3);
-      padding: 1px 20px 20px 20px;
+    .info-text a:hover {
+      color: white;
     }
-
-    .sponsor-container h2 {
-      margin: 10px;
-    }
-
-    .sponsor-list {
-      display: flex;
-      flex: 1;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .sponsor {
-      display: flex;
-      align-items: center;
-      width: 200px;
-      height: 100px;
-      background-color: white;
-      margin: 8px;
-      padding: 8px;
-    }
-
-    .sponsor img {
-      align-self: center;
-    }
-
-    .sponsor:hover {
-      filter: brightness(80%);
-      transform: scale(1.1);
-    }
-
-    .sponsor a {
-      text-decoration: none;
-    }
-
-    .sponsor a:hover {
-      text-decoration: none;
-    }
-
-    .sponsor img {
-      width: 100%;
-    }
-
 
   </style>
 
@@ -287,17 +321,40 @@
     }
   </style>
 
+  <style>
+    @media only screen and (max-width: 986px) {
+      .form-grid {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .info-card img, .info-text {
+        width: 100%;
+      }
+
+      .info-card {
+        order: 1;
+        margin-bottom: 40px;
+      }
+
+      .form-card {
+        order: 2
+      }
+
+    }
+  </style>
+
   <div class="content">
     <!-- public URL for Registration Page -->
     <!-- https://enterpriseflorida.infernoar.com/register/attendees/f70e4d78-0b8d-496f-7d3f-08d86c589370/f70e4d78-0b8d-496f-7d3f-08d86c589370 -->
 
-
     <div class="form-grid">
       <div class="form-card">
-        <h1>Create A Summit Event Account</h1>
-        <form>
 
+        <h1>Create a Virtual Event Account</h1>
+        <form>
           <!-- required fields -->
+
           <div class="field" id="field-email">
             <div><span class="field-warning"></span></div>
             <input type="text" class="field-input" placeholder="Email Address" name="email"/>
@@ -305,7 +362,7 @@
 
           <div class="field" id="field-password">
             <div><span class="field-warning"></span></div>
-            <input type="password" class="field-input" placeholder="New Password" name="password"/>
+            <input type="password" class="field-input" placeholder="Password" name="password"/>
           </div>
 
           <div class="field" id="field-firstname">
@@ -320,104 +377,144 @@
 
           <div class="field" id="field-company">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Company" name="userData1Name"/>
+            <input type="text" class="field-input" placeholder="Company Name" name="userData3Name"/>
           </div>
 
-          <div class="field" id="field-industry">
+          <!-- optional fields -->
+          <div class="field" id="field-country">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Industry" name="userData2Name"/>
+            <input type="text" class="field-input" placeholder="Country" name="userData1Name"/>
           </div>
 
           <div class="field" id="field-job-title">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Job Title" name="userData3Name"/>
+            <input type="text" class="field-input" placeholder="Job Title" name="userData2Name"/>
+          </div>
+
+          <div class="field" id="field-company-type">
+            <div><span class="field-warning"></span></div>
+            <div class="select-field">
+              <select class="field-input" name="userData4Name">
+                <option selected="selected" value="">Company Type</option>
+                <option value="Company Type 1">Company Type 1</option>
+                <option value="Company Type 2">Company Type 2</option>
+                <option value="Company Type 3">Company Type 3</option>
+                <option value="Company Type 4">Company Type 4</option>
+                <option value="Company Type 5">Company Type 5</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" id="field-industry">
+            <div><span class="field-warning"></span></div>
+            <div class="select-field">
+              <select class="field-input" name="userData5Name">
+                <option selected="selected" value="">Industry</option>
+                <option value="Industry 1">Industry 1</option>
+                <option value="Industry 2">Industry 2</option>
+                <option value="Industry 3">Industry 3</option>
+                <option value="Industry 4">Industry 4</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" id="field-industry-subsector">
+            <div><span class="field-warning"></span></div>
+            <div class="select-field">
+              <select class="field-input" name="userData6Name">
+                <option selected="selected" value="">Industry Subsector</option>
+                <option value="Industry Sub A">Industry Sub A</option>
+                <option value="Industry Sub B">Industry Sub B</option>
+                <option value="Industry Sub C">Industry Sub C</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field" id="field-product-description">
+            <div><span class="field-warning"></span></div>
+            <input rows="4" class="field" placeholder="Product Description" id="userData7Name"/>
           </div>
 
 
-          <div class="info">
-            Creating an account means you’ve read and accepted our
-            <a target="_blank" href="https://www.nextechar.com/nextech-ar-solutions-terms-and-conditions">
-              Terms of Use
-            </a>
-            and
-            <a target="_blank" href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy">Privacy Policy</a>
+          <div class="field" id="field-industry-interest">
+            <div><span class="field-warning"></span></div>
+            <input type="text" class="field-input" placeholder="Industries of Interest" name="userData8Name"/>
           </div>
+
+          <div class="field" id="field-hear-about-us">
+            <div><span class="field-warning"></span>
+            </div>
+            <input type="text" class="field-input" placeholder="How did you here about us?" name="userData9Name"/>
+          </div>
+
           <!-- Submit Buttons -->
-          <button type="button" id="validate-btn">Create Account</button>
+          <button type="button" id="validate-btn">Submit</button>
           <button type="button" class="hidden" id="submit-btn"></button>
 
-          <div class="info">
-            Have an account? <a href="/login">Sign in</a>
-          </div>
+
         </form>
 
       </div>
 
-      <div class="sponsor-card">
-        <div class="event-logo">
-          <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/logo/logo-vertical-transparent.png">
-          <div>Join us for our summit event</div>
+      <div class="info-card">
+        <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/reg-header.png">
+
+        <div class="info-text">
+          <p><a href="https://www.enterpriseflorida.com/">Enterprise Florida, Inc.</a>
+            (EFI), the official economic and trade development agency for the
+            State of Florida, is pleased to present the first-ever Florida International Trade
+                                                                               Expo, a virtual showcase
+            and matchmaker
+            of 150 of the state’s leading products and services providers.
+          </p>
+
+          <p>WHO SHOULD ATTEND?</p>
+
+          <p>Agents, distributors, representatives, and wholesalers seeking high-quality products for distribution and
+             sale in Europe, Latin America and the Caribbean, Canada, Mexico, Africa and Asia. </p>
+
+          <p>BENEFITS OF PARTICIPATING</p>
+          <ul>
+            <li>Connect with 150 Florida exhibitors in a wide range of industries</li>
+            <li>Text and video chat directly with Florida company representatives</li>
+            <li>Arrange virtual B2B meetings on day three of the Expo</li>
+            <li>Join industry-specific networking lounges</li>
+            <li>View live webinars about the advantages of doing business with Florida
+                                               companies
+            </li>
+            <li>Engage with a network of Florida professionals who can help buyers and sellers
+                                                 connect
+            </li>
+            <li>No cost to participate</li>
+          </ul>
+
+          <p>INDUSTRY SECTORS</p>
+
+          <p>The Florida International Trade Expo will connect you with decision makers from a
+             wide variety of industries.</p>
+
+          <ul>
+            <li>Aviation/ Aerospace</li>
+            <li>Life Sciences</li>
+            <li>Information Technology</li>
+            <li>Marine</li>
+            <li>Clean Energy</li>
+            <li>Financial and Professional Services</li>
+            <li>Manufacturers such as Consumer Goods, Health and Beauty, Food Products, Industrial Equipment &amp;amp;
+                Supplies plus many more
+            </li>
+          </ul>
+
+          <p>FOR FURTHER INFORMATION</p>
+
+          <p>For further information about the Florida International Trade Expo, please email
+            <a target="_blank" href="mailto:floridaexpo@enterpriseflorida.com">floridaexpo@enterpriseflorida.com</a></p>
         </div>
 
-        <div class="sponsor-container">
-          <h2>Our Sponsors</h2>
-          <div class="sponsor-list">
-            <div class="sponsor">
-              <a target="_blank" href="https://www.toolbox9.com/">
-                <img alt="toolbox no. 9"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/toolbox-no-9.png">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://www.aprio.com/">
-                <img alt="Aprio"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/aprio.png">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://www.northside.com/">
-                <img alt="Northside Hospital"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/2018_Northside_Logo_Navy.png">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://www.grantthornton.com/">
-                <img alt="Grant Thorton"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Grant-Thornton.png">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://www.wipfli.com/">
-                <img alt="Wipfli"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Wipfli logo.jpg">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://coles.kennesaw.edu/mshmi//">
-                <img alt="KSU - Master of Science in Healthcare Management and Informatics"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/ksu_logo_black.png">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://www.mmmlaw.com/">
-                <img alt="Morris, Manning & Martin"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/MMM logo.jpg">
-              </a>
-            </div>
-            <div class="sponsor">
-              <a target="_blank" href="https://www.azaleahealth.com/">
-                <img alt="Azalea Health"
-                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Azalea Health Logo.png">
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
 
     </div>
-
   </div>
-
 
   <!-- Init LandingElement -->
   <script type="text/javascript">
@@ -505,20 +602,6 @@
       {
         fieldSelector: '#field-company input',
         warningTextSelector: '#field-company .field-warning',
-        warningClass: 'is-invalid',
-        required: true,
-        minimumCharacters: 3,
-      },
-      {
-        fieldSelector: '#field-industry input',
-        warningTextSelector: '#field-industry .field-warning',
-        warningClass: 'is-invalid',
-        required: true,
-        minimumCharacters: 3,
-      },
-      {
-        fieldSelector: '#field-job-title input',
-        warningTextSelector: '#field-job-title .field-warning',
         warningClass: 'is-invalid',
         required: true,
         minimumCharacters: 3,
