@@ -96,136 +96,1379 @@
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
               </style>
+
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="f32934c2-47c6-46f3-864c-c6b7420dc9e1">
 
+
+
+                <!-- https://studio304nextechar.freetls.fastly.net/infernoAR/gallery2/
+                left pane 280
+                top pane 55
+                main pane has 15-20 padding forced on it. -->
+
+
+                <!-- Import Fonts -->
+                <script type="text/javascript">
+                  // Load custom fonts
+
+                  // NOTE: Helvetica Neue Regular is actually the thinnest of the fonts
+                  // instead thin is used for "light" in the mockups, and light for "regular" in the mockups
+                  var hvFontThin = new FontFace(
+                    'Helvetica Neue',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueThin.woff)',
+                    {
+                      style: 'normal',
+                      weight: '300'
+                    }
+                  );
+                  hvFontThin
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Helvetica Neue thin: ', error);
+                    });
+
+                  var hvFontLight = new FontFace(
+                    'Helvetica Neue',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueLight.woff)',
+                    {
+                      style: 'normal',
+                      weight: 'normal'
+                    }
+                  );
+                  hvFontLight
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Helvetica Neue Light: ', error);
+                    });
+
+                  var hvFontMedium = new FontFace(
+                    'Helvetica Neue',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueMedium.woff)',
+                    {
+                      style: 'normal',
+                      weight: '500'
+                    }
+                  );
+                  hvFontMedium
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Helvetica Neue Medium: ', error);
+                    });
+
+                  var hvFontBold = new FontFace(
+                    'Helvetica Neue',
+                    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueBold.woff)',
+                    {
+                      style: 'normal',
+                      weight: 'bold'
+                    }
+                  );
+                  hvFontBold
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log('Error loading Helvetica Neue Bold: ', error);
+                    });
+                </script>
+                <!-- ./ Import Fonts -->
+
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
+                  .h1,
+                  .h2,
+                  .h3,
+                  .h4,
+                  .h5,
+                  .h6,
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5,
+                  h6 {
+                    font-family: 'Helvetica Neue', sans-serif;
                   }
 
-                  .content {
-                    background-size: cover;
-                    background-color: #c3c3c3;
-                    background-repeat: no-repeat;
-                    color: #fff;
-                    min-height: calc(100vh - 114px);
+                  #ntar-bg {
+                    font-family: 'Helvetica Neue', sans-serif;
+                    font-weight: normal;
+                    font-style: normal;
+                    position: absolute;
+                    width: 100%;
+                    height: calc(100vh - 56px);
                     margin: -20px;
-                    padding: 20px 24px;
-                    font-family: Verdana, sans-serif !important;
+                    background-repeat: no-repeat;
+                    background-position: top center;
+                    background-attachment: fixed;
+                    background-size: cover;
+                    background-color: #ccc;
+                    overflow-y: auto;
+                    scroll-behavior: smooth;
                   }
 
+                  .main {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                  }
 
-                  .top-banner {
+                  .banner-image {
                     min-height: 400px;
                     background-size: cover;
                     background-repeat: no-repeat;
-                    margin: -20px -24px;
-                    padding-left: 20px;
+                    padding-left: 40px;
                     background-blend-mode: multiply;
                     background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/attendees_header.jpg');
                   }
 
-                  .top-banner-text {
-                    max-width: 550px;
-                    min-height: 400px;
-                    padding-top: 150px;
+                  .banner-info {
+                    color: #fff;
+                    max-width: 90%;
+                    min-height: 20vw;
+                    padding-top: 120px;
                   }
 
-                  .top-text {
-                    font-size: 32px;
+                  .banner-text {
                     font-weight: bold;
+                    font-size: calc(100vw - 96vw);
                   }
 
-                  .top-subtext {
-                    font-size: 16px;
+                  .banner-sub-text {
+                    font-size: calc(100vw - 98vw);
                   }
 
-                  .card-container {
-                    display: grid;
-                    margin-top: 60px;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2.8rem 0;
+                  }
+
+                  .sponsors-section {
+                    padding: 4.4rem;
+                  }
+
+                  .sponsors-header {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
                     align-items: center;
-                    grid-gap: 20px;
-                    background-color: #c3c3c3;
-                    grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+                    flex-wrap: wrap;
                   }
 
-                  .card {
-                    color: #000;
-                    height: 130px;
-                    font-size: 12px;
-                    border-radius: 8px;
-                    background-color: #fff;
-                    border: 1px solid #c3c3c3;
-                    box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
+                  .sponsors-header h1 {
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                    color: #01245B;
+                    margin-right: 2rem;
                   }
 
-                  .profile-container {
-                    display: grid;
-                    padding-left: 10px;
-                    grid-template-columns: 120px 1fr 120px;
-                  }
-
-                  .profile-image {
+                  .sponsors-header a {
+                    color: white;
+                    border-radius: 5px;
+                    background-color: #0B2668;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                    text-decoration: none;
+                    padding: 1.2rem 0;
+                    width: 36.4rem;
                     text-align: center;
-                    line-height: 130px;
-                  }
-
-                  .profile-image img {
-                    height: 110px;
-                    border-radius: 50%;
-                    border: solid 1px #999999;
-                  }
-
-                  .profile-info {
-                    float: left;
-                    padding: 10px 2px;
-                    font-size: 12px;
-                  }
-
-                  .profile-name {
-                    font-size: 14px;
+                    font-size: 2rem;
                     font-weight: bold;
                   }
 
+                  .sponsors-list {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    margin: 2rem 0;
+                  }
 
+                  .sponsors-list img {
+                    width: 36.4rem;
+                    height: 8.6rem;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                    margin: 1rem 0;
+                  }
+
+                  footer {
+                    color: white;
+                    font-size: 1.6rem;
+                    background-color: #01193D;
+                    padding: 4rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                  }
+
+                  footer p {
+                    margin: 0;
+                  }
+
+                  footer a {
+                    margin: 0;
+                  }
+
+                  footer .info {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+
+                  }
+
+                  footer .info {
+                    font-weight: 500;
+                  }
+
+                  footer .info a {
+                    color: white;
+                    text-decoration: none;
+                  }
+
+                  footer .info p {
+                    font-size: 1.4rem;
+                    font-weight: 300;
+                  }
+
+                  .info-links {
+                    margin-bottom: 4rem;
+                  }
+
+                  .social-links-title {
+                    margin-bottom: 2rem;
+                  }
+
+                  .social-link {
+                    width: 4rem;
+                    height: 4rem;
+                    margin-right: 1rem;
+                  }
+
+
+                  .exhibitors-divider {
+                    background-color: rgba(255, 255, 255, 0.75);
+                    width: 100px;
+                    padding: 3.8rem;
+                    padding: 4.4rem;
+                  }
+
+                  .exhibitors-divider h1 {
+                    color: #3D3D3D;
+                    font-size: 4.6rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 5.3rem;
+                  }
+
+                  .search-exhibitors-divider {
+                    background-color: rgb(246, 246, 246, 0.79);
+                    width: 100%;
+                    padding: 3.8rem 0 1.8rem;
+                    display: flex;
+                    justify-content: center;
+                  }
+
+                  .filter-options {
+                    width: 100%;
+                    margin: 0 3.5rem;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                  }
+
+                  .filter-options button {
+                    height: 6rem;
+                    width: 9.8rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    padding: 1.3rem 1.6rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 2.5rem;
+                    text-align: center;
+                  }
+
+                  .filter-options button:focus {
+                    outline: none;
+                    border: 2px solid rgba(11, 38, 104, 0.6);
+                  }
+
+                  .search-wrapper {
+                    width: 31.5rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .search-wrapper input {
+                    padding: 1.4rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    width: 75%;
+                    border: none;
+                  }
+
+                  .search-wrapper input::placeholder {
+                    /* Chrome, Firefox, Opera, Safari 10.1+ */
+                    color: #3D3D3D;
+                    opacity: 1;
+                    /* Firefox */
+                  }
+
+                  .search-wrapper input:-ms-input-placeholder {
+                    /* Internet Explorer 10-11 */
+                    color: #3D3D3D;
+                  }
+
+                  .search-wrapper input::-ms-input-placeholder {
+                    /* Microsoft Edge */
+                    color: #3D3D3D;
+                  }
+
+                  .search-wrapper img {
+                    width: 2rem;
+                    margin: 1.25rem;
+                  }
+
+                  .search-wrapper input:focus {
+                    outline: none;
+                    border: none;
+                  }
+
+                  .select-wrapper {
+                    width: 26.6rem;
+                    margin: 0.9rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                  }
+
+                  .select-wrapper select {
+                    width: 96%;
+                    padding: 1.4rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                    background: url("https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png") no-repeat right #fff;
+                    background-size: 8%;
+                    border: none;
+                  }
+
+                  .select-wrapper select:focus {
+                    outline: none;
+                  }
+
+                  .select-wrapper img {
+                    width: 2rem;
+                    margin: 1rem;
+                  }
+
+                  /*.attendee-list {*/
+                  /*  padding: 5.8rem 0;*/
+                  /*}*/
+
+                  .attendee {
+                    margin: 1.4rem 4.4rem;
+                    padding: 2rem 2rem;
+                    border-radius: 9px;
+                    background-color: #FFFFFF;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+                  }
+
+                  .attendee .avatar {
+                    height: 15.2rem;
+                    width: 15.2rem;
+                    /* border: 2px solid #6D7278; */
+                    border-radius: 50%;
+                  }
+
+                  .attendee .details {
+                    margin: 0 2rem;
+                    flex-grow: 3;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                  }
+
+                  .attendee .details .a-row {
+                    display: flex;
+                    align-items: baseline;
+                  }
+
+                  .header h1 {
+                    font-size: 2.4rem;
+                    font-weight: bold;
+                    margin: 0;
+                  }
+
+                  .header h2 {
+                    color: #52b952;
+                    font-size: 1.8rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    margin: 0 1rem;
+                  }
+
+                  .attendee .details h4 {
+                    color: #313131;
+                    font-size: 1.8rem;
+                    font-weight: 500;
+                    letter-spacing: 0;
+                    line-height: 2.9rem;
+                    margin: 0;
+                  }
+
+                  .attendee .details a {
+                    color: #0B2668;
+                    font-size: 1.6rem;
+                    letter-spacing: 0;
+                    line-height: 2.6rem;
+                  }
+
+                  .attendee .details .header {
+                    margin: 1.5rem 0;
+                    display: flex;
+                    flex-wrap: wrap;
+                  }
+
+                  .attendee .details .a-footer {
+                    width: 100%;
+                    margin-top: 3rem;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                  }
+
+                  .attendee .details .a-footer img {
+                    height: 1.8rem;
+                    width: auto;
+                  }
+
+                  .contact {
+                    margin: 1rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .contact img {
+                    margin: 0 1rem;
+                  }
+
+                  .attendee .actions {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    margin: 1.5rem 0;
+                  }
+
+                  .attendee .actions button {
+                    width: 24.4rem;
+                    height: 4.5rem;
+                    border-radius: 5px;
+                    margin: 1rem;
+                    font-size: 18px;
+                    font-weight: bold;
+                    letter-spacing: 0.9px;
+                    line-height: 23px;
+                    text-align: center;
+                  }
+
+                  .attendee .actions button:hover {
+                    cursor: pointer;
+                    outline: none;
+                    border: 1px solid #0B2668;
+                  }
+
+                  .attendee .actions button:focus {
+                    outline: none;
+                    border: 1px solid #0B2668;
+                  }
+
+
+                  /*.send-message {*/
+                  /*  color: white;*/
+                  /*  background-color: #0B2668;*/
+                  /*  border: 1px solid #0B2668;*/
+                  /*}*/
+
+                  /*.request-meeting {*/
+                  /*  color: #0B2668;*/
+                  /*  background-color: white;*/
+                  /*  border: 1px solid #0B2668;*/
+                  /*}*/
+
+                  .modal {
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    z-index: 2;
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    display: none;
+                  }
+
+                  .message-box {
+                    z-index: 3;
+                    display: flex;
+                    flex-direction: column;
+                    width: 90%;
+                    background-color: #F8F8F8;
+                  }
+
+                  .mb-row {
+                    width: 100%;
+                    display: flex;
+                  }
+
+                  .mb-actions {
+                    display: flex;
+                    align-items: flex-start;
+                  }
+
+                  .mb-actions .close-modal {
+                    background: transparent;
+                    border: none;
+                    font-size: 2rem;
+                  }
+
+                  .mb-actions .close-modal:hover {
+                    cursor: pointer;
+                    font-weight: bold;
+                  }
+
+                  .mb-actions .close-modal:focus {
+                    outline: none;
+                    border: none;
+                  }
+
+                  .mb-row textarea {
+                    resize: none;
+                    font-family: sans-serif;
+                    font-size: 1.8rem;
+
+                    margin: 2rem 0;
+                    padding: 1rem;
+
+                    border: 1px solid #979797;
+                    border-radius: 12px;
+
+                    flex-grow: 1;
+                    min-height: 10rem;
+                  }
+
+                  .mb-footer {
+                    width: 100%;
+                    display: flex;
+                    justify-content: flex-end;
+                  }
+
+                  .final-send {
+                    width: 24.4rem;
+                    height: 4.5rem;
+                    border-radius: 5px;
+                    margin: 1rem;
+                    font-size: 18px;
+                    font-weight: bold;
+                    letter-spacing: 0.9px;
+                    line-height: 23px;
+                    text-align: center;
+                    color: white;
+                    background-color: #0B2668;
+                    border: 1px solid #0B2668;
+                    align-self: flex-end;
+                  }
+
+                  .final-send:hover {
+                    cursor: pointer;
+                  }
+
+                  .final-send:disabled {
+                    opacity: 0.5;
+                  }
+
+                  .mc-row {
+                    display: flex;
+                    width: 100%;
+                  }
+
+                  .mc-row h1 {
+                    text-align: center;
+                    line-height: 2.9rem;
+                    max-width: 50rem;
+                  }
+
+                  .mc-flex-end {
+                    justify-content: flex-end;
+                  }
+
+                  .mc-center {
+                    justify-content: center;
+                  }
+
+                  .no-attendees-message {
+                    margin: 0;
+                    color: #0B2668;
+                    font-size: 2.2rem;
+                    font-weight: bold;
+                    letter-spacing: 0.092rem;
+                    line-height: 2.7rem;
+                    text-align: center;
+                  }
                 </style>
 
-                <div class="content">
-                  <div class="top-banner">
-                    <div class="top-banner-text">
-                      <div class="top-text">Attendees</div>
-                      <div class="top-subtext">See who else is attending the Digital Health Leadership Summit and network away.</div>
+                <script>
+
+                </script>
+
+                <div id="ntar-bg">
+                  <div id="main" class="main">
+
+                    <div class="banner-image">
+                      <div class="banner-info">
+                        <div class="banner-text">Attendees</div>
+                        <div class="banner-sub-text">See who else is attending the Digital Health Leadership Summit and network away.</div>
+                      </div>
                     </div>
+
+<!--                    <div class="banner">-->
+<!--                      <div class="banner-info">-->
+<!--                        <h1>Attendee List</h1>-->
+<!--                        <p>-->
+<!--                          Reach out and connect with others here. Send messages, emails, and request meetings all in one spot.-->
+<!--                        </p>-->
+<!--                      </div>-->
+<!--                      <img id="banner-image"-->
+<!--                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/attendee-list-hero.png" />-->
+<!--                    </div>-->
+
+                    <div class="search-exhibitors-divider">
+                      <div class="filter-options">
+                        <div class="search-wrapper">
+                          <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)" />
+                          <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/search-icon.png" />
+                        </div>
+
+                        <div class="select-wrapper">
+                          <select id="select-attendees-industry" onchange="filterAttendeesByIndustry(event)">
+                            <option class="option" value="">By Industry</option>
+                            <option value="commerce">Commerce</option>
+                            <option value="education">Education</option>
+                            <option value="robotics">Robotics</option>
+                            <option value="technology">Technology</option>
+                          </select>
+                        </div>
+
+                        <button id="all-grouping" onclick="allAttendees()">All</button>
+                        <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
+                        <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
+                        <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
+                        <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
+                        <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
+                      </div>
+                    </div>
+
+                    <div id="attendee-list" class="attendee-list">
+
+                      <template id="attendee-template">
+                        <div id="attendee" class="attendee">
+                          <img id="avatar" class="avatar" />
+                          <div class="details">
+                            <div class="a-row header">
+                              <h1 id="name"></h1>
+                              <h2 id="online-badge" style="display:none;">&bull; At Event Now</h2>
+                            </div>
+                            <div class="a-row">
+                              <h4 id="job">
+                              </h4>
+                            </div>
+                            <div class="a-row">
+                              <h4 id="industry"></h4>
+                            </div>
+
+                            <div class="a-row a-footer">
+                              <div class="contact">
+                                <img
+                                  src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/email-icon.png" />
+                                <a id="email" href="" target="_blank" rel="noreferrer"></a>
+                              </div>
+                              <div class="contact">
+                                <img
+                                  src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/website-icon.png" />
+                                <a id="company-link" href="" target="_blank" rel="noreferrer"></a>
+                              </div>
+
+                            </div>
+
+                          </div>
+<!--                          <div class="actions">-->
+<!--                            <button class="send-message" id="send-message-button">-->
+<!--                              Send a Message-->
+<!--                            </button>-->
+<!--                            <button class="request-meeting">-->
+<!--                              Request a Meeting-->
+<!--                            </button>-->
+
+<!--                          </div>-->
+                        </div>
+                      </template>
+
+
+                      <h1 id="no-attendees-message" class="no-attendees-message" style="display:none;">No attendees found.</h1>
+
+                    </div>
+
+<!--                    <div id="modal" class="modal" onclick="handleModalClick(event)">-->
+
+<!--                      <div id="message-box" class="attendee message-box">-->
+<!--                        <div class="mb-row">-->
+<!--                          <img class="avatar" id="mb-avatar" />-->
+<!--                          <div class="details">-->
+<!--                            <div class="a-row header">-->
+<!--                              <h1 id="mb-name"></h1>-->
+<!--                              <h2 id="mb-online-badge" style="display:none;">&bull; At Event Now</h2>-->
+<!--                            </div>-->
+<!--                            <div class="a-row">-->
+<!--                              <h4 id="mb-job">-->
+<!--                              </h4>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                          <div class="mb-actions">-->
+<!--                            <button id="close-modal-1" class="close-modal"><img id="close-modal-image-1"-->
+<!--                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png" /></button>-->
+<!--                          </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="mb-row">-->
+
+<!--                          <textarea id="message-textarea" oninput="turnOnSend(event)"></textarea>-->
+
+<!--                        </div>-->
+
+<!--                        <div class="mb-footer">-->
+
+<!--                          <button id="final-send" class="final-send" disabled onclick="sendMessage()">-->
+<!--                            Send-->
+<!--                          </button>-->
+
+<!--                        </div>-->
+<!--                      </div>-->
+
+<!--                      <div id="message-confirmation" class="attendee message-box" style="display:none;">-->
+<!--                        <div class="mc-row mc-flex-end">-->
+<!--                          <div class="mb-actions">-->
+<!--                            <button id="close-modal-2" class="close-modal"><img id="close-modal-image-2"-->
+<!--                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png" /></button>-->
+<!--                          </div>-->
+<!--                        </div>-->
+
+<!--                        <div class="mc-row mc-center">-->
+<!--                          <h1 id="send-confirmation">-->
+<!--                          </h1>-->
+<!--                        </div>-->
+
+<!--                        <div class="mc-row mc-center">-->
+<!--                          <button id="done-message" class="final-send">-->
+<!--                            Done-->
+<!--                          </button>-->
+<!--                        </div>-->
+
+
+<!--                      </div>-->
+<!--                    </div>-->
+
+                    <hr />
+                    <div class="sponsors-section">
+                      <div class="sponsors-header">
+                        <h1>Our Sponsors</h1>
+                        <a href="/videos/bacf2f95-c575-43c1-9210-08d83b177ae4/landing/a8154896-92f2-43f4-9108-8c91da797a57">View All
+                          Sponsors</a>
+                      </div>
+                      <div id="sponsor-list" class="sponsors-list">
+
+                        <template id="sponsor-template">
+                          <img id="sponsor-logo" src="" />
+                        </template>
+                      </div>
+                    </div>
+
+
+
+                    <footer>
+                      <div class="info">
+                        <div class="info-links">
+                          <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
+                        </div>
+                        <p>Copyright © 2020 NexTech AR Solutions Inc.</p>
+                      </div>
+                      <div class="social">
+                        <p class="social-links-title">Follow us on social:</p>
+                        <div class="social-links">
+                          <a href="#"><img class="social-link"
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/linkedin.png" /></a>
+                          <a href-"#"><img class="social-link"
+                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/facebook.png" /></a>
+                          <a href="#"><img class="social-link"
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/youtube.png" /></a>
+                          <a href="#"><img class="social-link"
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/ig.png" /></a>
+                        </div>
+                      </div>
+
+                    </footer>
+
                   </div>
+                </div>
 
-                  <div class="card-container">
-                    {% for user in data.UserProfiles %}
-                    <div class="card">
-                      <div class="profile-container">
-                        <div class="profile-image">
-                          <img src="https://ingress.infernocore.jolokia.com/api/ProfileImage/{{user.UserId}}/140/140" onerror="this.src='https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg'">
-                        </div>
+                <script>
 
-                        <div class="profile-info">
-                          <div class=profile-name>{{ user.FirstName }} {{ user.Lastname }}</div>
-                          <div>{{ user.Bio }}</div>
-                        </div>
-                      </div>
+                  var attendeesBaseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/";
 
-                      </div>
-                      {% endfor %}
+                  // var allUsers = data.UserProfiles ;
+                  // var attendees = peopleNovo1.filter(user => {
+                  //   return hasGroupNovo1(user.UserGroups, 'Attendees');
+                  // })
 
-                      <!-- <h2>Liquid Parsing Template</h2>-->
-                      <!-- <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>-->
-                      <!-- <p><strong>This is the data object:</strong> {{ data.UserProfiles.UserGroups | json }} </p> -->
+                  // var attendees = data.UserProfiles ;
 
-                    </div>
+                  var attendees = [
+                    {
+                      firstName: "Allison",
+                      lastName: "Aniston",
+                      email: "allison.aniston@dell.com",
+                      title: "Content Strategist",
+                      company: "Dell Technologies",
+                      industry: "Technology",
+                      companyLink: "www.dell.com",
+                      businessCard: "https://www.google.com",
+                      avatar: attendeesBaseUrl + "face.png",
+                      online: true,
+                      visible: true
+                    },
+                    {
+                      firstName: "Daniel",
+                      lastName: "Guzman",
+                      email: "daniel.guzman@dell.com",
+                      title: "Content Strategist",
+                      company: "Dell Technologies",
+                      industry: "Education",
+                      companyLink: "www.dell.com",
+                      businessCard: "https://www.google.com",
+                      avatar: attendeesBaseUrl + "face-3.png",
+                      online: false,
+                      visible: true
+                    },
+                    {
+                      firstName: "Theresa",
+                      lastName: "Watson",
+                      email: "theresa.watson@dell.com",
+                      title: "VP of Marketing",
+                      company: "Staubli",
+                      industry: "Robotics",
+                      companyLink: "www.staubli.com",
+                      businessCard: "https://www.google.com",
+                      avatar: attendeesBaseUrl + "face-2.png",
+                      online: false,
+                      visible: true
+                    },
+                    {
+                      firstName: "Manuel",
+                      lastName: "Miles",
+                      email: "manuel.miles@dell.com",
+                      title: "Dean of Science",
+                      company: "Ryerson University",
+                      industry: "Education",
+                      companyLink: "www.ryersonuniversity.com",
+                      businessCard: "https://www.google.com",
+                      avatar: attendeesBaseUrl + "face-4.png",
+                      online: true,
+                      visible: true
+                    },
+                  ]
+
+                  var buildAttendeeList = () => {
+
+                    const attendeeList = landingPageEl.getElementById("attendee-list");
+                    const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+
+                    for (let at of attendees) {
+
+                      let clone = attendeeTemplate.content.cloneNode(true);
+
+                      let attendeeDiv = clone.getElementById("attendee");
+                      attendeeDiv.id = "at-" + at.firstName.toLowerCase() + "-" + at.lastName.toLowerCase();
+
+                      if (at.online) {
+                        let online = clone.getElementById("online-badge");
+                        online.style = "";
+                      }
+
+                      let avatar = clone.getElementById("avatar");
+                      avatar.src = at.avatar;
+
+                      let name = clone.getElementById("name");
+                      name.innerHTML = at.firstName + " " + at.lastName;
+
+                      let email = clone.getElementById("email");
+                      email.innerHTML = at.email;
+                      email.href = "mailto:" + at.email;
+
+                      let companyLink = clone.getElementById("company-link");
+                      companyLink.innerHTML = at.companyLink;
+                      companyLink.href = at.companyLink;
+
+                      // let businessCard = clone.getElementById("business-card");
+                      // businessCard.href = at.businessCard;
+
+                      let job = clone.getElementById("job");
+                      job.innerHTML = at.title + " – " + "<b>" + at.company + "</b>";
+
+                      let industry = clone.getElementById("industry");
+                      industry.innerHTML = "Industry – " + "<b>" + at.industry + "</b>"
+
+                      // let sendMessageButton = clone.getElementById("send-message-button");
+                      // sendMessageButton.id = at.firstName + " " + at.lastName;
+
+                      attendeeList.appendChild(clone);
+                    }
+
+                  }
+
+                  buildAttendeeList();
+
+                  var updateAttendees = () => {
+
+                    let empty = true;
+
+                    for (let at of attendees) {
+
+                      let id = "at-" + at.firstName.toLowerCase() + "-" + at.lastName.toLowerCase();
+                      let el = landingPageEl.getElementById(id);
+
+                      if (el) {
+                        if (at.visible) {
+                          empty = false;
+                          el.style.display = ""
+                        }
+                        else {
+                          el.style.display = "none";
+                        }
+                      }
+                    }
+
+                    let emptyMessage = landingPageEl.getElementById("no-attendees-message");
+
+                    if (empty) {
+                      emptyMessage.style.display = "";
+                    }
+                    else {
+                      emptyMessage.style.display = "none";
+                    }
+                  }
+
+                  var searchAttendees = e => {
+                    let query = e.currentTarget.value.toLowerCase();
+
+                    for (let at of attendees) {
+
+                      if (at.firstName.toLowerCase().startsWith(query) || at.lastName.toLowerCase().startsWith(query)) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    updateAttendees();
+
+                  }
+
+                  var filterAttendeesByIndustry = e => {
+                    let query = e.currentTarget.value;
+
+                    if (query === "") {
+                      for (let at of attendees) {
+                        at.visible = true;
+                      }
+                    } else {
+                      for (let at of attendees) {
+                        if (at.industry.toLowerCase() === query) {
+                          at.visible = true;
+                        } else {
+                          at.visible = false;
+                        }
+                      }
+                    }
+
+                    clearSearchValue();
+                    clearLetterGroupings();
+
+                    updateAttendees();
+                  }
+
+                  var letterGroupings = [
+                    "all-grouping",
+                    "ae-grouping",
+                    "fj-grouping",
+                    "ko-grouping",
+                    "pt-grouping",
+                    "uz-grouping",
+                  ];
+
+                  var clearLetterGroupings = () => {
+                    for (let group of letterGroupings) {
+                      let el = landingPageEl.getElementById(group);
+                      el.style.color = "";
+                      el.style.backgroundColor = "";
+                    }
+
+                  }
+
+                  var clearIndustrySelect = () => {
+                    let select = landingPageEl.getElementById("select-attendees-industry");
+                    select.selectedIndex = 0;
+                  }
+
+                  var clearSearchValue = () => {
+                    let search = landingPageEl.getElementById("search-attendees")
+                    search.value = "";
+                  }
+
+                  var allAttendees = () => {
+
+                    for (let at of attendees) {
+                      at.visible = true;
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("all-grouping").style.color = "white";
+                    landingPageEl.getElementById("all-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var AE = "abcde";
+                  var filterAttendeesAE = () => {
+
+                    let filtered = []
+
+                    for (let at of attendees) {
+
+                      if (AE.includes(at.firstName[0].toLowerCase()) || AE.includes(at.lastName[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("ae-grouping").style.color = "white";
+                    landingPageEl.getElementById("ae-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var FJ = "fghij";
+                  var filterAttendeesFJ = () => {
+
+                    for (let at of attendees) {
+
+                      if (FJ.includes(at.firstName[0].toLowerCase()) || FJ.includes(at.lastName[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("fj-grouping").style.color = "white";
+                    landingPageEl.getElementById("fj-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var KO = "klmno";
+                  var filterAttendeesKO = () => {
+
+                    for (let at of attendees) {
+
+                      if (KO.includes(at.firstName[0].toLowerCase()) || KO.includes(at.lastName[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("ko-grouping").style.color = "white";
+                    landingPageEl.getElementById("ko-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var PT = "pqrst";
+                  var filterAttendeesPT = () => {
+
+                    for (let at of attendees) {
+
+                      if (PT.includes(at.firstName[0].toLowerCase()) || PT.includes(at.lastName[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("pt-grouping").style.color = "white";
+                    landingPageEl.getElementById("pt-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var UZ = "uvwxyz";
+                  var filterAttendeesUZ = () => {
+
+                    for (let at of attendees) {
+
+                      if (UZ.includes(at.firstName[0].toLowerCase()) || UZ.includes(at.lastName[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("uz-grouping").style.color = "white";
+                    landingPageEl.getElementById("uz-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                </script>
+
+                <script>
+                  // handle sponsors
+
+                  var sponsors = ["dell", "johnson and johnson", "poly", "staubli", "telus", "viacom"]
+
+                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/sponsors/"
+
+                  var sponsorList = landingPageEl.getElementById("sponsor-list");
+
+                  var sponsorTemplate = landingPageEl.getElementById("sponsor-template");
+
+                  for (let sponsor of sponsors) {
+
+                    let clone = sponsorTemplate.content.cloneNode(true);
+
+                    let img = clone.getElementById("sponsor-logo");
+
+                    img.id = "sponsor-logo-" + sponsor;
+
+                    img.src = baseUrl + sponsor + ".png";
+
+                    sponsorList.appendChild(clone);
+
+
+                  }
+
+                </script>
+
+<!--                <script>-->
+<!--                  var contentSection = landingPageEl.getElementById("ntar-bg")-->
+<!--                  var resizeObserver = new ResizeObserver(entries => {-->
+<!--                    for (const entry of entries) {-->
+<!--                      var contentWidth = contentSection.offsetWidth;-->
+
+<!--                      var bannerImg = landingPageEl.getElementById("banner-image");-->
+
+<!--                      if (contentWidth <= 930) {-->
+<!--                        bannerImg.style.display = "none";-->
+<!--                      }-->
+<!--                      else {-->
+<!--                        bannerImg.style.display = "";-->
+<!--                      }-->
+
+<!--                    }-->
+<!--                  });-->
+<!--                  resizeObserver.observe(contentSection);-->
+<!--                </script>-->
+
+<!--                <script>-->
+<!--                  // handle modal-->
+
+<!--                  var showModal = e => {-->
+
+<!--                    // get attendee-->
+<!--                    let id = e.currentTarget.id;-->
+
+<!--                    let at = attendees.find(at => at.firstName + " " + at.lastName === id);-->
+
+<!--                    // set attendee data-->
+<!--                    messaging = at.firstName + " " + at.lastName;-->
+
+<!--                    // set attendee info in message box-->
+
+<!--                    if (at.online) {-->
+<!--                      let online = landingPageEl.getElementById("mb-online-badge");-->
+<!--                      online.style = "";-->
+<!--                    }-->
+
+<!--                    let avatar = landingPageEl.getElementById("mb-avatar");-->
+<!--                    avatar.src = at.avatar;-->
+
+<!--                    let name = landingPageEl.getElementById("mb-name");-->
+<!--                    name.innerHTML = at.firstName + " " + at.lastName;-->
+
+<!--                    let job = landingPageEl.getElementById("mb-job");-->
+<!--                    job.innerHTML = at.title + " – " + "<b>" + at.company + "</b>";-->
+
+<!--                    let contentSection = landingPageEl.getElementById("main")-->
+<!--                    let contentHeight = contentSection.offsetHeight;-->
+
+<!--                    let modal = landingPageEl.getElementById("modal");-->
+
+<!--                    modal.style.display = "flex";-->
+<!--                    modal.style.height = contentHeight.toString() + "px";-->
+
+<!--                    let messageBox = landingPageEl.getElementById("message-box");-->
+<!--                    messageBox.scrollIntoView();-->
+
+<!--                  }-->
+
+<!--                  var handleModalClick = e => {-->
+
+<!--                    let target = e.target;-->
+
+<!--                    if (target.id === "modal" ||-->
+<!--                      target.id === "close-modal-1" ||-->
+<!--                      target.id === "close-modal-image-1" ||-->
+<!--                      target.id === "close-modal-2" ||-->
+<!--                      target.id === "close-modal-image-2" ||-->
+<!--                      target.id === "done-message") {-->
+
+<!--                      // reset messageBox and confirmation-->
+<!--                      let messageBox = landingPageEl.getElementById("message-box");-->
+<!--                      messageBox.style.display = "";-->
+
+<!--                      let messageTextArea = landingPageEl.getElementById("message-textarea");-->
+<!--                      messageTextArea.value = "";-->
+
+<!--                      let messageConfirmation = landingPageEl.getElementById("message-confirmation");-->
+<!--                      messageConfirmation.style.display = "none";-->
+
+<!--                      let modal = landingPageEl.getElementById("modal");-->
+
+<!--                      let messaging = "";-->
+
+<!--                      modal.style.display = "";-->
+
+<!--                    }-->
+
+<!--                  }-->
+
+<!--                  var turnOnSend = e => {-->
+
+<!--                    let target = e.target;-->
+
+<!--                    let sendButton = landingPageEl.getElementById("final-send");-->
+
+<!--                    if (target.value.trim().length > 0) {-->
+<!--                      sendButton.disabled = false;-->
+<!--                    } else {-->
+<!--                      sendButton.disabled = true;-->
+<!--                    }-->
+
+<!--                  }-->
+
+<!--                  var sendMessage = async e => {-->
+
+<!--                    let promise = new Promise(function (resolve, reject) {-->
+<!--                      setTimeout(() => resolve("done"), 0);-->
+<!--                    });-->
+
+<!--                    await promise;-->
+
+
+<!--                    let messageBox = landingPageEl.getElementById("message-box");-->
+<!--                    messageBox.style.display = "none";-->
+
+<!--                    let messageConfirmation = landingPageEl.getElementById("message-confirmation");-->
+
+<!--                    messageConfirmation.style.display = "";-->
+
+<!--                    let message = landingPageEl.getElementById("send-confirmation");-->
+<!--                    message.innerHTML = "Your message to " + messaging + " has been successfully sent!";-->
+<!--                  }-->
+
+<!--                </script>-->
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
