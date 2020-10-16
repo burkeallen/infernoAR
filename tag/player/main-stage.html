@@ -82,7 +82,7 @@
         <div class="aside-inner">
           <nav class="sidebar" sidebar-anyclick-close="">
             <ul class="nav">
-              <li><a href="../">Menu</a></li>
+              <li><a href="..">Menu</a></li>
             </ul>
           </nav>
           </nav>
@@ -108,7 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="4643d554-cd3e-4a28-ac30-230d8df71933">
+              <inferno-snippet-content id="aa7edb03-ddb4-4001-8a42-a26283149017">
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -131,13 +131,103 @@
                   }
                 </style>
 
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
+                  }
+
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
+                  }
+
+                  .rightCol {
+                    margin: 0 5px;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .stage-grid, .leftCol, .rightCol {
+                      display: block;
+                      margin: 0 auto;
+                    }
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0;
+                  }
+                </style>
+
+                <!-- group chat -->
+                <style>
+                  .group_chat {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .group_chat {
+                      position: relative;
+                      margin-top: 40px;
+                      width: 100%;
+                      height: 350px;
+                    }
+
+                  }
+                </style>
+
                 <div class="content">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                    <div class="ntar-video-container">
+                      <div class="ntar-video" id="inferno-video-player"></div>
+                    </div>
 
-                </div>
+                  <div>
+                    <iframe
+                      class="chat-iframe"
+                      src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=GRUNDFOS-main-stage&chatroomname=GRUNDFOS-Main-Stage-Chat">
+                    </iframe>
+                  </div>
+                  <div>
+
+                    <div class="question">
+                      <div class="ask-question">Ask a Question</div>
+                      <div id="inferno-questions-basic"></div>
+                      <div class="recording-message">Recorded conference available the week of October 13th</div>
+                    </div>
+
+
+                  </div>
+
+                  </div>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
