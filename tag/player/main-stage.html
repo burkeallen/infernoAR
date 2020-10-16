@@ -203,30 +203,45 @@
                   }
                 </style>
 
+                <style>
+                  .grid-container {
+                      display: grid;
+                      grid-template-columns: 60% 40%;
+                      grid-template-rows: 1fr;
+                      gap: 0px 0px;
+                      grid-template-areas:
+                      "left right";
+                    }
+                    .left {
+                      grid-area: left;
+                    }
+                    .right {
+                      grid-area: right;
+                    }
+
+                </style>
+
                 <div class="content">
-
-                    <div class="ntar-video-container">
-                      <div class="ntar-video" id="inferno-video-player"></div>
+                  <div class="grid-container">
+                    <div class="left">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player">
+                        </div>
+                      </div>
+                      <div class="question">
+                        <div class="ask-question">Ask a Question</div>
+                        <div id="inferno-questions-basic"></div>
+                        <div class="recording-message">Recorded conference available the week of October 13th</div>
+                      </div>
                     </div>
-
-                  <div>
-                    <iframe
-                      class="chat-iframe"
-                      src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=GRUNDFOS-main-stage&chatroomname=GRUNDFOS-Main-Stage-Chat">
-                    </iframe>
-                  </div>
-                  <div>
-
-                    <div class="question">
-                      <div class="ask-question">Ask a Question</div>
-                      <div id="inferno-questions-basic"></div>
-                      <div class="recording-message">Recorded conference available the week of October 13th</div>
+                    <div class="right">
+                      <iframe
+                        class="chat-iframe"
+                        src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=GRUNDFOS-main-stage&chatroomname=GRUNDFOS-Main-Stage-Chat">
+                      </iframe>
                     </div>
-
-
                   </div>
-
-                  </div>
+                </div>
 
 
               </inferno-snippet-content>
