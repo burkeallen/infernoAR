@@ -103,14 +103,6 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="f32934c2-47c6-46f3-864c-c6b7420dc9e1">
 
-
-
-                <!-- https://studio304nextechar.freetls.fastly.net/infernoAR/gallery2/
-                left pane 280
-                top pane 55
-                main pane has 15-20 padding forced on it. -->
-
-
                 <!-- Import Fonts -->
                 <script type="text/javascript">
                   // Load custom fonts
@@ -192,22 +184,19 @@
                 <!-- ./ Import Fonts -->
 
                 <style>
-                  .h1,
-                  .h2,
-                  .h3,
-                  .h4,
-                  .h5,
-                  .h6,
-                  h1,
-                  h2,
-                  h3,
-                  h4,
-                  h5,
+                  .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5,
                   h6 {
                     font-family: 'Helvetica Neue', sans-serif;
                   }
 
-                  #ntar-bg {
+                  /* when referencing an image that does not exist */
+                  /* this styles content style is being set to '' causing the entire screen from going black */
+                  /* overriding the behavior above */
+                  img::after {
+                    content: none;
+                  }
+
+                  #container {
                     font-family: 'Helvetica Neue', sans-serif;
                     font-weight: normal;
                     font-style: normal;
@@ -224,12 +213,6 @@
                     scroll-behavior: smooth;
                   }
 
-                  .main {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                  }
-
                   .banner-image {
                     min-height: 400px;
                     background-size: cover;
@@ -244,15 +227,16 @@
                     max-width: 90%;
                     min-height: 20vw;
                     padding-top: 120px;
+                    text-shadow: #000 0 0 1rem;
                   }
 
                   .banner-text {
                     font-weight: bold;
-                    font-size: calc(100vw - 96vw);
+                    font-size: clamp(2rem, 3vw, 4.5rem);
                   }
 
                   .banner-sub-text {
-                    font-size: calc(100vw - 98vw);
+                    font-size: clamp(1rem, 2.5vw, 3rem);
                   }
 
                   hr {
@@ -359,22 +343,6 @@
                     margin-right: 1rem;
                   }
 
-
-                  .exhibitors-divider {
-                    background-color: rgba(255, 255, 255, 0.75);
-                    width: 100px;
-                    padding: 3.8rem;
-                    padding: 4.4rem;
-                  }
-
-                  .exhibitors-divider h1 {
-                    color: #3D3D3D;
-                    font-size: 4.6rem;
-                    font-weight: bold;
-                    letter-spacing: 0;
-                    line-height: 5.3rem;
-                  }
-
                   .search-exhibitors-divider {
                     background-color: rgb(246, 246, 246, 0.79);
                     width: 100%;
@@ -477,7 +445,7 @@
                     -webkit-appearance: none;
                     -moz-appearance: none;
                     appearance: none;
-                    background: url("https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png") no-repeat right #fff;
+                    background: url("https://studio304nextechar.freetls.fastly.net/infernoAR/tag/chevron.png") no-repeat right #fff;
                     background-size: 8%;
                     border: none;
                   }
@@ -490,10 +458,6 @@
                     width: 2rem;
                     margin: 1rem;
                   }
-
-                  /*.attendee-list {*/
-                  /*  padding: 5.8rem 0;*/
-                  /*}*/
 
                   .attendee {
                     margin: 1.4rem 4.4rem;
@@ -617,66 +581,6 @@
                     border: 1px solid #0B2668;
                   }
 
-
-                  /*.send-message {*/
-                  /*  color: white;*/
-                  /*  background-color: #0B2668;*/
-                  /*  border: 1px solid #0B2668;*/
-                  /*}*/
-
-                  /*.request-meeting {*/
-                  /*  color: #0B2668;*/
-                  /*  background-color: white;*/
-                  /*  border: 1px solid #0B2668;*/
-                  /*}*/
-
-                  .modal {
-                    position: absolute;
-                    top: 0px;
-                    left: 0px;
-                    z-index: 2;
-                    width: 100%;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    display: none;
-                  }
-
-                  .message-box {
-                    z-index: 3;
-                    display: flex;
-                    flex-direction: column;
-                    width: 90%;
-                    background-color: #F8F8F8;
-                  }
-
-                  .mb-row {
-                    width: 100%;
-                    display: flex;
-                  }
-
-                  .mb-actions {
-                    display: flex;
-                    align-items: flex-start;
-                  }
-
-                  .mb-actions .close-modal {
-                    background: transparent;
-                    border: none;
-                    font-size: 2rem;
-                  }
-
-                  .mb-actions .close-modal:hover {
-                    cursor: pointer;
-                    font-weight: bold;
-                  }
-
-                  .mb-actions .close-modal:focus {
-                    outline: none;
-                    border: none;
-                  }
-
                   .mb-row textarea {
                     resize: none;
                     font-family: sans-serif;
@@ -691,335 +595,165 @@
                     flex-grow: 1;
                     min-height: 10rem;
                   }
-
-                  .mb-footer {
-                    width: 100%;
-                    display: flex;
-                    justify-content: flex-end;
-                  }
-
-                  .final-send {
-                    width: 24.4rem;
-                    height: 4.5rem;
-                    border-radius: 5px;
-                    margin: 1rem;
-                    font-size: 18px;
-                    font-weight: bold;
-                    letter-spacing: 0.9px;
-                    line-height: 23px;
-                    text-align: center;
-                    color: white;
-                    background-color: #0B2668;
-                    border: 1px solid #0B2668;
-                    align-self: flex-end;
-                  }
-
-                  .final-send:hover {
-                    cursor: pointer;
-                  }
-
-                  .final-send:disabled {
-                    opacity: 0.5;
-                  }
-
-                  .mc-row {
-                    display: flex;
-                    width: 100%;
-                  }
-
-                  .mc-row h1 {
-                    text-align: center;
-                    line-height: 2.9rem;
-                    max-width: 50rem;
-                  }
-
-                  .mc-flex-end {
-                    justify-content: flex-end;
-                  }
-
-                  .mc-center {
-                    justify-content: center;
-                  }
-
-                  .no-attendees-message {
-                    margin: 0;
-                    color: #0B2668;
-                    font-size: 2.2rem;
-                    font-weight: bold;
-                    letter-spacing: 0.092rem;
-                    line-height: 2.7rem;
-                    text-align: center;
-                  }
                 </style>
 
-                <script>
+                <div id="container">
 
-                </script>
-
-                <div id="ntar-bg">
-                  <div id="main" class="main">
-
-                    <div class="banner-image">
-                      <div class="banner-info">
-                        <div class="banner-text">Attendees</div>
-                        <div class="banner-sub-text">See who else is attending the Digital Health Leadership Summit and network away.</div>
-                      </div>
+                  <div class="banner-image">
+                    <div class="banner-info">
+                      <div class="banner-text">Attendees</div>
+                      <div class="banner-sub-text">See who else is attending the Digital Health Leadership Summit and network away.</div>
                     </div>
-
-<!--                    <div class="banner">-->
-<!--                      <div class="banner-info">-->
-<!--                        <h1>Attendee List</h1>-->
-<!--                        <p>-->
-<!--                          Reach out and connect with others here. Send messages, emails, and request meetings all in one spot.-->
-<!--                        </p>-->
-<!--                      </div>-->
-<!--                      <img id="banner-image"-->
-<!--                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/attendee-list-hero.png" />-->
-<!--                    </div>-->
-
-                    <div class="search-exhibitors-divider">
-                      <div class="filter-options">
-                        <div class="search-wrapper">
-                          <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)" />
-                          <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/search-icon.png" />
-                        </div>
-
-                        <div class="select-wrapper">
-                          <select id="select-attendees-industry" onchange="filterAttendeesByIndustry(event)">
-                            <option class="option" value="">By Industry</option>
-                            <option value="commerce">Commerce</option>
-                            <option value="education">Education</option>
-                            <option value="robotics">Robotics</option>
-                            <option value="technology">Technology</option>
-                          </select>
-                        </div>
-
-                        <button id="all-grouping" onclick="allAttendees()">All</button>
-                        <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
-                        <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
-                        <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
-                        <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
-                        <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
+                  </div>
+                  <div class="search-exhibitors-divider">
+                    <div class="filter-options">
+                      <div class="search-wrapper">
+                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
                       </div>
+
+                      <div class="select-wrapper">
+                        <select id="select-attendees-industry" onchange="filterAttendeesByIndustry(event)">
+                          <option class="option" value="">By Industry</option>
+                          <option value="commerce">Commerce</option>
+                          <option value="education">Education</option>
+                          <option value="robotics">Robotics</option>
+                          <option value="technology">Technology</option>
+                        </select>
+                      </div>
+
+                      <button id="all-grouping" onclick="allAttendees()">All</button>
+                      <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
+                      <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
+                      <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
+                      <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
+                      <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
                     </div>
+                  </div>
 
-                    <div id="attendee-list" class="attendee-list">
+                  <div id="attendee-list" class="attendee-list">
 
-                      <template id="attendee-template">
-                        <div id="attendee" class="attendee">
-                          <img id="avatar" class="avatar" />
-                          <div class="details">
-                            <div class="a-row header">
-                              <h1 id="name"></h1>
-                              <h2 id="online-badge" style="display:none;">&bull; At Event Now</h2>
+                    <template id="attendee-template">
+                      <div id="attendee" class="attendee">
+                        <img id="avatar" class="avatar"/>
+                        <div class="details">
+                          <div class="a-row header">
+                            <h1 id="name"></h1>
+<!--                            <h2 id="online-badge" style="display:none;">&bull; At Event Now</h2>-->
+                          </div>
+                          <div class="a-row">
+                            <h4 id="job"></h4>
+                          </div>
+                          <div class="a-row">
+                            <h4 id="industry"></h4>
+                          </div>
+
+                          <div class="a-row a-footer">
+                            <div class="contact">
+                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/> <a id="email" href="" target="_blank" rel="noreferrer"></a>
                             </div>
-                            <div class="a-row">
-                              <h4 id="job">
-                              </h4>
-                            </div>
-                            <div class="a-row">
-                              <h4 id="industry"></h4>
-                            </div>
-
-                            <div class="a-row a-footer">
-                              <div class="contact">
-                                <img
-                                  src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/email-icon.png" />
-                                <a id="email" href="" target="_blank" rel="noreferrer"></a>
-                              </div>
-                              <div class="contact">
-                                <img
-                                  src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/website-icon.png" />
-                                <a id="company-link" href="" target="_blank" rel="noreferrer"></a>
-                              </div>
-
+                            <div class="contact">
+                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>
                             </div>
 
                           </div>
-<!--                          <div class="actions">-->
-<!--                            <button class="send-message" id="send-message-button">-->
-<!--                              Send a Message-->
-<!--                            </button>-->
-<!--                            <button class="request-meeting">-->
-<!--                              Request a Meeting-->
-<!--                            </button>-->
 
-<!--                          </div>-->
-                        </div>
-                      </template>
-
-
-                      <h1 id="no-attendees-message" class="no-attendees-message" style="display:none;">No attendees found.</h1>
-
-                    </div>
-
-<!--                    <div id="modal" class="modal" onclick="handleModalClick(event)">-->
-
-<!--                      <div id="message-box" class="attendee message-box">-->
-<!--                        <div class="mb-row">-->
-<!--                          <img class="avatar" id="mb-avatar" />-->
-<!--                          <div class="details">-->
-<!--                            <div class="a-row header">-->
-<!--                              <h1 id="mb-name"></h1>-->
-<!--                              <h2 id="mb-online-badge" style="display:none;">&bull; At Event Now</h2>-->
-<!--                            </div>-->
-<!--                            <div class="a-row">-->
-<!--                              <h4 id="mb-job">-->
-<!--                              </h4>-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                          <div class="mb-actions">-->
-<!--                            <button id="close-modal-1" class="close-modal"><img id="close-modal-image-1"-->
-<!--                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png" /></button>-->
-<!--                          </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="mb-row">-->
-
-<!--                          <textarea id="message-textarea" oninput="turnOnSend(event)"></textarea>-->
-
-<!--                        </div>-->
-
-<!--                        <div class="mb-footer">-->
-
-<!--                          <button id="final-send" class="final-send" disabled onclick="sendMessage()">-->
-<!--                            Send-->
-<!--                          </button>-->
-
-<!--                        </div>-->
-<!--                      </div>-->
-
-<!--                      <div id="message-confirmation" class="attendee message-box" style="display:none;">-->
-<!--                        <div class="mc-row mc-flex-end">-->
-<!--                          <div class="mb-actions">-->
-<!--                            <button id="close-modal-2" class="close-modal"><img id="close-modal-image-2"-->
-<!--                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png" /></button>-->
-<!--                          </div>-->
-<!--                        </div>-->
-
-<!--                        <div class="mc-row mc-center">-->
-<!--                          <h1 id="send-confirmation">-->
-<!--                          </h1>-->
-<!--                        </div>-->
-
-<!--                        <div class="mc-row mc-center">-->
-<!--                          <button id="done-message" class="final-send">-->
-<!--                            Done-->
-<!--                          </button>-->
-<!--                        </div>-->
-
-
-<!--                      </div>-->
-<!--                    </div>-->
-
-                    <hr />
-                    <div class="sponsors-section">
-                      <div class="sponsors-header">
-                        <h1>Our Sponsors</h1>
-                        <a href="/videos/bacf2f95-c575-43c1-9210-08d83b177ae4/landing/a8154896-92f2-43f4-9108-8c91da797a57">View All
-                          Sponsors</a>
-                      </div>
-                      <div id="sponsor-list" class="sponsors-list">
-
-                        <template id="sponsor-template">
-                          <img id="sponsor-logo" src="" />
-                        </template>
-                      </div>
-                    </div>
-
-
-
-                    <footer>
-                      <div class="info">
-                        <div class="info-links">
-                          <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
-                        </div>
-                        <p>Copyright © 2020 NexTech AR Solutions Inc.</p>
-                      </div>
-                      <div class="social">
-                        <p class="social-links-title">Follow us on social:</p>
-                        <div class="social-links">
-                          <a href="#"><img class="social-link"
-                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/linkedin.png" /></a>
-                          <a href-"#"><img class="social-link"
-                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/facebook.png" /></a>
-                          <a href="#"><img class="social-link"
-                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/youtube.png" /></a>
-                          <a href="#"><img class="social-link"
-                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/ig.png" /></a>
                         </div>
                       </div>
-
-                    </footer>
+                    </template>
 
                   </div>
+
+                  <hr/>
+                  <div class="sponsors-section">
+                    <div class="sponsors-header">
+                      <h1>Our Sponsors</h1>
+                    </div>
+                    <div id="sponsor-list" class="sponsors-list">
+
+                      <template id="sponsor-template">
+                        <img id="sponsor-logo" src=""/>
+                      </template>
+                    </div>
+                  </div>
+
+<!--                  <footer>-->
+<!--                    <div class="info">-->
+<!--                      <div class="info-links">-->
+<!--                        <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>-->
+<!--                      </div>-->
+<!--                      <p>Copyright © 2020 NexTech AR Solutions Inc.</p>-->
+<!--                    </div>-->
+<!--                  </footer>-->
+
                 </div>
 
                 <script>
 
-                  var attendeesBaseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/";
 
                   // var allUsers = data.UserProfiles ;
                   // var attendees = peopleNovo1.filter(user => {
                   //   return hasGroupNovo1(user.UserGroups, 'Attendees');
                   // })
 
-                  // var attendees = data.UserProfiles ;
+                  // var attendees = {{ data.UserProfiles | json }};
+                  var attendees = data.UserProfiles;
+                  console.log(attendees);
 
-                  var attendees = [
-                    {
-                      firstName: "Allison",
-                      lastName: "Aniston",
-                      email: "allison.aniston@dell.com",
-                      title: "Content Strategist",
-                      company: "Dell Technologies",
-                      industry: "Technology",
-                      companyLink: "www.dell.com",
-                      businessCard: "https://www.google.com",
-                      avatar: attendeesBaseUrl + "face.png",
-                      online: true,
-                      visible: true
-                    },
-                    {
-                      firstName: "Daniel",
-                      lastName: "Guzman",
-                      email: "daniel.guzman@dell.com",
-                      title: "Content Strategist",
-                      company: "Dell Technologies",
-                      industry: "Education",
-                      companyLink: "www.dell.com",
-                      businessCard: "https://www.google.com",
-                      avatar: attendeesBaseUrl + "face-3.png",
-                      online: false,
-                      visible: true
-                    },
-                    {
-                      firstName: "Theresa",
-                      lastName: "Watson",
-                      email: "theresa.watson@dell.com",
-                      title: "VP of Marketing",
-                      company: "Staubli",
-                      industry: "Robotics",
-                      companyLink: "www.staubli.com",
-                      businessCard: "https://www.google.com",
-                      avatar: attendeesBaseUrl + "face-2.png",
-                      online: false,
-                      visible: true
-                    },
-                    {
-                      firstName: "Manuel",
-                      lastName: "Miles",
-                      email: "manuel.miles@dell.com",
-                      title: "Dean of Science",
-                      company: "Ryerson University",
-                      industry: "Education",
-                      companyLink: "www.ryersonuniversity.com",
-                      businessCard: "https://www.google.com",
-                      avatar: attendeesBaseUrl + "face-4.png",
-                      online: true,
-                      visible: true
-                    },
-                  ]
+                  // var attendeesBaseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/";
+                  // var attendees = [
+                  //   {
+                  //     firstName: "Allison",
+                  //     lastName: "Aniston",
+                  //     email: "allison.aniston@dell.com",
+                  //     title: "Content Strategist",
+                  //     company: "Dell Technologies",
+                  //     industry: "Technology",
+                  //     companyLink: "www.dell.com",
+                  //     businessCard: "https://www.google.com",
+                  //     avatar: attendeesBaseUrl + "face.png",
+                  //     online: true,
+                  //     visible: true
+                  //   },
+                  //   {
+                  //     firstName: "Daniel",
+                  //     lastName: "Guzman",
+                  //     email: "daniel.guzman@dell.com",
+                  //     title: "Content Strategist",
+                  //     company: "Dell Technologies",
+                  //     industry: "Education",
+                  //     companyLink: "www.dell.com",
+                  //     businessCard: "https://www.google.com",
+                  //     avatar: attendeesBaseUrl + "face-3.png",
+                  //     online: false,
+                  //     visible: true
+                  //   },
+                  //   {
+                  //     firstName: "Theresa",
+                  //     lastName: "Watson",
+                  //     email: "theresa.watson@dell.com",
+                  //     title: "VP of Marketing",
+                  //     company: "Staubli",
+                  //     industry: "Robotics",
+                  //     companyLink: "www.staubli.com",
+                  //     businessCard: "https://www.google.com",
+                  //     avatar: attendeesBaseUrl + "face-2.png",
+                  //     online: false,
+                  //     visible: true
+                  //   },
+                  //   {
+                  //     firstName: "Manuel",
+                  //     lastName: "Miles",
+                  //     email: "manuel.miles@dell.com",
+                  //     title: "Dean of Science",
+                  //     company: "Ryerson University",
+                  //     industry: "Education",
+                  //     companyLink: "www.ryersonuniversity.com",
+                  //     businessCard: "https://www.google.com",
+                  //     avatar: attendeesBaseUrl + "face-4.png",
+                  //     online: true,
+                  //     visible: true
+                  //   },
+                  // ]
 
                   var buildAttendeeList = () => {
 
@@ -1031,35 +765,38 @@
                       let clone = attendeeTemplate.content.cloneNode(true);
 
                       let attendeeDiv = clone.getElementById("attendee");
-                      attendeeDiv.id = "at-" + at.firstName.toLowerCase() + "-" + at.lastName.toLowerCase();
+                      attendeeDiv.id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
 
-                      if (at.online) {
-                        let online = clone.getElementById("online-badge");
-                        online.style = "";
+                      // used for local json
+                      // let avatar = clone.getElementById("avatar");
+                      // avatar.src = at.avatar;
+
+                      const avatar = clone.getElementById("avatar");
+                      avatar.onerror = function () {
+                        avatar.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/generic-avatar.jpg';
                       }
-
-                      let avatar = clone.getElementById("avatar");
-                      avatar.src = at.avatar;
+                      avatar.src = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + at.Id + '/250/250';
 
                       let name = clone.getElementById("name");
-                      name.innerHTML = at.firstName + " " + at.lastName;
+                      name.innerHTML = at.FirstName + " " + at.Lastname;
 
                       let email = clone.getElementById("email");
-                      email.innerHTML = at.email;
-                      email.href = "mailto:" + at.email;
+                      email.innerHTML = at.ContactInfoEmail;
+                      email.href = "mailto:" + at.ContactInfoEmail;
 
-                      let companyLink = clone.getElementById("company-link");
-                      companyLink.innerHTML = at.companyLink;
-                      companyLink.href = at.companyLink;
+                      // let companyLink = clone.getElementById("company-link");
+                      // companyLink.innerHTML = at.ContactInfoCompany;
+                      // companyLink.href = at.ContactInfoCompany;
 
                       // let businessCard = clone.getElementById("business-card");
                       // businessCard.href = at.businessCard;
 
                       let job = clone.getElementById("job");
-                      job.innerHTML = at.title + " – " + "<b>" + at.company + "</b>";
+                      job.innerHTML = at.ContactInfoTitle + " – " + "<b>" + at.ContactInfoCompany + "</b>";
 
-                      let industry = clone.getElementById("industry");
-                      industry.innerHTML = "Industry – " + "<b>" + at.industry + "</b>"
+                      // let industry = clone.getElementById("industry");
+                      // industry.innerHTML = "Industry – " + "<b>" + at.industry + "</b>"
 
                       // let sendMessageButton = clone.getElementById("send-message-button");
                       // sendMessageButton.id = at.firstName + " " + at.lastName;
@@ -1084,20 +821,10 @@
                         if (at.visible) {
                           empty = false;
                           el.style.display = ""
-                        }
-                        else {
+                        } else {
                           el.style.display = "none";
                         }
                       }
-                    }
-
-                    let emptyMessage = landingPageEl.getElementById("no-attendees-message");
-
-                    if (empty) {
-                      emptyMessage.style.display = "";
-                    }
-                    else {
-                      emptyMessage.style.display = "none";
                     }
                   }
 
@@ -1315,160 +1042,20 @@
 
                 <script>
                   // handle sponsors
-
                   var sponsors = ["dell", "johnson and johnson", "poly", "staubli", "telus", "viacom"]
-
-                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/sponsors/"
-
+                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
                   var sponsorList = landingPageEl.getElementById("sponsor-list");
-
                   var sponsorTemplate = landingPageEl.getElementById("sponsor-template");
-
                   for (let sponsor of sponsors) {
-
                     let clone = sponsorTemplate.content.cloneNode(true);
-
                     let img = clone.getElementById("sponsor-logo");
-
                     img.id = "sponsor-logo-" + sponsor;
-
                     img.src = baseUrl + sponsor + ".png";
-
                     sponsorList.appendChild(clone);
-
-
                   }
 
                 </script>
 
-<!--                <script>-->
-<!--                  var contentSection = landingPageEl.getElementById("ntar-bg")-->
-<!--                  var resizeObserver = new ResizeObserver(entries => {-->
-<!--                    for (const entry of entries) {-->
-<!--                      var contentWidth = contentSection.offsetWidth;-->
-
-<!--                      var bannerImg = landingPageEl.getElementById("banner-image");-->
-
-<!--                      if (contentWidth <= 930) {-->
-<!--                        bannerImg.style.display = "none";-->
-<!--                      }-->
-<!--                      else {-->
-<!--                        bannerImg.style.display = "";-->
-<!--                      }-->
-
-<!--                    }-->
-<!--                  });-->
-<!--                  resizeObserver.observe(contentSection);-->
-<!--                </script>-->
-
-<!--                <script>-->
-<!--                  // handle modal-->
-
-<!--                  var showModal = e => {-->
-
-<!--                    // get attendee-->
-<!--                    let id = e.currentTarget.id;-->
-
-<!--                    let at = attendees.find(at => at.firstName + " " + at.lastName === id);-->
-
-<!--                    // set attendee data-->
-<!--                    messaging = at.firstName + " " + at.lastName;-->
-
-<!--                    // set attendee info in message box-->
-
-<!--                    if (at.online) {-->
-<!--                      let online = landingPageEl.getElementById("mb-online-badge");-->
-<!--                      online.style = "";-->
-<!--                    }-->
-
-<!--                    let avatar = landingPageEl.getElementById("mb-avatar");-->
-<!--                    avatar.src = at.avatar;-->
-
-<!--                    let name = landingPageEl.getElementById("mb-name");-->
-<!--                    name.innerHTML = at.firstName + " " + at.lastName;-->
-
-<!--                    let job = landingPageEl.getElementById("mb-job");-->
-<!--                    job.innerHTML = at.title + " – " + "<b>" + at.company + "</b>";-->
-
-<!--                    let contentSection = landingPageEl.getElementById("main")-->
-<!--                    let contentHeight = contentSection.offsetHeight;-->
-
-<!--                    let modal = landingPageEl.getElementById("modal");-->
-
-<!--                    modal.style.display = "flex";-->
-<!--                    modal.style.height = contentHeight.toString() + "px";-->
-
-<!--                    let messageBox = landingPageEl.getElementById("message-box");-->
-<!--                    messageBox.scrollIntoView();-->
-
-<!--                  }-->
-
-<!--                  var handleModalClick = e => {-->
-
-<!--                    let target = e.target;-->
-
-<!--                    if (target.id === "modal" ||-->
-<!--                      target.id === "close-modal-1" ||-->
-<!--                      target.id === "close-modal-image-1" ||-->
-<!--                      target.id === "close-modal-2" ||-->
-<!--                      target.id === "close-modal-image-2" ||-->
-<!--                      target.id === "done-message") {-->
-
-<!--                      // reset messageBox and confirmation-->
-<!--                      let messageBox = landingPageEl.getElementById("message-box");-->
-<!--                      messageBox.style.display = "";-->
-
-<!--                      let messageTextArea = landingPageEl.getElementById("message-textarea");-->
-<!--                      messageTextArea.value = "";-->
-
-<!--                      let messageConfirmation = landingPageEl.getElementById("message-confirmation");-->
-<!--                      messageConfirmation.style.display = "none";-->
-
-<!--                      let modal = landingPageEl.getElementById("modal");-->
-
-<!--                      let messaging = "";-->
-
-<!--                      modal.style.display = "";-->
-
-<!--                    }-->
-
-<!--                  }-->
-
-<!--                  var turnOnSend = e => {-->
-
-<!--                    let target = e.target;-->
-
-<!--                    let sendButton = landingPageEl.getElementById("final-send");-->
-
-<!--                    if (target.value.trim().length > 0) {-->
-<!--                      sendButton.disabled = false;-->
-<!--                    } else {-->
-<!--                      sendButton.disabled = true;-->
-<!--                    }-->
-
-<!--                  }-->
-
-<!--                  var sendMessage = async e => {-->
-
-<!--                    let promise = new Promise(function (resolve, reject) {-->
-<!--                      setTimeout(() => resolve("done"), 0);-->
-<!--                    });-->
-
-<!--                    await promise;-->
-
-
-<!--                    let messageBox = landingPageEl.getElementById("message-box");-->
-<!--                    messageBox.style.display = "none";-->
-
-<!--                    let messageConfirmation = landingPageEl.getElementById("message-confirmation");-->
-
-<!--                    messageConfirmation.style.display = "";-->
-
-<!--                    let message = landingPageEl.getElementById("send-confirmation");-->
-<!--                    message.innerHTML = "Your message to " + messaging + " has been successfully sent!";-->
-<!--                  }-->
-
-<!--                </script>-->
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
