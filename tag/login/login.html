@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- SNIPPET CONTENT START -->
+<inferno-snippet-content id="00437f1d-1e1c-4ad8-ad8b-a47a33c54110">
+
+  <!--  Load custom fonts -->
+  <script type="text/javascript">
+    function loadFont(name, url) {
+      if (document.fonts.check('1em ' + name)) {
+        return;
+      }
+      const fontFace = new FontFace(name, 'url(' + url + ')');
+
+      fontFace.load().then(function (loadedFont) {
+        document.fonts.add(loadedFont);
+        console.log('Loaded custom font ', name);
+      }).catch(function (error) {
+        // error occurred
+        console.log('Error loading ', name);
+      });
+
+    }
+
+    loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
+
+  </script>
+
+  <style>
+    /* prevent entire screen from going black if you try to reference an image that does not exist*/
+    /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+    img::after {
+      content: none;
+    }
+
+    #fallback-link {
+      display: none;
+    }
+
+    h1, h2, h3, h4, h5 {
+      /*font-family: "CustomFont1", sans-serif !important;*/
+    }
+
+    .content {
+      background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/login/login_photo_bg.png');
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      min-height: 100vh;
+      z-index: 1;
+    }
+  </style>
+
+  <!-- form - left column -->
+  <style>
+    /* will get injected by inferno if errors */
+    .form-error-container {
+      width: 100%;
+      background-color: #242424ea;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .form-error-container p,
+    .form-error-container li {
+      padding: 8px;
+      color: var(--branding-warning);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 6fr 12fr;
+      grid-template-rows: 1fr;
+      gap: 0 0;
+      justify-content: center;
+    }
+
+    .form-card {
+      background-color: rgba(0, 0, 0, .5);
+      min-height: 100vh;
+      padding: 10%;
+      text-align: center;
+      color: white;
+    }
+
+    form input, form button {
+      width: 80%;
+      font-size: 1.2em;
+      line-height: 2em;
+      margin-bottom: 20px;
+      color: black;
+    }
+
+    input::placeholder {
+      color: #696969;
+    }
+
+    form button {
+      background-color: var(--branding-primary);
+      border: solid 1px var(--branding-primary);
+      font-size: 1.25em;
+      color: white;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      filter: brightness(110%);
+    }
+
+    .field div {
+      text-align: left;
+      margin-left: 40px;
+    }
+  </style>
+
+  <!--  Right Column styles -->
+  <style>
+    .info {
+      width: 80%;
+      text-align: right;
+      margin: 5% 10%;
+
+    }
+
+    .info a {
+      color: white;
+    }
+
+    .event-logo {
+      width: 60%;
+      margin: 7% auto 5% auto;
+      background-color: rgba(255, 255, 255, .7);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .event-logo div {
+      font-size: 1.2em;
+    }
+
+    .event-logo img {
+      width: 80%;
+    }
+
+    .sponsor-container {
+      width: 90%;
+      margin: 0 auto;
+      background-color: rgba(255, 255, 255, .3);
+      padding: 1px 20px 20px 20px;
+    }
+
+    .sponsor-container h2 {
+      margin: 10px;
+    }
+
+    .sponsor-list {
+      display: flex;
+      flex: 1;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .sponsor {
+      display: flex;
+      align-items: center;
+      width: 200px;
+      height: 100px;
+      background-color: white;
+      margin: 8px;
+      padding: 8px;
+    }
+
+    .sponsor img {
+      align-self: center;
+    }
+
+    .sponsor:hover {
+      filter: brightness(80%);
+      transform: scale(1.1);
+    }
+
+    .sponsor a {
+      text-decoration: none;
+    }
+
+    .sponsor a:hover {
+      text-decoration: none;
+    }
+
+    .sponsor img {
+      width: 100%;
+    }
+
+
+  </style>
+
+  <!-- Form Validation Styles -->
+  <style>
+    .hidden {
+      display: none;
+    }
+
+    /* Validation Styles */
+    .field-warning {
+      font-size: 1.2em;
+      color: #fa867e;
+      padding-left: 4px;
+
+    }
+
+    .is-invalid {
+      background-color: rgb(255, 188, 188);
+    }
+
+    .warning-shake {
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+      animation: shake 0.5s;
+
+      /* When the animation is finished, start again */
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translate(1px, 1px) rotate(0deg);
+      }
+
+      10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+      }
+
+      20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+      }
+
+      30% {
+        transform: translate(3px, 2px) rotate(0deg);
+      }
+
+      40% {
+        transform: translate(1px, -1px) rotate(1deg);
+      }
+
+      50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+      }
+
+      60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+      }
+
+      70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+      }
+
+      80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+      }
+
+      90% {
+        transform: translate(1px, 2px) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+      }
+    }
+  </style>
+
+  <!--  Media Breaks  -->
+  <style>
+    @media only screen and (max-width: 1024px) {
+      .form-grid {
+        display: block;
+        margin: 0 auto;
+        height: auto;
+        min-height: auto;
+      }
+      .form-card {
+        min-height: auto;
+        padding: 1%;
+      }
+      .sponsor-card {
+        min-height: auto;
+      }
+    }
+  </style>
+
+  <div class="content">
+    <!-- public URL for Registration Page -->
+    <!-- https://enterpriseflorida.infernoar.com/register/attendees/f70e4d78-0b8d-496f-7d3f-08d86c589370/f70e4d78-0b8d-496f-7d3f-08d86c589370 -->
+
+
+    <div class="form-grid">
+      <div class="form-card">
+        <div style="text-align: left; padding-left: 10%;">
+          <h1 style="color: yellow;">Conference Check-in</h1>
+          <p style="color: white;">Enter your details below</p>
+        </div>
+
+        <script type="text/javascript">
+          // For custom error handling
+          window.loginPageEl.addEventListener("rendered",(e)=>{ console.log("Error",e);});
+        </script>
+        <!-- id must be "login" -->
+        <form id="login">
+          <!-- optional, not required if events handled with js -->
+          <div class="form-error"></div>
+          <!-- name must be "email" -->
+          <input type="email" class="field" placeholder="Email Address" name="email" ><br>
+          <!-- optional, not required if events handled with js -->
+          <div class="email-error"></div>
+          <!-- name must be "password" -->
+          <input type="password" class="field" placeholder="Password" name="password"><br>
+          <!-- optional, not required if events handled with js -->
+          <div class="password-error"></div>
+          <!-- optional, name must be "remember" and type must be checkbox-->
+          <div style="display:none">
+          <input type="checkbox" name="remember"> Remember me<br>
+          </div>
+          <button name="submit">Log In</button> <!-- or "input type=submit" tag with name="submit" -->
+
+        </form>
+
+      </div>
+
+      <div class="sponsor-card">
+        <div class="event-logo">
+          <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/logo/logo-vertical-transparent.png">
+          <div>Join us for our summit</div>
+        </div>
+
+        <div class="sponsor-container">
+          <h2>Our Sponsors</h2>
+          <div class="sponsor-list">
+            <div class="sponsor">
+              <a target="_blank" href="https://www.toolbox9.com/">
+                <img alt="toolbox no. 9"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/toolbox-no-9.png">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://www.aprio.com/">
+                <img alt="Aprio"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/aprio.png">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://www.northside.com/">
+                <img alt="Northside Hospital"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/2018_Northside_Logo_Navy.png">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://www.grantthornton.com/">
+                <img alt="Grant Thorton"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Grant-Thornton.png">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://www.wipfli.com/">
+                <img alt="Wipfli"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Wipfli logo.jpg">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://coles.kennesaw.edu/mshmi//">
+                <img alt="KSU - Master of Science in Healthcare Management and Informatics"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/ksu_logo_black.png">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://www.mmmlaw.com/">
+                <img alt="Morris, Manning & Martin"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/MMM logo.jpg">
+              </a>
+            </div>
+            <div class="sponsor">
+              <a target="_blank" href="https://www.azaleahealth.com/">
+                <img alt="Azalea Health"
+                     src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Azalea Health Logo.png">
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- hack to remove extra height of login page on server  -->
+  <script>
+    var css = `app-login > div {height: auto !important}`;
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(css));
+    head.appendChild(style);
+  </script>
+
+  <!-- Init LandingElement -->
+  <script type="text/javascript">
+    // Check if landingPageEl is supplied
+    var landingElement;
+    if ('landingPageEl' in window) {
+      landingElement = landingPageEl;
+    } else {
+      landingElement = document;
+    }
+  </script>
+
+
+
+</inferno-snippet-content>
+<!--  SNIPPET CONTENT END  -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+
+
+</body>
+
+
+</html>
