@@ -80,22 +80,21 @@
   <!-- form - left column -->
   <style>
     /* will get injected by inferno if errors */
-    .form-error-container {
-      width: 100%;
-      background-color: #242424ea;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    /* will not look exactly right locally as other styles are getting applied on server */
+    .form-error {
+      color: white;
+      font-size: 1.3em;
+      background-color: var(--branding-danger);
+      width: 81%;
+      margin: 0 9.5% 12px 9.5%;
     }
 
-    .form-error-container p,
-    .form-error-container li {
+    .email-error, .password-error {
       padding: 8px;
-      color: var(--branding-warning);
+      color: var(--branding-danger);
+      font-size: 1.3em;
     }
+
 
     .form-grid {
       display: grid;
@@ -140,6 +139,17 @@
     .field div {
       text-align: left;
       margin-left: 40px;
+    }
+
+    .forgot {
+      width: 80%;
+      text-align: right;
+      margin: 5% 10%;
+
+    }
+
+    .forgot a {
+      color: white;
     }
   </style>
 
@@ -306,10 +316,12 @@
         height: auto;
         min-height: auto;
       }
+
       .form-card {
         min-height: auto;
         padding: 1%;
       }
+
       .sponsor-card {
         min-height: auto;
       }
@@ -330,14 +342,16 @@
 
         <script type="text/javascript">
           // For custom error handling
-          window.loginPageEl.addEventListener("rendered",(e)=>{ console.log("Error",e);});
+          window.loginPageEl.addEventListener("rendered", (e) => {
+            console.log("Error", e);
+          });
         </script>
         <!-- id must be "login" -->
         <form id="login">
           <!-- optional, not required if events handled with js -->
           <div class="form-error"></div>
           <!-- name must be "email" -->
-          <input type="email" class="field" placeholder="Email Address" name="email" ><br>
+          <input type="email" class="field" placeholder="Email Address" name="email"><br>
           <!-- optional, not required if events handled with js -->
           <div class="email-error"></div>
           <!-- name must be "password" -->
@@ -346,10 +360,12 @@
           <div class="password-error"></div>
           <!-- optional, name must be "remember" and type must be checkbox-->
           <div style="display:none">
-          <input type="checkbox" name="remember"> Remember me<br>
+            <input type="checkbox" name="remember"> Remember me<br>
           </div>
-          <button name="submit">Log In</button> <!-- or "input type=submit" tag with name="submit" -->
-
+          <button name="submit">Log In</button>
+          <div class="forgot m-sm">
+            <a href="/forgotpassword">Forgot Password?</a>
+          </div>
         </form>
 
       </div>
@@ -439,7 +455,6 @@
       landingElement = document;
     }
   </script>
-
 
 
 </inferno-snippet-content>
