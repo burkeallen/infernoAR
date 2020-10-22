@@ -110,6 +110,28 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="56a867a1-b796-4bde-aa92-005359048f39">
 
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
+
+                </script>
+
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -131,13 +153,169 @@
                   }
                 </style>
 
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
+                  }
+
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
+                  }
+
+                  @media only screen and (max-width: 1020px) {
+                    .stage-grid, .leftCol, .rightCol {
+                      display: block;
+                    }
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  videos-detail {
+                    background-color: black !important;
+                    padding: 28%;
+                  }
+
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0;
+                  }
+                </style>
+
+                <!-- group chat -->
+                <style>
+                  .group_chat {
+                    position: relative;
+                    width: 100%;
+                    height: 122.5%;
+                    top: -8px;
+                  }
+
+                  .group_chat iframe {
+                    position: absolute;
+                    border: none;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  @media only screen and (max-width: 1020px) {
+
+                    .group_chat {
+                      position: relative;
+                      margin-top: 20px;
+                      width: 101%;
+                      height: 400px;
+                    }
+
+                    .group_chat iframe {
+                      position: relative;
+                      width: 100%;
+                      height: 100%;
+                    }
+                  }
+                </style>
+
+                <!-- Sponsors -->
+                <style>
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    max-width: 1100px;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 10px 10px;
+                    padding: 0 5% 0 5%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 200px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
+
+                  .sponsors-header {
+                    margin: 0 30px 20px 30px;
+                  }
+
+                  .sponsors-header h1 {
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #ffffff;
+                  }
+
+                </style>
+
                 <div class="content">
+                  <div class="stage-grid">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
+                    </div>
 
+                    <div class="group_chat">
+                      <iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=tag-breakout-room-1" class="ntar-chat-iframe"></iframe>
+                    </div>
+                  </div>
+
+                  <div class="sponsors-header">
+                    <h1>Our Sponsors</h1>
+                  </div>
+                  <div id="sponsors-grid" class="sponsors-grid"></div>
+                  <template id="sponsor-template">
+                    <img id="sponsor-logo" src=""/>
+                  </template>
                 </div>
+
+                <!-- Sponsors -->
+                <script>
+                  var myLanding = landingPageEl ?? document;
+                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+                  var sponsors = ["toolbox-no-9", "aprio", "northside-hospital", "grant-thornton", "wipfli", "ksu", "morris-manning-martin", "azalea-health"]
+                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+
+                  for (let sponsor of sponsors) {
+                    let clone = sponsorTemplate.content.cloneNode(true);
+                    let img = clone.getElementById("sponsor-logo");
+                    img.id = "sponsor-logo-" + sponsor;
+                    img.src = baseUrl + sponsor + ".png";
+                    sponsorsGrid.appendChild(clone);
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

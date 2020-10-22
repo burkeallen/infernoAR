@@ -100,7 +100,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="24233654-ea0d-49d8-ac88-35340d80a4f7">
+              <inferno-snippet-content id="aa7edb03-ddb4-4001-8a42-a26283149017">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -236,22 +236,23 @@
                 <!-- QA Question Box -->
                 <style>
                   .inferno-input-group {
+                    padding: 1em 2em;
                     border-radius: 0 0 .5em .5em;
-                    padding: 1em;
                     background-color: var(--branding-primary);
                   }
 
                   .inferno-input-group input {
-                    width: 60%;
+                    margin: .5rem;
+                    min-width: 65%;
                   }
 
                   .inferno-input-group span {
-                    width: 20%;
+                    font-size: 16px;
                     color: white;
                   }
 
                   .inferno-input-group button {
-                    width: 15%;
+                    margin-top: .5rem;
                     background-color: white;
                     color: var(--branding-primary);
                     border: solid 1px white;
@@ -264,9 +265,44 @@
                   }
                 </style>
 
+                <!-- Sponsors -->
+                <style>
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    max-width: 1100px;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 10px 10px;
+                    padding: 0 5% 0 5%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 200px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
+
+                  .sponsors-header {
+                    margin: 0 30px 20px 30px;
+                  }
+
+                  .sponsors-header h1 {
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: #ffffff;
+                  }
+
+                </style>
+
                 <div class="content">
                   <div class="stage-grid">
-
                     <div class="leftCol">
                       <div class="ntar-video-container">
                         <div class="ntar-video" id="inferno-video-player"></div>
@@ -279,9 +315,33 @@
                     <div class="group_chat">
                       <iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=tag-main-stage" class="ntar-chat-iframe"></iframe>
                     </div>
-
                   </div>
+
+                  <div class="sponsors-header">
+                    <h1>Our Sponsors</h1>
+                  </div>
+                  <div id="sponsors-grid" class="sponsors-grid"></div>
+                  <template id="sponsor-template">
+                    <img id="sponsor-logo" src=""/>
+                  </template>
                 </div>
+
+                <!-- Sponsors -->
+                <script>
+                  var myLanding = landingPageEl ?? document;
+                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+                  var sponsors = ["toolbox-no-9", "aprio", "northside-hospital", "grant-thornton", "wipfli", "ksu", "morris-manning-martin", "azalea-health"]
+                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+
+                  for (let sponsor of sponsors) {
+                    let clone = sponsorTemplate.content.cloneNode(true);
+                    let img = clone.getElementById("sponsor-logo");
+                    img.id = "sponsor-logo-" + sponsor;
+                    img.src = baseUrl + sponsor + ".png";
+                    sponsorsGrid.appendChild(clone);
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -297,8 +357,7 @@
       <footer app-footer="" layout="row" layout-align="start center">
         Inferno Footer
       </footer>
-      <!-- ./ FOOTER -->
-    </div>
+      <!-- ./ FOOTER --></div>
   </videos-layout>
 </app-root>
 
