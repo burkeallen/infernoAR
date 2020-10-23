@@ -217,7 +217,7 @@
                     background-color: rgba(255, 255, 255, 1);
                   }
 
-                   /* setting display none cause issues with flickity rendering */
+                  /* setting display none cause issues with flickity rendering */
                   /* so we hide it by moving it off the screen */
                   .is-hidden {
                     position: absolute;
@@ -228,6 +228,7 @@
                   .flickity-page-dots {
                     bottom: -22px !important;
                   }
+
                   /* dots are lines */
                   .flickity-page-dots .dot {
                     height: 4px !important;
@@ -288,28 +289,30 @@
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
-                  console.log('loading color overrides for --branding-primary = white');
-                  var css = `
-                  jolo-search-box .search-box-container {display: none !important}
-                  span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
-                  `;
-                  var head = document.head || document.getElementsByTagName('head')[0];
-                  var style = document.createElement('style');
-                  style.appendChild(document.createTextNode(css));
-                  head.appendChild(style);
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
                 </script>
 
                 <script>
                   function loadFkty() {
+                    // add css style sheet
+                    const styleTag = document.createElement("link");
+                    styleTag.setAttribute('rel', 'stylesheet');
+                    styleTag.setAttribute('type', 'text/css');
+                    styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
+                    landingPageEl.appendChild(styleTag);
 
                     if (!window.flktyLoaded) {
-                      // add css style sheet
-                      const styleTag = document.createElement("link");
-                      styleTag.setAttribute('rel', 'stylesheet');
-                      styleTag.setAttribute('type', 'text/css');
-                      styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
-                      landingPageEl.appendChild(styleTag);
-
                       // add external JS file
                       const scriptTag = document.createElement("script");
                       scriptTag.onload = function (loadEvent) {
@@ -317,7 +320,6 @@
                       }
                       scriptTag.type = "text/javascript";
                       scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
-
                       document.getElementsByTagName("head")[0].appendChild(scriptTag);
                       window.flktyLoaded = true;
                     } else {
@@ -332,8 +334,8 @@
                       cellAlign: 'left',
                       freeScroll: true,
                       wrapAround: true,
-                      groupCells: 3,
-                      autoPlay: true,
+                      groupCells: 2,
+                      autoPlay: 6000,
                       on: {
                         ready: function () {
                           const el = landingPageEl.querySelector('.sponsor-container').classList.remove('is-hidden');
