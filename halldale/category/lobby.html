@@ -110,7 +110,7 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="41ec7f83-05e6-41fc-b911-aa799c202d43">
 
-
+                <!-- Main Snippet -->
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -204,50 +204,38 @@
                     bottom: 5%;
                     width: 96%;
                     margin: 0 auto;
+                  }
+                </style>
+
+                <!-- Flickity carousel/slider  -->
+                <style>
+                  .slider img {
+                    display: block;
+                    margin-right: 10px;
+                    width: 300px;
+                    height: 150px;
                     background-color: rgba(255, 255, 255, 1);
                   }
 
-                  .sponsor-container h2 {
-                    margin: 10px;
+                   /* setting display none cause issues with flickity rendering */
+                  /* so we hide it by moving it off the screen */
+                  .is-hidden {
+                    position: absolute;
+                    left: -3000px;
                   }
 
-                  .sponsor-list {
-                    display: flex;
-                    flex: 1;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
+                  /* position dots up a bit */
+                  .flickity-page-dots {
+                    bottom: -22px !important;
+                  }
+                  /* dots are lines */
+                  .flickity-page-dots .dot {
+                    height: 4px !important;
+                    width: 40px !important;
+                    margin: 0 !important;
+                    border-radius: 0 !important;
                   }
 
-                  .sponsor {
-                    display: flex;
-                    align-items: center;
-                    max-width: 140px;
-                    max-height: 100px;
-
-                    margin: 8px;
-                    padding: 8px;
-                  }
-
-                  .sponsor img {
-                    align-self: center;
-                  }
-
-                  .sponsor:hover {
-                    filter: brightness(80%);
-                    transform: scale(1.1);
-                  }
-
-                  .sponsor a {
-                    text-decoration: none;
-                  }
-
-                  .sponsor a:hover {
-                    text-decoration: none;
-                  }
-
-                  .sponsor img {
-                    width: 100%;
-                  }
                 </style>
 
                 <div class="content">
@@ -276,34 +264,20 @@
                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/logo.png">
                   </div>
 
-                  <div class="sponsor-container">
-                    <div class="sponsor-list">
-                      <div class="sponsor">
-
-                          <img alt="Alsim"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Alsim _Logo.png">
-
-                      </div>
-                      <div class="sponsor">
-                          <img alt="Avion Group"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Avion Group_Logo.png">
-                      </div>
-                      <div class="sponsor">
-                          <img alt="Bihrle"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Bihrle_Logo.png">
-                      </div>
-                      <div class="sponsor">
-                          <img alt="CPaT"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/CPaT_Logo.png">
-                      </div>
-                      <div class="sponsor">
-                          <img alt="Drillster"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Drillster_Logo.png">
-                      </div>
-                      <div class="sponsor">
-                          <img alt="Entrol"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Entrol_Logo.jpg">
-                      </div>
+                  <div class="sponsor-container is-hidden">
+                    <div class="slider">
+                      <img alt="Alsim"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Alsim _Logo.png">
+                      <img alt="Avion Group"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Avion Group_Logo.png">
+                      <img alt="Bihrle"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Bihrle_Logo.png">
+                      <img alt="CPaT"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/CPaT_Logo.png">
+                      <img alt="Drillster"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Drillster_Logo.png">
+                      <img alt="Entrol"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Entrol_Logo.jpg">
 
                     </div>
                   </div>
@@ -325,6 +299,51 @@
                   head.appendChild(style);
                 </script>
 
+                <script>
+                  function loadFkty() {
+
+                    if (!window.flktyLoaded) {
+                      // add css style sheet
+                      const styleTag = document.createElement("link");
+                      styleTag.setAttribute('rel', 'stylesheet');
+                      styleTag.setAttribute('type', 'text/css');
+                      styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
+                      landingPageEl.appendChild(styleTag);
+
+                      // add external JS file
+                      const scriptTag = document.createElement("script");
+                      scriptTag.onload = function (loadEvent) {
+                        initFlkty();
+                      }
+                      scriptTag.type = "text/javascript";
+                      scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
+
+                      document.getElementsByTagName("head")[0].appendChild(scriptTag);
+                      window.flktyLoaded = true;
+                    } else {
+                      initFlkty();
+                    }
+                  }
+
+                  function initFlkty() {
+                    const elem = landingPageEl.querySelector('.slider');
+                    const flkty = new Flickity(elem, {
+                      // options
+                      cellAlign: 'left',
+                      freeScroll: true,
+                      wrapAround: true,
+                      groupCells: 3,
+                      autoPlay: true,
+                      on: {
+                        ready: function () {
+                          const el = landingPageEl.querySelector('.sponsor-container').classList.remove('is-hidden');
+                        }
+                      }
+                    });
+                  }
+
+                  loadFkty();
+                </script>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
