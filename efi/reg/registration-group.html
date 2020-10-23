@@ -59,7 +59,10 @@
     }
 
     h1, h2, h3, h4, h5 {
-      font-family: "CustomFont1", sans-serif !important;
+      font-family: sans-serif !important;
+      font-size: clamp(1rem, 1.5rem + 1vw, 3rem);
+      margin-top: 3%;
+      text-transform: uppercase;
     }
 
     .content {
@@ -71,9 +74,76 @@
       min-height: 100vh;
       padding: 20px;
       z-index: 1;
-      font-family: "CustomFont1", sans-serif !important;
-      background-color: #8e3494
+      font-family: sans-serif !important;
+      background-color: #8e3494;
+      font-size: clamp(1rem, 1rem + 1vw, 2.5rem);
+      line-height: max(1em, 120%);
     }
+  </style>
+
+  <!--  info card style -->
+  <style>
+    .info-card {
+      display: grid;
+      justify-content: center;
+      align-content: center;
+      color: white;
+    }
+
+    .info-card button {
+      margin: 0 auto;
+      background-color: #8e3494;
+      border: none;
+      padding: 2%;
+      text-align: center;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .info-card button:hover {
+      filter: brightness(120%);
+      box-shadow: 6px 7px 40px -4px rgba(250, 250, 250, 0.4);
+    }
+    .info-text {
+      background-color: rgba(0, 0, 0, .7);
+      padding: 2%;
+      width: 90%;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .info-text img {
+      display: block;
+      position: relative;
+      width: min(100%, 500px);
+      margin: 2% auto;
+      background-color: white;
+    }
+
+    .info-text a {
+      color: white;
+      text-decoration: underline;
+    }
+
+    .info-text a:hover {
+      color: white;
+    }
+
+    .footer-img {
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    .footer-img img {
+      width: min(80%, 200px);
+    }
+
+    .footer-img img.logo {
+      width: min(150%, 400px);
+    }
+
   </style>
 
   <!-- form -->
@@ -96,29 +166,18 @@
       color: var(--branding-warning);
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr;
-      gap: 0 0;
-      justify-content: center;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
 
     .form-card {
-      background-color: rgba(142, 52, 148, .8);
-      height: 100%;
-      padding: 60px 40px;
-      text-align: center;
+      background-color: rgba(0, 0, 0, .7);
+      padding: 5% 0;
+      width: 90%;
+      margin: 5% auto;
+      position: relative;
       color: white;
+      text-align: center;
     }
 
 
-    .form-card h1 {
-      margin: 0;
-    }
 
     .form-card button {
       margin-top: 2em;
@@ -126,11 +185,13 @@
 
     form input, form button {
       width: 80%;
-      font-size: 1.2em;
+      font-size: clamp(1rem, 1rem + 1vw, 2.5rem);
       line-height: 2em;
       color: black;
       border: none;
       padding: 4px;
+      border-radius: .25em;
+      padding: .25em .5em;
     }
 
     input::placeholder {
@@ -140,7 +201,6 @@
     form button {
       background-color: var(--branding-primary);
       border: solid 1px var(--branding-primary);
-      font-size: 1.25em;
       color: white;
     }
 
@@ -150,7 +210,7 @@
 
     .field div {
       text-align: left;
-      margin-left: 40px;
+      margin-left: 5%;
     }
   </style>
 
@@ -166,7 +226,7 @@
       border: 0 !important;
       background: white;
       background-image: none;
-      font-size: 1.2em;
+      font-size: clamp(1rem, 1rem + 1vw, 2.5rem);
       line-height: 2em;
     }
 
@@ -180,7 +240,7 @@
       position: relative;
       display: flex;
       width: 80%;
-      height: 3em;
+      height: 5.5rem;
       line-height: 3;
       background: #2c3e50;
       overflow: hidden;
@@ -193,6 +253,11 @@
       padding: 0 .5em;
       color: #696969;
       cursor: pointer;
+    }
+
+    select, select option {
+      overflow-wrap: anywhere;
+      word-wrap: anywhere;
     }
 
     /* Arrow */
@@ -216,54 +281,6 @@
     }
   </style>
 
-  <!--  info card style -->
-  <style>
-    .info-card {
-      display: grid;
-      justify-content: center;
-      align-content: center;
-      color: white;
-    }
-
-
-    .info-text {
-      background-color: rgba(20, 183, 243, .9);
-      padding: 20px;
-      width: 80%;
-      margin: 0 auto;
-      font-size: 1.2em;
-      position: relative;
-    }
-
-    .info-text img {
-      width: 60%;
-      margin: 0 20% 2rem 20%;
-    }
-
-    .info-text a {
-      color: white;
-      text-decoration: underline;
-    }
-
-    .info-text a:hover {
-      color: white;
-    }
-
-    .footer-img {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .footer-img img {
-      width: min(80%, 200px);
-      margin: 0 auto;
-    }
-
-
-  </style>
-
   <!-- Form Validation Styles -->
   <style>
     .hidden {
@@ -272,14 +289,17 @@
 
     /* Validation Styles */
     .field-warning {
-      font-size: 1.2em;
-      color: #fa867e;
-      padding-left: 4px;
-
+      color: red;
+      padding-left: 6.5%;
+      margin-top: 2%;
     }
 
-    .is-invalid {
-      background-color: rgb(255, 188, 188);
+    input.is-invalid::placeholder {
+      color: red;
+    }
+
+    select.is-invalid option:first-child {
+      color: red;
     }
 
     .warning-shake {
@@ -337,24 +357,12 @@
     }
   </style>
 
-  <style>
-    @media only screen and (max-width: 986px) {
-      .form-grid {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .info-card {
-        order: 2;
-        margin-bottom: 40px;
-      }
-
-      .form-card {
-        order: 1;
-      }
-
+  <script>
+    function register() {
+      const el = document.querySelector('.form-card');
+      el.scrollIntoView();
     }
-  </style>
+  </script>
 
   <div class="content">
     <!-- public URL for Registration Page -->
@@ -365,105 +373,48 @@
 
         <div class="info-text">
           <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/expo-reg-header.png">
-          <p>March 16 - 18, 2021</p>
-
+          <h2>MARCH 16 - 18, 2021</h2>
           <p>A Multi-Sector Virtual Showcase of Florida's Leading Products and Services</p>
+          <p>
+            <a href="https://www.enterpriseflorida.com">Enterprise Florida, Inc.</a>
+            (EFI), the official economic and trade development agency for the
+            State of Florida, is pleased to present the first-ever Florida
+            International Trade Expo, a virtual showcase of 150+ of the
+            state’s leading products and services providers.
+          </p>
 
-          <br>
-          <p><a href="https://www.enterpriseflorida.com">Enterprise Florida, Inc.</a> (EFI), the official economic and
-                                                                                      trade development agency for the
-                                                                                      State of Florida, is pleased to
-                                                                                      present the first-ever Florida
-                                                                                      International Trade Expo, a
-                                                                                      virtual showcase of 150+ of the
-                                                                                      state’s leading products and
-                                                                                      services providers. </p>
+          <button onclick="register();">Register Now</button>
 
-          <br>
-          <p>WHO SHOULD ATTEND?</p>
+          <h2>WHO SHOULD ATTEND?</h2>
 
           <p>Agents, distributors, buyers, representatives, and wholesalers seeking high-quality products for
              distribution and sale in Europe, Latin America and the Caribbean, Canada, Mexico, Africa and Asia. </p>
 
-          <br>
-          <p>BENEFITS OF PARTICIPATING</p>
+          <h2>BENEFITS OF PARTICIPATING</h2>
 
           <ul>
-            <li><p>Connect with Florida exhibitors in a wide range of industries </p>
-
-            </li>
-            <li><p>Text and video chat directly with Florida company representatives </p>
-
-            </li>
-            <li><p>Arrange virtual business meetings during the expo</p>
-
-            </li>
-            <li><p>Join industry-specific networking lounges</p>
-
-            </li>
-            <li><p>View live webinars with Florida industry leaders and other experts</p>
-
-            </li>
-            <li><p>Engage with a network of Florida professionals who can help buyers and sellers connect</p>
-
-            </li>
-            <li><p>No cost to participate</p>
-
-            </li>
+            <li>Connect with Florida exhibitors in a wide range of industries</li>
+            <li>Text and video chat directly with Florida company representatives</li>
+            <li>Arrange virtual business meetings during the expo</li>
+            <li>Join industry-specific networking lounges</li>
+            <li>View live webinars with Florida industry leaders and other experts</li>
+            <li>Engage with a network of Florida professionals who can help buyers and sellers connect</li>
+            <li>No cost to participate</li>
           </ul>
 
-          <br>
-          <p>INDUSTRY SECTORS</p>
+          <h2>INDUSTRY SECTORS</h2>
 
           <p>The Florida International Trade Expo will connect you with decision makers from a wide variety of
-             industries.</p>
+             industries which include: Aviation & Aerospace, Clean Technology, Defense & Homeland Security, Financial &
+             Professional Services, Information Technology, Life Sciences & Medical Technology, Logistics, Distribution
+             & Infrastructure, Marine Equipment & Boats, Manufacturers such as Consumer Goods, Health and Beauty, Food
+             Products, Industrial Equipment & Supplies, plus many more.</p>
 
-          <br>
-          <ul>
-            <li><p>Aviation &amp;amp; Aerospace</p>
+          <h2>FOR FURTHER INFORMATION</h2>
 
-            </li>
-            <li><p>Clean Technology</p>
-
-            </li>
-            <li><p>Defense &amp;amp; Homeland Security</p>
-
-            </li>
-            <li><p>Financial &amp;amp; Professional Services </p>
-
-            </li>
-            <li><p>Information Technology</p>
-
-            </li>
-            <li><p>Life Sciences &amp;amp; Medical Technology</p>
-
-            </li>
-            <li><p>Logistics, Distribution &amp;amp; Infrastructure</p>
-
-            </li>
-            <li><p>Manufacturers such as Consumer Goods, Health and Beauty, Food Products, Industrial Equipment &amp;amp;
-                   Supplies, plus many more </p>
-
-            </li>
-            <li><p>Marine Equipment &amp;amp; Boats</p>
-
-            </li>
-          </ul>
-
-          <br>
-          <p>FOR FURTHER INFORMATION</p>
-
-          For further information about the Florida International Trade Expo, please email <a
-            href="mailto:floridaexpo@enterpriseflorida.com">floridaexpo@enterpriseflorida.com</a>.
-          <div class="footer-img">
-            <div>
-              <img
-                  src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/florida-enterprise.png">
-            </div>
-            <div>
-              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/fl-seal-white.png">
-            </div>
-          </div>
+          <p>For further information about the Florida International Trade Expo, please email
+            <strong><a href="mailto:floridaexpo@enterpriseflorida.com">floridaexpo@enterpriseflorida.com</a></strong>.
+          </p>
         </div>
 
       </div>
@@ -483,6 +434,19 @@
             <input type="password" class="field-input" placeholder="Password" name="password"/>
           </div>
 
+          <div class="field" id="field-prefix">
+            <div><span class="field-warning"></span></div>
+            <div class="select-field">
+              <select class="field-input" name="userData1Name">
+                <option selected="selected" value="">Prefix</option>
+                <option value="Dr.">Dr.</option>
+                <option value="Mr.">Mr.</option>
+                <option value="Ms.">Ms.</option>
+                <option value="Mrs.">Mrs.</option>
+              </select>
+            </div>
+          </div>
+
           <div class="field" id="field-firstname">
             <div><span class="field-warning"></span></div>
             <input type="text" class="field-input" placeholder="First Name" name="firstName"/>
@@ -495,30 +459,33 @@
 
           <div class="field" id="field-company">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Company Name" name="userData3Name"/>
+            <input type="text" class="field-input" placeholder="Company Name" name="userData2Name"/>
           </div>
 
           <!-- optional fields -->
           <div class="field" id="field-country">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Country" name="userData1Name"/>
+            <input type="text" class="field-input" placeholder="Country" name="userData3Name"/>
           </div>
 
           <div class="field" id="field-job-title">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Job Title" name="userData2Name"/>
+            <input type="text" class="field-input" placeholder="Job Title" name="userData4Name"/>
           </div>
 
           <div class="field" id="field-company-type">
             <div><span class="field-warning"></span></div>
             <div class="select-field">
-              <select class="field-input" name="userData4Name">
+              <select class="field-input" name="userData5Name">
                 <option selected="selected" value="">Company Type</option>
-                <option value="Company Type 1">Company Type 1</option>
-                <option value="Company Type 2">Company Type 2</option>
-                <option value="Company Type 3">Company Type 3</option>
-                <option value="Company Type 4">Company Type 4</option>
-                <option value="Company Type 5">Company Type 5</option>
+                <option value="Manufacturer/Producer">Manufacturer/Producer</option>
+                <option value="Distributor/Buyer">Distributor/Buyer</option>
+                <option value="Sales Representative">Sales Representative</option>
+                <option value="Service">Service</option>
+                <option value="Government/Organization">Government/Organization</option>
+                <option value="Government/Organization">Government/Organization</option>
+                <option value="Press">Press</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
@@ -526,51 +493,57 @@
           <div class="field" id="field-industry">
             <div><span class="field-warning"></span></div>
             <div class="select-field">
-              <select class="field-input" name="userData5Name">
-                <option selected="selected" value="">Industry</option>
-                <option value="Industry 1">Industry 1</option>
-                <option value="Industry 2">Industry 2</option>
-                <option value="Industry 3">Industry 3</option>
-                <option value="Industry 4">Industry 4</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field" id="field-industry-subsector">
-            <div><span class="field-warning"></span></div>
-            <div class="select-field">
               <select class="field-input" name="userData6Name">
-                <option selected="selected" value="">Industry Subsector</option>
-                <option value="Industry Sub A">Industry Sub A</option>
-                <option value="Industry Sub B">Industry Sub B</option>
-                <option value="Industry Sub C">Industry Sub C</option>
+                <option selected="selected" value="">Industry</option>
+                <option value="Aviation & Aerospace">Aviation & Aerospace</option>
+                <option value="Clean Technology">Clean Technology</option>
+                <option value="Consumer Goods">Consumer Goods</option>
+                <option value="Defense & Homeland Security">Defense & Homeland Security</option>
+                <option value="Financial & Professional Services">Financial & Professional Services</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Logistics, Distribution & Infrastructure">Logistics, Distribution & Infrastructure</option>
+                <option value="Life Sciences & Medical Technology">Life Sciences & Medical Technology</option>
+                <option value="Logistics & Distribution">Logistics & Distribution</option>
+                <option value="Manufacturing">Manufacturing</option>
+                <option value="Marine Equipment & Boats">Marine Equipment & Boats</option>
+                <option value="Other">Other</option>
               </select>
             </div>
           </div>
 
           <div class="field" id="field-product-description">
             <div><span class="field-warning"></span></div>
-            <input rows="4" class="field" placeholder="Product Description" id="userData7Name"/>
+            <input rows="4" class="field" placeholder="Primary Product or Service Description" id="userData7Name"/>
           </div>
 
 
-          <div class="field" id="field-industry-interest">
+          <div class="field" id="field-opportunities">
             <div><span class="field-warning"></span></div>
-            <input type="text" class="field-input" placeholder="Industries of Interest" name="userData8Name"/>
-          </div>
-
-          <div class="field" id="field-hear-about-us">
-            <div><span class="field-warning"></span>
+            <div class="select-field">
+              <select class="field-input" name="userData8Name">
+                <option selected="selected" value="">Are you interested in receiving business/investment opportunities in Florida? </option>
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
             </div>
-            <input type="text" class="field-input" placeholder="How did you here about us?" name="userData9Name"/>
           </div>
 
           <!-- Submit Buttons -->
-          <button type="button" id="validate-btn">Submit</button>
+          <button type="button" id="validate-btn">SUBMIT</button>
           <button type="button" class="hidden" id="submit-btn"></button>
 
 
         </form>
+
+        <div class="footer-img">
+          <div>
+            <img class="logo"
+                 src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/logo.png">
+          </div>
+          <div>
+            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/fl-state-seal-white.png">
+          </div>
+        </div>
 
       </div>
 
@@ -661,12 +634,75 @@
         minimumCharacters: 6,
       },
       {
-        fieldSelector: '#field-company input',
-        warningTextSelector: '#field-company .field-warning',
+        fieldSelector: '#field-prefix select',
+        warningTextSelector: '#field-prefix .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 2,
+      },
+      {
+        fieldSelector: '#field-firstname input',
+        warningTextSelector: '#field-firstname .field-warning',
         warningClass: 'is-invalid',
         required: true,
         minimumCharacters: 3,
       },
+      {
+        fieldSelector: '#field-lastname input',
+        warningTextSelector: '#field-lastname .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 3,
+      },
+      {
+        fieldSelector: '#field-company input',
+        warningTextSelector: '#field-company .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 1,
+      },
+      {
+        fieldSelector: '#field-country input',
+        warningTextSelector: '#field-country .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 1,
+      },
+      {
+        fieldSelector: '#field-job-title input',
+        warningTextSelector: '#field-job-title .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 1,
+      },
+      {
+        fieldSelector: '#field-company-type select',
+        warningTextSelector: '#field-company-type .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 2,
+      },
+      {
+        fieldSelector: '#field-industry select',
+        warningTextSelector: '#field-industry .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 2,
+      },
+      {
+      fieldSelector: '#field-product-description input',
+      warningTextSelector: '#field-product-description .field-warning',
+      warningClass: 'is-invalid',
+      required: true,
+      minimumCharacters: 3,
+    },
+      {
+        fieldSelector: '#field-opportunities select',
+        warningTextSelector: '#field-opportunities .field-warning',
+        warningClass: 'is-invalid',
+        required: true,
+        minimumCharacters: 2,
+      }
     ];
   </script>
 
@@ -767,7 +803,8 @@
         (validatorGetEl(fieldData.fieldSelector).type === 'checkbox' &&
           validatorGetEl(fieldData.fieldSelector).checked === false)
       ) {
-        return ['This field is required'];
+        const label = validatorGetEl(fieldData.fieldSelector).placeholder ?? validatorGetEl(fieldData.fieldSelector).options[0].innerHTML;
+        return [ label + ' is required'];
       }
 
       return [];
@@ -903,7 +940,6 @@
 
     // Return first element found
     function validatorGetEl(selector) {
-      console.log(selector, landingElement);
       return landingElement.querySelector(selector);
     }
 
@@ -928,7 +964,6 @@
         750
       );
 
-      console.log(field.fieldSelector, element);
       element.addEventListener('blur', (e) => {
         validatorProcess(field, validationFields);
       });
