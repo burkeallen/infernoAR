@@ -103,11 +103,6 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="f32934c2-47c6-46f3-864c-c6b7420dc9e1">
 
-                <!-- https://studio304nextechar.freetls.fastly.net/infernoAR/gallery2/
-                left pane 280
-                top pane 55
-                main pane has 15-20 padding forced on it. -->
-
                 <!-- Import Fonts -->
                 <script type="text/javascript">
                   // Load custom fonts
@@ -254,53 +249,6 @@
                     margin: 2.8rem 0;
                   }
 
-                  .sponsors-section {
-                    padding: 0 4.4rem 4.4rem;
-                  }
-
-                  .sponsors-header {
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    flex-wrap: wrap;
-                  }
-
-                  .sponsors-header h1 {
-                    font-size: 3.5rem;
-                    font-weight: bold;
-                    color: #01245B;
-                    margin-right: 2rem;
-                    margin-top: 0px;
-                  }
-
-                  .sponsors-header a {
-                    color: white;
-                    border-radius: 5px;
-                    background-color: #0B2668;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                    text-decoration: none;
-                    padding: 1.2rem 0;
-                    width: 36.4rem;
-                    text-align: center;
-                    font-size: 2rem;
-                    font-weight: bold;
-                  }
-
-                  .sponsors-list {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    padding: 0 5% 0 5%;
-                  }
-
-                  .sponsors-list img {
-                    width: 30rem;
-                    height: 8.6rem;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                    margin: 1rem;
-                  }
-
                   .search-exhibitors-divider {
                     background-color: rgb(246, 246, 246, 0.79);
                     width: 100%;
@@ -385,37 +333,11 @@
                     outline: none;
                     border: none;
                   }
+                </style>
 
-                  /*.select-wrapper {*/
-                  /*  width: 26.6rem;*/
-                  /*  margin: 0.9rem;*/
-                  /*  border: 2px solid rgba(11, 38, 104, 0.32);*/
-                  /*  border-radius: 4px;*/
-                  /*  background-color: #FFFFFF;*/
-                  /*}*/
+                <!-- Attendees -->
+                <style>
 
-                  /*.select-wrapper select {*/
-                  /*  width: 96%;*/
-                  /*  padding: 1.4rem;*/
-                  /*  color: #3D3D3D;*/
-                  /*  font-size: 2rem;*/
-                  /*  font-weight: bold;*/
-                  /*  -webkit-appearance: none;*/
-                  /*  -moz-appearance: none;*/
-                  /*  appearance: none;*/
-                  /*  background: url("https://studio304nextechar.freetls.fastly.net/infernoAR/tag/chevron.png") no-repeat right #fff;*/
-                  /*  background-size: 8%;*/
-                  /*  border: none;*/
-                  /*}*/
-
-                  /*.select-wrapper select:focus {*/
-                  /*  outline: none;*/
-                  /*}*/
-
-                  /*.select-wrapper img {*/
-                  /*  width: 2rem;*/
-                  /*  margin: 1rem;*/
-                  /*}*/
 
                   .attendee {
                     margin: 1.4rem 4.4rem;
@@ -520,17 +442,51 @@
                   .contact img {
                     margin-right: 1rem;
                   }
+                </style>
+
+                <!-- Sponsors -->
+                <style>
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 40px auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 10px 10px;
+                    padding: 0 10% 0 10%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 240px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
+
+                  .sponsors-header {
+                    margin: 0 30px;
+                  }
+
+                  .sponsors-header h1 {
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                    color: #01245B;
+                  }
 
                 </style>
 
                 <div id="container">
-
                   <div class="banner-image">
                     <div class="banner-info">
                       <div class="banner-text">Attendees</div>
                       <div class="banner-sub-text">See who else is attending the Digital Health Leadership Summit and network away.</div>
                     </div>
                   </div>
+
                   <div class="search-exhibitors-divider">
                     <div class="filter-options">
                       <div class="search-wrapper">
@@ -545,7 +501,6 @@
                       <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
                     </div>
                   </div>
-
                   <div id="attendee-list" class="attendee-list">
 
                     <template id="attendee-template">
@@ -576,22 +531,21 @@
                   </div>
 
                   <hr/>
-                  <div class="sponsors-section">
+
+                  <div class=sponsor-container>
                     <div class="sponsors-header">
                       <h1>Our Sponsors</h1>
                     </div>
-                    <div id="sponsor-list" class="sponsors-list">
-
-                      <template id="sponsor-template">
-                        <img id="sponsor-logo" src=""/>
-                      </template>
-                    </div>
+                    <div id="sponsors-grid" class="sponsors-grid"></div>
+                    <template id="sponsor-template">
+                      <img id="sponsor-logo" src=""/>
+                    </template>
                   </div>
 
                 </div>
 
+                <!-- Attendees -->
                 <script>
-
                   // used for local json
                   // var attendees = data.UserProfiles ;
 
@@ -605,7 +559,7 @@
                     });
                     return inGroup;
                   }
-                  var dataJSON = {{ data.UserProfiles | json }} ;
+                  var dataJSON = {{data.UserProfiles | json}};
                   var attendees = dataJSON.filter(user => {
                     return hasGroupNovo1(user.UserGroups, 'Attendees');
                   })
@@ -664,8 +618,7 @@
                         if (at.visible) {
                           empty = false;
                           el.style.display = ""
-                        }
-                        else {
+                        } else {
                           el.style.display = "none";
                         }
                       }
@@ -680,8 +633,7 @@
                       if (at.FirstName.toLowerCase().startsWith(query)
                         || at.Lastname.toLowerCase().startsWith(query)
                         || contactInfoTitle.toLowerCase().startsWith(query)
-                        || contactInfoCompany.toLowerCase().startsWith(query))
-                      {
+                        || contactInfoCompany.toLowerCase().startsWith(query)) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -834,32 +786,21 @@
 
                 </script>
 
+                <!-- Sponsors -->
                 <script>
-                  // handle sponsors
-
-                  var sponsors = ["dell", "johnson and johnson", "poly", "staubli", "telus", "viacom"]
-
-                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/sponsors/"
-
-                  var sponsorList = landingPageEl.getElementById("sponsor-list");
-
-                  var sponsorTemplate = landingPageEl.getElementById("sponsor-template");
+                  var myLanding = landingPageEl ?? document;
+                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+                  var sponsors = ["toolbox-no-9", "aprio", "northside-hospital", "grant-thornton", "wipfli", "ksu", "morris-manning-martin", "azalea-health", "dss", "nutanix", "telliant"]
+                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
 
                   for (let sponsor of sponsors) {
-
                     let clone = sponsorTemplate.content.cloneNode(true);
-
                     let img = clone.getElementById("sponsor-logo");
-
                     img.id = "sponsor-logo-" + sponsor;
-
                     img.src = baseUrl + sponsor + ".png";
-
-                    sponsorList.appendChild(clone);
-
-
+                    sponsorsGrid.appendChild(clone);
                   }
-
                 </script>
 
               </inferno-snippet-content>
