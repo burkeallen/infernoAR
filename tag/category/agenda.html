@@ -102,60 +102,58 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="06598932-4048-447a-800f-50c692318d81">
 
+                <!-- Container -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
                   img::after {
                     content: none;
                   }
 
                   hr {
                     border: 1px solid rgba(11, 38, 104, 0.32);
-                    margin: 2.8rem 0;
+                    margin: 2rem 0;
                   }
+                </style>
 
-                  #container {
-                    font-family: 'Helvetica Neue', sans-serif;
-                    font-weight: normal;
-                    font-style: normal;
-                    position: absolute;
+                <!-- banner -->
+                <style>
+                  .banner {
                     width: 100%;
-                    height: calc(100vh - 56px);
-                    margin: -20px;
-                    background-repeat: no-repeat;
-                    background-position: top center;
-                    background-attachment: fixed;
+                    height: 400px;
                     background-size: cover;
-                    background-color: #ccc;
-                    overflow-y: auto;
-                    scroll-behavior: smooth;
+                    background-position: left center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/agenda/agenda_header.jpg');
                   }
 
-                  .shadow {
-                    position: absolute;
+                  .banner-shadow {
                     z-index: 99;
-                    top: 380px;
-                    left: 0;
+                    position: absolute;
+                    margin-top: 380px;
                     width: 100%;
                     height: 20px;
                     box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
                   }
 
-                  .banner-image {
-                    min-height: 400px;
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    padding-left: 40px;
-                    background-blend-mode: multiply;
-                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/agenda/agenda_header.jpg');
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
                   }
 
                   .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
                     color: #fff;
                     max-width: 90%;
-                    min-height: 20vw;
-                    padding-top: 120px;
                     text-shadow: #000 0 0 .5rem;
                   }
 
@@ -168,7 +166,6 @@
                     font-weight: lighter;
                     font-size: clamp(1.75rem, 2.25vw, 2.75rem);
                   }
-
                 </style>
 
                 <!-- Tabs -->
@@ -209,7 +206,7 @@
                     grid-auto-columns: auto;
                     grid-auto-rows: auto;
                     gap: 10px;
-                    margin: 0 40px;
+                    margin: 20px 40px;
                   }
 
                   .card {
@@ -217,24 +214,23 @@
                     flex-direction: row;
                     flex: auto;
                     width: 100%;
-                    border-radius: 1em;
-                    background-color: #FCE4D6;
+                    border-radius: 1.1rem;
                     border: 2px solid #fff;
                   }
 
                   .event-left {
-                    width: 10rem;
+                    width: 11rem;
                     color: white;
                     background-color: var(--branding-primary);
-                    border-radius: 1em 0 0 1em;
-                    padding: 1em;
+                    border-radius: 1rem 0 0 1rem;
+                    padding: 1rem;
                     white-space: nowrap;
                     text-align: center;
                   }
 
                   .time {
                     color: #ffffff;
-                    padding-bottom: 10px;
+                    padding-bottom: 5px;
                   }
 
                   .join  {
@@ -244,7 +240,7 @@
                   .join a {
                     color: var(--branding-primary);
                     border-radius: 5px;
-                    padding: .25em .75em;
+                    padding: .25rem .75rem;
                     background-color: #ccc;
                     text-decoration: none;
                   }
@@ -255,18 +251,15 @@
 
                   .event {
                     position: relative;
-                    top: 0;
-                    left: 0;
-                    padding: 1em;
-                    font-size:  clamp(1.25rem, 1.5rem, 2rem);
+                    width: 100%;
+                    padding: 1rem;
+                    border-radius: 0 1rem 1rem 0;
+                    font-size: clamp(1.25rem, 1.5rem, 2rem);
                   }
 
                   .event-title {
                     font-weight: bold;
                     padding-bottom: 10px;
-                  }
-
-                  .event-desc {
                   }
 
                   .session-title {
@@ -276,14 +269,15 @@
                     font-size: clamp(1.5rem, 1.75rem, 2rem);
                   }
 
+                  .main-stage {
+                    background-color: #FCE4D6;
+                  }
 
                   .room-1 {
-                    text-align: left;
                     background-color: #C6E0B4;
                   }
 
                   .room-2 {
-                    text-align: left;
                     background-color: #FFE699;
                   }
 
@@ -291,25 +285,8 @@
 
                 <!-- Sponsors -->
                 <style>
-                  .sponsors-grid {
-                    display: grid;
-                    margin: 40px auto;
-                    grid-auto-columns: max-content;
-                    grid-auto-rows: max-content;
-                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                    gap: 10px 10px;
-                    padding: 0 10% 0 10%;
-                  }
-
-                  .sponsors-grid img {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    max-width: 240px;
-                    text-align: center;
-                    background-color: #ffffff;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  .sponsor-container {
+                    padding-bottom: 40px;
                   }
 
                   .sponsors-header {
@@ -322,18 +299,36 @@
                     color: #01245B;
                   }
 
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 10px 10px;
+                    padding: 10px 10% 0 10%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 240px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
                 </style>
 
-                <!-- Content -->
                 <div id="container">
-                  <div class="banner-image">
+                  <div class="banner">
                     <div class="banner-info">
                       <div class="banner-text">Agenda</div>
                       <div class="banner-sub-text">View our schedule below to see all of the exciting sessions in store for our live event on Thursday, November 12th.</div>
                     </div>
+                    <div class="banner-shadow"></div>
                   </div>
-
-                  <div class="shadow"></div>
 
                   <div class="tab">
                     <button id="btn-full-schedule" class="active" onclick="openAgenda(event, 'full-schedule')">Full Schedule</button>
@@ -351,7 +346,7 @@
                         <div class="room">Main Stage</div>
                         <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
                       </div>
-                      <div class="event">
+                      <div class="event main-stage">
                         <div class="event-title">
                           Keynote #1 - Aneesh Chopra, “The Great Health Care Data Quake - How data is transforming health care policy, strategy, and technology
                         </div>
@@ -367,7 +362,7 @@
                         <div class="room">Main Stage</div>
                         <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
                       </div>
-                      <div class="event">
+                      <div class="event main-stage">
                         <div class="event-title">
                           Opening Plenary #1 - Information Blocking and the ONC final rule
                         </div>
@@ -383,7 +378,7 @@
                         <div class="room">Main Stage</div>
                         <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
                       </div>
-                      <div class="event">
+                      <div class="event  main-stage">
                         <div class="event-title">
                           Opening Plenary #2 - CMS Interoperability and Patient Access final rule
                         </div>
@@ -494,8 +489,12 @@
                     <div class="session-title">Break (3:30 - 4:00)</div>
 
                     <div class="card">
-                      <div class="event-left">4:00 - 4:30<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">4:00 - 4:30</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event main-stage">
                         <div class="event-title">
                           Fireside Chat - Modernizing our public health data infrastructure in the era of COVID-19
                         </div>
@@ -579,7 +578,7 @@
                         <div class="room">Main Stage</div>
                         <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
                       </div>
-                      <div class="event">
+                      <div class="event main-stage">
                         <div class="event-title">
                           Wrap Up
                         </div>
@@ -594,7 +593,7 @@
                         <div class="room">Main Stage</div>
                         <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
                       </div>
-                      <div class="event">
+                      <div class="event main-stage">
                         <div class="event-title">
                           Virtual Cocktail Reception
                         </div>
