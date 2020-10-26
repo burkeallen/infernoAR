@@ -793,19 +793,37 @@
 
                 <!-- Sponsors -->
                 <script>
-                  var myLanding = landingPageEl ?? document;
-                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
-                  var sponsors = ["toolbox-no-9", "aprio", "northside-hospital", "grant-thornton", "wipfli", "ksu", "morris-manning-martin", "azalea-health", "dss", "nutanix", "telliant"]
-                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
-                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  const myLanding = landingPageEl ?? document;
+                  let sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  const sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
 
-                  for (let sponsor of sponsors) {
+                  let sponsorsJson = {}
+                  loadJSON(baseUrl + '/sponsors.json',
+                    function (response) {
+                      sponsorsJson = JSON.parse(response);
+                    })
+
+                  for (let sponsor of sponsorsJson['sponsors']) {
                     let clone = sponsorTemplate.content.cloneNode(true);
                     let img = clone.getElementById("sponsor-logo");
-                    img.id = "sponsor-logo-" + sponsor;
-                    img.src = baseUrl + sponsor + ".png";
+                    img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
+                    img.src = baseUrl + sponsor.image;
                     sponsorsGrid.appendChild(clone);
                   }
+
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
+
                 </script>
 
               </inferno-snippet-content>
