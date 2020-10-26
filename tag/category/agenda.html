@@ -102,49 +102,58 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="06598932-4048-447a-800f-50c692318d81">
 
+                <!-- Container -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
                   img::after {
                     content: none;
                   }
 
                   hr {
                     border: 1px solid rgba(11, 38, 104, 0.32);
-                    margin: 2.8rem 0;
+                    margin: 2rem 0;
                   }
+                </style>
 
-                  #container {
-                    font-family: 'Helvetica Neue', sans-serif;
-                    font-weight: normal;
-                    font-style: normal;
-                    position: absolute;
+                <!-- banner -->
+                <style>
+                  .banner {
                     width: 100%;
-                    height: calc(100vh - 56px);
-                    margin: -20px;
-                    background-repeat: no-repeat;
-                    background-position: top center;
-                    background-attachment: fixed;
+                    height: 400px;
                     background-size: cover;
-                    background-color: #ccc;
-                    overflow-y: auto;
-                    scroll-behavior: smooth;
-                  }
-
-                  .banner-image {
-                    min-height: 400px;
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    padding-left: 40px;
+                    background-position: left center;
                     background-blend-mode: multiply;
                     background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/agenda/agenda_header.jpg');
                   }
 
+                  .banner-shadow {
+                    z-index: 99;
+                    position: absolute;
+                    margin-top: 380px;
+                    width: 100%;
+                    height: 20px;
+                    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
                   .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
                     color: #fff;
                     max-width: 90%;
-                    min-height: 20vw;
-                    padding-top: 120px;
                     text-shadow: #000 0 0 .5rem;
                   }
 
@@ -157,15 +166,35 @@
                     font-weight: lighter;
                     font-size: clamp(1.75rem, 2.25vw, 2.75rem);
                   }
+                </style>
 
-                  .top-banner {
-                    margin-bottom: 20px;
-                    padding-left: 40px;
-                    height: 6vh;
-                    line-height: 6vh;
-                    color: var(--branding-primary);
-                    font-size: clamp(1.75rem, 2rem, 2.25rem);;
-                    background-color: #ffffff;
+                <!-- Tabs -->
+                <style>
+                  .tab {
+                    margin-bottom: 10px;
+                    overflow: hidden;
+                    border: 1px solid #ccc;
+                    background-color: #f1f1f1;
+                  }
+
+                  .tab button {
+                    font-size: clamp(1.25rem, 1.5rem, 2rem);
+                    background-color: inherit;
+                    float: left;
+                    border: none;
+                    outline: none;
+                    cursor: pointer;
+                    padding: 14px 16px;
+                    transition: 0.3s;
+                  }
+
+                  .tab button:hover {
+                    background-color: #ddd;
+                  }
+
+                  .tab button.active {
+                    color: #ffffff;
+                    background-color: var(--branding-primary);
                   }
 
                 </style>
@@ -185,35 +214,52 @@
                     flex-direction: row;
                     flex: auto;
                     width: 100%;
-                    border-radius: 1em;
-                    background-color: #FCE4D6;
+                    border-radius: 1.1rem;
                     border: 2px solid #fff;
                   }
 
-                  .time {
-                    width: 10rem;
+                  .event-left {
+                    width: 11rem;
                     color: white;
                     background-color: var(--branding-primary);
-                    border-radius: 1em 0 0 1em;
-                    padding: 1em;
+                    border-radius: 1rem 0 0 1rem;
+                    padding: 1rem;
                     white-space: nowrap;
                     text-align: center;
                   }
 
+                  .time {
+                    color: #ffffff;
+                    padding-bottom: 5px;
+                  }
+
+                  .join  {
+                    padding-top: 10px;
+                  }
+
+                  .join a {
+                    color: var(--branding-primary);
+                    border-radius: 5px;
+                    padding: .25rem .75rem;
+                    background-color: #ccc;
+                    text-decoration: none;
+                  }
+
+                  .join a:hover {
+                    font-weight: bold;
+                  }
+
                   .event {
                     position: relative;
-                    top: 0;
-                    left: 0;
-                    padding: 1em;
-                    font-size:  clamp(1.25rem, 1.5rem, 2rem);
+                    width: 100%;
+                    padding: 1rem;
+                    border-radius: 0 1rem 1rem 0;
+                    font-size: clamp(1.25rem, 1.5rem, 2rem);
                   }
 
                   .event-title {
                     font-weight: bold;
                     padding-bottom: 10px;
-                  }
-
-                  .event-desc {
                   }
 
                   .session-title {
@@ -223,14 +269,15 @@
                     font-size: clamp(1.5rem, 1.75rem, 2rem);
                   }
 
+                  .main-stage {
+                    background-color: #FCE4D6;
+                  }
 
                   .room-1 {
-                    text-align: left;
                     background-color: #C6E0B4;
                   }
 
                   .room-2 {
-                    text-align: left;
                     background-color: #FFE699;
                   }
 
@@ -238,25 +285,8 @@
 
                 <!-- Sponsors -->
                 <style>
-                  .sponsors-grid {
-                    display: grid;
-                    margin: 40px auto;
-                    grid-auto-columns: max-content;
-                    grid-auto-rows: max-content;
-                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                    gap: 10px 10px;
-                    padding: 0 10% 0 10%;
-                  }
-
-                  .sponsors-grid img {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    max-width: 240px;
-                    text-align: center;
-                    background-color: #ffffff;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  .sponsor-container {
+                    padding-bottom: 40px;
                   }
 
                   .sponsors-header {
@@ -269,23 +299,54 @@
                     color: #01245B;
                   }
 
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 10px 10px;
+                    padding: 10px 10% 0 10%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 240px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
                 </style>
 
                 <div id="container">
-                  <div class="banner-image">
+                  <div class="banner">
                     <div class="banner-info">
                       <div class="banner-text">Agenda</div>
                       <div class="banner-sub-text">View our schedule below to see all of the exciting sessions in store for our live event on Thursday, November 12th.</div>
                     </div>
+                    <div class="banner-shadow"></div>
                   </div>
-                  <div class="top-banner">Today's Agenda - Thursday, November 12</div>
 
-                  <div class="session-title">General Session</div>
+                  <div class="tab">
+                    <button id="btn-full-schedule" class="active" onclick="openAgenda(event, 'full-schedule')">Full Schedule</button>
+                    <button id="btn-breakout-room-1" onclick="openAgenda(event, 'breakout-room-1')">Breakout Room 1</button>
+                    <button id="btn-breakout-room-2" onclick="openAgenda(event, 'breakout-room-2')">Breakout Room 2</button>
+                  </div>
 
-                  <div class="grid-container">
+                  <div id="full-schedule" class="grid-container">
+
+                    <div class="session-title">Main Stage</div>
+
                     <div class="card">
-                      <div class="time">1:00 - 1:30<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">1:00 - 1:30</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event main-stage">
                         <div class="event-title">
                           Keynote #1 - Aneesh Chopra, “The Great Health Care Data Quake - How data is transforming health care policy, strategy, and technology
                         </div>
@@ -294,9 +355,14 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="card">
-                      <div class="time">1:30 - 1:45<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">1:30 - 1:45</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event main-stage">
                         <div class="event-title">
                           Opening Plenary #1 - Information Blocking and the ONC final rule
                         </div>
@@ -305,9 +371,14 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="card">
-                      <div class="time">1:45 - 2:00<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">1:45 - 2:00</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event  main-stage">
                         <div class="event-title">
                           Opening Plenary #2 - CMS Interoperability and Patient Access final rule
                         </div>
@@ -320,7 +391,11 @@
                     <div class="session-title">Breakout Sessions</div>
 
                     <div class="card">
-                      <div class="time">2:00 - 2:30<br>Breakout<br>Room 1</div>
+                      <div class="event-left">
+                        <div class="time">2:00 - 2:30</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
                       <div class="event room-1">
                         <div class="event-title">
                           Person-centric insights: How innovative start-ups are reinventing how patients interact with the health care system
@@ -332,7 +407,11 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">2:00 - 2:30<br>Breakout<br>Room 2</div>
+                      <div class="event-left">
+                        <div class="time">2:00 - 2:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
                       <div class="event room-2">
                         <div class="event-title">
                           What's old is new again: How physician and patient workflow is being reinvented
@@ -344,7 +423,11 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">2:30 - 3:00<br>Breakout<br>Room 1</div>
+                      <div class="event-left">
+                        <div class="time">2:30 - 3:00</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
                       <div class="event room-1">
                         <div class="event-title">
                           What about me? : The lost story of the patient and caregiver voice
@@ -356,7 +439,11 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">2:30 - 3:00<br>Breakout<br>Room 2</div>
+                      <div class="event-left">
+                        <div class="time">2:30 - 3:00</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
                       <div class="event room-2">
                         <div class="event-title">
                           Including the most vulnerable: Digitizing social determinant information to provide whole person care
@@ -368,7 +455,11 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">3:00 - 3:30<br>Breakout<br>Room 1</div>
+                      <div class="event-left">
+                        <div class="time">3:00 - 3:30</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
                       <div class="event room-1">
                         <div class="event-title">
                           Freeing the data: The move to innovate using cloud-based technology and third-party applications
@@ -380,7 +471,11 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">3:00 - 3:30<br>Breakout<br>Room 2</div>
+                      <div class="event-left">
+                        <div class="time">3:00 - 3:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
                       <div class="event room-2">
                         <div class="event-title">
                           Show me the money: Investor focus in the era of health care personalization
@@ -394,8 +489,12 @@
                     <div class="session-title">Break (3:30 - 4:00)</div>
 
                     <div class="card">
-                      <div class="time">4:00 - 4:30<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">4:00 - 4:30</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event main-stage">
                         <div class="event-title">
                           Fireside Chat - Modernizing our public health data infrastructure in the era of COVID-19
                         </div>
@@ -405,20 +504,14 @@
                       </div>
                     </div>
 
-                    <div class="card">
-                      <div class="time">3:00 - 3:30<br>Breakout<br>Room 2</div>
-                      <div class="event room-2">
-                        <div class="event-title">
-                          Show me the money: Investor focus in the era of health care personalization
-                        </div>
-                        <div class="event-desc">
-                          Billions of dollars of investment has poured into digital health over the last few years and the amount of capital continues to flood in. The number of large exits are increasing and the opportunities are greater than ever. Investments can now focus on moving from capitalizing on the inefficiencies in health care to providing long-term value to patients and physicians alike.
-                        </div>
-                      </div>
-                    </div>
+                    <div class="session-title">Breakout Sessions (Resumed)</div>
 
                     <div class="card">
-                      <div class="time">4:30 - 5:00<br>Breakout<br>Room 1</div>
+                      <div class="event-left">
+                        <div class="time">4:30 - 5:00</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
                       <div class="event room-1">
                         <div class="event-title">
                           Open clinical logic models: How the physician voice is helping to reinvent care delivery
@@ -430,8 +523,12 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">4:30 - 5:00<br>Breakout<br>Room 1</div>
-                      <div class="event room-1">
+                      <div class="event-left">
+                        <div class="time">4:30 - 5:00</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
+                      <div class="event room-2">
                         <div class="event-title">
                           Health Plans: Reinventing the business model
                         </div>
@@ -442,8 +539,12 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">5:00 - 5:30<br>Breakout<br>Room 2</div>
-                      <div class="event room-2">
+                      <div class="event-left">
+                        <div class="time">5:00 - 5:30</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
+                      <div class="event room-1">
                         <div class="event-title">
                           On demand health care: How retail care and telemedicine are reinventing the provider/patient relationship
                         </div>
@@ -454,7 +555,11 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">5:00 - 5:30<br>Breakout<br>Room 2</div>
+                      <div class="event-left">
+                        <div class="time">5:00 - 5:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
                       <div class="event room-2">
                         <div class="event-title">
                           Who are you?: Securing the privacy, data security, and identity of data across regulatory structures
@@ -465,9 +570,15 @@
                       </div>
                     </div>
 
+                    <div class="session-title">Main Stage</div>
+
                     <div class="card">
-                      <div class="time">5:30 - 5:45<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">5:30 - 5:45</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event main-stage">
                         <div class="event-title">
                           Wrap Up
                         </div>
@@ -477,8 +588,12 @@
                     </div>
 
                     <div class="card">
-                      <div class="time">5:50 - 6:50<br>Main Stage</div>
-                      <div class="event">
+                      <div class="event-left">
+                        <div class="time">5:50 - 6:50</div>
+                        <div class="room">Main Stage</div>
+                        <div class='join'><a href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">Join</a></div>
+                      </div>
+                      <div class="event main-stage">
                         <div class="event-title">
                           Virtual Cocktail Reception
                         </div>
@@ -487,7 +602,181 @@
                       </div>
                     </div>
 
+                  </div>
 
+                  <div id="breakout-room-1" class="grid-container">
+
+                    <div class="session-title">Breakout Room 1</div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">2:00 - 2:30</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
+                      <div class="event room-1">
+                        <div class="event-title">
+                          Person-centric insights: How innovative start-ups are reinventing how patients interact with the health care system
+                        </div>
+                        <div class="event-desc">
+                          New innovations are allowing individuals to aggregate person-centric health care information in ways unimaginable just a few years ago. Each of these new applications can help patients and caregivers more effectively manage their care and provide them personalized recommendations regarding the health care options available to them across providers and payers.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">2:30 - 3:00</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
+                      <div class="event room-1">
+                        <div class="event-title">
+                          What about me? : The lost story of the patient and caregiver voice
+                        </div>
+                        <div class="event-desc">
+                          For years, we have focused exclusively on data exchange between providers and payers and lost the most important person in the equation, the patient. For patients with chronic conditions, they have experienced nightmare stories trying to juggle their various patient portals, paper and digital records, and coordinate care across the byzantine layers of health care bureaucracy. Come hear real stories from real patients who have struggled to coordinate their own care and what they are doing about it.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">3:00 - 3:30</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
+                      <div class="event room-1">
+                        <div class="event-title">
+                          Freeing the data: The move to innovate using cloud-based technology and third-party applications
+                        </div>
+                        <div class="event-desc">
+                          Cutting edge technology companies are reinventing the health care landscape as they enable organizations to move to the cloud. This will enable companies to begin to reinvent physician workflows, integrate point solution applications, and transform care delivery by developing a more flexible technology architecture that yields better outcomes as the industry moves to value-based care.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="session-title">Break (3:30 - 4:00)</div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">4:30 - 5:00</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
+                      <div class="event room-1">
+                        <div class="event-title">
+                          Open clinical logic models: How the physician voice is helping to reinvent care delivery
+                        </div>
+                        <div class="event-desc">
+                          The physician voice has been missing in the movement toward digital health. How are innovative physicians beginning to reinvent care delivery models that provide actionable and relevant intelligence to doctors around the country? Care delivery systems are being reinvented as a result of a stronger physician voice.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">5:00 - 5:30</div>
+                        <div class="room">Breakout<br>Room 1</div>
+                        <div class='join'><a href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/detail/480ca3d6-3c04-4eb4-bbf0-2cd7feffa04d">Join</a></div>
+                      </div>
+                      <div class="event room-1">
+                        <div class="event-title">
+                          On demand health care: How retail care and telemedicine are reinventing the provider/patient relationship
+                        </div>
+                        <div class="event-desc">
+                          The old model of payers to provider to patient to payer is being turned on its head. New delivery models are rapidly gaining traction including direct primary care and (finally!) telemedicine. These innovative organizations are at the forefront of breakthrough direct-to-consumer models that will change the health care landscape for good.
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div id="breakout-room-2" class="grid-container">
+
+                    <div class="session-title">Breakout Room 2</div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">2:00 - 2:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
+                      <div class="event room-2">
+                        <div class="event-title">
+                          What's old is new again: How physician and patient workflow is being reinvented
+                        </div>
+                        <div class="event-desc">
+                          EHR vendors have been able to digitize health care data across the country but have caused significant provider burden as vendors have been building systems based on government regulations rather than client needs. How will EHRs begin to move from the primary data platform to a data platform that enables point solutions to better manage and deliver care.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">2:30 - 3:00</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
+                      <div class="event room-2">
+                        <div class="event-title">
+                          Including the most vulnerable: Digitizing social determinant information to provide whole person care
+                        </div>
+                        <div class="event-desc">
+                          From COVID to the recession, the gap between those who are succeeding and suffering has never been greater. Health and Health Care data is beginning to come together in a meaningful way to provide better outcomes that focuses on both an individuals acute and long-term needs. Innovators across the country are beginning to digitize social determinants of health data to make this dream a reality.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">3:00 - 3:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
+                      <div class="event room-2">
+                        <div class="event-title">
+                          Show me the money: Investor focus in the era of health care personalization
+                        </div>
+                        <div class="event-desc">
+                          Billions of dollars of investment has poured into digital health over the last few years and the amount of capital continues to flood in. The number of large exits are increasing and the opportunities are greater than ever. Investments can now focus on moving from capitalizing on the inefficiencies in health care to providing long-term value to patients and physicians alike.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="session-title">Break (3:30 - 4:00)</div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">4:00 - 4:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
+                      <div class="event room-2">
+                        <div class="event-title">
+                          Health Plans: Reinventing the business model
+                        </div>
+                        <div class="event-desc">
+                          Payers around the country are beginning to reinvent themselves to get closer to their members. From investments in retail clinics to providers, to home health, payers are looking to capture more value by gobbling up more of the supply chain. Payers are looking to use their data more aggressively to engage with their members in creative ways so that old models of coverage become obsolete.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card">
+                      <div class="event-left">
+                        <div class="time">5:00 - 5:30</div>
+                        <div class="room">Breakout<br>Room 2</div>
+                        <div class='join'><a href="videos/0616781b-d984-4d91-6667-08d860a9dffa/detail/54c5fe4c-d86f-4e68-800a-48b785cb13c2">Join</a></div>
+                      </div>
+                      <div class="event room-2">
+                        <div class="event-title">
+                          Who are you?: Securing the privacy, data security, and identity of data across regulatory structures
+                        </div>
+                        <div class="event-desc">
+                          Health and health care data is already moving seamlessly between different regulatory structures which is both exciting and scary at the same time. How will data, personal consent preferences, and security be handled seamlessly between HIPAA and the FTC regulatory frameworks? How can we identify unique individuals using digital credentials and biometrics? The future of health care data exchange relies on identifying individuals across not just within systems and securing that information no matter where it sits.
+                        </div>
+                      </div>
+                    </div>
                   </div>
 
                   <hr/>
@@ -501,26 +790,81 @@
                       <img id="sponsor-logo" src=""/>
                     </template>
                   </div>
-
                 </div>
 
-                <!-- Sponsors -->
+                <!-- tabs -->
                 <script>
-                  var myLanding = landingPageEl ?? document;
-                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
-                  var sponsors = ["toolbox-no-9", "aprio", "northside-hospital", "grant-thornton", "wipfli", "ksu", "morris-manning-martin", "azalea-health", "dss", "nutanix", "telliant"]
-                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
-                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  function openAgenda(evt, tabName) {
+                    const myLanding = landingPageEl ?? document;
+                    const btn0 = myLanding.querySelector("#btn-full-schedule");
+                    const btn1 = myLanding.querySelector("#btn-breakout-room-1");
+                    const btn2 = myLanding.querySelector("#btn-breakout-room-2");
+                    btn0.className = "";
+                    btn1.className = "";
+                    btn2.className = "";
 
-                  for (let sponsor of sponsors) {
-                    let clone = sponsorTemplate.content.cloneNode(true);
-                    let img = clone.getElementById("sponsor-logo");
-                    img.id = "sponsor-logo-" + sponsor;
-                    img.src = baseUrl + sponsor + ".png";
-                    sponsorsGrid.appendChild(clone);
+                    const tabContent0 = myLanding.querySelector("#full-schedule");
+                    const tabContent1 = myLanding.querySelector("#breakout-room-1");
+                    const tabContent2 = myLanding.querySelector("#breakout-room-2");
+                    tabContent0.style.display = "none";
+                    tabContent1.style.display = "none";
+                    tabContent2.style.display = "none";
+
+                    switch(tabName) {
+                      case 'breakout-room-1' :
+                        myLanding.querySelector("#breakout-room-1").style.display = "grid";
+                        myLanding.querySelector("#btn-breakout-room-1").className += "active";
+                        break;
+                      case 'breakout-room-2' :
+                        myLanding.querySelector("#breakout-room-2").style.display = "grid";
+                        myLanding.querySelector("#btn-breakout-room-2").className += "active";
+                        break;
+                      default:
+                        myLanding.querySelector("#full-schedule").style.display = "grid";
+                        myLanding.querySelector("#btn-full-schedule").className += "active";
+                    }
                   }
                 </script>
 
+                <!-- Sponsors -->
+                <script>
+                  const myLanding = landingPageEl ?? document;
+                  let sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  const sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+
+                  let sponsorsJson = {}
+                  loadJSON(baseUrl + '/sponsors.json',
+                    function (response) {
+                      sponsorsJson = JSON.parse(response);
+                    })
+
+                  for (let sponsor of sponsorsJson['sponsors']) {
+                    let clone = sponsorTemplate.content.cloneNode(true);
+                    let img = clone.getElementById("sponsor-logo");
+                    img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
+                    img.src = baseUrl + sponsor.image;
+                    sponsorsGrid.appendChild(clone);
+                  }
+
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
+
+                </script>
+
+                <!-- onload -->
+                <script>
+                  openAgenda(event, 'full-schedule');
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -183,54 +183,58 @@
                 </script>
                 <!-- ./ Import Fonts -->
 
+                <!-- Container -->
                 <style>
-                  h1,
-                  h2,
-                  h3,
-                  h4,
-                  h5,
-                  h6 {
-                    font-family: 'Helvetica Neue', sans-serif;
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
                   }
 
-                  /* when referencing an image that does not exist */
-                  /* this styles content style is being set to '' causing the entire screen from going black */
-                  /* overriding the behavior above */
                   img::after {
                     content: none;
                   }
 
-                  #container {
-                    font-family: 'Helvetica Neue', sans-serif;
-                    font-weight: normal;
-                    font-style: normal;
-                    position: absolute;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
+                  }
+                </style>
+
+                <!-- banner -->
+                <style>
+                  .banner {
                     width: 100%;
-                    height: calc(100vh - 56px);
-                    margin: -20px;
-                    background-repeat: no-repeat;
-                    background-position: top center;
-                    background-attachment: fixed;
+                    height: 400px;
                     background-size: cover;
-                    background-color: #ccc;
-                    overflow-y: auto;
-                    scroll-behavior: smooth;
+                    background-position: left center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/agenda/agenda_header.jpg');
                   }
 
-                  .banner-image {
-                    min-height: 400px;
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    padding-left: 40px;
-                    background-blend-mode: multiply;
-                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/attendees_header.jpg');
+                  .banner-shadow {
+                    z-index: 99;
+                    position: absolute;
+                    margin-top: 380px;
+                    width: 100%;
+                    height: 20px;
+                    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
                   }
 
                   .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
                     color: #fff;
                     max-width: 90%;
-                    min-height: 20vw;
-                    padding-top: 120px;
                     text-shadow: #000 0 0 .5rem;
                   }
 
@@ -243,14 +247,12 @@
                     font-weight: lighter;
                     font-size: clamp(1.75rem, 2.25vw, 2.75rem);
                   }
+                </style>
 
-                  hr {
-                    border: 1px solid rgba(11, 38, 104, 0.32);
-                    margin: 2.8rem 0;
-                  }
-
+                <!-- Filter -->
+                <style>
                   .search-exhibitors-divider {
-                    background-color: rgb(246, 246, 246, 0.79);
+                    background-color: rgb(246, 246, 246);
                     width: 100%;
                     padding: 3.8rem 0 1.8rem;
                     display: flex;
@@ -337,8 +339,6 @@
 
                 <!-- Attendees -->
                 <style>
-
-
                   .attendee {
                     margin: 1.4rem 4.4rem;
                     padding: 1rem 2rem;
@@ -446,25 +446,8 @@
 
                 <!-- Sponsors -->
                 <style>
-                  .sponsors-grid {
-                    display: grid;
-                    margin: 40px auto;
-                    grid-auto-columns: max-content;
-                    grid-auto-rows: max-content;
-                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                    gap: 10px 10px;
-                    padding: 0 10% 0 10%;
-                  }
-
-                  .sponsors-grid img {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    max-width: 240px;
-                    text-align: center;
-                    background-color: #ffffff;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  .sponsor-container {
+                    padding-bottom: 40px;
                   }
 
                   .sponsors-header {
@@ -477,14 +460,35 @@
                     color: #01245B;
                   }
 
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 10px 10px;
+                    padding: 10px 10% 0 10%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 240px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
                 </style>
 
                 <div id="container">
-                  <div class="banner-image">
+                  <div class="banner">
                     <div class="banner-info">
                       <div class="banner-text">Attendees</div>
                       <div class="banner-sub-text">See who else is attending the Digital Health Leadership Summit and network away.</div>
                     </div>
+                    <div class="banner-shadow"></div>
                   </div>
 
                   <div class="search-exhibitors-divider">
@@ -492,7 +496,6 @@
                       <div class="search-wrapper">
                         <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
                       </div>
-
                       <button id="all-grouping" onclick="allAttendees()">All</button>
                       <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
                       <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
@@ -501,6 +504,7 @@
                       <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
                     </div>
                   </div>
+
                   <div id="attendee-list" class="attendee-list">
 
                     <template id="attendee-template">
@@ -549,6 +553,7 @@
                   // used for local json
                   // var attendees = data.UserProfiles ;
 
+                  // used for production
                   // used for production
                   var hasGroupNovo1 = (groups, groupName) => {
                     var inGroup = false;
@@ -788,19 +793,37 @@
 
                 <!-- Sponsors -->
                 <script>
-                  var myLanding = landingPageEl ?? document;
-                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
-                  var sponsors = ["toolbox-no-9", "aprio", "northside-hospital", "grant-thornton", "wipfli", "ksu", "morris-manning-martin", "azalea-health", "dss", "nutanix", "telliant"]
-                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
-                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  const myLanding = landingPageEl ?? document;
+                  let sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  const sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
 
-                  for (let sponsor of sponsors) {
+                  let sponsorsJson = {}
+                  loadJSON(baseUrl + '/sponsors.json',
+                    function (response) {
+                      sponsorsJson = JSON.parse(response);
+                    })
+
+                  for (let sponsor of sponsorsJson['sponsors']) {
                     let clone = sponsorTemplate.content.cloneNode(true);
                     let img = clone.getElementById("sponsor-logo");
-                    img.id = "sponsor-logo-" + sponsor;
-                    img.src = baseUrl + sponsor + ".png";
+                    img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
+                    img.src = baseUrl + sponsor.image;
                     sponsorsGrid.appendChild(clone);
                   }
+
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
+
                 </script>
 
               </inferno-snippet-content>
