@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
@@ -60,13 +55,10 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -82,7 +74,7 @@
         <div class="aside-inner">
           <nav class="sidebar" sidebar-anyclick-close="">
             <ul class="nav">
-              <li><a href="../">Menu</a></li>
+              <li><a href="..">Menu</a></li>
             </ul>
           </nav>
           </nav>
@@ -108,19 +100,24 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="d8e9e967-2538-4105-bd26-ce8bbf2de070">
+              <inferno-snippet-content id="df046e47-1c67-40c9-b48d-a321fbc8f8f6">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
-                    const font = new FontFace(name, 'url(' + url + ')');
-                    font.load().then(function (loadedFont) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
                       document.fonts.add(loadedFont);
                       console.log('Loaded custom font ', name);
                     }).catch(function (error) {
                       // error occurred
                       console.log('Error loading ', name);
                     });
+
                   }
 
                   loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
@@ -147,19 +144,29 @@
                     margin: -20px;
                     z-index: 1;
                     font-family: 'gothamMed', sans-serif;
-                    padding: 30px 0;
+                    padding-bottom: 40px;
                   }
 
                   .content-header {
-                    width: 100%;
-                    margin-bottom: 20px;
                     text-align: center;
+                    width: 100%;
                   }
 
                   .content-header img {
-                    width: 75%;
+                    margin-top: 20px;
+                    width: 90%;
                     height: auto;
                   }
+
+                  pre {
+                    color: black;
+                    font-family: 'Lucida Console', Monaco, monospace;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    max-height: 600px;
+                    max-width: 90%;
+                  }
+
                 </style>
 
                 <!-- Video Cards -->
@@ -169,7 +176,7 @@
                     grid-auto-columns: max-content;
                     grid-auto-rows: max-content;
                     padding: 0 20%;
-                    margin: 30px 0;
+                    margin: 40px 0;
                     align-content: center;
                     grid-gap: 5%;
                     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -207,27 +214,27 @@
 
                 <!-- PDF Cards -->
                 <style>
-                  .product-wrapper {
+                  .card-wrapper {
                     display: grid;
-                    background: var(--branding-primary);
+                    background-color: #BA981B;
                     color: #ffffff;
                     font-size: 2em;
-                    margin: 30px;
-                    padding: 40px;
+                    margin: 20px 40px;
+                    padding: 30px;
                   }
 
-                  #grid-products {
+                  #grid-pdf-cards {
                     display: grid;
                     grid-gap: 20px 20px;
-                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
                     grid-template-rows: auto;
                     align-items: center;
                     text-align: center;
                   }
 
                   .pdf-card {
-                    grid-auto-rows: max-content;
-                    width: 300px;
+                    height: 300px;
+                    width: 400px;
                     margin: 0 auto;
                     border-radius: 8px;
                     background: darkgray;
@@ -378,9 +385,10 @@
                   }
                 </style>
 
+                <!-- Content  -->
                 <div class="content">
                   <div class="content-header">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/woseley/wolseley-banner.jpg">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/hvp/hvp-header.jpg">
                   </div>
                   <div class="grid-video-cards">
                     {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
@@ -395,11 +403,8 @@
                     {% endif %} {% endfor %} {% endfor %}
 
                   </div>
-                  <div class="content-header">
-                    <a target="_blank" href="https://www.wolseley.co.uk/b/grundfos-pumps/"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/woseley/wolseley-code-banner.jpg"></a>
-                  </div>
-                  <div class="product-wrapper">
-                    <div id="grid-products"></div>
+                  <div class="card-wrapper">
+                    <div id="grid-pdf-cards"></div>
                   </div>
                 </div>
 
@@ -451,18 +456,15 @@
                 <script>
                   function buildCards() {
                     var pdfCards = [
-                      {title: "", title2: "", type: "pdf",  target: "widest-range-of-grundfos-pumps-on-the-market"},
-                      {title: "", title2: "", type: "pdf", target: "gas-app"},
-                      {title: "", title2: "", type: "pdf", target: "meet-the-team"},
-                      {title: "", title2: "", type: "pdf", target: "parts-accreditation"},
-                      {title: "", title2: "", type: "pdf", target: "pumps"},
-                      {title: "", title2: "", type: "pdf", target: "supporting-the-trade"},
-                      {title: "", title2: "", type: "pdf", target: "wolseley-gives-more-in-the-community"},
+                      {title: "", title2: "", type: "pdf", target: "40-hvp-julaug-hhic-column"},
+                      {title: "", title2: "", type: "pdf", target: "48-julaug-beama-insight"},
+                      {title: "", title2: "", type: "pdf", target: "60-hvp-julaug-hwa-column"},
+                      {title: "", title2: "", type: "pdf", target: "61-hvp-sepoct-ciphe-column"},
                     ];
 
-                    const gridPDFCards = landingPageEl.getElementById("grid-products");
+                    const gridPDFCards = landingPageEl.getElementById("grid-pdf-cards");
                     gridPDFCards.innerHTML = "";
-                    const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/woseley/";
+                    const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/hvp/";
                     pdfCards.forEach(item => {
                       const thumbNailUrl = baseUrl + item.target + ".png";
                       const loadPdf = `loadPDF("` + baseUrl + item.target + `.pdf")`;

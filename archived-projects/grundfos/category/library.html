@@ -74,7 +74,7 @@
         <div class="aside-inner">
           <nav class="sidebar" sidebar-anyclick-close="">
             <ul class="nav">
-              <li><a href="../">Menu</a></li>
+              <li><a href="..">Menu</a></li>
             </ul>
           </nav>
           </nav>
@@ -100,8 +100,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="bb235944-3865-4750-a0e4-b5896262a3c3">
-
+              <inferno-snippet-content id="db3fa242-9a68-44f6-9eb3-7b1419258f0c">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -128,7 +127,42 @@
 
                 </script>
 
-                <!-- Main Page Style -->
+                <script type="text/javascript">
+                  // Load custom fonts
+                  var gothamMed = new FontFace('gothamMed', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf)');
+                  gothamMed.load().then(function (loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function (error) {
+                    // error occurred
+                    console.log('Error loading gothamMed');
+                  });
+
+                  var gothamBlack = new FontFace('gothamBlack', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf)');
+                  gothamBlack.load().then(function (loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function (error) {
+                    // error occurred
+                    console.log('Error loading gothamBlack');
+                  });
+
+                  var gothamBook = new FontFace('gothamBook', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf)');
+                  gothamBook.load().then(function (loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function (error) {
+                    // error occurred
+                    console.log('Error loading gothamBook');
+                  });
+
+                  var iconFont = new FontFace('icomoon', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff)');
+                  iconFont.load().then(function (loadedFont) {
+                    document.fonts.add(loadedFont);
+                  }).catch(function (error) {
+                    // error occurred
+                    console.log('Error loading icon font set');
+                  });
+                </script>
+
+                <!--  Page Style -->
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -137,7 +171,7 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-library.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
@@ -158,72 +192,148 @@
                     background-color: #ffffff;
                   }
 
-                  .bottom-banner img {
-                    width: 100%;
-                    height: auto;
-                    margin-top: 20px;
-                  }
-
-                  .info-text {
-                    color: #ffffff;
-                    padding: 20px 40px;
-                    font-size: 1.5em;
-                    text-align: center;
-                    margin-top: 40px;
-                    width: 90%;
-                    margin-left: 5%;
-                  }
-
-                  .info-text a:hover {
-                    text-decoration: none;
-                    filter: brightness(130%);
-                    color: #03a9f4;
-                  }
-
-                  .playBtn {
-                    position: absolute;
-                    top: 20%;
-                    left: 39%;
-                    width: 25%;
-                    height: 30%;
-                  }
                 </style>
 
-                <!-- grid content-->
+                <!--  Video Grid Style -->
                 <style>
-                  .grid-container {
+                  .video-card-container {
                     display: grid;
-                    width: 90%;
-                    margin-left: 5%;
                     grid-auto-columns: max-content;
                     grid-auto-rows: max-content;
-                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
                     gap: 20px 20px;
                     align-content: center;
-                    padding: 0 40px 0 40px;
+                    padding: 5% 5% 0 5%;
                   }
 
                   .card {
                     position: relative;
                     top: 0;
                     left: 0;
-                    min-width: 250px;
-                    min-height: 260px;
+                    min-width: 196px;
+                    min-height: 176px;
                     text-align: center;
                     border-radius: 1em;
-                    background-color: darkgrey;
-                    box-shadow: 2px 2px 6px 2px rgba(0, 162, 250, .5);
+                    background-color: #F8F8F8;
+                    border: 1px solid #c3c3c3;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
                     cursor: pointer;
                   }
 
                   .card .thumbnail {
+                    position: relative;
                     width: 100%;
                     border-radius: 1em;
                     border: none;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
                     background-color: transparent;
                   }
 
+                  .thumbnail {
+                    margin-bottom: 10px;
+                  }
 
+                  .playBtn {
+                    position: absolute;
+                    top: 24%;
+                    left: 36%;
+                    width: 25%;
+                    height: 32%;
+                  }
+
+                  pre {
+                    color: black;
+                    font-family: 'Lucida Console', Monaco, monospace;
+                    font-size: 1rem;
+                    font-weight: bold;
+                    max-height: 600px;
+                    max-width: 90%;
+                  }
+                </style>
+
+                <!--  PDF Grid Style -->
+                <style>
+                  #pdf-card-container {
+                    display: grid;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(196px, 1fr));
+                    gap: 20px 20px;
+                    align-content: center;
+                    padding: 2% 5% 5% 5%;
+                  }
+
+                  .pdf-card {
+                    padding: 3px;
+                    cursor: pointer;
+                    border-radius: 8px;
+                    background-color: #F8F8F8;
+                    text-align: center;
+                  }
+
+                  .pdf-card-img {
+                    height: 276px;
+                    width: 100%;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+                  }
+
+                  .pdf-card-title {
+                    margin-top: 5px;
+                    font-size: 12px;
+                    font-weight: bold;
+                  }
+
+                  .pdf-card-title-2 {
+                    font-size: 12px;
+                  }
+
+                </style>
+
+                <!-- PDF Overlay  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
                 </style>
 
                 <!-- modal pop-up -->
@@ -305,19 +415,11 @@
                   }
                 </style>
 
-
                 <div class="content">
-
-                  <div class="top-banner">LEARNING ZONE</div>
-                  <div class="info-text">
-                    Welcome to the learning zone. Here we have a variety of short training modules that have come from ECADEMY the Grundfos online training platform . Take the modules & try the short quiz after each one.
-                  </div>
-
-
-                  <div class="grid-container">
+                  <div class="top-banner">LIBRARY</div>
+                  <div class="video-card-container">
                     {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
-                    {% assign sortedEvents = data.Events | sort_natural: "Name" %}
-                    {% for event in sortedEvents %}
+                    {% for event in data.Events %}
                     {% for category in event.Categories %}
                     {% assign cat = category.Id | downcase %}
                     {% if cat == currentCat %}
@@ -330,16 +432,12 @@
                     {% endfor %}
                     {% endfor %}
                   </div>
+                  <div id="pdf-card-container"></div>
+                </div>
 
-                  <div class="info-text">
-                    If you would like to see more of these bite size training modules – take a trip to
-                    <a target="_blank" href="https://www.grundfos.com/ecademy.html">Grundfos Ecademy</a> and join today.
-                  </div>
-
-                  <div class="bottom-banner">
-                    <a target="_blank" href="https://www.grundfos.com/ecademy.html"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/learning/header.jpg">
-                    </a>
-                  </div>
+                <div class="pdf-view" id="pdf-blanket" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe class="pdf-viewer" id="pdf-frame"></iframe>
                 </div>
 
                 <div id="open-modal" class="modal-window">
@@ -356,6 +454,7 @@
 
                 <script>
                   function toggleModal(vidElement) {
+                    scrollTop();
                     const videoWrapper = landingPageEl.querySelector('.videoWrapper');
                     let video = videoWrapper.querySelector('#video-frame');
                     const modalClose = landingPageEl.querySelector('.modal-close');
@@ -367,7 +466,6 @@
                     if (video) {
                       video.remove();
                       landingPageEl.querySelector('#open-modal').classList.toggle('open');
-                      scrollTop();
                       return;
                     }
 
@@ -378,7 +476,79 @@
                     video.src = '/embed/' + vidElement.id;
                     videoWrapper.appendChild(clone);
                     landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                  }
+                </script>
+
+                <!-- Build Card -->
+                <script>
+                  var pdfCards = [
+                    {title: "UPS 3", title2: "Sales Leaflet", type: "pdf", target: "ups3-sales-leaflet-uk-print-nov19-a4-2pp-a4-2pp"},
+                    {title: "UPS 3", title2: "SalesData Sheet", type: "pdf", target: "ups3-data-sheet-uk-print-nov19-a4-2pp-a4-2pp"},
+                    {title: "UPS2 25-80", title2: "Sales Leaflet", type: "pdf", target: "ups2-25-80-32-80-sales-leaflet-1014"},
+                    {title: "Domestic Catalogue", title2: "", type: "pdf", target: "uk-dbs-catalogue-24pp-gcsept19"},
+                    {title: "STR2 & SSR2 UNIVERSAL", title2: "Data Sheet", type: "pdf", target: "ml10607-iss-05-17-product-data-sheet-str2-&-ssr2-universal-head-pump-range"},
+                    {title: "STR2 & SSR2", title2: "Data Sheet", type: "pdf", target: "ml10606-iss-05-17-product-data-sheet-str2-&-ssr2-pump-range"},
+                    {title: "AMAZON UNIVERSAL", title2: "Data Sheet", type: "pdf", target: "ml10274-iss-04-17-product-data-sheet-amazon-brass-universal-pump-range"},
+                    {title: "AMAZON", title2: "Data Sheet", type: "pdf", target: "ml10273-iss-04-17-product-data-sheet-amazon-brass-positive-head-pump-range"},
+                    {title: "HOMEBOOSTER", title2: "Sales Leaflet", type: "pdf", target: "home-booster-sales-leaflet-0615"},
+                    {title: "GUARANTEE CODES", title2: "", type: "pdf", target: "guarantee-update-jan-2020"},
+                    {title: "SCALA2", title2: "Sales Leaflet", type: "pdf", target: "scala2-sales-leaflet-a4-march19"},
+                    {title: "DOMESTIC", title2: "Sales Leaflet", type: "pdf", target: "game-changer-2019-20-uk-dl8pp-leaflet"},
+                    {title: "CONLIFT", title2: "Sales Leaflet", type: "pdf", target: "conlift1-ls-aug19"},
+                    {title: "ALPHA3", title2: "Sales Leaflet", type: "pdf", target: "alpha3-model-b-sales-leaflet-a4-gb"},
+                    {title: "ALPHA3", title2: "Data Sheet", type: "pdf", target: "alpha3-model-b-data-sheet-a4-gb"},
+                    {title: "ALPHA1", title2: "Sales Leaflet", type: "pdf", target: "alpha1-sales-leaflet-uk"},
+                    {title: "ALPHA1", title2: "Data Sheet", type: "pdf", target: "alpha1-data-sheet-uk"},
+                    {title: "UPA 15-90 N", title2: "Data Sheet", type: "pdf", target: "upa-15-90-n-sales-leaflet-a4-web"},
+                    {title: "SOLOLIFT", title2: "Sales Brochure", type: "pdf", target: "sololift2-brochure-update-july19-web"},
+                    {title: "PRESSURE BOOSTING GUIDE", title2: "", type: "pdf", target: "gb-dcw-selection-guide-pressure-boosting-2019"},
+                    {title: "DRAINAGE SELECTION GUIDE", title2: "", type: "pdf", target: "gb-dcw-selection-guide-drainage"},
+                    {title: "FIRESAFE", title2: "Sales Brochure", type: "pdf", target: "firesafe-domestic-range-brochure-oct19"},
+                  ];
+
+                  var videoCards = [
+                    {title: "preventing-noise-in-heating-system", type: "video", target: "/embed/eec75929-215d-4ad2-8a13-71bce1d08e25", thumb: "video-preventing-noise-in-heating-system.png"},
+                    {title: "better-heat-pump-systems-using-hydronic-balancing", type: "video", target: "/embed/49e8425e-a4c7-457c-8997-8e9d57b63349", thumb: "video-better-heat-pump-systems-using-hydronic-balancing.png"},
+                    {title: "correct-commissioning-makes-better-systems", type: "video", target: "/embed/1a2a7d39-3556-4f83-8911-d9967470f0ff", thumb: "video-correct-commissioning-makes-better-systems.png"},
+                    {title: "more-efficient-and-better-heating-systems", type: "video", target: "/embed/0dd1d5e3-fa04-40c5-9443-100d11e790e3", thumb: "video-more-efficient-and-better-heating-systems.png"},
+                    {title: "grundfos-presents.png", type: "video", target: "/embed/fb7bca6e-d347-46c9-8ee4-f8dd65226542", thumb: "video-grundfos-presents.png"},
+                  ]
+
+                  function buildCards() {
+                    const PdfCardContainer = landingPageEl.getElementById("pdf-card-container");
+                    PdfCardContainer.innerHTML = "";
+                    const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/library/";
+                    pdfCards.forEach(item => {
+                      const thumbNailUrl = baseUrl + "thumbnail/" + item.target + ".png";
+                      const loadPdf = `loadPDF("` + baseUrl + `pdf/` + item.target + `.pdf")`;
+                      PdfCardContainer.innerHTML +=
+                        "<div class='pdf-card' onclick=" + loadPdf + ">" +
+                        "<img class='pdf-card-img' src=" + thumbNailUrl + ">" +
+                        "<div class='pdf-card-title'>" + item.title + "</div>" +
+                        "<div class='pdf-card-title-2'>" + item.title2 + "</div>" +
+                        "</div>";
+                    })
+                  };
+
+                  buildCards();
+
+                </script>
+
+                <!-- Load/Close PDF -->
+                <script>
+                  function loadPDF(url) {
                     scrollTop();
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = url;
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
                   }
 
                   function scrollTop() {
@@ -494,11 +664,11 @@
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
-             class="inferno-input-group-addon">Ask A Question
+            <span class="inferno-input-group-addon">Ask A Question</span>
             <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
-             class="inferno-input-group-btn">
+            <span class="inferno-input-group-btn">
               <button class="inferno-btn" type="button">Submit</button>
-
+            </span>
           </div>
         </div>
       </questions>
