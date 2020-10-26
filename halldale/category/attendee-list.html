@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,19 +108,24 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b">
+              <inferno-snippet-content id="87b222ae-d33d-4c65-ba0b-fbf266483416">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
-                    const font = new FontFace(name, `url(${url})`);
-                    font.load().then(function (loadedFont) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
                       document.fonts.add(loadedFont);
-                      console.log(`Loaded custom font ${name}`);
+                      console.log('Loaded custom font ', name);
                     }).catch(function (error) {
                       // error occurred
-                      console.log(`Error loading ${name}`);
+                      console.log('Error loading ', name);
                     });
+
                   }
 
                   loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
@@ -137,32 +142,108 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/bg.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: center;
+                    background-position: right bottom;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: 'gothamMed', sans-serif;
                   }
 
-                  iframe {
-                    display: block;
-                    border: none;
-                    height: calc(100vh - 114px);
+                </style>
+
+                <!-- Search Bar Banner -->
+                <style>
+                  .search-banner {
+                    display: grid;
+                    grid-template-columns: 1fr 3fr 1fr;
+                    grid-template-rows: 1fr;
+                    gap: 10px 10px;
+                    justify-content: center;
+                    align-items: center;
                     width: 100%;
-                    overflow-y: hidden;
+                    background-color: white;
+                    min-height: 50px;
+                    color: var(--sidebar-bg-color);
+                    padding: 0 2%;
                   }
+
+                  .search-banner h1 {
+                    font-size: 2em;
+                    color: var(--sidebar-bg-color);
+                  }
+
+                  .search-input {
+                    position: relative;
+                  }
+
+                  .search-input input {
+                    width: 80%;
+                    font-size: 1.5em;
+                    line-height: 1.75em;
+                    border-radius: .5em;
+                    padding: 0 .5em;
+                    border: solid 1px #ccc;
+                  }
+
+                  .search-input input::placeholder {
+                    color: #696969;
+                  }
+
+                  .search-icon {
+                    position: absolute;
+                    top: 0;
+                    right: 22%;
+                    speak: none;
+                    font-family: 'Material Icons';
+                    font-size: 1.75em;
+                    line-height: 1.75em;
+                    padding: 0 .25em;
+                  }
+
+                  .search-banner .logo img {
+                    height: 50px;
+                  }
+
+
                 </style>
 
                 <div class="content">
-
-                  <iframe scrolling="no" class="3d"
-                          src="https://cdn.instavr.co/html/G83td5Eg9ENbnIaWLi7H_app.html"></iframe>
+                  <div class="search-banner">
+                    <div><h1>Attendee List</h1></div>
+                    <div class="search-input">
+                      <input type="text" placeholder="Search Attendees"/>
+                      <mat-icon class=" search-icon mat-icon material-icons mat-icon-no-color" role="img"
+                                aria-hidden="true">
+                        search
+                      </mat-icon>
+                    </div>
+                    <div class="logo">
+                      <img
+                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/logo.png">
+                    </div>
+                  </div>
 
                 </div>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -108,19 +108,24 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b">
+              <inferno-snippet-content id="c9985737-d030-4fdd-8ac7-33de79771c9f">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
-                    const font = new FontFace(name, `url(${url})`);
-                    font.load().then(function (loadedFont) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
                       document.fonts.add(loadedFont);
-                      console.log(`Loaded custom font ${name}`);
+                      console.log('Loaded custom font ', name);
                     }).catch(function (error) {
                       // error occurred
-                      console.log(`Error loading ${name}`);
+                      console.log('Error loading ', name);
                     });
+
                   }
 
                   loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
@@ -137,32 +142,230 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/agenda-logo-bg.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: center;
+                    background-position: left bottom;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: 'gothamMed', sans-serif;
                   }
 
-                  iframe {
-                    display: block;
-                    border: none;
-                    height: calc(100vh - 114px);
-                    width: 100%;
-                    overflow-y: hidden;
+                  .top-banner {
+                    padding: 10px 50px;
+                    line-height: 60px;
+                    color: var(--branding-primary);
+                    font-size: 32px;
+                    background-color: #ffffff;
+
                   }
+
+                  .top-banner span {
+                    color: var(--sidebar-bg-color);
+                  }
+
+                  .top-banner img {
+                    float: right;
+                  }
+
+                  .info-text {
+                    color: #ffffff;
+                    padding: 20px 40px;
+                    font-size: 1.5em;
+                    text-align: center;
+                    margin-top: 40px;
+                    width: 90%;
+                    margin-left: 5%;
+                  }
+
+                </style>
+
+                <!-- gri content-->
+                <style>
+                  .grid-container {
+                    display: grid;
+                    width: 90%;
+                    grid-auto-columns: auto;
+                    grid-auto-rows: auto;
+                    grid-template-columns: repeat(auto-fit, 1fr);
+                    gap: 20px 20px;
+                    align-content: center;
+                    padding: 40px;
+                  }
+
+                  .card {
+                    display: flex;
+                    flex-direction: row;
+                    flex: auto;
+                    width: 70%;
+                    min-height: 200px;
+                    border-radius: 1em;
+                    background-color: #fff;
+                    border: 2px solid #fff;
+                  }
+
+                  .time {
+                    width: 20%;
+                    min-width: 100px;
+                    color: white;
+                    background-color: var(--sidebar-bg-color);
+                    border-radius: 1em 0 0 1em;
+                    padding: 1em;
+                    white-space: nowrap;
+                  }
+
+                  .event {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    width: 80%;
+                    padding: 1em;
+                  }
+
+                  .event-title {
+                    font-size: 1.5em;
+                    line-height: 2em;
+                  }
+
+                  .event-desc {
+                    font-family: gothamBook, sans-serif;
+                  }
+
+                  .join {
+                    position: absolute;
+                    right: 1em;
+                    bottom: 1em;
+                    display: block;
+                    background-color: var(--sidebar-bg-color);
+                    color: white;
+                    border-radius: .65em;
+                    width: 80px;
+                    font-size: 1.5em;
+                    line-height: 2em;
+                    text-align: center;
+                  }
+
+                  .join:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: white;
+                  }
+
+                  .event-presenters {
+                    margin: 1em 0;
+                  }
+
+
                 </style>
 
                 <div class="content">
 
-                  <iframe scrolling="no" class="3d"
-                          src="https://cdn.instavr.co/html/G83td5Eg9ENbnIaWLi7H_app.html"></iframe>
+                  <div class="top-banner">
+                    <span>Conference Agenda</span>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                  </div>
+
+                  <div class="grid-container">
+                    <!--  9:45 AM -->
+                    <div class="card">
+                      <div class="time">9:45 AM</div>
+                      <div class="event">
+                        <div class="event-title">Welcome</div>
+                        <div class="event-desc">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                          laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </div>
+                        <div class="event-presenters">Glynn Williams and Dave Lacey</div>
+                        <a id="welcome-event" class="join"
+                           href="#">Join</a>
+                      </div>
+                    </div>
+
+                    <!--  10:30 AM -->
+                    <div class="card">
+                      <div class="time">10:30 AM</div>
+                      <div class="event">
+                        <div class="event-title">Event Title 1</div>
+                        <div class="event-desc">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        </div>
+                        <div class="event-presenters">Presenters Names here</div>
+                        <a id="event1" class="join"
+                           href="#">Join</a>
+                      </div>
+                    </div>
+
+
+                    <!--  10:30 AM -->
+                    <div class="card">
+                      <div class="time">11:30 AM</div>
+                      <div class="event">
+                        <div class="event-title">Event Title 2</div>
+                        <div class="event-desc">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        </div>
+                        <div class="event-presenters">Presenters Names here</div>
+                        <a id="event2" class="join"
+                           href="#">Join</a>
+                      </div>
+                    </div>
+
+                    <!--  10:30 AM -->
+                    <div class="card">
+                      <div class="time">1:30 PM</div>
+                      <div class="event">
+                        <div class="event-title">Event Title 3</div>
+                        <div class="event-desc">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        </div>
+                        <div class="event-presenters">Presenters Names here</div>
+                        <a id="event3" class="join"
+                           href="#">Join</a>
+                      </div>
+                    </div>
+
+                    <!--  10:30 AM -->
+                    <div class="card">
+                      <div class="time">2:30 PM</div>
+                      <div class="event">
+                        <div class="event-title">Event Title 4</div>
+                        <div class="event-desc">
+                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        </div>
+                        <div class="event-presenters">Presenters Names here</div>
+                        <a id="event4" class="join"
+                           href="#">Join</a>
+                      </div>
+                    </div>
+
+                  </div>
 
                 </div>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

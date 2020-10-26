@@ -108,61 +108,123 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8c1ea827-1b28-41e9-a3cd-9bd91d8e1b7b">
-
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    const font = new FontFace(name, `url(${url})`);
-                    font.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log(`Loaded custom font ${name}`);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log(`Error loading ${name}`);
-                    });
-                  }
-
-                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
-                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
-                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
-
-                </script>
+              <inferno-snippet-content id="1871201f-7cf3-4e6e-923d-a2ef6fb9edb4">
 
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/main-stage/mainstage-bg.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: center;
+                    background-position: bottom left;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
+                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: "CustomFont1", sans-serif !important;
                   }
 
-                  iframe {
-                    display: block;
-                    border: none;
-                    height: calc(100vh - 114px);
-                    width: 100%;
-                    overflow-y: hidden;
-                  }
                 </style>
 
                 <div class="content">
 
-                  <iframe scrolling="no" class="3d"
-                          src="https://cdn.instavr.co/html/G83td5Eg9ENbnIaWLi7H_app.html"></iframe>
+                  <div>
+                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
+                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
+                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
+                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>
+                    <!-- Sort events by start time -->
+                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
+
+                    <!-- Set nextEvent so we know if no upcoming event is found -->
+                    {% assign nextEvent = 'No Event' %}
+
+                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
+
+<!--                    <h2>Current Category</h2>-->
+<!--                    <ul>-->
+<!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
+<!--                      <li>{{ currentCategory }}</li>-->
+<!--                    </ul>-->
+
+                    <!-- Iterate the sorted events -->
+                    {% for event in sortedEvents %}
+
+                    <!-- Check the event category ID matches this page category ID -->
+                    {% assign thisCategory = event.FirstCategoryId | downcase %}
+                    {% if thisCategory != currentCategory%}
+                    <!-- ... and if not, skip iteration -->
+<!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
+<!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
+                    {% continue %}
+                    {% endif %}
+
+                    <!-- The end time is start timestamp added to video duration -->
+                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
+
+                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
+                    {% if currentTime  > endTime  %}
+<!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
+<!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
+                    {% assign nextEvent = event %}
+                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
+                    {% continue %}
+                    <!-- ...otherwise... -->
+                    {% else %}
+                    <!-- ... we set this as our next upcoming event and ... -->
+                    {% assign nextEvent = event %}
+                    {% endif %}
+
+                    <!-- ...break the iteration loop. -->
+                    {% break %}
+
+                    {% endfor %}
+
+                    <!-- If the loop didn't find any upcoming events,... -->
+                    {% if nextEvent == 'No Event' %}
+<!--                    <h1> No Sessions or Events are Currently Available </h1>-->
+<!--                    <p>Check Back Later</p>-->
+                    {% else %}
+                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
+                    <!-- set display: none when in production -->
+                    <h1> Enter the Current or Upcoming Session </h1>
+                    <p>{{nextEvent.Name}}</p>
+                    <a id="redirect-link"
+                       href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
+                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+                    </a>
+                    {% endif %}
+
+                    <script type="text/javascript">
+                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
+                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
+                      }
+                    </script>
+                  </div>
+
+                  <div style="text-align:center; padding:20%">
+                    <h1>Checking to see what room to take you too.</h1>
+                    <p>If you are not redirected, then there are no events are currently Scheduled - check back
+                       later</p>
+                  </div>
 
                 </div>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
