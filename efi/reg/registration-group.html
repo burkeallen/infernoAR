@@ -29,33 +29,8 @@
 <!-- SNIPPET CONTENT START -->
 <inferno-snippet-content id="07c5480e-fd65-4eb1-9406-dbec5112019e">
 
-  <!--  Load custom fonts -->
-  <script type="text/javascript">
-    function loadFont(name, url) {
-      if (document.fonts.check('1em ' + name)) {
-        return;
-      }
-      const fontFace = new FontFace(name, 'url(' + url + ')');
 
-      fontFace.load().then(function (loadedFont) {
-        document.fonts.add(loadedFont);
-        console.log('Loaded custom font ', name);
-      }).catch(function (error) {
-        // error occurred
-        console.log('Error loading ', name);
-      });
-
-    }
-
-    loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
-
-    function register() {
-      const el = document.querySelector('.section8');
-      el.scrollIntoView();
-    }
-  </script>
-
-<!--  Main Styles -->
+  <!--  Main Styles -->
   <style>
     /* prevent entire screen from going black if you try to reference an image that does not exist*/
     /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -92,7 +67,7 @@
       width: 90%;
       max-width: 740px;
       padding: 20px;
-      box-shadow: 4px 4px 40px 12px rgba(0,0,0, .5);
+      box-shadow: 4px 4px 40px 12px rgba(0, 0, 0, .5);
     }
 
     .header {
@@ -112,7 +87,7 @@
     }
   </style>
 
-<!--  content styles -->
+  <!--  content styles -->
   <style>
     .section1 {
       width: 100%;
@@ -149,7 +124,7 @@
       gap: 0px 0px;
     }
 
-    .section4, .section7 , .section8 {
+    .section4, .section7, .section8 {
       justify-content: center;
       align-content: center;
       text-align: center;
@@ -382,6 +357,33 @@
     }
   </style>
 
+  <style>
+    @media screen and (max-width: 650px) {
+      .card, .content {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .card {
+        padding: 8px;
+      }
+
+      .field , form button {
+        margin: 5px 0;
+        width: 100%;
+      }
+
+      .field-warning {
+        margin: 0 5%;
+      }
+      .section1, .section2, .section3, .section4, .section5, .section6, .section7, .section8 {
+        display: block;
+      }
+    }
+  </style>
+
+
   <div class="content">
     <!-- public URL for Registration Page -->
     <!-- https://enterpriseflorida.infernoar.com/register/attendees/f70e4d78-0b8d-496f-7d3f-08d86c589370/f70e4d78-0b8d-496f-7d3f-08d86c589370 -->
@@ -390,7 +392,7 @@
     <div class="card">
       <div class="header">
         <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/registration/image001.png">
-        <div class="register-now" onclick="register();"></div>
+        <div class="register-now" onclick="document.querySelector('.section8').scrollIntoView();"></div>
       </div>
 
       <div class="section1">
