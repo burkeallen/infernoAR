@@ -795,45 +795,45 @@
                 <!-- tabs -->
                 <script>
                   function openAgenda(evt, tabName) {
-                    const myLanding = landingPageEl ?? document;
-                    const btn0 = myLanding.querySelector("#btn-full-schedule");
-                    const btn1 = myLanding.querySelector("#btn-breakout-room-1");
-                    const btn2 = myLanding.querySelector("#btn-breakout-room-2");
+                    const myTabsPage = landingPageEl ?? document;
+                    const btn0 = myTabsPage.querySelector("#btn-full-schedule");
+                    const btn1 = myTabsPage.querySelector("#btn-breakout-room-1");
+                    const btn2 = myTabsPage.querySelector("#btn-breakout-room-2");
                     btn0.className = "";
                     btn1.className = "";
                     btn2.className = "";
 
-                    const tabContent0 = myLanding.querySelector("#full-schedule");
-                    const tabContent1 = myLanding.querySelector("#breakout-room-1");
-                    const tabContent2 = myLanding.querySelector("#breakout-room-2");
+                    const tabContent0 = myTabsPage.querySelector("#full-schedule");
+                    const tabContent1 = myTabsPage.querySelector("#breakout-room-1");
+                    const tabContent2 = myTabsPage.querySelector("#breakout-room-2");
                     tabContent0.style.display = "none";
                     tabContent1.style.display = "none";
                     tabContent2.style.display = "none";
 
                     switch(tabName) {
                       case 'breakout-room-1' :
-                        myLanding.querySelector("#breakout-room-1").style.display = "grid";
-                        myLanding.querySelector("#btn-breakout-room-1").className += "active";
+                        myTabsPage.querySelector("#breakout-room-1").style.display = "grid";
+                        myTabsPage.querySelector("#btn-breakout-room-1").className += "active";
                         break;
                       case 'breakout-room-2' :
-                        myLanding.querySelector("#breakout-room-2").style.display = "grid";
-                        myLanding.querySelector("#btn-breakout-room-2").className += "active";
+                        myTabsPage.querySelector("#breakout-room-2").style.display = "grid";
+                        myTabsPage.querySelector("#btn-breakout-room-2").className += "active";
                         break;
                       default:
-                        myLanding.querySelector("#full-schedule").style.display = "grid";
-                        myLanding.querySelector("#btn-full-schedule").className += "active";
+                        myTabsPage.querySelector("#full-schedule").style.display = "grid";
+                        myTabsPage.querySelector("#btn-full-schedule").className += "active";
                     }
                   }
                 </script>
 
                 <!-- Sponsors -->
                 <script>
-                  const myLanding = landingPageEl ?? document;
-                  let sponsorsGrid = myLanding.getElementById("sponsors-grid");
-                  const sponsorTemplate = myLanding.getElementById("sponsor-template");
-                  const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+                  var myLanding = landingPageEl ?? document;
+                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
 
-                  let sponsorsJson = {}
+                  var sponsorsJson = {};
                   loadJSON(baseUrl + '/sponsors.json',
                     function (response) {
                       sponsorsJson = JSON.parse(response);
