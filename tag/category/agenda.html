@@ -832,10 +832,10 @@
                   var myLanding = landingPageEl ?? document;
                   var sponsorsGrid = myLanding.getElementById("sponsors-grid");
                   var sponsorTemplate = myLanding.getElementById("sponsor-template");
-                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
 
                   var sponsorsJson = {};
-                  loadJSON(baseUrl + '/sponsors.json',
+                  loadJSON(baseUrl + '/sponsors/sponsors.json',
                     function (response) {
                       sponsorsJson = JSON.parse(response);
                     })
@@ -844,7 +844,7 @@
                     let clone = sponsorTemplate.content.cloneNode(true);
                     let img = clone.getElementById("sponsor-logo");
                     img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
-                    img.src = baseUrl + sponsor.image;
+                    img.src = baseUrl + '/sponsors/' + sponsor.image;
                     sponsorsGrid.appendChild(clone);
                   }
 
