@@ -110,27 +110,6 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
 
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2');
-
-                </script>
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -140,24 +119,64 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                    font-family: "Helvetica Neue", Helvetica, Arial sans-serif;
+                  }
+
+                  .info {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    margin: 40px auto;
+                    text-align: center;
+                  }
+
+                  .top-img {
+                    width: 90%;
+                  }
+
+                  .message {
+                    background: var(--sidebar-bg-color) padding-box;
+                    border: 1px solid #707070;
+                    border-radius: 5em;
+                    text-align: center;
+                    color: #FFFFFF;
+                    margin: 5% auto;
+                    padding: 5%;
+                    font-size: 1.25em;
+                  }
+                  .message h2 {
+                    margin: 0;
+                    font-weight: bold;
+                    font-family: "Helvetica Neue", Helvetica, Arial sans-serif;
+                    font-size: 1.5em;
+                  }
+                  .message p {
+                    margin-top: 5%;
+                  }
+                  .arrows {
+                    width: 80%;
+                    max-height: 200px;
+                    margin: 0 auto;
                   }
                 </style>
 
                 <div class="content">
-
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  <div class="info">
+                    <div>
+                      <img class="top-img" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/temp/Image 23.png">
+                      <div class="message">
+                        <h2>You have successfully logged in. </h2>
+                        <h2>Please save your username and password.</h2>
+                        <p>We look forward to seeing you at NAMD 2020: Virtual Conference</p>
+                      </div>
+                      <img class="arrows" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/temp/arrows-h.png">
+                    </div>
+                  </div>
 
                 </div>
 
