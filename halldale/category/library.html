@@ -108,7 +108,31 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="9dfe9977-49f4-43a4-9cb4-564b61e43801">
+              <inferno-snippet-content id="2728770f-e580-4d29-bc2c-1a5e9c183b65">
+
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
+                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
+
+                </script>
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -118,200 +142,88 @@
                   }
 
                   .content {
-                    background-image: none;
-                    background-color: var(--sidebar-bg-color);
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/agenda-logo-bg.jpg');
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: right bottom;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: 'gothamMed', sans-serif;
                   }
 
-                  .content > img {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
+                  .top-banner {
+                    padding: 10px 50px;
+                    line-height: 60px;
+                    color: var(--branding-primary);
+                    font-size: 32px;
+                    background-color: #ffffff;
 
-                <!-- Video Panel -->
-                <style>
-                  .video-panel {
-                    position: absolute;
-                    left: 3%;
-                    top: 26.3%;
-                    width: 20%;
-                    height: 35.3%;
-                    clip-path: polygon(4% 2%, 97% 39%, 97% 98%, 3% 94%);
-                    z-index: 99;
                   }
 
-                </style>
+                  .top-banner span {
+                    color: var(--sidebar-bg-color);
+                  }
 
-                <!-- Lobby Menu -->
-                <style>
-                  .menu {
-                    position: absolute;
+                  .top-banner img {
+                    float: right;
+                  }
+
+                  .grid {
                     display: grid;
-                    top: 5%;
-                    right: 5%;
-                    z-index: 99;
-                    width: 300px;
-                    padding: 2%;
-                    background-color: rgba(255, 255, 255, .9);
+                    align-content: center;
+                    justify-content: center;
                   }
 
-                  .menu a:nth-child(2), .menu a:nth-child(3) {
-                    background-color: #27aae1;
-                    border: solid 1px #27aae1;;
-                  }
-
-                  .menu img {
-                    width: 100%;
-                  }
-
-                  .menu-button {
-                    background-color: var(--branding-primary);
-                    border: solid 1px var(--branding-primary);
+                  .grid div {
+                    display: grid;
+                    align-content: center;
+                    justify-content: center;
+                    margin-top: 10%;
+                    min-width: 80%;
+                    min-height: 400px;
+                    background-color: rgba(0, 0, 0, .4);
                     color: white;
-                    font-size: 1.4em;
-                    line-height: 2em;
-                    margin: 4%;
-                    padding-left: 1em;
+                    font-size: 2em;
+                    text-align: center;
+                    padding: 5%;
+                    border-radius: .5em;
                   }
-
-                  .menu-button:hover {
-                    filter: brightness(120%);
-                    transform: scale(1.1);
-                    text-transform: none;
-                    color: white;
-                  }
-
                 </style>
 
-                <!-- Sponsors -->
-                <style>
-                  .sponsor-container {
-                    position: absolute;
-                    bottom: 5%;
-                    width: 96%;
-                    margin: 0 auto;
-                    background-color: rgba(255, 255, 255, 1);
-                  }
-
-                  .sponsor-container h2 {
-                    margin: 10px;
-                  }
-
-                  .sponsor-list {
-                    display: flex;
-                    flex: 1;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                  }
-
-                  .sponsor {
-                    display: flex;
-                    align-items: center;
-                    max-width: 140px;
-                    max-height: 100px;
-
-                    margin: 8px;
-                    padding: 8px;
-                  }
-
-                  .sponsor img {
-                    align-self: center;
-                  }
-
-                  .sponsor:hover {
-                    filter: brightness(80%);
-                    transform: scale(1.1);
-                  }
-
-                  .sponsor a {
-                    text-decoration: none;
-                  }
-
-                  .sponsor a:hover {
-                    text-decoration: none;
-                  }
-
-                  .sponsor img {
-                    width: 100%;
-                  }
-                </style>
 
                 <div class="content">
-                  <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/lobby/lobby_bg.jpg">
 
-                  <div class="video-panel"></div>
-
-                  <div class="menu">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/logo/1Logo-transparent.png">
-                    <a class="menu-button"
-                       href="videos/fb172cb6-cc2d-483f-5cae-08d860938aca/landing/06598932-4048-447a-800f-50c692318d81">
-                      Agenda</a>
-                    <a class="menu-button"
-                       href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">
-                      Main Stage</a>
-                    <a class="menu-button"
-                       href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/landing/b3091238-2a3b-49b0-a26d-13b3c7015d80">
-                      Breakout Room 1</a>
-                    <a class="menu-button"
-                       href="videos/0616781b-d984-4d91-6667-08d860a9dffa/landing/e98a9a95-ddf5-4a85-9a6c-10634855499c">
-                      Breakout Room 2</a>
-                    <a class="menu-button"
-                       href="videos/d1d203d0-4314-48e8-5cb0-08d860938aca/landing/a7f4b31e-c8e7-4760-af59-25d8c3e596de">
-                      Resource Library</a>
-                    <a class="menu-button"
-                       href="videos/399c2dc9-8be2-4353-731b-08d860999a75/landing/f32934c2-47c6-46f3-864c-c6b7420dc9e1">
-                      Attendees</a>
-                    <a class="menu-button"
-                       href="videos/ef9ba75f-a73b-42ed-5caf-08d860938aca/landing/d16e2b2e-3909-421c-a0bb-9c14f1132ec9">
-                      Exhibit Hall</a>
+                  <div class="top-banner">
+                    <span>Library</span>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
                   </div>
 
-                  <div class="sponsor-container">
-                    <div class="sponsor-list">
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.aprio.com/">
-                          <img alt="Aprio"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/aprio.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.northside.com/">
-                          <img alt="Northside Hospital"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/2018_Northside_Logo_Navy.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.grantthornton.com/">
-                          <img alt="Grant Thorton"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Grant-Thornton.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.wipfli.com/">
-                          <img alt="Wipfli"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Wipfli logo.jpg">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://coles.kennesaw.edu/mshmi//">
-                          <img alt="KSU - Master of Science in Healthcare Management and Informatics"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/ksu_logo_black.png">
-                        </a>
-                      </div>
-
+                  <div class="grid">
+                    <div>
+                      <p>Library stuff goes here</p>
                     </div>
                   </div>
 
                 </div>
+
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
