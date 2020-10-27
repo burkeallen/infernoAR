@@ -150,16 +150,17 @@
 
                 </style>
 
-                <!-- Lobby Menu -->
+                <!-- Menu -->
                 <style>
                   .menu {
-                    position: absolute;
                     display: grid;
+                    position: absolute;
                     top: 5%;
                     right: 5%;
                     z-index: 99;
-                    width: 300px;
-                    padding: 2%;
+                    height: auto;
+                    width: 30%;
+                    padding: 0 5px 10px 5px;
                     background-color: rgba(255, 255, 255, .9);
                   }
 
@@ -173,20 +174,25 @@
                   }
 
                   .menu-button {
+                    text-align: center;
+                    color: white;
                     background-color: var(--branding-primary);
                     border: solid 1px var(--branding-primary);
+                    font-size: clamp(1rem, 2.25vw, 2rem);
+                    line-height: clamp(1.5rem, 2.75vw, 2.5rem);
+                    margin: .35rem .75rem;
+                    padding: 2%;
+                  }
+
+                  .menu-button a {
                     color: white;
-                    font-size: 1.4em;
-                    line-height: 2em;
-                    margin: 4%;
-                    padding-left: 1em;
+                    text-decoration: none;
                   }
 
                   .menu-button:hover {
+                    text-decoration: none;
+                    transform: scale(1);
                     filter: brightness(120%);
-                    transform: scale(1.1);
-                    text-transform: none;
-                    color: white;
                   }
 
                 </style>
@@ -196,51 +202,34 @@
                   .sponsor-container {
                     position: absolute;
                     bottom: 5%;
-                    width: 96%;
-                    margin: 0 auto;
-                    background-color: rgba(255, 255, 255, 1);
-                  }
-
-                  .sponsor-container h2 {
-                    margin: 10px;
-                  }
-
-                  .sponsor-list {
-                    display: flex;
-                    flex: 1;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                  }
-
-                  .sponsor {
-                    display: flex;
-                    align-items: center;
-                    max-width: 140px;
-                    max-height: 100px;
-
-                    margin: 8px;
-                    padding: 8px;
-                  }
-
-                  .sponsor img {
-                    align-self: center;
-                  }
-
-                  .sponsor:hover {
-                    filter: brightness(80%);
-                    transform: scale(1.1);
-                  }
-
-                  .sponsor a {
-                    text-decoration: none;
-                  }
-
-                  .sponsor a:hover {
-                    text-decoration: none;
-                  }
-
-                  .sponsor img {
                     width: 100%;
+                  }
+
+                  .sponsors-header h1 {
+                    color: #01245B;
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                  }
+
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+                    gap: 5px 5px;
+                    padding: 0 5%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    width: 20rem;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
                   }
                 </style>
 
@@ -275,43 +264,51 @@
                       Exhibit Hall</a>
                   </div>
 
-                  <div class="sponsor-container">
-                    <div class="sponsor-list">
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.aprio.com/">
-                          <img alt="Aprio"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/aprio.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.northside.com/">
-                          <img alt="Northside Hospital"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/2018_Northside_Logo_Navy.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.grantthornton.com/">
-                          <img alt="Grant Thorton"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Grant-Thornton.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.wipfli.com/">
-                          <img alt="Wipfli"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Wipfli logo.jpg">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://coles.kennesaw.edu/mshmi//">
-                          <img alt="KSU - Master of Science in Healthcare Management and Informatics"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/ksu_logo_black.png">
-                        </a>
-                      </div>
-
-                    </div>
+                  <div class=sponsor-container>
+                    <div id="sponsors-grid" class="sponsors-grid"></div>
+                    <template id="sponsor-template">
+                      <img id="sponsor-logo" src=""/>
+                    </template>
                   </div>
 
                 </div>
+
+                  <!-- Sponsors -->
+                  <script>
+                    var myLanding = landingPageEl ?? document;
+                    var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                    var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                    var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/"
+
+                    var sponsorsJson = {};
+                    loadJSON(baseUrl + 'lobby/sponsors.json',
+                      function (response) {
+                        sponsorsJson = JSON.parse(response);
+                      })
+
+                    for (let sponsor of sponsorsJson['sponsors']) {
+                      let clone = sponsorTemplate.content.cloneNode(true);
+                      let img = clone.getElementById("sponsor-logo");
+                      img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
+                      img.src = baseUrl + '/sponsors/' + sponsor.image;
+                      sponsorsGrid.appendChild(clone);
+                    }
+
+                    function loadJSON(file, callback) {
+                      const xobj = new XMLHttpRequest()
+                      xobj.overrideMimeType('application/json')
+                      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                      xobj.onreadystatechange = function () {
+                        if (xobj.readyState == 4 && xobj.status == '200') {
+                          callback(xobj.responseText)
+                        }
+                      }
+                      xobj.send(null)
+                    }
+
+                  </script>
+
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
