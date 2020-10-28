@@ -110,62 +110,46 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="9dfe9977-49f4-43a4-9cb4-564b61e43801">
 
+                <!-- Container -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+
+                  #container {
+                    top: 0;
+                    left: 0;
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    font-family: Verdana, sans-serif !important;
+                    background-size: cover;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/lobby/lobby_bg.jpg');
+                  }
+
+                  #container img {
+                    height: auto;
+                    width: 100%;
+                  }
+
                   img::after {
                     content: none;
                   }
 
-                  .content {
-                    background-image: none;
-                    background-color: var(--sidebar-bg-color);
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: Verdana, sans-serif !important;
-                  }
-
-                  .content > img {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
                   }
                 </style>
 
-                <!-- Video Panel -->
-                <style>
-                  .video-panel {
-                    position: absolute;
-                    left: 3%;
-                    top: 26.3%;
-                    width: 20%;
-                    height: 35.3%;
-                    clip-path: polygon(4% 2%, 97% 39%, 97% 98%, 3% 94%);
-                    z-index: 99;
-                  }
-
-                </style>
-
-                <!-- Lobby Menu -->
+                <!-- Menu -->
                 <style>
                   .menu {
-                    position: absolute;
                     display: grid;
+                    position: absolute;
                     top: 5%;
-                    right: 5%;
+                    right: 10%;
                     z-index: 99;
-                    width: 300px;
-                    padding: 2%;
+                    height: auto;
+                    width: 30%;
+                    padding: 0 5px 10px 5px;
                     background-color: rgba(255, 255, 255, .9);
-                  }
-
-                  .menu a:nth-child(2), .menu a:nth-child(3) {
-                    background-color: #27aae1;
-                    border: solid 1px #27aae1;;
                   }
 
                   .menu img {
@@ -173,20 +157,25 @@
                   }
 
                   .menu-button {
+                    text-align: center;
+                    color: white;
                     background-color: var(--branding-primary);
                     border: solid 1px var(--branding-primary);
+                    font-size: clamp(1rem, 2.25vw, 2rem);
+                    line-height: clamp(1.5rem, 2.75vw, 2.5rem);
+                    margin: .35rem .75rem;
+                    padding: 1%;
+                  }
+
+                  .menu-button a {
                     color: white;
-                    font-size: 1.4em;
-                    line-height: 2em;
-                    margin: 4%;
-                    padding-left: 1em;
+                    text-decoration: none;
                   }
 
                   .menu-button:hover {
+                    text-decoration: none;
+                    transform: scale(1);
                     filter: brightness(120%);
-                    transform: scale(1.1);
-                    text-transform: none;
-                    color: white;
                   }
 
                 </style>
@@ -196,122 +185,102 @@
                   .sponsor-container {
                     position: absolute;
                     bottom: 5%;
-                    width: 96%;
-                    margin: 0 auto;
-                    background-color: rgba(255, 255, 255, 1);
-                  }
-
-                  .sponsor-container h2 {
-                    margin: 10px;
-                  }
-
-                  .sponsor-list {
-                    display: flex;
-                    flex: 1;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                  }
-
-                  .sponsor {
-                    display: flex;
-                    align-items: center;
-                    max-width: 140px;
-                    max-height: 100px;
-
-                    margin: 8px;
-                    padding: 8px;
-                  }
-
-                  .sponsor img {
-                    align-self: center;
-                  }
-
-                  .sponsor:hover {
-                    filter: brightness(80%);
-                    transform: scale(1.1);
-                  }
-
-                  .sponsor a {
-                    text-decoration: none;
-                  }
-
-                  .sponsor a:hover {
-                    text-decoration: none;
-                  }
-
-                  .sponsor img {
                     width: 100%;
                   }
+
+                  .sponsors-header h1 {
+                    color: #01245B;
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                  }
+
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+                    gap: 5px 5px;
+                    padding: 0 5%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    width: 20rem;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
+
+                  @media only screen and (min-width: 1200px) {
+                    .sponsors-grid {
+                      grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+                    }
+                    .sponsors-grid img {
+                      width: 28rem;
+                    }
+                  }
+
                 </style>
 
-                <div class="content">
-                  <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/lobby/lobby_bg.jpg">
+                <div id="container"></div>
+                <div class="video-panel"></div>
 
-                  <div class="video-panel"></div>
-
-                  <div class="menu">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/logo/1Logo-transparent.png">
-                    <a class="menu-button"
-                       href="videos/fb172cb6-cc2d-483f-5cae-08d860938aca/landing/06598932-4048-447a-800f-50c692318d81">
-                      Agenda</a>
-                    <a class="menu-button"
-                       href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">
-                      Main Stage</a>
-                    <a class="menu-button"
-                       href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/landing/b3091238-2a3b-49b0-a26d-13b3c7015d80">
-                      Breakout Room 1</a>
-                    <a class="menu-button"
-                       href="videos/0616781b-d984-4d91-6667-08d860a9dffa/landing/e98a9a95-ddf5-4a85-9a6c-10634855499c">
-                      Breakout Room 2</a>
-                    <a class="menu-button"
-                       href="videos/d1d203d0-4314-48e8-5cb0-08d860938aca/landing/a7f4b31e-c8e7-4760-af59-25d8c3e596de">
-                      Resource Library</a>
-                    <a class="menu-button"
-                       href="videos/399c2dc9-8be2-4353-731b-08d860999a75/landing/f32934c2-47c6-46f3-864c-c6b7420dc9e1">
-                      Attendees</a>
-                    <a class="menu-button"
-                       href="videos/ef9ba75f-a73b-42ed-5caf-08d860938aca/landing/d16e2b2e-3909-421c-a0bb-9c14f1132ec9">
-                      Exhibit Hall</a>
-                  </div>
-
-                  <div class="sponsor-container">
-                    <div class="sponsor-list">
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.aprio.com/">
-                          <img alt="Aprio"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/aprio.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.northside.com/">
-                          <img alt="Northside Hospital"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/2018_Northside_Logo_Navy.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.grantthornton.com/">
-                          <img alt="Grant Thorton"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Grant-Thornton.png">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://www.wipfli.com/">
-                          <img alt="Wipfli"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/Wipfli logo.jpg">
-                        </a>
-                      </div>
-                      <div class="sponsor">
-                        <a target="_blank" href="https://coles.kennesaw.edu/mshmi//">
-                          <img alt="KSU - Master of Science in Healthcare Management and Informatics"
-                               src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/registration/ksu_logo_black.png">
-                        </a>
-                      </div>
-
-                    </div>
-                  </div>
-
+                <div class="menu">
+                  <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/logo/1Logo-transparent.png">
+                  <a class="menu-button" href="videos/fb172cb6-cc2d-483f-5cae-08d860938aca/landing/06598932-4048-447a-800f-50c692318d81"> Agenda</a>
+                  <a class="menu-button" href="videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417"> Main Stage</a>
+                  <a class="menu-button" href="videos/1d1ddbee-150a-4481-107a-08d8608a56ce/landing/b3091238-2a3b-49b0-a26d-13b3c7015d80"> Breakout Room 1</a>
+                  <a class="menu-button" href="videos/0616781b-d984-4d91-6667-08d860a9dffa/landing/e98a9a95-ddf5-4a85-9a6c-10634855499c"> Breakout Room 2</a>
+                  <a class="menu-button" href="videos/d1d203d0-4314-48e8-5cb0-08d860938aca/landing/a7f4b31e-c8e7-4760-af59-25d8c3e596de"> Resource Library</a>
+                  <a class="menu-button" href="videos/399c2dc9-8be2-4353-731b-08d860999a75/landing/f32934c2-47c6-46f3-864c-c6b7420dc9e1"> Attendees</a>
+                  <a class="menu-button" href="videos/ef9ba75f-a73b-42ed-5caf-08d860938aca/landing/d16e2b2e-3909-421c-a0bb-9c14f1132ec9"> Exhibit Hall</a>
                 </div>
+
+                <div class=sponsor-container>
+                  <div id="sponsors-grid" class="sponsors-grid"></div>
+                  <template id="sponsor-template">
+                    <img id="sponsor-logo" src=""/>
+                  </template>
+                </div>
+
+                <!-- Sponsors -->
+                <script>
+                  var myLanding = landingPageEl ?? document;
+                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
+
+                  var sponsorsJson = {};
+                  loadJSON(baseUrl + '/sponsors/lobby-sponsors.json',
+                    function (response) {
+                      sponsorsJson = JSON.parse(response);
+                    })
+
+                  for (let sponsor of sponsorsJson['sponsors']) {
+                    let clone = sponsorTemplate.content.cloneNode(true);
+                    let img = clone.getElementById("sponsor-logo");
+                    img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
+                    img.src = baseUrl + '/sponsors/' + sponsor.image;
+                    sponsorsGrid.appendChild(clone);
+                  }
+
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
+
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

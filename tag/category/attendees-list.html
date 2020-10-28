@@ -522,9 +522,9 @@
                             <div class="contact">
                               <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/> <a id="email" href="" target="_blank" rel="noreferrer"></a>
                             </div>
-                            <div class="contact">
-                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>
-                            </div>
+<!--                            <div class="contact">-->
+<!--                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>-->
+<!--                            </div>-->
 
                           </div>
 
@@ -598,9 +598,9 @@
                       email.innerHTML = at.ContactInfoEmail;
                       email.href = "mailto:" + at.ContactInfoEmail;
 
-                      let companyLink = clone.getElementById("company-link");
-                      companyLink.innerHTML = (at.companyLink ? at.companyLink : "");
-                      companyLink.href = at.companyLink;
+                      // let companyLink = clone.getElementById("company-link");
+                      // companyLink.innerHTML = (at.companyLink ? at.companyLink : "");
+                      // companyLink.href = at.companyLink;
 
                       let job = clone.getElementById("job");
                       const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
@@ -796,10 +796,10 @@
                   var myLanding = landingPageEl ?? document;
                   var sponsorsGrid = myLanding.getElementById("sponsors-grid");
                   var sponsorTemplate = myLanding.getElementById("sponsor-template");
-                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
+                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
 
                   var sponsorsJson = {};
-                  loadJSON(baseUrl + '/sponsors.json',
+                  loadJSON(baseUrl + '/sponsors/all-sponsors.json',
                     function (response) {
                       sponsorsJson = JSON.parse(response);
                     })
@@ -808,7 +808,7 @@
                     let clone = sponsorTemplate.content.cloneNode(true);
                     let img = clone.getElementById("sponsor-logo");
                     img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
-                    img.src = baseUrl + sponsor.image;
+                    img.src = baseUrl + '/sponsors/' + sponsor.image;
                     sponsorsGrid.appendChild(clone);
                   }
 
