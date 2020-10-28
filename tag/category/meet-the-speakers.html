@@ -401,13 +401,13 @@
                   }
 
                   .attendee .details .header {
-                    margin: 1rem 0;
+                    /*margin: 1rem 0;*/
                     display: flex;
                     flex-wrap: wrap;
                   }
 
                   .attendee .details .a-footer {
-                    width: 65%;
+                    width: 100%;
                     display: flex;
                     justify-content: space-between;
                     flex-wrap: wrap;
@@ -494,7 +494,7 @@
                   <div class="search-exhibitors-divider">
                     <div class="filter-options">
                       <div class="search-wrapper">
-                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
+                        <input id="search-attendees" placeholder="Search Speakers" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
                       </div>
                       <button id="all-grouping" onclick="allAttendees()">All</button>
                       <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
@@ -519,12 +519,17 @@
                           </div>
 
                           <div class="a-row a-footer">
+                            <div id="speakers-session"></div>
+                          </div>
+
+                          <div class="a-row a-footer">
                             <div class="contact">
-                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/> <a id="email" href="" target="_blank" rel="noreferrer"></a>
+                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/>
+                              <a id="email" href="" target="_blank" rel="noreferrer"></a>
                             </div>
-                            <div class="contact">
-                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>
-                            </div>
+<!--                            <div class="contact">-->
+<!--                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>-->
+<!--                            </div>-->
 
                           </div>
 
@@ -564,8 +569,7 @@
                     });
                     return inGroup;
                   }
-                  var dataJSON = {{data.UserProfiles | json}}
-                  ;
+                  var dataJSON = {{data.UserProfiles | json}};
                   var attendees = dataJSON.filter(user => {
                     return hasGroupNovo1(user.UserGroups, 'Speakers');
                   })
@@ -599,15 +603,18 @@
                       email.innerHTML = at.ContactInfoEmail;
                       email.href = "mailto:" + at.ContactInfoEmail;
 
-                      let companyLink = clone.getElementById("company-link");
-                      companyLink.innerHTML = (at.companyLink ? at.companyLink : "");
-                      companyLink.href = at.companyLink;
+                      // let companyLink = clone.getElementById("company-link");
+                      // companyLink.innerHTML = (at.companyLink ? at.companyLink : "");
+                      // companyLink.href = at.companyLink;
 
                       let job = clone.getElementById("job");
                       const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
                       const contactInfoCompany = at.ContactInfoCompany ? at.ContactInfoCompany : "";
                       const hyphen = contactInfoTitle !== "" && contactInfoCompany != "" ? " - " : "";
                       job.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
+
+                      let speakersSession = clone.getElementById("speakers-session");
+                      speakersSession.innerHTML = (at.Bio ? at.Bio : "");
 
                       attendeeList.appendChild(clone);
                     }
