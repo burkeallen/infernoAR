@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
@@ -60,13 +55,10 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -110,32 +102,261 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="d16e2b2e-3909-421c-a0bb-9c14f1132ec9">
 
+                <!-- Container -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
                   img::after {
                     content: none;
                   }
 
-                  .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
                   }
                 </style>
 
-                <div class="content">
+                <!-- banner -->
+                <style>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
+                    background-size: cover;
+                    background-position: left center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/expo/expo-header.png');
+                  }
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  .banner-shadow {
+                    z-index: 99;
+                    position: absolute;
+                    margin-top: 380px;
+                    width: 100%;
+                    height: 20px;
+                    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
+                    color: #fff;
+                    max-width: 70%;
+                    text-shadow: #000 0 0 .5rem;
+                  }
+
+                  .banner-text {
+                    font-weight: bold;
+                    font-size: clamp(2rem, 2.5vw, 3rem);
+                  }
+
+                  .banner-sub-text {
+                    font-weight: lighter;
+                    font-size: clamp(1.25rem, 1.25vw, 2.25rem);
+                  }
+                </style>
+
+                <!-- sponsor section -->
+                <style>
+                  .sponsor-section {
+                    padding: 20px 20px;
+                    background-color: #ffffff;
+                  }
+
+                  .sponsor-section-title {
+                    font-weight: bold;
+                    color: var(--branding-primary);
+                    font-size: clamp(1.5rem, 1.75vw, 2rem);
+                  }
+
+                  .sponsor-section-description {
+                    font-weight: lighter;
+                    font-size: clamp(1rem, 1.25vw, 1.5rem);
+                  }
+
+                  .sponsor-grid-container {
+                  }
+
+                  .sponsor-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    max-width: 100%;
+                    padding: 10px;
+                    align-items: center;
+                  }
+
+                  .sponsor-card {
+                    display: flex;
+                    flex-direction: column;
+                    background-color: #ffffff;
+                    border-radius: 1em;
+                    margin: 10px;
+                    color: white;
+                  }
+
+                  .platinum-sponsor {
+                    position: relative;
+                    width: 200px;
+                    height: 250px;
+                  }
+
+                  .general-module-gold-sponsor {
+                    position: relative;
+                    width: 200px;
+                    height: 250px;
+                  }
+
+                  .silver-bronze-sponsor {
+                    position: relative;
+                    width: 200px;
+                    height: 250px;
+                  }
+
+                  .community-sponsor {
+                    position: relative;
+                    width: 160px;
+                    height: 200px;
+                  }
+
+                  .sponsor-type {
+                    position: absolute;
+                    width:100%;
+                    bottom:10px;
+                    text-align:center;
+                    color: #000000;
+                  }
+
+                </style>
+
+                <div id="container">
+                  <div class="banner">
+                    <div class="banner-info">
+                      <div class="banner-text">Sponsor Expo</div>
+                      <div class="banner-sub-text">Welcome to our Sponsor Expo Hall. Visiting our Platinum, General Session, Module, and Gold Sponsors will give you direct access to their exhibit booths. In these booths, you can live chat with the sponsors, view videos, and download other resources about their services and community impact. Visiting our Silver, Bronze, and Community Sponsors will
+                        take you directly to their company website.
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Platinum -->
+                  <div class="sponsor-section">
+                    <div class="sponsor-section-title">Platinum Sponsors</div>
+                    <div class="sponsor-section-description">To access these sponsors’ booths and interact with them, click their logos below.</div>
+                  </div>
+                  <div class="sponsor-grid-container">
+                    <div class="sponsor-grid">
+                      <div class="sponsor-card platinum-sponsor">
+                        <div class="sponsor-type">Platinum</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- General Module, Gold -->
+                  <div class="sponsor-section">
+                    <div class="sponsor-section-title">General Session, Module, and Gold Sponsors</div>
+                    <div class="sponsor-section-description">To access these sponsors’ booths and interact with them, click their logos below.</div>
+                  </div>
+                  <div class="sponsor-grid-container">
+                    <div class="sponsor-grid">
+                      <div class="sponsor-card general-module-gold-sponsor">
+                          <div class="sponsor-type">Module</div>
+                      </div>
+                      <div class="sponsor-card general-module-gold-sponsor">
+                        <div class="sponsor-card platinum-sponsor">
+                          <div class="sponsor-type">Gold</div>
+                        </div>
+                      </div>
+                      <div class="sponsor-card general-module-gold-sponsor">
+                          <div class="sponsor-type">Gold</div>
+                      </div>
+                      <div class="sponsor-card general-module-gold-sponsor">
+                          <div class="sponsor-type">Gold</div>
+                      </div>
+                      <div class="sponsor-card general-module-gold-sponsor">
+                          <div class="sponsor-type">Gold</div>
+                      </div>
+                      <div class="sponsor-card general-module-gold-sponsor">
+                          <div class="sponsor-type">Gold</div>
+                      </div>
+                      <div class="sponsor-card general-module-gold-sponsor">
+                          <div class="sponsor-type">Gold</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Silver and Bronze -->
+                  <div class="sponsor-section">
+                    <div class="sponsor-section-title">Silver and Bronze Sponsors</div>
+                    <div class="sponsor-section-description">To access these sponsors’ website, click their logos below.</div>
+                  </div>
+                  <div class="sponsor-grid-container">
+                    <div class="sponsor-grid">
+                      <div class="sponsor-card silver-bronze-sponsor">
+                        <div class="sponsor-type">Silver</div>
+                      </div>
+                      <div class="sponsor-card silver-bronze-sponsor">
+                        <div class="sponsor-type">Silver</div>
+                      </div>
+                      <div class="sponsor-card silver-bronze-sponsor">
+                        <div class="sponsor-type">Silver</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="sponsor-section">
+                    <div class="sponsor-section-title">Community Sponsors</div>
+                    <div class="sponsor-section-description">To access these sponsors’ websites, click their logos below.</div>
+                  </div>
+                  <div class="sponsor-grid-container">
+                    <div class="sponsor-grid">
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                      <div class="sponsor-card community-sponsor">
+                        <div class="sponsor-type">Community</div>
+                      </div>
+                    </div>
+                  </div>
 
                 </div>
 
