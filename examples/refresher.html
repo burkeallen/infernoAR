@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="This refresher will update a verify specific snippet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quartz - Attendee Refresher</title>
+
+    <!-- CSS -->
+    <style>
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #eee;
+      font-size: 16px;
+      font-family: sans-serif;
+      position: relative;
+    }
+
+    .auth, .main, .success, .failed {
+      display: none;
+      padding: 50px;
+    }
+
+    input {
+      display: block;
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 4px;
+      background: #fff;
+      border: none;
+      width: 250px;
+    }
+
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(1,1,1,.9);
+      display: none;
+    }
+
+    .show {
+      display: block !important;
+    }
+
+    .loader h1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      color: #fff;
+      transform: translate(-50%,-50%);
+    }
+
+    .template {
+      display: none;
+    }
+
+    </style>
+
+    <!-- jQuery + validation -->
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+
+    <!-- Homegrown scripts -->
+    <script type="text/javascript">
+      var _baseUrl = "https://api.infernocore.jolokia.com/api/";
+      var _snippetId = "eac0416b-f8ef-4211-80aa-f640dcd26173";
+      var _clientId = "0caa23b9-2f4e-48eb-ac79-08d860b32121";
+      var _accessToken = false;
+
+      function auth() {
+        // Auth w/ Inferno API
+        var params = {
+          email: $('#email').val(),
+          password: $('#password').val(),
+          grantType: 'password'
+        };
+
+        if (!params.email || !params.password) { return false; }
+
+        // Show loader 
+        $('.loader').addClass('show');
+
+        // XHR
+        $.ajax({
+          url: _baseUrl + 'token',
+          type: 'POST',
+          accept: 'application/json',
+          contentType: 'application/json',
+          data: JSON.stringify(params),
+          success: function(res) {
+            // Reset form
+            $('#email').val(null);
+            $('#password').val(null);
+
+            // Get JSON
+            var json = JSON.parse(res);
+
+            // Store token
+            _accessToken = json.AccessToken;
+
+            // Continue
+            $('.auth').removeClass('show');
+            $('.loader').removeClass('show');
+            $('.main').addClass('show');
+          },
+          error: function(err) {
+            $('.loader').removeClass('show');
+            alert('There was an error authenticating. Please check your email and password and try again.');
+          }
+        });
+      }
+
+      function refresh() {
+        if (!_accessToken) { return; }
+
+        $('.main').removeClass('show');
+        $('.loader').addClass('show');
+        var html = $('.template textarea').val();
+
+        fetchUsers().then(function(users) {
+          html += createListElements(users.filter(function(item) { return item.hideProfilePrivacyOptOut === false; }));
+          html += "</div>";
+
+          createCodeRevision(html).then(function() {
+            $('.loader').removeClass('show');
+            $('.success').addClass('show');
+
+          }, function() {
+            $('.loader').removeClass('show');
+            $('.failed').addClass('show');
+          });
+
+        }, function() {
+           $('.loader').removeClass('show');
+           $('.failed').addClass('show');
+        });
+      }
+
+      function fetchUsers() {
+        var defer = $.Deferred();
+        // XHR
+        $.ajax({
+          url: _baseUrl + 'TempUserExport',
+          type: 'GET',
+          accept: 'application/json',
+          contentType: 'application/json',
+          headers: {
+            'Authorization': 'Bearer ' + _accessToken,
+            'X-Client-Override': _clientId
+          },
+          success: function(res) {
+            if (res) {
+              defer.resolve(res);
+            }
+            else {
+              defer.reject();
+            }
+          },
+          error: function(err) {
+            console.log('get users error');
+            console.log(err);
+            defer.reject();
+          }
+        });
+
+        return defer;
+      }
+
+      // Create list elements
+      function createListElements(arr) {
+        var grid = "<ul>";
+
+        $.each(arr, function(index, userProfile) {
+          var content = "<li data-first-name='" + (userProfile.firstName ? userProfile.firstName : "") + "' data-last-name='"+ (userProfile.lastname ? userProfile.lastname : "") +"'  data-company='"+ (userProfile.contactInfoCompany ? userProfile.contactInfoCompany : "") +"' data-title='" + (userProfile.contactInfoTitle ? userProfile.contactInfoTitle : "") +"'>";
+          content += "<img class='quartz-photo' src='https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userProfile.userId + "/96/96' onerror='this.src=\"https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/attendee_placeholder.png\"' />";
+          content += "<div class='quartz-profile'><h2>"+ (userProfile.firstName ? userProfile.firstName : "") + " " + (userProfile.lastname ? userProfile.lastname : "") + "</h2>";
+          content += "<h3>" + (userProfile.contactInfoTitle ? userProfile.contactInfoTitle + " -  " : "") + (userProfile.contactInfoCompany ? userProfile.contactInfoCompany : "") + "</h3>";
+          content += "<p>" + (userProfile.bio ? userProfile.bio : "") + "</p>";
+          content += "<div class='quartz-icons'>";
+          
+          if (userProfile.contactInfoEmail) {
+            content += '<a href="mailto:' + userProfile.contactInfoEmail + '"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/mail.png" /></a>';
+          }
+     
+          if (userProfile.socialLinkedIn) {
+            content += '<a href="' + userProfile.socialLinkedIn + '" target="_blank"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/li.png" /></a>';
+          }
+
+          if (userProfile.socialFacebook) {
+            content += '<a href="' + userProfile.socialFacebook + '" target="_blank"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/fb.png" /></a>';
+          }
+
+          if (userProfile.socialTwitter) {
+            content += '<a href="' + userProfile.socialTwitter + '" target="_blank"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/tw.png" /></a>';
+          }
+
+          if (userProfile.socialYoutube) {
+            content += '<a href="' + userProfile.socialYoutube + '" target="_blank"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/yt.png" /></a>';
+          }
+
+          if (userProfile.socialInstagram) {
+            content += '<a href="' + userProfile.socialInstagram + '" target="_blank"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/icm/ig.png" /></a>';
+          }
+
+          content += "</div>";
+          content += "</div></li>";
+          grid += content;
+        });
+        grid += "</ul>";
+        return grid;
+      }
+            
+      // Create revision
+      function createCodeRevision(html) {
+        var now = new Date();
+        var stamp = now.getMonth() + '/' + now.getDate() + '/' + now.getFullYear() + ' ' + now.getHours() + ':' + ('0'+ now.getMinutes()).slice(-2);
+        var defer = $.Deferred();
+        var params = {
+          snippet: html,
+          comments: "Snippet generated by refresher: " + stamp.toString(),
+          codeSnippetId: _snippetId
+        };
+
+        // XHR
+        $.ajax({
+          url: _baseUrl + 'Snippets/AddRevision',
+          type: 'POST',
+          accept: 'application/json',
+          contentType: 'application/json',
+          headers: {
+            'Authorization': 'Bearer ' + _accessToken
+          },
+          data: JSON.stringify(params),
+          success: function(res) {
+            // Make sure it went through
+            if (res && res.revisionDate) {
+              defer.resolve(res.revisionDate);
+            }
+            else {
+              defer.reject();
+            }
+          },
+          error: function(err) {
+            console.log('create snippet error');
+            console.log(err);
+            defer.reject();
+          }
+        });
+
+        return defer;
+      }
+    </script>
+  </head>
+  <body>
+    <div class="auth show">
+      <h1>Please login with your superadmin account</h1>
+      <form name="login" onsubmit="event.preventDefault(); auth()">
+      <input type="email" id="email" placeholder="Email" required minlength="3">
+      <input type="password" id="password" placeholder="Password" required minlength="3">
+      <button type="submit">Login</button>
+      </form>
+    </div>
+    </div>
+    <div class="main">
+      <h1>quartz - Attendee Refresher</h1>
+      <button onclick="refresh()">Click here to refresh attendee page</button>
+    </div>
+    <div class="success">
+      <h1>All done.</h1>
+    </div>
+    <div class="failed">
+      <h1>Failed to generate a new version.</h1>
+      <p>Refresh and try again</p>
+    </div>
+    <div class="loader">
+      <h1>Loading...</h1>
+    </div>
+    <div class="template">
+      <textarea readonly="true">
+      <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        img:after { content: none; }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1,h2,h3,h4 {
+            margin: 0;
+            padding: 0;
+            font-weight: 400;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        button {
+            outline: none;
+            border: none;
+            background: transparent;
+            font-family: sans-serif;
+        }
+
+        button:hover {
+            opacity: .9;
+            cursor: pointer;
+        }
+
+        .quartz-attendees {
+            background: #eee;
+            width: calc(100% + 40px);
+            min-height: calc(100vh - 115px);
+            margin: -20px;
+            padding: 0 0 4vmin;
+            color: #333;
+            font-family: sans-serif;
+        }
+
+        .quartz-attendees ul {
+            padding: 3vmin;
+            margin: 0;
+        }
+
+        .quartz-attendees li {
+            display: block;
+            margin: 0 0 3vmin;
+            padding: 2vmin;
+            display: flex;
+            background: #fff;
+        }
+
+        .quartz-attendees li.quartz-hide {
+            display: none !important;
+        }
+
+        .quartz-photo {
+            margin: 0 2vmin 0 0;
+            display: block;
+            width: 10vmin;
+            height: 10vmin;
+            border-radius: 100%;
+            border: 2px solid #ccc;
+        }
+
+        .quartz-profile h2 {
+            font-size: 2.5vmin;
+            line-height: 3vmin;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .quartz-profile h3 {
+            font-size: 2vmin;
+            line-height: 2.5vmin;
+            color: #333;
+        }
+
+        .quartz-icons {
+            display: flex;
+        }
+
+        .quartz-search {
+            background: #fff;
+            padding: 4vmin;
+            display: flex;
+        }
+
+        .quartz-search input {
+            border: 1px solid #03a9f4;
+            font-size: 2.2vmin;
+            line-height: 2.4vmin;
+            font-weight: bold;
+            color: #000;
+            padding: 1.5vmin;
+            margin: 0 2vmin 0 0;
+        }
+
+        .quartz-search button {
+            border: 1px solid #03a9f4;
+            font-size: 2.2vmin;
+            line-height: 2.4vmin;
+            font-weight: normal;
+            padding: 1.5vmin;
+            margin: 0 2vmin;
+            color: #000;
+        }
+
+        .quartz-search button:hover {
+            opacity: .8;
+        }
+
+        .quartz-search button.quartz-selected {
+            background: #03a9f4;
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var _searchType = ['first-name', 'last-name'];
+        var _timer;
+        var landingPageEl = landingPageEl || document;
+
+        function toggleSearchType(el, type) {
+            $(landingPageEl).find('.quartz-search button').removeClass('quartz-selected');
+
+            $(el).addClass('quartz-selected');
+            _searchType = type;
+
+            doSearch();
+        }
+
+        function doSearch() {
+            var search = $(landingPageEl).find("#quartz-search").val().toLowerCase();
+            var els = $(landingPageEl).find(".quartz-attendees").find('ul li');
+
+            if (search && search.length > 2) {
+                $.each(els, function(key, el) {
+                    var pass = false;
+                    $.each(_searchType, function(key, attr) {
+                        if (!pass) {
+                            var val = $(el).data(attr).toLowerCase();
+                            if (val && val.length > 1 && val.indexOf(search) > -1) {
+                                pass = true;
+                            }
+                        }
+                    });
+
+                    if (pass) {
+                        $(el).removeClass('quartz-hide');
+                    }
+                    else {
+                        $(el).addClass('quartz-hide');
+                    }
+                });
+            }
+            else {
+                $(landingPageEl).find('.quartz-hide').removeClass('quartz-hide');
+            }
+        }
+
+        var searchInput = $(landingPageEl).find("#quartz-search");
+        if (searchInput) {
+            searchInput.keyup(onKeyUp);
+        }
+
+        function onKeyUp() {
+            if (_timer) {
+                clearTimeout(_timer);
+                _timer = null;
+            }
+
+            _timer = setTimeout(doSearch, 250);
+        }
+    </script>
+    <div class="quartz-attendees">
+        <div class="quartz-search">
+            <input type="text" placeholder="Search..." id="quartz-search">
+            <button class="quartz-selected" onclick="toggleSearchType(this, ['first-name','last-name'])">By Name</button>
+            <button onclick="toggleSearchType(this, ['title'])">By Job Title</button>
+            <button onclick="toggleSearchType(this, ['company'])">By Company</button>
+            <button onclick="toggleSearchType(this, ['first-name', 'last-name', 'title', 'company'])">All</button>
+        </div>
+      </textarea>
+    </div>
+  </body>
+</html>

@@ -22,6 +22,8 @@ import users and manage their profile data via the inferno APIs
   - https://birme.net
 - Free photoshop 
   -  https://www.photopea.com/
+- JSON Test Data Generator
+  - https://next.json-generator.com/ 
 - CSS Grid Helper
   - https://grid.layoutit.com/ 
 - CSV to JSON converter 

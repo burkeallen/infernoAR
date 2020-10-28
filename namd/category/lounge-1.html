@@ -108,29 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
-
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2');
-
-                </script>
+              <inferno-snippet-content id="9ba9bf00-ba35-4d03-aee9-c4c708e817bb">
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -140,24 +118,108 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    padding: 20px 24px;
+                    font-family: "Helvetica Neue", Helvetica, Arial sans-serif;
+                  }
+
+                  .lobby {
+                    display: block;
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  .lobby img {
+                    width: 100%;
+                    height: calc(100vh - 114px);
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
                   }
                 </style>
 
-                <div class="content">
+                <!-- Hotspots -->
+                <style>
+                  .hotspot {
+                    position: absolute;
+                    display: block;
+                    z-index: 2;
+                    cursor: pointer;
+                  }
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  .hotspot:hover {
+                    background-color: rgba(0,0,0, .1);
+                  }
+
+                  .policy-solutions {
+                    top: 7%;
+                    left: 6%;
+                    width: 14%;
+                    height: 44%;
+                    clip-path: polygon(0% 2%, 96% 5%, 95% 95%, 0% 100%);
+                  }
+
+                  .member-stories {
+                    top: 49%;
+                    left: 6%;
+                    width: 14%;
+                    height: 44%;
+                    clip-path: polygon(3% 5%, 95% 1%, 95% 89%, 4% 99%);
+                  }
+
+                  .medicaid-overview {
+                    top: 10.4%;
+                    left: 32%;
+                    width: 20.5%;
+                    height: 39.7%;
+                  }
+
+                  .covid-19 {
+                    top: 34%;
+                    left: 57%;
+                    width: 9%;
+                    height: 21%;
+                    clip-path: polygon(0% 16%, 100% 2%, 100% 98%, 2% 99%);
+                  }
+
+                  .special-populations {
+                    top: 30.5%;
+                    left: 67%;
+                    width: 11%;
+                    height: 25%;
+                    clip-path: polygon(0% 14%, 100% 0%, 100% 100%, 0% 100%);
+                  }
+
+                  .sdoh {
+                    top: 26%;
+                    left: 79.2%;
+                    width: 13%;
+                    height: 29%;
+                    clip-path: polygon(0% 14%, 100% 0%, 100% 100%, 0% 100%);
+                  }
+
+                  .meeting-room {
+                    top: 61%;
+                    left: 75.8%;
+                    width: 15.7%;
+                    height: 10%;
+                    clip-path: polygon(0% 6%, 100% 16%, 100% 100%, 0% 78%);
+                  }
+
+
+                </style>
+
+                <div class="content">
+                  <div class="lobby">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lounge1-ahp/NAMD-AHIP_Lounge-11024_1.jpg">
+                  </div>
+
+                  <div class="hotspot policy-solutions"></div>
+                  <div class="hotspot member-stories"></div>
+                  <div class="hotspot medicaid-overview"></div>
+                  <div class="hotspot covid-19"></div>
+                  <div class="hotspot special-populations"></div>
+                  <div class="hotspot sdoh"></div>
+                  <div class="hotspot meeting-room"></div>
 
                 </div>
 

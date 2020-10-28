@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,8 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8df730fa-fbf1-40d7-a2ee-a56cfd2e40b8">
-
+              <inferno-snippet-content id="46a19d20-bac4-458f-87bd-ddfbb65d9d09">
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -119,201 +118,134 @@
                   }
 
                   .content {
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/mainstage.jpg');
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: bottom left;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    font-family: "Helvetica Neue", Helvetica, Arial sans-serif;
+                    padding: 20px 24px;
+                    z-index: 1;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  }
+                </style>
+
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
                   }
 
-                  .lobby {
-                    display: block;
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
+                  }
+
+                  .rightCol {
+                    margin: 0 5px;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .stage-grid, .leftCol, .rightCol {
+                      display: block;
+                      margin: 0 auto;
+                    }
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0;
+                  }
+                </style>
+
+                <!-- group chat -->
+                <style>
+                  .group-chat {
                     position: relative;
                     width: 100%;
                     height: 100%;
+                    background-color: #ccc;
+                    text-align: center;
+                    border-radius: .5em;
                   }
 
-                  .lobby img {
-                    width: 100%;
-                    height: calc(100vh - 114px);
-                    z-index: 1;
+                  .group-chat p {
+                    margin: 0;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .group-chat {
+                      position: relative;
+                      margin-top: 40px;
+                      width: 100%;
+                      height: 350px;
+                    }
+
                   }
                 </style>
 
-                <!-- Hotspots -->
+                <!-- Poll Chat Tab -->
                 <style>
-                  .hotspot {
-                    position: absolute;
-                    display: block;
-                    z-index: 2;
-                    cursor: pointer;
-                  }
 
-                  .hotspot:hover {
-                    background-color: rgba(0,0,0, .1);
-                  }
-
-                  .left-banner {
-                    top: 15%;
-                    left: 10%;
-                    width: 14%;
-                    height: 40%;
-                    clip-path: polygon(5% 2%, 100% 13%, 98% 98%, 0% 95%);
-                  }
-
-                  .middle-banner {
-                    top: 21%;
-                    left: 28.5%;
-                    width: 43.5%;
-                    height: 22%;
-                    padding: 1%;
-                    display: flex;
-                    justify-content: center;
-                    align-content: center;
-                  }
-
-                  .right-banner {
-                    top: 14.5%;
-                    left: 76%;
-                    width: 14%;
-                    height: 40%;
-                    clip-path: polygon(2% 14%, 96% 0%, 100% 97%, 3% 100%);
-                  }
-
-                  .sponsor-lounge {
-                    top: 47%;
-                    left: 26%;
-                    width: 11%;
-                    height: 7%;
-                  }
-
-                  .medical-director {
-                    top: 47%;
-                    left: 44%;
-                    width: 12%;
-                    height: 7%;
-                  }
-
-                  .library {
-                    top: 47%;
-                    left: 44%;
-                    width: 12%;
-                    height: 7%;
-                  }
-
-                  .attendee-lounge {
-                    top: 47%;
-                    left: 62%;
-                    width: 12%;
-                    height: 7%;
-                  }
-
-                  .general-session {
-                    top: 55%;
-                    left: 10%;
-                    width: 13%;
-                    height: 7%;
-                    clip-path: polygon(3% 0%, 94% 14%, 95% 95%, 0% 83%);
-                  }
-
-                  .exhibit-hall {
-                    top: 57%;
-                    left: 42%;
-                    width: 16%;
-                    height: 5.5%;
-                  }
-
-                  .breakouts {
-                    top: 55%;
-                    left: 77.5%;
-                    width: 13%;
-                    height: 7%;
-                    clip-path: polygon(1% 17%, 93% 0%, 95% 86%, 2% 98%);
-                  }
-
-                  .info-desk {
-                    top: 74%;
-                    left: 13%;
-                    width: 20%;
-                    height: 14%;
-                  }
-
-                  .matt-video {
-                    top: 74%;
-                    left: 51%;
-                    width: 16%;
-                    height: 14%;
-                  }
-
-                  .sponsor1 {
-                    top: 59%;
-                    left: 23.75%;
-                    width: 5.5%;
-                    height: 13%;
-                  }
-
-                  .sponsor2 {
-                    top: 59%;
-                    left: 29.3%;
-                    width: 5.5%;
-                    height: 13%;
-                  }
-
-                  .sponsor3 {
-                    top: 59%;
-                    left: 34.8%;
-                    width: 5%;
-                    height: 13%;
-                  }
-
-                  .sponsor4 {
-                    top: 59.5%;
-                    left: 59.4%;
-                    width: 5%;
-                    height: 12.7%;
-                  }
-
-                  .sponsor5 {
-                    top: 59.3%;
-                    left: 64.8%;
-                    width: 5%;
-                    height: 12.9%;
-                  }
-
-                  .sponsor6 {
-                    top: 59.3%;
-                    left: 70.3%;
-                    width: 5%;
-                    height: 12.9%;
+                  .chat-iframe {
+                    height: 110%;
+                    width: 100%;
+                    border: none;
+                    outline: none;
                   }
 
                 </style>
+
 
                 <div class="content">
-                  <div class="lobby">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/temp/NAMD_LOBBY.png">
-                  </div>
+                  <div class="stage-grid">
 
-                  <div class="hotspot left-banner"></div>
-                  <div class="hotspot middle-banner">
-                    <img width="100%" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/temp/Image 23.png">
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
+                    </div>
+
+                    <div class="rightCol">
+                      <div class="group-chat">
+                        <p>Live Chat</p>
+                        <iframe
+                            class="chat-iframe"
+                            src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=namd-fall-main-stage&chatroomname=NAMD-Fall-Main-Stage-Chat">
+                        </iframe>
+
+                      </div>
+                    </div>
                   </div>
-                  <div class="hotspot right-banner"></div>
-                  <div class="hotspot sponsor-lounge"></div>
-                  <div class="hotspot medical-director"></div>
-                  <div class="hotspot library"></div>
-                  <div class="hotspot attendee-lounge"></div>
-                  <div class="hotspot general-session"></div>
-                  <div class="hotspot exhibit-hall"></div>
-                  <div class="hotspot breakouts"></div>
-                  <div class="hotspot info-desk"></div>
-                  <div class="hotspot matt-video"></div>
-                  <div class="hotspot sponsor1"></div>
-                  <div class="hotspot sponsor2"></div>
-                  <div class="hotspot sponsor3"></div>
-                  <div class="hotspot sponsor4"></div>
-                  <div class="hotspot sponsor5"></div>
-                  <div class="hotspot sponsor6"></div>
 
                 </div>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -450,6 +382,5 @@
   }
 
 </script>
-
 
 </html>
