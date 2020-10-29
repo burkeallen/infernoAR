@@ -337,111 +337,72 @@
                   }
                 </style>
 
-                <!-- Attendees that are Speakers -->
+                <!-- Speakers Grid -->
                 <style>
-                  .attendee {
+                  #speakers-grid {
+                    display: grid;
+                    grid-auto-columns: auto;
+                    grid-auto-rows: auto;
+                    gap: 0px 0px;
+                  }
+
+                  .speaker-card {
+                    display: flex;
+                    height: auto;
+                    min-width: 400px;
+                    flex-wrap: wrap;
                     margin: 1.4rem 4.4rem;
                     padding: 1rem 2rem;
                     border-radius: 9px;
                     background-color: #FFFFFF;
-                    display: flex;
-                    justify-content: center;
                     align-items: center;
-                    flex-wrap: wrap;
                   }
 
-                  .attendee .avatar {
+                  .speaker-avatar {
                     height: 13.2rem;
                     width: 13.2rem;
                     border-radius: 50%;
                   }
 
-                  .attendee .details {
-                    margin: 0 2rem;
-                    flex-grow: 3;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: flex-start;
+                  .speaker-info {
+                    flex: 1;
+                    margin-left: 20px;
                   }
 
-                  .attendee .details .a-row {
-                    display: flex;
-                    align-items: baseline;
-                  }
-
-                  .header h1 {
-                    font-size: 2.4rem;
+                  .speaker-name {
+                    font-size: 2rem;
                     font-weight: bold;
-                    margin: 0;
                   }
 
-                  .header h2 {
-                    color: #52b952;
-                    font-size: 1.8rem;
-                    font-weight: bold;
-                    letter-spacing: 0;
-                    margin: 0 1rem;
-                  }
-
-                  .attendee .details h4 {
-                    color: #313131;
-                    font-size: 1.8rem;
-                    font-weight: 500;
-                    letter-spacing: 0;
-                    line-height: 2.9rem;
-                    margin: 0;
-                  }
-
-                  .attendee .details a {
-                    color: #0B2668;
-                    font-size: 1.6rem;
-                    letter-spacing: 0;
-                    line-height: 2.6rem;
-                  }
-
-                  .attendee .details .header {
-                    /*margin: 1rem 0;*/
+                  .speaker-email {
+                    margin: .50rem 0;
                     display: flex;
-                    flex-wrap: wrap;
                   }
 
-                  .attendee .details .a-footer {
-                    width: 100%;
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                  }
-
-                  .a-footer {
-                    margin-top: 0.5rem
-                  }
-
-                  .attendee .details .a-footer img {
+                  .speaker-email img {
                     height: 1.8rem;
                     width: auto;
+                    padding-right: 5px
                   }
 
-                  .no-attendees-message {
-                    margin: 0;
-                    color: #0B2668;
-                    font-size: 2.2rem;
-                    font-weight: bold;
-                    letter-spacing: 0.092rem;
-                    line-height: 2.7rem;
-                    text-align: center;
+                  .company-title {
                   }
 
-                  .contact {
-                    margin: 1rem 0;
+                  .linked-in {
+                    margin: .50rem 0;
                     display: flex;
-                    justify-content: space-between;
-                    align-items: center;
                   }
 
-                  .contact img {
-                    margin-right: 1rem;
+                  .linked-in img{
+                    height: 2.4rem;
+                    width: auto;
+                    padding-right: 5px
                   }
+
+                  .speaker-session {
+                  }
+
+
                 </style>
 
                 <!-- Sponsors -->
@@ -505,38 +466,33 @@
                     </div>
                   </div>
 
-                  <div id="attendee-list" class="attendee-list">
+                  <div class="speakers-container">
+                    <div id="speakers-grid"></div>
+                    <template id="speaker-template">
+                      <div id=speaker-card class="speaker-card">
+                        <img id="speaker-avatar" class="speaker-avatar"/>
+                        <div id="speaker-info" class="speaker-info">
+                          <div id="speaker-name" class="speaker-name"></div>
+                          <div id="company-title" class="company-title"></div>
 
-                    <template id="attendee-template">
-                      <div id="attendee" class="attendee">
-                        <img id="avatar" class="avatar"/>
-                        <div class="details">
-                          <div class="a-row header">
-                            <h1 id="name"></h1>
-                          </div>
-                          <div class="a-row">
-                            <h4 id="job"></h4>
-                          </div>
-
-                          <div class="a-row a-footer">
-                            <div id="speakers-session"></div>
+                          <div class="speaker-session">
+                            Session: <span id="speaker-session"></span>
                           </div>
 
-                          <div class="a-row a-footer">
-                            <div class="contact">
-                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/>
-                              <a id="email" href="" target="_blank" rel="noreferrer"></a>
-                            </div>
-<!--                            <div class="contact">-->
-<!--                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>-->
-<!--                            </div>-->
-
+                          <div class="speaker-email">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/email-icon.png"/>
+                            <a id="speaker-email" href="" target="_blank" rel="noreferrer"></a>
                           </div>
+
+                          <div class="linked-in">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/linked-in.png"/>
+                            <a id="linked-in" href="" target="_blank" rel="noreferrer"></a>
+                          </div>
+
 
                         </div>
                       </div>
                     </template>
-
                   </div>
 
                   <hr/>
@@ -555,77 +511,76 @@
 
                 <!-- Speakers -->
                 <script>
-                  // used for local json
-                  // var attendees = data.UserProfiles ;
 
-                  // used for production
-                  // used for production
-                  var hasGroupNovo1 = (groups, groupName) => {
-                    var inGroup = false;
-                    groups.forEach(group => {
-                      if (group.Name.toLowerCase().trim() === groupName.toLowerCase().trim()) {
-                        inGroup = true;
-                      }
-                    });
-                    return inGroup;
-                  }
-                  var dataJSON = {{data.UserProfiles | json}};
-                  var attendees = dataJSON.filter(user => {
-                    return hasGroupNovo1(user.UserGroups, 'Speakers');
-                  })
+                  var myLanding1 = landingPageEl ?? document;
+                  var speakersGrid = myLanding1.getElementById("speakers-grid");
+                  var speakerTemplate = myLanding1.getElementById("speaker-template");
+                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
 
-                  var buildAttendeeList = () => {
-                    const attendeeList = landingPageEl.getElementById("attendee-list");
-                    const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+                  var attendees = {};
+                  loadJSON(baseUrl + '/speakers/speakers.json',
+                    function (response) {
+                      attendees = JSON.parse(response);
+                    })
 
-                    for (let at of attendees) {
-                      let clone = attendeeTemplate.content.cloneNode(true);
+                  for (let speaker of attendees) {
 
-                      let attendeeDiv = clone.getElementById("attendee");
-                      attendeeDiv.id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
-
-                      // used for local json
-                      // let avatar = clone.getElementById("avatar");
-                      // avatar.src = at.avatar;
-
-                      // used for production
-                      const avatar = clone.getElementById("avatar");
-                      avatar.onerror = function () {
-                        avatar.onerror = null;
-                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/generic-avatar.jpg';
-                      }
-                      avatar.src = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + at.UserId + '/300/300';
-
-                      let fullName = clone.getElementById("name");
-                      fullName.innerHTML = at.FirstName + " " + at.Lastname;
-
-                      let email = clone.getElementById("email");
-                      email.innerHTML = at.ContactInfoEmail;
-                      email.href = "mailto:" + at.ContactInfoEmail;
-
-                      // let companyLink = clone.getElementById("company-link");
-                      // companyLink.innerHTML = (at.companyLink ? at.companyLink : "");
-                      // companyLink.href = at.companyLink;
-
-                      let job = clone.getElementById("job");
-                      const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
-                      const contactInfoCompany = at.ContactInfoCompany ? at.ContactInfoCompany : "";
-                      const hyphen = contactInfoTitle !== "" && contactInfoCompany != "" ? " - " : "";
-                      job.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
-
-                      let speakersSession = clone.getElementById("speakers-session");
-                      speakersSession.innerHTML = (at.Bio ? at.Bio : "");
-
-                      attendeeList.appendChild(clone);
+                    if (speaker.FullName == "") {
+                      continue;
                     }
+
+                    let clone = speakerTemplate.content.cloneNode(true);
+                    let speakerCard = clone.getElementById("speaker-card");
+
+                    let newElementId = speaker.FullName.toLowerCase().replace(" ", "-");
+                    speakerCard.id = "at-" + newElementId;
+
+                    let speakerName = clone.getElementById("speaker-name");
+                    speakerName.innerHTML = speaker.FullName ? speaker.FullName : "";
+
+                    const title = speaker.Title ? speaker.Title : "";
+                    const company = speaker.CompanyName ? speaker.CompanyName : "";
+                    const hyphen = title !== "" && company != "" ? " - " : "";
+                    let companyTitle = clone.getElementById("company-title");
+                    companyTitle.innerHTML = title + hyphen + company;
+
+                    let speakerEmail = clone.getElementById("speaker-email");
+                    speakerEmail.innerHTML = speaker.Email ? speaker.Email : "";
+                    speakerEmail.href = "mailto:" + speaker.Email;
+
+                    let linkedIn = clone.getElementById("linked-in");
+                    linkedIn.innerHTML = speaker.LinkedIn ? speaker.LinkedIn : "";
+
+                    let speakerSession = clone.getElementById("speaker-session");
+                    speakerSession.innerHTML = speaker.Session ? speaker.Session : "";
+
+                    const speakerAvatar = clone.getElementById("speaker-avatar");
+                    speakerAvatar.onerror = function () {
+                      speakerAvatar.onerror = null;
+                      this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/generic-avatar.jpg';
+                    }
+                    speakerAvatar.src = baseUrl + "/speakers/profile-image/" + newElementId + ".jpg";
+
+                    speakersGrid.appendChild(clone);
+
                   }
 
-                  buildAttendeeList();
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
 
                   var updateAttendees = () => {
                     let empty = true;
                     for (let at of attendees) {
-                      let id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
+                      let id = "at-" + at.FirstName.toLowerCase() + "-" + at.LastName.toLowerCase();
                       let el = landingPageEl.getElementById(id);
                       if (el) {
                         if (at.visible) {
@@ -641,12 +596,12 @@
                   var searchAttendees = e => {
                     let query = e.currentTarget.value.toLowerCase();
                     for (let at of attendees) {
-                      const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
-                      const contactInfoCompany = at.ContactInfoCompany ? at.ContactInfoCompany : "";
+                      const Title = at.Title ? at.Title : "";
+                      const CompanyName = at.CompanyName ? at.CompanyName : "";
                       if (at.FirstName.toLowerCase().startsWith(query)
-                        || at.Lastname.toLowerCase().startsWith(query)
-                        || contactInfoTitle.toLowerCase().startsWith(query)
-                        || contactInfoCompany.toLowerCase().startsWith(query)) {
+                        || at.LastName.toLowerCase().startsWith(query)
+                        || Title.toLowerCase().startsWith(query)
+                        || CompanyName.toLowerCase().startsWith(query)) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -700,7 +655,7 @@
                   var filterAttendeesAE = () => {
                     let filtered = []
                     for (let at of attendees) {
-                      if (AE.includes(at.FirstName[0].toLowerCase()) || AE.includes(at.Lastname[0].toLowerCase())) {
+                      if (AE.includes(at.FirstName[0].toLowerCase()) || AE.includes(at.LastName[0].toLowerCase())) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -720,7 +675,7 @@
                   var FJ = "fghij";
                   var filterAttendeesFJ = () => {
                     for (let at of attendees) {
-                      if (FJ.includes(at.FirstName[0].toLowerCase()) || FJ.includes(at.Lastname[0].toLowerCase())) {
+                      if (FJ.includes(at.FirstName[0].toLowerCase()) || FJ.includes(at.LastName[0].toLowerCase())) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -740,7 +695,7 @@
                   var KO = "klmno";
                   var filterAttendeesKO = () => {
                     for (let at of attendees) {
-                      if (KO.includes(at.FirstName[0].toLowerCase()) || KO.includes(at.Lastname[0].toLowerCase())) {
+                      if (KO.includes(at.FirstName[0].toLowerCase()) || KO.includes(at.LastName[0].toLowerCase())) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -760,7 +715,7 @@
                   var PT = "pqrst";
                   var filterAttendeesPT = () => {
                     for (let at of attendees) {
-                      if (PT.includes(at.FirstName[0].toLowerCase()) || PT.includes(at.Lastname[0].toLowerCase())) {
+                      if (PT.includes(at.FirstName[0].toLowerCase()) || PT.includes(at.LastName[0].toLowerCase())) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -780,7 +735,7 @@
                   var UZ = "uvwxyz";
                   var filterAttendeesUZ = () => {
                     for (let at of attendees) {
-                      if (UZ.includes(at.FirstName[0].toLowerCase()) || UZ.includes(at.Lastname[0].toLowerCase())) {
+                      if (UZ.includes(at.FirstName[0].toLowerCase()) || UZ.includes(at.LastName[0].toLowerCase())) {
                         at.visible = true;
                       } else {
                         at.visible = false;
@@ -833,6 +788,8 @@
                   }
 
                 </script>
+
+
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
@@ -847,8 +804,7 @@
       <footer app-footer="" layout="row" layout-align="start center">
         Inferno Footer
       </footer>
-      <!-- ./ FOOTER -->
-    </div>
+      <!-- ./ FOOTER --></div>
   </videos-layout>
 </app-root>
 
