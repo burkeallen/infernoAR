@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
@@ -60,13 +55,10 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -110,34 +102,267 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="a7f4b31e-c8e7-4760-af59-25d8c3e596de">
 
+                <!-- Container -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
                   img::after {
                     content: none;
                   }
 
-                  .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/bkg-default.jpg');
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
                   }
+                </style>
+
+                <!-- banner -->
+                <style>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
+                    background-size: cover;
+                    background-position: center center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/library-header.jpg?refresh=102820-02');
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
+                    color: #fff;
+                    max-width: 70%;
+                    text-shadow: #000 0 0 .5rem;
+                  }
+
+                  .banner-text {
+                    font-weight: bold;
+                    font-size: clamp(2rem, 2.5vw, 3rem);
+                  }
+
+                  .banner-sub-text {
+                    font-weight: lighter;
+                    font-size: clamp(1.25rem, 1.25vw, 2.25rem);
+                  }
+                </style>
+
+                <!-- Library Card Grid -->
+                <style>
+                  .library-section {
+                    padding: 20px 20px;
+                    background-color: #ffffff;
+                  }
+
+                  .library-section-title {
+                    font-weight: bold;
+                    color: var(--branding-primary);
+                    font-size: clamp(1.5rem, 1.75vw, 2rem);
+                  }
+
+                  .library-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    max-width: 100%;
+                    padding: 10px;
+                  }
+
+                  .library-card {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 1em;
+                    margin: 10px;
+                    background-color: #ffffff;
+                    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
+                  }
+
+                  .library-card-thumb {
+                    width: 160px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .library-card-title {
+                    display: flex;
+                    position: absolute;
+                    top: 20px;
+                    height: 40px;
+                    font-size: 1rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                  }
+
+                  .library-card :hover{
+                    cursor: pointer;
+                    transform: scale(1.1);
+                    transition: 1s ease;
+                  }
+
                 </style>
 
                 <div class="content">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  <div id="container">
+                    <div class="banner">
+                      <div class="banner-info">
+                        <div class="banner-text">Resource Library</div>
+                        <div class="banner-sub-text">Our resource library contains helpful documents, videos, and other content for your on-demand consumption. Filter the content by category for easy access to Research and Sponsor Info.
+                        </div>
+                      </div>
+                    </div>
 
+                    <!-- Industry Research Section-->
+                    <div class="library-section">
+                      <div class="library-section-title">Industry Research</div>
+                      <div class="library-section-description"></div>
+                    </div>
+
+                    <div id="industry-research-grid" class="library-grid">
+                      <template id="industry-research-template">
+                        <div id="industry-research-card" class="library-card">
+                          <img id="industry-research-thumb" class="library-card-thumb" />
+                          <div id="industry-research-title" class="library-card-title" />
+                        </div>
+                      </template>
+                    </div>
+
+                    <!-- Sponsor Info Section-->
+                    <div class="library-section">
+                      <div class="library-section-title">Sponsor Info</div>
+                      <div class="library-section-description"></div>
+                    </div>
+
+                    <div id="sponsor-info-grid" class="library-grid">
+                      <template id="sponsor-info-template">
+                        <div id="sponsor-info-card" class="library-card">
+                          <img id="sponsor-info-thumb" class="library-card-thumb" />
+                          <div id="sponsor-info-title" class="library-card-title" />
+                        </div>
+                      </template>
+                    </div>
+
+                  </div>
                 </div>
+
+                <script>
+                  var sponsorInfoCardData = {};
+                  var industryResearchCardData = {};
+
+                  function buildLibrary() {
+                    var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
+
+                    loadJSON(baseUrl + '/library/sponsor-info.json?r=1',
+                      function (response) {
+                        sponsorInfoCardData = JSON.parse(response);
+                      })
+
+                    loadJSON(baseUrl + '/library/industry-research.json?r=1',
+                      function (response) {
+                        industryResearchCardData = JSON.parse(response);
+                      })
+
+                    buildIndustryResearchGrid();
+                    buildSponsorInfoGrid();
+                  }
+
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false)
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
+
+                  function buildIndustryResearchGrid() {
+                    const myLanding = landingPageEl ?? document;
+                    const industryResearchGrid = myLanding.getElementById("industry-research-grid");
+                    const industryResearchTemplate = myLanding.getElementById("industry-research-template");
+
+                    for (let cardData of industryResearchCardData) {
+                      const card = industryResearchTemplate.content.cloneNode(true);
+
+                      const industryResearchCard = card.getElementById("industry-research-card");
+                      industryResearchCard.addEventListener('click', function() { loadPDF(); });
+
+                      const industryResearchThumb = card.getElementById("industry-research-thumb");
+                      industryResearchThumb.onerror = function () {
+                        industryResearchThumb.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/default.jpeg';
+                      }
+                      industryResearchThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
+
+                      const industryResearchTitle = card.getElementById("industry-research-title");
+                      industryResearchTitle.innerHTML = cardData.ContentName;
+
+                      industryResearchGrid.appendChild(card);
+                    }
+                  }
+
+                  function buildSponsorInfoGrid() {
+                    const myLanding = landingPageEl ?? document;
+                    const sponsorInfoGrid = myLanding.getElementById("sponsor-info-grid");
+                    const sponsorInfoTemplate = myLanding.getElementById("sponsor-info-template");
+
+                    for (let cardData of sponsorInfoCardData) {
+                      const card = sponsorInfoTemplate.content.cloneNode(true);
+                      const sponsorInfoCardData = card.getElementById("sponsor-info-card");
+
+                      const sponsorInfoThumb = card.getElementById("sponsor-info-thumb");
+                      sponsorInfoThumb.onerror = function () {
+                        sponsorInfoThumb.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/default.jpeg';
+                      }
+                      sponsorInfoThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
+
+                      const sponsorInfoTitle = card.getElementById("sponsor-info-title");
+                      sponsorInfoTitle.innerHTML = cardData.ContentName;
+
+                      sponsorInfoGrid.appendChild(card);
+                    }
+                  }
+
+                </script>
+
+                <!-- PDF -->
+                <script>
+                  function openPDF() {
+                    alert('Opened PDF');
+                  }
+                </script>
+
+                <!-- Main -->
+                <script>
+                  buildLibrary();
+
+
+
+                </script>
+
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
