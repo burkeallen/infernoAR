@@ -148,7 +148,7 @@
                   }
 
                   .hotspot:hover {
-                    background-color: rgba(0,0,0, .1);
+                    background-color: rgba(0, 0, 0, .1);
                   }
 
                   .left-banner {
@@ -193,16 +193,16 @@
                   }
 
                   .library {
-                    top: 47%;
-                    left: 44%;
+                    top: 48%;
+                    left: 63%;
                     width: 12%;
                     height: 7%;
                   }
 
                   .attendee-lounge {
-                    top: 47%;
-                    left: 62%;
-                    width: 12%;
+                    top: 55%;
+                    left: 10%;
+                    width: 13%;
                     height: 7%;
                   }
 
@@ -221,7 +221,7 @@
                     height: 5.5%;
                   }
 
-                  .breakouts {
+                  .speakers {
                     top: 55%;
                     left: 77.5%;
                     width: 13%;
@@ -237,10 +237,10 @@
                   }
 
                   .matt-video {
-                    top: 74%;
-                    left: 51%;
-                    width: 16%;
-                    height: 14%;
+                    top: 73.4%;
+                    left: 51.5%;
+                    width: 10%;
+                    height: 12%;
                   }
 
                   .sponsor1 {
@@ -287,25 +287,137 @@
 
                 </style>
 
+                <!-- Modal Window Style -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: #fff;
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+                <!-- Modal Window Script -->
+                <!-- Toggle Modal on and off -->
+                <template>
+                  <iframe src="/embed/"
+                          frameborder="0"
+                          allowfullscreen="true"
+                          webkitallowfullscreen="true"
+                          mozallowfullscreen="true">
+                  </iframe>
+                </template>
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('template');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                  }
+                </script>
+
+
                 <div class="content">
                   <div class="lobby">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/temp/NAMD_LOBBY.png">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lobby/lobby_bg.png">
                   </div>
 
-                  <div class="hotspot left-banner"></div>
-                  <div class="hotspot middle-banner">
-                    <img width="100%" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/temp/Image 23.png">
-                  </div>
-                  <div class="hotspot right-banner"></div>
-                  <div class="hotspot sponsor-lounge"></div>
-                  <div class="hotspot medical-director"></div>
-                  <div class="hotspot library"></div>
-                  <div class="hotspot attendee-lounge"></div>
-                  <div class="hotspot general-session"></div>
-                  <div class="hotspot exhibit-hall"></div>
-                  <div class="hotspot breakouts"></div>
-                  <div class="hotspot info-desk"></div>
-                  <div class="hotspot matt-video"></div>
+                  <a href="/videos/cb11f926-31a1-40c4-b628-08d87c2110f2/landing/780bd211-6b28-4655-aa5a-03a346e02427" class="hotspot sponsor-lounge"> </a>
+                  <a href="/videos/b36f0312-38ad-4a3d-15b2-08d8742e3b76/landing/f4227356-3d97-47f3-9625-3ac2126a25c5" class="hotspot medical-director"> </a>
+                  <a href="/videos/ca9d81ac-3fb9-40cb-9aa5-08d85e2ed553/landing/40955f5a-f515-4292-83d3-ab7df0cad68f" class="hotspot library"> </a>
+
+                  <a href="/videos/9bc32866-daa6-4ab2-2558-08d87a478093/landing/af32cfe3-c513-421f-bc2d-4c699c4b196b" class="hotspot attendee-lounge"> </a>
+                  <a href="/videos/7d904ee8-f7aa-48f9-8ab5-08d86def408e/landing/308fb5cb-4101-4e02-a6f1-83b9c42a71c5" class="hotspot exhibit-hall"> </a>
+                  <a href="/videos/19ea6428-3688-4bd3-ac84-08d87435ca66/landing/d6c7d9ea-9053-4be7-b530-4244558b275d" class="hotspot speakers"> </a>
+
+                  <a href="/videos/335ca6e3-bbe3-456a-ac83-08d87435ca66/landing/dd975207-d0ba-4bae-b378-77d4058a9b78" class="hotspot info-desk"> </a>
+                  <div class="hotspot matt-video" id="75f3afbd-d671-4636-abf1-bf6c1b6d824d"
+                       onclick="toggleModal(this)"></div>
+
                   <div class="hotspot sponsor1"></div>
                   <div class="hotspot sponsor2"></div>
                   <div class="hotspot sponsor3"></div>
@@ -313,6 +425,13 @@
                   <div class="hotspot sponsor5"></div>
                   <div class="hotspot sponsor6"></div>
 
+                </div>
+
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
                 </div>
 
               </inferno-snippet-content>

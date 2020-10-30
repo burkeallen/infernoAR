@@ -153,6 +153,14 @@
                     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                   }
 
+                  h1 {
+                    color: white;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    margin-left: 2%;
+                    font-size: 2em;
+                    font-weight: bolder;
+                  }
+
                   .top-banner {
                     padding: 10px 50px;
                     line-height: 60px;
@@ -178,21 +186,37 @@
                     padding: 10px;
                   }
 
+                  .directory-grid {
+                    padding-bottom: 40px;
+                  }
+
                   .card {
+                    position: relative;
                     display: flex;
                     flex-direction: column;
                     justify-content: start;
                     align-items: center;
                     width: 200px;
                     height: 250px;
-                    background-color: rgba(0, 0, 0, .4);
+                    background-color: white;
                     border-radius: 1em;
                     margin: 10px;
                     padding: 10px;
-                    color: white;
+                    color: #000000;
+                    cursor: pointer;
                   }
 
-                  .diamond {
+                  .card:hover {
+                    transform: scale(1.05);
+                    filter: brightness(80%);
+                  }
+
+                  .card a {
+                    color: #000000;
+                    text-decoration: none;
+                  }
+
+                  .hero {
                     background-color: #cccccc;
                     min-height: 200px;
                     display: flex;
@@ -200,6 +224,78 @@
                     font-size: 3em;
                     color: #777777;
                     padding-left: 20px;
+                  }
+
+                  .diamond {
+                    width: 420px;
+                  }
+
+                  .card-top {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    height: 60%;
+                  }
+
+                  .card-top img {
+                    width: 100%;
+                  }
+
+                  .card-bottom {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 30%;
+                    text-align: center;
+                    background-color: #dddddd;
+                    border-radius: 0 0 1rem;
+                  }
+
+                  .name {
+                    font-size: 1.5em;
+                  }
+
+                  .level {
+                    width: 115px;
+                    text-transform: uppercase;
+                    position: absolute;
+                    transform: rotateZ(-45deg);
+                    text-align: center;
+                    top: 7%;
+                    left: -12%;
+                    clip-path: polygon(17% 0%, 77% 0%, 93% 100%, 0% 100%);
+                    text-indent: -8%;
+                  }
+
+                  .diamond .level {
+                    background-color: rgba(192, 192, 192, .6);
+                    left: -6%;
+                  }
+
+                  .bronze .level {
+                    background-color: rgba(184, 72, 1, .6);
+                  }
+
+                  .booth-happenings {
+                    position: absolute;
+                    top: 100px;
+                    right: 40px;
+                    font-size: .75em;
+                    line-height: 1.25em;
+                    text-align: center;
+                    color: white;
+                    background-color: var(--sidebar-bg-color);
+                    border: none;
+                    cursor: pointer;
+                    padding: .25em 1em;
+                  }
+
+                  .booth-happenings:hover {
+                    transform: scale(1.05);
+                    filter: brightness(120%);
+                    color: white;
+                    text-decoration: none;
                   }
                 </style>
 
@@ -209,36 +305,118 @@
                   <div class="top-banner">
                     <span>Exhibit Hall</span>
                     <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                    <a class="booth-happenings" href="#" target="_blank">On Booth Happenings</a>
                   </div>
 
-                  <div class="diamond">Diamond Sponsor</div>
+                  <div class="hero">Hero Banner - need image</div>
 
-                  <div class="grid">
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
-                    <div class="card"><p>Sponsor</p></div>
+                  <div class="featured">
+                    <h1>Featured</h1>
+                    <div class="grid featured-grid"></div>
                   </div>
+
+                  <div class="Directory">
+                    <h1>Directory</h1>
+                    <div class="grid directory-grid"></div>
+                  </div>
+
+
+                  <template>
+                    <a class="card" href="">
+                      <div class="level"></div>
+                      <div class="card-top">
+                        <img src=""/>
+                      </div>
+                      <div class="card-bottom">
+                        <div class="name"></div>
+                      </div>
+                    </a>
+                  </template>
 
                 </div>
 
+                <script>
+                  function buildSponsors() {
+                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/';
+                    const list = [
+                      {level: 'diamond', name: 'CAE', img: 'diamond_cae.png', href: '#'},
+                      {level: 'bronze', name: 'Allsim', img: 'bronze_allsim.png', href: '#'},
+                      {
+                        level: 'bronze',
+                        name: 'Avion Group',
+                        img: 'bronze_avion.png',
+                        href: '/videos/12da6057-7390-4806-c343-08d8744f050e/landing/2afa8c55-e8f0-44ce-96ce-bdcba1ee10cb'
+                      },
+                      {level: 'bronze', name: 'Bhirle', img: 'bronze_bihrle.png', href: '#'},
+                      {
+                        level: 'bronze',
+                        name: 'CPaT Global',
+                        img: 'bronze_cpat.png',
+                        href: '/videos/04934a6f-e1fe-41ec-0028-08d87b4df110/landing/80b7f432-02e2-4eb0-bcd8-2d623e251e19'
+                      },
+                      {
+                        level: 'bronze',
+                        name: 'Drillster',
+                        img: 'bronze_drillster.png',
+                        href: '/videos/1ce0504e-8f00-456c-8004-08d87b4f05c1/landing/9e4ac9d8-0752-4af9-ae93-a508f2b09c07'
+                      },
+                      {level: 'bronze', name: 'Entrol', img: 'bronze_entrol.png', href: '#'},
+                      {
+                        level: 'bronze',
+                        name: 'Flight Simulation Company',
+                        img: 'bronze_fsc.png',
+                        href: '/videos/2d23ffb6-3657-4fde-0603-08d87a694829/landing/ca7f4708-6f8e-4c51-ac25-c48a43e91b41'
+                      },
+                      {level: 'bronze', name: 'Pace', img: 'bronze_pace.png', href: '#'},
+                      {
+                        level: 'bronze',
+                        name: 'ProSim Training Solutions',
+                        img: 'bronze_prosim.png',
+                        href: '/videos/2c1bdd7b-3cfe-46ab-8000-08d87b4f05c1/landing/bafdf1b0-8754-49ab-9d85-32fb6e59c8b1'
+                      },
+                      {
+                        level: 'bronze',
+                        name: 'Simnest Aviation',
+                        img: 'bronze_simnest.png',
+                        href: '/videos/fcb730aa-ea8d-4b7d-255d-08d87a478093/landing/90893aec-6b0f-49dc-babf-805e272e098e'
+                      },
+                      {
+                        level: 'bronze',
+                        name: 'Wright Brothers',
+                        img: 'bronze_wbft.png',
+                        href: '/videos/29f17541-d6eb-4906-c337-08d8744f050e/landing/eff3eea0-a301-4505-8413-e23ef6900601'
+                      }
+                    ];
+
+                    // filter out users who have opted out of sharing their data
+                    const featured = landingPageEl.querySelector('.featured-grid');
+                    const directory = landingPageEl.querySelector('.directory-grid');
+                    const template = landingPageEl.querySelector('template');
+
+                    list.forEach(item => {
+                      const clone = template.content.cloneNode(true);
+                      const card = clone.querySelector('.card');
+                      card.href = item.href;
+                      card.classList.add(item.level);
+
+                      card.querySelector('img').src = baseUrl + item.img;
+                      card.querySelector('.name').innerHTML = item.name;
+                      card.querySelector('.level').innerHTML = item.level;
+
+                      if (item.level.toLowerCase().includes('bronze')) {
+                        directory.appendChild(clone);
+                      } else {
+                        featured.appendChild(clone);
+                      }
+                    });
+
+                  }
+
+
+                  buildSponsors();
+
+
+                </script>
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
@@ -255,6 +433,216 @@
                     window.whiteHack = true;
                   }
                 </script>
+
+
+                <!-- ##### ChatWee widget ##### -->
+
+                <script type="text/javascript">
+                  setTimeout(function () {
+
+                    // don't load script if widget already on page
+                    var widget = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+                    if (widget) return;
+
+
+                    //********************* the src is unique to each chatwee client/instance
+                    (function () {
+                      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                      s1.async = true;
+                      s1.src = 'https://chatwee-api.com/v2/script/5f7ef4b1ebaa9f3cf83ed7fa.js';
+                      s1.charset = 'UTF-8';
+                      s1.setAttribute('crossorigin', '*');
+                      s0.parentNode.insertBefore(s1, s0);
+                    })();
+                  }, 500);
+                </script>
+
+                <script type="text/javascript">
+                  setTimeout(function () {
+                    (function () {
+                      var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+
+                      link1.setAttribute("rel", "stylesheet")
+                      link1.setAttribute("type", "text/css")
+                      link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+                      link1.setAttribute("media", "all")
+                      body.parentNode.insertBefore(link1, body);
+                    })();
+                  }, 100);
+                </script>
+
+                {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
+                {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
+                {%- assign userLastName = data.CurrentViewingUser.LastName -%}
+
+                <!-- get duration till end of conference plus one day for buffer -->
+                {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
+                {%- assign lastEvent = eventsByDate.last -%}
+
+                {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
+                {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
+                {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
+
+                <!-- difference in seconds -->
+                {%- assign diffSeconds = eventEnd | minus:nowTimestamp -%}
+                {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
+                {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
+
+                <script async>
+
+                  var userInfernoId = "{{ userInfernoId }}";
+                  var firstName = "{{ userFirstName }}";
+                  var lastName = "{{ userLastName }}";
+                  var chatDuration = "{{ chatDuration }}";
+                  var hasProfileImage = false;
+
+
+                  //********************* change these values for your specific client/event
+                  var chatweeValues = {
+                    userIdKey: "chatwee-user-id",
+                    sessionCookieKey: "chatwee-SID-5f7ef4b1ebaa9f3cf83ed7fa",
+                    chatId: "5f7ef4b1ebaa9f3cf83ed7fa",
+                    clientApiKey: "a6feff42c070b4633a876aec",
+                    isAdmin: 0,
+                    ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+                  }
+
+                  // helper functions
+                  var getCookie = key => {
+                    let cookieValue = "";
+
+                    const cookieList = document.cookie;
+                    if (cookieList) {
+                      const cookie = cookieList
+                        .split("; ")
+                        .find(row => row.startsWith(key));
+
+                      if (cookie) {
+                        cookieValue = cookie.split("=")[1];
+                      }
+
+                    }
+                    return cookieValue;
+                  }
+
+                  var setCookie = (key, value, age) => {
+                    document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
+                  }
+
+                  var validateChatSessionId = sessionId => {
+                    const url = chatweeValues.ssoBaseUrl + "validate-session?" + "chatId=" + chatweeValues.chatId + "&clientKey=" + chatweeValues.clientApiKey + "&sessionId=" + sessionId;
+
+                    return fetch(url).then(res => res.json());
+                  }
+
+                  var loginChat = userId => {
+                    const url = chatweeValues.ssoBaseUrl + "login?" + "chatId=" + chatweeValues.chatId + "&clientKey=" + chatweeValues.clientApiKey + "&userId=" + userId;
+
+                    return fetch(url).then(res => res.json());
+                  }
+
+                  var registerChat = () => {
+                    const name = firstName + " " + lastName;
+
+                    // TO DO: get default chat icon
+                    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-chat-icon.png";
+
+                    if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
+
+                    const url = chatweeValues.ssoBaseUrl
+                      + "register?"
+                      + "chatId="
+                      + chatweeValues.chatId
+                      + "&clientKey="
+                      + chatweeValues.clientApiKey
+                      + "&login="
+                      + name
+                      + "&isAdmin="
+                      + chatweeValues.isAdmin
+                      + "&avatar="
+                      + avatarUrl;
+
+                    return fetch(url).then(res => res.json());
+                  }
+
+                  // connect to Chatwee
+                  var connectChat = async () => {
+
+                    // see if session id locally
+                    let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+                    if (sessionId) {
+                      // validate session id with chatwee
+                      let valid
+                      try {
+                        valid = await validateChatSessionId(sessionId);
+                      } catch (e) {
+                        throw new Error(e);
+                      }
+
+                      // if true, do nothing
+                      if (valid) return;
+
+                    }
+
+                    // if false, check if user id is present locally
+                    const userId = getCookie(chatweeValues.userIdKey);
+
+                    // if true, login and set session id locally
+                    if (userId) {
+                      let sessionId = ""
+                      try {
+                        sessionId = await loginChat(userId);
+                      } catch (e) {
+                        throw new Error(e);
+                      }
+
+                      setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
+                    }
+                    // if false, register and set user id and log in user
+                    else {
+                      let userId = ""
+                      try {
+                        userId = await registerChat();
+                      } catch (e) {
+                        throw new Error(e);
+                      }
+
+                      setCookie(chatweeValues.userIdKey, userId, chatDuration);
+
+                      let sessionId = ""
+                      try {
+                        sessionId = await loginChat(userId);
+                      } catch (e) {
+                        throw new Error(e);
+                      }
+
+                      setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
+
+                    }
+
+                    return;
+                  }
+
+                  var getProfileImage = () => {
+                    let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+                    return fetch(url);
+                  }
+
+                  var makeCalls = async () => {
+                    const res = await getProfileImage();
+                    if (res.status === 200) {
+                      hasProfileImage = true;
+                    }
+                    connectChat();
+                  }
+
+                  makeCalls();
+
+                </script>
+
+
+                <!-- ##### end of  chat widget ##### -->
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

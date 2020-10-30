@@ -153,13 +153,20 @@
                     font-family: 'gothamMed', sans-serif;
                   }
 
+                  .agenda-page-header {
+                    color: white;
+                    padding: 0 5%;
+                  }
+                </style>
+
+                <!-- Top banner content -->
+                <style>
                   .top-banner {
                     padding: 10px 50px;
                     line-height: 60px;
                     color: var(--branding-primary);
                     font-size: 32px;
                     background-color: #ffffff;
-
                   }
 
                   .top-banner span {
@@ -169,20 +176,66 @@
                   .top-banner img {
                     float: right;
                   }
+                </style>
 
-                  .info-text {
-                    color: #ffffff;
-                    padding: 20px 40px;
-                    font-size: 1.5em;
+                <!-- Tabs content -->
+                <style>
+                  .page1, page2, page3 {
+
+                  }
+
+                  .tabs {
+                    display: flex;
+                    flex-direction: row;
+                    width: 100%;
+
+                  }
+
+                  .tabs > div {
                     text-align: center;
-                    margin-top: 40px;
-                    width: 90%;
-                    margin-left: 5%;
+                    line-height: 4em;
+                    height: 100%;
+                    margin: 0 1px;
+                    padding: 8px;
+                    width: 100%;
+                    cursor: pointer;
+                    background-color: var(--sidebar-bg-color);
+                    color: white;
+                    border-top: solid 1px #dddddd;
+                    border-right: solid 1px #dddddd;
+                  }
+
+
+                  .tabs > div.active-tab, .tabs > div:hover {
+                    background-color: white;
+                    color: var(--sidebar-bg-color);
+                    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, .5);
+                  }
+
+                  .tabs > div:hover {
+                    filter: brightness(90%);
                   }
 
                 </style>
 
-                <!-- gri content-->
+
+                <script>
+                  function openTab(activeTab) {
+                    const tab = activeTab.replace(/\D/g, "");
+
+                    landingPageEl.querySelector('#tab1').classList.remove('active-tab');
+                    landingPageEl.querySelector('#tab2').classList.remove('active-tab');
+                    landingPageEl.querySelector('#tab3').classList.remove('active-tab');
+                    landingPageEl.querySelector('#tab' + tab).classList.add('active-tab');
+
+                    landingPageEl.querySelector('#page1').style.display = 'none';
+                    landingPageEl.querySelector('#page2').style.display = 'none';
+                    landingPageEl.querySelector('#page3').style.display = 'none';
+                    landingPageEl.querySelector('#page' + tab).style.display = '';
+                  }
+                </script>
+
+                <!-- grid content-->
                 <style>
                   .grid-container {
                     display: grid;
@@ -199,7 +252,7 @@
                     display: flex;
                     flex-direction: row;
                     flex: auto;
-                    width: 70%;
+                    width: 100%;
                     min-height: 200px;
                     border-radius: 1em;
                     background-color: #fff;
@@ -207,13 +260,7 @@
                   }
 
                   .time {
-                    width: 20%;
-                    min-width: 100px;
-                    color: white;
-                    background-color: var(--sidebar-bg-color);
-                    border-radius: 1em 0 0 1em;
-                    padding: 1em;
-                    white-space: nowrap;
+
                   }
 
                   .event {
@@ -221,7 +268,7 @@
                     top: 0;
                     left: 0;
                     width: 80%;
-                    padding: 1em;
+                    padding: 1em 1em 80px 1em;
                   }
 
                   .event-title {
@@ -253,8 +300,33 @@
                     color: white;
                   }
 
-                  .event-presenters {
-                    margin: 1em 0;
+                  .left-block {
+                    width: 20%;
+                    min-width: 100px;
+                    color: white;
+                    background-color: var(--sidebar-bg-color);
+                    border-radius: 1em 0 0 1em;
+                    padding: 1em;
+                    text-align: center;
+                  }
+
+                  .event-group {
+                   margin-bottom: 1.25em;
+                  }
+
+                  .event-presenters li {
+                    padding-left: 2em;
+                    text-indent: -1.3em;
+                    font-width: normal;
+                    font-family: gothamBook, sans-serif;
+                  }
+
+                  .blue {
+                    background-color: #303083 !important;
+                  }
+
+                  .red {
+                    background-color: #ab0513 !important;
                   }
 
 
@@ -267,89 +339,145 @@
                     <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
                   </div>
 
-                  <div class="grid-container">
-                    <!--  9:45 AM -->
-                    <div class="card">
-                      <div class="time">9:45 AM</div>
-                      <div class="event">
-                        <div class="event-title">Welcome</div>
-                        <div class="event-desc">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                          laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                          voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                          non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </div>
-                        <div class="event-presenters">Glynn Williams and Dave Lacey</div>
-                        <a id="welcome-event" class="join"
-                           href="#">Join</a>
-                      </div>
-                    </div>
-
-                    <!--  10:30 AM -->
-                    <div class="card">
-                      <div class="time">10:30 AM</div>
-                      <div class="event">
-                        <div class="event-title">Event Title 1</div>
-                        <div class="event-desc">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        </div>
-                        <div class="event-presenters">Presenters Names here</div>
-                        <a id="event1" class="join"
-                           href="#">Join</a>
-                      </div>
-                    </div>
-
-
-                    <!--  10:30 AM -->
-                    <div class="card">
-                      <div class="time">11:30 AM</div>
-                      <div class="event">
-                        <div class="event-title">Event Title 2</div>
-                        <div class="event-desc">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        </div>
-                        <div class="event-presenters">Presenters Names here</div>
-                        <a id="event2" class="join"
-                           href="#">Join</a>
-                      </div>
-                    </div>
-
-                    <!--  10:30 AM -->
-                    <div class="card">
-                      <div class="time">1:30 PM</div>
-                      <div class="event">
-                        <div class="event-title">Event Title 3</div>
-                        <div class="event-desc">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        </div>
-                        <div class="event-presenters">Presenters Names here</div>
-                        <a id="event3" class="join"
-                           href="#">Join</a>
-                      </div>
-                    </div>
-
-                    <!--  10:30 AM -->
-                    <div class="card">
-                      <div class="time">2:30 PM</div>
-                      <div class="event">
-                        <div class="event-title">Event Title 4</div>
-                        <div class="event-desc">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                          labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                        </div>
-                        <div class="event-presenters">Presenters Names here</div>
-                        <a id="event4" class="join"
-                           href="#">Join</a>
-                      </div>
-                    </div>
-
+                  <div class="tabs">
+                    <div id="tab1" onclick="openTab(this.id)" class="active-tab">Tuesday 10th</div>
+                    <div id="tab2" onclick="openTab(this.id)">Wednesday 11th</div>
+                    <div id="tab3" onclick="openTab(this.id)">Thursday 12th</div>
                   </div>
 
+                  <div id="page1">
+                    <div class="agenda-page-header">
+                      <h1>Day 1 - Tuesday 10th November 2020</h1>
+                      <p>
+                        * UTC – Coordinated Universal Time : CET – Central European Time : EST – Eastern Standard Time
+                        (US) : CST – Central Standard Time (US)
+                      </p>
+                    </div>
+                    <div class="grid-container page1"></div>
+                  </div>
+
+                  <div id="page2">
+                    <div class="agenda-page-header">
+                      <h1>Day 2 - Wednesday 11th November 2020</h1>
+                      <p>
+                        * UTC – Coordinated Universal Time : CET – Central European Time : EST – Eastern Standard Time
+                        (US) : CST – Central Standard Time (US)
+                      </p>
+                    </div>
+                    <div class="grid-container page2"></div>
+                  </div>
+
+                  <div id="page3">
+                    <div class="agenda-page-header">
+                      <h1>Day 3 - Thursday 12th November 2020</h1>
+                      <p>
+                        * UTC – Coordinated Universal Time : CET – Central European Time : EST – Eastern Standard Time
+                        (US) : CST – Central Standard Time (US)
+                      </p>
+                    </div>
+                    <div class="grid-container page3"></div>
+                  </div>
+
+                  <template>
+                    <div class="card">
+                      <div class="left-block">
+                        <div class="event-group"></div>
+                        <div class="time"></div>
+                      </div>
+                      <div class="event">
+                        <div class="event-title"></div>
+                        <div class="event-desc"></div>
+                        <a id="eventid" class="join" href="">Join</a>
+                      </div>
+                    </div>
+                  </template>
+
                 </div>
+
+
+                <script>
+                  function buildEvents() {
+                    const events = [
+                      {
+                        day: 1,
+                        time: '0900-1000 (UTC)<br>1000-1100 (CET)',
+                        group: 'EUROPEAN FOCUS',
+                        title: 'Session 2: Pilot – EASA Panel',
+                        desc: `
+<li>Bernard Bourdon, Head of Aircrew & Medical Department EASA
+<li>Francesco Gaetani, Manager, Air Operations Implementation Section, EASA
+<li>Daan Dousi, EASA
+<li>Ascanio Russo, Flight Crew Licensing Expert, EASA
+<li>Capt. Giancarlo Buono, Director Safety and Flight Operations, Europe, IATA
+<li>Jani Hottola, Special Advisor, Traficom / Member of EASA General Aviation Task Force
+<li>Live Q&A
+                        `,
+                        href: '#'
+                      },
+                      {
+                        day: 2,
+                        time: '1330-1430 (UTC)<br>1430-1530 (CET)<br>0830-0930 (EST)<br>0730-0830 (CST)',
+                        group: 'GLOBAL FOCUS',
+                        title: 'Session 4: Pilot – Big Data',
+                        desc: `
+<li>Chris Ranganathan, Chief Learning Officer, CAE - Agility, Humanity, Innovation and Resilience Through Adversity
+<li>Peter Tholen, Training Standards Captin, L3Harris - Using Data to Shift from What to Why
+<li>Live Q&A
+                        `,
+                        href: '#'
+                      },
+                      {
+                        day: 3,
+                        time: '1900-2000 (UTC)<br>2000-2100 (CET)<br>1400-1500 (EST)<br>1300-1400 (CST)',
+                        group: 'NORTH AMERICA FOCUS',
+                        title: 'Session 7: Pilot – Airmanship',
+                        desc: `
+<li> Dr. Kathy Abbott, Chief Scientific & Technical Advisor, Flight Deck Human Factors & Colleen Donovan, Federal Aviation Administration- Automated-Manual Balance
+<li> Paul ‘BJ’ Ransbury, Chief Executive Officer, Aviation Performance Solutions LLC - The Upside of UPRT
+<li> Live Q&A
+                        `,
+                        href: ''
+                      },
+                    ];
+
+                    const template = landingPageEl.querySelector('template');
+                    const day1 = landingPageEl.querySelector('.page1');
+                    const day2 = landingPageEl.querySelector('.page2');
+                    const day3 = landingPageEl.querySelector('.page3');
+
+                    events.forEach(session => {
+                      const clone = template.content.cloneNode(true);
+                      const card = clone.querySelector('.card');
+                      card.querySelector('.time').innerHTML = session.time;
+                      card.querySelector('.event-title').innerHTML = session.title;
+                      card.querySelector('.event-desc').innerHTML = session.desc;
+                      card.querySelector('.event-group').innerHTML = session.group;
+                      card.querySelector('.join').id = session.title.replace(/[^A-Z0-9]/ig, "-");
+                      card.querySelector('.join').href = session.href;
+
+                      if (session.group.includes('AMERICA')) {
+                        card.querySelector('.left-block').classList.add('red');
+                      }else if (session.group.includes('GLOBAL')) {
+                        card.querySelector('.left-block').classList.add('blue');
+                      } else {
+
+                      }
+
+                      if (session.day === 1) {
+                        day1.appendChild(clone);
+                      } else if (session.day === 2) {
+                        day2.appendChild(clone);
+                      } else {
+                        day3.appendChild(clone);
+                      }
+
+                    });
+
+                    openTab('tab1');
+                  }
+
+                  buildEvents();
+                </script>
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>

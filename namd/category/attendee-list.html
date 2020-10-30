@@ -99,7 +99,7 @@
 
     function login() {
       const currentProject = projects.filter(project => {
-        return project.name === 'halldale';
+        return project.name === 'namd';
       })[0];
       if (!currentProject) {
         alert('could not log into Inferno');
@@ -170,7 +170,30 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="87b222ae-d33d-4c65-ba0b-fbf266483416">
+              <inferno-snippet-content id="xxxxxxxxxxxxxxxxxxxxxxxxx">
+
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('gotham', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff');
+
+                </script>
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
