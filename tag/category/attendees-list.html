@@ -598,10 +598,6 @@
                       email.innerHTML = at.ContactInfoEmail;
                       email.href = "mailto:" + at.ContactInfoEmail;
 
-                      // let companyLink = clone.getElementById("company-link");
-                      // companyLink.innerHTML = (at.companyLink ? at.companyLink : "");
-                      // companyLink.href = at.companyLink;
-
                       let job = clone.getElementById("job");
                       const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
                       const contactInfoCompany = at.ContactInfoCompany ? at.ContactInfoCompany : "";
@@ -824,6 +820,18 @@
                     xobj.send(null)
                   }
 
+                </script>
+
+                <!-- Inferno Hacks -->
+                <script>
+                  if (!window.whiteHack) {
+                    const css = `jolo-search-box .search-box-container {display: none !important}`;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
                 </script>
 
               </inferno-snippet-content>
