@@ -102,6 +102,22 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="a7f4b31e-c8e7-4760-af59-25d8c3e596de">
 
+                <!-- Toggle Modal on and off -->
+                <script>
+                  function toggleModal(id) {
+                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/';
+                    alert(id);
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
                 <!-- Container -->
                 <style>
                   #container {
@@ -264,6 +280,7 @@
                   </div>
                 </div>
 
+                <!-- library build  -->
                 <script>
                   var sponsorInfoCardData = {};
                   var industryResearchCardData = {};
@@ -305,9 +322,6 @@
                     for (let cardData of industryResearchCardData) {
                       const card = industryResearchTemplate.content.cloneNode(true);
 
-                      const industryResearchCard = card.getElementById("industry-research-card");
-                      industryResearchCard.addEventListener('click', function() { loadPDF(); });
-
                       const industryResearchThumb = card.getElementById("industry-research-thumb");
                       industryResearchThumb.onerror = function () {
                         industryResearchThumb.onerror = null;
@@ -317,6 +331,11 @@
 
                       const industryResearchTitle = card.getElementById("industry-research-title");
                       industryResearchTitle.innerHTML = cardData.ContentName;
+
+                      const industryResearchCard = card.getElementById("industry-research-card");
+                      industryResearchCard.onclick = function () {
+                        toggleModal(cardData.FileName);
+                      }
 
                       industryResearchGrid.appendChild(card);
                     }
@@ -329,7 +348,6 @@
 
                     for (let cardData of sponsorInfoCardData) {
                       const card = sponsorInfoTemplate.content.cloneNode(true);
-                      const sponsorInfoCardData = card.getElementById("sponsor-info-card");
 
                       const sponsorInfoThumb = card.getElementById("sponsor-info-thumb");
                       sponsorInfoThumb.onerror = function () {
@@ -341,22 +359,24 @@
                       const sponsorInfoTitle = card.getElementById("sponsor-info-title");
                       sponsorInfoTitle.innerHTML = cardData.ContentName;
 
+                      const sponsorInfoCardData = card.getElementById("sponsor-info-card");
+                      sponsorInfoCardData.onclick = function () {
+                        toggleModal(cardData.FileName);
+                      }
+
                       sponsorInfoGrid.appendChild(card);
                     }
                   }
 
-                </script>
-
-                <!-- PDF -->
-                <script>
-                  function openPDF() {
-                    alert('Opened PDF');
+                  if (window.location.hostname.includes('127.0.0.1')) {
+                    window.addEventListener('load', (event) => {
+                      buildLibrary();
+                      console.log('The page has fully loaded');
+                    });
+                  } else  {
+                    buildLibrary();
                   }
-                </script>
 
-                <!-- Main -->
-                <script>
-                  buildLibrary();
                 </script>
 
                 <!-- Inferno Hacks -->
@@ -370,7 +390,6 @@
                     window.whiteHack = true;
                   }
                 </script>
-
 
 
               </inferno-snippet-content>
