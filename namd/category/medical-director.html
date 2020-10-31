@@ -108,7 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
+              <inferno-snippet-content id="f4227356-3d97-47f3-9625-3ac2126a25c5">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -128,7 +128,8 @@
 
                   }
 
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2');
+                  loadFont('gotham', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff');
 
                 </script>
 
@@ -140,26 +141,899 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/arrows-v.png');
+                    background-color: #5378A7;
                     background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
+                    background-repeat: repeat-y;
+                    background-position: right top;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                    font-family: "gotham", Helvetica, Arial, sans-serif;
+                  }
+
+                  .top-banner {
+                    padding: 10px 50px;
+                    line-height: 60px;
+                    color: white;
+                    font-size: 32px;
+                  }
+
+                  .top-banner h1 {
+                    font-size: 1em;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                    font-weight: bold;
+                  }
+
+                  .top-banner hr {
+                    border: solid 2px #00467F;
+                    width: 75%;
+                  }
+
+                  .grid {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    max-width: 90%;
+                    padding: 1%;
+                  }
+
+                  .card {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    width: 31%;
+                    min-height: 350px;
+                    background-color: #00467F;
+                    margin: 10px;
+                    padding: 2% 1%;
+                    color: white;
+                    cursor: pointer;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                  }
+
+                  .card:hover {
+                    filter: brightness(80%);
+                    cursor: pointer;
+                    -ms-transform: translateY(-.5vh);
+                    -webkit-transform: translateY(-.5vh);
+                    transform: translateY(-.5vh);
+                  }
+
+                  .card img {
+                    width: 50%;
+                    height: auto;
+                    border-radius: 50%;
+                  }
+
+                  .location {
+                    margin-bottom: 1em;
+                    font-size: 1.3em;
+                    font-weight: bold;
+                    text-align: center;
+                  }
+
+                  .name {
+                    margin-top: 1em;
+                    font-size: 1.3em;
+                    font-weight: bold;
+                    text-align: center;
+                  }
+
+                  .title {
+                    text-align: center;
+                  }
+
+                  .info {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    align-content: center;
+                    width: 85%;
+                    position: absolute;
+                    bottom: 4%;
+                    left: 3%;
+                    padding: 5% 0 0 0;
+                    z-index: 99999;
+                  }
+
+                  .info div {
+                    width: 24%;
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: start;
+                    align-items: center;
+                    align-content: center;
+                  }
+
+                  .info span {
+                    margin: 0 .25em;
+                  }
+                  .info img:hover {
+                    transform: scale(1.1);
+                    -ms-transform: translateY(-.5vh);
+                    -webkit-transform: translateY(-.5vh);
+                    transform: translateY(-.5vh);
+                  }
+
+                </style>
+
+                <!-- Modal Window Style -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 999;
+                    padding: 5%;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 3%;
+                    top: -11px;
+                    color: #fff;
+                    font-size: 1.5em;
+                    text-decoration: none;
+                    font-weight: bold;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                    cursor: pointer;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+
+                  .modal-grid {
+                    display: grid;
+                    grid-template-columns: 0.6fr 1.4fr;
+                    grid-template-rows: 1fr;
+                    gap: 0px 20px;
+                    padding: 2%;
+                    color: white;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                    background-color: #5378A7;
+                  }
+
+                  .left {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    width: 100%;
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/arrows-v.png');
+                    background-repeat: no-repeat;
+                    background-position: center bottom;
+                    background-size: 50%;
+                  }
+
+                  .left > div {
+                    text-align: center;
+                  }
+
+                  .left img {
+                    border-radius: 50%;
+                    width: 60%;
+                    margin-top: 10%;
+                  }
+
+                  .left .name {
+                    font-size: 1.3em;
+                  }
+
+                  .right {
+                    font-size: 1.1em;
+                    padding: 1em;
+                  }
+
+                  .video, .video-icon, .video span {
+                    z-index: 999999;
                   }
                 </style>
+                <!-- Modal Window Script -->
+                <template id="modalWindow">
+                  <div class="modal-grid">
+                    <div class="left">
+                      <img src="">
+                      <div class="name"></div>
+                      <div class="title"></div>
+                    </div>
+                    <div class="right"></div>
+                  </div>
+                </template>
+
+                <!-- Toggle Modal on and off -->
+                <script>
+                  function toggleModal(id) {
+                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/directors/';
+                    const contentWrapper = landingPageEl.querySelector('.contentWrapper');
+                    let modalClose = landingPageEl.querySelector('.modal-close');
+                    const modalOpen = contentWrapper.querySelector('.modal-grid');
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(id);
+                    });
+
+
+                    if (modalOpen) {
+                      modalOpen.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      return;
+                    } else {
+                      modalClose = document.createElement("div");
+                      modalClose.id = 'modalOpen';
+                      contentWrapper.appendChild(modalClose);
+
+                    }
+
+                    const template = landingPageEl.querySelector('#modalWindow');
+                    const clone = template.content.cloneNode(true);
+
+
+                    const list = getList();
+                    const user = list.filter(item => item.Id === id)[0];
+                    const avatar = clone.querySelector('img');
+                    avatar.src = baseUrl + user.thumb;
+                    avatar.onerror = function () {
+                      // prevent an infinite loop is second image does not load
+                      avatar.onerror = null;
+                      avatar.src = baseUrl + '_avatar.jpg';
+                    }
+                    clone.querySelector('.name').innerHTML = user.firstName + ' ' + user.lastName;
+                    clone.querySelector('.title').innerHTML = user.title;
+                    clone.querySelector('.right').innerHTML = user.bio;
+                    contentWrapper.appendChild(clone);
+                    const modal = landingPageEl.querySelector('#open-modal');
+                    modal.classList.toggle('open');
+                    scrollTop();
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
 
                 <div class="content">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  <div class="top-banner">
+                    <h1>Meet Your Medicaid Directors</h1>
+                    <hr align="left">
+                  </div>
+
+                  <div class="grid"></div>
+
+                  <template id="speakerCard">
+                    <div class="card">
+                      <div class="location"></div>
+                      <img src="">
+                      <div class="name"></div>
+                      <div class="title"></div>
+                      <div class="info">
+                        <div class="bio">
+                          <img class="bio-icon" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/bio_ic.png"><span>Bio</span>
+                        </div>
+                        <div class="video">
+                          <span>Video</span><img class="video-icon" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/video_ic.png">
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+
+                  <div id="open-modal" class="modal-window">
+                    <div>
+                      <div title="Close" class="modal-close">Close</div>
+                      <div class="contentWrapper"></div>
+                    </div>
+                  </div>
+
 
                 </div>
+
+                <!-- build speaker list-->
+                <script>
+
+                  function getList() {
+                    let list = [
+                      {
+                        "firstName": "Allison",
+                        "lastName": "Taylor",
+                        "location": "INDIANA",
+                        "Id": "60093",
+                        "bio": "Need a Bio",
+                        "thumb": "allison_taylor.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Ben",
+                        "lastName": "Shaffer",
+                        "location": "RHODE ISLAND",
+                        "Id": "90140",
+                        "bio": "Need a Bio",
+                        "thumb": "ben_shaffer.jpg",
+                        "title": "Medicaid Program Director"
+                      },
+                      {
+                        "firstName": "Beth",
+                        "lastName": "Kidder",
+                        "location": "FLORIDA",
+                        "Id": "120187",
+                        "bio": "Need a Bio",
+                        "thumb": "beth_kidder.jpg",
+                        "title": "Deputy Secretary for Medicaid"
+                      },
+                      {
+                        "firstName": "Bill",
+                        "lastName": "Snyder",
+                        "location": "SOUTH DAKOTA",
+                        "Id": "150233",
+                        "bio": "Need a Bio",
+                        "thumb": "bill_snyder.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Caprice",
+                        "lastName": "Knapp",
+                        "location": "NORTH DAKOTA",
+                        "Id": "180280",
+                        "bio": "Need a Bio",
+                        "thumb": "caprice_knapp.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Cory",
+                        "lastName": "Gustafson",
+                        "location": "VERMONT",
+                        "Id": "210327",
+                        "bio": "Need a Bio",
+                        "thumb": "cory_gustafson.jpg",
+                        "title": "Commissioner"
+                      },
+                      {
+                        "firstName": "Cynthia",
+                        "lastName": "Beane",
+                        "location": "WEST VIRGINIA",
+                        "Id": "240373",
+                        "bio": "Need a Bio",
+                        "thumb": "cindy_beane.jpg",
+                        "title": "Commissioner"
+                      },
+                      {
+                        "firstName": "Daniel",
+                        "lastName": "Tsai",
+                        "location": "MASSACHUSETTS",
+                        "Id": "270420",
+                        "bio": "Need a Bio",
+                        "thumb": "daniel_tsai.jpg",
+                        "title": "Assistant Secretary"
+                      },
+                      {
+                        "firstName": "Dave",
+                        "lastName": "Richard",
+                        "location": "NORTH CAROLINA",
+                        "Id": "300467",
+                        "bio": "Need a Bio",
+                        "thumb": "dave_richard.jpg",
+                        "title": "Deputy Secretary"
+                      },
+                      {
+                        "firstName": "Dawn",
+                        "lastName": "Stehle",
+                        "location": "ARKANSAS",
+                        "Id": "330513",
+                        "bio": "Need a Bio",
+                        "thumb": "dawn_stehle.jpg",
+                        "title": "Deputy Director"
+                      },
+                      {
+                        "firstName": "Dennis",
+                        "lastName": "Schrader",
+                        "location": "MARYLAND",
+                        "Id": "360560",
+                        "bio": "Need a Bio",
+                        "thumb": "dennis_schrader.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Donna",
+                        "lastName": "Frescatore",
+                        "location": "NEW YORK",
+                        "Id": "390607",
+                        "bio": "Need a Bio",
+                        "thumb": "donna_frescatore.jpg",
+                        "title": "State Medicaid Director, Deputy Commissioner"
+                      },
+                      {
+                        "firstName": "Drew",
+                        "lastName": "Snyder",
+                        "location": "MISSISSIPPI",
+                        "Id": "420653",
+                        "bio": "Need a Bio",
+                        "thumb": "drew_snyder.jpg",
+                        "title": "Executive Director"
+                      },
+                      {
+                        "firstName": "Gary",
+                        "lastName": "Smith ",
+                        "location": "VIRGIN ISLANDS",
+                        "Id": "450700",
+                        "bio": "Need a Bio",
+                        "thumb": "gary_smith.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Helen",
+                        "lastName": "Sablan",
+                        "location": "NORTHERN MARIANA ISLANDS",
+                        "Id": "480747",
+                        "bio": "Need a Bio",
+                        "thumb": "helen_sablan.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Henry",
+                        "lastName": "Lipman",
+                        "location": "NEW HAMPSHIRE",
+                        "Id": "510793",
+                        "bio": "Need a Bio",
+                        "thumb": "henry_lipman.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Jacey",
+                        "lastName": "Cooper",
+                        "location": "CALIFORNIA",
+                        "Id": "540840",
+                        "bio": "Need a Bio",
+                        "thumb": "jacey_cooper.jpg",
+                        "title": "Medicaid Director, Chief Deputy Director"
+                      },
+                      {
+                        "firstName": "Jami",
+                        "lastName": "Snyder",
+                        "location": "ARIZONA",
+                        "Id": "570887",
+                        "bio": "Need a Bio",
+                        "thumb": "jami_snyder.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Janet",
+                        "lastName": "Cruz ",
+                        "location": "GUAM",
+                        "Id": "600933",
+                        "bio": "Need a Bio",
+                        "title": "Interim Director"
+                      },
+                      {
+                        "firstName": "Jennifer",
+                        "lastName": "Langer Jacobs",
+                        "location": "NEW JERSEY",
+                        "Id": "630980",
+                        "bio": "Need a Bio",
+                        "thumb": "jennifer_langer_jacobs.jpg",
+                        "title": "Assistant Commissioner"
+                      },
+                      {
+                        "firstName": "Jeremy",
+                        "lastName": "Brunssen",
+                        "location": "NEBRASKA",
+                        "Id": "661027",
+                        "bio": "Need a Bio",
+                        "thumb": "jeremy_brunssen.jpg",
+                        "title": "Interim Director"
+                      },
+                      {
+                        "firstName": "Jim",
+                        "lastName": "Jones",
+                        "location": "WISCONSIN",
+                        "Id": "691073",
+                        "bio": "Need a Bio",
+                        "thumb": "jim_jones.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Josh",
+                        "lastName": "Baker",
+                        "location": "SOUTH CAROLINA",
+                        "Id": "721120",
+                        "bio": "Need a Bio",
+                        "thumb": "joshua_baker.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Judy",
+                        "lastName": "Mohr Peterson",
+                        "location": "HAWAII",
+                        "Id": "751167",
+                        "bio": "Need a Bio",
+                        "title": "Med-QUEST Division Administrator"
+                      },
+                      {
+                        "firstName": "Julie",
+                        "lastName": "Lovelady",
+                        "location": "IOWA",
+                        "Id": "781213",
+                        "bio": "Need a Bio",
+                        "thumb": "julie_lovelady.jpg",
+                        "title": "Interim Medicaid Director"
+                      },
+                      {
+                        "firstName": "Karen",
+                        "lastName": "Kimsey",
+                        "location": "VIRGINIA",
+                        "Id": "811260",
+                        "bio": "Need a Bio",
+                        "thumb": "karen_kimsey.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Kate",
+                        "lastName": "McEvoy",
+                        "location": "CONNECTICUT",
+                        "Id": "841306",
+                        "bio": "Need a Bio",
+                        "thumb": "kate_mcevoy.jpg",
+                        "title": "Director of Health Services"
+                      },
+                      {
+                        "firstName": "Kate",
+                        "lastName": "Massey",
+                        "location": "MICHIGAN",
+                        "Id": "871353",
+                        "bio": "Need a Bio",
+                        "thumb": "kate_massey.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Kelly",
+                        "lastName": "Cunningham ",
+                        "location": "ILLINOIS",
+                        "Id": "901400",
+                        "bio": "Need a Bio",
+                        "thumb": "kelly_cunningham.jpg",
+                        "title": "Administrator"
+                      },
+                      {
+                        "firstName": "Lisa",
+                        "lastName": "Lee",
+                        "location": "KENTUCKY",
+                        "Id": "931446",
+                        "bio": "Need a Bio",
+                        "thumb": "lisa_lee.jpg",
+                        "title": "Commissioner"
+                      },
+                      {
+                        "firstName": "Lori",
+                        "lastName": "Coyner",
+                        "location": "OREGON",
+                        "Id": "961493",
+                        "bio": "Need a Bio",
+                        "thumb": "lori_coyner.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Luz",
+                        "lastName": "Cruz-Romero",
+                        "location": "PUERTO RICO",
+                        "Id": "991540",
+                        "bio": "Need a Bio",
+                        "thumb": "luz_cruz_romero.jpg",
+                        "title": "Executive Director"
+                      },
+                      {
+                        "firstName": "Lynnette",
+                        "lastName": "Rhodes",
+                        "location": "GEORGIA",
+                        "Id": "1021586",
+                        "bio": "Need a Bio",
+                        "thumb": "lynnette_rhodes.jpg",
+                        "title": "Executive Director"
+                      },
+                      {
+                        "firstName": "Marie",
+                        "lastName": "Matthews",
+                        "location": "MONTANA",
+                        "Id": "1051633",
+                        "bio": "Need a Bio",
+                        "thumb": "marie_matthews.jpg",
+                        "title": "State Medicaid Director"
+                      },
+                      {
+                        "firstName": "MaryAnne",
+                        "lastName": "Lindeblad",
+                        "location": "WASHINGTON",
+                        "Id": "1081680",
+                        "bio": "Need a Bio",
+                        "thumb": "maryanne_lindeblad.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Matt",
+                        "lastName": "Wimmer",
+                        "location": "IDAHO",
+                        "Id": "1111726",
+                        "bio": "Need a Bio",
+                        "thumb": "matt_wimmer.jpg",
+                        "title": "Division Administrator for Medicaid"
+                      },
+                      {
+                        "firstName": "Matt",
+                        "lastName": "Anderson",
+                        "location": "MINNESOTA",
+                        "Id": "1141773",
+                        "bio": "Need a Bio",
+                        "title": "Assistant Commissioner and Medicaid Director"
+                      },
+                      {
+                        "firstName": "Maureen",
+                        "lastName": "Corcoran",
+                        "location": "OHIO",
+                        "Id": "1171820",
+                        "bio": "Need a Bio",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Melisa",
+                        "lastName": "Byrd",
+                        "location": "WASHINGTON D.C.",
+                        "Id": "1201866",
+                        "bio": "Need a Bio",
+                        "thumb": "melissa_bryd.jpg",
+                        "title": "Senior Deputy Director/ Medicaid Director"
+                      },
+                      {
+                        "firstName": "Melody",
+                        "lastName": "Anthony",
+                        "location": "OKLAHOMA",
+                        "Id": "1231913",
+                        "bio": "Need a Bio",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Michelle",
+                        "lastName": "Probert",
+                        "location": "MAINE",
+                        "Id": "1261960",
+                        "bio": "Need a Bio",
+                        "thumb": "michelle_probert.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Nate",
+                        "lastName": "Checketts",
+                        "location": "UTAH",
+                        "Id": "1292006",
+                        "bio": "Need a Bio",
+                        "thumb": "nate_checketts.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Nicole",
+                        "lastName": "Comeaux",
+                        "location": "NEW MEXICO",
+                        "Id": "1322053",
+                        "bio": "Need a Bio",
+                        "thumb": "nicole_comeaux.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Renee",
+                        "lastName": "Gayhart",
+                        "location": "ALASKA",
+                        "Id": "1352100",
+                        "bio": "Need a Bio",
+                        "thumb": "renee_gayhart.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Sally",
+                        "lastName": "Kozak",
+                        "location": "PENNSYLVANIA",
+                        "Id": "1382146",
+                        "bio": "Need a Bio",
+                        "thumb": "sally_kozak.jpg",
+                        "title": "Deputy Secretary"
+                      },
+                      {
+                        "firstName": "Sandra King",
+                        "lastName": "Young",
+                        "location": "AMERICAN SAMOA",
+                        "Id": "1412193",
+                        "bio": "Need a Bio",
+                        "thumb": "sandra_king_young.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Sarah",
+                        "lastName": "Fertig",
+                        "location": "KANSAS",
+                        "Id": "1442240",
+                        "bio": "Need a Bio",
+                        "thumb": "sarah_fertig.jpg",
+                        "title": "State Medicaid Director"
+                      },
+                      {
+                        "firstName": "Stephanie ",
+                        "lastName": "Azar",
+                        "location": "ALABAMA",
+                        "Id": "1472286",
+                        "bio": "Need a Bio",
+                        "thumb": "stephanie_azar.jpg",
+                        "title": "Commissioner"
+                      },
+                      {
+                        "firstName": "Stephanie ",
+                        "lastName": "Stephens",
+                        "location": "TEXAS",
+                        "Id": "1502333",
+                        "bio": "Need a Bio",
+                        "thumb": "stephanie_stephens.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Stephen",
+                        "lastName": "Groff",
+                        "location": "DELAWARE",
+                        "Id": "1532380",
+                        "bio": "Need a Bio",
+                        "thumb": "stephen_groff.jpg",
+                        "title": "Medicaid Director"
+                      },
+                      {
+                        "firstName": "Stephen",
+                        "lastName": "Smith ",
+                        "location": "TENNESSEE",
+                        "Id": "1562426",
+                        "bio": "Need a Bio",
+                        "thumb": "stephen_smith.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Suzanne",
+                        "lastName": "Bierman",
+                        "location": "NEVADA",
+                        "Id": "1592473",
+                        "bio": "Need a Bio",
+                        "thumb": "suzanne_bierman.jpg",
+                        "title": "Medicaid Administrator"
+                      },
+                      {
+                        "firstName": "Tara",
+                        "lastName": "LeBlanc",
+                        "location": "LOUISIANA",
+                        "Id": "1622520",
+                        "bio": "Need a Bio",
+                        "thumb": "tara_leblanc.jpg",
+                        "title": "Interim Medicaid Executive Director"
+                      },
+                      {
+                        "firstName": "Teri",
+                        "lastName": "Green",
+                        "location": "WYOMING",
+                        "Id": "1652566",
+                        "bio": "Need a Bio",
+                        "thumb": "teri_green.jpg",
+                        "title": "State Medicaid Director"
+                      },
+                      {
+                        "firstName": "Todd",
+                        "lastName": "Richardson",
+                        "location": "MISSOURI",
+                        "Id": "1682613",
+                        "bio": "Need a Bio",
+                        "thumb": "todd_richardson.jpg",
+                        "title": "Director"
+                      },
+                      {
+                        "firstName": "Tracy",
+                        "lastName": "Johnson",
+                        "location": "COLORADO",
+                        "Id": "1712660",
+                        "bio": "Need a Bio",
+                        "thumb": "tracy_johnson.jpg",
+                        "title": "Medicaid Director"
+                      },
+                    ];
+
+                    list = list.sort(function (a, b) {
+                      if (a.location.toLowerCase() > b.location.toLowerCase()) {
+                        return 1;
+                      }
+                      if (a.location.toLowerCase() < b.location.toLowerCase()) {
+                        return -1;
+                      }
+                      return 0;
+                    });
+                    return list;
+                  }
+
+                  function buildSpeakers() {
+                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/directors/';
+                    const list = getList();
+                    // filter out users who have opted out of sharing their data
+                    const container = landingPageEl.querySelector('.grid');
+                    const template = landingPageEl.querySelector('#speakerCard');
+
+                    list.forEach(item => {
+                      const clone = template.content.cloneNode(true);
+                      const card = clone.querySelector('.card');
+                      // card.id = 'test';
+
+                      const avatar = card.querySelector('img');
+                      avatar.src = baseUrl + item.thumb;
+                      avatar.onerror = function () {
+                        // prevent an infinite loop is second image does not load
+                        avatar.onerror = null;
+                        avatar.src = baseUrl + '_avatar.jpg';
+                      }
+                      card.querySelector('.location').innerHTML = item.location ?? '';
+                      card.querySelector('.name').innerHTML = item.firstName + ' ' + item.lastName;
+                      card.querySelector('.title').innerHTML = item.title;
+                      card.onclick = function () {
+                        toggleModal(item.Id);
+                      }
+                      container.appendChild(clone);
+
+                    });
+
+                  }
+
+                  if (window.location.hostname.includes('local')) {
+                    window.addEventListener('load', (event) => {
+                      buildSpeakers();
+                      console.log('The page has fully loaded');
+                    });
+                  } else  {
+                    buildSpeakers();
+                  }
+
+
+
+
+                </script>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

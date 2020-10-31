@@ -170,7 +170,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxxxxxxxxxxxxxxxxxx">
+              <inferno-snippet-content id="af32cfe3-c513-421f-bc2d-4c699c4b196b">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -203,15 +203,22 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/bg.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/arrows-v.png');
+                    background-color: #5378A7;
                     background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: right bottom;
+                    background-repeat: repeat-y;
+                    background-position: right top;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     z-index: 1;
-                    font-family: 'gothamMed', sans-serif;
+                    font-family: "gotham", Helvetica, Arial, sans-serif;
+                  }
+
+
+                  .content hr {
+                    border: solid 2px #00467F;
+                    width: 75%;
+                    margin: 0 2% 0 0;
                   }
 
                 </style>
@@ -220,21 +227,22 @@
                 <style>
                   .search-banner {
                     display: grid;
-                    grid-template-columns: 1fr 3fr 1fr;
+                    grid-template-columns: 1fr 3fr;
                     grid-template-rows: 1fr;
                     gap: 10px 10px;
-                    justify-content: center;
+                    justify-content: start;
                     align-items: center;
                     width: 100%;
-                    background-color: white;
+                    color: white;
                     min-height: 50px;
-                    color: var(--sidebar-bg-color);
                     padding: 0 2%;
                   }
 
                   .search-banner h1 {
                     font-size: 2em;
-                    color: var(--sidebar-bg-color);
+                    color: white;
+                    font-weight: bold;
+                    maring: 0;
                   }
 
                   .search-input {
@@ -242,12 +250,13 @@
                   }
 
                   .search-input input {
-                    width: 80%;
+                    width: 100%;
                     font-size: 1.5em;
-                    line-height: 1.75em;
+                    line-height: 2em;
                     border-radius: .5em;
                     padding: 0 .5em;
-                    border: solid 1px #ccc;
+                    border: none;
+                    color: #000000;
                   }
 
                   .search-input input::placeholder {
@@ -257,16 +266,13 @@
                   .search-icon {
                     position: absolute;
                     top: 0;
-                    right: 22%;
+                    right: 1em;
                     speak: none;
                     font-family: 'Material Icons';
                     font-size: 1.75em;
                     line-height: 1.75em;
                     padding: 0 .25em;
-                  }
-
-                  .search-banner .logo img {
-                    height: 50px;
+                    color: #dddddd;
                   }
 
 
@@ -282,24 +288,22 @@
                   }
 
                   .card {
+                    position: relative;
                     display: flex;
                     flex-direction: column;
                     justify-content: start;
                     align-items: center;
-                    width: 200px;
-                    height: 250px;
-                    background-color: white;
-                    border-radius: 1em;
-                    margin: 10px;
-                    padding: 10px;
-                    text-align: center;
+                    width: 20%;
+                    background-color: #00467F;
+                    margin: 2%;
+                    padding: 2% 1%;
+                    color: white;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
                   }
 
                   .avatar {
-                    width: 128px;
-                    height: 128px;
-                    margin: 0 auto;
-
+                    width: 60%;
+                    height: auto;
                   }
 
                   .avatar img {
@@ -310,23 +314,24 @@
 
                   .person {
                     width: 100%;
-                    margin-top: 4px;
-                    font-size: 1.2em;
+                    margin-top: 1em;
+                    font-weight: bolder;
                     overflow-wrap: break-word;
+                    text-align: center;
                   }
 
                   .company {
                     width: 100%;
-                    font-size: 1em;
-                    font-weight: bold;
+                    font-size: .75em;
                     overflow-wrap: break-word;
+                    text-align: center;
                   }
 
                   .job-title {
                     width: 100%;
-                    font-size: 1em;
-                    font-weight: bold;
+                    font-size: .75em;
                     overflow-wrap: break-word;
+                    text-align: center;
                   }
 
                   .no-results-message {
@@ -342,11 +347,33 @@
                     justify-content: center;
                   }
 
+                  .social {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    align-content: center;
+                    width: 100%
+                  }
+
+                  .social img {
+                    margin: 1em .25em;
+                    width: 15%;
+                    cursor: pointer;
+                  }
+
+                  .social img:hover {
+                    transform: scale(1.1);
+                    -ms-transform: translateY(-.5vh);
+                    -webkit-transform: translateY(-.5vh);
+                    transform: translateY(-.5vh);
+                  }
+
                 </style>
 
                 <div class="content">
                   <div class="search-banner">
-                    <div><h1>Attendee List</h1></div>
+                    <div><h1>Attendees</h1></div>
                     <div class="search-input">
                       <input type="text" placeholder="Search Attendees" oninput="searchAttendees(event)"/>
                       <mat-icon class=" search-icon mat-icon material-icons mat-icon-no-color" role="img"
@@ -354,11 +381,9 @@
                         search
                       </mat-icon>
                     </div>
-                    <div class="logo">
-                      <img
-                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
-                    </div>
                   </div>
+
+                  <hr align="left">
 
                   <div class="attendee-list">
                     <template>
@@ -367,7 +392,16 @@
                         <div class="person"></div>
                         <div class="company"></div>
                         <div class="job-title"></div>
-                        <div class="social"></div>
+                        <div class="social">
+                          <img class="facebook" style="display: none;"
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/facebook.png">
+                          <img class="instagram" style="display: none;"
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/instagram.png">
+                          <img class="twitter" style="display: none;"
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/twitter.png">
+                          <img class="linkedin" style="display: none;"
+                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/linkedin.png">
+                        </div>
                       </div>
                     </template>
 
@@ -396,7 +430,7 @@
                   var attendees = [];
                   var totalAttendees = null;
 
-                 function fetchUsers(pageNumber) {
+                  function fetchUsers(pageNumber) {
                     const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
                     // max pagesize = 1000
                     // page start at 1 not 0
@@ -410,12 +444,12 @@
                       'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname
                     };
 
-                   // add a header property for users accessing with SA credentials
-                   if (window.sessionStorage.overrideId) {
-                     headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
-                   }
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
+                    }
 
-                   console.log(JSON.stringify(headers));
+                    console.log(JSON.stringify(headers));
 
                     $.ajax({
                       url: _baseUrl + 'UserProfileExport',
@@ -452,7 +486,7 @@
                         // remove users who are not in a specified group
                         return item.userGroups.some(group => {
                             const name = group.name.toLowerCase();
-                            return name.includes('public') || name.includes('attendee');
+                            return name.includes('fall namd full') || name.includes('fall namd state');
                           }
                         );
                       });
@@ -484,6 +518,42 @@
                       card.querySelector('.company').innerHTML = user.contactInfoCompany ?? '';
                       card.querySelector('.job-title').innerHTML = user.contactInfoTitle ?? '';
                       card.id = user.id.toString();
+
+                      // Social Icons Display
+                      console.log(user);
+
+                      const facebook = user.socialFacebook ?? false;
+                      const instagram = user.socialInstagram ?? false;
+                      const linkedin = user.socialLinkedIn ?? false;
+                      const twitter = user.socialTwitter ?? false;
+
+                      if (facebook) {
+                        card.querySelector('.facebook').style.display = '';
+                        card.querySelector('.facebook').onclick = function() {
+                          window.open( user.socialFacebook, "_blank");
+                        };
+                      }
+
+                      if (linkedin) {
+                        card.querySelector('.linkedin').style.display = '';
+                        card.querySelector('.linkedin').onclick = function() {
+                          window.open( user.socialLinkedIn, "_blank");
+                        };
+                      }
+
+                      if (instagram) {
+                        card.querySelector('.instagram').style.display = '';
+                        card.querySelector('.instagram').onclick = function() {
+                          window.open( user.socialInstagram, "_blank");
+                        };
+                      }
+
+                      if (twitter) {
+                        card.querySelector('.twitter').style.display = '';
+                        card.querySelector('.twitter').onclick = function() {
+                          window.open( user.socialTwitter, "_blank");
+                        };
+                      }
                       container.appendChild(clone);
                     });
 

@@ -108,7 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
+              <inferno-snippet-content id="a7f3df83-f5c7-49ac-849a-dbff2254bbc1">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -128,7 +128,8 @@
 
                   }
 
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2');
+                  loadFont('gotham', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff');
 
                 </script>
 
@@ -140,7 +141,7 @@
                   }
 
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/library-bg.png');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
@@ -149,17 +150,178 @@
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                    font-family: "gotham", Helvetica, Arial, sans-serif;
                   }
+
+                  .top-banner {
+                    padding: 10px 50px;
+                    line-height: 60px;
+                    color: white;
+                    font-size: 32px;
+                    background-color: #5377A6;
+                    margin: -20px -24px 20px -24px;
+                  }
+
+                  .top-banner h1 {
+                    font-size: 1em;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                    font-weight: bold;
+                  }
+
+                  .top-banner hr {
+                    border: solid 2px #00467F;
+                    width: 75%;
+                  }
+
+
+                  .grid {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    max-width: 90%;
+                    padding: 1% 1% 40px 1%;
+                  }
+
+                  .card {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    width: 20%;
+                    min-height: 350px;
+                    background-color: #00467F;
+                    margin: 10px;
+                    padding: 2% 1%;
+                    color: white;
+                    cursor: pointer;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                  }
+
+                  .card:hover {
+                    filter: brightness(80%);
+                    cursor: pointer;
+                    -ms-transform: translateY(-.5vh);
+                    -webkit-transform: translateY(-.5vh);
+                    transform: translateY(-.5vh);
+                  }
+
+                  .card img {
+                    width: 50%;
+                    height: auto;
+                    border-radius: 50%;
+                  }
+
+                  .title {
+                    margin: 1em 0;
+                    font-size: 1.3em;
+                    font-weight: bold;
+                    text-align: center;
+                  }
+
+                  .sub-title {
+                    margin: .75em 0;
+                    text-align: center;
+                  }
+
+                  .download {
+                    border-radius: 2em;
+                    padding: .5em 2em;
+                    color: white;
+                    background-color: var(--sidebar-bg-color);
+                    border: solid 1px #cccccc;
+                  }
+
                 </style>
 
                 <div class="content">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  <div class="top-banner">
+                    <h1>Sponsor Library</h1>
+                    <hr align="left">
+                  </div>
+
+                  <div class="grid"></div>
+
+                  <template>
+                    <div class="card">
+                      <img src="">
+                      <div class="title"></div>
+                      <div class="sub-title"></div>
+                      <div class="download"></div>
+                    </div>
+                  </template>
 
                 </div>
+
+                <script>
+
+                  function getList() {
+                    let list = [
+                      {id: 1, title: "item 1", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 2, title: "item 2", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 3, title: "item 3", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
+                      {id: 4, title: "item 4", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
+                      {id: 5, title: "item 5", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
+                      {id: 6, title: "item 6", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 7, title: "item 7", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 8, title: "item 8", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 9, title: "item 9", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 10, title: "item 10", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
+                      {id: 11, title: "item 11", subTitle: "sub title goes here", action: "View PDF"},
+                      {id: 12, title: "item 12", subTitle: "sub title goes here", action: "View PDF"},
+                    ];
+
+                    list = list.sort(function (a, b) {
+                      if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                        return 1;
+                      }
+                      if (a.title.toLowerCase() < b.title.toLowerCase()) {
+                        return -1;
+                      }
+                      return 0;
+                    });
+                    return list;
+                  }
+
+                  function buildLibrary() {
+                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/';
+                    const list = getList();
+                    // filter out users who have opted out of sharing their data
+                    const container = landingPageEl.querySelector('.grid');
+                    const template = landingPageEl.querySelector('template');
+
+                    list.forEach(item => {
+                      const clone = template.content.cloneNode(true);
+                      const card = clone.querySelector('.card');
+
+                      const image = card.querySelector('img');
+                      image.src = baseUrl + item.thumb;
+                      image.onerror = function () {
+                        // prevent an infinite loop is second image does not load
+                        image.onerror = null;
+                        image.src = baseUrl + 'doc-icon.png';
+                      }
+                      card.querySelector('.title').innerHTML = item.title;
+                      card.querySelector('.sub-title').innerHTML = item.subTitle;
+                      card.querySelector('.download').innerHTML = item.action;
+                      container.appendChild(clone);
+
+                    });
+
+                  }
+
+                  if (window.location.hostname.includes('local')) {
+                    window.addEventListener('load', (event) => {
+                      buildLibrary();
+                    });
+                  } else {
+                    buildLibrary();
+                  }
+
+
+                </script>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -108,31 +108,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="2728770f-e580-4d29-bc2c-1a5e9c183b65">
-
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
-                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
-                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
-
-                </script>
+              <inferno-snippet-content id="1e8f8408-3d23-47fd-85de-013c4bd1e292">
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -142,100 +118,135 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/agenda-logo-bg.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/breakout/player1-bg.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: right bottom;
+                    background-position: bottom left;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
+                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: 'gothamMed', sans-serif;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  }
+                </style>
+
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
                   }
 
-                  .top-banner {
-                    padding: 10px 50px;
-                    line-height: 60px;
-                    color: var(--branding-primary);
-                    font-size: 32px;
-                    background-color: #ffffff;
-
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
                   }
 
-                  .top-banner span {
-                    color: var(--sidebar-bg-color);
+                  .rightCol {
+                    margin: 0 5px;
                   }
 
-                  .top-banner img {
-                    float: right;
-                    width: 250px;
-                    margin: 13px 0;
+                  @media only screen and (max-width: 1024px) {
+                    .stage-grid, .leftCol, .rightCol {
+                      display: block;
+                      margin: 0 auto;
+                    }
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
                   }
 
-                  .grid {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    max-width: 80%;
-                    padding: 10px;
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
                   }
 
-                  .card {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: start;
-                    align-items: center;
-                    width: 200px;
-                    height: 250px;
-                    background-color: rgba(255, 255, 255, .4);
-                    border-radius: 1em;
-                    margin: 10px;
-                    padding: 10px;
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0;
                   }
+                </style>
+
+                <!-- group chat -->
+                <style>
+                  .group-chat {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    background-color: #ccc;
+                    text-align: center;
+                    border-radius: .5em;
+                  }
+
+                  .group-chat p {
+                    margin: 0;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .group-chat {
+                      position: relative;
+                      margin-top: 40px;
+                      width: 100%;
+                      height: 350px;
+                    }
+
+                  }
+                </style>
+
+                <!-- Poll Chat Tab -->
+                <style>
+
+                  .chat-iframe {
+                    height: 110%;
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                  }
+
                 </style>
 
 
                 <div class="content">
 
-                  <div class="top-banner">
-                    <span>Library</span>
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
-                  </div>
+                  <div class="stage-grid">
 
-                  <div class="grid">
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
+                    </div>
+
+                    <div class="rightCol">
+                      <div class="group-chat">
+                        <p>Live Chat</p>
+                        <iframe
+                            class="chat-iframe"
+                            src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=namd-fall-breakout-session&chatroomname=NAMD-Fall-Breakout-session-Chat">
+                        </iframe>
+                      </div>
+                    </div>
+
                   </div>
 
                 </div>
 
-
-                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
-                <script>
-                  if (!window.whiteHack) {
-                    console.log('loading color overrides for --branding-primary = white');
-                    const css = `
-                          jolo-search-box .search-box-container {display: none !important}
-                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
-                    `;
-                    const head = document.head || document.getElementsByTagName('head')[0];
-                    const style = document.createElement('style');
-                    style.appendChild(document.createTextNode(css));
-                    head.appendChild(style);
-                    window.whiteHack = true;
-                  }
-                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -372,6 +383,5 @@
   }
 
 </script>
-
 
 </html>
