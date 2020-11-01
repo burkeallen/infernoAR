@@ -102,21 +102,21 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="a7f4b31e-c8e7-4760-af59-25d8c3e596de">
 
-                <!-- Toggle Modal on and off -->
-                <script>
-                  function toggleModal(id) {
-                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/';
-                    alert(id);
-                  }
+<!--                &lt;!&ndash; Toggle Modal on and off &ndash;&gt;-->
+<!--                <script>-->
+<!--                  function toggleModal(id) {-->
+<!--                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/';-->
+<!--                    alert(id);-->
+<!--                  }-->
 
-                  function scrollTop() {
-                    window.scroll({
-                      top: 0,
-                      left: 0,
-                      behavior: 'smooth'
-                    });
-                  }
-                </script>
+<!--                  function scrollTop() {-->
+<!--                    window.scroll({-->
+<!--                      top: 0,-->
+<!--                      left: 0,-->
+<!--                      behavior: 'smooth'-->
+<!--                    });-->
+<!--                  }-->
+<!--                </script>-->
 
                 <!-- Container -->
                 <style>
@@ -239,6 +239,58 @@
 
                 </style>
 
+                <!-- PDF  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+                </style>
+
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view"  onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                </div>
+
                 <div class="content">
 
                   <div id="container">
@@ -337,7 +389,7 @@
 
                       const industryResearchCard = card.getElementById("industry-research-card");
                       industryResearchCard.onclick = function () {
-                        toggleModal(cardData.FileName);
+                        loadPDF(cardData.FileName);
                       }
 
                       industryResearchGrid.appendChild(card);
@@ -364,7 +416,7 @@
 
                       const sponsorInfoCardData = card.getElementById("sponsor-info-card");
                       sponsorInfoCardData.onclick = function () {
-                        toggleModal(cardData.FileName);
+                        loadPDF(cardData.FileName);
                       }
 
                       sponsorInfoGrid.appendChild(card);
@@ -379,7 +431,33 @@
                   } else  {
                     buildLibrary();
                   }
+                </script>
 
+                <!-- PDF -->
+                <script>
+                  function loadPDF(id) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/" + id + ".pdf";
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
                 </script>
 
                 <!-- Inferno Hacks -->
