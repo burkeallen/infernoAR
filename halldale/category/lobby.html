@@ -44,14 +44,77 @@
     var data = {}
     loadJSON('../liquid.json', function (response) {
       // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
+      const x = JSON.parse(response);
+      data = x[0];
+      console.log('liquid', data);
     })
 
   </script>
   <script>
-    let landingPageEl = null
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
   </script>
+
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password'
+      };
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain};
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem("domain", project.domain);
+          storeUser(JSON.parse(res));
+        },
+        error: function (err) {
+          alert(JSON.stringify(err));
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain);
+        }
+      });
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem("clientId", data.ClientId);
+      sessionStorage.setItem("token", data.AccessToken);
+      sessionStorage.setItem("refreshToken", data.RefreshToken);
+    }
+
+    function login() {
+      const currentProject = projects.filter(project => {
+        return project.name === 'halldale';
+      })[0];
+      if (!currentProject) {
+        alert('could not log into Inferno');
+      }
+      authenticate(currentProject);
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.web.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.web.config.js"></script>
+
 </head>
 
 <body>
@@ -208,6 +271,7 @@
                     background: white;
                     padding: .5em 0;
                   }
+
                   .fixed-sponsor {
                     width: 200px;
                     height: 100px;
@@ -218,8 +282,9 @@
                 <!-- Flickity carousel/slider  -->
                 <style>
                   .slider {
-                    margin-left: 210px;
+                    margin-left: calc(200px + 6em);
                   }
+
                   .slider img {
                     display: block;
                     width: 200px;
@@ -286,6 +351,8 @@
                     <div class="slider">
                       <img alt="Alsim"
                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_allsim.png">
+                      <img alt="AMST"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_amst.png">
                       <img alt="Avion Group"
                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_avion.png">
                       <img alt="Bihrle"
@@ -298,6 +365,8 @@
                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_entrol.png">
                       <img alt="FSC"
                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_fsc.png">
+                      <img alt="JetPubs"
+                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_jetpubs.png">
                       <img alt="PACE"
                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_pace.png">
                       <img alt="ProSim"
@@ -376,67 +445,30 @@
 
                 <!-- ##### ChatWee widget ##### -->
 
-                <script type="text/javascript">
-                  setTimeout(function () {
+                <!-- ##### chat widget ##### -->
 
-                    // don't load script if widget already on page
-                    var widget = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
-                    if (widget) return;
-
-
-                    //********************* the src is unique to each chatwee client/instance
-                    (function () {
-                      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                      s1.async = true;
-                      s1.src = 'https://chatwee-api.com/v2/script/5f7ef4b1ebaa9f3cf83ed7fa.js';
-                      s1.charset = 'UTF-8';
-                      s1.setAttribute('crossorigin', '*');
-                      s0.parentNode.insertBefore(s1, s0);
-                    })();
-                  }, 500);
-                </script>
-
-                <script type="text/javascript">
-                  setTimeout(function () {
-                    (function () {
-                      var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
-
-                      link1.setAttribute("rel", "stylesheet")
-                      link1.setAttribute("type", "text/css")
-                      link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
-                      link1.setAttribute("media", "all")
-                      body.parentNode.insertBefore(link1, body);
-                    })();
-                  }, 100);
-                </script>
-
-                {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
+                <!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
                 {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
-                {%- assign userLastName = data.CurrentViewingUser.LastName -%}
+                {%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
 
-                <!-- get duration till end of conference plus one day for buffer -->
-                {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
-                {%- assign lastEvent = eventsByDate.last -%}
 
-                {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
-                {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
-                {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
-
-                <!-- difference in seconds -->
-                {%- assign diffSeconds =  eventEnd | minus:nowTimestamp -%}
-                {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
-                {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
+                <div style="display:none;">
+                  <p id="user-inferno-first-name">${firstName}</p>
+                  <p id="user-inferno-last-name">${lastName}</p>
+                </div>
 
                 <script async>
 
-                  var userInfernoId = "{{ userInfernoId }}";
-                  var firstName = "{{ userFirstName }}";
-                  var lastName = "{{ userLastName }}";
+                  var userInfernoId = window.sessionStorage.getItem("userId");
+                  var firstName = window.isLocalTemplate ? 'TEST' : landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+                  var lastName = window.isLocalTemplate ? 'USER' : landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+
                   var chatDuration = "{{ chatDuration }}";
                   var hasProfileImage = false;
 
+                  // global chat manager
+                  var chatManager = null;
 
-                  //********************* change these values for your specific client/event
                   var chatweeValues = {
                     userIdKey: "chatwee-user-id",
                     sessionCookieKey: "chatwee-SID-5f7ef4b1ebaa9f3cf83ed7fa",
@@ -444,6 +476,71 @@
                     clientApiKey: "a6feff42c070b4633a876aec",
                     isAdmin: 0,
                     ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+                  }
+
+                  var loadChatScript = () => {
+                    // don't load script if already on page
+                    let chatScript = document.getElementById("chat-script");
+                    if (chatScript) return;
+
+                    (function () {
+                      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                      s1.id = "chat-script";
+                      s1.async = true;
+                      s1.src = 'https://static.chatwee-api.com/v2/script.js';
+                      s1.charset = 'UTF-8';
+                      s0.parentNode.insertBefore(s1, s0);
+                    })();
+
+                    return;
+                  }
+
+                  var loadChatStyles = () => {
+                    return;  // no custom styling for this instance
+
+                    // dont load styles if already on page
+                    // let chatStyleSheet = document.getElementById("chat-replacement-styling");
+                    // if (chatStyleSheet) return;
+                    //
+                    // (function () {
+                    //   var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+                    //
+                    //   link1.setAttribute("id", "chat-replacement-styling")
+                    //   link1.setAttribute("rel", "stylesheet")
+                    //   link1.setAttribute("type", "text/css")
+                    //   link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+                    //   link1.setAttribute("media", "all")
+                    //   body.parentNode.insertBefore(link1, body);
+                    // })();
+
+                    return;
+                  }
+
+                  var startChat = async () => {
+                    if (!chatManager) {
+                      chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+                      chatManager.Run();
+                    }
+                  }
+
+                  var openChat = () => {
+                    // close bubble
+                    let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+                    let bubble = bubbleChild.parentNode;
+                    bubble.style.display = "none";
+
+                    // open chat
+                    let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
+                    let chat = chatChild.parentNode;
+                    chat.style.display = "block";
+                    return;
+                  }
+
+                  // Chatwee UserId must be set as the Id for the button
+                  var triggerConversation = e => {
+                    let userId = e.target.id;
+                    openChat();
+                    chatManager.TriggerConversation(userId);
                   }
 
                   // helper functions
@@ -469,13 +566,27 @@
                   }
 
                   var validateChatSessionId = sessionId => {
-                    const url = chatweeValues.ssoBaseUrl + "validate-session?" + "chatId=" + chatweeValues.chatId + "&clientKey=" + chatweeValues.clientApiKey + "&sessionId=" + sessionId;
+                    const url = chatweeValues.ssoBaseUrl
+                      + "validate-session?"
+                      + "chatId="
+                      + chatweeValues.chatId
+                      + "&clientKey="
+                      + chatweeValues.clientApiKey
+                      + "&sessionId="
+                      + sessionId;
 
                     return fetch(url).then(res => res.json());
                   }
 
                   var loginChat = userId => {
-                    const url = chatweeValues.ssoBaseUrl + "login?" + "chatId=" + chatweeValues.chatId + "&clientKey=" + chatweeValues.clientApiKey + "&userId=" + userId;
+                    const url = chatweeValues.ssoBaseUrl
+                      + "login?"
+                      + "chatId="
+                      + chatweeValues.chatId
+                      + "&clientKey="
+                      + chatweeValues.clientApiKey
+                      + "&userId="
+                      + userId;
 
                     return fetch(url).then(res => res.json());
                   }
@@ -484,7 +595,7 @@
                     const name = firstName + " " + lastName;
 
                     // TO DO: get default chat icon
-                    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-chat-icon.png";
+                    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/chatwee/_avatar.jpg";
 
                     if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
 
@@ -552,8 +663,7 @@
                       let sessionId = ""
                       try {
                         sessionId = await loginChat(userId);
-                      }
-                      catch (e) {
+                      } catch (e) {
                         throw new Error(e);
                       }
 
@@ -569,19 +679,31 @@
                     return fetch(url);
                   }
 
-                  var makeCalls = async () => {
+                  var waitForGlobal = async (key, callback1, callback2) => {
+                    if (window[key]) {
+                      await callback1();
+                      await callback2();
+                    } else {
+                      setTimeout(function () {
+                        waitForGlobal(key, callback1, callback2);
+                      }, 100);
+                    }
+                  };
+
+                  var setUpChat = async () => {
+                    loadChatScript();
+                    loadChatStyles();
                     const res = await getProfileImage();
                     if (res.status === 200) {
                       hasProfileImage = true;
                     }
-                    connectChat();
+
+                    waitForGlobal("ChatweeLib", connectChat, startChat);
                   }
 
-                  makeCalls();
+                  setUpChat();
 
                 </script>
-
-
                 <!-- ##### end of  chat widget ##### -->
 
               </inferno-snippet-content>
