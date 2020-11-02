@@ -241,18 +241,31 @@
                   .modal-window.open {
                     opacity: 1;
                     pointer-events: auto;
-                    display: inline-block;
                     z-index: 999;
-                    padding: 5%;
-                    margin: 0 auto;
+                    padding-top: 5%;
+                    display: flex;
+                    justify-content: center;
                   }
 
-                  .modal-window > div {
+                  .modal-window .contentWrapper {
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                  }
+
+                  .modal-window .modal-box {
                     position: relative;
                     min-width: 400px;
                     width: 80%;
-                    margin: 2% auto 15% auto;
-                    padding: 2rem;
+                    margin: 2% auto;
+                    padding: 2rem 0;
+                    background-color: transparent;
+                    border: none;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
                   }
 
                   .modal-window header {
@@ -275,12 +288,6 @@
                     color: #fff;
                     cursor: pointer;
                   }
-
-                  .modal-window h1 {
-                    font-size: 150%;
-                    margin: 0 0 15px;
-                  }
-
 
                   .modal-grid {
                     display: grid;
@@ -384,17 +391,14 @@
                     clone.querySelector('.right').innerHTML = user.bio;
                     contentWrapper.appendChild(clone);
                     const modal = landingPageEl.querySelector('#open-modal');
+                    setModalPosition(modal);
                     modal.classList.toggle('open');
-                    // scrollTop();
                   }
 
-                  function scrollTop() {
-                    window.scroll({
-                      top: 0,
-                      left: 0,
-                      behavior: 'smooth'
-                    });
+                  function setModalPosition(el) {
+                    el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
                   }
+
                 </script>
 
                 <div class="content">
@@ -415,12 +419,11 @@
                   </template>
 
                   <div id="open-modal" class="modal-window">
-                    <div>
+                    <div class="modal-box">
                       <div title="Close" class="modal-close">Close</div>
                       <div class="contentWrapper"></div>
                     </div>
                   </div>
-
 
                 </div>
 
@@ -1013,18 +1016,48 @@
 
                   }
 
-                  if (window.location.hostname.includes('local')) {
+                  if (window.location.hostname.includes('local') || window.location.hostname.includes('127.0.0.1') ) {
                     window.addEventListener('load', (event) => {
                       buildSpeakers();
                       console.log('The page has fully loaded');
                     });
-                  } else  {
+                  } else {
                     buildSpeakers();
                   }
 
 
                 </script>
 
+                <!-- Tawk Clearing Code -->
+                <script type="text/javascript">
+                  setTimeout(function () {
+                    // Clear iframes (with title "chat widget")
+                    var iframes = document.querySelectorAll('iframe');
+                    for (var i = 0; i < iframes.length; i++) {
+                      if (iframes[i].title.toLowerCase() === 'chat widget') {
+                        iframes[i].parentNode.removeChild(iframes[i]);
+                      }
+                    }
+
+                    // Check for Tawk instance
+                    if (window.Tawk_API) {
+                      // Let's hide it / end the chat / destroy all Tawk props on the window
+                      window.Tawk_API.hideWidget();
+                      window.Tawk_API.endChat();
+                      Object.keys(window).forEach(function (key) {
+                        if (key.toLowerCase().indexOf('tawk') > -1) {
+                          delete window[key];
+                        }
+                      });
+
+
+
+                      // Clear
+                      window.Tawk_API = null;
+                    }
+                  }, 1500);
+                </script>
+                <!-- End Tawk Clearing Code -->
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

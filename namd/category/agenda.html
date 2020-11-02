@@ -296,6 +296,10 @@
                     margin-top: 0.5rem;
                   }
 
+                  .menu div:last-child {
+                    padding-bottom: 40px;
+                  }
+
                   .date-block .header {
                     display: flex;
                     justify-content: space-between;
@@ -351,7 +355,7 @@
                   .keynote .header {
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-start;
+                    justify-content: space-between;
                     min-width: 261px;
                     background-color: unset;
                   }
@@ -364,8 +368,13 @@
                     text-align: center;
                   }
 
+                  .join-btns {
+                    width: 100%;
+                  }
+
                   .event-link {
-                    width: 80%;
+                    display: block;
+                    width: 100%;
                     margin-top: 1rem;
                     text-align: center;
                     background-color: #021F49;
@@ -486,6 +495,7 @@
                       flex-direction: column;
 
                     }
+
                     .body {
                       width: 100%;
                     }
@@ -493,6 +503,7 @@
                     .text {
                       width: 100%;
                     }
+
                     .speaker-info {
                       flex-direction: column;
                     }
@@ -587,22 +598,25 @@
                     <div id="box" class="keynote">
                       <div class="header">
                         <h1 id="time-auditorium"></h1>
-                        <a href="" id="event-link" class="event-link">Join Now</a>
+                        <div class="join-btns">
+                        </div>
                       </div>
                       <div id="keynote-card-body" class="body">
                         <div class="text">
                           <h2 id="event-title"></h2>
                           <div id="event-details-container">
-                            <p id="event-details"><button
-                                id="dropdown-button-speaker"
-                                class="dropdown-speaker"
-                                onclick="toggleExpandSpeaker(event)"
-                                style="display: none;"
-                            >
+                            <p id="event-details">
+                              <button
+                                  id="dropdown-button-speaker"
+                                  class="dropdown-speaker"
+                                  onclick="toggleExpandSpeaker(event)"
+                                  style="display: none;"
+                              >
                                   <span id="dropdown-button-speaker-text"
                                   >Read More...</span
                                   >
-                            </button></p>
+                              </button>
+                            </p>
                           </div>
 
                           <div id="speaker-container" style="display: none">
@@ -617,7 +631,7 @@
                             </div>
                           </div>
                         </div>
-                        <hr />
+                        <hr/>
                       </div>
                     </div>
                   </template>
@@ -638,6 +652,10 @@
                   var baseUrlTwo =
                     "https://studio304nextechar.freetls.fastly.net/infernoAR/cagc/speaker_imgs/";
 
+                  var mainStage = '/videos/8cf4b3da-9136-4aed-2ee9-08d85e382ebe/landing/0e78b0d3-14be-4481-b5d1-51b8ba4369b1';
+                  var exhibitHall = '/videos/7d904ee8-f7aa-48f9-8ab5-08d86def408e/landing/308fb5cb-4101-4e02-a6f1-83b9c42a71c5';
+                  var joinNowText = 'Join Now';
+                  var exhibitHallText = 'Exhibit Hall';
                   var events = [
                     {
                       day: 1,
@@ -646,6 +664,8 @@
                       timeAuditorium: "3:30PM – 5:00PM",
                       eventTitle: "VIRTUAL EXHIBIT HALL Opening Reception",
                       eventDetails: `Join us as we officially kick off the NAMD 2020 Virtual Conference.  Matt Salo, Executive Director of NAMD, will provide brief remarks and will provide an overview of the virtual conference platform.`,
+                      join1: {url: mainStage, text: joinNowText},
+                      join2: {url: exhibitHall, text: exhibitHallText},
                       speakers: [
                         {
                           type: 0,
@@ -664,6 +684,7 @@
                       eventTitle: "MEDICAID DIRECTOR MEET & GREET SESSIONS WITH SPONSORS",
                       eventDetails: `Medicaid Directors and senior state leaders will meet one-on-one with sponsors in 15 minute meet and greets to learn about the latest solutions and strategies to help with their biggest challenges.`,
                       speakers: null,
+                      join1: {url: 'https://match.eventdex.com/login', text: joinNowText},
                     },
                     {
                       day: 2,
@@ -673,6 +694,7 @@
                       eventTitle: "NAMD WELLNESS CHALLENGE: DAY ONE! <br><i>Sponsored by Centene</i>",
                       eventDetails: `Wakeup and workout with the Pro-Football Hall of Fame, sponsored by Centene!  Join us to get your heart pumping during an interactive virtual workout with one of the Pro-Football Hall of Fame's Gold Jacket recipients.  This workout is guaranteed to energize you for a full day of learning and networking.`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText}
                     },
                     {
                       day: 2,
@@ -682,6 +704,7 @@
                       eventTitle: "BREAKFAST WITH SPONSORS",
                       eventDetails: `Grab your breakfast and a cup of coffee and join us in the Virtual Exhibit Hall to explore the latest solutions from our Industry partners. This is a great time to score some points in the <u>Exhibit Hall Impact Challenge</u>! Details on how to participate coming soon.`,
                       speakers: null,
+                      join1: {url: exhibitHall, text: exhibitHallText}
                     },
                     {
                       day: 2,
@@ -690,6 +713,7 @@
                       timeAuditorium: "11:00AM – 11:15AM",
                       eventTitle: "WELCOME + OPENING REMARKS",
                       eventDetails: `Join NAMD leadership as we set the stage for this years exciting line-up of sessions and events.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 0,
@@ -715,6 +739,7 @@
                       timeAuditorium: "11:15AM – 12:15PM",
                       eventTitle: "PLENARY SESSION WHOA 2020",
                       eventDetails: `This plenary session will reflect on how health and the health care system has changed in the last year. It will level-set on the big picture and recognize the challenges that states and Medicaid agencies have gone through in 2020 and how we might emerge in the near future.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 1,
@@ -784,6 +809,10 @@
                       eventTitle:
                         "BREAKOUT 1 <br>COVID Testing and Vaccines: How Are Medicaid and Public Health Partnering?",
                       eventDetails: `A panel of Medicaid Directors and State Public Health Officers will talk about how they have collaborated and navigated through testing over the last year and their respective roles for the next six months and beyond, including planning around how to make a vaccine available to Medicaid members`,
+                      join1: {
+                        url: '/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/ebdc2ad7-6d2f-4594-ae39-5b957a596967',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -826,6 +855,10 @@
                       timeAuditorium: "",
                       eventTitle: "BREAKOUT 2 <br>What’s the Economic Outlook for Medicaid?",
                       eventDetails: `Medicaid Directors will share how they are modeling out the economic outlook for states and how this recession is different from 2008. They will talk about where they think we will be this time next year. `,
+                      join1: {
+                        url: 'https://namd.live/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/7a89deb9-4d7f-4354-a1a8-6e7433f3d7da',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -874,6 +907,10 @@
                       eventTitle:
                         "BREAKOUT 3 <br>How Will Medicaid Leverage Innovations in Care Delivery in 2021?",
                       eventDetails: `COVID-19’s impacts on care delivery across sectors has been pronounced. This panel will explore how efforts to reform payment and delivery systems were impacted by the pandemic and what new opportunities are emerging in 2021.`,
+                      join1: {
+                        url: '/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/06190df6-ce45-4bc6-8770-57da8178f39b',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -916,6 +953,10 @@
                       timeAuditorium: "",
                       eventTitle: "BREAKOUT 4 <br>Perspectives from the Territories",
                       eventDetails: `Medicaid Directors from the territories will talk about how they have navigated the last several months and what is top of mind as they look forward to next year. `,
+                      join1: {
+                        url: '/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/3955d1da-71cb-489f-a5eb-a9e490b88cfb',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -966,14 +1007,16 @@
                       eventTitle: "LUNCH<br><i>Sponsored by UnitedHealthcare</i>",
                       eventDetails: `Join fellow attendees and UnitedHealthcare as we highlight Martha's Table, a non-profit in DC whose mission is to support strong children, strong families, and strong communities by increasing access to high-quality education, healthy food, and family and community supports.  UnitedHealthcare will make a donation to Martha's Table for every person who joins this event.  Make sure you participate to help make a difference!`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText}
                     },
                     {
                       day: 2,
                       eventId: "",
                       eventLink: "",
                       timeAuditorium: "1:45PM – 2:15PM",
-                      eventTitle: "KEYNOTE SPEAKER<br><i>Sponsored by Vertex Pharmaceuticals</i>",
-                      eventDetails: `Session details TBA.`,
+                      eventTitle: "KEYNOTE SPEAKER<br><i>Sponsored by Vertex Pharmaceuticals</i><br><b>Toward a Future of True Health Equity</b>",
+                      eventDetails: `Dr. Dayna Matthew will address the challenges and opportunities on the longstanding racial and ethnic disparities that impact not just Medicaid and the broader health care system, but American society as a whole.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 0,
@@ -993,6 +1036,7 @@
                       eventTitle:
                         "BREAK + MEMBER PERSPECTIVE VIDEO SEGMENT<br><i>Sponsored by DentaQuest</i>",
                       eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: null,
                     },
                     {
@@ -1012,6 +1056,10 @@
                       eventTitle:
                         "BREAKOUT 1<br>Navigating the Public Health Emergency: How Medicaid and CHIP Programs are Responding",
                       eventDetails: `When the Public Health Emergency (PHE) lifts, Medicaid programs will need to “unwind” flexibilities and changes put in place to address the COVID crisis. Medicaid Directors from Florida, Georgia and Oregon and CMCS will talk about the operational challenges states are facing with eligibility and enrollment, provider payment changes, and provider enrollment, among other issues. `,
+                      join1: {
+                        url: '/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/05c13a06-04ba-4ff3-8eac-85b416f8978c',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -1052,6 +1100,10 @@
                       timeAuditorium: "",
                       eventTitle: "BREAKOUT 2<BR>Medicaid Forward: Re-envisioning Behavioral Health Care",
                       eventDetails: `This session will explore the vulnerabilities of our behavioral health system that have been revealed over the last six months by the pandemic. We will then discuss opportunities to change how we approach and treat behavioral health in the future.  `,
+                      join1: {
+                        url: '/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/ec6b8da2-cae5-4510-9e20-9426b6294bad',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -1091,6 +1143,10 @@
                       eventTitle:
                         "BREAKOUT 3<BR>Medicaid Forward: Re-envisioning Long-Term Services and Supports",
                       eventDetails: `The pandemic laid bare profound vulnerabilities in our health care system, with long-term services and supports being front and center. We will hear perspectives from Medicaid Directors and a federal leader about how they are thinking about our new normal and what comes next.`,
+                      join1: {
+                        url: 'https://namd.live/videos/618ceaca-ea47-4365-9aa4-08d85e2ed553/detail/ab4fff4f-317a-4ddc-a409-06b1c9d0a2fc',
+                        text: joinNowText
+                      },
                       speakers: [
                         {
                           type: 1,
@@ -1132,6 +1188,7 @@
                       eventTitle: "BREAK + MEMBER PERSPECTIVE VIDEO SEGMENT",
                       eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText},
                     },
                     {
                       day: 2,
@@ -1141,6 +1198,10 @@
                       eventTitle: "NETWORKING WITH PEERS",
                       eventDetails: `Medicaid Directors will be randomly assigned to small Zoom room groups where they can spontaneously connect with each other live. There is no agenda and no pre-set questions – just time to catch up with each other and hear how other Directors are doing!`,
                       speakers: null,
+                      join1: {
+                        url: '/videos/e83511ea-32de-44f0-d55e-08d87d4fa71b/landing/713c8ebb-9ba3-4f21-82ab-4ac9a04d8c72',
+                        text: joinNowText
+                      },
                     },
                     {
                       day: 2,
@@ -1150,6 +1211,7 @@
                       eventTitle: "VIRTUAL EXHIBIT HALL",
                       eventDetails: `Join us in the Virtual Exhibit Hall to discover the latest offerings from our industry partners.  Remember, every visit to an Exhibit Booth earns you points toward the Exhibit Hall Impact Challenge.  Details on how to participate coming soon.`,
                       speakers: null,
+                      join1: {url: exhibitHall, text: exhibitHallText},
                     },
                     {
                       day: 2,
@@ -1159,6 +1221,7 @@
                       eventTitle: "MEDICAID DIRECTOR MEET & GREET SESSION WITH SPONSORS",
                       eventDetails: `Medicaid Directors and senior state leaders will meet one-on-one with sponsors in 15 minute meet and greets to learn about the latest solutions and strategies to help with their biggest challenges.`,
                       speakers: null,
+                      join1: {url: 'https://match.eventdex.com/login', text: joinNowText},
                     },
                     {
                       day: 2,
@@ -1168,6 +1231,7 @@
                       eventTitle: "EVENING GATHER & GIVE EVENT <br><i>Sponsored by Anthem</i>",
                       eventDetails: `Join Anthem and fellow attendees for a special evening event highlighting a group of nonprofits from across the US.  This is an incredible opportunity for you to make an impact on one of the nonprofits showcased by casting a vote. Anthem will match each vote with a donation.`,
                       speakers: null,
+                      join1: {url: 'javascript:alert("need zoom link");', text: joinNowText},
                     },
                     {
                       day: 3,
@@ -1177,6 +1241,7 @@
                       eventTitle: "NAMD Wellness Challenge: Day Two!<br><i>Sponsored by Centene</i>",
                       eventDetails: `Wakeup and workout with the Pro-Football Hall of Fame, sponsored by Centene! Join us to get your heart pumping during an interactive virtual workout with one of the Pro-Football Hall of Fame's Gold Jacket recipients. This workout is guaranteed to energize you for a full day of learning and networking.`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText}
                     },
                     {
                       day: 3,
@@ -1186,6 +1251,7 @@
                       eventTitle: "BREAKFAST with Sponsors",
                       eventDetails: `Grab your breakfast and a cup of coffee and join us in the Virtual Exhibit Hall to explore the latest solutions from our Industry partners. This is a great time to score some points in the Exhibit Hall Impact Challenge! Details on how to participate coming soon.`,
                       speakers: null,
+                      join1: {url: exhibitHall, text: exhibitHallText}
                     },
                     {
                       day: 3,
@@ -1195,6 +1261,7 @@
                       eventTitle:
                         "PLENARY SESSION<br>Rising to the Challenge: Advancing Medicaid in the Post-Pandemic World ",
                       eventDetails: `Medicaid Directors will look forward to the next two to five years and reflect on the future of the program post-COVID, and how Medicaid’s leadership and innovation through the public health emergency will shape that future.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 1,
@@ -1238,6 +1305,7 @@
                         "BREAK + MEMBER PERSPECTIVE VIDEO SEGMENT<br><i>Sponsored by 3M Health Information Systems</i>",
                       eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText}
                     },
                     {
                       day: 3,
@@ -1256,6 +1324,7 @@
                       eventTitle:
                         "BREAKOUT 1<br>Planning for the Future: State Perspectives Beyond Medicaid",
                       eventDetails: `Medicaid is one component of the broader state response to COVID and the recession it is leaving in its wake. We will explore how governors, state budget officers, and legislatures are responding to the economic downturn and planning for an uncertain future, and what this might mean for Medicaid. `,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 1,
@@ -1297,6 +1366,7 @@
                       timeAuditorium: "",
                       eventTitle: "BREAKOUT 2<br>Medicaid Forward: Re-envisioning Pediatric Care",
                       eventDetails: `Panelists in this session will describe the impact the pandemic had on pediatric care for kids covered by Medicaid. They will also share how we all might re-envision how we deliver pediatric care moving forward. `,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 1,
@@ -1339,6 +1409,7 @@
                       eventTitle:
                         "BREAKOUT 3<br>Health Equity: Medicaid’s Unique Opportunity and Obligation to Advance Health Equity",
                       eventDetails: `This panel will discuss how Medicaid Directors are seeking to better understand and to erase inequity and create meaningful opportunities for good health and well-being for Black, Indigenous and People of Color.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 1,
@@ -1396,6 +1467,7 @@
                       eventTitle: "LUNCH<br><i>Sponsored by PhRMA</i>",
                       eventDetails: `Session details TBA.`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText}
                     },
                     {
                       day: 3,
@@ -1405,6 +1477,7 @@
                       eventTitle:
                         "PLENARY SESSION<br>A Message from The Centers for Medicare and Medicaid Services (CMS)",
                       eventDetails: `Session overview TBA.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 0,
@@ -1424,6 +1497,7 @@
                         "BREAK + MEMBER PERSPECTIVE VIDEO SEGMENT<br><i>Sponsored by 3M Health Information Systems</i>",
                       eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
                       speakers: null,
+                      join1: {url: mainStage, text: joinNowText},
                     },
                     {
                       day: 3,
@@ -1432,7 +1506,15 @@
                       timeAuditorium: "2:00PM – 2:35PM",
                       eventTitle: "PLENARY SESSION<br>Looking Ahead to 2021 and Beyond",
                       eventDetails: `Former senior officials from the Trump and Obama Administrations will share their perspectives on what the health care landscape might look like over the next four years.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
+                        {
+                          type: 2,
+                          name: "Sarah Kliff",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Investigative Reporter, The New York Times",
+                          speakerBio: ``,
+                        },
                         {
                           type: 2,
                           name: "Scott Gottlieb",
@@ -1456,6 +1538,7 @@
                       timeAuditorium: "2:35PM – 2:45PM",
                       eventTitle: "CLOSING REMARKS",
                       eventDetails: `Join us as NAMD Executive Director, Matt Salo, closes out the NAMD 2020 Virtual Conference.`,
+                      join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
                           type: 0,
@@ -1474,6 +1557,7 @@
                       eventTitle: "VIRTUAL EXHIBIT HALL",
                       eventDetails: `Join us in the Virtual Exhibit Hall to explore the latest solutions from our industry partners. Remember, every visit to an Exhibit Booth earns you points toward the <u>Exhibit Hall Impact Challenge</u>!`,
                       speakers: null,
+                      join1: {url: exhibitHall, text: exhibitHallText},
                     },
                     {
                       day: 3,
@@ -1483,6 +1567,7 @@
                       eventTitle: "MEDICAID DIRECTOR MEET & GREET SESSION WITH SPONSORS",
                       eventDetails: `Medicaid Directors and senior state leaders will meet one-on-one with sponsors in 15 minute meet and greets to learn about the latest solutions and strategies to help with their biggest challenges.`,
                       speakers: null,
+                      join1: {url: 'https://match.eventdex.com/login', text: joinNowText},
                     },
                   ];
 
@@ -1507,11 +1592,22 @@
                       let timeAuditorium = clone.getElementById("time-auditorium");
                       timeAuditorium.innerHTML = event.timeAuditorium.toUpperCase();
 
-                      let eventLink = clone.getElementById("event-link");
-                      if (event.eventLink != null){
-                        eventLink.href = event.eventLink;
-                      } else {
-                        eventLink.style.display = "none";
+                      const joinButtons = clone.querySelector('.join-btns');
+
+                      if (event.join1) {
+                        const joinLink = document.createElement('a');
+                        joinLink.classList.add('event-link');
+                        joinLink.innerHTML = event.join1.text;
+                        joinLink.href = event.join1.url;
+                        joinButtons.appendChild(joinLink);
+                      }
+
+                      if (event.join2) {
+                        const joinLink = document.createElement('a');
+                        joinLink.classList.add('event-link');
+                        joinLink.innerHTML = event.join2.text;
+                        joinLink.href = event.join2.url;
+                        joinButtons.appendChild(joinLink);
                       }
 
 
@@ -1649,6 +1745,31 @@
                 </script>
 
                 <!-- ./ Expand scripts -->
+                <!-- Tawk Clearing Code -->
+                <script type="text/javascript">
+                  setTimeout(function () {
+                    if (!window.Tawk_API) return; // if it does not exist no need to continue
+
+                    // Else Let's hide it / end the chat / destroy all Tawk.to props on the window
+                    window.Tawk_API.hideWidget();
+                    window.Tawk_API.endChat();
+                    Object.keys(window).forEach(function (key) {
+                      if (key.toLowerCase().includes('tawk')) {
+                        delete window[key];
+                      }
+                    });
+                    delete window.Tawk_API;
+
+                    let iframes = document.querySelectorAll('iframe');
+                    iframes.forEach(item => {
+                      if (item.title.toLowerCase().includes('chat widget')) {
+                        item.parentNode.removeChild(item);
+                      }
+                    })
+
+                  }, 1500);
+                </script>
+                <!-- End Tawk Clearing Code -->
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

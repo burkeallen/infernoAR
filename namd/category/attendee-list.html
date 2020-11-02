@@ -596,7 +596,35 @@
 
                 </script>
 
+                <!-- Tawk Clearing Code -->
+                <script type="text/javascript">
+                  setTimeout(function () {
+                    // Clear iframes (with title "chat widget")
+                    var iframes = document.querySelectorAll('iframe');
+                    for (var i = 0; i < iframes.length; i++) {
+                      if (iframes[i].title.toLowerCase() === 'chat widget') {
+                        iframes[i].parentNode.removeChild(iframes[i]);
+                      }
+                    }
+                    // Check for Tawk instance
+                    if (window.Tawk_API) {
+                      // Let's hide it / end the chat / destroy all Tawk props on the window
+                      window.Tawk_API.hideWidget();
+                      window.Tawk_API.endChat();
+                      Object.keys(window).forEach(function (key) {
+                        if (key.toLowerCase().indexOf('tawk') > -1) {
+                          delete window[key];
+                        }
+                      });
 
+
+
+                      // Clear
+                      window.Tawk_API = null;
+                    }
+                  }, 1500);
+                </script>
+                <!-- End Tawk Clearing Code -->
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
