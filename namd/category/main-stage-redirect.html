@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,58 +108,120 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="xxxxxxxxx-xxxxxx-xxxxxxxxx-xxxxxxxx">
-
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2');
-
-                </script>
+              <inferno-snippet-content id="0e78b0d3-14be-4481-b5d1-51b8ba4369b1">
 
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-
                   .content {
-                    background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
+                    background-color: var(--sidebar-bg-color);
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                    color: white;
+
                   }
+
                 </style>
 
                 <div class="content">
 
-                  <h2>Liquid Parsing Template</h2>
-                  <p><strong>This is text from the data object:</strong> {{ data.sample }}</p>
-                  <p><strong>This is the data object:</strong> {{ data | json }} </p>
+                  <div>
+                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
+                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
+                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
+                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>
+                    <!-- Sort events by start time -->
+                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
+
+                    <!-- Set nextEvent so we know if no upcoming event is found -->
+                    {% assign nextEvent = 'No Event' %}
+
+                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
+
+<!--                    <h2>Current Category</h2>-->
+<!--                    <ul>-->
+<!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
+<!--                      <li>{{ currentCategory }}</li>-->
+<!--                    </ul>-->
+
+                    <!-- Iterate the sorted events -->
+                    {% for event in sortedEvents %}
+
+                    <!-- Check the event category ID matches this page category ID -->
+                    {% assign thisCategory = event.FirstCategoryId | downcase %}
+                    {% if thisCategory != currentCategory%}
+                    <!-- ... and if not, skip iteration -->
+<!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
+<!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
+                    {% continue %}
+                    {% endif %}
+
+                    <!-- The end time is start timestamp added to video duration -->
+                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
+
+                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
+                    {% if currentTime  > endTime  %}
+<!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
+<!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
+                    {% assign nextEvent = event %}
+                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
+                    {% continue %}
+                    <!-- ...otherwise... -->
+                    {% else %}
+                    <!-- ... we set this as our next upcoming event and ... -->
+                    {% assign nextEvent = event %}
+                    {% endif %}
+
+                    <!-- ...break the iteration loop. -->
+                    {% break %}
+
+                    {% endfor %}
+
+                    <!-- If the loop didn't find any upcoming events,... -->
+                    {% if nextEvent == 'No Event' %}
+<!--                    <h1> No Sessions or Events are Currently Available </h1>-->
+<!--                    <p>Check Back Later</p>-->
+                    {% else %}
+                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
+                    <!-- set display: none when in production -->
+                    <h1> Enter the Current or Upcoming Session </h1>
+                    <p>{{nextEvent.Name}}</p>
+                    <a id="redirect-link"
+                       href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
+                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+                    </a>
+                    {% endif %}
+
+                    <script type="text/javascript">
+                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
+                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
+                      }
+                    </script>
+                  </div>
+
+                  <div style="text-align:center; padding:20%">
+                    <h1>Checking to see what room to take you too.</h1>
+                    <p>If you are not redirected, then there are no events are currently Scheduled - check back
+                       later</p>
+                  </div>
 
                 </div>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
                 <!-- Tawk Clearing Code -->
                 <script type="text/javascript">
                   setTimeout(function () {
@@ -181,8 +243,6 @@
                           delete window[key];
                         }
                       });
-
-
 
                       // Clear
                       window.Tawk_API = null;
