@@ -44,13 +44,15 @@
     var data = {}
     loadJSON('../liquid.json', function (response) {
       // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
+      const x = JSON.parse(response);
+      data = x[0];
+      console.log('liquid', data);
     })
 
   </script>
   <script>
-    let landingPageEl = null
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
   </script>
 
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
@@ -111,7 +113,7 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" src="/inferno.web.config.js"></script>
+  <script onload="login()" onerror="console.error('/inferno.web.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.web.config.js"></script>
 
 </head>
 
@@ -458,8 +460,8 @@
                 <script async>
 
                   var userInfernoId = window.sessionStorage.getItem("userId");
-                  var firstName = landingPageEl.getElementById("user-inferno-first-name").innerHTML;
-                  var lastName = landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+                  var firstName = window.isLocalTemplate ? 'TEST' : landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+                  var lastName = window.isLocalTemplate ? 'USER' : landingPageEl.getElementById("user-inferno-last-name").innerHTML;
 
                   var chatDuration = "{{ chatDuration }}";
                   var hasProfileImage = false;
@@ -469,9 +471,9 @@
 
                   var chatweeValues = {
                     userIdKey: "chatwee-user-id",
-                    sessionCookieKey: "chatwee-SID-5f5f60102f3d91228471fce6",
-                    chatId: "5f5f60102f3d91228471fce6",
-                    clientApiKey: "152e1956ee640cb1c6eef961",
+                    sessionCookieKey: "chatwee-SID-5f7ef4b1ebaa9f3cf83ed7fa",
+                    chatId: "5f7ef4b1ebaa9f3cf83ed7fa",
+                    clientApiKey: "a6feff42c070b4633a876aec",
                     isAdmin: 0,
                     ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
                   }
@@ -494,26 +496,24 @@
                   }
 
                   var loadChatStyles = () => {
+                    return;  // no custom styling for this instance
+
                     // dont load styles if already on page
-                    let chatStyleSheet = document.getElementById("chat-replacement-styling");
-                    if (chatStyleSheet) return;
-
-                    (function () {
-                      var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
-
-                      link1.setAttribute("id", "chat-replacement-styling")
-                      link1.setAttribute("rel", "stylesheet")
-                      link1.setAttribute("type", "text/css")
-                      link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
-                      link1.setAttribute("media", "all")
-                      body.parentNode.insertBefore(link1, body);
-                    })();
+                    // let chatStyleSheet = document.getElementById("chat-replacement-styling");
+                    // if (chatStyleSheet) return;
+                    //
+                    // (function () {
+                    //   var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+                    //
+                    //   link1.setAttribute("id", "chat-replacement-styling")
+                    //   link1.setAttribute("rel", "stylesheet")
+                    //   link1.setAttribute("type", "text/css")
+                    //   link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+                    //   link1.setAttribute("media", "all")
+                    //   body.parentNode.insertBefore(link1, body);
+                    // })();
 
                     return;
-                  }
-
-                  var loadChatStyles = () => {
-
                   }
 
                   var startChat = async () => {
@@ -521,7 +521,6 @@
                       chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
                       chatManager.Run();
                     }
-                    return;
                   }
 
                   var openChat = () => {
@@ -534,7 +533,6 @@
                     let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
                     let chat = chatChild.parentNode;
                     chat.style.display = "block";
-
                     return;
                   }
 
@@ -597,7 +595,7 @@
                     const name = firstName + " " + lastName;
 
                     // TO DO: get default chat icon
-                    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-chat-icon.png";
+                    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/chatwee/_avatar.jpg";
 
                     if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
 
@@ -665,8 +663,7 @@
                       let sessionId = ""
                       try {
                         sessionId = await loginChat(userId);
-                      }
-                      catch (e) {
+                      } catch (e) {
                         throw new Error(e);
                       }
 
@@ -696,8 +693,6 @@
                   var setUpChat = async () => {
                     loadChatScript();
                     loadChatStyles();
-                    hackChat();
-
                     const res = await getProfileImage();
                     if (res.status === 200) {
                       hasProfileImage = true;
