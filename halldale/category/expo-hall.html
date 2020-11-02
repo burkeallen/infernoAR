@@ -233,6 +233,10 @@
                     width: 420px;
                   }
 
+                  .silver {
+                    width: 310px;
+                  }
+
                   .card-top {
                     display: flex;
                     flex-direction: row;
@@ -272,26 +276,33 @@
                   }
 
                   .diamond .level {
-                    background-color: rgba(192, 192, 192, .6);
+                    background-color: rgba(0, 0, 0, .6);
                     left: -6%;
+                    color: white;
                   }
+
+                  .silver .level {
+                    background-color: rgba(192, 192, 192, .6);
+                    left: -8%;
+                  }
+
 
                   .bronze .level {
                     background-color: rgba(184, 72, 1, .6);
                   }
 
                   .booth-happenings {
-                    position: absolute;
-                    top: 100px;
-                    right: 40px;
-                    font-size: .75em;
-                    line-height: 1.25em;
+                    position: relative;
+                    font-size: 1.25em;
+                    line-height: 1.75em;
                     text-align: center;
                     color: white;
                     background-color: var(--sidebar-bg-color);
                     border: none;
                     cursor: pointer;
                     padding: .25em 1em;
+                    float: right;
+                    margin: 1em;
                   }
 
                   .booth-happenings:hover {
@@ -307,11 +318,15 @@
 
                   <div class="top-banner">
                     <span>Exhibit Hall</span>
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/global-atvs-logo.png">
-                    <a class="booth-happenings" href="#" target="_blank">On Booth Happenings</a>
+                    <img
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/global-atvs-logo.png">
                   </div>
 
                   <div class="hero">Hero Banner - need image</div>
+
+                  <div class="button-banner">
+                    <a class="booth-happenings" href="javascript:void(0),alert('need link - will open in new Tab');" >On Booth Happenings</a>
+                  </div>
 
                   <div class="featured">
                     <h1>Featured</h1>
@@ -341,11 +356,12 @@
                 <script>
                   function buildSponsors() {
 
-                    const notAvaialable = 'javascript:alert("Booth not yet Available")';
+                    const notAvaialable = 'javascript:void(0),alert("Booth not yet Available");';
 
                     const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/';
                     let list = [
-                      {level: 'diamond', name: 'CAE', img: 'diamond_cae.png', href: notAvaialable},
+                      {level: 'diamond', name: '_CAE', img: 'diamond_cae.png', href: notAvaialable},
+                      {level: 'silver', name: 'AMST', img: 'bronze_amst.png', href: notAvaialable},
                       {level: 'bronze', name: 'Allsim', img: 'bronze_allsim.png', href: notAvaialable},
                       {
                         level: 'bronze',
@@ -377,7 +393,7 @@
                       {
                         level: 'bronze',
                         name: 'ProSim Training Solutions',
-                        img: 'bronze_prosim.png2',
+                        img: 'bronze_prosim2.png',
                         href: '/videos/2c1bdd7b-3cfe-46ab-8000-08d87b4f05c1/landing/bafdf1b0-8754-49ab-9d85-32fb6e59c8b1'
                       },
                       {
@@ -391,10 +407,24 @@
                         name: 'Wright Brothers',
                         img: 'bronze_wbft.png',
                         href: '/videos/29f17541-d6eb-4906-c337-08d8744f050e/landing/eff3eea0-a301-4505-8413-e23ef6900601'
+                      },
+                      {
+                        level: 'bronze',
+                        name: 'JETPUBS',
+                        img: 'bronze_jetpubs.png',
+                        href: '/videos/e475728c-7102-455f-cb8d-08d87d161b6f/landing/e058c52d-f8f8-457d-8bbd-9b0060644229'
                       }
                     ];
 
-                    list.sort((a, b) => a.name);
+                    list = list.sort(function (a, b) {
+                      if (a.name.toLowerCase() > b.name.toLowerCase()) {
+                        return 1;
+                      }
+                      if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                        return -1;
+                      }
+                      return 0;
+                    });
 
                     // filter out users who have opted out of sharing their data
                     const featured = landingPageEl.querySelector('.featured-grid');
@@ -408,7 +438,8 @@
                       card.classList.add(item.level);
 
                       card.querySelector('img').src = baseUrl + item.img;
-                      card.querySelector('.name').innerHTML = item.name;
+                      //force CAE before AMST but remove special character forcing the sort order
+                      card.querySelector('.name').innerHTML = item.name.replace('_', '');
                       card.querySelector('.level').innerHTML = item.level;
 
                       if (item.level.toLowerCase().includes('bronze')) {

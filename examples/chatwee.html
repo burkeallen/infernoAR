@@ -1,714 +1,280 @@
-<!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+<!-- ##### chat widget ##### -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
+<!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
+{%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
+{%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
+
+<!-- get duration till end of conference plus one day for buffer -->
+{%- assign eventsByDate = data.Events | sort: "StartTime" -%}
+{%- assign lastEvent = eventsByDate.last -%}
+
+{%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
+{%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
+{%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
+
+<!-- difference in seconds -->
+{%- assign diffSeconds =  eventEnd | minus:nowTimestamp -%}
+{%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
+{%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
+
+<div style="display:none;">
+  <p id="user-inferno-first-name">${firstName}</p>
+  <p id="user-inferno-last-name">${lastName}</p>
+</div>
+
+<script async>
+
+  var userInfernoId = window.sessionStorage.getItem("userId");
+  var firstName = landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+  var lastName = landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+
+  // var userInfernoId = "{{ userInfernoId }}";
+  // var firstName = "{{ userFirstName }}";
+  // var lastName = "{{ userLastName }}";
+
+  var chatDuration = "{{ chatDuration }}";
+  var hasProfileImage = false;
+
+  // global chat manager
+  var chatManager = null;
+
+  var chatweeValues = {
+    userIdKey: "chatwee-user-id",
+    sessionCookieKey: "chatwee-SID-5f5f60102f3d91228471fce6",
+    chatId: "5f5f60102f3d91228471fce6",
+    clientApiKey: "152e1956ee640cb1c6eef961",
+    isAdmin: 0,
+    ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+  }
+
+  var loadChatScript = () => {
+    // don't load script if already on page
+    let chatScript = document.getElementById("chat-script");
+    if (chatScript) return;
+
+    (function () {
+      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+      s1.id = "chat-script";
+      s1.async = true;
+      s1.src = 'https://static.chatwee-api.com/v2/script.js';
+      s1.charset = 'UTF-8';
+      s0.parentNode.insertBefore(s1, s0);
+    })();
+
+    return;
+  }
+
+  var loadChatStyles = () => {
+    // dont load styles if already on page
+    let chatStyleSheet = document.getElementById("chat-replacement-styling");
+    if (chatStyleSheet) return;
+
+    (function () {
+      var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+
+      link1.setAttribute("id", "chat-replacement-styling")
+      link1.setAttribute("rel", "stylesheet")
+      link1.setAttribute("type", "text/css")
+      link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+      link1.setAttribute("media", "all")
+      body.parentNode.insertBefore(link1, body);
+    })();
+
+    return;
+  }
+
+  var startChat = async () => {
+    if (!chatManager) {
+      chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+      chatManager.Run();
+    }
+    return;
+  }
+
+  var openChat = () => {
+    // close bubble
+    let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+    let bubble = bubbleChild.parentNode;
+    bubble.style.display = "none";
+
+    // open chat
+    let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
+    let chat = chatChild.parentNode;
+    chat.style.display = "block";
+
+    return;
+  }
+
+  // Chatwee UserId must be set as the Id for the button
+  var triggerConversation = e => {
+    let userId = e.target.id;
+    openChat();
+    chatManager.TriggerConversation(userId);
+  }
+
+  // helper functions
+  var getCookie = key => {
+    let cookieValue = "";
+
+    const cookieList = document.cookie;
+    if (cookieList) {
+      const cookie = cookieList
+        .split("; ")
+        .find(row => row.startsWith(key));
+
+      if (cookie) {
+        cookieValue = cookie.split("=")[1];
       }
-      xobj.send(null)
+
+    }
+    return cookieValue;
+  }
+
+  var setCookie = (key, value, age) => {
+    document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
+  }
+
+  var validateChatSessionId = sessionId => {
+    const url = chatweeValues.ssoBaseUrl
+      + "validate-session?"
+      + "chatId="
+      + chatweeValues.chatId
+      + "&clientKey="
+      + chatweeValues.clientApiKey
+      + "&sessionId="
+      + sessionId;
+
+    return fetch(url).then(res => res.json());
+  }
+
+  var loginChat = userId => {
+    const url = chatweeValues.ssoBaseUrl
+      + "login?"
+      + "chatId="
+      + chatweeValues.chatId
+      + "&clientKey="
+      + chatweeValues.clientApiKey
+      + "&userId="
+      + userId;
+
+    return fetch(url).then(res => res.json());
+  }
+
+  var registerChat = () => {
+    const name = firstName + " " + lastName;
+
+    // TO DO: get default chat icon
+    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-chat-icon.png";
+
+    if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
+
+    const url = chatweeValues.ssoBaseUrl
+      + "register?"
+      + "chatId="
+      + chatweeValues.chatId
+      + "&clientKey="
+      + chatweeValues.clientApiKey
+      + "&login="
+      + name
+      + "&isAdmin="
+      + chatweeValues.isAdmin
+      + "&avatar="
+      + avatarUrl;
+
+    return fetch(url).then(res => res.json());
+  }
+
+  // connect to Chatwee
+  var connectChat = async () => {
+
+    // see if session id locally
+    let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+    if (sessionId) {
+      // validate session id with chatwee
+      let valid
+      try {
+        valid = await validateChatSessionId(sessionId);
+      } catch (e) {
+        throw new Error(e);
+      }
+
+      // if true, do nothing
+      if (valid) return;
+
     }
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
-
-  </script>
-  <script>
-    let landingPageEl = null
-  </script>
-</head>
-
-<body>
-
-<app-root class='layout-fixed has-menu'>
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close="">
-            <ul class="nav">
-              <li><a href="../">Menu</a></li>
-            </ul>
-          </nav>
-          </nav>
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex="">
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="41ec7f83-05e6-41fc-b911-aa799c202d43">
-
-                <!-- Main Snippet -->
-                <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-
-                  .content {
-                    background-image: none;
-                    background-color: var(--sidebar-bg-color);
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: Verdana, sans-serif !important;
-                  }
-
-                  .content > img {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
-
-                <!-- Video Panel -->
-                <style>
-                  .video-panel {
-                    position: absolute;
-                    left: 3%;
-                    top: 26.3%;
-                    width: 20%;
-                    height: 35.3%;
-                    clip-path: polygon(4% 2%, 97% 39%, 97% 98%, 3% 94%);
-                    background-color: rgba(255, 0, 0, 0.5);
-                    z-index: 99;
-                  }
-
-                  .video-panel > img {
-                    width: 100%;
-                    height: 100%;
-                    transform: matrix(2, .3, -.1, 1, 2, 25) skew(1deg, 4deg);
-                  }
-                </style>
-
-                <!-- Lobby Menu -->
-                <style>
-                  .menu {
-                    position: absolute;
-                    display: grid;
-                    top: 5%;
-                    right: 5%;
-                    z-index: 99;
-                    width: 300px;
-                    padding: 2%;
-                    background-color: rgba(255, 255, 255, .9);
-                    border-radius: .5em;
-                  }
-
-                  .menu img {
-                    width: 100%;
-                    margin-bottom: 5%;
-                  }
-
-                  .menu-button {
-                    text-align: center;
-                    background-color: white;
-                    border: solid 1px var(--sidebar-bg-color);
-                    color: var(--sidebar-bg-color);
-                    font-size: 1.4em;
-                    line-height: 2em;
-                    margin: 2% 0;
-                    border-radius: .5em;
-                    text-transform: uppercase;
-                  }
-
-                  .menu-button:hover {
-                    filter: brightness(120%);
-                    transform: scale(1.1);
-                    text-decoration: none;
-                    color: var(--sidebar-bg-color);
-                  }
-
-                </style>
-
-                <!-- Sponsors -->
-                <style>
-                  .sponsor-container {
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    margin: 0 -24px;
-                  }
-                </style>
-
-                <!-- Flickity carousel/slider  -->
-                <style>
-                  .slider img {
-                    display: block;
-                    margin-right: 1px;
-                    width: 200px;
-                    height: 100px;
-                    background-color: rgba(255, 255, 255, 1);
-                  }
-
-                  /* setting display none cause issues with flickity rendering */
-                  /* so we hide it by moving it off the screen */
-                  .is-hidden {
-                    position: absolute;
-                    left: -3000px;
-                  }
-
-                  /* position dots up a bit */
-                  .flickity-page-dots {
-                    bottom: -22px !important;
-                  }
-
-                  /* dots are lines */
-                  .flickity-page-dots .dot {
-                    height: 4px !important;
-                    width: 40px !important;
-                    margin: 0 !important;
-                    border-radius: 0 !important;
-                  }
-
-                  /* no circle */
-                  .flickity-button {
-                    display: none;
-                  }
-
-                </style>
-
-                <div class="content">
-                  <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/lobby-bg.jpg">
-
-                  <div class="menu">
-                    <img
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/GlobalATS_logo-1.png">
-                    <a class="menu-button"
-                       src="/videos/9d079cdc-e855-4a88-1079-08d8608a56ce/detail/1c8761e9-0bc6-46d4-ac3d-a278ff36d417">
-                      Main Stage</a>
-                    <a class="menu-button"
-                       src="/videos/1d1ddbee-150a-4481-107a-08d8608a56ce/landing/b3091238-2a3b-49b0-a26d-13b3c7015d80">
-                      Conference Agenda</a>
-                    <a class="menu-button"
-                       src="/videos/ef9ba75f-a73b-42ed-5caf-08d860938aca/landing/d16e2b2e-3909-421c-a0bb-9c14f1132ec9">
-                      Exhibition Hall</a>
-                    <a class="menu-button"
-                       src="/videos/d1d203d0-4314-48e8-5cb0-08d860938aca/landing/a7f4b31e-c8e7-4760-af59-25d8c3e596de">
-                      Resource Library</a>
-                    <a class="menu-button"
-                       src="/videos/399c2dc9-8be2-4353-731b-08d860999a75/landing/f32934c2-47c6-46f3-864c-c6b7420dc9e1">
-                      Attendee List</a>
-                    <img style="width:70%; margin: 5% auto;"
-                         src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/logo.png">
-                  </div>
-
-                  <div class="sponsor-container is-hidden">
-                    <div class="slider">
-                      <img alt="CAE"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/gold/CAE logo.jpg">
-                      <img alt="Alsim"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Alsim _Logo.png">
-                      <img alt="Avion Group"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Avion Group_Logo.png">
-                      <img alt="Bihrle"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Bihrle_Logo.png">
-                      <img alt="CPaT"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/CPaT_Logo.png">
-                      <img alt="Drillster"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Drillster_Logo.png">
-                      <img alt="Entrol"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Entrol_Logo.jpg">
-                      <img alt="FSC"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/FSC Company logo.png">
-                      <img alt="PACE"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/PACE_Logo.png">
-                      <img alt="ProSim"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/ProSim_Logo.jpg">
-                      <img alt="Simnest"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/Simnest_logo.png">
-                      <img alt="WBFT"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze/WBFT Logo.png">
-
-                    </div>
-                  </div>
-
-
-                </div>
-
-
-                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
-                <script>
-                  if (!window.whiteHack) {
-                    console.log('loading color overrides for --branding-primary = white');
-                    const css = `
-                          jolo-search-box .search-box-container {display: none !important}
-                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
-                    `;
-                    const head = document.head || document.getElementsByTagName('head')[0];
-                    const style = document.createElement('style');
-                    style.appendChild(document.createTextNode(css));
-                    head.appendChild(style);
-                    window.whiteHack = true;
-                  }
-                </script>
-
-                <script>
-                  function loadFkty() {
-                    // add css style sheet
-                    const styleTag = document.createElement("link");
-                    styleTag.setAttribute('rel', 'stylesheet');
-                    styleTag.setAttribute('type', 'text/css');
-                    styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
-                    landingPageEl.appendChild(styleTag);
-
-                    if (!window.flktyLoaded) {
-                      // add external JS file
-                      const scriptTag = document.createElement("script");
-                      scriptTag.onload = function (loadEvent) {
-                        initFlkty();
-                      }
-                      scriptTag.type = "text/javascript";
-                      scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
-                      document.getElementsByTagName("head")[0].appendChild(scriptTag);
-                      window.flktyLoaded = true;
-                    } else {
-                      initFlkty();
-                    }
-                  }
-
-                  function initFlkty() {
-                    const elem = landingPageEl.querySelector('.slider');
-                    const flkty = new Flickity(elem, {
-                      // options
-                      cellAlign: 'left',
-                      freeScroll: true,
-                      wrapAround: true,
-                      groupCells: 3,
-                      autoPlay: 6000,
-                      on: {
-                        ready: function () {
-                          const el = landingPageEl.querySelector('.sponsor-container').classList.remove('is-hidden');
-                        }
-                      }
-                    });
-                  }
-
-                  loadFkty();
-                </script>
-
-                <!-- ##### ChatWee widget ##### -->
-
-                <script type="text/javascript">
-                  setTimeout(function () {
-
-                    // don't load script if widget already on page
-                    var widget = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
-                    if (widget) return;
-
-
-                    //********************* the src is unique to each chatwee client/instance
-                    (function () {
-                      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                      s1.async = true;
-                      s1.src = 'https://chatwee-api.com/v2/script/5f7ef4b1ebaa9f3cf83ed7fa.js';
-                      s1.charset = 'UTF-8';
-                      s1.setAttribute('crossorigin', '*');
-                      s0.parentNode.insertBefore(s1, s0);
-                    })();
-                  }, 500);
-                </script>
-
-                <script type="text/javascript">
-                  setTimeout(function () {
-                    (function () {
-                      var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
-
-                      link1.setAttribute("rel", "stylesheet")
-                      link1.setAttribute("type", "text/css")
-                      link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
-                      link1.setAttribute("media", "all")
-                      body.parentNode.insertBefore(link1, body);
-                    })();
-                  }, 100);
-                </script>
-
-                {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
-                {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
-                {%- assign userLastName = data.CurrentViewingUser.LastName -%}
-
-                <!-- get duration till end of conference plus one day for buffer -->
-                {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
-                {%- assign lastEvent = eventsByDate.last -%}
-
-                {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
-                {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
-                {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
-
-                <!-- difference in seconds -->
-                {%- assign diffSeconds =  eventEnd | minus:nowTimestamp -%}
-                {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
-                {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
-
-                <script async>
-
-                  var userInfernoId = "{{ userInfernoId }}";
-                  var firstName = "{{ userFirstName }}";
-                  var lastName = "{{ userLastName }}";
-                  var chatDuration = "{{ chatDuration }}";
-                  var hasProfileImage = false;
-
-
-                  //********************* change these values for your specific client/event
-                  var chatweeValues = {
-                    userIdKey: "chatwee-user-id",
-                    sessionCookieKey: "chatwee-SID-5f7ef4b1ebaa9f3cf83ed7fa",
-                    chatId: "5f7ef4b1ebaa9f3cf83ed7fa",
-                    clientApiKey: "a6feff42c070b4633a876aec",
-                    isAdmin: 0,
-                    ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
-                  }
-
-                  // helper functions
-                  var getCookie = key => {
-                    let cookieValue = "";
-
-                    const cookieList = document.cookie;
-                    if (cookieList) {
-                      const cookie = cookieList
-                        .split("; ")
-                        .find(row => row.startsWith(key));
-
-                      if (cookie) {
-                        cookieValue = cookie.split("=")[1];
-                      }
-
-                    }
-                    return cookieValue;
-                  }
-
-                  var setCookie = (key, value, age) => {
-                    document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
-                  }
-
-                  var validateChatSessionId = sessionId => {
-                    const url = chatweeValues.ssoBaseUrl + "validate-session?" + "chatId=" + chatweeValues.chatId + "&clientKey=" + chatweeValues.clientApiKey + "&sessionId=" + sessionId;
-
-                    return fetch(url).then(res => res.json());
-                  }
-
-                  var loginChat = userId => {
-                    const url = chatweeValues.ssoBaseUrl + "login?" + "chatId=" + chatweeValues.chatId + "&clientKey=" + chatweeValues.clientApiKey + "&userId=" + userId;
-
-                    return fetch(url).then(res => res.json());
-                  }
-
-                  var registerChat = () => {
-                    const name = firstName + " " + lastName;
-
-                    // TO DO: get default chat icon
-                    let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-chat-icon.png";
-
-                    if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
-
-                    const url = chatweeValues.ssoBaseUrl
-                      + "register?"
-                      + "chatId="
-                      + chatweeValues.chatId
-                      + "&clientKey="
-                      + chatweeValues.clientApiKey
-                      + "&login="
-                      + name
-                      + "&isAdmin="
-                      + chatweeValues.isAdmin
-                      + "&avatar="
-                      + avatarUrl;
-
-                    return fetch(url).then(res => res.json());
-                  }
-
-                  // connect to Chatwee
-                  var connectChat = async () => {
-
-                    // see if session id locally
-                    let sessionId = getCookie(chatweeValues.sessionCookieKey);
-
-                    if (sessionId) {
-                      // validate session id with chatwee
-                      let valid
-                      try {
-                        valid = await validateChatSessionId(sessionId);
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-
-                      // if true, do nothing
-                      if (valid) return;
-
-                    }
-
-                    // if false, check if user id is present locally
-                    const userId = getCookie(chatweeValues.userIdKey);
-
-                    // if true, login and set session id locally
-                    if (userId) {
-                      let sessionId = ""
-                      try {
-                        sessionId = await loginChat(userId);
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-
-                      setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
-                    }
-                    // if false, register and set user id and log in user
-                    else {
-                      let userId = ""
-                      try {
-                        userId = await registerChat();
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-
-                      setCookie(chatweeValues.userIdKey, userId, chatDuration);
-
-                      let sessionId = ""
-                      try {
-                        sessionId = await loginChat(userId);
-                      }
-                      catch (e) {
-                        throw new Error(e);
-                      }
-
-                      setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
-
-                    }
-
-                    return;
-                  }
-
-                  var getProfileImage = () => {
-                    let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
-                    return fetch(url);
-                  }
-
-                  var makeCalls = async () => {
-                    const res = await getProfileImage();
-                    if (res.status === 200) {
-                      hasProfileImage = true;
-                    }
-                    connectChat();
-                  }
-
-                  makeCalls();
-
-                </script>
-
-
-                <!-- ##### end of  chat widget ##### -->
-
-              </inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer="" layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
-
-</body>
-
-<!-- Menu Collapse Script -->
-<script>
-
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
-
-  }
-
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
-
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
+    // if false, check if user id is present locally
+    const userId = getCookie(chatweeValues.userIdKey);
+
+    // if true, login and set session id locally
+    if (userId) {
+      let sessionId = ""
+      try {
+        sessionId = await loginChat(userId);
+      } catch (e) {
+        throw new Error(e);
+      }
+
+      setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
     }
-  }
+    // if false, register and set user id and log in user
+    else {
+      let userId = ""
+      try {
+        userId = await registerChat();
+      } catch (e) {
+        throw new Error(e);
+      }
 
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
+      setCookie(chatweeValues.userIdKey, userId, chatDuration);
 
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
+      let sessionId = ""
+      try {
+        sessionId = await loginChat(userId);
+      }
+      catch (e) {
+        throw new Error(e);
+      }
+
+      setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
+
     }
+
+    return;
   }
 
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
-      <questions _nghost-qch-c20="">
-        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
-          <div class="inferno-input-group">
-            <span class="inferno-input-group-addon">Ask A Question</span>
-            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
-            <span class="inferno-input-group-btn">
-              <button class="inferno-btn" type="button">Submit</button>
-            </span>
-          </div>
-        </div>
-      </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
-        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
-          width="640"
-          height="360"
-          frameborder="0"
-          allowfullscreen">
-        </iframe>
-        `)
-    }
+  var getProfileImage = () => {
+    let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+    return fetch(url);
   }
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
+  var waitForGlobal = async (key, callback1, callback2) => {
+    if (window[key]) {
+      await callback1();
+      await callback2();
+    } else {
+      setTimeout(function () {
+        waitForGlobal(key, callback1, callback2);
+      }, 100);
+    }
+  };
+
+  var setUpChat = async () => {
+    loadChatScript();
+    loadChatStyles();
+
+    const res = await getProfileImage();
+    if (res.status === 200) {
+      hasProfileImage = true;
+    }
+
+    waitForGlobal("ChatweeLib", connectChat, startChat);
   }
+
+  setUpChat();
 
 </script>
 
 
-</html>
+<!-- ##### end of  chat widget ##### -->
