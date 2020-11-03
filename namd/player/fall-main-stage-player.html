@@ -50,7 +50,8 @@
 
   </script>
   <script>
-    let landingPageEl = null
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
   </script>
 </head>
 
@@ -63,7 +64,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,30 +109,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="a7f3df83-f5c7-49ac-849a-dbff2254bbc1">
-
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('gotham', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff');
-                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff');
-
-                </script>
+              <inferno-snippet-content id="46a19d20-bac4-458f-87bd-ddfbb65d9d09">
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -141,185 +119,215 @@
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/library-bg.png');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/mainstage.jpg');
                     background-attachment: fixed;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: center;
+                    background-position: bottom left;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: "gotham", Helvetica, Arial, sans-serif;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                  }
+                </style>
+
+                <!-- Stage Grid -->
+                <style>
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
                   }
 
-                  .top-banner {
-                    padding: 10px 50px;
-                    line-height: 60px;
-                    color: white;
-                    font-size: 32px;
-                    background-color: #5377A6;
-                    margin: -20px -24px 20px -24px;
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
                   }
 
-                  .top-banner h1 {
-                    font-size: 1em;
-                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
-                    font-weight: bold;
+                  .rightCol {
+                    margin: 0 5px;
                   }
 
-                  .top-banner hr {
-                    border: solid 2px #00467F;
-                    width: 75%;
+                  @media only screen and (max-width: 1024px) {
+                    .stage-grid, .leftCol, .rightCol {
+                      display: block;
+                      margin: 0 auto;
+                    }
                   }
+                </style>
 
-
-                  .grid {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    max-width: 90%;
-                    padding: 1% 1% 40px 1%;
-                  }
-
-                  .card {
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
                     position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: start;
-                    align-items: center;
-                    width: 20%;
-                    min-height: 350px;
-                    background-color: #00467F;
-                    margin: 10px;
-                    padding: 2% 1%;
-                    color: white;
-                    cursor: pointer;
-                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
                   }
 
-                  .card:hover {
-                    filter: brightness(80%);
-                    cursor: pointer;
-                    -ms-transform: translateY(-.5vh);
-                    -webkit-transform: translateY(-.5vh);
-                    transform: translateY(-.5vh);
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
                   }
 
-                  .card img {
-                    width: 50%;
-                    height: auto;
-                    border-radius: 50%;
+                  #inferno-video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0;
                   }
+                </style>
 
-                  .title {
-                    margin: 1em 0;
-                    font-size: 1.3em;
-                    font-weight: bold;
+                <!--  ask a question -->
+                <style>
+                  .ask-question {
+                    color: #fff;
+                    width: 50vw;
                     text-align: center;
                   }
 
-                  .sub-title {
-                    margin: .75em 0;
+                  .question {
+                    margin: 30px auto 0;
+                    position: relative;
+                    width: 50vw;
                     text-align: center;
+                    background-color: transparent;
                   }
 
-                  .download {
-                    border-radius: 2em;
-                    padding: .5em 2em;
-                    color: white;
-                    background-color: var(--sidebar-bg-color);
-                    border: solid 1px #cccccc;
+                  .ask-question span {
+                    color: #fff;
+                  }
+
+                  button {
+                    outline: none;
+                    border: none;
+                    background: transparent;
+                    font-family: 'openSans', sans-serif;
+                  }
+
+                  button:hover {
+                    opacity: .9;
+                    cursor: pointer;
+                  }
+
+
+                  .inferno-input-group {
+                    display: block;
+                    position: relative;
+                  }
+
+                  .inferno-input-group-addon {
+                    display: none;
+                  }
+
+                  input {
+                    padding-left: .5em;
+                  }
+
+                  .inferno-form-control {
+                    min-height: 37px;
+                    border: none;
+                    width: Calc(55vw - 30%);
+                    border-radius: 4px 0 0 4px;
+                    outline: none;
+                  }
+
+                  .inferno-btn {
+                    color: #fff;
+                    width: 80px;
+                    min-height: 38px;
+                    background-color: #a6192e;
+                    border-radius: 0 4px 4px 0;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                    .content {
+                      /* use when the background div encompasses the entire content */
+                      margin: -15px;
+                    }
+
+                    .inferno-form-control {
+                      width: Calc(55vw - 20%);
+                      border-radius: 4px;
+                    }
+
+                    .inferno-btn {
+                      border-radius: 4px;
+                    }
+                  }
+                </style>
+                <!-- group chat -->
+                <style>
+                  .group-chat {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    background-color: #ccc;
+                    text-align: center;
+                    border-radius: .5em;
+                  }
+
+                  .group-chat p {
+                    margin: 0;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .group-chat {
+                      position: relative;
+                      margin-top: 40px;
+                      width: 100%;
+                      height: 350px;
+                    }
+
+                  }
+                </style>
+
+                <!-- Poll Chat Tab -->
+                <style>
+
+                  .chat-iframe {
+                    height: 110%;
+                    width: 100%;
+                    border: none;
+                    outline: none;
                   }
 
                 </style>
 
+
                 <div class="content">
+                  <div class="stage-grid">
 
-                  <div class="top-banner">
-                    <h1>Sponsor Library</h1>
-                    <hr align="left">
-                  </div>
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
 
-                  <div class="grid"></div>
 
-                  <template>
-                    <div class="card">
-                      <img src="">
-                      <div class="title"></div>
-                      <div class="sub-title"></div>
-                      <div class="download"></div>
+                      <div class="question">
+                        <div id="inferno-questions-basic"></div>
+                      </div>
+
                     </div>
-                  </template>
+
+                  </div>
 
                 </div>
 
                 <script>
-
-                  function getList() {
-                    let list = [
-                      {id: 1, title: "item 1", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 2, title: "item 2", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 3, title: "item 3", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
-                      {id: 4, title: "item 4", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
-                      {id: 5, title: "item 5", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
-                      {id: 6, title: "item 6", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 7, title: "item 7", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 8, title: "item 8", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 9, title: "item 9", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 10, title: "item 10", subTitle: "sub title goes here", action: "View Video", thumb: "video-icon.png"},
-                      {id: 11, title: "item 11", subTitle: "sub title goes here", action: "View PDF"},
-                      {id: 12, title: "item 12", subTitle: "sub title goes here", action: "View PDF"},
-                    ];
-
-                    list = list.sort(function (a, b) {
-                      if (a.title.toLowerCase() > b.title.toLowerCase()) {
-                        return 1;
-                      }
-                      if (a.title.toLowerCase() < b.title.toLowerCase()) {
-                        return -1;
-                      }
-                      return 0;
-                    });
-                    return list;
-                  }
-
-                  function buildLibrary() {
-                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/';
-                    const list = getList();
-                    // filter out users who have opted out of sharing their data
-                    const container = landingPageEl.querySelector('.grid');
-                    const template = landingPageEl.querySelector('template');
-
-                    list.forEach(item => {
-                      const clone = template.content.cloneNode(true);
-                      const card = clone.querySelector('.card');
-
-                      const image = card.querySelector('img');
-                      image.src = baseUrl + item.thumb;
-                      image.onerror = function () {
-                        // prevent an infinite loop is second image does not load
-                        image.onerror = null;
-                        image.src = baseUrl + 'doc-icon.png';
-                      }
-                      card.querySelector('.title').innerHTML = item.title;
-                      card.querySelector('.sub-title').innerHTML = item.subTitle;
-                      card.querySelector('.download').innerHTML = item.action;
-                      container.appendChild(clone);
-
-                    });
-
-                  }
-
-                  if (window.location.hostname.includes('local')) {
-                    window.addEventListener('load', (event) => {
-                      buildLibrary();
-                    });
-                  } else {
-                    buildLibrary();
-                  }
-
-
+                  // ask a question hack
+                  $(document).ready(function () {
+                    const container = landingPageEl ?? document;
+                    const qa = container.querySelector('.inferno-input-group');
+                    qa.querySelector('input').placeholder = 'Ask a Question';
+                  });
                 </script>
 
                 <!-- Tawk Clearing Code -->
@@ -343,7 +351,6 @@
                           delete window[key];
                         }
                       });
-
 
 
                       // Clear
@@ -487,6 +494,5 @@
   }
 
 </script>
-
 
 </html>

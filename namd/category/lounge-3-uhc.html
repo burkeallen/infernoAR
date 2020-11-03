@@ -63,7 +63,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,118 +108,280 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="0e78b0d3-14be-4481-b5d1-51b8ba4369b1">
+              <inferno-snippet-content id="e247ebd1-0a62-4080-a91a-1994e6fe4af3">
 
                 <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
                   .content {
-                    background-color: var(--sidebar-bg-color);
+                    position: relative;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    color: white;
+                    font-family: "Helvetica Neue", Helvetica, Arial sans-serif;
+                  }
 
+                  .lobby {
+                    display: block;
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  .lobby img {
+                    width: 100%;
+                    height: calc(100vh - 114px);
+                    z-index: 1;
+                  }
+                </style>
+
+                <!-- Hotspots -->
+                <style>
+                  .hotspot {
+                    position: absolute;
+                    display: block;
+                    z-index: 2;
+                    cursor: pointer;
+                  }
+
+                  .hotspot:hover {
+                    background-color: rgba(0, 0, 0, .1);
+                  }
+
+                  .food {
+                    top: 69%;
+                    left: 49%;
+                    width: 19%;
+                    height: 20%;
+                  }
+
+                  .food img {
+                    width: 100%;
+                  }
+
+                  .video-wall {
+                    top: 3%;
+                    left: 33%;
+                    width: 34%;
+                    height: 50%;
+                    z-index: 2;
+                  }
+
+                  .tall-banner {
+                    top: 26%;
+                    left: 5%;
+                    width: 13.6%;
+                    height: 66.6%;
+                    clip-path: polygon(0% 1%, 100% 2%, 99% 94%, 1% 100%);
+                    background-color: white;
                   }
 
                 </style>
 
+                <!-- Video Player -->
+                <style>
+                  .video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  .video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em;
+                  }
+                </style>
+
+                <!-- Modal Window Style -->
+                <style>
+                  .modal-window {
+                    position: fixed;
+                    background-color: rgba(0, 0, 0, 0.6);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    z-index: 999;
+                    padding-top: 5%;
+                    display: flex;
+                    justify-content: center;
+                  }
+
+                  .modal-window .contentWrapper {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 300px;
+                  }
+
+                  .modal-window .modal-box {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto;
+                    padding: 2rem 0;
+                    background-color: transparent;
+                    border: none;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 3%;
+                    top: -11px;
+                    color: #fff;
+                    font-size: 1.5em;
+                    text-decoration: none;
+                    font-weight: bold;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                    cursor: pointer;
+                  }
+
+                  a.yes {
+                    display: block;
+                    background-color: var(--sidebar-bg-color);
+                    color: white;
+                    font-size: 1.2em;
+                    padding: 0 2em;
+                    border-radius: .3em;
+                    width: 50%;
+                    margin: 1em auto;
+                  }
+
+                  a.yes:hover {
+                    text-decoration: none;
+                    -ms-transform: scale(1.1) translateY(-.5vh);
+                    -webkit-transform: scale(1.1) translateY(-.5vh);
+                    transform: scale(1.1) translateY(-.5vh);
+                  }
+
+                  .modal-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: 1fr;
+                    gap: 0px 20px;
+                    background: #5378A7;
+                    padding: 2%;
+                    color: white;
+                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                    width: 100%;
+                    min-width: 500px;
+                  }
+
+                  .left {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 100%;
+                    min-height: 300px;
+                  }
+
+                  .left > div {
+                    text-align: center;
+                  }
+
+                  .yes-message {
+                    font-size: 1.25em;
+                    line-height: 2em;
+                  }
+                </style>
+                <!-- Modal Window Script -->
+
                 <div class="content">
-
-                  <div>
-                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
-                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
-                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
-                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>
-                    <!-- Sort events by start time -->
-                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
-
-                    <!-- Set nextEvent so we know if no upcoming event is found -->
-                    {% assign nextEvent = 'No Event' %}
-
-                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
-
-<!--                    <h2>Current Category</h2>-->
-<!--                    <ul>-->
-<!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
-<!--                      <li>{{ currentCategory }}</li>-->
-<!--                    </ul>-->
-
-                    <!-- Iterate the sorted events -->
-                    {% for event in sortedEvents %}
-
-                    <!-- Check the event category ID matches this page category ID -->
-                    {% assign thisCategory = event.FirstCategoryId | downcase %}
-                    {% if thisCategory != currentCategory%}
-                    <!-- ... and if not, skip iteration -->
-<!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-<!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
-                    {% continue %}
-                    {% endif %}
-
-                    <!-- The end time is start timestamp added to video duration -->
-                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
-
-                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
-                    {% if currentTime  > endTime  %}
-<!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-<!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
-                    {% assign nextEvent = event %}
-                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
-                    {% continue %}
-                    <!-- ...otherwise... -->
-                    {% else %}
-                    <!-- ... we set this as our next upcoming event and ... -->
-                    {% assign nextEvent = event %}
-                    {% endif %}
-
-                    <!-- ...break the iteration loop. -->
-                    {% break %}
-
-                    {% endfor %}
-
-                    <!-- If the loop didn't find any upcoming events,... -->
-                    {% if nextEvent == 'No Event' %}
-<!--                    <h1> No Sessions or Events are Currently Available </h1>-->
-<!--                    <p>Check Back Later</p>-->
-                    {% else %}
-                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
-                    <!-- set display: none when in production -->
-                    <h1> Enter the Current or Upcoming Session </h1>
-                    <p>{{nextEvent.Name}}</p>
-                    <a id="redirect-link"
-                       href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
-                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
-                    </a>
-                    {% endif %}
-
-                    <script type="text/javascript">
-                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
-                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
-                      }
-                    </script>
+                  <div class="lobby">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lounge3-UHC/mock.jpg">
                   </div>
 
-                  <div style="text-align:center; padding:20%">
-                    <h1>Checking to see what room to take you too.</h1>
-                    <p>If you are not redirected, then there are no events are currently Scheduled - check back
-                       later</p>
+                  <div class="hotspot food" id="lounge_UHC_ClickHere_Click" onclick="toggleModal()">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lounge3-UHC/food.png">
+                  </div>
+                  <div class="hotspot video-wall">
+                    <div class="video-container">
+                      <div class="video-player">
+                        <iframe src="/embed/e6c41fc6-742c-43e3-ba0d-8ac3bf8d2b34"
+                                frameborder="0"
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true">
+                        </iframe>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="hotspot tall-banner"></div>
+
+                  <div id="open-modal" class="modal-window">
+                    <div class="modal-box">
+                      <div title="Close" class="modal-close" onclick="toggleModal()">Close</div>
+                      <div class="contentWrapper">
+                        <div class="modal-grid">
+
+                          <div class="left">
+                            <div class="yes-message">
+                              Thank you for stopping by! Click the "YES" button below and UnitedHealthcare will donate
+                              a food box to Martha's Table.
+                              <a class="yes" href="javascript:void(0)" id="lounge_UHC_ClickHere_Confirm"
+                                 onclick="clickYes()">Yes</a>
+                            </div>
+                            <p>**Your information will not be shared with anyone.</p>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
                   </div>
 
                 </div>
 
-                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
-                  if (!window.whiteHack) {
-                    console.log('loading color overrides for --branding-primary = white');
-                    const css = `
-                          jolo-search-box .search-box-container {display: none !important}
-                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
-                    `;
-                    const head = document.head || document.getElementsByTagName('head')[0];
-                    const style = document.createElement('style');
-                    style.appendChild(document.createTextNode(css));
-                    head.appendChild(style);
-                    window.whiteHack = true;
+                  function toggleModal() {
+                    const modal = landingPageEl.querySelector('.modal-window');
+                    modal.classList.toggle('open');
+                    const offset = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    landingPageEl.querySelector('#open-modal').style.left = offset;
+                  }
+
+                  function clickYes() {
+                    const message = landingPageEl.querySelector('.yes-message');
+                    message.innerHTML = 'Thank you for your Support';
                   }
                 </script>
 
@@ -232,6 +394,7 @@
                   </script>
                 </tawkto-hide>
                 <!-- End Tawk Clearing Code -->
+
 
                 <!-- ##### Remove Chatwee ##### -->
                 <remove-chatwee>

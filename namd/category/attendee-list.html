@@ -413,7 +413,6 @@
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
                   if (!window.whiteHack) {
-                    // console.log('loading color overrides for --branding-primary = white');
                     const css = `
                           jolo-search-box .search-box-container {display: none !important}
                           span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
@@ -449,8 +448,6 @@
                       headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
                     }
 
-                    console.log(JSON.stringify(headers));
-
                     $.ajax({
                       url: _baseUrl + 'UserProfileExport',
                       type: 'POST',
@@ -469,7 +466,6 @@
                           buildAttendeeList();
                         }
                         totalAttendees = xhr.getResponseHeader('X-Pagination-TotalItems');
-                        console.log('totalAttendees', totalAttendees);
                       },
                       error: function (err) {
                         alert(JSON.stringify(err));
@@ -520,8 +516,6 @@
                       card.id = user.id.toString();
 
                       // Social Icons Display
-                      console.log(user);
-
                       const facebook = user.socialFacebook ?? false;
                       const instagram = user.socialInstagram ?? false;
                       const linkedin = user.socialLinkedIn ?? false;
@@ -597,34 +591,26 @@
                 </script>
 
                 <!-- Tawk Clearing Code -->
-                <script type="text/javascript">
-                  setTimeout(function () {
-                    // Clear iframes (with title "chat widget")
-                    var iframes = document.querySelectorAll('iframe');
-                    for (var i = 0; i < iframes.length; i++) {
-                      if (iframes[i].title.toLowerCase() === 'chat widget') {
-                        iframes[i].parentNode.removeChild(iframes[i]);
-                      }
-                    }
-                    // Check for Tawk instance
+                <tawkto-hide>
+                  <script type="text/javascript">
                     if (window.Tawk_API) {
-                      // Let's hide it / end the chat / destroy all Tawk props on the window
-                      window.Tawk_API.hideWidget();
-                      window.Tawk_API.endChat();
-                      Object.keys(window).forEach(function (key) {
-                        if (key.toLowerCase().indexOf('tawk') > -1) {
-                          delete window[key];
-                        }
-                      });
-
-
-
-                      // Clear
-                      window.Tawk_API = null;
+                      Tawk_API.hideWidget();
                     }
-                  }, 1500);
-                </script>
+                  </script>
+                </tawkto-hide>
                 <!-- End Tawk Clearing Code -->
+
+                <!-- ##### Remove Chatwee ##### -->
+                <remove-chatwee>
+                  <script>
+                    if (window.ChatweeLib) {
+                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+                      chatweeManager.Dispose();
+                    }
+                  </script>
+                </remove-chatwee>
+                <!-- ##### End Remove Chatwee ##### -->
+
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
