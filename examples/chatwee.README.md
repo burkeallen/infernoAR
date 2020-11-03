@@ -6,12 +6,12 @@ The ChatWee Widget will include an interactive chat bubble in the bottom right c
 
 ### Setup
 
-1. Copy and paste all of the code included in the chat-original.html file at the bottom of any landing page.
+1. Copy and paste all of the code included in the chatwee.html file at the bottom of any landing page.
 
 2. Within the variable `chatweeValues`, update the following values, found in the Integration page in Chatwee:
-   a. `chatId: "5f47b04141f1d417ef0ef4d2"`
-   b. `clientApiKey: “675fa0c0c93c392957625bde”`
-   c. `sessionCookieKey: "chatwee-SID-5f47b04141f1d417ef0ef4d2"`
+   - `chatId: "5f47b04141f1d417ef0ef4d2"`
+   - `clientApiKey: “675fa0c0c93c392957625bde”`
+   - `sessionCookieKey: "chatwee-SID-5f47b04141f1d417ef0ef4d2"`
 
 3. Be sure to include the chat code in every landing page. If the user reloads on a page that does not include the chat, the chat bubble will not appear until they return to a page that includes it.
 

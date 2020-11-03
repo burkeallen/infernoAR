@@ -413,7 +413,6 @@
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
                   if (!window.whiteHack) {
-                    // console.log('loading color overrides for --branding-primary = white');
                     const css = `
                           jolo-search-box .search-box-container {display: none !important}
                           span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
@@ -449,8 +448,6 @@
                       headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
                     }
 
-                    console.log(JSON.stringify(headers));
-
                     $.ajax({
                       url: _baseUrl + 'UserProfileExport',
                       type: 'POST',
@@ -469,7 +466,6 @@
                           buildAttendeeList();
                         }
                         totalAttendees = xhr.getResponseHeader('X-Pagination-TotalItems');
-                        console.log('totalAttendees', totalAttendees);
                       },
                       error: function (err) {
                         alert(JSON.stringify(err));
@@ -520,8 +516,6 @@
                       card.id = user.id.toString();
 
                       // Social Icons Display
-                      console.log(user);
-
                       const facebook = user.socialFacebook ?? false;
                       const instagram = user.socialInstagram ?? false;
                       const linkedin = user.socialLinkedIn ?? false;

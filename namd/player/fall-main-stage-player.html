@@ -50,7 +50,8 @@
 
   </script>
   <script>
-    let landingPageEl = null
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
   </script>
 </head>
 
@@ -63,7 +64,7 @@
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
             color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
                     trigger-resize="" onclick="mtTriggerMenu()">
@@ -108,7 +109,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="e247ebd1-0a62-4080-a91a-1994e6fe4af3">
+              <inferno-snippet-content id="46a19d20-bac4-458f-87bd-ddfbb65d9d09">
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -118,122 +119,246 @@
                   }
 
                   .content {
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/mainstage.jpg');
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: bottom left;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    font-family: "Helvetica Neue", Helvetica, Arial sans-serif;
-                  }
-
-                  .lobby {
-                    display: block;
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                  }
-
-                  .lobby img {
-                    width: 100%;
-                    height: calc(100vh - 114px);
+                    padding: 20px 24px;
                     z-index: 1;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                   }
                 </style>
 
-                <!-- Hotspots -->
+                <!-- Stage Grid -->
                 <style>
-                  .hotspot {
+                  .stage-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: auto;
+                    gap: 0 0;
+                    margin-top: 20px;
+
+                  }
+
+                  .leftCol {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    grid-template-rows: repeat(2, auto);
+                    gap: 0px 0px;
+                  }
+
+                  .rightCol {
+                    margin: 0 5px;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .stage-grid, .leftCol, .rightCol {
+                      display: block;
+                      margin: 0 auto;
+                    }
+                  }
+                </style>
+
+                <!-- Video Player -->
+                <style>
+                  .ntar-video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  #inferno-video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  #inferno-video-player iframe {
                     position: absolute;
-                    display: block;
-                    z-index: 2;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em .5em 0 0;
+                  }
+                </style>
+
+                <!--  ask a question -->
+                <style>
+                  .ask-question {
+                    color: #fff;
+                    width: 50vw;
+                    text-align: center;
+                  }
+
+                  .question {
+                    margin: 30px auto 0;
+                    position: relative;
+                    width: 50vw;
+                    text-align: center;
+                    background-color: transparent;
+                  }
+
+                  .ask-question span {
+                    color: #fff;
+                  }
+
+                  button {
+                    outline: none;
+                    border: none;
+                    background: transparent;
+                    font-family: 'openSans', sans-serif;
+                  }
+
+                  button:hover {
+                    opacity: .9;
                     cursor: pointer;
                   }
 
-                  .hotspot:hover {
-                    background-color: rgba(0,0,0, .1);
+
+                  .inferno-input-group {
+                    display: block;
+                    position: relative;
                   }
 
-                  .food {
-                    top: 69%;
-                    left: 49%;
-                    width: 19%;
-                    height: 20%;
+                  .inferno-input-group-addon {
+                    display: none;
                   }
 
-                  .food img {
-                    width: 100%;
+                  input {
+                    padding-left: .5em;
                   }
 
-                  .video-wall {
-                    top: 5.2%;
-                    left: 29.3%;
-                    width: 40.7%;
-                    height: 35%;
-                    background-color: #000000;
+                  .inferno-form-control {
+                    min-height: 37px;
+                    border: none;
+                    width: Calc(55vw - 30%);
+                    border-radius: 4px 0 0 4px;
+                    outline: none;
                   }
 
-                  .video-wall iframe {
+                  .inferno-btn {
+                    color: #fff;
+                    width: 80px;
+                    min-height: 38px;
+                    background-color: #a6192e;
+                    border-radius: 0 4px 4px 0;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                    .content {
+                      /* use when the background div encompasses the entire content */
+                      margin: -15px;
+                    }
+
+                    .inferno-form-control {
+                      width: Calc(55vw - 20%);
+                      border-radius: 4px;
+                    }
+
+                    .inferno-btn {
+                      border-radius: 4px;
+                    }
+                  }
+                </style>
+                <!-- group chat -->
+                <style>
+                  .group-chat {
+                    position: relative;
                     width: 100%;
                     height: 100%;
-                    background-color: #000000;
+                    background-color: #ccc;
+                    text-align: center;
+                    border-radius: .5em;
                   }
 
-                  .tall-banner {
-                    top: 26%;
-                    left: 5%;
-                    width: 13.6%;
-                    height: 66.6%;
-                    clip-path: polygon(0% 1%, 100% 2%, 99% 94%, 1% 100%);
-                    background-color: white;
+                  .group-chat p {
+                    margin: 0;
                   }
 
+                  @media only screen and (max-width: 1024px) {
+                    .group-chat {
+                      position: relative;
+                      margin-top: 40px;
+                      width: 100%;
+                      height: 350px;
+                    }
+
+                  }
+                </style>
+
+                <!-- Poll Chat Tab -->
+                <style>
+
+                  .chat-iframe {
+                    height: 110%;
+                    width: 100%;
+                    border: none;
+                    outline: none;
+                  }
 
                 </style>
 
+
                 <div class="content">
-                  <div class="lobby">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lounge3-UHC/mock.jpg">
+                  <div class="stage-grid">
+
+                    <div class="leftCol">
+                      <div class="ntar-video-container">
+                        <div class="ntar-video" id="inferno-video-player"></div>
+                      </div>
+
+
+                      <div class="question">
+                        <div id="inferno-questions-basic"></div>
+                      </div>
+
+                    </div>
 
                   </div>
-
-                  <div class="hotspot food">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lounge3-UHC/food.png">
-                  </div>
-                  <div class="hotspot video-wall">
-                    <iframe src="/embed/e6c41fc6-742c-43e3-ba0d-8ac3bf8d2b34"
-                            frameborder="0"
-                            allowfullscreen="true"
-                            webkitallowfullscreen="true"
-                            mozallowfullscreen="true">
-                    </iframe>
-                  </div>
-                  <div class="hotspot tall-banner"></div>
 
                 </div>
+
+                <script>
+                  // ask a question hack
+                  $(document).ready(function () {
+                    const container = landingPageEl ?? document;
+                    const qa = container.querySelector('.inferno-input-group');
+                    qa.querySelector('input').placeholder = 'Ask a Question';
+                  });
+                </script>
 
                 <!-- Tawk Clearing Code -->
                 <script type="text/javascript">
                   setTimeout(function () {
-                    if (!window.Tawk_API) return; // if it does not exist no need to continue
-
-                    // Else Let's hide it / end the chat / destroy all Tawk.to props on the window
-                    window.Tawk_API.hideWidget();
-                    window.Tawk_API.endChat();
-                    Object.keys(window).forEach(function (key) {
-                      if (key.toLowerCase().includes('tawk')) {
-                        delete window[key];
+                    // Clear iframes (with title "chat widget")
+                    var iframes = document.querySelectorAll('iframe');
+                    for (var i = 0; i < iframes.length; i++) {
+                      if (iframes[i].title.toLowerCase() === 'chat widget') {
+                        iframes[i].parentNode.removeChild(iframes[i]);
                       }
-                    });
-                    delete window.Tawk_API;
+                    }
 
-                    let iframes = document.querySelectorAll('iframe');
-                    iframes.forEach(item => {
-                      if (item.title.toLowerCase().includes('chat widget')) {
-                        item.parentNode.removeChild(item);
-                      }
-                    })
+                    // Check for Tawk instance
+                    if (window.Tawk_API) {
+                      // Let's hide it / end the chat / destroy all Tawk props on the window
+                      window.Tawk_API.hideWidget();
+                      window.Tawk_API.endChat();
+                      Object.keys(window).forEach(function (key) {
+                        if (key.toLowerCase().indexOf('tawk') > -1) {
+                          delete window[key];
+                        }
+                      });
 
+
+                      // Clear
+                      window.Tawk_API = null;
+                    }
                   }, 1500);
                 </script>
                 <!-- End Tawk Clearing Code -->
-
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
@@ -369,6 +494,5 @@
   }
 
 </script>
-
 
 </html>
