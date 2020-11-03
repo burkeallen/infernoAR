@@ -163,17 +163,11 @@
                   }
 
                   .video-wall {
-                    top: 5.2%;
-                    left: 29.3%;
-                    width: 40.7%;
-                    height: 35%;
-                    background-color: #000000;
-                  }
-
-                  .video-wall iframe {
-                    width: 100%;
-                    height: 100%;
-                    background-color: #000000;
+                    top: 3%;
+                    left: 33%;
+                    width: 34%;
+                    height: 50%;
+                    z-index: 2;
                   }
 
                   .tall-banner {
@@ -185,7 +179,29 @@
                     background-color: white;
                   }
 
+                </style>
 
+                <!-- Video Player -->
+                <style>
+                  .video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .video-player {
+                    height: auto !important;
+                    max-width: none;
+                  }
+
+                  .video-player iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: .5em;
+                  }
                 </style>
 
                 <!-- Modal Window Style -->
@@ -319,12 +335,16 @@
                     <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lounge3-UHC/food.png">
                   </div>
                   <div class="hotspot video-wall">
-                    <iframe src="/embed/e6c41fc6-742c-43e3-ba0d-8ac3bf8d2b34"
-                            frameborder="0"
-                            allowfullscreen="true"
-                            webkitallowfullscreen="true"
-                            mozallowfullscreen="true">
-                    </iframe>
+                    <div class="video-container">
+                      <div class="video-player">
+                        <iframe src="/embed/e6c41fc6-742c-43e3-ba0d-8ac3bf8d2b34"
+                                frameborder="0"
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true"
+                                mozallowfullscreen="true">
+                        </iframe>
+                      </div>
+                    </div>
                   </div>
                   <div class="hotspot tall-banner"></div>
 
@@ -338,7 +358,8 @@
                             <div class="yes-message">
                               Thank you for stopping by! Click the "YES" button below and UnitedHealthcare will donate
                               a food box to Martha's Table.
-                              <a class="yes" href="javascript:void(0)" id="lounge_UHC_ClickHere_Confirm" onclick="clickYes()">Yes</a>
+                              <a class="yes" href="javascript:void(0)" id="lounge_UHC_ClickHere_Confirm"
+                                 onclick="clickYes()">Yes</a>
                             </div>
                             <p>**Your information will not be shared with anyone.</p>
                           </div>
@@ -365,30 +386,27 @@
                 </script>
 
                 <!-- Tawk Clearing Code -->
-                <script type="text/javascript">
-                  setTimeout(function () {
-                    if (!window.Tawk_API) return; // if it does not exist no need to continue
-
-                    // Else Let's hide it / end the chat / destroy all Tawk.to props on the window
-                    window.Tawk_API.hideWidget();
-                    window.Tawk_API.endChat();
-                    Object.keys(window).forEach(function (key) {
-                      if (key.toLowerCase().includes('tawk')) {
-                        delete window[key];
-                      }
-                    });
-                    delete window.Tawk_API;
-
-                    let iframes = document.querySelectorAll('iframe');
-                    iframes.forEach(item => {
-                      if (item.title.toLowerCase().includes('chat widget')) {
-                        item.parentNode.removeChild(item);
-                      }
-                    })
-
-                  }, 1500);
-                </script>
+                <tawkto-hide>
+                  <script type="text/javascript">
+                    if (window.Tawk_API) {
+                      Tawk_API.hideWidget();
+                    }
+                  </script>
+                </tawkto-hide>
                 <!-- End Tawk Clearing Code -->
+
+
+                <!-- ##### Remove Chatwee ##### -->
+                <remove-chatwee>
+                  <script>
+                    if (window.ChatweeLib) {
+                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+                      chatweeManager.Dispose();
+                    }
+                  </script>
+                </remove-chatwee>
+                <!-- ##### End Remove Chatwee ##### -->
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -449,36 +449,30 @@
                     <div class="videoWrapper"></div>
                   </div>
                 </div>
+
+
+
                 <!-- Tawk Clearing Code -->
-                <script type="text/javascript">
-                  setTimeout(function () {
-                    // Clear iframes (with title "chat widget")
-                    var iframes = document.querySelectorAll('iframe');
-                    for (var i = 0; i < iframes.length; i++) {
-                      if (iframes[i].title.toLowerCase() === 'chat widget') {
-                        iframes[i].parentNode.removeChild(iframes[i]);
-                      }
-                    }
-
-                    // Check for Tawk instance
+                <tawkto-hide>
+                  <script type="text/javascript">
                     if (window.Tawk_API) {
-                      // Let's hide it / end the chat / destroy all Tawk props on the window
-                      window.Tawk_API.hideWidget();
-                      window.Tawk_API.endChat();
-                      Object.keys(window).forEach(function (key) {
-                        if (key.toLowerCase().indexOf('tawk') > -1) {
-                          delete window[key];
-                        }
-                      });
-
-
-
-                      // Clear
-                      window.Tawk_API = null;
+                      Tawk_API.hideWidget();
                     }
-                  }, 1500);
-                </script>
+                  </script>
+                </tawkto-hide>
                 <!-- End Tawk Clearing Code -->
+
+                <!-- ##### Remove Chatwee ##### -->
+                <remove-chatwee>
+                  <script>
+                    if (window.ChatweeLib) {
+                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+                      chatweeManager.Dispose();
+                    }
+                  </script>
+                </remove-chatwee>
+                <!-- ##### End Remove Chatwee ##### -->
+
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->

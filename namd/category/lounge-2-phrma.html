@@ -182,30 +182,25 @@
 
 
                 <!-- Tawk Clearing Code -->
-                <script type="text/javascript">
-                  setTimeout(function () {
-                    if (!window.Tawk_API) return; // if it does not exist no need to continue
-
-                    // Else Let's hide it / end the chat / destroy all Tawk.to props on the window
-                    window.Tawk_API.hideWidget();
-                    window.Tawk_API.endChat();
-                    Object.keys(window).forEach(function (key) {
-                      if (key.toLowerCase().includes('tawk')) {
-                        delete window[key];
-                      }
-                    });
-                    delete window.Tawk_API;
-
-                    let iframes = document.querySelectorAll('iframe');
-                    iframes.forEach(item => {
-                      if (item.title.toLowerCase().includes('chat widget')) {
-                        item.parentNode.removeChild(item);
-                      }
-                    })
-
-                  }, 1500);
-                </script>
+                <tawkto-hide>
+                  <script type="text/javascript">
+                    if (window.Tawk_API) {
+                      Tawk_API.hideWidget();
+                    }
+                  </script>
+                </tawkto-hide>
                 <!-- End Tawk Clearing Code -->
+
+                <!-- ##### Remove Chatwee ##### -->
+                <remove-chatwee>
+                  <script>
+                    if (window.ChatweeLib) {
+                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+                      chatweeManager.Dispose();
+                    }
+                  </script>
+                </remove-chatwee>
+                <!-- ##### End Remove Chatwee ##### -->
 
 
               </inferno-snippet-content>
