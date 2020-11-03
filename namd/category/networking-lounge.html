@@ -181,7 +181,6 @@
                 </div>
 
 
-                <!-- Tawk Clearing Code -->
                 <tawkto-hide>
                   <script type="text/javascript">
                     if (window.Tawk_API) {
@@ -189,19 +188,16 @@
                     }
                   </script>
                 </tawkto-hide>
-                <!-- End Tawk Clearing Code -->
 
-                <!-- ##### ChatWee widget ##### -->
-                <chatwee>
-                  <!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
+                <chatwee-initialize>
+                  <!--  get current users name to send to chatWee -->
                   {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
                   {%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
 
                   <!-- get duration till end of conference plus one day for buffer -->
-                  <!-- this determines the length of time to set the chatwee cookie expiration too -->
+                  <!-- this determines the length of time to set the chatWee cookie expiration too -->
                   {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
                   {%- assign lastEvent = eventsByDate.last -%}
-
                   {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
                   {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
                   {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
@@ -209,14 +205,17 @@
                   <!-- difference in seconds -->
                   {%- assign diffSeconds = eventEnd | minus:nowTimestamp -%}
                   {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
+
+                  <!--  set chatwee cookie expiration time -->
                   {%- assign chatWeeDuration = diffSeconds | plus: secondsInADay -%}
 
+                  <!--  use to hold users name to send to chatWee-->
                   <div style="display:none;">
                     <p id="user-inferno-first-name">${firstName}</p>
                     <p id="user-inferno-last-name">${lastName}</p>
                   </div>
 
-                  <script id="init-chatwee" async>
+                  <script>
 
                     var userInfernoId = window.sessionStorage.getItem("userId");
                     var firstName = window.isLocalTemplate ? 'TEST' : landingPageEl.getElementById("user-inferno-first-name").innerHTML;
@@ -227,106 +226,123 @@
 
                     // global chat manager
                     var chatWeeManager = null;
-
-                    var chatWeeMainID = '5f7ef3ae1e09cc38f15f19d2';
-
+                    var chatWeeMainID = '5f7ef3ae1e09cc38f15f19d2'; // get from chatWee Admin Panel
                     var chatweeValues = {
-                      userIdKey: "chatwee-user-id",
-                      sessionCookieKey: "chatwee-SID-" + chatWeeMainID,
-                      chatId: chatWeeMainID,
-                      clientApiKey: "e0a1f57b8bee2d98d6a81002",
-                      isAdmin: 0,
-                      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+                      userIdKey: "chatwee-user-id", // do not change
+                      sessionCookieKey: "chatwee-SID-" + chatWeeMainID, // do not change
+                      chatId: chatWeeMainID, // do not change
+                      clientApiKey: "e0a1f57b8bee2d98d6a81002", // get from chatWee Admin Panel
+                      isAdmin: 0, // do not change
+                      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/" // do not change
                     }
 
-                    var loadChatScript = () => {
-                      // don't load script if already on page
-                      let chatScript = document.getElementById("weeChat-script");
+                    async function setUpChatWee() {
+                      loadChatWeeScript();
+                      loadChatWeeCustomStyles();
+                      const res = await getProfileImage();
+                      if (res.status === 200) {
+                        chatWeeHasProfileImage = true;
+                      }
+
+                      waitForGlobal("ChatweeLib", connectChatWee, startChatWee);
+                    }
+
+                    function loadChatWeeScript() {
+                      // don't load script again if already loaded
+                      let chatScript = document.getElementById("chatWee-script");
                       if (chatScript) return;
 
-                      (function () {
-                        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                        s1.id = "weeChat-script";
-                        s1.async = true;
-                        s1.src = 'https://static.chatwee-api.com/v2/script.js';
-                        s1.charset = 'UTF-8';
-                        s0.parentNode.insertBefore(s1, s0);
-                      })();
+                      const s1 = document.createElement("script");
+                      const s0 = document.getElementsByTagName("script")[0];
+                      s1.id = "chatWee-script";
+                      s1.async = true;
+                      s1.src = 'https://static.chatwee-api.com/v2/script.js';
+                      s0.parentNode.insertBefore(s1, s0);
+                    }
+
+                    async function loadChatWeeCustomStyles() {
+                      return;  // remove this line if you want to load custom styles
+
+                      let chatStyleSheet = document.getElementById("chatWee-custom-styling");
+                      if (chatStyleSheet) return;
+
+                      const style = document.createElement("link");
+                      const body = document.getElementsByTagName("body")[0];
+
+                      // change to your custom style sheet
+                      style.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+                      style.setAttribute("id", "chatWee-custom-styling")
+                      style.setAttribute("rel", "stylesheet")
+                      style.setAttribute("type", "text/css")
+                      style.setAttribute("media", "all")
+                      body.parentNode.insertBefore(style, body);
+
+                    }
+
+                    async function connectChatWee() {
+
+                      // see if session id locally
+                      let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+                      if (sessionId) {
+                        // validate session id with chatwee
+                        let valid
+                        try {
+                          valid = await validateChatWeeSessionId(sessionId);
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+                        // if true, do nothing
+                        if (valid) return;
+                      }
+
+                      // if false, check if user id is present locally
+                      const userId = getCookie(chatweeValues.userIdKey);
+
+                      // if true, login and set session id locally
+                      if (userId) {
+                        let sessionId = ""
+                        try {
+                          sessionId = await loginChat(userId);
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatWeeDuration);
+                      }
+                      // if false, register and set user id and log in user
+                      else {
+                        let userId = ""
+                        try {
+                          userId = await registerChatWee();
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        setCookie(chatweeValues.userIdKey, userId, chatWeeDuration);
+
+                        let sessionId = ""
+                        try {
+                          sessionId = await loginChatWee(userId);
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatWeeDuration);
+
+                      }
 
                       return;
                     }
 
-                    var loadChatStyles = () => {
-                      return;  // no custom styling for this instance
-
-                      // dont load styles if already on page
-                      // let chatStyleSheet = document.getElementById("chat-replacement-styling");
-                      // if (chatStyleSheet) return;
-                      //
-                      // (function () {
-                      //   var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
-                      //
-                      //   link1.setAttribute("id", "chat-replacement-styling")
-                      //   link1.setAttribute("rel", "stylesheet")
-                      //   link1.setAttribute("type", "text/css")
-                      //   link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
-                      //   link1.setAttribute("media", "all")
-                      //   body.parentNode.insertBefore(link1, body);
-                      // })();
-
-                      return;
-                    }
-
-                    var startChat = async () => {
+                    async function startChatWee() {
                       if (!chatWeeManager) {
                         chatWeeManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
                         chatWeeManager.Run();
                       }
                     }
 
-                    var openChat = () => {
-                      // close bubble
-                      let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
-                      let bubble = bubbleChild.parentNode;
-                      bubble.style.display = "none";
-
-                      // open chat
-                      let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
-                      let chat = chatChild.parentNode;
-                      chat.style.display = "block";
-                      return;
-                    }
-
-                    // Chatwee UserId must be set as the Id for the button
-                    var triggerConversation = e => {
-                      let userId = e.target.id;
-                      openChat();
-                      chatWeeManager.TriggerConversation(userId);
-                    }
-
-                    // helper functions
-                    var getCookie = key => {
-                      let cookieValue = "";
-
-                      const cookieList = document.cookie;
-                      if (cookieList) {
-                        const cookie = cookieList
-                          .split("; ")
-                          .find(row => row.startsWith(key));
-
-                        if (cookie) {
-                          cookieValue = cookie.split("=")[1];
-                        }
-
-                      }
-                      return cookieValue;
-                    }
-
-                    var setCookie = (key, value, age) => {
-                      document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
-                    }
-
-                    var validateChatSessionId = sessionId => {
+                    function validateChatWeeSessionId(sessionId) {
                       const url = chatweeValues.ssoBaseUrl
                         + "validate-session?"
                         + "chatId="
@@ -339,7 +355,7 @@
                       return fetch(url).then(res => res.json());
                     }
 
-                    var loginChat = userId => {
+                    function loginChatWee(userId) {
                       const url = chatweeValues.ssoBaseUrl
                         + "login?"
                         + "chatId="
@@ -352,7 +368,7 @@
                       return fetch(url).then(res => res.json());
                     }
 
-                    var registerChat = () => {
+                    function registerChatWee() {
                       const name = firstName + " " + lastName;
 
                       // TO DO: get default chat icon
@@ -376,71 +392,31 @@
                       return fetch(url).then(res => res.json());
                     }
 
-                    // connect to Chatwee
-                    var connectChat = async () => {
-
-                      // see if session id locally
-                      let sessionId = getCookie(chatweeValues.sessionCookieKey);
-
-                      if (sessionId) {
-                        // validate session id with chatwee
-                        let valid
-                        try {
-                          valid = await validateChatSessionId(sessionId);
-                        } catch (e) {
-                          throw new Error(e);
+                    // helper functions
+                    function getCookie(key) {
+                      let cookieValue = "";
+                      const cookieList = document.cookie;
+                      if (cookieList) {
+                        const cookie = cookieList
+                          .split("; ")
+                          .find(row => row.startsWith(key));
+                        if (cookie) {
+                          cookieValue = cookie.split("=")[1];
                         }
-
-                        // if true, do nothing
-                        if (valid) return;
-
                       }
-
-                      // if false, check if user id is present locally
-                      const userId = getCookie(chatweeValues.userIdKey);
-
-                      // if true, login and set session id locally
-                      if (userId) {
-                        let sessionId = ""
-                        try {
-                          sessionId = await loginChat(userId);
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatWeeDuration);
-                      }
-                      // if false, register and set user id and log in user
-                      else {
-                        let userId = ""
-                        try {
-                          userId = await registerChat();
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        setCookie(chatweeValues.userIdKey, userId, chatWeeDuration);
-
-                        let sessionId = ""
-                        try {
-                          sessionId = await loginChat(userId);
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatWeeDuration);
-
-                      }
-
-                      return;
+                      return cookieValue;
                     }
 
-                    var getProfileImage = () => {
+                    function setCookie(key, value, age) {
+                      document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
+                    }
+
+                    function getProfileImage() {
                       let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
                       return fetch(url);
                     }
 
-                    var waitForGlobal = async (key, callback1, callback2) => {
+                    async function waitForGlobal(key, callback1, callback2) {
                       if (window[key]) {
                         await callback1();
                         await callback2();
@@ -451,23 +427,11 @@
                       }
                     };
 
-                    var setUpChat = async () => {
-                      loadChatScript();
-                      loadChatStyles();
-                      const res = await getProfileImage();
-                      if (res.status === 200) {
-                        chatWeeHasProfileImage = true;
-                      }
-
-                      waitForGlobal("ChatweeLib", connectChat, startChat);
-                    }
-
-                    setUpChat();
+                    setUpChatWee();
 
                   </script>
 
-                </chatwee>
-                <!-- ##### end of  chat widget ##### -->
+                </chatwee-initialize>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
