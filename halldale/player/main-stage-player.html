@@ -194,36 +194,91 @@
                 </style>
 
 
-                <!-- QA Question Box -->
+                <!--  ask a question -->
                 <style>
+                  .ask-question {
+                    color: #fff;
+                    width: 50vw;
+                    text-align: center;
+                  }
+
+                  .question {
+                    margin: 10px auto;
+                    position: relative;
+                    width: 50vw;
+                    text-align: center;
+                    background-color: transparent;
+                  }
+
+                  .ask-question span {
+                    color: #fff;
+                  }
+
+                  button {
+                    outline: none;
+                    border: none;
+                    background: transparent;
+                    font-family: 'openSans', sans-serif;
+                  }
+
+                  button:hover {
+                    opacity: .9;
+                    cursor: pointer;
+                  }
+
 
                   .inferno-input-group {
-                    border-radius: 0 0 .5em .5em;
-                    padding: 1em;
-                    background-color: var(--branding-primary);
+                    display: block;
+                    position: relative;
                   }
 
-
-                  .inferno-input-group input {
-                    width: 60%;
+                  .inferno-input-group-addon {
+                    display: none;
                   }
 
-                  .inferno-input-group span {
-                    width: 20%;
-                    color: var(--sidebar-bg-color);
+                  input {
+                    padding-left: .5em;
                   }
 
-                  .inferno-input-group button {
-                    width: 15%;
-                    background-color: var(--sidebar-bg-color);
-                    color: var(--branding-primary);
-                    border: solid 1px var(--sidebar-bg-color);
-                    float: right;
+                  .inferno-form-control {
+                    min-height: 37px;
+                    border: none;
+                    width: Calc(55vw - 30%);
+                    border-radius: 4px 0 0 4px;
+                    outline: none;
+                    margin-bottom: 1em;
                   }
 
-                  .inferno-input-group button:hover {
-                    filter: brightness(120%);
-                    transform: scale(1.1);
+                  .inferno-btn {
+                    color: #fff;
+                    width: 80px;
+                    min-height: 38px;
+                    background-color: #a6192e;
+                    border-radius: 0 4px 4px 0;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .stage-grid {
+                      padding: 1% 5%;
+                    }
+                  }
+                  @media only screen and (max-width: 768px) {
+                    .stage-grid {
+                      padding: 0;
+                    }
+                    .content {
+                      /* use when the background div encompasses the entire content */
+                      margin: -15px;
+                    }
+
+                    .inferno-form-control {
+                      width: Calc(55vw - 20%);
+                      border-radius: 4px;
+                    }
+
+                    .inferno-btn {
+                      border-radius: 4px;
+                    }
                   }
                 </style>
 
@@ -279,6 +334,18 @@
 
                   }
                 </script>
+
+                <ask-aquestion-placeholder>
+                  <script>
+                    // ask a question hack
+                    $(document).ready(function () {
+                      const container = landingPageEl ?? document;
+                      const qa = container.querySelector('.inferno-input-group');
+                      qa.querySelector('input').placeholder = 'Ask a Question';
+                    });
+                  </script>
+                </ask-aquestion-placeholder>
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
