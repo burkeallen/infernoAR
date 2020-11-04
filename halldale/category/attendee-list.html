@@ -376,7 +376,7 @@
                   var attendees = [];
                   var totalAttendees = null;
 
-                 function fetchUsers(pageNumber) {
+                  function fetchUsers(pageNumber) {
                     const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
                     // max pagesize = 1000
                     // page start at 1 not 0
@@ -390,12 +390,12 @@
                       'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname
                     };
 
-                   // add a header property for users accessing with SA credentials
-                   if (window.sessionStorage.overrideId) {
-                     headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
-                   }
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
+                    }
 
-                   console.log(JSON.stringify(headers));
+                    console.log(JSON.stringify(headers));
 
                     $.ajax({
                       url: _baseUrl + 'UserProfileExport',
@@ -444,6 +444,7 @@
                     // filter out users who have opted out of sharing their data
                     const container = landingPageEl.querySelector('.attendee-list');
                     const template = landingPageEl.querySelector('template');
+                    const baseImgUrl = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/';
 
                     if (!attendees || !attendees.length) {
                       landingPageEl.getElementById("no-results-message").style.display = '';
@@ -451,13 +452,7 @@
                     attendees.forEach(user => {
                       const clone = template.content.cloneNode(true);
                       const card = clone.querySelector('.card');
-                      const avatar = card.querySelector('.avatar img');
-                      avatar.onerror = function () {
-                        // prevent an infinite loop is second image does not load
-                        avatar.onerror = null;
-                        avatar.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/_avatar.jpg';
-                      }
-                      avatar.src = ' https://ingress.infernocore.jolokia.com/api/ProfileImage/' + user.UserId + '/250/250';
+                      card.querySelector('.avatar img').src = baseImgUrl + user.userId + '/250/250';
                       const firstName = user.firstName ?? '';
                       const lastName = user.lastname ?? '';
                       card.querySelector('.person').innerHTML = firstName + ' ' + lastName;
