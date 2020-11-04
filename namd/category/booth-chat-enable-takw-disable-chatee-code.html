@@ -1,0 +1,41 @@
+<chatwee-hide>
+  <script>
+    if (window.ChatweeLib) {
+      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+      chatweeManager.Dispose();
+    }
+  </script>
+</chatwee-hide>
+
+
+<tawkto-initialize>
+  <script>
+    var loadTawkChatScript = () => {
+      // don't load script if already on page
+      let chatScript = document.getElementById("tawkto-script");
+      if (chatScript) {
+        Tawk_API.showWidget();
+        Tawk_API.maximize();
+        return;
+      }
+
+      window.Tawk_API = window.Tawk_API || {}
+      window.Tawk_LoadStart = new Date();
+      Tawk_API.onLoad = function () {
+        Tawk_API.showWidget();
+        Tawk_API.maximize();
+      };
+
+      const s1 = document.createElement("script");
+      const s0 = document.getElementsByTagName("script")[0];
+      s1.id = "tawkto-script";
+      s1.async = true;
+      s1.src = 'https://embed.tawk.to/5f91b5b417015e2aea6d7d40/default';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode.insertBefore(s1, s0);
+    }
+
+    loadTawkChatScript();
+
+  </script>
+</tawkto-initialize>
