@@ -197,10 +197,9 @@
                     position: relative;
                     display: flex;
                     flex-direction: column;
-                    justify-content: start;
+                    justify-content: center;
                     align-items: center;
-                    width: 200px;
-                    height: 250px;
+                    width: 300px;
                     background-color: white;
                     border-radius: 1em;
                     margin: 10px;
@@ -223,7 +222,7 @@
                     display: block;
                     position: relative;
                     width: 100%;
-                    padding:0;
+                    padding: 0;
                   }
 
                   .hero img {
@@ -232,38 +231,18 @@
                   }
 
                   .diamond {
-                    width: 420px;
+                    width: 380px;
                   }
 
                   .silver {
-                    width: 310px;
+                    width: 300px;
                   }
 
-                  .card-top {
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    height: 60%;
-                  }
-
-                  .card-top img {
+                  .card img {
                     width: 100%;
+                    max-height: 100%;
                   }
 
-                  .card-bottom {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 30%;
-                    text-align: center;
-                    background-color: #dddddd;
-                    border-radius: 0 0 1rem;
-                  }
-
-                  .name {
-                    font-size: 1.5em;
-                  }
 
                   .level {
                     width: 115px;
@@ -271,21 +250,23 @@
                     position: absolute;
                     transform: rotateZ(-45deg);
                     text-align: center;
-                    top: 7%;
-                    left: -12%;
+                    top: 8%;
+                    left: -8%;
                     clip-path: polygon(17% 0%, 77% 0%, 93% 100%, 0% 100%);
                     text-indent: -8%;
                   }
 
                   .diamond .level {
                     background-color: rgba(0, 0, 0, .6);
-                    left: -6%;
+                    top: 6%;
+                    left: -7%;
                     color: white;
                   }
 
                   .silver .level {
                     background-color: rgba(192, 192, 192, .6);
                     left: -8%;
+                    top: 6%;
                   }
 
 
@@ -331,7 +312,8 @@
                   </div>
 
                   <div class="button-banner">
-                    <a class="booth-happenings" href="javascript:void(0),alert('need link - will open in new Tab');">
+                    <a class="booth-happenings" id="On_Booth_Happenings_Click" target="_blank"
+                       href="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/expo/On Booth Events _Global ATS-V.pdf">
                       On Booth Happenings
                     </a>
                     </a>
@@ -351,12 +333,7 @@
                   <template>
                     <a class="card" href="">
                       <div class="level"></div>
-                      <div class="card-top">
-                        <img src=""/>
-                      </div>
-                      <div class="card-bottom">
-                        <div class="name"></div>
-                      </div>
+                      <img src=""/>
                     </a>
                   </template>
 
@@ -367,62 +344,91 @@
 
                     const notAvaialable = 'javascript:void(0),alert("Booth not yet Available");';
 
-                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/';
+                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/expo/v2/';
                     let list = [
-                      {level: 'diamond', name: '_CAE', img: 'diamond_cae.png', href: notAvaialable},
-                      {level: 'silver', name: 'AMST', img: 'bronze_amst.png', href: notAvaialable},
-                      {level: 'bronze', name: 'Allsim', img: 'bronze_allsim.png', href: notAvaialable},
+                      {level: 'diamond', name: '_CAE', img: 'Large_White_CAE.png', href: notAvaialable},
+                      {level: 'silver', name: 'AMST', img: 'Medium_White-AMST.png', href: notAvaialable},
+                      {level: 'bronze', name: 'Allsim', img: 'Small_White_alsim.png', href: notAvaialable},
+                      {
+                        level: 'bronze',
+                        name: 'Aviation eLearning',
+                        img: 'Small_White_AviationeLearning.png',
+                        href: notAvaialable
+                      },
                       {
                         level: 'bronze',
                         name: 'Avion Group',
-                        img: 'bronze_avion.png',
+                        img: 'Small_White_avion.png',
                         href: '/videos/12da6057-7390-4806-c343-08d8744f050e/landing/2afa8c55-e8f0-44ce-96ce-bdcba1ee10cb'
                       },
-                      {level: 'bronze', name: 'Bhirle', img: 'bronze_bihrle.png', href: '#'},
+                      {level: 'bronze', name: 'Bhirle', img: 'Small_White_Bihrle.png', href: '#'},
+                      {level: 'bronze', name: 'Cole', img: 'Small_White_Cole.png', href: '#'},
                       {
                         level: 'bronze',
                         name: 'CPaT Global',
-                        img: 'bronze_cpat.png',
+                        img: 'Small_White_CPaT.png',
                         href: '/videos/04934a6f-e1fe-41ec-0028-08d87b4df110/landing/80b7f432-02e2-4eb0-bcd8-2d623e251e19'
                       },
                       {
                         level: 'bronze',
                         name: 'Drillster',
-                        img: 'bronze_drillster.png',
+                        img: 'Small_White_Drillster.png',
                         href: '/videos/1ce0504e-8f00-456c-8004-08d87b4f05c1/landing/9e4ac9d8-0752-4af9-ae93-a508f2b09c07'
                       },
-                      {level: 'bronze', name: 'Entrol', img: 'bronze_entrol.png', href: '#'},
+                      {
+                        level: 'bronze',
+                        name: 'Entrol',
+                        img: 'Small_White_entrol.png',
+                        href: '#'
+                      },
                       {
                         level: 'bronze',
                         name: 'Flight Simulation Company',
-                        img: 'bronze_fsc.png',
+                        img: 'Small_White_Flight.png',
                         href: '/videos/2d23ffb6-3657-4fde-0603-08d87a694829/landing/ca7f4708-6f8e-4c51-ac25-c48a43e91b41'
                       },
-                      {level: 'bronze', name: 'Pace', img: 'bronze_pace.png', href: '#'},
+                      {
+                        level: 'bronze',
+                        name: 'JETPUBS',
+                        img: 'Small_White_JETPUBS.png',
+                        href: '/videos/e475728c-7102-455f-cb8d-08d87d161b6f/landing/e058c52d-f8f8-457d-8bbd-9b0060644229'
+                      },
+                      {
+                        level: 'bronze',
+                        name: 'MINT',
+                        img: 'Small_White_MINT.png',
+                        href: '#'
+                      },
+                      {
+                        level: 'bronze',
+                        name: 'Pace',
+                        img: 'Small_White_PACE.png',
+                        href: '#'
+                      },
                       {
                         level: 'bronze',
                         name: 'ProSim Training Solutions',
-                        img: 'bronze_prosim2.png',
+                        img: 'Small_White_ProSim.png',
                         href: '/videos/2c1bdd7b-3cfe-46ab-8000-08d87b4f05c1/landing/bafdf1b0-8754-49ab-9d85-32fb6e59c8b1'
                       },
                       {
                         level: 'bronze',
                         name: 'Simnest Aviation',
-                        img: 'bronze_simnest.png',
+                        img: 'Small_White_SimnestAviation.png',
                         href: '/videos/fcb730aa-ea8d-4b7d-255d-08d87a478093/landing/90893aec-6b0f-49dc-babf-805e272e098e'
                       },
                       {
                         level: 'bronze',
-                        name: 'Wright Brothers',
-                        img: 'bronze_wbft.png',
-                        href: '/videos/29f17541-d6eb-4906-c337-08d8744f050e/landing/eff3eea0-a301-4505-8413-e23ef6900601'
+                        name: 'Urbe Aero',
+                        img: 'Small_White_UrbeAero.png',
+                        href: '#'
                       },
                       {
                         level: 'bronze',
-                        name: 'JETPUBS',
-                        img: 'bronze_jetpubs.png',
-                        href: '/videos/e475728c-7102-455f-cb8d-08d87d161b6f/landing/e058c52d-f8f8-457d-8bbd-9b0060644229'
-                      }
+                        name: 'Wright Brothers',
+                        img: 'Small_White_WrightBrothersFlight.png',
+                        href: '/videos/29f17541-d6eb-4906-c337-08d8744f050e/landing/eff3eea0-a301-4505-8413-e23ef6900601'
+                      },
                     ];
 
                     list = list.sort(function (a, b) {
@@ -448,7 +454,7 @@
 
                       card.querySelector('img').src = baseUrl + item.img;
                       //force CAE before AMST but remove special character forcing the sort order
-                      card.querySelector('.name').innerHTML = item.name.replace('_', '');
+                      // card.querySelector('.name').innerHTML = item.name.replace('_', '');
                       card.querySelector('.level').innerHTML = item.level;
 
                       if (item.level.toLowerCase().includes('bronze')) {
