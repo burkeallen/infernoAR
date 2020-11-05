@@ -440,7 +440,7 @@
                   }
 
                   #event-panelist {
-                    font-size: 1.75rem;
+                    /*font-size: 1.75rem;*/
                   }
 
                   .speaker-info {
@@ -606,16 +606,16 @@
                             <h2 id="event-speakers" style="display: none">Speakers</h2>
                             <div id="speaker-list">
 
+                              <div id="facilitator">
+                                <h2 id="event-facilitator" style="display: none">Facilitators</h2>
+                              </div>
+
                               <div id="moderator">
                                 <h2 id="event-moderator" style="display: none">Moderator</h2>
                               </div>
 
                               <div id="panelist">
                                 <h2 id="event-panelist" style="display: none">Panelists</h2>
-                              </div>
-
-                              <div id="facilitator">
-                                <h2 id="event-facilitator" style="display: none">Facilitators</h2>
                               </div>
 
                             </div>
@@ -929,9 +929,23 @@
                       speakers: [
                         {
                           type: 3,
-                          name: "TBA",
+                          name: "Mark Larson",
                           speakerLink: "javascript:void(0)",
-                          speakerTitle: "",
+                          speakerTitle: "Senior Vice President, Leadership and Capacity Building, (CHCS)",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Sinsi Hernández-Cancio",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Vice President for Health Justice, National Partnership for Women & Families",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Corey Pleasants",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Senior Operations and Policy Advisor in the Office of the Chief of Staff, Department of Medical Assistance Services, Commonwealth of Virginia",
                           speakerBio: ``,
                         },
                       ],
@@ -1056,7 +1070,6 @@
                         const speakerFacilitator = clone.getElementById("facilitator");
 
                         clone.getElementById("dropdown-button-speaker-" + x).style.display = "";
-                        clone.getElementById("event-speakers").style.display = "block";
 
                         for (let speaker of event.speakers) {
                           let cloneTwo = speakerTemplate.content.cloneNode(true);
@@ -1079,6 +1092,7 @@
                             speakerFacilitator.appendChild(cloneTwo);
                           } else {
                             // speaker.type == 0 / is a regular speaker
+                            clone.getElementById("event-speakers").style.display = "block";
                             speakerList.appendChild(cloneTwo);
                           }
                         }
