@@ -172,6 +172,8 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="af32cfe3-c513-421f-bc2d-4c699c4b196b">
 
+
+
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
@@ -375,9 +377,8 @@
                   <div class="search-banner">
                     <div><h1>Attendees</h1></div>
                     <div class="search-input">
-                      <input type="text" placeholder="Search Attendees" oninput="searchAttendees(event)"/>
-                      <mat-icon class=" search-icon mat-icon material-icons mat-icon-no-color" role="img"
-                                aria-hidden="true">
+                      <input type="text" placeholder="Search Attendees" oninput="searchAttendees(event)">
+                      <mat-icon class=" search-icon mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                         search
                       </mat-icon>
                     </div>
@@ -388,19 +389,15 @@
                   <div class="attendee-list">
                     <template>
                       <div class="card" id="1">
-                        <div class="avatar"><img src=""></div>
+                        <div class="avatar"><img src></div>
                         <div class="person"></div>
                         <div class="company"></div>
                         <div class="job-title"></div>
                         <div class="social">
-                          <img class="facebook" style="display: none;"
-                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/facebook.png">
-                          <img class="instagram" style="display: none;"
-                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/instagram.png">
-                          <img class="twitter" style="display: none;"
-                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/twitter.png">
-                          <img class="linkedin" style="display: none;"
-                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/linkedin.png">
+                          <img class="facebook" style="display: none;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/facebook.png">
+                          <img class="instagram" style="display: none;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/instagram.png">
+                          <img class="twitter" style="display: none;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/twitter.png">
+                          <img class="linkedin" style="display: none;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/linkedin.png">
                         </div>
                       </div>
                     </template>
@@ -440,12 +437,13 @@
                     // Set header
                     const headers = {
                       'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
                     };
 
                     // add a header property for users accessing with SA credentials
                     if (window.sessionStorage.overrideId) {
-                      headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
                     }
 
                     $.ajax({
@@ -502,12 +500,12 @@
                       const clone = template.content.cloneNode(true);
                       const card = clone.querySelector('.card');
                       const avatar = card.querySelector('.avatar img');
-                      avatar.onerror = function () {
-                        // prevent an infinite loop is second image does not load
-                        avatar.onerror = null;
-                        avatar.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/Generic-Avatar.jpg';
-                      }
-                      avatar.src = ' https://ingress.infernocore.jolokia.com/api/ProfileImage/' + user.UserId + '/250/250';
+                      //avatar.onerror = function () {
+                      // prevent an infinite loop is second image does not load
+                      // avatar.onerror = null;
+                      //  avatar.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/Generic-Avatar.jpg';
+                      //}
+                      avatar.src = ' https://ingress.infernocore.jolokia.com/api/ProfileImage/' + user.userId + '/250/250';
                       const firstName = user.firstName ?? '';
                       const lastName = user.lastname ?? '';
                       card.querySelector('.person').innerHTML = firstName + ' ' + lastName;
@@ -611,8 +609,9 @@
                 </remove-chatwee>
                 <!-- ##### End Remove Chatwee ##### -->
 
-              </inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
+
+
+                <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->

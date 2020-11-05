@@ -243,8 +243,8 @@
                     background-size: cover;
                     background-repeat: no-repeat;
                     background-position: center;
-                    top: 73.5%;
-                    left: 34%;
+                    top: 74.1%;
+                    left: 34.2%;
                     width: 10%;
                     height: 12%;
                   }
@@ -345,10 +345,10 @@
                     right: 0;
                     top: 0;
                     color: #fff;
-                    font-size: 80%;
                     width: 70px;
                     text-align: center;
                     text-decoration: none;
+                    cursor: pointer;
                   }
 
                   .modal-close:hover {
@@ -414,42 +414,106 @@
                 </script>
 
 
+                <template id="qrcodeTemplate">
+                  <div id="qrcode" class="qrcode">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lobby/qr-code.png">
+                  </div>
+                </template>
+
+                <style>
+                  .qrcode {
+                    display: flex;
+                    justify-content: center;
+                  }
+                </style>
+                <script>
+                  function toggleQRCode() {
+                    // hijacking the video overlay for this
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let qrcode = videoWrapper.querySelector('#qrcode');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleQRCode();
+                    });
+
+                    if (qrcode) {
+                      // remove and close
+                      qrcode.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('template#qrcodeTemplate');
+                    const clone = temp.content.cloneNode(true);
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+
+                  }
+                </script>
+
                 <div class="content">
                   <div class="lobby">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lobby/NAMD_final_Lobby_v2.png">
+                    <img
+                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lobby/NAMD_final_Lobby_v2.png">
                   </div>
 
-                  <a href="/videos/cb11f926-31a1-40c4-b628-08d87c2110f2/landing/780bd211-6b28-4655-aa5a-03a346e02427" class="hotspot sponsor-lounge"> </a>
-                  <a href="/videos/b36f0312-38ad-4a3d-15b2-08d8742e3b76/landing/f4227356-3d97-47f3-9625-3ac2126a25c5" class="hotspot medical-director"> </a>
-                  <a href="/videos/ca9d81ac-3fb9-40cb-9aa5-08d85e2ed553/landing/40955f5a-f515-4292-83d3-ab7df0cad68f" class="hotspot library"> </a>
+                  <a id="lobby_sponsor_lounge_click"
+                     href="/videos/cb11f926-31a1-40c4-b628-08d87c2110f2/landing/780bd211-6b28-4655-aa5a-03a346e02427"
+                     class="hotspot sponsor-lounge"> </a>
+                  <a id="lobby_medicaid_director_click"
+                     href="/videos/b36f0312-38ad-4a3d-15b2-08d8742e3b76/landing/f4227356-3d97-47f3-9625-3ac2126a25c5"
+                     class="hotspot medical-director"> </a>
+                  <a id="lobby_library_click"
+                     href="/videos/ca9d81ac-3fb9-40cb-9aa5-08d85e2ed553/landing/40955f5a-f515-4292-83d3-ab7df0cad68f"
+                     class="hotspot library"> </a>
 
-                  <a href="/videos/9bc32866-daa6-4ab2-2558-08d87a478093/landing/af32cfe3-c513-421f-bc2d-4c699c4b196b" class="hotspot attendee-lounge"> </a>
-                  <a href="/videos/7d904ee8-f7aa-48f9-8ab5-08d86def408e/landing/308fb5cb-4101-4e02-a6f1-83b9c42a71c5" class="hotspot exhibit-hall"> </a>
-                  <a href="/videos/19ea6428-3688-4bd3-ac84-08d87435ca66/landing/d6c7d9ea-9053-4be7-b530-4244558b275d" class="hotspot speakers"> </a>
+                  <a id="lobby_attendee_lounge_click"
+                     href="/videos/9bc32866-daa6-4ab2-2558-08d87a478093/landing/af32cfe3-c513-421f-bc2d-4c699c4b196b"
+                     class="hotspot attendee-lounge"> </a>
+                  <a id="lobby_exhibit_hall_click"
+                     href="/videos/7d904ee8-f7aa-48f9-8ab5-08d86def408e/landing/308fb5cb-4101-4e02-a6f1-83b9c42a71c5"
+                     class="hotspot exhibit-hall"> </a>
+                  <a id="lobby_speakers_click"
+                     href="/videos/19ea6428-3688-4bd3-ac84-08d87435ca66/landing/d6c7d9ea-9053-4be7-b530-4244558b275d"
+                     class="hotspot speakers"> </a>
 
-                  <a href="/videos/335ca6e3-bbe3-456a-ac83-08d87435ca66/landing/dd975207-d0ba-4bae-b378-77d4058a9b78" class="hotspot info-desk"> </a>
-                  <div class="hotspot matt-video" id="75f3afbd-d671-4636-abf1-bf6c1b6d824d"
+                  <a href="/videos/335ca6e3-bbe3-456a-ac83-08d87435ca66/landing/dd975207-d0ba-4bae-b378-77d4058a9b78"
+                     class="hotspot info-desk"> </a>
+
+                  <div id="lobby_play_matt_video_click" class="hotspot matt-video"
+                       id="75f3afbd-d671-4636-abf1-bf6c1b6d824d"
                        onclick="toggleModal(this)">
                     <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/lobby/play-btn2.png">
                   </div>
 
-                  <a class="hotspot sponsor1" title="Wellness Challenge" href="https://2020.NAMD.live/WellnessChallenge" target="_blank"></a>
-                  <a class="hotspot sponsor2" title="Gather & Give" href="javascript:alert('need link or action');void(0)"></a>
-                  <a class="hotspot sponsor3" title="Road Trip" href="javascript:alert('need link or action');void(0)"></a>
+                  <div class="hotspot sponsor1" id="lobby_wellness_challenge_click" title="Wellness Challenge"
+                       id="a53c47c2-9b1d-49b5-a1ae-f8e0a239ce2a"
+                       onclick="toggleModal(this)"> </div>
 
-                  <a class="hotspot sponsor4" title="Conference Materials" href="https://2020.NAMD.live/VirtualKit" target="_blank"></a>
-                  <a class="hotspot sponsor5" title="Full Agenda" href="/videos/53dcca0b-86fc-49fe-9aa6-08d85e2ed553/landing/c6dcb27f-a4db-4a0b-97dd-15e32ba3540a"></a>
-                  <a class="hotspot sponsor6" title="State Only Agenda" href="/videos/be0e402c-af61-4b60-8c3e-08d874288ed9/landing/7ac54594-0202-4aea-8a73-5d78270849cf"></a>
+                  <a class="hotspot sponsor2" id="lobby_gather_give_click" title="Gather & Give"
+                     href="https://nextechar.zoom.us/j/9993750031" target="_blank"> </a>
+
+                  <div class="hotspot sponsor3" id="lobby_road_trip_click" title="Road Trip"
+                     onclick="toggleQRCode()"> </div>
+
+                  <a class="hotspot sponsor4" id="lobby_conference_materials_click" title="Conference Materials"
+                     href="https://2020.NAMD.live/VirtualKit" target="_blank"> </a>
+
+                  <a class="hotspot sponsor5" id="lobby_full_agenda_click" title="Full Agenda"
+                     href="/videos/53dcca0b-86fc-49fe-9aa6-08d85e2ed553/landing/c6dcb27f-a4db-4a0b-97dd-15e32ba3540a"> </a>
+
+                  <a class="hotspot sponsor6" id="lobby_state_only_agenda_click" title="State Only Agenda"
+                     href="/videos/be0e402c-af61-4b60-8c3e-08d874288ed9/landing/7ac54594-0202-4aea-8a73-5d78270849cf"> </a>
 
                 </div>
 
                 <div id="open-modal" class="modal-window">
                   <div>
-                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div title="Close" class="modal-close">CLOSE</div>
                     <div class="videoWrapper"></div>
                   </div>
                 </div>
-
 
 
                 <!-- Tawk Clearing Code -->

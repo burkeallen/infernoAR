@@ -231,7 +231,7 @@
                       userIdKey: "chatwee-user-id", // do not change
                       sessionCookieKey: "chatwee-SID-" + chatWeeMainID, // do not change
                       chatId: chatWeeMainID, // do not change
-                      clientApiKey: "e0a1f57b8bee2d98d6a81002", // get from chatWee Admin Panel
+                      clientApiKey: "5dfd2fde304b85bf4f1dfa67", // get from chatWee Admin Panel
                       isAdmin: 0, // do not change
                       ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/" // do not change
                     }
@@ -290,6 +290,7 @@
                         try {
                           valid = await validateChatWeeSessionId(sessionId);
                         } catch (e) {
+                          console.error('connectChatWee - validateChatWeeSessionId - ERROR ', e);
                           throw new Error(e);
                         }
                         // if true, do nothing
@@ -303,8 +304,9 @@
                       if (userId) {
                         let sessionId = ""
                         try {
-                          sessionId = await loginChat(userId);
+                          sessionId = await loginChatWee(userId);
                         } catch (e) {
+                          console.error('connectChatWee - loginChatWee - ERROR ', e);
                           throw new Error(e);
                         }
 
@@ -316,6 +318,7 @@
                         try {
                           userId = await registerChatWee();
                         } catch (e) {
+                          console.error('connectChatWee - registerChatWee - ERROR ', e);
                           throw new Error(e);
                         }
 
@@ -325,6 +328,7 @@
                         try {
                           sessionId = await loginChatWee(userId);
                         } catch (e) {
+                          console.error('connectChatWee 2 - loginChatWee - ERROR ', e);
                           throw new Error(e);
                         }
 
