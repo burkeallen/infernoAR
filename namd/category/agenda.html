@@ -456,7 +456,7 @@
                     text-decoration: underline;
                   }
 
-                  .speaker-info p {
+                  .speaker-info:first-child {
                     margin-left: 1rem;
                   }
 
@@ -745,9 +745,9 @@
                       speakers: [
                         {
                           type: 1,
-                          name: "Snyder Jami",
+                          name: "Jami Snyder",
                           speakerLink: "javascript:void(0)",
-                          speakerTitle: "Snyder, Director, Arizona Health Care Cost Containment System",
+                          speakerTitle: "Director, Arizona Health Care Cost Containment System",
                           speakerBio: ``,
                         },
                         {
@@ -1275,10 +1275,10 @@
                         },
                         {
                           type: 2,
-                          name: "Tracy Johnson PhD",
+                          name: "Tracy Johnson",
                           speakerLink: "javascript:void(0)",
                           speakerTitle:
-                            "Medicaid Director, Colorado Department of Health Care Policy & Financing; Medicaid & Child Health Plan Plus (CHP+)",
+                            "PhD, Medicaid Director, Colorado Department of Health Care Policy & Financing; Medicaid & Child Health Plan Plus (CHP+)",
                           speakerBio: ``,
                         },
                         {
@@ -1460,7 +1460,7 @@
                       eventLink: null,
                       timeAuditorium: "12:45PM – 1:15PM",
                       eventTitle: "LUNCH<br><i>Sponsored by PhRMA</i>",
-                      eventDetails: `Session details TBA.`,
+                      eventDetails: ``,
                       speakers: null,
                       join1: {url: mainStage, text: joinNowText}
                     },
@@ -1504,7 +1504,7 @@
                       join1: {url: mainStage, text: joinNowText},
                       speakers: [
                         {
-                          type: 2,
+                          type: 1,
                           name: "Sarah Kliff",
                           speakerLink: "javascript:void(0)",
                           speakerTitle: "Investigative Reporter, The New York Times",
@@ -1514,7 +1514,7 @@
                           type: 2,
                           name: "Scott Gottlieb",
                           speakerLink: "javascript:void(0)",
-                          speakerTitle: "<b>MD</b>, Former FDA Commissioner",
+                          speakerTitle: "MD, Former FDA Commissioner",
                           speakerBio: ``,
                         },
                         {
@@ -1653,13 +1653,13 @@
                         const speakerPanelist = clone.getElementById("panelist");
 
                         clone.getElementById("dropdown-button-speaker-" + x).style.display = "";
-                        clone.getElementById("event-speakers").style.display = "block";
+
 
                         for (let speaker of event.speakers) {
                           let cloneTwo = speakerTemplate.content.cloneNode(true);
 
                           let speakerName = cloneTwo.getElementById("speaker-name");
-                          speakerName.innerHTML = speaker.name + ",";
+                          speakerName.innerHTML = speaker.name + ",&nbsp;";
                           speakerName.id = "speaker-name TRACK_" + speaker.name;
 
                           let speakerTitle = cloneTwo.getElementById("speaker-title");
@@ -1672,6 +1672,7 @@
                             clone.getElementById("event-panelist").style.display = "block";
                             speakerPanelist.appendChild(cloneTwo);
                           } else {
+                            clone.getElementById("event-speakers").style.display = "block";
                             speakerList.appendChild(cloneTwo);
                           }
                         }
