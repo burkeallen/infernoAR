@@ -33,7 +33,10 @@ import users and manage their profile data via the inferno APIs
 - InfernoAR API - swagger documentation 
   - https://api.infernocore.jolokia.com/swagger/index.html
   - often find it is easier to use Browser inspector network tab to see calls, payloads, return objcts, etc.
-
+- PDF Simpli (can be used to capture PDf thumb nails)
+  - https://pdfsimpli.com/
+  
+  
 # Lessons Learned
 
 - sales are selling features that do not exist, use imagination to see if you can help the PM solve 
