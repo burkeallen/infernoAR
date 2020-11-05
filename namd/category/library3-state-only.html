@@ -133,6 +133,7 @@
 
                 </script>
 
+                <!-- Main Styles -->
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -186,7 +187,7 @@
                     position: relative;
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-evenly;
+                    justify-content: space-between;
                     align-items: center;
                     width: 40%;
                     background-color: #00467F;
@@ -197,15 +198,16 @@
                   }
 
                   .card img {
-                    width: 40%;
-                    height: auto;
-                    border-radius: 50%;
+                    height: 120px;
+                    border-radius: .5em;
+                    width: auto;
                   }
 
                   .category {
                     text-align: center;
                     font-size: 1.2em;
                     font-weight: bold;
+                    margin-bottom: 1em;
                   }
 
                   .title {
@@ -240,6 +242,228 @@
 
                 </style>
 
+                <pdf-viewer>
+                  <style>
+                    .pdf-view {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                      background-color: rgba(0, 0, 0, 0.8);
+                      z-index: 30;
+                      display: none;
+                    }
+
+                    .pdf-viewer {
+                      position: absolute;
+                      top: 60px;
+                      left: 30px;
+                      right: 30px;
+                      width: calc(100% - 60px);
+                      height: calc(100% - 90px);
+                      bottom: 30px;
+                      border: none;
+                    }
+
+                    a.window-close {
+                      padding: 0.55rem;
+                      width: 11rem;
+                      font-size: 1.3rem;
+                      font-weight: 100;
+                      line-height: 1;
+                      color: #333;
+                      background-color: #fff;
+                      border-radius: 4rem;
+                      text-align: center;
+                      cursor: pointer;
+                      text-decoration: none;
+                      display: inline-block;
+                      margin: 20px 0 0 30px;
+                    }
+
+                    a.window-close:hover {
+                      color: #333;
+                      text-decoration: none;
+                    }
+                  </style>
+
+                  <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                    <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                    <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                  </div>
+
+                  <!-- PDF -->
+                  <script>
+                    function togglePDF(el) {
+                      landingPageEl.getElementById('pdf-frame').src = el.getAttribute('pdf');
+                      landingPageEl.getElementById('pdf-blanket').style.display = 'block';
+                    }
+
+                    function closePDF() {
+                      landingPageEl.getElementById('pdf-frame').src = '';
+                      landingPageEl.getElementById('pdf-blanket').style.display = 'none';
+                    }
+                  </script>
+                </pdf-viewer>
+
+                <video-viewer>
+                  <style>
+                    .modal-window {
+                      position: fixed;
+                      background-color: rgba(0, 0, 0, 0.5);
+                      top: 0;
+                      right: 0;
+                      bottom: 0;
+                      left: 0;
+                      opacity: 0;
+                      pointer-events: none;
+                      -webkit-transition: all 0.7s;
+                      -moz-transition: all 0.7s;
+                      transition: all 0.7s;
+                      display: none;
+                    }
+
+                    .modal-window.open {
+                      opacity: 1;
+                      pointer-events: auto;
+                      display: inline-block;
+                      z-index: 99999999;
+                      padding: 5%;
+                    }
+
+                    .modal-window .contentWrapper {
+                      display: flex;
+                      justify-content: center;
+                      width: 100%;
+                      margin-top: 20px;
+                    }
+
+                    .videoWrapper {
+                      position: relative;
+                      padding-bottom: 56.5%; /* 16:9 */
+                      height: 0;
+                    }
+
+                    .videoWrapper iframe {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                    }
+
+
+                    .modal-window .modal-box {
+                      position: relative;
+                      min-width: 400px;
+                      width: 80%;
+                      margin: 20px auto;
+                      padding: 2rem 0;
+                      background-color: transparent;
+                      border: none;
+                    }
+
+                    .modal-window h1 {
+                      font-size: 150%;
+                      margin: 0 0 15px;
+                    }
+
+                    .modal-window header {
+                      font-weight: bold;
+                    }
+
+                    .modal-close {
+                      position: absolute;
+                      right: 3%;
+                      top: -11px;
+                      color: #fff;
+                      font-size: 1.5em;
+                      text-decoration: none;
+                      font-weight: bold;
+                    }
+
+                    .modal-close:hover {
+                      filter: brightness(130%);
+                      text-decoration: none;
+                      color: #fff;
+                      cursor: pointer;
+                    }
+
+                    .modal-grid {
+                      display: grid;
+                      grid-template-columns: 0.6fr 1.4fr;
+                      grid-template-rows: 1fr;
+                      gap: 0px 20px;
+                      padding: 2%;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      background-color: #5378A7;
+                    }
+
+                    .modal-grid-video {
+                      display: grid;
+                      grid-template-columns: 1fr;
+                      grid-template-rows: 1fr;
+                      gap: 0 0;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      background-color: #5378A7;
+                    }
+
+                  </style>
+
+                  <template id="modalWindow">
+                    <div class="modal-grid">
+                    </div>
+                  </template>
+
+                  <template id="videoFrame">
+                    <iframe src="/embed/"
+                            frameborder="0"
+                            allowfullscreen="true"
+                            webkitallowfullscreen="true"
+                            mozallowfullscreen="true">
+                    </iframe>
+                  </template>
+
+                  <script>
+                    function toggleModalVideo(el) {
+                      const id = el.getAttribute('video');
+                      const contentWrapper = landingPageEl.querySelector('.contentWrapper');
+                      contentWrapper.classList.toggle('videoWrapper');
+                      let video = contentWrapper.querySelector('#video-frame');
+                      const modalClose = landingPageEl.querySelector('.modal-close');
+
+                      modalClose.addEventListener('click', function () {
+                        toggleModalVideo(el);
+                      });
+
+                      if (video) {
+                        video.remove();
+                        landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                        return;
+                      }
+
+                      const temp = landingPageEl.querySelector('template#videoFrame');
+                      const clone = temp.content.cloneNode(true);
+                      video = clone.querySelector('iframe');
+                      video.id = 'video-frame';
+                      video.src = '/embed/' + id;
+                      contentWrapper.appendChild(clone);
+                      const modal = landingPageEl.querySelector('#open-modal');
+                      setModalPosition(modal);
+                      modal.classList.toggle('open');
+                    }
+
+                    function setModalPosition(el) {
+                      el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    }
+
+                  </script>
+
+                </video-viewer>
+
                 <div class="content">
 
                   <div class="top-banner">
@@ -249,7 +473,7 @@
 
                   <div class="grid"></div>
 
-                  <template>
+                  <template id="library-card">
                     <div class="card" video="" id="">
                       <div class="category"></div>
                       <img src="">
@@ -259,25 +483,18 @@
                     </div>
                   </template>
 
+
+                  <div id="open-modal" class="modal-window">
+                    <div class="modal-box">
+                      <div title="Close" class="modal-close">Close</div>
+                      <div class="contentWrapper"></div>
+                    </div>
+                  </div>
+
                 </div>
 
-                <toggle-video>
-                  <script>
-                    function toggleVideo(el) {
-                      console.log('video', el);
-                    }
-                  </script>
-                </toggle-video>
 
-                <toggle-pdf>
-                  <script>
-                    function togglePDF(el) {
-                      console.log('video', el);
-                    }
-                  </script>
-                </toggle-pdf>
-
-                <displa-library-list>
+                <display-library-list>
                   <script>
 
                     function getLibraryList() {
@@ -315,7 +532,7 @@
                           category: "Spotlight Award",
                           desc: "A summary of all Spotlight award submissions received for the 2020 Spotlight Award ",
                           action: "View PDF",
-                          thumb: "doc-icon.png",
+                          thumb: "2020 Spotlight Award Submission Summaries for Fall Meeting.jpg",
                           link: "2020 Spotlight Award Submission Summaries for Fall Meeting.pdf"
                         },
 
@@ -325,8 +542,8 @@
                           category: "Gives and Gets",
                           desc: "A summary of all Spotlight award submissions received for the 2020 Spotlight Award ",
                           action: "View PDF",
-                          thumb: "doc-icon.png",
-                          link: "https://nextecharsolutions.sharepoint.com/:b:/s/NAMDNov2020/EWj7u_Qj5ZJJjQ1kaxbEYl4BfQ-bzPIc-LQOK-wNOFLZFQ?e=lMbZe1"
+                          thumb: "Fall Meeting 2020 Gives and Gets - FINAL.jpg",
+                          link: "Fall Meeting 2020 Gives and Gets - FINAL.pdf"
                         },
                       ];
 
@@ -347,7 +564,7 @@
                       const list = getLibraryList();
                       // filter out users who have opted out of sharing their data
                       const container = landingPageEl.querySelector('.grid');
-                      const template = landingPageEl.querySelector('template');
+                      const template = landingPageEl.querySelector('template#library-card');
 
                       list.forEach(item => {
                         const clone = template.content.cloneNode(true);
@@ -358,7 +575,7 @@
                     }
 
                     function buildCard(item, clone) {
-                      const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/';
+                      const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/state-only/';
                       const card = clone.querySelector('.card');
                       const image = card.querySelector('img');
                       const imageSrc = item.thumb ?? 'doc-icon.png';
@@ -368,18 +585,23 @@
                       card.querySelector('.category').innerHTML = item.category ?? '';
                       card.querySelector('.description').innerHTML = item.desc ?? '';
                       card.querySelector('.download').innerHTML = item.action ?? '';
-                      card.id = item.id;
+                      const button = card.querySelector('.download');
+                      button.id = 'State_only_library_Click_' + item.title.replaceAll(' ', '_');
 
                       if (item.action.toLowerCase().includes('video')) {
-                        card.setAttribute('video', item.link);
-                        card.querySelector('.download').onclick = function () {
-                          toggleVideo(this);
+                        button.setAttribute('video', item.link);
+                        button.onclick = function () {
+                          toggleModalVideo(this);
                         }
-                      } else {
-                        card.querySelector('.download').onclick = function () {
+                      } else if (item.action.toLowerCase().includes('pdf')) {
+                        button.setAttribute('pdf', baseUrl + item.link);
+                        button.onclick = function () {
                           togglePDF(this);
                         }
+                      } else {
+                        console.log('unknown Library action');
                       }
+
                     }
 
                     if (window.location.hostname.includes('local')) {
@@ -392,7 +614,7 @@
 
 
                   </script>
-                </displa-library-list>
+                </display-library-list>
 
                 <tawkto-hide>
                   <script type="text/javascript">

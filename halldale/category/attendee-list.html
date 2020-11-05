@@ -262,24 +262,23 @@
                   }
 
                   .card {
+                    position: relative;
                     display: flex;
                     flex-direction: column;
-                    justify-content: start;
+                    justify-content: space-between;
                     align-items: center;
-                    width: 200px;
-                    height: 250px;
+                    width: 20%;
+                    min-width: 240px;
                     background-color: white;
-                    border-radius: 1em;
                     margin: 10px;
                     padding: 10px;
                     text-align: center;
+                    border-radius: .3em;
                   }
 
                   .avatar {
                     width: 128px;
                     height: 128px;
-                    margin: 0 auto;
-
                   }
 
                   .avatar img {
@@ -305,7 +304,6 @@
                   .job-title {
                     width: 100%;
                     font-size: 1em;
-                    font-weight: bold;
                     overflow-wrap: break-word;
                   }
 
@@ -322,7 +320,36 @@
                     justify-content: center;
                   }
 
+                  .social img {
+                    width: 32px;
+                    margin: 1em;
+                    float: left;
+                  }
+
+                  .social a {
+                    text-decoration: none;
+                  }
+
+                  .social :hover {
+                    text-decoration: none;
+                    -ms-transform: scale(1.1) translateY(-.5vh);
+                    -webkit-transform: scale(1.1) translateY(-.5vh);
+                    transform: scale(1.1) translateY(-.5vh);
+                    cursor: pointer;
+                  }
+
+                  .bio {
+                    font-size: .75em;
+                    margin-top: 1em;
+                  }
+
+                  @media only screen and (max-width: 1024px) {
+                    .grid {
+                      width: 100%;
+                    }
+                  }
                 </style>
+
 
                 <div class="content">
                   <div class="search-banner">
@@ -344,16 +371,30 @@
                     <template>
                       <div class="card" id="1">
                         <div class="avatar"><img src=""></div>
-                        <div class="person"></div>
-                        <div class="company"></div>
-                        <div class="job-title"></div>
-                        <div class="social"></div>
+                        <div style="text-align: center">
+                          <div class="person"></div>
+                          <div class="company"></div>
+                          <div class="job-title"></div>
+                        </div>
+                        <div class="social">
+                          <a href="" target="" id=""><img src=""></a>
+                        </div>
+                        <div class="bio"></div>
                       </div>
                     </template>
 
                     <h1 id="no-results-message" class="no-results-message" style="display:none;">No people found.</h1>
 
                   </div>
+
+
+                  <div id="open-modal" class="modal-window">
+                    <div class="modal-box">
+                      <div title="Close" class="modal-close">Close</div>
+                      <div class="contentWrapper"></div>
+                    </div>
+                  </div>
+
                 </div>
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
@@ -387,15 +428,14 @@
                     // Set header
                     const headers = {
                       'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
                     };
 
                     // add a header property for users accessing with SA credentials
                     if (window.sessionStorage.overrideId) {
-                      headers.append("X-Client-Override", sessionStorage.getItem('overrideId'));
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
                     }
-
-                    console.log(JSON.stringify(headers));
 
                     $.ajax({
                       url: _baseUrl + 'UserProfileExport',
@@ -415,7 +455,6 @@
                           buildAttendeeList();
                         }
                         totalAttendees = xhr.getResponseHeader('X-Pagination-TotalItems');
-                        console.log('totalAttendees', totalAttendees);
                       },
                       error: function (err) {
                         alert(JSON.stringify(err));
@@ -458,11 +497,26 @@
                       card.querySelector('.person').innerHTML = firstName + ' ' + lastName;
                       card.querySelector('.company').innerHTML = user.contactInfoCompany ?? '';
                       card.querySelector('.job-title').innerHTML = user.contactInfoTitle ?? '';
+                      card.querySelector('.bio').innerHTML = user.bio ? user.bio.substr(0, 240) : '';
+
+                      const social = card.querySelector('.social');
+                      const a = social.querySelector('a');
+                      const img = social.querySelector('img');
+
+                      if (user.socialLinkedIn) {
+                        img.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/linkedin.png';
+                        a.href = user.socialLinkedIn;
+                        const fullName = firstName + ' ' + lastName;
+                        a.id = fullName.replace(/[^A-Z0-9]/ig, "_") + 'click_linkedIn';
+                      } else {
+                        img.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/clear.png';
+                      }
                       card.id = user.id.toString();
                       container.appendChild(clone);
                     });
 
                   }
+
 
                   fetchUsers(1);
                 </script>
