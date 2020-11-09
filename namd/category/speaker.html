@@ -50,7 +50,8 @@
 
   </script>
   <script>
-    let landingPageEl = null
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
   </script>
 </head>
 
@@ -154,7 +155,6 @@
 
                   .top-banner {
                     padding: 10px 50px;
-                    line-height: 60px;
                     color: white;
                     font-size: 32px;
                   }
@@ -396,16 +396,59 @@
                   }
 
                   function setModalPosition(el) {
-                    el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    if (window.innerWidth > 600) {
+                      el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    } else {
+                      const box = el.querySelector('.modal-box');
+                      const grid = el.querySelector('.modal-grid');
+                      box.style.minWidth = "100%";
+                      grid.style.display = "flex";
+                      grid.style.flexDirection = "column";
+                    }
                   }
 
                 </script>
+
+                <!-- media queries -->
+                <style>
+                  @media only screen and (max-width: 1024px) {
+                    .grid {
+                      width: 100%;
+                      max-width: 100%;
+                      padding: 10px;
+                    }
+
+                    .card {
+                      width:45%;
+                      padding: 20px;
+                    }
+                  }
+
+                  @media only screen and (max-width: 765px) {
+
+                  }
+
+                  @media only screen and (max-width: 375px) {
+                    .grid {
+                      display: block;
+                      width: 100%;
+                      max-width: 100%;
+                      padding: 10px;
+                    }
+
+                    .card {
+                      width:95%;
+                      padding: 20px;
+                    }
+                  }
+                </style>
 
                 <div class="content">
 
                   <div class="top-banner">
                     <h1>SPEAKERS</h1>
                     <hr align="left">
+                    <div style="color: white; font-size: .5em;">Speakers listed in alphabetical order by last name.</div>
                   </div>
 
                   <div class="grid"></div>
@@ -458,7 +501,7 @@
                         "lastName": "Beane",
                         "title": "Medicaid Commissioner, West Virginia Department of Health & Human Resources - Bureau for Medical Services",
                         "org": "West Virginia Department of Health and Human Resources - Bureau for Medical Services",
-                        "bio": `Cindy Beane, MSW, LCSW, is the Commissioner for WV Medicaid. Ms. Beane has over 25 years’ experience working in health care.  Cindy currently serves as the Chairperson for the NAMD Board's Governance Committee.  <br>Cindy and her team developed a Continuum of Care wavier designed to enhance services for our most vulnerable at-risk children among the Medicaid population, administered through managed care with the goal of keeping them with their families and a support network to improve their outcomes. During the PHE, Cindy has remained committed to assuring appropriate, cost conscience strategies to strengthen services and improve their quality of life.`,
+                        "bio": "Cindy Beane, MSW, LCSW, is the Commissioner for WV Medicaid. Ms. Beane has over 25 years’ experience working in health care.  Cindy currently serves as the Chairperson for the NAMD Board's Governance Committee. Cindy and her team developed a Continuum of Care wavier designed to enhance services for our most vulnerable at-risk children among the Medicaid population, administered through managed care with the goal of keeping them with their families and a support network to improve their outcomes. During the PHE, Cindy has remained committed to assuring appropriate, cost conscience strategies to strengthen services and improve their quality of life.",
                         "session": "Monday, November 9<br>1:00 PM - 1:45 PM",
                         "Id": "4773019181584080000"
                       },
@@ -526,7 +569,7 @@
                         "thumb": "maureen_corcoran.jpg",
                         "firstName": "Maureen",
                         "lastName": "Corcoran",
-                        "title": "Director",
+                        "title": "Director, Ohio Department of Medicaid",
                         "org": "Director, Ohio Department of Medicaid",
                         "bio": "Maureen Corcoran is Director of the Ohio Department of Medicaid, bringing previous Ohio public service experiences including Assistant Acting Deputy for Medicaid at the Department of Job and Family Services, Human Services Policy Advisor to Governor Richard Celeste, and Chief of the Office of Healthcare Cost Containment for the Department of Health. Previously, Ms. Corcoran founded Vorys Health Care Advisors, a health care policy consulting firm. She is a leader in intellectual and developmental disabilities and behavioral health with multiple awards honoring her work. She has a master’s in Nursing and MBA in Finance from Case Western Reserve University.",
                         "session": "Tuesday, November 10<br>2:30 PM - 3:15 PM",
@@ -548,7 +591,7 @@
                         "lastName": "Coyner",
                         "title": "Medicaid Director, Oregon Health Authority",
                         "org": "Oregon Health Authority",
-                        "bio": "Lori Coyner, Medicaid director, oversees Oregon’s Medicaid program covering nearly one million Oregonians through a coordinated care system led by 15 Coordinated Care Organizations (CCOs).  She returned to the role in February 2019 after a year consulting with Health Management Associates as the Managing Principal of the Portland office.  During her 2015-2017 tenure as Oregon’s Medicaid Director, he played a pivotal role in securing federal renewal of Oregon’s Medicaid 1115 waiver that includes innovative strategies to incent investment in social determinants of health, value-based payment methods, and continues Oregon’s health system transformation that includes Oregon’s quality incentive payment program. ",
+                        "bio": "Lori Coyner, Medicaid Director, oversees Oregon’s Medicaid program covering nearly one million Oregonians through a coordinated care system led by 15 Coordinated Care Organizations (CCOs).  She returned to the role in February 2019 after a year consulting with Health Management Associates as the Managing Principal of the Portland office.  During her 2015-2017 tenure as Oregon’s Medicaid Director, he played a pivotal role in securing federal renewal of Oregon’s Medicaid 1115 waiver that includes innovative strategies to incent investment in social determinants of health, value-based payment methods, and continues Oregon’s health system transformation that includes Oregon’s quality incentive payment program. ",
                         "session": "Tuesday, November 10<br>12:30 PM - 1:15 PM<br>2:30 PM - 3:15 PM",
                         "Id": "4773891841444360000"
                       },
@@ -558,7 +601,7 @@
                         "lastName": "Cruz",
                         "title": "Executive Director, Puerto Rico Medicaid Program, Department of Health",
                         "org": "Puerto Rico Medicaid Program",
-                        "bio": "Luz Cruz began to work in 2001, in the Medicaid Program. In January 2017, she accepted the position of Executive Director, and has assumed the following challenges: the implementation of MAGI (Modify Adjusted Gross Income), MMIS (Medicaid Management Information System), and new Eligibility System. She also promoted the establishment of the Medical Care Advisory Committee, the Medicaid Integrity Program Unit and the Medicaid Fraud Control Unit all of that in the middle of hurricanes, earthquakes, government leadership crisis and the COVID-19 pandemic.<br>Luz Cruz has a master’s degree in Business Administration with a concentration in Management from the Metropolitan University.",
+                        "bio": "Luz Cruz began to work in 2001, in the Medicaid Program. In January 2017, she accepted the position of Executive Director, and has assumed the following challenges: the implementation of MAGI (Modify Adjusted Gross Income), MMIS (Medicaid Management Information System), and new Eligibility System. She also promoted the establishment of the Medical Care Advisory Committee, the Medicaid Integrity Program Unit and the Medicaid Fraud Control Unit all of that in the middle of hurricanes, earthquakes, government leadership crisis and the COVID-19 pandemic. Luz Cruz has a master’s degree in Business Administration with a concentration in Management from the Metropolitan University.",
                         "session": "Tuesday, November 10<br>12:30 PM - 1:15 PM",
                         "Id": "4774519744516830000"
                       },
@@ -789,7 +832,7 @@
                         "lastName": "Massey",
                         "title": "Medicaid Director, Michigan Department of Health & Human Services",
                         "org": "Michigan Department of Health and Human Services",
-                        "bio": "Calder Lynch is the Deputy Administrator and Acting Chief of Staff at CMS. CMS provides healthcare to over 130 million Americans every year, with a $1 trillion dollar budget that makes up 26% of the entire federal budget, with almost 6,000 employees supporting that mission. He manages the day-to-day operations of the agency dealing with all aspects of CMS as well as providing strategic counsel to the Administrator. Calder also served as the Deputy Administrator and Director of CMCS, as the agency’s senior executive overseeing the Medicaid and Children’s Health Insurance Programs, which covers nearly 72 million Americans.",
+                        "bio": "Kate Massey is senior deputy director for the Medical Services Administration with the Michigan Department of Health and Human Services (MDHHS). In this role, she also serves as Michigan’s Medicaid director overseeing several health care programs, including MIChild and the Healthy Michigan Plan. Massey has nearly 20 years of operational and policy expertise in Medicaid, Medicare, the Children’s Health Insurance Program (CHIP) and private market health insurance. She most recently served as chief executive officer for Magellan Complete Care of Virginia; prior to that she served as vice president for Medicaid and Medicare for Kaiser Permanente of the Mid-Atlantic States, overseeing the launch of two Medicaid managed care organizations in Virginia and Maryland. She also has worked for Amerigroup, where she established its Public Policy Institute and served as executive director. She began her career in public service working for the federal Office of Management and Budget, leading a team focused on Medicaid, CHIP and private health insurance market programs. Later, she worked at the White House Office of Health Reform, overseeing implementation of provisions in the Affordable Care Act related to Medicaid, Medicare and public health, and she served as unit chief of the Low-Income Health Programs and Prescription Drugs Unit in the Congressional Budget Office. She has a master’s degree in public affairs from the Lyndon B. Johnson College of Public Policy at the University of Texas at Austin and a bachelor’s degree from Bard College in New York.",
                         "session": "Wednesday, November 11<br>11:00 AM - 11:45 AM",
                         "Id": "4780924979722560000"
                       },
@@ -909,7 +952,7 @@
                         "lastName": "Rudowitz",
                         "title": "Vice President & Co-Director, Program on Medicaid and the Uninsured, Kaiser Family Foundation",
                         "org": "KFF",
-                        "bio": "Robin Rudowitz is VP at KFF and Co-Director for the Program on Medicaid and the Uninsured, where she focuses on state and federal Medicaid financing issues and Medicaid and the Affordable Care Act.  Prior to joining KFF in 2004, Rudowitz was a Senior Manager at The Lewin Group, a health policy and management consulting firm.  Rudowitz has worked on budget and health policy issues in different government agencies including the Office of Legislation at CMS, the Office of the Chief Financial Officer for DC, the Congressional Budget Office and the Ways and Means Committee for the New York State Assembly.",
+                        "bio": "Robin Rudowitz is the Vice President at the Kaiser Family Foundation and Co-Director for the Program on Medicaid and the Uninsured, where she focuses on state and federal Medicaid financing issues and Medicaid and the Affordable Care Act.  Prior to joining KFF in 2004, Rudowitz was a Senior Manager at The Lewin Group, a health policy and management consulting firm.  Rudowitz has worked on budget and health policy issues in different government agencies including the Office of Legislation at CMS, the Office of the Chief Financial Officer for DC, the Congressional Budget Office and the Ways and Means Committee for the New York State Assembly.",
                         "session": "Tuesday, November 10<br>12:30 PM - 1:15 PM",
                         "Id": "4784023706425530000"
                       },
@@ -999,7 +1042,7 @@
                         "lastName": "Wimmer",
                         "title": "Administrator for the Division of Medicaid, Idaho Department of Health & Welfare",
                         "org": "Idaho Department of Health & Welfare",
-                        "bio": "Matt Wimmer serves as administrator for the Idaho Division of Medicaid. He has worked for the Idaho Department of Health and Welfare since 2008 and is currently leading the Division through implementation of value-based payment, children’s mental health reform and developmental disabilities services reform. He was selected as a Fellow for the 2019 Medicaid Leadership Institute program and currently serves on the National Association of Medicaid Director’s board. Previously, he worked with the American Academy of Pediatrics San Diego Chapter providing countywide coordination and support for San Diego’s Healthy Development Services program.",
+                        "bio": "Matt Wimmer serves as Administrator for the Idaho Division of Medicaid. He has worked for the Idaho Department of Health and Welfare since 2008 and is currently leading the Division through implementation of value-based payment, children’s mental health reform and developmental disabilities services reform. He was selected as a Fellow for the 2019 Medicaid Leadership Institute program and currently serves on the National Association of Medicaid Director’s board. Previously, he worked with the American Academy of Pediatrics San Diego Chapter providing countywide coordination and support for San Diego’s Healthy Development Services program.",
                         "session": "Monday, November 9<br>11:15 AM - 12:15 PM",
                         "Id": "4790432814126650000"
                       },
@@ -1070,7 +1113,7 @@
 
                   }
 
-                  if (window.location.hostname.includes('local') || window.location.hostname.includes('127.0.0.1') ) {
+                  if (window.isLocalTemplate ) {
                     window.addEventListener('load', (event) => {
                       buildSpeakers();
                       console.log('The page has fully loaded');

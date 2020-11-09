@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatwee Test </title>
+  <style>
+    h1 {
+      color: cornflowerblue;
+      margin-left: 2em;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      max-width: 80%;
+      padding: 10px;
+    }
+
+    button {
+      width: 30%;
+      background-color: cornflowerblue;
+      color: #F8F8F8;
+      border: none;
+      border-radius: .3em;
+      padding: .5em;
+      font-size: 2em;
+      margin: 20px;
+      cursor: pointer;
+      -webkit-transition: all 0.7s;
+      -moz-transition: all 0.7s;
+      transition: all 0.7s;
+
+    }
+
+    button:hover {
+      -ms-transform: scale(1.1) translateY(-1vh);
+      -webkit-transform: scale(1.1) translateY(-1vh);
+      transform: scale(1.1) translateY(-1vh);
+    }
+
+    article {
+      width: 100%;
+      padding: 1em;
+    }
+
+    p {
+      display: block;
+      width: 100%;
+      padding: 1em;
+      background-color: #dddddd;
+      margin: 1em;
+      font-family: monospace, sans-serif;
+      font-weight: bold;
+    }
+
+    span {
+      margin-left: 1em;
+      font-weight: normal;
+    }
+
+    .error {
+      color: red
+    }
+
+    .action {
+      background-color: #000000;
+      color: #cccccc;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <script>
+    // loosely simulate inferno shadow root element
+    const landingPageEl = document;
+    window.isLocalTemplate = true;
+  </script>
+</head>
+<body>
+<div style="display:none;">
+  <p id="user-inferno-first-name">Test-1</p>
+  <p id="user-inferno-last-name">User-1</p>
+</div>
+<script>
+  function initChatWee() {
+    window.chatwee = {};
+    window.chatwee.manager = null;
+
+    /**
+     * set amount of time before cookie expires
+     * cookie is used to keep user logged into chat wee
+     * if cookie expires user wil lbe logged in as a new user
+     * even if user id and name are the same
+     */
+    window.chatwee.maxAge = 86400 * 365; // default = 1 year
+
+    /**
+     * Update ChatId with value from Chatwee Admin Panel
+     * Update ClientAPIKey with value from Chatwee Admin Panel
+     */
+    window.chatwee.ChatId = '5f7ef3ae1e09cc38f15f19d2';
+    window.chatwee.ClientAPIKey = '5dfd2fde304b85bf4f1dfa67';
+
+    /**
+     * DO NOT CHANGE THESE VALUES
+     */
+    window.chatwee.SessionCookieKey = 'chatwee-SID-' + window.chatwee.ChatId;
+    window.chatwee.isAdmin = 0;
+    window.chatwee.ssoBaseUrl = 'https://chatwee-api.com/v2/sso-user/';
+    window.chatwee.userId = window.sessionStorage.getItem("userId") ?? '2eb7a06d-5548-40e1-b6a6-39d3745eef97';
+    window.chatwee.profileImage = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + window.chatwee.userId + '/70/70';
+    window.chatwee.firstName = 'test';
+    window.chatwee.lastName = 'user';
+
+  }
+
+
+  function chatWeeEnable() {
+    initChatWee();
+    loadChatWeeScript();
+  }
+
+  function loadChatWeeScript() {
+    // don't load script again if already loaded
+    const script = document.getElementById("chatWee-script");
+    if (script) return; // script file already exists
+
+    const s1 = document.createElement("script");
+    const s0 = document.getElementsByTagName("script")[0];
+    s1.id = "chatWee-script";
+    s1.async = true;
+    s1.src = 'https://static.chatwee-api.com/v2/script.js';
+    s0.parentNode.insertBefore(s1, s0);
+  }
+
+  function validateChatWeeSessionId(sessionId) {
+    logAction('validateChatWeeSessionId');
+    const chatwee = window.chatwee;
+    const url = chatwee.ssoBaseUrl
+      + `validate-session?${chatwee.ChatId}`
+      + `&clientKey=${chatwee.ClientAPIKey}`
+      + `&sessionId=${sessionId}`;
+    return fetch(url).then(res => {
+
+      logAction('results = <pre>' + JSON.stringify(res.json()), null, 4) + '</pre>';
+      return res;
+    });
+  }
+
+  function registerChatWee() {
+    const chatwee = window.chatwee;
+    const username = chatwee.firstName + " " + chatwee.lastName;
+    const url = chatwee.ssoBaseUrl + "register?"
+      + `chatId=${chatwee.ChatId}`
+      + `&clientKey=${chatwee.ClientAPIKey}`
+      + `&login=${username}`
+      + `&isAdmin=${chatwee.isAdmin}`
+      + `&avatar=${chatwee.profileImage}`;
+    return fetch(url).then(res => res.json());
+  }
+
+  function loginChatWee(userId) {
+    logAction('loginChatWee');
+    const chatwee = window.chatwee;
+    const url = chatwee.ssoBaseUrl + "login?"
+      + `chatId=${chatwee.ChatId}`
+      + `&clientKey=${chatwee.ClientAPIKey}`
+      + `&userId=${chatwee.userId}`;
+
+    // return fetch(url).then(res => res.json());
+
+
+    return fetch(url).then(response => {
+      // The API call was successful!
+      if (response.ok) {
+        console.log('response', response);
+        return response.json();
+      } else {
+        return Promise.reject(response);
+      }
+    }).then(data => {
+      // This is the JSON from our response
+      console.log('data', data);
+      return data;
+    }).catch(err => {
+      // There was an error
+      console.warn('ERROR', err);
+    });
+  }
+
+  async function connectChatWee() {
+    const chatwee = window.chatwee;
+    let sessionId = getCookie(chatwee.SessionCookieKey);
+    console.log('sessionId', sessionId);
+
+    if (sessionId) {
+      // validate session id with chatwee
+      let valid
+      try {
+        valid = await validateChatWeeSessionId(sessionId);
+        console.log(valid, valid);
+      } catch (e) {
+        console.error('connectChatWee - validateChatWeeSessionId - ERROR ', e);
+        throw new Error(e);
+      }
+      // if true, do nothing
+      if (valid) return;
+    }
+
+    // if false, check if user id is present locally
+    const userId = getCookie(chatwee.userId);
+    console.log('userId', userId);
+    // if true, login and set session id locally
+    if (userId) {
+      let sessionId = ""
+      try {
+        sessionId = await loginChatWee(userId);
+      } catch (e) {
+        console.error('connectChatWee - loginChatWee - ERROR ', e);
+        throw new Error(e);
+      }
+
+      setCookie(chatwee.sessionCookieKey, sessionId, chatwee.maxAge);
+    }
+    // if false, register and set user id and log in user
+    else {
+      let userId = ""
+      try {
+        userId = await registerChatWee();
+      } catch (e) {
+        console.error('connectChatWee - registerChatWee - ERROR ', e);
+        throw new Error(e);
+      }
+
+      setCookie(chatwee.userIdKey, userId, chatwee.maxAge);
+
+      let sessionId = ""
+      try {
+        sessionId = await loginChatWee(userId);
+      } catch (e) {
+        console.error('connectChatWee 2 - loginChatWee - ERROR ', e);
+        throw new Error(e);
+      }
+
+      setCookie(chatwee.sessionCookieKey, sessionId, chatwee.maxAge);
+
+    }
+
+    return;
+  }
+
+  /**
+   * Helper Functions
+   */
+  function getCookie(key) {
+    let cookieValue = "";
+    const cookieList = document.cookie;
+    if (cookieList) {
+      const cookie = cookieList
+        .split("; ")
+        .find(row => row.startsWith(key));
+      if (cookie) {
+        cookieValue = cookie.split("=")[1];
+      }
+    }
+    return cookieValue;
+  }
+
+  function setCookie(key, value, age) {
+    document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
+  }
+
+  function getProfileImage() {
+    let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+    return fetch(url);
+  }
+
+
+</script>
+<h1>Chatwee Test</h1>
+<div class="grid">
+  <button onclick="enable()">Enable</button>
+  <button>Disable</button>
+  <article></article>
+</div>
+
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    chatWeeEnable();
+  })
+
+
+  function enable() {
+    const article = document.querySelector("article");
+    article.innerHTML = '';
+
+    initChatWee();
+    connectChatWee();
+    listWindowChatWee(article);
+    listStyles(article);
+    listScripts(article);
+  }
+
+  function listStyles(parent) {
+    const header = document.createElement('h1');
+    header.innerHTML = 'STYLES';
+    parent.append(header);
+    let hasChatwee = false;
+
+    const items = document.styleSheets;
+    for (let i = 0; i < items.length; i++) {
+      const el = document.createElement('p');
+      const id = items[i].id;
+
+      if (id && id.includes('chch-')) {
+        el.innerHTML = `<pre>style id="${id}"</pre>`
+        parent.append(el);
+        hasChatwee = true;
+      }
+    }
+
+    if (!hasChatwee) {
+      const none = document.createElement('p');
+      none.innerHTML = 'None';
+      parent.append(none);
+    }
+
+  }
+
+  function listScripts(parent) {
+    const header = document.createElement('h1');
+    header.innerHTML = 'SCRIPTS';
+    parent.append(header);
+
+    const items = document.scripts;
+    let hasChatwee = false;
+
+    for (let i = 0; i < items.length; i++) {
+      const el = document.createElement('p');
+      const source = items[i].src.toLowerCase();
+
+      if (source.includes('chatwee')) {
+        el.innerHTML = `<pre>script src="${source}" id="${items[i].getAttribute('id')}"</pre>`
+        parent.append(el);
+        hasChatwee = true;
+      }
+    }
+
+    if (!hasChatwee) {
+      const none = document.createElement('p');
+      none.innerHTML = 'None';
+      parent.append(none);
+    }
+
+
+  }
+
+  function listWindowChatWee(parent) {
+    const header = document.createElement('h1');
+    header.innerHTML = 'WINDOW OBJECTS';
+    parent.append(header);
+    let hasChatwee = false;
+
+    Object.keys(window).forEach(function (key) {
+      const lowerkey = key.toLowerCase();
+      let output = window[key];
+
+      if (lowerkey.includes('chatwee')) {
+        if (!output.toString().includes('function')) {
+          const el = document.createElement('p');
+          if (lowerkey === 'chatweelib') {
+            output = '<b>EXISTS</b>';
+          } else if (typeof window[key] === "object") {
+            try {
+              const pretty = JSON.stringify(output, null, 2);
+            } catch {
+              const pretty = 'error parsing object';
+            }
+            // const pretty = JSON.stringify(output, null, 2);
+            output = '<pre>' + JSON.stringify(output, null, 2) + '</pre>';
+          }
+          output = output.toString();
+          el.innerHTML = key + '<span>' + output + '</span>';
+          parent.append(el);
+          hasChatwee = true;
+        }
+      }
+    });
+
+    if (!hasChatwee) {
+      const none = document.createElement('p');
+      none.innerHTML = 'None';
+      parent.append(none);
+    }
+
+  }
+
+  function logAction(message) {
+    const article = document.querySelector("article");
+    const actionHeader = document.querySelector(".actionHeader");
+    if (!actionHeader) {
+      const header = document.createElement('h1');
+      header.innerHTML = 'Chatwee Actions';
+      header.classList.toggle('actionHeader');
+      article.append(header);
+    }
+
+    const el = document.createElement('p');
+    el.innerHTML = message;
+    el.classList.toggle('action');
+    article.append(el);
+  }
+
+
+</script>
+</body>
+</html>

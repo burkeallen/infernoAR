@@ -28,6 +28,8 @@ import users and manage their profile data via the inferno APIs
   - https://grid.layoutit.com/ 
 - CSV to JSON converter 
   - https://www.convertcsv.com/csv-to-json.htm
+- JSON to CSV converter - will even convert nested objects
+  - https://toolslick.com/conversion/data/json-to-csv
 - MS Word to Clean HTML converter
   - https://www.textfixer.com/html/convert-word-to-html.php
 - InfernoAR API - swagger documentation 
