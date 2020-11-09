@@ -155,7 +155,6 @@
 
                   .top-banner {
                     padding: 10px 50px;
-                    line-height: 60px;
                     color: white;
                     font-size: 32px;
                   }
@@ -265,8 +264,6 @@
                     transform: translateY(-.5vh);
                     cursor: pointer;
                   }
-
-
                 </style>
 
                 <!-- Modal Window Style -->
@@ -463,7 +460,12 @@
                   }
 
                   function setModalPosition(el) {
-                    el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    if (window.innerWidth > 600) {
+                      el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    } else {
+                      const box = el.querySelector('.modal-box');
+                      box.style.minWidth = "100%";
+                    }
                   }
                 </script>
 
@@ -508,12 +510,49 @@
 
                 </script>
 
+                <!-- media queries -->
+                <style>
+                  @media only screen and (max-width: 1024px) {
+                    .grid {
+                      width: 100%;
+                      max-width: 100%;
+                      padding: 10px;
+                    }
+
+                    .card {
+                      width:45%;
+                      padding: 20px;
+                    }
+                  }
+
+                  @media only screen and (max-width: 765px) {
+
+                  }
+
+                  @media only screen and (max-width: 375px) {
+                    .grid {
+                      display: block;
+                      width: 100%;
+                      max-width: 100%;
+                      padding: 10px;
+                    }
+
+                    .card {
+                      width:95%;
+                      padding: 20px;
+                    }
+                  }
+                </style>
                 <div class="content">
 
                   <div class="top-banner">
                     <h1>Meet Your Medicaid Directors</h1>
                     <hr align="left">
+                    <div style="color: white; font-size: .5em;">Medicaid Directors listed in alphabetical order by
+                                                                state.
+                    </div>
                   </div>
+
 
                   <div class="grid"></div>
 
@@ -671,14 +710,14 @@
                         "location": "OREGON",
                         "Id": "1231913",
                         "video": "https://namd.live/videos/b36f0312-38ad-4a3d-15b2-08d8742e3b76/detail/aa06397a-3b27-4447-95d2-23750477c5fa",
-                        "bio": "Lori Coyner, Medicaid director, oversees Oregon’s Medicaid program covering nearly one million Oregonians through a coordinated care system led by 15 Coordinated Care Organizations (CCOs). She returned to the role in February 2019 after a year consulting with Health Management Associates as the Managing Principal of the Portland office. During her 2015-2017 tenure as Oregon’s Medicaid Director, he played a pivotal role in securing federal renewal of Oregon’s Medicaid 1115 waiver that includes innovative strategies to incent investment in social determinants of health, value-based payment methods, and continues Oregon’s health system transformation that includes Oregon’s quality incentive payment program.",
+                        "bio": "Lori Coyner, Medicaid Director, oversees Oregon’s Medicaid program covering nearly one million Oregonians through a coordinated care system led by 15 Coordinated Care Organizations (CCOs). She returned to the role in February 2019 after a year consulting with Health Management Associates as the Managing Principal of the Portland office. During her 2015-2017 tenure as Oregon’s Medicaid Director, he played a pivotal role in securing federal renewal of Oregon’s Medicaid 1115 waiver that includes innovative strategies to incent investment in social determinants of health, value-based payment methods, and continues Oregon’s health system transformation that includes Oregon’s quality incentive payment program.",
                         "thumb": "lori_coyner.jpg",
                         "title": "Medicaid Director"
                       },
                       {
                         "firstName": "Janet",
                         "lastName": "Cruz ",
-                        "thumb" : "janet_cruz.jpg",
+                        "thumb": "janet_cruz.jpg",
                         "location": "GUAM",
                         "bio": "Janet Cruz is currently a Management Analyst IV with the Department of Public Health & Social Services, DPW, Bureau of Healthcare Financing Administration (BHCFA). She has worked with the Government of Guam for 30 years and spent 6 years in the private sector. She has spent her lifetime of 57 years on Guam. Janet earned her bachelor’s degree in Business Administration from the University of Guam in 1985. Shortly after, she perused a passion to better our community by implementing her knowledge and skills to expand services to those in most need on her island.",
                         "Id": "390607",
@@ -738,6 +777,7 @@
                         "lastName": "Green",
                         "location": "WYOMING",
                         "Id": "1712660",
+                        "video": "https://namd.live/videos/b36f0312-38ad-4a3d-15b2-08d8742e3b76/detail/af5bbc8c-7ab7-48f4-a1df-84dc5dcf0a41",
                         "bio": "Teri Green has worked over 28 years in the healthcare benefit arena, promoting cost effective, patient support.  Her experience includes management at the state level for the Workers’ Compensation program.  To that end, she also worked in the private sector as a risk-management consultant in the mining industry.  She is certified by the Insurance Institute of America in Claims Management.  She has served in Quality Assurance, Medicaid Program Integrity, and currently for 12 years as the State Medicaid Director for Wyoming.  She has successfully designed and implemented cutting-edge health programs that have received national attention and award. ",
                         "thumb": "teri_green.jpg",
                         "title": "State Medicaid Director"

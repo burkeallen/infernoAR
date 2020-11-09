@@ -1,20 +1,89 @@
 <!DOCTYPE html>
-<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<html lang="en"
+      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password'
+      };
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain};
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem("domain", project.domain);
+          storeUser(JSON.parse(res));
+        },
+        error: function (err) {
+          alert(JSON.stringify(err));
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain);
+        }
+      });
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem("clientId", data.ClientId);
+      sessionStorage.setItem("token", data.AccessToken);
+      sessionStorage.setItem("refreshToken", data.RefreshToken);
+    }
+
+    function login() {
+      const currentProject = projects.filter(project => {
+        return project.name === 'tag';
+      })[0];
+      if (!currentProject) {
+        alert('could not log into Inferno');
+      }
+      authenticate(currentProject);
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.web.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.web.config.js"></script>
+
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
@@ -44,9 +113,6 @@
     })
 
   </script>
-  <script>
-    let landingPageEl = null
-  </script>
 </head>
 
 <body>
@@ -55,10 +121,13 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header">LOCAL</div>
+        <mat-toolbar
+            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+            color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
+                    trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -96,7 +165,6 @@
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
               </style>
-
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -130,7 +198,7 @@
                     background-size: cover;
                     background-position: left center;
                     background-blend-mode: multiply;
-                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/attendees_header_v2.jpg');
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/agenda/agenda_header.jpg');
                   }
 
                   .banner-shadow {
@@ -265,9 +333,15 @@
                     border-radius: 9px;
                     background-color: #FFFFFF;
                     display: flex;
+                    flex-direction: row;
                     justify-content: center;
                     align-items: center;
-                    flex-wrap: wrap;
+                  }
+
+                  @media only screen and (max-width: 375px) {
+                    .attendee {
+                      flex-direction: column;
+                    }
                   }
 
                   .attendee .avatar {
@@ -417,11 +491,11 @@
                         <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
                       </div>
                       <button id="all-grouping" onclick="allAttendees()">All</button>
-                      <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
-                      <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
-                      <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
-                      <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
-                      <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
+                      <button id="ae-grouping" onclick="filterLastName('abcde')">A - E</button>
+                      <button id="fj-grouping" onclick="filterLastName('fghij')">F - J</button>
+                      <button id="ko-grouping" onclick="filterLastName('klmno')">K - O</button>
+                      <button id="pt-grouping" onclick="filterLastName('pqrst')">P - T</button>
+                      <button id="uz-grouping" onclick="filterLastName('uvwxyz')">U - Z</button>
                     </div>
                   </div>
 
@@ -442,9 +516,9 @@
                             <div class="contact">
                               <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/> <a id="email" href="" target="_blank" rel="noreferrer"></a>
                             </div>
-<!--                            <div class="contact">-->
-<!--                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>-->
-<!--                            </div>-->
+                            <!--                            <div class="contact">-->
+                            <!--                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>-->
+                            <!--                            </div>-->
 
                           </div>
 
@@ -468,59 +542,112 @@
 
                 </div>
 
-                <!-- Attendees -->
+                <!-- Attendees using API -->
                 <script>
-                  // used for local json
-                  // var attendees = data.UserProfiles ;
 
-                  // used for production
-                  // used for production
-                  var hasGroupNovo1 = (groups, groupName) => {
-                    var inGroup = false;
-                    groups.forEach(group => {
-                      if (group.Name.toLowerCase().trim() === groupName.toLowerCase().trim()) {
-                        inGroup = true;
+                  var attendees =[];
+
+                  var fetchUsers = (pageNumber) => {
+                    const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
+                    // max pagesize = 1000
+                    // page start at 1 not 0
+                    const params = {
+                      "pageNumber": pageNumber,
+                      "pageSize": 1000
+                    };
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    $.ajax({
+                      url: _baseUrl + 'UserProfileExport',
+                      type: 'POST',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      data: JSON.stringify(params),
+                      success: function (res, status, xhr) {
+                        if (res && res.length) {
+                          const list = filterList(res);
+                          attendees = attendees.concat(list);
+                          // keep fetching until we run out of attendees to get
+                          fetchUsers(pageNumber + 1);
+                        } else {
+                          attendees = sortList(attendees, 'lastname');
+                          buildAttendeeList();
+                        }
+                        totalAttendees = xhr.getResponseHeader('X-Pagination-TotalItems');
+                      },
+                      error: function (err) {
+                        alert(JSON.stringify(err));
+                        console.error('Error Fetching User Profiles', err);
                       }
                     });
-                    return inGroup;
+
                   }
-                  var dataJSON = {{data.UserProfiles | json}};
-                  var attendees = dataJSON.filter(user => {
-                    return hasGroupNovo1(user.UserGroups, 'Attendees');
-                  })
+
+                  var filterList = (res) => {
+                    return res.filter(item => {
+                      // remove users who have not yet opted in
+                      if (item.hideProfilePrivacyOptOut) {
+                        return false;
+                      }
+                      // remove users who are not in a specified group
+                      return item.userGroups.some(group => {
+                          const name = group.name.toLowerCase();
+                          return name.includes('attendee');
+                        }
+                      );
+                    });
+                  }
+
+                  var sortList = (list, key) => {
+                    list = list.sort(function (a, b) {
+                      if (a[key].toLowerCase() > b[key].toLowerCase()) {
+                        return 1;
+                      }
+                      if (a[key].toLowerCase() < b[key].toLowerCase()) {
+                        return -1;
+                      }
+                      return 0;
+                    });
+
+                    return list;
+                  }
 
                   var buildAttendeeList = () => {
                     const attendeeList = landingPageEl.getElementById("attendee-list");
                     const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+                    const avatarURL = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/';
+                    const avatarSize = '/300/300';
 
-                    for (let at of attendees) {
+                    for (let user of attendees) {
                       let clone = attendeeTemplate.content.cloneNode(true);
 
                       let attendeeDiv = clone.getElementById("attendee");
-                      attendeeDiv.id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
+                      attendeeDiv.id = user.id.toString();
 
-                      // used for local json
-                      // let avatar = clone.getElementById("avatar");
-                      // avatar.src = at.avatar;
-
-                      // used for production
-                      const avatar = clone.getElementById("avatar");
-                      avatar.onerror = function () {
-                        avatar.onerror = null;
-                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/generic-avatar.jpg';
-                      }
-                      avatar.src = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + at.UserId + '/300/300';
+                      clone.getElementById("avatar").src =  avatarURL+ user.userId + avatarSize;
 
                       let fullName = clone.getElementById("name");
-                      fullName.innerHTML = at.FirstName + " " + at.Lastname;
+                      fullName.innerHTML = user.firstName + " " + user.lastname;
 
                       let email = clone.getElementById("email");
-                      email.innerHTML = at.ContactInfoEmail;
-                      email.href = "mailto:" + at.ContactInfoEmail;
+                      email.innerHTML = user.contactInfoEmail;
+                      email.href = "mailto:" + user.contactInfoEmail;
 
                       let job = clone.getElementById("job");
-                      const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
-                      const contactInfoCompany = at.ContactInfoCompany ? at.ContactInfoCompany : "";
+                      const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
+                      const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
                       const hyphen = contactInfoTitle !== "" && contactInfoCompany != "" ? " - " : "";
                       job.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
 
@@ -528,15 +655,13 @@
                     }
                   }
 
-                  buildAttendeeList();
-
                   var updateAttendees = () => {
                     let empty = true;
-                    for (let at of attendees) {
-                      let id = "at-" + at.FirstName.toLowerCase() + "-" + at.Lastname.toLowerCase();
-                      let el = landingPageEl.getElementById(id);
+                    for (let user of attendees) {
+                      const id = user.id.toString();
+                      const el = landingPageEl.getElementById(id);
                       if (el) {
-                        if (at.visible) {
+                        if (user.visible) {
                           empty = false;
                           el.style.display = ""
                         } else {
@@ -548,16 +673,16 @@
 
                   var searchAttendees = e => {
                     let query = e.currentTarget.value.toLowerCase();
-                    for (let at of attendees) {
-                      const contactInfoTitle = at.ContactInfoTitle ? at.ContactInfoTitle : "";
-                      const contactInfoCompany = at.ContactInfoCompany ? at.ContactInfoCompany : "";
-                      if (at.FirstName.toLowerCase().startsWith(query)
-                        || at.Lastname.toLowerCase().startsWith(query)
+                    for (let user of attendees) {
+                      const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
+                      const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
+                      if (user.firstName.toLowerCase().startsWith(query)
+                        || user.lastname.toLowerCase().startsWith(query)
                         || contactInfoTitle.toLowerCase().startsWith(query)
                         || contactInfoCompany.toLowerCase().startsWith(query)) {
-                        at.visible = true;
+                        user.visible = true;
                       } else {
-                        at.visible = false;
+                        user.visible = false;
                       }
                     }
 
@@ -578,20 +703,20 @@
 
                   var clearLetterGroupings = () => {
                     for (let group of letterGroupings) {
-                      let el = landingPageEl.getElementById(group);
+                      const el = landingPageEl.getElementById(group);
                       el.style.color = "";
                       el.style.backgroundColor = "";
                     }
                   }
 
                   var clearSearchValue = () => {
-                    let search = landingPageEl.getElementById("search-attendees")
+                    const search = landingPageEl.getElementById("search-attendees")
                     search.value = "";
                   }
 
                   var allAttendees = () => {
-                    for (let at of attendees) {
-                      at.visible = true;
+                    for (let user of attendees) {
+                      user.visible = true;
                     }
 
                     clearSearchValue();
@@ -604,106 +729,18 @@
 
                   }
 
-                  var AE = "abcde";
-                  var filterAttendeesAE = () => {
-                    let filtered = []
-                    for (let at of attendees) {
-                      if (AE.includes(at.FirstName[0].toLowerCase()) || AE.includes(at.Lastname[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
+                  var filterLastName = (letters) => {
+                    attendees.forEach(user => {
+                      user.visible = letters.includes(user.lastname[0].toLowerCase());
+                    });
                     clearSearchValue();
                     clearLetterGroupings();
-
                     landingPageEl.getElementById("ae-grouping").style.color = "white";
                     landingPageEl.getElementById("ae-grouping").style.backgroundColor = "#41578B";
-
                     updateAttendees();
-
                   }
 
-                  var FJ = "fghij";
-                  var filterAttendeesFJ = () => {
-                    for (let at of attendees) {
-                      if (FJ.includes(at.FirstName[0].toLowerCase()) || FJ.includes(at.Lastname[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("fj-grouping").style.color = "white";
-                    landingPageEl.getElementById("fj-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
-
-                  var KO = "klmno";
-                  var filterAttendeesKO = () => {
-                    for (let at of attendees) {
-                      if (KO.includes(at.FirstName[0].toLowerCase()) || KO.includes(at.Lastname[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("ko-grouping").style.color = "white";
-                    landingPageEl.getElementById("ko-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
-
-                  var PT = "pqrst";
-                  var filterAttendeesPT = () => {
-                    for (let at of attendees) {
-                      if (PT.includes(at.FirstName[0].toLowerCase()) || PT.includes(at.Lastname[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("pt-grouping").style.color = "white";
-                    landingPageEl.getElementById("pt-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
-
-                  var UZ = "uvwxyz";
-                  var filterAttendeesUZ = () => {
-                    for (let at of attendees) {
-                      if (UZ.includes(at.FirstName[0].toLowerCase()) || UZ.includes(at.Lastname[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("uz-grouping").style.color = "white";
-                    landingPageEl.getElementById("uz-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
+                  fetchUsers(1);
 
                 </script>
 
