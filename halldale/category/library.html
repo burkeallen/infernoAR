@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
@@ -60,13 +55,10 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -172,7 +164,7 @@
                     margin: 13px 0;
                   }
 
-                  .grid {
+                  .library-card-grid {
                     display: flex;
                     flex-direction: row;
                     flex-wrap: wrap;
@@ -180,7 +172,8 @@
                     padding: 10px;
                   }
 
-                  .card {
+                  .library-card {
+                    position: relative;
                     display: flex;
                     flex-direction: column;
                     justify-content: start;
@@ -191,35 +184,129 @@
                     border-radius: 1em;
                     margin: 10px;
                     padding: 10px;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .library-card-thumb {
+                    width: 160px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .library-card-title {
+                    display: flex;
+                    position: absolute;
+                    top: 20px;
+                    height: 40px;
+                    font-size: 1.25rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .library-card img:hover {
+                    cursor: pointer;
+                    transform: scale(1.1);
+                    transition: 1s ease;
+                  }
+
+                </style>
+
+                <!-- PDF  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
                   }
                 </style>
 
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                </div>
 
                 <div class="content">
 
                   <div class="top-banner">
-                    <span>Library</span>
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                    <span>Library</span> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
                   </div>
 
-                  <div class="grid">
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
-                    <div class="card"><p>Library Item </p></div>
+                  <div id="library-card-grid" class="library-card-grid">
+
+                    <div class="library-card">
+                      <a target="_blank" href="https://www.halldale.com/membership">
+                        <img class="library-card-thumb" src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/library/halldale_membership_graphic_thumb.jpg">
+                      </a>
+                      <div class="library-card-title">Halldale Membership</div>
+                    </div>
+
+                    <template id="library-card-template">
+                      <div id="library-card" class="library-card">
+                        <img id="library-card-thumb" class="library-card-thumb"/>
+                        <div id="library-card-title" class="library-card-title"/>
+                      </div>
+                    </template>
+
                   </div>
+
+                  <div id="sponsor-info-grid" class="library-grid">
+                    <template id="sponsor-info-template">
+                      <div id="sponsor-info-card" class="library-card">
+                        <img id="sponsor-info-thumb" class="library-card-thumb"/>
+                        <div id="sponsor-info-title" class="library-card-title"/>
+                      </div>
+                    </template>
+                  </div>
+
 
                 </div>
-
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
@@ -237,24 +324,105 @@
                   }
                 </script>
 
+                <!-- library build  -->
+                <script>
+                  var jsonData = {};
+
+                  function buildLibrary() {
+                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/library/library-card-v2.json',
+                      function (response) {
+                        jsonData = JSON.parse(response);
+                      })
+
+                    buildPdfGrid();
+                  }
+
+                  function loadJSON(file, callback) {
+                    const xobj = new XMLHttpRequest()
+                    xobj.overrideMimeType('application/json')
+                    xobj.open('GET', file, false)
+                    xobj.onreadystatechange = function () {
+                      if (xobj.readyState == 4 && xobj.status == '200') {
+                        callback(xobj.responseText)
+                      }
+                    }
+                    xobj.send(null)
+                  }
+
+                  function buildPdfGrid() {
+                    const myLanding = landingPageEl ?? document;
+                    const libraryCardGrid = myLanding.getElementById("library-card-grid");
+                    const libraryCardTemplate = myLanding.getElementById("library-card-template");
+                    for (let cardData of jsonData) {
+                      const card = libraryCardTemplate.content.cloneNode(true);
+
+                      const libraryCardThumb = card.getElementById("library-card-thumb");
+                      libraryCardThumb.onerror = function () {
+                        libraryCardThumb.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/library/default-thumb.jpeg';
+                      }
+                      libraryCardThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/library/' + cardData.Thumb;
+
+                      const libraryCardTitle = card.getElementById("library-card-title");
+                      libraryCardTitle.innerHTML = cardData.Title;
+
+                      const libraryCard = card.getElementById("library-card");
+                      libraryCard.onclick = function () {
+                        loadPDF(cardData.PDFFile);
+                      }
+
+                      libraryCardGrid.appendChild(card);
+                    }
+                  }
+
+                  if (window.location.hostname.includes('127.0.0.1')) {
+                    window.addEventListener('load', (event) => {
+                      buildLibrary();
+                      console.log('The page has fully loaded');
+                    });
+                  } else {
+                    buildLibrary();
+                  }
+                </script>
+
+                <!-- PDF -->
+                <script>
+                  function loadPDF(fileName) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/library/" + fileName;
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
                 <chatwee-initialize>
                   <!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
                   {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
                   {%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
 
                   <!-- get duration till end of conference plus one day for buffer -->
-                  <!-- this determines the length of time to set the chatwee cookie expiration too -->
-                  {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
-                  {%- assign lastEvent = eventsByDate.last -%}
+                  <!-- this determines the length of time to set the chatwee cookie expiration too -->{%- assign eventsByDate = data.Events | sort: "StartTime" -%} {%- assign lastEvent = eventsByDate.last -%}
 
-                  {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
-                  {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
-                  {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
+                  {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%} {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%} {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
 
-                  <!-- difference in seconds -->
-                  {%- assign diffSeconds = eventEnd | minus:nowTimestamp -%}
-                  {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
-                  {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
+                  <!-- difference in seconds -->{%- assign diffSeconds = eventEnd | minus:nowTimestamp -%} {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%} {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
 
                   <div style="display:none;">
                     <p id="user-inferno-first-name">${firstName}</p>

@@ -348,14 +348,12 @@
                   var industryResearchCardData = {};
 
                   function buildLibrary() {
-                    var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
-
-                    loadJSON(baseUrl + '/library/sponsor-info.json',
+                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/sponsor-info-alpha.json',
                       function (response) {
                         sponsorInfoCardData = JSON.parse(response);
                       })
 
-                    loadJSON(baseUrl + '/library/industry-research.json',
+                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/industry-research-alpha.json',
                       function (response) {
                         industryResearchCardData = JSON.parse(response);
                       })
@@ -392,7 +390,7 @@
                       industryResearchThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
 
                       const industryResearchTitle = card.getElementById("industry-research-title");
-                      industryResearchTitle.innerHTML = cardData.ContentName;
+                      industryResearchTitle.innerHTML = cardData.Title;
 
                       const industryResearchCard = card.getElementById("industry-research-card");
                       industryResearchCard.onclick = function () {
@@ -417,9 +415,10 @@
                         this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/default.jpeg';
                       }
                       sponsorInfoThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
+                      // sponsorInfoThumb.src = 'https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
 
                       const sponsorInfoTitle = card.getElementById("sponsor-info-title");
-                      sponsorInfoTitle.innerHTML = cardData.ContentName;
+                      sponsorInfoTitle.innerHTML = cardData.Title;
 
                       const sponsorInfoCardData = card.getElementById("sponsor-info-card");
                       sponsorInfoCardData.onclick = function () {
@@ -430,7 +429,7 @@
                     }
                   }
 
-                  if (window.location.hostname.includes('127.0.0.1')) {
+                  if (window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('localhost')) {
                     window.addEventListener('load', (event) => {
                       buildLibrary();
                       console.log('The page has fully loaded');
@@ -447,6 +446,7 @@
                     const myLanding = landingPageEl ?? document;
                     const pdfFrame = myLanding.getElementById('pdf-frame');
                     pdfFrame.src = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/" + id + ".pdf";
+                    // pdfFrame.src = "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/tag/library/pdf/" + id + ".pdf";
                     const pdfBlanket = myLanding.getElementById('pdf-blanket');
                     pdfBlanket.style.display = 'block';
                   }
