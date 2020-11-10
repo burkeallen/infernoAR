@@ -349,7 +349,7 @@
                   </template>
 
                   <script>
-                    function toggleModalVideo(el) {
+                    function toggleVideoModal(el) {
                       const id = el.getAttribute('video');
                       const contentWrapper = landingPageEl.querySelector('.contentWrapper');
                       contentWrapper.classList.toggle('videoWrapper');
@@ -357,7 +357,7 @@
                       const modalClose = landingPageEl.querySelector('.modal-close');
 
                       modalClose.addEventListener('click', function () {
-                        toggleModalVideo(el);
+                        toggleVideoModal(el);
                       });
 
                       if (video) {
@@ -404,7 +404,7 @@
                     {% for category in event.Categories %}
                     {% assign cat = category.Id | downcase %}
                     {% if cat == currentCat %}
-                    <div class="card" video="{{event.Id}}" id="{{event.Id}}" onclick="toggleModalVideo(this)">
+                    <div class="card" video="{{event.Id}}" id="{{event.Id}}" onclick="toggleVideoModal(this)">
                       <img title="{{event.Name}}" src="{{event.VideoThumbnail}}">
                       <div class="title">{{event.Name}}</div>
                       <div class="description"></div>
