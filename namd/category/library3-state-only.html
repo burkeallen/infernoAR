@@ -551,8 +551,8 @@
                           category: "Medicaid Evolution",
                           desc: "Track 2, Session 1 - Medicaid Evolution",
                           action: "View PDF",
-                          thumb: "Track 2 - Session 1 - Medicaid evolution.jpg",
-                          link: "Track 2 - Session 1 - Medicaid evolution.pdf"
+                          thumb: "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/Track+2+-+Session+1+-+Medicaid+Evolution.jpg",
+                          link: "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/Track+2+-+Session+1+-+Medicaid+Evolution.pdf"
                         },
                         {
                           id: 6,
@@ -560,8 +560,8 @@
                           category: "On Medicaid's Radar<br>Equity",
                           desc: "Track 2, Session 2: Advancing Equity in Medicaid",
                           action: "View PDF",
-                          thumb: "Track 2 - Session 2 - health equity.jpg",
-                          link: "Track 2 - Session 2 - health equity.pdf"
+                          thumb: "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/Track+2+-+Session+2+-+Health+Equity.jpg",
+                          link: "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/Track+2+-+Session+2+-+Health+Equity.pdf"
                         },
                         {
                           id: 7,
@@ -569,8 +569,8 @@
                           category: "On Medicaid's Radar",
                           desc: "Track 2, Session 3: Managing in the Middle",
                           action: "View PDF",
-                          thumb: "Track 2 - Session 3 - middle managing.jpg",
-                          link: "Track 2 - Session 3 - middle managing.pdf"
+                          thumb: "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/Track+2+-+Session+3+-+Middle+Managing.jpg",
+                          link: "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/Track+2+-+Session+3+-+Middle+Managing.pdf"
                         },
                       ];
 
@@ -605,8 +605,14 @@
                       const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/library/state-only/';
                       const card = clone.querySelector('.card');
                       const image = card.querySelector('img');
-                      const imageSrc = item.thumb ?? 'doc-icon.png';
-                      image.src = baseUrl + imageSrc;
+
+                      // hack for items that need to be uploaded to S3 bucket after file server ran out of space
+                      if (item.thumb.includes('https://')) {
+                        image.src = item.thumb;
+                      } else {
+                        const imageSrc = item.thumb ?? 'doc-icon.png';
+                        image.src = baseUrl + imageSrc;
+                      }
 
                       card.querySelector('.title').innerHTML = item.title ?? '';
                       card.querySelector('.category').innerHTML = item.category ?? '';
@@ -621,7 +627,12 @@
                           toggleModalVideo(this);
                         }
                       } else if (item.action.toLowerCase().includes('pdf')) {
-                        button.setAttribute('pdf', baseUrl + item.link);
+                        // hack for items that need to be uploaded to S3 bucket after file server ran out of space
+                        if (item.link.includes('https://')) {
+                          button.setAttribute('pdf', item.link);
+                        } else {
+                          button.setAttribute('pdf', baseUrl + item.link);
+                        }
                         button.onclick = function () {
                           togglePDF(this);
                         }
