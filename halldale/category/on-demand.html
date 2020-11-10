@@ -398,13 +398,20 @@
                     ######################
                     need to loop through events associated with this page(category) and create a card for each event
                     -->
-
-                    <div class="card" video="" id="" onclick="toggleModalVideo(this)">
-                      <img src="">
-                      <div class="title"></div>
+                    {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                    {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                    {% for event in sortedEvents %}
+                    {% for category in event.Categories %}
+                    {% assign cat = category.Id | downcase %}
+                    {% if cat == currentCat %}
+                    <div class="card" video="{{event.Id}}" id="{{event.Id}}" onclick="toggleModalVideo(this)">
+                      <img title="{{event.Name}}" src="{{event.VideoThumbnail}}">
+                      <div class="title">{{event.Name}}</div>
                       <div class="description"></div>
                     </div>
-
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
                     <!-- ######################## -->
 
                     <div id="open-modal" class="modal-window">
