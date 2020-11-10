@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+  <script>
+    let landingPageEl = null
+  </script>
+</head>
+
+<body>
+
+<app-root class='layout-fixed has-menu'>
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar
+            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+            color="primary">
+          <div class="navbar-header">LOCAL</div>
+          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
+                    trigger-resize="" onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close="">
+            <ul class="nav">
+              <li><a href="../">Menu</a></li>
+            </ul>
+          </nav>
+          </nav>
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex="">
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="3b4d22f0-4983-4ee0-963e-43bd8482c58d">
+
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
+                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
+
+                </script>
+
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
+                  .content {
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/agenda-logo-bg.jpg');
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: right bottom;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    z-index: 1;
+                    font-family: 'gothamMed', sans-serif;
+                  }
+
+                  .top-banner {
+                    padding: 10px 50px;
+                    line-height: 60px;
+                    color: var(--branding-primary);
+                    font-size: 32px;
+                    background-color: #ffffff;
+
+                  }
+
+                  .top-banner span {
+                    color: var(--sidebar-bg-color);
+                  }
+
+                  .top-banner img {
+                    float: right;
+                    width: 250px;
+                    margin: 13px 0;
+                  }
+
+                  .on-demand-grid {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    max-width: 80%;
+                    padding: 10px;
+                  }
+
+                  .on-demand {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    width: 200px;
+                    height: 250px;
+                    background-color: rgba(255, 255, 255, .4);
+                    border-radius: 1em;
+                    margin: 10px;
+                    padding: 10px;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .on-demand-thumb {
+                    width: 160px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .on-demand-title {
+                    display: flex;
+                    position: absolute;
+                    top: 20px;
+                    height: 40px;
+                    font-size: 1.25rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .on-demand img:hover {
+                    cursor: pointer;
+                    transform: scale(1.1);
+                    transition: 1s ease;
+                  }
+
+                </style>
+
+                <video-viewer>
+                  <style>
+                    .modal-window {
+                      position: fixed;
+                      background-color: rgba(0, 0, 0, 0.5);
+                      top: 0;
+                      right: 0;
+                      bottom: 0;
+                      left: 0;
+                      opacity: 0;
+                      pointer-events: none;
+                      -webkit-transition: all 0.7s;
+                      -moz-transition: all 0.7s;
+                      transition: all 0.7s;
+                      display: none;
+                    }
+
+                    .modal-window.open {
+                      opacity: 1;
+                      pointer-events: auto;
+                      display: inline-block;
+                      z-index: 99999999;
+                      padding: 5%;
+                    }
+
+                    .modal-window .contentWrapper {
+                      display: flex;
+                      justify-content: center;
+                      width: 100%;
+                      margin-top: 20px;
+                    }
+
+                    .videoWrapper {
+                      position: relative;
+                      padding-bottom: 56.5%; /* 16:9 */
+                      height: 0;
+                    }
+
+                    .videoWrapper iframe {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                    }
+
+
+                    .modal-window .modal-box {
+                      position: relative;
+                      min-width: 400px;
+                      width: 80%;
+                      margin: 20px auto;
+                      padding: 2rem 0;
+                      background-color: transparent;
+                      border: none;
+                    }
+
+                    .modal-window h1 {
+                      font-size: 150%;
+                      margin: 0 0 15px;
+                    }
+
+                    .modal-window header {
+                      font-weight: bold;
+                    }
+
+                    .modal-close {
+                      position: absolute;
+                      right: 3%;
+                      top: -11px;
+                      color: #fff;
+                      font-size: 1.5em;
+                      text-decoration: none;
+                      font-weight: bold;
+                    }
+
+                    .modal-close:hover {
+                      filter: brightness(130%);
+                      text-decoration: none;
+                      color: #fff;
+                      cursor: pointer;
+                    }
+
+                    .modal-grid {
+                      display: grid;
+                      grid-template-columns: 0.6fr 1.4fr;
+                      grid-template-rows: 1fr;
+                      gap: 0px 20px;
+                      padding: 2%;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      background-color: #5378A7;
+                    }
+
+                    .modal-grid-video {
+                      display: grid;
+                      grid-template-columns: 1fr;
+                      grid-template-rows: 1fr;
+                      gap: 0 0;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      background-color: #5378A7;
+                    }
+
+                  </style>
+
+                  <template id="modalWindow">
+                    <div class="modal-grid">
+                    </div>
+                  </template>
+
+                  <template id="videoFrame">
+                    <iframe src="/embed/"
+                            frameborder="0"
+                            allowfullscreen="true"
+                            webkitallowfullscreen="true"
+                            mozallowfullscreen="true">
+                    </iframe>
+                  </template>
+
+                  <script>
+                    function toggleModalVideo(el) {
+                      const id = el.getAttribute('video');
+                      const contentWrapper = landingPageEl.querySelector('.contentWrapper');
+                      contentWrapper.classList.toggle('videoWrapper');
+                      let video = contentWrapper.querySelector('#video-frame');
+                      const modalClose = landingPageEl.querySelector('.modal-close');
+
+                      modalClose.addEventListener('click', function () {
+                        toggleModalVideo(el);
+                      });
+
+                      if (video) {
+                        video.remove();
+                        landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                        return;
+                      }
+
+                      const temp = landingPageEl.querySelector('template#videoFrame');
+                      const clone = temp.content.cloneNode(true);
+                      video = clone.querySelector('iframe');
+                      video.id = 'video-frame';
+                      video.src = '/embed/' + id;
+                      contentWrapper.appendChild(clone);
+                      const modal = landingPageEl.querySelector('#open-modal');
+                      setModalPosition(modal);
+                      modal.classList.toggle('open');
+                    }
+
+                    function setModalPosition(el) {
+                      el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    }
+
+                  </script>
+
+                </video-viewer>
+
+                <div class="content">
+
+                  <div class="top-banner">
+                    <span>On Demand</span> <img
+                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                  </div>
+
+                  <div id="on-demand-grid" class="on-demand-grid">
+
+                    <!--
+                    ######################
+                    need to loop through events associated with this page(category) and create a card for each event
+                    -->
+
+                    <div class="card" video="" id="" onclick="toggleModalVideo(this)">
+                      <img src="">
+                      <div class="title"></div>
+                      <div class="description"></div>
+                    </div>
+
+                    <!-- ######################## -->
+
+                    <div id="open-modal" class="modal-window">
+                      <div class="modal-box">
+                        <div title="Close" class="modal-close">Close</div>
+                        <div class="contentWrapper"></div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+
+                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <script>
+                  if (!window.whiteHack) {
+                    console.log('loading color overrides for --branding-primary = white');
+                    const css = `
+                          jolo-search-box .search-box-container {display: none !important}
+                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
+                    `;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
+
+
+                <chatwee-initialize>
+                  <!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
+                  {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
+                  {%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
+
+                  <!-- get duration till end of conference plus one day for buffer -->
+                  <!-- this determines the length of time to set the chatwee cookie expiration too -->{%- assign
+                  eventsByDate = data.Events | sort: "StartTime" -%} {%- assign lastEvent = eventsByDate.last -%}
+
+                  {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%} {%- assign eventEnd =
+                  eventStart | plus: lastEvent.VideoDuration -%} {%- assign nowTimestamp = "now" | date: "%s" | plus: 0
+                  -%}
+
+                  <!-- difference in seconds -->{%- assign diffSeconds = eventEnd | minus:nowTimestamp -%} {%- assign
+                  secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%} {%- assign chatDuration = diffSeconds |
+                  plus: secondsInADay -%}
+
+                  <div style="display:none;">
+                    <p id="user-inferno-first-name">${firstName}</p>
+                    <p id="user-inferno-last-name">${lastName}</p>
+                  </div>
+
+                  <script async>
+
+                    var userInfernoId = window.sessionStorage.getItem("userId");
+                    var firstName = window.isLocalTemplate ? 'TEST' : landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+                    var lastName = window.isLocalTemplate ? 'USER' : landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+
+                    var chatDuration = "{{ chatDuration }}";
+                    var hasProfileImage = false;
+
+                    // global chat manager
+                    var chatManager = null;
+
+                    var chatweeValues = {
+                      userIdKey: "chatwee-user-id",
+                      sessionCookieKey: "chatwee-SID-5f7ef4b1ebaa9f3cf83ed7fa",
+                      chatId: "5f7ef4b1ebaa9f3cf83ed7fa",
+                      clientApiKey: "a6feff42c070b4633a876aec",
+                      isAdmin: 0,
+                      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+                    }
+
+                    var loadChatScript = () => {
+                      // don't load script if already on page
+                      let chatScript = document.getElementById("chat-script");
+                      if (chatScript) return;
+
+                      (function () {
+                        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                        s1.id = "chat-script";
+                        s1.async = true;
+                        s1.src = 'https://static.chatwee-api.com/v2/script.js';
+                        s1.charset = 'UTF-8';
+                        s0.parentNode.insertBefore(s1, s0);
+                      })();
+
+                      return;
+                    }
+
+                    var loadChatStyles = () => {
+                      return;  // no custom styling for this instance
+
+                      // dont load styles if already on page
+                      // let chatStyleSheet = document.getElementById("chat-replacement-styling");
+                      // if (chatStyleSheet) return;
+                      //
+                      // (function () {
+                      //   var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+                      //
+                      //   link1.setAttribute("id", "chat-replacement-styling")
+                      //   link1.setAttribute("rel", "stylesheet")
+                      //   link1.setAttribute("type", "text/css")
+                      //   link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+                      //   link1.setAttribute("media", "all")
+                      //   body.parentNode.insertBefore(link1, body);
+                      // })();
+
+                      return;
+                    }
+
+                    var startChat = async () => {
+                      if (!chatManager) {
+                        chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+                        chatManager.Run();
+                      }
+                    }
+
+                    var openChat = () => {
+                      // close bubble
+                      let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+                      let bubble = bubbleChild.parentNode;
+                      bubble.style.display = "none";
+
+                      // open chat
+                      let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
+                      let chat = chatChild.parentNode;
+                      chat.style.display = "block";
+                      return;
+                    }
+
+                    // Chatwee UserId must be set as the Id for the button
+                    var triggerConversation = e => {
+                      let userId = e.target.id;
+                      openChat();
+                      chatManager.TriggerConversation(userId);
+                    }
+
+                    // helper functions
+                    var getCookie = key => {
+                      let cookieValue = "";
+
+                      const cookieList = document.cookie;
+                      if (cookieList) {
+                        const cookie = cookieList
+                          .split("; ")
+                          .find(row => row.startsWith(key));
+
+                        if (cookie) {
+                          cookieValue = cookie.split("=")[1];
+                        }
+
+                      }
+                      return cookieValue;
+                    }
+
+                    var setCookie = (key, value, age) => {
+                      document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
+                    }
+
+                    var validateChatSessionId = sessionId => {
+                      const url = chatweeValues.ssoBaseUrl
+                        + "validate-session?"
+                        + "chatId="
+                        + chatweeValues.chatId
+                        + "&clientKey="
+                        + chatweeValues.clientApiKey
+                        + "&sessionId="
+                        + sessionId;
+
+                      return fetch(url).then(res => res.json());
+                    }
+
+                    var loginChat = userId => {
+                      const url = chatweeValues.ssoBaseUrl
+                        + "login?"
+                        + "chatId="
+                        + chatweeValues.chatId
+                        + "&clientKey="
+                        + chatweeValues.clientApiKey
+                        + "&userId="
+                        + userId;
+
+                      return fetch(url).then(res => res.json());
+                    }
+
+                    var registerChat = () => {
+                      const name = firstName + " " + lastName;
+
+                      // TO DO: get default chat icon
+                      let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/chatwee/_avatar.jpg";
+
+                      if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
+
+                      const url = chatweeValues.ssoBaseUrl
+                        + "register?"
+                        + "chatId="
+                        + chatweeValues.chatId
+                        + "&clientKey="
+                        + chatweeValues.clientApiKey
+                        + "&login="
+                        + name
+                        + "&isAdmin="
+                        + chatweeValues.isAdmin
+                        + "&avatar="
+                        + avatarUrl;
+
+                      return fetch(url).then(res => res.json());
+                    }
+
+                    // connect to Chatwee
+                    var connectChat = async () => {
+
+                      // see if session id locally
+                      let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+                      if (sessionId) {
+                        // validate session id with chatwee
+                        let valid
+                        try {
+                          valid = await validateChatSessionId(sessionId);
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        // if true, do nothing
+                        if (valid) return;
+
+                      }
+
+                      // if false, check if user id is present locally
+                      const userId = getCookie(chatweeValues.userIdKey);
+
+                      // if true, login and set session id locally
+                      if (userId) {
+                        let sessionId = ""
+                        try {
+                          sessionId = await loginChat(userId);
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
+                      }
+                      // if false, register and set user id and log in user
+                      else {
+                        let userId = ""
+                        try {
+                          userId = await registerChat();
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        setCookie(chatweeValues.userIdKey, userId, chatDuration);
+
+                        let sessionId = ""
+                        try {
+                          sessionId = await loginChat(userId);
+                        } catch (e) {
+                          throw new Error(e);
+                        }
+
+                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
+
+                      }
+
+                      return;
+                    }
+
+                    var getProfileImage = () => {
+                      let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+                      return fetch(url);
+                    }
+
+                    var waitForGlobal = async (key, callback1, callback2) => {
+                      if (window[key]) {
+                        await callback1();
+                        await callback2();
+                      } else {
+                        setTimeout(function () {
+                          waitForGlobal(key, callback1, callback2);
+                        }, 100);
+                      }
+                    };
+
+                    var setUpChat = async () => {
+                      loadChatScript();
+                      loadChatStyles();
+                      const res = await getProfileImage();
+                      if (res.status === 200) {
+                        hasProfileImage = true;
+                      }
+
+                      waitForGlobal("ChatweeLib", connectChat, startChat);
+                    }
+
+                    setUpChat();
+
+                  </script>
+
+                </chatwee-initialize>
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer="" layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+</body>
+
+<!-- Menu Collapse Script -->
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+</html>
