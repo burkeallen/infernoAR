@@ -249,18 +249,30 @@
 
                 <!-- Sponsors -->
                 <script>
+
                   var myLanding = landingPageEl ?? document;
                   var sponsorsGrid = myLanding.getElementById("sponsors-grid");
                   var sponsorTemplate = myLanding.getElementById("sponsor-template");
                   var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
 
-                  var sponsorsJson = {};
-                  loadJSON(baseUrl + '/sponsors/lobby-sponsors-v2.json',
-                    function (response) {
-                      sponsorsJson = JSON.parse(response);
-                    })
+                  // var sponsorsJson = {};
+                  // loadJSON(baseUrl + '/sponsors/lobby-sponsors-v2.json',
+                  //   function (response) {
+                  //     sponsorsJson = JSON.parse(response);
+                  //   })
 
-                  for (let sponsor of sponsorsJson['sponsors']) {
+                  var jsonText = `[
+                  {"name":"Aprio","image":"aprio.png"},
+                  {"name":"Northside","image":"northside-hospital.png"},
+                  {"name":"Grant Thornton","image":"grant-thornton.png"},
+                  {"name":"WIPFLI","image":"wipfli.png"},
+                  {"name":"Juno DSS","image":"juno-dss.png"},
+                  {"name":"Telliant","image":"telliant.png "},
+                  {"name":"Nutanix", "image":"nutanix.png"}
+                  ]`;
+                  sponsorsJson = JSON.parse(jsonText);
+
+                  for (let sponsor of sponsorsJson) {
                     let clone = sponsorTemplate.content.cloneNode(true);
                     let img = clone.getElementById("sponsor-logo");
                     img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
@@ -268,17 +280,17 @@
                     sponsorsGrid.appendChild(clone);
                   }
 
-                  function loadJSON(file, callback) {
-                    const xobj = new XMLHttpRequest()
-                    xobj.overrideMimeType('application/json')
-                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-                    xobj.onreadystatechange = function () {
-                      if (xobj.readyState == 4 && xobj.status == '200') {
-                        callback(xobj.responseText)
-                      }
-                    }
-                    xobj.send(null)
-                  }
+                  // function loadJSON(file, callback) {
+                  //   const xobj = new XMLHttpRequest()
+                  //   xobj.overrideMimeType('application/json')
+                  //   xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+                  //   xobj.onreadystatechange = function () {
+                  //     if (xobj.readyState == 4 && xobj.status == '200') {
+                  //       callback(xobj.responseText)
+                  //     }
+                  //   }
+                  //   xobj.send(null)
+                  // }
 
                 </script>
 
