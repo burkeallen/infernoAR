@@ -224,8 +224,8 @@
 
                   .library-card :hover{
                     cursor: pointer;
-                    transform: scale(1.1);
-                    transition: 1s ease;
+                    transform: scale(1.05);
+                    transition: .5s ease;
                   }
 
                 </style>
@@ -325,7 +325,7 @@
 
                     <div class="library-section">
                       <div class="library-section-title">Event Recordings</div>
-                      <div class="library-section-description">Coming After November 12st Event</div>
+                      <div class="library-section-description">Coming After November 12th Event</div>
                     </div>
 
                     <div id="event-recordings-grid" class="library-grid">
@@ -348,7 +348,7 @@
                   var industryResearchCardData = {};
 
                   function buildLibrary() {
-                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/sponsor-info-alpha.json',
+                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/sponsor-info-v2.json',
                       function (response) {
                         sponsorInfoCardData = JSON.parse(response);
                       })
@@ -414,8 +414,7 @@
                         sponsorInfoThumb.onerror = null;
                         this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/default.jpeg';
                       }
-                      sponsorInfoThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
-                      // sponsorInfoThumb.src = 'https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
+                      sponsorInfoThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg?r=1109';
 
                       const sponsorInfoTitle = card.getElementById("sponsor-info-title");
                       sponsorInfoTitle.innerHTML = cardData.Title;
@@ -445,8 +444,7 @@
                     scrollTop();
                     const myLanding = landingPageEl ?? document;
                     const pdfFrame = myLanding.getElementById('pdf-frame');
-                    pdfFrame.src = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/" + id + ".pdf";
-                    // pdfFrame.src = "https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/tag/library/pdf/" + id + ".pdf";
+                    pdfFrame.src = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/" + id + ".pdf?r=1109";
                     const pdfBlanket = myLanding.getElementById('pdf-blanket');
                     pdfBlanket.style.display = 'block';
                   }
