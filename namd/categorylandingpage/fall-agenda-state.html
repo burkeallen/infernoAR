@@ -1,0 +1,1461 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.web.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.web.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="7ac54594-0202-4aea-8a73-5d78270849cf">
+
+<!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('gotham', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff');
+
+                </script>
+
+                <style>
+                  /* Resets */
+                  * {
+                    box-sizing: border-box;
+                  }
+
+                  ul {
+                    list-style: none;
+                    margin: 0;
+                    padding: 0;
+                  }
+
+                  h1,
+                  h2,
+                  h3,
+                  h4 {
+                    margin: 0;
+                    padding: 0;
+                    font-weight: 400;
+                  }
+
+                  body {
+                    width: 100%;
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                  }
+
+                  .red {
+                    color: #b60e36;
+                  }
+
+                  button {
+                    outline: none;
+                    border: none;
+                    background: transparent;
+                    font-family: sans-serif;
+                  }
+
+                  button:hover {
+                    opacity: 0.9;
+                    cursor: pointer;
+                  }
+
+                  /* End Resets */
+
+                  /* Background Styles */
+                  .ntar-landing-bg {
+                    /* Image */
+                    background-image: url("https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/agenda/down_arrows_v2.jpg");
+                    background-repeat: no-repeat;
+                    background-position: right;
+                    background-color: #5378a7;
+
+                    /* Cover height minus 55px header */
+                    min-height: calc(100vh - 35px);
+
+                    /* Stick to Jolokia content frame */
+                    position: absolute;
+                    top: -20px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                  }
+
+                  .ntar-landing-bg::before {
+                    content: "";
+                    position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    left: 0px;
+                  }
+
+                  .ntar-clock {
+                    position: absolute;
+                    top: 2vmin;
+                    right: 2vmin;
+                    border-radius: 5px;
+                    padding: 1vmin;
+                    font-size: 2vmin;
+                    line-height: 2.5vmin;
+                    background: #585db1;
+                    color: #fff;
+                    font-weight: bold;
+                    font-family: sans-serif;
+                    box-shadow: 0 8px 12px rgba(1, 1, 1, 0.2);
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                    .ntar-landing-bg {
+                      /* Cover height minus 55px header */
+                      min-height: calc(100vh - 70px);
+
+                      /* Stick to Jolokia content frame */
+                      position: fixed;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                    }
+                  }
+
+                  /* ./ Background Styles */
+
+                  /* Page Content Container Styles */
+                  .ntar-landing-content {
+                    /* Scale to full width and height + footer space */
+                    width: 100%;
+                    height: calc(100% + 60px);
+
+                    /* Stick to Jolokia content frame and scroll y */
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    overflow: hidden auto;
+
+                    /* Pad Content */
+                    padding: 0px;
+
+                    /* Display Type */
+                    flex-direction: column;
+                    align-items: flex-start;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                    .ntar-landing-content {
+                      /* Cover height minus 55px header */
+                      min-height: calc(100vh - 55px);
+
+                      /* Stick to Jolokia content frame */
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                    }
+                  }
+
+                  /* ./ Page Content Container Styles */
+                  .menu-img {
+                    position: absolute;
+                    right: 55px;
+                    width: 10vw;
+                  }
+
+                  #date-block2 {
+                    margin-bottom: 40px;
+                  }
+
+                  .overview-divider {
+                    color: white;
+                    padding: 2rem;
+                  }
+
+                  .overview-divider h1 {
+                    font-size: 3rem;
+                    font-weight: bold;
+                  }
+
+                  /* Drop Down Container Styles */
+
+
+                  .date-block {
+                    /* width: 100%; */
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 0.5rem;
+                  }
+
+                  .date-block .header {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 2rem 1rem 2rem 4rem;
+                    align-items: center;
+                    background-color: #021f49;
+                  }
+
+                  .date-list {
+                    width: 100%;
+                  }
+
+                  .date-list img {
+                    position: absolute;
+                    right: 55px;
+                    width: 10vw;
+
+                  }
+
+                  .dropdown-button {
+                    border: none;
+                    border-radius: 4px;
+                    height: 6.4rem;
+                    width: 18rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 0 2rem;
+                    margin-left: 1.5rem;
+                    color: #fff !important;
+                  }
+
+                  .dropdown-button span {
+                    color: rgb(0, 0, 0);
+                    font-size: 2rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 2.5rem;
+                  }
+
+                  .dropdown-button:focus {
+                    outline: none;
+                  }
+
+                  /* ./ Drop Down Container Styles */
+
+                  /* Event Styles Container Styles */
+
+                  .keynote {
+                    display: flex;
+                  }
+
+                  .keynote .header {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    min-width: 261px;
+                    background-color: unset;
+                  }
+
+                  .keynote .header h1 {
+                    width: 100%;
+                    color: white;
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                    text-align: center;
+                  }
+
+                  .event-link {
+                    width: 80%;
+                    margin-top: 1rem;
+                    text-align: center;
+                    background-color: #021F49;
+                    padding: 1rem 0;
+                    border-radius: 1525px;
+                    color: white;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    text-decoration: none;
+                  }
+
+                  .event-link:hover {
+                    transform: scale(1.05);
+                    text-decoration: none;
+                  }
+
+                  .body {
+                    padding: 2rem 2rem 0;
+                    width: 70%;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                  }
+
+                  .body .text {
+                    width: 100%;
+                  }
+
+                  .body .text h2 {
+                    color: white;
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                    letter-spacing: 1px;
+                  }
+
+                  .body .text p {
+                    color: white;
+                    font-size: 1.75rem;
+
+                  }
+
+                  .dropdown-speaker {
+                    padding: 0;
+                    margin: 0 0 1rem;
+                  }
+
+                  .dropdown-speaker span {
+                    color: #021F49;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    margin-left: 5px;
+                  }
+
+                  #event-speakers {
+                    margin-bottom: 1rem;
+                  }
+
+                  #moderator,
+                  #panelist {
+                    margin-bottom: 1rem;
+                  }
+
+                  #event-moderator {
+                    font-size: 1.75rem;
+                  }
+
+                  #event-panelist {
+                    /*font-size: 1.75rem;*/
+                  }
+
+                  .speaker-info {
+                    display: flex;
+                  }
+
+                  .speaker-info a {
+                    font-size: 1.75rem;
+                    font-weight: bold;
+                    color: white;
+                    text-decoration: none;
+                  }
+
+                  .speaker-info a:hover {
+                    text-decoration: underline;
+                  }
+
+                  .speaker-info p {
+                    margin-left: 1rem;
+                  }
+
+                  .speaker-name {
+                    font-weight: bold;
+                    white-space: nowrap;
+                  }
+
+                  hr {
+                    width: 100%;
+                    color: #b60e36;
+                    border: 1px solid;
+                  }
+
+                  .day-date h1 {
+                    color: white;
+                    font-size: 4rem;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                  }
+
+                  .day-date h2 {
+                    color: white;
+                    font-size: 2.75rem;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    line-height: 2.75rem;
+                  }
+
+                  /* ./ Event Styles Container Styles */
+
+                  @media only screen and (max-width: 1200px) {
+                  }
+
+                  @media only screen and (max-width: 768px) {
+                    .keynote {
+                      flex-direction: column;
+
+                    }
+
+                    .body {
+                      width: 100%;
+                    }
+
+                    .text {
+                      width: 100%;
+                    }
+
+                    .speaker-info {
+                      flex-direction: column;
+                    }
+                  }
+                </style>
+
+                <!-- Background Frame (No Content) -->
+                <div class="ntar-landing-bg"></div>
+                <!-- ./ Background Frame -->
+
+                <!-- Page Content Container -->
+                <div class="ntar-landing-content">
+                  <div class="overview-divider">
+                    <h1>AGENDA - STATE-ONLY - MONDAY NOVEMBER 9, 2020</h1>
+                    <p>All times listed are EST.</p>
+                  </div>
+                  <div class="menu">
+                    <div id="date-block1" class="date-block">
+                      <div class="header">
+                        <div class="day-date">
+                          <h1 id="date-text1">TRACK 1</h1>
+                          <h2>STATE-ONLY DAY FOR MEDICAID DIRECTORS AND SENIOR LEADERS</h2>
+                        </div>
+                        <button id="dropdown-button-day-one" class="dropdown-button" onclick="toggleExpand(event)">
+                              <span id="dropdown-button-text-day-one" style="display: none">Expand</span><img class="chevron" id="dropdown-button-chevron-day-one" src="https://studio304nextechar.freetls.fastly.net/infernoAR//lobster/images/chevron-down.png">
+                        </button>
+                      </div>
+                      <div id="date-list-day-one" class="date-list" style="display: none;">
+                        <div class="bg-img-day-one"></div>
+                        <div id="event-list-one"></div>
+                      </div>
+                    </div>
+
+                    <div id="date-block2" class="date-block">
+                      <div class="header">
+                        <div class="day-date">
+                          <h1 id="date-text2">TRACK 2</h1>
+                          <h2>ON MEDICAID'S RADAR: KEY TOPICS FOR RISING LEADERS</h2>
+                        </div>
+                        <button id="dropdown-button-day-two" class="dropdown-button" onclick="toggleExpand(event)">
+                              <span id="dropdown-button-text-day-two" style="display: none">Expand</span><img class="chevron" id="dropdown-button-chevron-day-two" src="https://studio304nextechar.freetls.fastly.net/infernoAR//lobster/images/chevron-down.png">
+                        </button>
+                      </div>
+                      <div id="date-list-day-two" class="date-list" style="display: none">
+                        <div class="bg-img-day-two"></div>
+                        <div id="event-list-two"></div>
+                      </div>
+                    </div>
+
+                    <div class="bg-img"></div>
+                  </div>
+
+                  <template id="event-template">
+                    <div id="box" class="keynote">
+                      <div class="header">
+                        <h1 id="time-auditorium"></h1>
+                        <a href id="event-link" class="event-link">Join Now</a>
+                        <a href id="event-link2" class="event-link">Exhibit Hall</a>
+                      </div>
+                      <div id="keynote-card-body" class="body">
+                        <div class="text">
+                          <h2 id="event-title"></h2>
+                          <div id="event-details-container">
+                            <p id="event-details">
+                              <button id="dropdown-button-speaker" class="dropdown-speaker" onclick="toggleExpandSpeaker(event)" style="display: none;">
+                                  <span id="dropdown-button-speaker-text">Read More...</span>
+                              </button>
+                            </p>
+                          </div>
+
+                          <div id="speaker-container" style="display: none">
+                            <h2 id="event-speakers" style="display: none">Speakers</h2>
+                            <div id="speaker-list">
+
+                              <div id="facilitator">
+                                <h2 id="event-facilitator" style="display: none">Facilitators</h2>
+                              </div>
+
+                              <div id="moderator">
+                                <h2 id="event-moderator" style="display: none">Moderator</h2>
+                              </div>
+
+                              <div id="panelist">
+                                <h2 id="event-panelist" style="display: none">Panelists</h2>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                      </div>
+                    </div>
+                  </template>
+
+                  <template id="speaker-template">
+                    <div class="speaker">
+                      <div class="speaker-info">
+                        <p id="speaker-name" class="speaker-name"></p>
+                        <p id="speaker-title" class="speaker-title"></p>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+                <!-- ./ Page Content Container -->
+
+                <script>
+                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/";
+                  var baseUrlTwo =
+                    "https://studio304nextechar.freetls.fastly.net/infernoAR/cagc/speaker_imgs/";
+
+                  var mainStageLink = '/videos/8cf4b3da-9136-4aed-2ee9-08d85e382ebe/landing/0e78b0d3-14be-4481-b5d1-51b8ba4369b1';
+                  var exhibitHallLink = '/videos/7d904ee8-f7aa-48f9-8ab5-08d86def408e/landing/308fb5cb-4101-4e02-a6f1-83b9c42a71c5';
+                  var fallStageLink = '/videos/2a02e63a-1441-470f-d511-08d8848c10a8/landing/0e78b0d3-14be-4481-b5d1-51b8ba4369b1';
+                  var events = [
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "11:00 AM – 11:15 AM",
+                      eventTitle: "Welcome & Opening Remarks",
+                      eventDetails: "Matt Salo and Beth Kidder will welcome Medicaid Directors and teams to NAMD’s Fall 2020 meeting. They’ll walk through the agenda and orient the states to the virtual 2020 meeting. The Spotlight Award winner will be announced.",
+                      speakers: [
+                        {
+                          type: 0,
+                          name: "Matt Salo",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "<b>Executive Director, NAMD</b>",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 0,
+                          name: "Beth Kidder",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "<b>Deputy Secretary for Medicaid, Florida Agency for Health Care Administration</b>",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "11:15 AM – 12:15 PM",
+                      eventTitle: "Reflecting on 2020",
+                      eventDetails: `A panel of Directors will share how they have navigated through the last year, and how it affected them – and their teams – professionally and personally.`,
+                      speakers: [
+                        {
+                          type: 1,
+                          name: "Beth Kidder",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Deputy Secretary for Medicaid, Florida Agency for Health Care Administration",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Josh Baker",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Director, South Carolina Department of Health & Human Services",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "MaryAnne Lindeblad",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Medicaid Director, Washington State Health Care Authority",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Ben Shaffer",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Medicaid Program Director, Executive Office, Rhode Island Health & Human Services",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Matt Wimmer",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Division Administrator for Medicaid, Idaho Department of Health & Welfare",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: "https://nextechar.zoom.us/j/9993750031",
+                      timeAuditorium: "12:15 PM – 1:00 PM ",
+                      eventTitle: `LUNCH & NETWORKING<br>Random and Spontaneous Networking Time With Your Peers`,
+                      eventDetails: `Directors will be randomly assigned to small Zoom rooms groups where they can spontaneously connect with each other live. There is no agenda and no pre-set questions – just time to catch up with each other and hear how other Directors are doing!`,
+                      speakers: null,
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "1:00 PM – 1:45 PM ",
+                      eventTitle: "Positioning Medicaid and CHIP for the Future - Where Are You Headed?",
+                      eventDetails: `Building off the morning’s session on how the experiences of 2020 have affected us all, Directors will describe how they are thinking ahead about how they might change their Medicaid and CHIP programs permanently.`,
+                      speakers: [
+                        {
+                          type: 1,
+                          name: "Tracy Johnson, PhD",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Medicaid Director, Colorado Department of Health Care Policy & Financing; Medicaid & Child Health Plan Plus (CHP+)",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Cindy Beane, MSW, LCSW",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Commissioner, West Virginia Medicaid – Bureau for Medical Services; Governance Committee Chair, NAMD Board of Directors",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Judy Mohr-Peterson, PhD",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Hawaii Medicaid Director, Med-QUEST Administrator",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Todd Richardson",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Director, Missouri Department of Social Services, Mo HealthNet",
+                          speakerBio: ``,
+                        },
+                      ]
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "1:45 PM – 2:00 PM",
+                      eventTitle: "BREAK<br>Member Perspective Video Segment",
+                      eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
+                      speakers: null,
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "2:00 PM – 2:45 PM",
+                      eventTitle: "Navigating State Budget Cuts",
+                      eventDetails: `Medicaid Directors and Chief Financial Officers will share how they are approaching the hard reality of Medicaid budget cuts both now and in the upcoming fiscal year.  `,
+                      speakers: [
+                        {
+                          type: 1,
+                          name: "Tom Betlach",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Partner, Speire Healthcare Strategies, LLC; former Arizona Medicaid Director",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Suzanne Bierman",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Administrator, Nevada Department of Health & Human Services, Division of Health Care Financing & Policy",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Phillip Burrell",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Deputy Administrator, Nevada Department of Health & Human Services, Division of Health Care Financing & Policy",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Mike Gilbert",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Deputy Commissioner, Connecticut Department of Social Services",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Kate McEvoy",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Director of Health Services, Connecticut Department of Social Services",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "2:45 PM – 3:15 PM",
+                      eventTitle: "A Message from the Centers for Medicare and Medicaid Services ",
+                      eventDetails: `Anne Marie Costello will reflect on the federal-state partnership, particularly over the last several months of navigating the PHE, and will talk about CMCS' priorities looking forward.`,
+                      speakers: [
+                        {
+                          type: 0,
+                          name: "Anne Marie Costello",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Acting Deputy Administrator & Director, The Center for Medicaid & CHIP Services (CMCS)",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: fallStageLink,
+                      timeAuditorium: "3:15 PM – 3:30 PM",
+                      eventTitle: "BREAK <br>+ Member Perspective Video Segment",
+                      eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
+                      speakers: null,
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: mainStageLink,
+                      eventLink2: exhibitHallLink,
+                      timeAuditorium: "3:30 PM – 5:00 PM",
+                      eventTitle: "VIRTUAL EXHIBIT HALL",
+                      eventDetails: `Join us as we officially kick off the NAMD 2020 Virtual Conference.  <b>Matt Salo</b>, Executive Director of NAMD, will provide brief remarks and will provide an overview of the virtual conference platform.`,
+                      speakers: null,
+                    },
+                    {
+                      day: 1,
+                      eventId: "",
+                      eventLink: "https://match.eventdex.com/login",
+                      timeAuditorium: "3:45 PM – 5:15 PM",
+                      eventTitle: "MEDICAID DIRECTOR MEET & GREETS WITH SPONSORS",
+                      eventDetails: `Medicaid Directors and senior state leaders will meet one-on-one with sponsors in 15 minute meet and greets to learn about the latest solutions and strategies to help with their biggest challenges.`,
+                      speakers: null,
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "11:00 AM – 11:05 AM",
+                      eventTitle: "Welcome to Track 2: On Medicaid’s Radar ",
+                      eventDetails: `<b>Dianne Hasselman<b>, Deputy Executive Director, NAMD`,
+                      speakers: [
+                        {
+                          type: 0,
+                          name: "Dianne Hasselman",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Deputy Executive Director, NAMD",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "11:05 AM – 12:00 PM",
+                      eventTitle: "SESSION 1<br>The Evolution of Medicaid and the Challenges and Opportunities it Presents for Medicaid Leaders",
+                      eventDetails: `This session will explore the 55-year evolution of Medicaid, and serve as an opportunity to reflect on the key trends in the state/federal partnership and the role that Medicaid programs play in states. It will also explore how these trends relate to the broader changes occurring in the US health system. `,
+                      speakers: [
+                        {
+                          type: 3,
+                          name: "Mark Larson",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Senior Vice President, Leadership and Capacity Building, Center for Health Care Strategies (CHCS)",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 3,
+                          name: "Lauren Moran",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Senior Program Officer, Center for Health Care Strategies (CHCS)",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "12:00 PM – 12:45 PM ",
+                      eventTitle: "LUNCH & NETWORKING",
+                      eventDetails: `This time will be an opportunity to connect informally with peers in Medicaid across the country via Zoom rooms. `,
+                      speakers: null,
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "12:45 PM – 1:00 PM ",
+                      eventTitle: "BREAK<br>+ Member Perspective Video Segment",
+                      eventDetails: `During breaks, NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
+                      speakers: null,
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "1:00 PM – 1:45 PM",
+                      eventTitle: "SESSION 2<br>Advancing Equity Through the Fundamental Levers of Medicaid",
+                      eventDetails: `Promoting health equity is an important priority for Medicaid programs across the country. Highlighting practical steps states can take, this session will explore the important role that Medicaid programs can play on their own and through partnership with other state agencies. `,
+                      speakers: [
+                        {
+                          type: 3,
+                          name: "Mark Larson",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Senior Vice President, Leadership and Capacity Building, (CHCS)",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Sinsi Hernández-Cancio",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Vice President for Health Justice, National Partnership for Women & Families",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 2,
+                          name: "Corey Pleasants",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Senior Operations and Policy Advisor in the Office of the Chief of Staff, Department of Medical Assistance Services, Commonwealth of Virginia",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "1:45 PM  – 2:15 PM",
+                      eventTitle: "Member Perspective Video Segment",
+                      eventDetails: `NAMD will feature a series of perspectives from individual Medicaid members on how the program impacts their lives, and ways it could be even more effective and member-centric.`,
+                      speakers: null,
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: null,
+                      timeAuditorium: "2:00 PM  – 2:15 PM",
+                      eventTitle: "BREAK",
+                      eventDetails: ``,
+                      speakers: null,
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: "https://chcs.zoom.us/j/95980438996?pwd=QWRCSXNWZEk0RlFVK2lFeU1NSUM4dz09#success",
+                      timeAuditorium: "2:15 PM – 3:15 PM ",
+                      eventTitle: "SESSION 3<br>Managing in the Middle: Leadership Strategies for Mid-Level Managers",
+                      eventDetails: `Have you ever felt squeezed in your relationships between senior leadership and your staff? This session will explore the important role that mid-level managers play in the success of Medicaid programs and offer some practical tips on how to successfully navigate the challenges inherent to leading at this level of an organization.`,
+                      speakers: [
+                        {
+                          type: 0,
+                          name: "Dr. Ed O’Neil",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "O’Neil and Associates",
+                          speakerBio: ``,
+                        },
+                        {
+                          type: 0,
+                          name: "Mark Larson",
+                          speakerLink: "javascript:void(0)",
+                          speakerTitle: "Senior Vice President, Leadership and Capacity Building, Center for Health Care Strategies (CHCS)",
+                          speakerBio: ``,
+                        },
+                      ],
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: null,
+                      timeAuditorium: "3:15 PM  – 3:30 PM",
+                      eventTitle: "BREAK",
+                      eventDetails: ``,
+                      speakers: null,
+                    },
+                    {
+                      day: 2,
+                      eventId: "",
+                      eventLink: mainStageLink,
+                      eventLink2: exhibitHallLink,
+                      timeAuditorium: "3:30 PM – 5:00 PM ",
+                      eventTitle: "VIRTUAL EXHIBIT HALL",
+                      eventDetails: `Join us as we officially kick off the NAMD 2020 Virtual Conference.  <b>Matt Salo</b>, Executive Director of NAMD, will provide brief remarks and will provide an overview of the virtual conference platform.`,
+                      speakers: null,
+                    },
+                  ];
+
+                  var buildEventList = () => {
+                    const eventListOne = landingPageEl.getElementById("event-list-one");
+                    const eventListTwo = landingPageEl.getElementById("event-list-two");
+                    const eventTemplate = landingPageEl.getElementById("event-template");
+                    const speakerTemplate = landingPageEl.getElementById("speaker-template");
+                    let x = 0;
+
+                    for (let event of events) {
+                      x++;
+                      let clone = eventTemplate.content.cloneNode(true);
+
+                      let box = clone.getElementById("box");
+                      box.id = event.eventId + "-box";
+
+                      let keynoteCardBody = clone.getElementById("keynote-card-body");
+                      keynoteCardBody.id = "keynote-card-body-" + event.eventId;
+
+                      let timeAuditorium = clone.getElementById("time-auditorium");
+                      timeAuditorium.innerHTML = event.timeAuditorium.toUpperCase();
+
+                      let eventLink = clone.getElementById("event-link");
+                      if (event.eventLink) {
+                        if (event.eventLink.toLowerCase().includes('http')) {
+                          eventLink.target = '_Blank';
+                        }
+                        eventLink.href = event.eventLink;
+                      } else {
+                        eventLink.style.display = "none";
+                      }
+
+                      let eventLink2 = clone.getElementById("event-link2");
+                      if (event.eventLink2) {
+                        if (event.eventLink2.toLowerCase().includes('http')) {
+                          eventLink2.target = '_Blank';
+                        }
+                        eventLink2.href = event.eventLink2;
+                      } else {
+                        eventLink2.style.display = "none";
+                      }
+
+                      let eventTitle = clone.getElementById("event-title");
+                      eventTitle.innerHTML = event.eventTitle;
+                      eventTitle.id = event.eventId + "-page-event-title";
+
+                      let eventDetails = clone.getElementById("event-details");
+                      eventDetails.innerHTML = event.eventDetails + eventDetails.innerHTML;
+
+                      let eventSpeaker = clone.getElementById("dropdown-button-speaker");
+                      eventSpeaker.id = "dropdown-button-speaker-" + x;
+
+                      let eventSpeakerText = clone.getElementById("dropdown-button-speaker-text");
+                      eventSpeakerText.id = "dropdown-button-speaker-text-" + x;
+
+                      let eventSpeakerContainer = clone.getElementById("speaker-container");
+                      eventSpeakerContainer.id = "speaker-container-" + x;
+
+                      if (event.speakers != null) {
+
+                        const speakerList = clone.getElementById("speaker-list");
+                        const speakerModerator = clone.getElementById("moderator");
+                        const speakerPanelist = clone.getElementById("panelist");
+                        const speakerFacilitator = clone.getElementById("facilitator");
+
+                        clone.getElementById("dropdown-button-speaker-" + x).style.display = "";
+
+                        for (let speaker of event.speakers) {
+                          let cloneTwo = speakerTemplate.content.cloneNode(true);
+
+                          let speakerName = cloneTwo.getElementById("speaker-name");
+                          speakerName.innerHTML = speaker.name + ",";
+                          speakerName.id = "speaker-name TRACK_" + speaker.name;
+
+                          let speakerTitle = cloneTwo.getElementById("speaker-title");
+                          speakerTitle.innerHTML = speaker.speakerTitle;
+
+                          if (speaker.type == 1) {
+                            clone.getElementById("event-moderator").style.display = "block";
+                            speakerModerator.appendChild(cloneTwo);
+                          } else if (speaker.type == 2) {
+                            clone.getElementById("event-panelist").style.display = "block";
+                            speakerPanelist.appendChild(cloneTwo);
+                          } else if (speaker.type == 3) {
+                            clone.getElementById("event-facilitator").style.display = "block";
+                            speakerFacilitator.appendChild(cloneTwo);
+                          } else {
+                            // speaker.type == 0 / is a regular speaker
+                            clone.getElementById("event-speakers").style.display = "block";
+                            speakerList.appendChild(cloneTwo);
+                          }
+                        }
+                      }
+
+                      if (event.day == 1) {
+                        eventListOne.appendChild(clone);
+                      } else if (event.day == 2) {
+                        eventListTwo.appendChild(clone);
+                      } else {
+                        // do nothing only 2 event days/tracks
+                      }
+
+                    }
+                  };
+
+                  buildEventList();
+                </script>
+
+                <!-- Expand scripts -->
+                <script>
+                  var toggleExpand = (e) => {
+                    let target = e.currentTarget;
+
+                    let id = target.id.replace("dropdown-button-", "");
+
+                    let text = landingPageEl.getElementById("dropdown-button-text-" + id);
+
+                    if (text.innerHTML === "Expand") {
+                      expandDate(id);
+                    } else if (text.innerHTML === "Collapse") {
+                      collapseDate(id);
+                    }
+                  };
+
+                  var expandDate = (id) => {
+                    let text = landingPageEl.getElementById("dropdown-button-text-" + id);
+                    text.innerHTML = "Collapse";
+
+                    let chevron = landingPageEl.getElementById("dropdown-button-chevron-" + id);
+                    chevron.style.transform = "rotate(180deg)";
+
+                    let list = landingPageEl.getElementById("date-list-" + id);
+                    list.style.display = "";
+                  };
+
+                  var collapseDate = (id) => {
+                    let text = landingPageEl.getElementById("dropdown-button-text-" + id);
+                    text.innerHTML = "Expand";
+
+                    let chevron = landingPageEl.getElementById("dropdown-button-chevron-" + id);
+                    chevron.style.transform = "";
+
+                    let list = landingPageEl.getElementById("date-list-" + id);
+                    list.style.display = "none";
+                  };
+                </script>
+
+                <script>
+                  var toggleExpandSpeaker = (e) => {
+                    let target = e.currentTarget;
+
+                    let id = target.id.replace("dropdown-button-speaker-", "");
+
+                    let text = landingPageEl.getElementById("dropdown-button-speaker-text-" + id);
+
+                    if (text.innerHTML === "Read More...") {
+                      expandSpeakers(id);
+                    } else if (text.innerHTML === "Read Less...") {
+                      collapseSpeakers(id);
+                    }
+                  };
+
+                  var expandSpeakers = (id) => {
+                    let text = landingPageEl.getElementById("dropdown-button-speaker-text-" + id);
+                    text.innerHTML = "Read Less...";
+
+                    let list = landingPageEl.getElementById("speaker-container-" + id);
+                    list.style.display = "";
+                  };
+
+                  var collapseSpeakers = (id) => {
+                    let text = landingPageEl.getElementById("dropdown-button-speaker-text-" + id);
+                    text.innerHTML = "Read More...";
+
+                    let list = landingPageEl.getElementById("speaker-container-" + id);
+                    list.style.display = "none";
+                  };
+                </script>
+
+                <!-- ./ Expand scripts -->
+
+                <!-- Tawk Clearing Code -->
+                <tawkto-hide>
+                  <script type="text/javascript">
+                    if (window.Tawk_API) {
+                      Tawk_API.hideWidget();
+                    }
+                  </script>
+                </tawkto-hide>
+                <!-- End Tawk Clearing Code -->
+
+                <!-- ##### Remove Chatwee ##### -->
+                <remove-chatwee>
+                  <script>
+                    if (window.ChatweeLib) {
+                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+                      chatweeManager.Dispose();
+                    }
+                  </script>
+                </remove-chatwee>
+                <!-- ##### End Remove Chatwee ##### -->
+
+</inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

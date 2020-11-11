@@ -1,0 +1,1182 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.web.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.web.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="308fb5cb-4101-4e02-a6f1-83b9c42a71c5">
+
+                  <!-- Booth Def -->
+                  <script>
+                    var _boothCategories = [
+                      {
+                        id: 1,
+                        name: 'Platinum Sponsor',
+                        sort: '1',
+                      },
+                      {
+                        id: 2,
+                        name: 'Diamond & Wellness Challenge',
+                        sort: '2',
+                      },
+                      {
+                        id: 3,
+                        name: 'Evening Reception',
+                        sort: '3',
+                      },
+                      {
+                        id: 4,
+                        name: 'Lunch',
+                        sort: '4',
+                      },
+                      {
+                        id: 5,
+                        name: 'Diamond',
+                        sort: '5',
+                      },
+                      {
+                        id: 6,
+                        name: 'Information Desk',
+                        sort: '6',
+                      },
+                      {
+                        id: 7,
+                        name: 'Conference Box',
+                        sort: '7',
+                      },
+                      {
+                        id: 8,
+                        name: 'Keynote Speaker',
+                        sort: '8',
+                      },
+                      {
+                        id: 9,
+                        name: 'Emerald',
+                        sort: '9',
+                      },
+                      {
+                        id: 10,
+                        name: 'VR Experience',
+                        sort: '10',
+                      },
+                      {
+                        id: 11,
+                        name: 'Sapphire',
+                        sort: '11',
+                      },
+                      {
+                        id: 12,
+                        name: 'Pearl',
+                        sort: '12',
+                      },
+                      {
+                        id: 13,
+                        name: 'Networking Break',
+                        sort: '13',
+                      },
+                      {
+                        id: 14,
+                        name: 'Ruby',
+                        sort: '14',
+                      },
+                      {
+                        id: 15,
+                        name: 'Gold',
+                        sort: '15',
+                      }
+                    ]
+                    var _booths = [
+                      {
+                        name: 'AHIP',
+                        image: 'AHIP_logo-2.jpg',
+                        link: '',
+                        lounge: '4e91c7cb-77e6-4326-9327-08d87c32f049',
+                        web: '',
+                        category: 1,
+                      },
+                      {
+                        name: 'AmeriHealth Caritas',
+                        image: 'amerihealth-caritas-logo2.jpg',
+                        link: '0d017822-1cb9-4a1f-932b-08d87c32f049',
+                        lounge: '',
+                        category: 1,
+                      },
+                      {
+                        name: 'Centene',
+                        image: 'Centene_logo-2.jpg',
+                        link: '662e8137-b1a4-49cc-e062-08d87f22fabf',
+                        lounge: '',
+                        category: 2,
+                      },
+                      {
+                        name: 'Anthem',
+                        image: 'Anthem-logo.jpg',
+                        link: 'a6514a08-121a-4c65-7bd3-08d87c76187e',
+                        lounge: '',
+                        category: 3,
+                      },
+                      {
+                        name: 'PhRMA',
+                        image: 'PhRMA-logo.jpg',
+                        link: '',
+                        lounge: '572c2496-fc8a-4245-2d95-08d87cade246',
+                        category: 4,
+                      },
+                      {
+                        name: 'UnitedHealthcare',
+                        image: 'united-healthcare-logo.jpg',
+                        link: '013b9ec4-1be5-423a-2d30-08d87c76f7ff',
+                        lounge: '',
+                        category: 4,
+                      },
+                      {
+                        name: 'Aetna Medicaid',
+                        image: 'Aetna_logo.jpg',
+                        link: 'c3ae6694-3655-47fa-752c-08d87bba9cb7',
+                        lounge: '',
+                        category: 5,
+                      },
+                      {
+                        name: 'CareSource',
+                        image: 'Care-Source_logo.jpg',
+                        link: '1bd8bad8-af61-441c-d563-08d87d4fa71b',
+                        lounge: '',
+                        category: 5,
+                      },
+                      {
+                        name: 'Molina Healthcare',
+                        image: 'Molina-Healthcare-logo.jpg',
+                        link: '8321b5d7-b76a-4ca4-d7ae-08d87d470cc0',
+                        lounge: '',
+                        category: 5,
+                      },
+                      {
+                        name: 'Sellers Dorsey',
+                        image: 'sellers-dorsey-logo.jpg',
+                        link: '41f7b8e2-2395-49ec-d56e-08d87d4fa71b',
+                        lounge: '',
+                        category: 5,
+                      },
+                      {
+                        name: 'Humana Healthy Horizons',
+                        image: 'Humana-Logo-3.jpg',
+                        link: '0248f9f3-cbd9-4990-6512-08d87e83235d',
+                        lounge: '',
+                        category: 6,
+                      },
+                      {
+                        name: 'Gainwell Technologies',
+                        image: 'gainwell-logo-2.jpg',
+                        link: '482821f3-5ff3-4118-e4d0-08d87ea2e77a',
+                        lounge: '',
+                        category: 7,
+                      },
+                      {
+                        name: 'Vertex',
+                        image: 'vertex-logo-2.jpg',
+                        link: '',
+                        lounge: '',
+                        category: 8,
+                        web: 'https://www.vrtx.com'
+                      },
+                      {
+                        name: 'Arnold Ventures',
+                        image: 'Arnold Ventures.jpg',
+                        link: '',
+                        lounge: '6d9a2766-0727-4ca4-8a90-08d87e9a0af8',
+                        category: 9,
+                      },
+                      {
+                        name: 'Express Scripts',
+                        image: 'express-scripts_logo-1.jpg',
+                        link: 'ff5f92ba-ff01-4be8-8a7f-08d87e9a0af8',
+                        lounge: '',
+                        category: 9,
+                      },
+                      {
+                        name: 'Magellan Health',
+                        image: 'magellan-health-logo2.jpg',
+                        link: '',
+                        lounge: '',
+                        category: 9,
+                        web: 'https://www.magellanhealth.com'
+                      },
+                      {
+                        name: 'Milliman',
+                        image: 'milliman-logo-1.jpg',
+                        link: '92da5215-466c-4f7d-dcb5-08d87f129952',
+                        lounge: '',
+                        category: 9,
+                      },
+                      {
+                        name: 'Optum',
+                        image: 'optum-logo-3.jpg',
+                        link: '004ced41-3b07-4566-6513-08d87e83235d',
+                        lounge: '',
+                        category: 10,
+                      },
+                      {
+                        name: 'Campaign for Transformative Therapies',
+                        image: 'Campaign-for-Transformative-Therapies-logo.jpg',
+                        link: 'd9976061-1e0a-4630-2d91-08d87cade246',
+                        lounge: '',
+                        category: 11,
+                      },
+                      {
+                        name: 'Equifax, Inc.',
+                        image: 'equifax-logo.jpg',
+                        link: 'dfe9dc6c-a6e1-485a-d560-08d87d4fa71b',
+                        lounge: '',
+                        category: 11,
+                      },
+                      {
+                        name: 'MAXIMUS',
+                        image: 'maximus-logo-2.jpg',
+                        link: 'd5e4eb72-d38f-493a-fba2-08d87e80b21f',
+                        lounge: '',
+                        category: 11,
+                      },
+                      {
+                        name: 'GDIT',
+                        image: 'gdit_sht_lg_cmyk_gry.jpg',
+                        link: '5cf5642f-deb0-4940-7e7e-08d87eac1a55',
+                        lounge: '',
+                        category: 12,
+                      },
+                      {
+                        name: '3M',
+                        image: '3Mt-logo.jpg',
+                        link: 'f8d9bb94-3903-4b94-d7a4-08d87d470cc0',
+                        lounge: '',
+                        category: 13,
+                      },
+                      {
+                        name: 'DentaQuest',
+                        image: 'DentaQuest-logo-2-1.jpg',
+                        link: '8c6bf55f-f17e-48f6-fba0-08d87e80b21f',
+                        lounge: '',
+                        category: 13,
+                      },
+                      {
+                        name: 'ACAP',
+                        image: 'Association-For-Community-Affiliated-Plans-logo-1.jpg',
+                        link: '78875321-5a81-4b19-d7b0-08d87d470cc0',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'Deloitte Consulting LLP',
+                        image: 'Deloitte-logo.jpg',
+                        link: 'f9078d54-80d5-47af-3c70-08d87cc3b3e3',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'Kaiser Permanente',
+                        image: 'Kaiser-Permanente-logo-1.jpg',
+                        link: '4489ea05-84b9-44d4-d570-08d87d4fa71b',
+                        lounge: '',
+                        category: 14,
+                        web: 'https://kp.org',
+                      },
+                      {
+                        name: 'Mathematica',
+                        image: 'mathematica-logo.jpg',
+                        link: 'a18f3d64-ce98-4687-4fb8-08d87d490c28',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'MedImpact',
+                        image: 'MedImpact-logo-1.jpg',
+                        link: '4475e7f3-884b-4884-8a82-08d87e9a0af8',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'NACDS',
+                        image: 'national-association-of-chain-drug-stores-logo-1.jpg',
+                        link: 'c2c8bf32-386e-468b-d79e-08d87d470cc0',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'Novartis Pharmaceuticals',
+                        image: 'novartis-logo.jpg',
+                        link: '',
+                        lounge: 'e83511ea-32de-44f0-d55e-08d87d4fa71b',
+                        category: 14,
+                      },
+                      {
+                        name: 'PCMA',
+                        image: 'PCMA-Logo.jpg',
+                        link: 'bcbe6d18-8240-4899-fbb2-08d87e80b21f',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'Public Consulting Group',
+                        image: 'Public-Consulting-Group-logo.jpg',
+                        link: '3f229ef9-61ac-400c-e05a-08d87f22fabf',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'WEX Inc',
+                        image: 'WEX-LOGO-186C-300x252.jpg',
+                        link: '414a10c9-5da6-4c4b-6514-08d87e83235d',
+                        lounge: '',
+                        category: 14,
+                      },
+                      {
+                        name: 'Abt Associates',
+                        image: 'Abt-logo.jpg',
+                        link: 'eb1e3192-446c-4841-3c6f-08d87cc3b3e3',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Accenture',
+                        image: 'accenture-logo.jpg',
+                        link: '8a0a8353-ba07-413d-e4c6-08d87ea2e77a',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'AFMC',
+                        image: 'afmc-logo.jpg',
+                        link: 'd92247c8-c75a-4215-d779-08d87c09436f',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Aurrera Health Group',
+                        image: 'aurerra-health-group-logo.jpg',
+                        link: '74fc6af5-1618-4641-2d90-08d87cade246',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Avesis, a Guardian Company',
+                        image: 'Avesis-logo-2.jpg',
+                        link: '5c5b7c5b-4dc3-449e-2d2f-08d87c76f7ff',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'BerryDunn',
+                        image: 'BerryDunn-Logo-2-1.jpg',
+                        link: '67316712-4b86-492f-fba3-08d87e80b21f',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'CAQH',
+                        image: 'CAQH-Logo-3.jpg',
+                        link: '203e0437-6028-4bfe-2d92-08d87cade246',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Finity, Inc.',
+                        image: 'finity-logo.jpg',
+                        link: 'bebb4e26-6016-4f4b-8a80-08d87e9a0af8',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'HHAeXchange',
+                        image: 'HHAeXchange-logo.jpg',
+                        link: '84a91a69-09c5-4182-4fb7-08d87d490c28',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'HMS',
+                        image: 'hms-logo.jpg',
+                        link: 'c0442876-f5d9-4d14-fba1-08d87e80b21f',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'IBM Watson Health',
+                        image: 'IBM-logo-2.jpg',
+                        link: '941f572f-0fcc-4984-2d93-08d87cade246',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'LexisNexis Risk Solutions',
+                        image: 'lexix-nexis-solutions-logo.jpg',
+                        link: 'a0d00909-5740-4472-d562-08d87d4fa71b',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Lyft',
+                        image: 'lyft-logo-2.jpg',
+                        link: 'fd9131df-4f7f-4344-d79d-08d87d470cc0',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Medicaid Learning Center',
+                        image: 'Medicaid-Learning-Center-logo.jpg',
+                        link: 'af0e5019-938f-422a-8a81-08d87e9a0af8',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'MediSked, LLC',
+                        image: 'MediSked-logo-2.jpg',
+                        link: '91b51d68-330f-49f0-dcb4-08d87f129952',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Mom\'s Meals',
+                        image: 'moms-meals-logo.jpg',
+                        link: '70d8f55e-cd6c-4721-7e7f-08d87eac1a55',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'MTM, Inc.',
+                        image: 'MTM-logo-2.jpg',
+                        link: '5c980d1f-2c1c-4b81-8a83-08d87e9a0af8',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Quest Analytics',
+                        image: 'Quest Analytics.jpg',
+                        link: '4e9474df-8a3a-4d9d-e4d3-08d87ea2e77a',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'SAS',
+                        image: 'sas-logo-2.jpg',
+                        link: '5d13f2fa-6598-482a-fbb1-08d87e80b21f',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Telligen',
+                        image: 'Telligen_Color_No-Tag.jpg',
+                        link: '9553c5c2-d84b-44ad-e05b-08d87f22fabf',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'The Compliance Team, Inc.',
+                        image: 'The-Compliance-Team-Inc-logo-2.jpg',
+                        link: 'd5b6ef72-1299-4f01-e4c5-08d87ea2e77a',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Tyler Technologies',
+                        image: 'tyler-technolgies-logo.jpg',
+                        link: 'ab4326cf-38fd-40f7-d79f-08d87d470cc0',
+                        lounge: '',
+                        category: 15,
+                      },
+                      {
+                        name: 'Veyo',
+                        image: 'Veyo-logo.jpg',
+                        link: 'ba5b7f56-aee4-4fd6-8a84-08d87e9a0af8',
+                        lounge: '',
+                        category: 15,
+                      },
+                    ];
+                  </script>
+                  <!-- Booth Def -->
+
+                  <div style="display:none">
+                    {% for category in data.Categories %}
+                    <a href="/videos/{{ category.Id }}/landing/{{ category.LandingPageSnippetId }}" id="VLink_{{ category.Id }}">{{ category.Name }}</a>
+                    {% endfor %}
+                  </div>
+
+
+
+                  <!--  Load custom fonts -->
+                  <script type="text/javascript">
+                    function loadFont(name, url) {
+                      if (document.fonts.check('1em ' + name)) {
+                        return;
+                      }
+                      const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                      fontFace.load().then(function (loadedFont) {
+                        document.fonts.add(loadedFont);
+                        console.log('Loaded custom font ', name);
+                      }).catch(function (error) {
+                        // error occurred
+                        console.log('Error loading ', name);
+                      });
+
+                    }
+
+                    loadFont('gotham', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff');
+                    loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff');
+
+                  </script>
+
+                  <style>
+                    /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                    /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                    img::after {
+                      content: none;
+                    }
+
+                    .content {
+                      background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/arrows-v.png');
+                      background-color: #5378A7;
+                      background-attachment: fixed;
+                      background-repeat: repeat-y;
+                      background-position: right top;
+                      min-height: calc(100vh - 114px);
+                      margin: -20px;
+                      z-index: 1;
+                      font-family: "gotham", Helvetica, Arial, sans-serif;
+                    }
+
+                    .top-banner {
+                      padding: 10px 50px;
+                      line-height: 60px;
+                      color: white;
+                      font-size: 32px;
+                    }
+
+                    .top-banner h1 {
+                      font-size: 1em;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      font-weight: bold;
+                    }
+
+                    .top-banner hr {
+                      border: solid 2px #00467F;
+                      width: 75%;
+                    }
+
+                    .section-banner {
+                      padding: 10px 50px;
+                      line-height: 60px;
+                      color: white;
+                      font-size: 32px;
+                    }
+
+                    .section-banner h2 {
+                      font-size: 0.8em;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      font-weight: bold;
+                    }
+
+                    .section-banner hr {
+                      border: solid 1px #00467F;
+                      width: 60%;
+                      margin-top: 12px;
+                    }
+
+                    .grid {
+                      display: flex;
+                      flex-direction: row;
+                      flex-wrap: wrap;
+                      max-width: 95%;
+                      padding: 1% 1% 40px 1%;
+                    }
+
+                    @media only screen and (max-width: 1024px) {
+                      .grid {
+                        max-width: 100%;
+                      }
+                    }
+
+                    .card {
+                      position: relative;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: space-evenly;
+                      align-items: center;
+                      width: 22%;
+                      min-height: 280px;
+                      background-color: #00467F;
+                      margin: 10px;
+                      padding: 2% 1%;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                    }
+
+                    .card img {
+                      width: 70%;
+                      height: auto;
+                      border-radius: 50%;
+                    }
+
+                    .name {
+                      margin: 1em 0;
+                      font-size: 1.3em;
+                      font-weight: bold;
+                      text-align: center;
+                    }
+
+                    .join-now {
+                      border-radius: 2em;
+                      padding: .5em 2em;
+                      color: white;
+                      background-color: var(--sidebar-bg-color);
+                      border: solid 1px #cccccc;
+                      cursor: pointer;
+                      margin-bottom: 8px;
+                    }
+
+                    .join-now:hover {
+                      filter: brightness(110%);
+                      cursor: pointer;
+                      -ms-transform: translateY(-.5vh);
+                      -webkit-transform: translateY(-.5vh);
+                      transform: translateY(-.5vh);
+                      color: white;
+                      text-decoration: none;
+                    }
+                  </style>
+
+                  <!-- JS -->
+                  <script type="text/javascript">
+                    // Create booths
+                    var _timer;
+                    var _lastScrollEl;
+                    var _lastScrollPos;
+
+                    function virtualLink(id) {
+                      const link = landingPageEl.querySelector('#VLink_' + id);
+                      if (link) {
+                        link.dispatchEvent(new MouseEvent('click'));
+                      }
+                    }
+
+                    function vLinkExists(id) {
+                      const link = landingPageEl.querySelector('#VLink_' + id);
+                      return link !== null;
+                    }
+
+
+                    function init(booths) {
+
+                      const contentEl = landingPageEl.querySelector('.content');
+                      const displayBooths = booths.sort((a, b) => a.name.localeCompare(b.name));
+                      const displayCats = _boothCategories.sort((a, b) => a.sort - b.sort);
+
+                      // Create sections and section grids
+                      displayCats.forEach(cat => {
+                        // Section header
+                        const sectionDiv = document.createElement('div');
+                        sectionDiv.classList.add('section-banner');
+                        sectionDiv.innerHTML = '<h2>' + cat.name + '</h2><hr align="left">';
+                        contentEl.appendChild(sectionDiv);
+                        // Grid
+                        const gridDiv = document.createElement('div');
+                        gridDiv.classList.add('grid');
+                        gridDiv.dataset.section = cat.id;
+                        // Add booths to grid
+                        displayBooths
+                          .filter(booth => booth.category === cat.id)
+                          .forEach(booth => {
+                            // User has permission
+
+
+                            const idName = booth.name.replaceAll(' ', '_').replaceAll("'", '');
+                            const card = document.createElement('div');
+                            card.classList.add('card');
+                            const img = document.createElement('img');
+                            img.src = 'https://nextech-booths.s3-us-west-2.amazonaws.com/infernoar/namd/hall/' + booth.image;
+                            const name = document.createElement('div');
+                            name.classList.add('name');
+                            name.textContent = booth.name;
+
+
+                            // Append
+                            card.appendChild(img);
+                            card.appendChild(name);
+
+
+                            // Booth Link
+                            if (booth.link && booth.link.length > 0 && vLinkExists(booth.link)) {
+                              const button = document.createElement('button');
+                              button.classList.add('join-now');
+                              button.textContent = 'Visit Booth';
+                              button.addEventListener('click', () => {
+                                virtualLink(booth.link);
+                              })
+                              button.id = 'TRACK-Action[Visit_Booth_Link]-Booth[' + idName + ']';
+                              card.appendChild(button);
+                            }
+
+                            // Lounge
+                            if (booth.lounge && booth.lounge.length > 0 && vLinkExists(booth.lounge)) {
+                              const lounge = document.createElement('button');
+                              lounge.classList.add('join-now');
+                              lounge.textContent = 'Visit Lounge';
+                              lounge.addEventListener('click', () => {
+                                virtualLink(booth.lounge);
+                              })
+                              lounge.id = 'TRACK-Action[Visit_Lounge_Link]-Lounge[' + idName + ']';
+                              card.appendChild(lounge);
+                            }
+
+                            // Web
+                            if (booth.web && booth.web.length > 0) {
+                              const web = document.createElement('a');
+                              web.classList.add('join-now');
+                              web.textContent = 'Visit Website';
+                              web.id = 'TRACK-Action[Visit_Web_Link]-Sponsor[' + idName + ']';
+                              web.href = booth.web;
+                              web.target = "_blank";
+                              card.appendChild(web);
+                            }
+
+                            gridDiv.appendChild(card);
+
+                          })
+
+                        // Append Grid
+                        contentEl.appendChild(gridDiv);
+                      })
+                    }
+
+                    // Let's kick everything off
+                    $(document).ready(function () { init(_booths); });
+                  </script>
+
+
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                  <!-- HTML -->
+                  <div class="ntar-landing-bg"></div>
+
+                  <div class="content">
+
+                    <div class="top-banner">
+                      <h1>Exhibition Hall</h1>
+                      <hr align="left">
+                    </div>
+
+                    <!-- <div class="section-banner">
+                      <h2>Section</h2>
+                      <hr align="left">
+                    </div>
+                    <div class="grid">
+
+                      <div class="card">
+                        <img
+                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/sponsor-lounge/ahip.png">
+                        <div class="name">AHIP</div>
+                        <a href="/videos/4e91c7cb-77e6-4326-9327-08d87c32f049/landing/9ba9bf00-ba35-4d03-aee9-c4c708e817bb"
+                          id="sponsor_lounge_click_ahip" class="join-now">Join Now</a>
+                      </div>
+
+
+                    </div> -->
+
+
+
+                  </div>
+
+            <!-- Tawk Clearing Code -->
+                <tawkto-hide>
+                  <script type="text/javascript">
+                    if (window.Tawk_API) {
+                      Tawk_API.hideWidget();
+                    }
+                  </script>
+                </tawkto-hide>
+                <!-- End Tawk Clearing Code -->
+
+                <!-- ##### Remove Chatwee ##### -->
+                <remove-chatwee>
+                  <script>
+                    if (window.ChatweeLib) {
+                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
+                      chatweeManager.Dispose();
+                    }
+                  </script>
+                </remove-chatwee>
+                <!-- ##### End Remove Chatwee ##### -->
+
+
+
+</inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
