@@ -443,11 +443,11 @@
                         <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
                       </div>
                       <button id="all-grouping" onclick="allAttendees()">All</button>
-                      <button id="ae-grouping" onclick="filterLastName('abcde')">A - E</button>
-                      <button id="fj-grouping" onclick="filterLastName('fghij')">F - J</button>
-                      <button id="ko-grouping" onclick="filterLastName('klmno')">K - O</button>
-                      <button id="pt-grouping" onclick="filterLastName('pqrst')">P - T</button>
-                      <button id="uz-grouping" onclick="filterLastName('uvwxyz')">U - Z</button>
+                      <button id="ae-grouping" onclick="filterLastName(this, 'abcde')">A - E</button>
+                      <button id="fj-grouping" onclick="filterLastName(this, 'fghij')">F - J</button>
+                      <button id="ko-grouping" onclick="filterLastName(this, 'klmno')">K - O</button>
+                      <button id="pt-grouping" onclick="filterLastName(this, 'pqrst')">P - T</button>
+                      <button id="uz-grouping" onclick="filterLastName(this, 'uvwxyz')">U - Z</button>
                     </div>
                   </div>
 
@@ -636,8 +636,8 @@
                       const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
                       if (user.firstName.toLowerCase().startsWith(query)
                         || user.lastname.toLowerCase().startsWith(query)
-                        || contactInfoTitle.toLowerCase().startsWith(query)
-                        || contactInfoCompany.toLowerCase().startsWith(query)) {
+                        || contactInfoTitle.toLowerCase().includes(query)
+                        || contactInfoCompany.toLowerCase().includes(query)) {
                         user.visible = true;
                       } else {
                         user.visible = false;
@@ -687,14 +687,14 @@
 
                   }
 
-                  var filterLastName = (letters) => {
+                  var filterLastName = (element, letters) => {
                     attendees.forEach(user => {
                       user.visible = letters.includes(user.lastname[0].toLowerCase());
                     });
                     clearSearchValue();
                     clearLetterGroupings();
-                    landingPageEl.getElementById("ae-grouping").style.color = "white";
-                    landingPageEl.getElementById("ae-grouping").style.backgroundColor = "#41578B";
+                    landingPageEl.getElementById(element.id).style.color = "white";
+                    landingPageEl.getElementById(element.id).style.backgroundColor = "#41578B";
                     updateAttendees();
                   }
 

@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en" class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,8 +10,79 @@
   <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
@@ -44,65 +112,134 @@
     })
 
   </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
   <script>
-    let landingPageEl = null
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
   </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
 </head>
 
 <body>
-
-<app-root class='layout-fixed has-menu'>
+<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header">LOCAL</div>
-          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm="" trigger-resize="" onclick="mtTriggerMenu()">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
                   </mat-icon>
               </span>
             </button>
-            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
           </div>
         </mat-toolbar>
       </app-header>
       <!-- SIDEBAR -->
       <videos-sidebar class="aside">
         <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close="">
-            <ul class="nav">
-              <li><a href="../">Menu</a></li>
-            </ul>
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          </nav>
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
-      <section class="IE-FlexAuto" flex="">
+      <section class="IE-FlexAuto" flex>
         <div class="content-wrapper">
           <landing-page class="ng-star-inserted">
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
               </style>
-
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="27438c01-96a3-4332-a2ff-2081042bdd1c">
-
 
                 <!-- Container -->
                 <style>
@@ -121,6 +258,7 @@
                     border: 1px solid rgba(11, 38, 104, 0.32);
                     margin: 2rem 0;
                   }
+
                 </style>
 
                 <!-- banner -->
@@ -133,6 +271,7 @@
                     background-blend-mode: multiply;
                     background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/meet-the-speakers-header.jpg');
                   }
+
 
                   .banner-shadow {
                     z-index: 99;
@@ -258,16 +397,10 @@
                   }
                 </style>
 
-                <!-- Speakers Grid -->
+                <!-- Attendees -->
                 <style>
-                  #speakers-grid {
-                    display: grid;
-                    grid-auto-columns: auto;
-                    grid-auto-rows: auto;
-                    gap: 0px 0px;
-                  }
 
-                  .speaker-card {
+                  .attendee-card {
                     display: flex;
                     height: auto;
                     min-width: 400px;
@@ -279,18 +412,18 @@
                     align-items: center;
                   }
 
-                  .speaker-avatar {
+                  .attendee-avatar {
                     height: 13.2rem;
                     width: 13.2rem;
                     border-radius: 50%;
                   }
 
-                  .speaker-info {
+                  .attendee-info {
                     flex: 1;
                     margin-left: 20px;
                   }
 
-                  .speaker-name {
+                  .attendee-name {
                     font-size: 2rem;
                     font-weight: bold;
                   }
@@ -298,24 +431,25 @@
                   .company-title {
                   }
 
-                  /*.speaker-email {*/
-                  /*  margin: .50rem 0;*/
-                  /*  display: flex;*/
-                  /*  align-items: center;*/
-                  /*}*/
+                  .attendee-email {
+                    margin: .50rem 0;
+                    display: flex;
+                    align-items: center;
+                    display: none;
+                  }
 
-                  /*.speaker-email img {*/
-                  /*  height: 1.5rem;*/
-                  /*  width: auto;*/
-                  /*  padding-right: 5px*/
-                  /*}*/
+                  .attendee-email img {
+                    height: 1.5rem;
+                    width: auto;
+                    padding-right: 5px
+                  }
 
                   .linked-in {
                     margin: .50rem 0;
                     display: flex;
                   }
 
-                  .linked-in img{
+                  .linked-in img {
                     height: 2rem;
                     width: 2.6rem;
                     align-items: center;
@@ -366,7 +500,9 @@
                   <div class="banner">
                     <div class="banner-info">
                       <div class="banner-text">Meet the Speakers</div>
-                      <div class="banner-sub-text">Check out our keynote speakers and panelists you’ll be hearing from at today’s event.</div>
+                      <div class="banner-sub-text">Check out our keynote speakers and panelists you’ll be hearing from
+                                                   at today’s event.
+                      </div>
                     </div>
                     <div class="banner-shadow"></div>
                   </div>
@@ -374,41 +510,39 @@
                   <div class="search-exhibitors-divider">
                     <div class="filter-options">
                       <div class="search-wrapper">
-                        <input id="search-attendees" placeholder="Search Speakers" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
+                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/>
+                        <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
                       </div>
                       <button id="all-grouping" onclick="allAttendees()">All</button>
-                      <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
-                      <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
-                      <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
-                      <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
-                      <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
+                      <button id="ae-grouping" onclick="filterLastName(this, 'abcde')">A - E</button>
+                      <button id="fj-grouping" onclick="filterLastName(this, 'fghij')">F - J</button>
+                      <button id="ko-grouping" onclick="filterLastName(this, 'klmno')">K - O</button>
+                      <button id="pt-grouping" onclick="filterLastName(this, 'pqrst')">P - T</button>
+                      <button id="uz-grouping" onclick="filterLastName(this, 'uvwxyz')">U - Z</button>
                     </div>
                   </div>
 
-                  <div class="speakers-container">
-                    <div id="speakers-grid"></div>
-                    <template id="speaker-template">
-                      <div id=speaker-card class="speaker-card">
-                        <img id="speaker-avatar" class="speaker-avatar"/>
-                        <div id="speaker-info" class="speaker-info">
-                          <div id="speaker-name" class="speaker-name"></div>
-                          <div id="company-title" class="company-title"></div>
+                  <div id="attendee-list" class="attendee-list">
 
+                    <template id="attendee-template">
+                      <div id=attendee-card class="attendee-card">
+                        <img id="attendee-avatar" class="attendee-avatar"/>
+                        <div id="attendee-info" class="attendee-info">
+                          <div id="attendee-name" class="attendee-name"></div>
+                          <div id="company-title" class="company-title"></div>
                           <div class="speaker-session">
                             Session: <span id="speaker-session"></span>
                           </div>
-
-<!--                          <div class="speaker-email">-->
-<!--                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/email-icon.png"/>-->
-<!--                            <a id="speaker-email" href="" target="_blank" rel="noreferrer"></a>-->
-<!--                          </div>-->
-
+                          <div class="attendee-email">
+                            <img
+                                src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/email-icon.png"/>
+                            <a id="attendee-email-link" href="" target="_blank" rel="noreferrer"></a>
+                          </div>
                           <div class="linked-in">
-                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/linked-in.png"/>
+                            <img
+                                src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/linked-in.png"/>
                             <a href="#" target="_blank" rel="noreferrer" id="linked-in"></a>
                           </div>
-
-
                         </div>
                       </div>
                     </template>
@@ -428,82 +562,566 @@
 
                 </div>
 
-                <!-- Speakers -->
+                <!-- Attendees using API -->
                 <script>
 
-                  var myLanding1 = landingPageEl ?? document;
-                  var speakersGrid = myLanding1.getElementById("speakers-grid");
-                  var speakerTemplate = myLanding1.getElementById("speaker-template");
-                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/tag"
+                  var attendees = [
+                    {
+                      "FullName": "Aashima Gupta",
+                      "firstName": "Aashima",
+                      "lastname": "Gupta",
+                      "contactInfoEmail": "aashimagupta@google.com",
+                      "contactInfoTitle": "Director",
+                      "contactInfoCompany": "Global Healthcare Strategy and Solutions, Google Cloud",
+                      "socialLinkedIn": "https://www.linkedin.com/in/aashimagupta/",
+                      "Session": "Freeing the data | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "Alexandra Mugge",
+                      "firstName": "Alexandra",
+                      "lastname": "Mugge",
+                      "contactInfoEmail": "Alexandra.Mugge@cms.hhs.gov",
+                      "contactInfoTitle": "Chief Health Informatics Officer",
+                      "contactInfoCompany": "Center for Medicare & Medicaid Services",
+                      "socialLinkedIn": "https://www.linkedin.com/in/amugge/",
+                      "Session": "Opening Plenary | 1:30pm-1:45pm"
+                    },
+                    {
+                      "FullName": "Amy Gleason",
+                      "firstName": "Amy",
+                      "lastname": "Gleason",
+                      "contactInfoEmail": "Amy.M.Gleason@omb.eop.gov",
+                      "contactInfoTitle": "Digital Services Expert",
+                      "contactInfoCompany": "US Digital Service, The White House",
+                      "socialLinkedIn": "https://www.linkedin.com/in/gleasonamy/",
+                      "Session": "Keynote | 4:00pm-4:30pm"
+                    },
+                    {
+                      "FullName": "Aneesh Chopra",
+                      "firstName": "Aneesh",
+                      "lastname": "Chopra",
+                      "contactInfoEmail": "aneesh.chopra@carejourney.com",
+                      "contactInfoTitle": "President",
+                      "contactInfoCompany": "CareJourney",
+                      "socialLinkedIn": "https://www.linkedin.com/in/apchopra/",
+                      "Session": "Keynote | 12:45pm-1:15pm"
+                    },
+                    {
+                      "FullName": "Anju Mathew",
+                      "firstName": "Anju",
+                      "lastname": "Mathew",
+                      "contactInfoEmail": "anju@oncolens.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "Oncolens",
+                      "socialLinkedIn": "Health Information Technology, ONC",
+                      "Session": "Person-centric insights | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Ann Mond Johnson",
+                      "firstName": "Ann Mond",
+                      "lastname": "Johnson",
+                      "contactInfoEmail": "ann@americantelemed.org",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "American Telemedicine Association (ATA)",
+                      "socialLinkedIn": "https://www.linkedin.com/in/annmondjohnson/",
+                      "Session": "On demand health care| 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Ashok Chennuru",
+                      "firstName": "Ashok",
+                      "lastname": "Chennuru",
+                      "contactInfoEmail": "ashok.chennuru@anthem.com",
+                      "contactInfoTitle": "Chief Data and Analytics Officer",
+                      "contactInfoCompany": "Anthem",
+                      "socialLinkedIn": "requested we not use his LinkedIn profile",
+                      "Session": "Health Plans  | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Austin Poole",
+                      "firstName": "Austin",
+                      "lastname": "Poole",
+                      "contactInfoEmail": "apoole@bipcapital.com",
+                      "contactInfoTitle": "Lead Healthcare Tech Investor",
+                      "contactInfoCompany": "BIP Capital",
+                      "socialLinkedIn": "https://www.linkedin.com/in/austinmpoole/",
+                      "Session": "Show me the money | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "Baha Zeidan",
+                      "firstName": "Baha",
+                      "lastname": "Zeidan",
+                      "contactInfoEmail": "baha.zeidan@azaleahealth.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "Azalea Health",
+                      "socialLinkedIn": "https://www.linkedin.com/in/bahazeidan/",
+                      "Session": "What's old is new again | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Brad Jones",
+                      "firstName": "Brad",
+                      "lastname": "Jones, PhD",
+                      "contactInfoEmail": "lifewellpro@gmail.com",
+                      "contactInfoTitle": "Founder and CEO",
+                      "contactInfoCompany": "Life Well Promotions, LLC",
+                      "socialLinkedIn": "https://www.linkedin.com/in/w-brad-jones-b5b70832/",
+                      "Session": "Including the most vulnerable: SDOH | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Brett Williams",
+                      "firstName": "Brett",
+                      "lastname": "Williams",
+                      "contactInfoEmail": "brett.williams@aprio.com",
+                      "contactInfoTitle": "National Partner",
+                      "contactInfoCompany": "Aprio",
+                      "socialLinkedIn": "https://www.linkedin.com/in/brettwilliamsaprio/",
+                      "Session": "Who are you? | 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Carina Edwards",
+                      "firstName": "Carina",
+                      "lastname": "Edwards",
+                      "contactInfoEmail": "cedwards@quilhealth.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "Quil",
+                      "socialLinkedIn": "https://www.linkedin.com/in/carina-edwards-aa0731/",
+                      "Session": "Person-centric insights | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Chad Hooker",
+                      "firstName": "Chad",
+                      "lastname": "Hooker",
+                      "contactInfoEmail": "ch@fulcrumep.com",
+                      "contactInfoTitle": "Vice President",
+                      "contactInfoCompany": "Fulcrum Equity Partners",
+                      "socialLinkedIn": "https://www.linkedin.com/in/chadhooker1/",
+                      "Session": "Show me the money | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "David Bradshaw",
+                      "firstName": "David",
+                      "lastname": "Bradshaw",
+                      "contactInfoEmail": "David.Bradshaw@cerner.com",
+                      "contactInfoTitle": "SVP Consumer Experience",
+                      "contactInfoCompany": "Cerner",
+                      "socialLinkedIn": "https://www.linkedin.com/in/david-bradshaw-3825355/",
+                      "Session": "What's old is new again | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "David Tyler",
+                      "firstName": "David",
+                      "lastname": "Tyler",
+                      "contactInfoEmail": "David.Tyler@us.gt.com",
+                      "contactInfoTitle": "National Managing Principal – Health Care\n",
+                      "contactInfoCompany": "Grant Thornton",
+                      "socialLinkedIn": "https://www.linkedin.com/in/david-g-tyler//",
+                      "Session": "Open clinical logic models | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Deven McGraw",
+                      "firstName": "Deven",
+                      "lastname": "McGraw",
+                      "contactInfoEmail": "deven@ciitizen.com",
+                      "contactInfoTitle": "Chief Regulatory Officer",
+                      "contactInfoCompany": "Ciitizen",
+                      "socialLinkedIn": "https://www.linkedin.com/in/deven-mcgraw-6650285/",
+                      "Session": "Who are you? | 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Dinesh Raju, MD, PhD",
+                      "firstName": "Dinesh",
+                      "lastname": "Raju, MD, PhD",
+                      "contactInfoEmail": "dinesh.raju@gwinnettclinic.com",
+                      "contactInfoTitle": "Physician",
+                      "contactInfoCompany": "Gwinnett Clinic",
+                      "socialLinkedIn": "https://www.linkedin.com/in/dinesh-raju-82a52b18a/",
+                      "Session": "What about me? | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Ed Holmes",
+                      "firstName": "Ed",
+                      "lastname": "Holmes",
+                      "contactInfoEmail": "ed.holmes@fairwarning.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "FairWarning",
+                      "socialLinkedIn": "https://www.linkedin.com/in/edholmes/",
+                      "Session": "Who are you? | 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Ellen Dalton",
+                      "firstName": "Ellen",
+                      "lastname": "Dalton",
+                      "contactInfoEmail": "Ellen.Dalton@medecision.com",
+                      "contactInfoTitle": "Chief Marketing & Experience Officer",
+                      "contactInfoCompany": "Medecision",
+                      "socialLinkedIn": "https://www.linkedin.com/in/ellen-donahue-dalton-1193823/",
+                      "Session": "Open clinical logic models | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Frank Opelka",
+                      "firstName": "Frank",
+                      "lastname": "Opelka",
+                      "contactInfoEmail": "fopelka@facs.org",
+                      "contactInfoTitle": "Medical Director",
+                      "contactInfoCompany": "American College of Surgeons; Quality and Health Policy",
+                      "socialLinkedIn": "https://www.linkedin.com/in/frank-opelka-9ba2b45/",
+                      "Session": "Open clinical logic models | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Grace Cordovano",
+                      "firstName": "Grace",
+                      "lastname": "Cordovano",
+                      "contactInfoEmail": "enlighteningresults@gmail.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "Enlightening Results, LLC",
+                      "socialLinkedIn": "https://www.linkedin.com/in/gcordovano/",
+                      "Session": "What about me? | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Ian Juliano",
+                      "firstName": "Ian",
+                      "lastname": "Juliano",
+                      "contactInfoEmail": "ijuliano@trellahealth.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "Trella Health",
+                      "socialLinkedIn": "https://www.linkedin.com/in/ianjuliano/",
+                      "Session": "Person-centric insights | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Jennifer Webster",
+                      "firstName": "Jennifer",
+                      "lastname": "Webster",
+                      "contactInfoEmail": "Jennifer.Webster@IntegraConnect.com",
+                      "contactInfoTitle": "VP, Analytics and Data Solutions at Integra Connect",
+                      "contactInfoCompany": "Integra Connect",
+                      "socialLinkedIn": "\n\nhttps://www.linkedin.com/in/jennifer-webster-00aa0657/\n\n",
+                      "Session": "Freeing the data | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "John Yates",
+                      "firstName": "John",
+                      "lastname": "Yates",
+                      "contactInfoEmail": "",
+                      "contactInfoTitle": "Attorney",
+                      "contactInfoCompany": "Morris, Manning, and Martin",
+                      "socialLinkedIn": "https://www.linkedin.com/in/johncyates/",
+                      "Session": "Show me the money | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "Kristen Valdes",
+                      "firstName": "Kristen",
+                      "lastname": "Valdes",
+                      "contactInfoEmail": "kristen@icanbwell.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "b.well Connected Health",
+                      "socialLinkedIn": "https://www.linkedin.com/in/kristen-valdes/",
+                      "Session": "Person-centric insights | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Lisa Maki",
+                      "firstName": "Lisa",
+                      "lastname": "Maki",
+                      "contactInfoEmail": "Lisa.Maki@microsoft.com",
+                      "contactInfoTitle": "Vice President Strategic Partnerships",
+                      "contactInfoCompany": "Microsoft Health Next",
+                      "socialLinkedIn": "https://www.linkedin.com/in/lisammaki/",
+                      "Session": "Freeing the data | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "Lucienne Ide, MD, PhD",
+                      "firstName": "Lucienne",
+                      "lastname": "Ide, MD, PhD",
+                      "contactInfoEmail": "lucie@rimidi.com",
+                      "contactInfoTitle": "Founder",
+                      "contactInfoCompany": "Rimidi, Inc.",
+                      "socialLinkedIn": "https://www.linkedin.com/in/lucienneide/",
+                      "Session": "Person-centric insights | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Madhav Gone",
+                      "firstName": "Madhav",
+                      "lastname": "Gone",
+                      "contactInfoEmail": "mgone@Healthfirst.org",
+                      "contactInfoTitle": "Healthcare Technology Leader",
+                      "contactInfoCompany": "Healthfirst Inc.",
+                      "socialLinkedIn": "https://www.linkedin.com/in/madhav-gone-49a2894/",
+                      "Session": "Health Plans  | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Michael Koriwchak, MD",
+                      "firstName": "Michael",
+                      "lastname": "Koriwchak, MD",
+                      "contactInfoEmail": "mkoriwchak@entofga.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "ENT of Georgia",
+                      "socialLinkedIn": "https://www.linkedin.com/in/michael-koriwchak-md-a6289123/",
+                      "Session": "On demand health care| 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Michele Madison",
+                      "firstName": "Michele",
+                      "lastname": "Madison",
+                      "contactInfoEmail": "mmadison@mmmlaw.com",
+                      "contactInfoTitle": "Attorney",
+                      "contactInfoCompany": "Morris Manning Martin",
+                      "socialLinkedIn": "https://www.linkedin.com/in/michele-madison-24900215/",
+                      "Session": "Health Plans  | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Mizan Rahman",
+                      "firstName": "Mizan",
+                      "lastname": "Rahman",
+                      "contactInfoEmail": "mizan@cloudapper.com",
+                      "contactInfoTitle": "CEO",
+                      "contactInfoCompany": "RightPatient",
+                      "socialLinkedIn": "https://www.linkedin.com/in/themizan/",
+                      "Session": "Who are you? | 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Morgan Gleason",
+                      "firstName": "Morgan",
+                      "lastname": "Gleason",
+                      "contactInfoEmail": "morgangleason@gmail.com",
+                      "contactInfoTitle": "Patient Advocate and Public Speaker",
+                      "contactInfoCompany": "MorganGleason.com",
+                      "socialLinkedIn": "https://www.linkedin.com/in/morgan-gleason-092363110/",
+                      "Session": "What about me? | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Tom Greer",
+                      "firstName": "Tom",
+                      "lastname": "Greer",
+                      "contactInfoEmail": "tg@fulcrumep.com",
+                      "contactInfoTitle": "",
+                      "contactInfoCompany": "Fulcrum Equity Partners",
+                      "socialLinkedIn": "https://www.linkedin.com/in/thomas-greer-35487158/",
+                      "Session": "Show me the money | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "Robert Knight",
+                      "firstName": "Robert",
+                      "lastname": "Knight",
+                      "contactInfoEmail": "robert.knight@walmart.com",
+                      "contactInfoTitle": "Head of Consumer Health Innovation",
+                      "contactInfoCompany": "Walmart",
+                      "socialLinkedIn": "https://www.linkedin.com/in/robbyknight/",
+                      "Session": "On demand health care| 5:00pm-5:30pm"
+                    },
+                    {
+                      "FullName": "Robyn Bussey",
+                      "firstName": "Robyn",
+                      "lastname": "Bussey",
+                      "contactInfoEmail": "rbussey1@gsu.edu",
+                      "contactInfoTitle": "Community Health Strategist ",
+                      "contactInfoCompany": "Atlanta Regional Collaborative for Health Improvement (ARCHI)",
+                      "socialLinkedIn": "http://archicollaborative.org/our-team/",
+                      "Session": "Including the most vulnerable: SDOH | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Ryan Howells",
+                      "firstName": "Ryan",
+                      "lastname": "Howells",
+                      "contactInfoEmail": "ryan.howells@leavittpartners.com",
+                      "contactInfoTitle": "Principal",
+                      "contactInfoCompany": "Leavitt Partners",
+                      "socialLinkedIn": "https://www.linkedin.com/in/ryanhowells/",
+                      "Session": "Wrap-up | 5:30pm-5:45pm"
+                    },
+                    {
+                      "FullName": "Shantanu Nigam",
+                      "firstName": "Shantanu",
+                      "lastname": "Nigam",
+                      "contactInfoEmail": "shantanunigam@gmail.com",
+                      "contactInfoTitle": "Clinical AI Evangelist",
+                      "contactInfoCompany": "Jvion",
+                      "socialLinkedIn": "https://www.linkedin.com/in/shantanunigam//",
+                      "Session": "Including the most vulnerable: SDOH | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Sherry Farrugia",
+                      "firstName": "Sherry",
+                      "lastname": "Farrugia",
+                      "contactInfoEmail": "sherry@gatech.edu",
+                      "contactInfoTitle": "Interim CEO ",
+                      "contactInfoCompany": "Global Center for Medical Innovation (GCMI) ",
+                      "socialLinkedIn": "https://www.linkedin.com/in/sherryfarrugia//",
+                      "Session": "Open clinical logic models | 4:30pm-5:00pm"
+                    },
+                    {
+                      "FullName": "Spence McClelland",
+                      "firstName": "Spence",
+                      "lastname": "McClelland",
+                      "contactInfoEmail": "",
+                      "contactInfoTitle": "Partner",
+                      "contactInfoCompany": "Noro-Mosely Partners",
+                      "socialLinkedIn": "https://www.linkedin.com/in/spence-mcclelland-aa50452/",
+                      "Session": "Show me the money | 3:00pm-3:30pm"
+                    },
+                    {
+                      "FullName": "Steve Posnack",
+                      "firstName": "Steve",
+                      "lastname": "Posnack",
+                      "contactInfoEmail": "steven.posnack@hhs.gov",
+                      "contactInfoTitle": "Deputy National Coordinator",
+                      "contactInfoCompany": "Health Information Technology, ONC",
+                      "socialLinkedIn": "https://www.linkedin.com/in/steven-posnack-6960b71/",
+                      "Session": "Opening Plenary | 1:15pm-1:30pm"
+                    },
+                    {
+                      "FullName": "Tanya Mack",
+                      "firstName": "Tanya",
+                      "lastname": "Mack",
+                      "contactInfoEmail": "tmack@womenstelehealth.com",
+                      "contactInfoTitle": "President Technology Solutions",
+                      "contactInfoCompany": "Women's Telehealth",
+                      "socialLinkedIn": "https://www.linkedin.com/in/tanya-mack-84b91aa/",
+                      "Session": "Including the most vulnerable: SDOH | 2:30pm-3:00pm"
+                    },
+                    {
+                      "FullName": "Tina Joros",
+                      "firstName": "Tina",
+                      "lastname": "Joros",
+                      "contactInfoEmail": "Tina.Joros@allscripts.com",
+                      "contactInfoTitle": "Vice President Allscripts Healthcare and the General Manager of the Allscripts Practice Financial Platform and Open business units",
+                      "contactInfoCompany": "AllScripts",
+                      "socialLinkedIn": "https://www.linkedin.com/in/tina-joros-0ab53413/",
+                      "Session": "What's old is new again | 2:00pm-2:30pm"
+                    },
+                    {
+                      "FullName": "Laurent Rotival",
+                      "firstName": "Laurent",
+                      "lastname": "Rotival",
+                      "contactInfoEmail": "",
+                      "contactInfoTitle": "SVP, Strategic Technology Solutions & CIO",
+                      "contactInfoCompany": "Cambia Health Solutions",
+                      "socialLinkedIn": "https://www.linkedin.com/in/laurentrotival/",
+                      "Session": "Health Plans  | 4:30pm-5:00pm"
+                    }
+                  ];
 
-                  var attendees = {};
-                  loadJSON(baseUrl + '/speakers/speakers-v4.json',
-                    function (response) {
-                      attendees = JSON.parse(response);
-                    })
+                  var fetchUsers = (pageNumber) => {
+                    const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
+                    // max pagesize = 1000
+                    // page start at 1 not 0
+                    const params = {
+                      "pageNumber": pageNumber,
+                      "pageSize": 1000
+                    };
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
 
-                  for (let speaker of attendees) {
-
-                    if (speaker.FullName == "") {
-                      continue;
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
                     }
 
-                    let clone = speakerTemplate.content.cloneNode(true);
-                    let speakerCard = clone.getElementById("speaker-card");
-
-                    let newElementId = speaker.FullName.toLowerCase().replaceAll(" ", "-");
-                    speakerCard.id = "at-" + newElementId;
-
-                    let speakerName = clone.getElementById("speaker-name");
-                    speakerName.innerHTML = speaker.FullName ? speaker.FullName : "";
-
-                    const title = speaker.Title ? speaker.Title : "";
-                    const company = speaker.CompanyName ? speaker.CompanyName : "";
-                    const hyphen = title !== "" && company != "" ? " - " : "";
-                    let companyTitle = clone.getElementById("company-title");
-                    companyTitle.innerHTML = title + hyphen + company;
-
-                    // let speakerEmail = clone.getElementById("speaker-email");
-                    // speakerEmail.innerHTML = speaker.Email ? speaker.Email : "";
-                    // speakerEmail.href = "mailto:" + speaker.Email;
-
-                    let linkedIn = clone.getElementById("linked-in");
-                    linkedIn.href = speaker.LinkedIn ? speaker.LinkedIn : "";
-                    linkedIn.innerHTML = speaker.LinkedIn ? speaker.LinkedIn : "";
-
-                    let speakerSession = clone.getElementById("speaker-session");
-                    speakerSession.innerHTML = speaker.Session ? speaker.Session : "";
-
-                    const speakerAvatar = clone.getElementById("speaker-avatar");
-                    speakerAvatar.onerror = function () {
-                      speakerAvatar.onerror = null;
-                      this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/generic-avatar.jpg';
-                    }
-                    speakerAvatar.src = baseUrl + "/speakers/profile-image/" + newElementId + ".jpg?r=4";
-
-                    speakersGrid.appendChild(clone);
+                    $.ajax({
+                      url: _baseUrl + 'UserProfileExport',
+                      type: 'POST',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      data: JSON.stringify(params),
+                      success: function (res, status, xhr) {
+                        if (res && res.length) {
+                          const list = filterList(res);
+                          attendees = attendees.concat(list);
+                          // keep fetching until we run out of attendees to get
+                          fetchUsers(pageNumber + 1);
+                        } else {
+                          attendees = sortList(attendees, 'lastname');
+                          buildAttendeeList();
+                        }
+                        totalAttendees = xhr.getResponseHeader('X-Pagination-TotalItems');
+                      },
+                      error: function (err) {
+                        alert(JSON.stringify(err));
+                        console.error('Error Fetching User Profiles', err);
+                      }
+                    });
 
                   }
 
-                  function loadJSON(file, callback) {
-                    const xobj = new XMLHttpRequest()
-                    xobj.overrideMimeType('application/json')
-                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-                    xobj.onreadystatechange = function () {
-                      if (xobj.readyState == 4 && xobj.status == '200') {
-                        callback(xobj.responseText)
+                  var filterList = (res) => {
+                    return res.filter(item => {
+                      // remove users who have not yet opted in
+                      if (item.hideProfilePrivacyOptOut) {
+                        return false;
                       }
+                      // remove users who are not in a specified group
+                      return item.userGroups.some(group => {
+                          const name = group.name.toLowerCase();
+                          return name.includes('speaker');
+                        }
+                      );
+                    });
+                  }
+
+                  var sortList = (list, key) => {
+                    list = list.sort(function (a, b) {
+                      if (a[key].toLowerCase() > b[key].toLowerCase()) {
+                        return 1;
+                      }
+                      if (a[key].toLowerCase() < b[key].toLowerCase()) {
+                        return -1;
+                      }
+                      return 0;
+                    });
+
+                    return list;
+                  }
+
+                  var buildAttendeeList = () => {
+                    const attendeeList = landingPageEl.getElementById("attendee-list");
+                    const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+                    const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag";
+
+
+                    for (let user of attendees) {
+                      let clone = attendeeTemplate.content.cloneNode(true);
+
+                      let attendeeDiv = clone.getElementById("attendee-card");
+                      attendeeDiv.id = user.FullName.toLowerCase().replaceAll(" ", "-");
+
+                      clone.getElementById("attendee-avatar").src = baseUrl + "/speakers/profile-image/" + user.FullName.toLowerCase().replaceAll(" ", "-") + ".jpg?r=4";
+
+                      let fullName = clone.getElementById("attendee-name");
+                      fullName.innerHTML = user.firstName + " " + user.lastname;
+
+                      let speakerSession = clone.getElementById("speaker-session");
+                      speakerSession.innerHTML = user.Session ? user.Session : "";
+
+
+                      if (user.socialLinkedIn) {
+                        let linkedIn = clone.getElementById("linked-in");
+                        linkedIn.href = user.socialLinkedIn ? user.socialLinkedIn : "";
+                        linkedIn.innerHTML = user.socialLinkedIn ? user.socialLinkedIn : "";
+                      } else {
+                        let linkedInClass = clone.querySelector(".linked-in");
+                        linkedInClass.style.display = "none";
+                      }
+
+                      let companyTitle = clone.getElementById("company-title");
+                      const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
+                      const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
+                      const hyphen = contactInfoTitle !== "" && contactInfoCompany != "" ? " - " : "";
+                      companyTitle.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
+
+                      attendeeList.appendChild(clone);
                     }
-                    xobj.send(null)
                   }
 
                   var updateAttendees = () => {
                     let empty = true;
-                    for (let at of attendees) {
-                      let id = "at-" + at.FirstName.toLowerCase() + "-" + at.LastName.toLowerCase();
-                      let el = landingPageEl.getElementById(id);
+                    for (let user of attendees) {
+                      const id =  user.FullName.toLowerCase().replaceAll(" ", "-");
+                      const el = landingPageEl.getElementById(id);
                       if (el) {
-                        if (at.visible) {
+                        if (user.visible) {
                           empty = false;
                           el.style.display = ""
                         } else {
@@ -515,16 +1133,19 @@
 
                   var searchAttendees = e => {
                     let query = e.currentTarget.value.toLowerCase();
-                    for (let at of attendees) {
-                      const Title = at.Title ? at.Title : "";
-                      const CompanyName = at.CompanyName ? at.CompanyName : "";
-                      if (at.FirstName.toLowerCase().startsWith(query)
-                        || at.LastName.toLowerCase().startsWith(query)
-                        || Title.toLowerCase().startsWith(query)
-                        || CompanyName.toLowerCase().startsWith(query)) {
-                        at.visible = true;
+                    for (let user of attendees) {
+                      const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
+                      const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
+                      if (
+                        user.firstName.toLowerCase().startsWith(query)
+                        || user.lastname.toLowerCase().startsWith(query)
+                        || contactInfoTitle.toLowerCase().includes(query)
+                        || contactInfoCompany.toLowerCase().includes(query)
+                        || user.Session.toLowerCase().includes(query)
+                      ) {
+                        user.visible = true;
                       } else {
-                        at.visible = false;
+                        user.visible = false;
                       }
                     }
 
@@ -545,20 +1166,20 @@
 
                   var clearLetterGroupings = () => {
                     for (let group of letterGroupings) {
-                      let el = landingPageEl.getElementById(group);
+                      const el = landingPageEl.getElementById(group);
                       el.style.color = "";
                       el.style.backgroundColor = "";
                     }
                   }
 
                   var clearSearchValue = () => {
-                    let search = landingPageEl.getElementById("search-attendees")
+                    const search = landingPageEl.getElementById("search-attendees")
                     search.value = "";
                   }
 
                   var allAttendees = () => {
-                    for (let at of attendees) {
-                      at.visible = true;
+                    for (let user of attendees) {
+                      user.visible = true;
                     }
 
                     clearSearchValue();
@@ -571,105 +1192,23 @@
 
                   }
 
-                  var AE = "abcde";
-                  var filterAttendeesAE = () => {
-                    let filtered = []
-                    for (let at of attendees) {
-                      if (AE.includes(at.FirstName[0].toLowerCase()) || AE.includes(at.LastName[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
+                  var filterLastName = (element, letters) => {
+                    attendees.forEach(user => {
+                      user.visible = letters.includes(user.lastname[0].toLowerCase());
+                    });
                     clearSearchValue();
                     clearLetterGroupings();
-
-                    landingPageEl.getElementById("ae-grouping").style.color = "white";
-                    landingPageEl.getElementById("ae-grouping").style.backgroundColor = "#41578B";
-
+                    landingPageEl.getElementById(element.id).style.color = "white";
+                    landingPageEl.getElementById(element.id).style.backgroundColor = "#41578B";
                     updateAttendees();
-
                   }
 
-                  var FJ = "fghij";
-                  var filterAttendeesFJ = () => {
-                    for (let at of attendees) {
-                      if (FJ.includes(at.FirstName[0].toLowerCase()) || FJ.includes(at.LastName[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("fj-grouping").style.color = "white";
-                    landingPageEl.getElementById("fj-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
-
-                  var KO = "klmno";
-                  var filterAttendeesKO = () => {
-                    for (let at of attendees) {
-                      if (KO.includes(at.FirstName[0].toLowerCase()) || KO.includes(at.LastName[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("ko-grouping").style.color = "white";
-                    landingPageEl.getElementById("ko-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
-
-                  var PT = "pqrst";
-                  var filterAttendeesPT = () => {
-                    for (let at of attendees) {
-                      if (PT.includes(at.FirstName[0].toLowerCase()) || PT.includes(at.LastName[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("pt-grouping").style.color = "white";
-                    landingPageEl.getElementById("pt-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
-                  }
-
-                  var UZ = "uvwxyz";
-                  var filterAttendeesUZ = () => {
-                    for (let at of attendees) {
-                      if (UZ.includes(at.FirstName[0].toLowerCase()) || UZ.includes(at.LastName[0].toLowerCase())) {
-                        at.visible = true;
-                      } else {
-                        at.visible = false;
-                      }
-                    }
-
-                    clearSearchValue();
-                    clearLetterGroupings();
-
-                    landingPageEl.getElementById("uz-grouping").style.color = "white";
-                    landingPageEl.getElementById("uz-grouping").style.backgroundColor = "#41578B";
-
-                    updateAttendees();
-
+                  if (window.isLocalTemplate) {
+                    window.addEventListener('load', function () {
+                      buildAttendeeList();
+                    });
+                  } else {
+                    buildAttendeeList();
                   }
 
                 </script>
@@ -721,7 +1260,6 @@
                   }
                 </script>
 
-
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
@@ -736,7 +1274,8 @@
       <footer app-footer="" layout="row" layout-align="start center">
         Inferno Footer
       </footer>
-      <!-- ./ FOOTER --></div>
+      <!-- ./ FOOTER -->
+    </div>
   </videos-layout>
 </app-root>
 
@@ -748,29 +1287,28 @@
   // LIQUID PROCESSING (Set the data variable above)
   function processLiquid() {
     return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
       // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
       // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
       // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
+      const result = landingPageEl.querySelector('inferno-snippet-content');
       // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
+      const engine = new liquidjs.Liquid();
       // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html);
+      resolve();
     })
 
   }
 
   // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
   function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
+    const appRoot = document.querySelector('app-root');
+    const sideBar = document.querySelector('videos-sidebar');
+    window.sessionStorage.setItem('menuState', 'collapsed');
+    appRoot.classList.add('aside-collapsed');
+    appRoot.classList.remove('aside-hidden');
+    sideBar.classList.remove('hidden');
   }
 
   function mtHideMenu() {
