@@ -195,15 +195,14 @@
     }
 
     const now = moment();
-    const dueDay = dueDateTime.startOf('day');
-    const today = now.startOf('day');
+    const dueDay = dueDateTime;
 
     if (now.isBefore(dueDateTime)) {
       el.classList.add('due');
       el.innerHTML = 'Due ' + dueDateTime.fromNow();
       return;
     }
-    if (today.isSame(dueDay) && now.isSameOrAfter(dueDateTime)) {
+    if (now.isSame(dueDay) && now.isSameOrAfter(dueDateTime)) {
       el.classList.add('is-live');
       el.innerHTML = `<strong>LIVE NOW</strong>`;
       gsap.fromTo(el, {duration: 2}, {repeat: -1, filter: 'brightness(120%)', duration: 2, scale: 1.1});
