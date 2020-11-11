@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+  class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,21 +9,50 @@
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
   <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+    rel="stylesheet">
   <!-- Import Inferno's Styles -->
   <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+    href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
   <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+    href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null;
-    window.isLocalTemplate = true;
-  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+  <script>
+    let landingPageEl = null
+  </script>
+
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
@@ -82,37 +111,12 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.web.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.web.config.js"></script>
+  <script onload="login()" src="/inferno.web.config.js">
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
-
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
-
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
 
   </script>
+
+
 </head>
 
 <body>
@@ -122,12 +126,12 @@
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+          class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+          color="primary">
           <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+              trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -188,6 +192,7 @@
                     border: 1px solid rgba(11, 38, 104, 0.32);
                     margin: 2rem 0;
                   }
+
                 </style>
 
                 <!-- banner -->
@@ -198,7 +203,7 @@
                     background-size: cover;
                     background-position: left center;
                     background-blend-mode: multiply;
-                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/agenda/agenda_header.jpg');
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/attendees_header_v2.jpg');
                   }
 
                   .banner-shadow {
@@ -327,115 +332,62 @@
 
                 <!-- Attendees -->
                 <style>
-                  .attendee {
+
+                  .attendee-card {
+                    display: flex;
+                    height: auto;
+                    min-width: 400px;
+                    flex-wrap: wrap;
                     margin: 1.4rem 4.4rem;
                     padding: 1rem 2rem;
                     border-radius: 9px;
                     background-color: #FFFFFF;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
                     align-items: center;
                   }
 
-                  @media only screen and (max-width: 375px) {
-                    .attendee {
-                      flex-direction: column;
-                    }
-                  }
-
-                  .attendee .avatar {
+                  .attendee-avatar {
                     height: 13.2rem;
                     width: 13.2rem;
                     border-radius: 50%;
                   }
 
-                  .attendee .details {
-                    margin: 0 2rem;
-                    flex-grow: 3;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: flex-start;
+                  .attendee-info {
+                    flex: 1;
+                    margin-left: 20px;
                   }
 
-                  .attendee .details .a-row {
-                    display: flex;
-                    align-items: baseline;
-                  }
-
-                  .header h1 {
-                    font-size: 2.4rem;
+                  .attendee-name {
+                    font-size: 2rem;
                     font-weight: bold;
-                    margin: 0;
                   }
 
-                  .header h2 {
-                    color: #52b952;
-                    font-size: 1.8rem;
-                    font-weight: bold;
-                    letter-spacing: 0;
-                    margin: 0 1rem;
+                  .company-title {
                   }
 
-                  .attendee .details h4 {
-                    color: #313131;
-                    font-size: 1.8rem;
-                    font-weight: 500;
-                    letter-spacing: 0;
-                    line-height: 2.9rem;
-                    margin: 0;
-                  }
-
-                  .attendee .details a {
-                    color: #0B2668;
-                    font-size: 1.6rem;
-                    letter-spacing: 0;
-                    line-height: 2.6rem;
-                  }
-
-                  .attendee .details .header {
-                    margin: 1rem 0;
+                  .attendee-email {
+                    margin: .50rem 0;
                     display: flex;
-                    flex-wrap: wrap;
-                  }
-
-                  .attendee .details .a-footer {
-                    width: 65%;
-                    display: flex;
-                    justify-content: space-between;
-                    flex-wrap: wrap;
-                  }
-
-                  .a-footer {
-                    margin-top: 0.5rem
-                  }
-
-                  .attendee .details .a-footer img {
-                    height: 1.8rem;
-                    width: auto;
-                  }
-
-                  .no-attendees-message {
-                    margin: 0;
-                    color: #0B2668;
-                    font-size: 2.2rem;
-                    font-weight: bold;
-                    letter-spacing: 0.092rem;
-                    line-height: 2.7rem;
-                    text-align: center;
-                  }
-
-                  .contact {
-                    margin: 1rem 0;
-                    display: flex;
-                    justify-content: space-between;
                     align-items: center;
                   }
 
-                  .contact img {
-                    margin-right: 1rem;
+                  .attendee-email img {
+                    height: 1.5rem;
+                    width: auto;
+                    padding-right: 5px
                   }
+
+                  .linked-in {
+                    margin: .50rem 0;
+                    display: flex;
+                  }
+
+                  .linked-in img{
+                    height: 2rem;
+                    width: 2.6rem;
+                    align-items: center;
+                    padding-right: 5px
+                  }
+
                 </style>
 
                 <!-- Sponsors -->
@@ -502,30 +454,22 @@
                   <div id="attendee-list" class="attendee-list">
 
                     <template id="attendee-template">
-                      <div id="attendee" class="attendee">
-                        <img id="avatar" class="avatar"/>
-                        <div class="details">
-                          <div class="a-row header">
-                            <h1 id="name"></h1>
+                      <div id=attendee-card class="attendee-card">
+                        <img id="attendee-avatar" class="attendee-avatar"/>
+                        <div id="attendee-info" class="attendee-info">
+                          <div id="attendee-name" class="attendee-name"></div>
+                          <div id="company-title" class="company-title"></div>
+                          <div class="attendee-email">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/email-icon.png"/>
+                            <a id="attendee-email-link" href="" target="_blank" rel="noreferrer"></a>
                           </div>
-                          <div class="a-row">
-                            <h4 id="job"></h4>
+                          <div class="linked-in">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/linked-in.png"/>
+                            <a href="#" target="_blank" rel="noreferrer" id="linked-in"></a>
                           </div>
-
-                          <div class="a-row a-footer">
-                            <div class="contact">
-                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/email-icon.png"/> <a id="email" href="" target="_blank" rel="noreferrer"></a>
-                            </div>
-                            <!--                            <div class="contact">-->
-                            <!--                              <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/website-icon.png"/> <a id="company-link" href="" target="_blank" rel="noreferrer"></a>-->
-                            <!--                            </div>-->
-
-                          </div>
-
                         </div>
                       </div>
                     </template>
-
                   </div>
 
                   <hr/>
@@ -633,23 +577,37 @@
                     for (let user of attendees) {
                       let clone = attendeeTemplate.content.cloneNode(true);
 
-                      let attendeeDiv = clone.getElementById("attendee");
+                      let attendeeDiv = clone.getElementById("attendee-card");
                       attendeeDiv.id = user.id.toString();
 
-                      clone.getElementById("avatar").src =  avatarURL+ user.userId + avatarSize;
+                      clone.getElementById("attendee-avatar").src =  avatarURL + user.userId + avatarSize;
 
-                      let fullName = clone.getElementById("name");
+                      let fullName = clone.getElementById("attendee-name");
                       fullName.innerHTML = user.firstName + " " + user.lastname;
 
-                      let email = clone.getElementById("email");
-                      email.innerHTML = user.contactInfoEmail;
-                      email.href = "mailto:" + user.contactInfoEmail;
+                      if (user.contactInfoEmail) {
+                        let emailLink = clone.getElementById("attendee-email-link");
+                        emailLink.innerHTML = user.contactInfoEmail;
+                        emailLink.href = "mailto:" + user.contactInfoEmail;
+                      } else {
+                        let emailClass = clone.querySelector(".attendee-email");
+                        emailClass.style.display = "none";
+                      }
 
-                      let job = clone.getElementById("job");
+                      if (user.socialLinkedIn) {
+                        let linkedIn = clone.getElementById("linked-in");
+                        linkedIn.href = user.socialLinkedIn ? user.socialLinkedIn : "";
+                        linkedIn.innerHTML = user.socialLinkedIn ? user.socialLinkedIn : "";
+                      } else {
+                        let linkedInClass = clone.querySelector(".linked-in");
+                        linkedInClass.style.display = "none";
+                      }
+
+                      let companyTitle = clone.getElementById("company-title");
                       const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
                       const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
                       const hyphen = contactInfoTitle !== "" && contactInfoCompany != "" ? " - " : "";
-                      job.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
+                      companyTitle.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
 
                       attendeeList.appendChild(clone);
                     }
@@ -818,29 +776,28 @@
   // LIQUID PROCESSING (Set the data variable above)
   function processLiquid() {
     return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
       // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
       // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
       // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
+      const result = landingPageEl.querySelector('inferno-snippet-content');
       // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
+      const engine = new liquidjs.Liquid();
       // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html);
+      resolve();
     })
 
   }
 
   // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
   function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
+    const appRoot = document.querySelector('app-root');
+    const sideBar = document.querySelector('videos-sidebar');
+    window.sessionStorage.setItem('menuState', 'collapsed');
+    appRoot.classList.add('aside-collapsed');
+    appRoot.classList.remove('aside-hidden');
+    sideBar.classList.remove('hidden');
   }
 
   function mtHideMenu() {

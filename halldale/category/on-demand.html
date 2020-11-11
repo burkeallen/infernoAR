@@ -186,18 +186,16 @@
                     flex-direction: column;
                     justify-content: start;
                     align-items: center;
-                    width: 200px;
-                    height: 250px;
                     background-color: rgba(255, 255, 255, .4);
                     border-radius: 1em;
                     margin: 10px;
-                    padding: 10px;
+                    padding: 2px;
                     -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
                     box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
                   }
 
                   .on-demand-thumb {
-                    width: 160px;
+                    width: 240px;
                     height: auto;
                     padding: 5px;
                     border-radius: 1em;
@@ -206,7 +204,7 @@
                   .on-demand-title {
                     display: flex;
                     position: absolute;
-                    top: 20px;
+                    top: 15px;
                     height: 40px;
                     font-size: 1.25rem;
                     justify-content: center;
@@ -220,191 +218,121 @@
                     -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
                   }
 
-                  .on-demand img:hover {
+                  .on-demand  img:hover {
                     cursor: pointer;
-                    transform: scale(1.1);
+                    transform: scale(1.06);
                     transition: 1s ease;
                   }
 
+                  /*.playBtn {*/
+                  /*  position: absolute;*/
+                  /*  top: 85px;*/
+                  /*  left: 60px;*/
+                  /*  width: 80px;*/
+                  /*  height: 80px;*/
+                  /*}*/
+
                 </style>
 
-                <video-viewer>
-                  <style>
-                    .modal-window {
-                      position: fixed;
-                      background-color: rgba(0, 0, 0, 0.5);
-                      top: 0;
-                      right: 0;
-                      bottom: 0;
-                      left: 0;
-                      opacity: 0;
-                      pointer-events: none;
-                      -webkit-transition: all 0.7s;
-                      -moz-transition: all 0.7s;
-                      transition: all 0.7s;
-                      display: none;
-                    }
 
-                    .modal-window.open {
-                      opacity: 1;
-                      pointer-events: auto;
-                      display: inline-block;
-                      z-index: 99999999;
-                      padding: 5%;
-                    }
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
 
-                    .modal-window .contentWrapper {
-                      display: flex;
-                      justify-content: center;
-                      width: 100%;
-                      margin-top: 20px;
-                    }
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
 
-                    .videoWrapper {
-                      position: relative;
-                      padding-bottom: 56.5%; /* 16:9 */
-                      height: 0;
-                    }
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
 
-                    .videoWrapper iframe {
-                      position: absolute;
-                      top: 0;
-                      left: 0;
-                      width: 100%;
-                      height: 100%;
-                    }
+                  .modal-window header {
+                    font-weight: bold;
+                  }
 
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: #fff;
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
 
-                    .modal-window .modal-box {
-                      position: relative;
-                      min-width: 400px;
-                      width: 80%;
-                      margin: 20px auto;
-                      padding: 2rem 0;
-                      background-color: transparent;
-                      border: none;
-                    }
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
 
-                    .modal-window h1 {
-                      font-size: 150%;
-                      margin: 0 0 15px;
-                    }
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
 
-                    .modal-window header {
-                      font-weight: bold;
-                    }
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
 
-                    .modal-close {
-                      position: absolute;
-                      right: 3%;
-                      top: -11px;
-                      color: #fff;
-                      font-size: 1.5em;
-                      text-decoration: none;
-                      font-weight: bold;
-                    }
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
 
-                    .modal-close:hover {
-                      filter: brightness(130%);
-                      text-decoration: none;
-                      color: #fff;
-                      cursor: pointer;
-                    }
-
-                    .modal-grid {
-                      display: grid;
-                      grid-template-columns: 0.6fr 1.4fr;
-                      grid-template-rows: 1fr;
-                      gap: 0px 20px;
-                      padding: 2%;
-                      color: white;
-                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
-                      background-color: #5378A7;
-                    }
-
-                    .modal-grid-video {
-                      display: grid;
-                      grid-template-columns: 1fr;
-                      grid-template-rows: 1fr;
-                      gap: 0 0;
-                      color: white;
-                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
-                      background-color: #5378A7;
-                    }
-
-                  </style>
-
-                  <template id="modalWindow">
-                    <div class="modal-grid">
-                    </div>
-                  </template>
-
-                  <template id="videoFrame">
-                    <iframe src="/embed/"
-                            frameborder="0"
-                            allowfullscreen="true"
-                            webkitallowfullscreen="true"
-                            mozallowfullscreen="true">
-                    </iframe>
-                  </template>
-
-                  <script>
-                    function toggleVideoModal(el) {
-                      const id = el.getAttribute('video');
-                      const contentWrapper = landingPageEl.querySelector('.contentWrapper');
-                      contentWrapper.classList.toggle('videoWrapper');
-                      let video = contentWrapper.querySelector('#video-frame');
-                      const modalClose = landingPageEl.querySelector('.modal-close');
-
-                      modalClose.addEventListener('click', function () {
-                        toggleVideoModal(el);
-                      });
-
-                      if (video) {
-                        video.remove();
-                        landingPageEl.querySelector('#open-modal').classList.toggle('open');
-                        return;
-                      }
-
-                      const temp = landingPageEl.querySelector('template#videoFrame');
-                      const clone = temp.content.cloneNode(true);
-                      video = clone.querySelector('iframe');
-                      video.id = 'video-frame';
-                      video.src = '/embed/' + id;
-                      contentWrapper.appendChild(clone);
-                      const modal = landingPageEl.querySelector('#open-modal');
-                      setModalPosition(modal);
-                      modal.classList.toggle('open');
-                    }
-
-                    function setModalPosition(el) {
-                      el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
-                    }
-
-                  </script>
-
-                </video-viewer>
 
                 <div class="content">
 
                   <div class="top-banner">
                     <span>On Demand</span> <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                    src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
                   </div>
 
-                  <div id="on-demand-grid" class="on-demand-grid">
+<!--                  {{data.CurrentlyViewedCategory.Id}}-->
 
-                    <!--
-                    ######################
-                    need to loop through events associated with this page(category) and create a card for each event
-                    -->
+
+                  <div class="on-demand-grid">
                     {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
                     {% assign sortedEvents = data.Events | sort_natural: "Name" %}
                     {% for event in sortedEvents %}
                     {% for category in event.Categories %}
                     {% assign cat = category.Id | downcase %}
                     {% if cat == currentCat %}
-                    <div class="card" video="{{event.Id}}" id="{{event.Id}}" onclick="toggleVideoModal(this)">
+                    <div class="card" video="{{event.Id}}" id="{{event.Id}}" onclick="toggleModalVideo(this)">
                       <img title="{{event.Name}}" src="{{event.VideoThumbnail}}">
                       <div class="title">{{event.Name}}</div>
                       <div class="description"></div>
@@ -412,18 +340,59 @@
                     {% endif %}
                     {% endfor %}
                     {% endfor %}
-                    <!-- ######################## -->
-
-                    <div id="open-modal" class="modal-window">
-                      <div class="modal-box">
-                        <div title="Close" class="modal-close">Close</div>
-                        <div class="contentWrapper"></div>
-                      </div>
-                    </div>
                   </div>
 
 
                 </div>
+
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <template>
+                  <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                  </iframe>
+                </template>
+
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      scrollTop();
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('template');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                    scrollTop();
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
