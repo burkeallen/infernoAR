@@ -25,9 +25,11 @@
     }
 
     .grid-container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-gap: 20px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      flex: 1;
     }
 
     .heading {
@@ -40,7 +42,19 @@
       border-radius: 12px;
       padding: 12px;
       color: #000222;
-      cursor: pointer;
+      min-width: 30%;
+      margin: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    template.card {
+      display: none;
+    }
+
+    .card div {
+      width: 100%;
     }
 
     .card .folder {
@@ -52,8 +66,16 @@
 
     .card .title {
       line-height: 1.75em;
+      word-wrap: break-word;
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
     }
 
+    .card .title:hover {
+      filter: brightness(140%);
+      font-weight: bolder;
+    }
     .card .due-date {
 
     }
@@ -65,8 +87,13 @@
       text-align: center;
       color: antiquewhite;
       margin-top: 12px;
+      cursor: pointer;
     }
 
+    .count-down:hover {
+      filter: brightness(140%);
+      transform: scale(1.1);
+    }
 
     .is-live {
       background: blue;
@@ -82,6 +109,11 @@
 
     .completed {
       background: darkgreen;
+      text-transform: uppercase;
+    }
+
+    .unknown {
+      background: #000000;
       text-transform: uppercase;
     }
 
@@ -106,38 +138,62 @@
   </template>
 
 </div>
-
 <script>
 
-  const projects = [
-    {folder: 'tag', title: 'Digital Health Summit', dueDate: '2020-11-12T08:00'},
-    {folder: 'efi', title: 'Enterprise Florida <br> registration opens 10-23 <br> site launch December 7th', dueDate: '2020-12-07T08:00'},
-    {folder: 'halldale', title: 'Halldale Global ATS-V <br> Site Launch November 3rd', dueDate: '2020-11-10T08:00'},
-    {folder: 'namd', title: 'NAMD <br> Site launch November 2nd', dueDate: '2020-11-09T08:00'},
-  ];
+  function buildMenu() {
 
-  const grid = document.getElementById('grid');
+    const grid = document.getElementById('grid');
+    let list = projects.sort(function (a, b) {
+      if (a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+      }
+      if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+      }
+      return 0;
+    });
 
-  projects.forEach(project => {
-    const temp = document.querySelector("template");
-    const clone = temp.content.cloneNode(true);
-    const card = clone.querySelector('.card');
-    const dueDate = moment(project.dueDate, 'YYYY-MM-DDTHH:mm');
-    card.querySelector('.folder').innerHTML = project.folder;
-    card.querySelector('.title').innerHTML = project.title;
-    card.querySelector('.due-date').innerHTML = dueDate.format('LLLL');
-    setDueDateDisplay(card, dueDate);
-    setEventTimer(card, project.eventLive);
-    card.id = project.folder;
-    card.addEventListener('click', function () {
-      window.location.href = `./${project.folder}/index.html`;
-    })
-    gsap.fromTo(card, {opacity: .1}, {opacity: 1, duration: 4});
-    grid.appendChild(clone);
-  });
+    list.forEach(project => {
+      const temp = document.querySelector("template");
+      const clone = temp.content.cloneNode(true);
+      const card = clone.querySelector('.card');
+      card.querySelector('.folder').innerHTML = project.name;
+      card.querySelector('.title').innerHTML = project.domain;
+      card.querySelector('.title').style.zIndex = "99";
+      card.querySelector('.title').addEventListener('click', function () {
+        window.open('https://' + project.domain, '_blank');
+      });
+
+      if (project.dueDate) {
+        const dueDate = moment(project.dueDate, 'YYYY-MM-DDTHH:mm');
+        card.querySelector('.due-date').innerHTML = dueDate.format('LLLL') ?? '';
+        setDueDateDisplay(card, dueDate);
+        setEventTimer(card, project.eventLive);
+      } else {
+        card.querySelector('.due-date').innerHTML = ''
+        setDueDateDisplay(card, false);
+      }
+
+      card.querySelector('.count-down').addEventListener('click', function () {
+        window.location.href = `./${project.name}`;
+      })
+
+      card.id = project.folder;
+      gsap.fromTo(card, {opacity: .1}, {opacity: 1, duration: 4});
+      grid.appendChild(clone);
+    });
+
+  }
 
   function setDueDateDisplay(card, dueDateTime) {
     const el = card.querySelector('.count-down');
+    if (!dueDateTime) {
+      el.innerHTML = 'Date Not Set';
+      el.title = 'Add dueDate to inferno.web.config.js file';
+      el.classList.add('unknown');
+      return;
+    }
+
     const now = moment();
     const dueDay = dueDateTime.startOf('day');
     const today = now.startOf('day');
@@ -150,7 +206,7 @@
     if (today.isSame(dueDay) && now.isSameOrAfter(dueDateTime)) {
       el.classList.add('is-live');
       el.innerHTML = `<strong>LIVE NOW</strong>`;
-      gsap.fromTo(el, {duration: 2 }, {repeat: -1,  filter: 'brightness(120%)', duration: 2, scale: 1.1});
+      gsap.fromTo(el, {duration: 2}, {repeat: -1, filter: 'brightness(120%)', duration: 2, scale: 1.1});
       return;
     }
     if (now.isSame(dueDateTime)) {
@@ -168,5 +224,14 @@
   }
 
 </script>
+<script onerror="console.error('/inferno.web.config.js', 'can not build the menu')"
+        src="/inferno.web.config.js"></script>
+
+<script>
+  window.addEventListener('load', (event) => {
+    buildMenu();
+  });
+</script>
+
 </body>
 </html>
