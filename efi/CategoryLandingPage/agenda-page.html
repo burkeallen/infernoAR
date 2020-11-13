@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -240,62 +240,377 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="ca15f59c-de65-4b5a-bdc3-769944c5e521">
+                  <!-- Agenda Page -->
+                  <!--  Load custom fonts -->
+                  <script type="text/javascript">
+                    function loadFont(name, url) {
+                      if (document.fonts.check("1em " + name)) {
+                        return;
+                      }
+                      const fontFace = new FontFace(name, "url(" + url + ")");
 
-                <!-- Agenda Page -->
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
+                      fontFace
+                        .load()
+                        .then(function (loadedFont) {
+                          document.fonts.add(loadedFont);
+                          console.log("Loaded custom font ", name);
+                        })
+                        .catch(function (error) {
+                          // error occurred
+                          console.log("Error loading ", name);
+                        });
                     }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
+                    loadFont(
+                      "CustomFont1",
+                      "https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2"
+                    );
+                  </script>
 
-                  }
+                  <style>
+                    /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                    /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                    img::after {
+                      content: none;
+                    }
 
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
+                    h1,
+                    h2,
+                    h3,
+                    h4,
+                    h5 {
+                      font-family: "CustomFont1", sans-serif !important;
+                    }
 
-                </script>
+                    .content {
+                      background-image: url("https://studio304nextechar.freetls.fastly.net/infernoAR/efi/agenda/background.png");
+                      /*background-attachment: fixed;*/
+                      background-repeat: no-repeat;
+                      background-size: cover;
+                      background-position: top;
+                      min-height: calc(100vh - 114px);
+                      margin: -20px;
+                      padding: 20px 24px;
+                      z-index: 1;
+                      font-family: "helvetica neue", Arial, sans-serif !important;
+                      display: flex;
+                      align-items: center;
+                      flex-direction: column;
+                    }
 
-                <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
+                    #event-list {
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;
+                      align-items: center;
+                      margin: 25rem 0 10rem 0;
+                      width: 90%;
+                    }
 
-                  h1, h2, h3, h4, h5 {
-                    font-family: "CustomFont1", sans-serif !important;
-                  }
+                    .day-box {
+                      display: flex;
+                      flex-direction: column;
+                      background-color: rgba(255, 255, 255, 0.9);
+                      margin-bottom: 2rem;
+                      align-items: center;
+                      padding: 0 2rem;
+                      width: 100%;
+                      color: #01245b;
+                    }
 
-                  .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/bkg1.jpg');
-                    /*background-attachment: fixed;*/
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
-                  }
-                </style>
+                    .main {
+                      width: 100%;
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      padding: 2rem;
+                    }
 
-                <div class="content">
+                    .day {
+                      font-size: 3.4rem;
+                    }
 
-                  <h2 style="color:white">Agenda Placeholder</h2>
+                    .expand-button {
+                      border: none;
+                      outline: none;
+                      background-color: #d7e3e9;
+                      padding: 1rem 2rem;
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: center;
+                      width: 10rem;
+                      color: black;
+                    }
 
-                </div>
+                    .chevron::before {
+                      border-style: solid;
+                      border-width: 0.15em 0.15em 0 0;
+                      content: "";
+                      display: inline-block;
+                      height: 0.65em;
+                      left: 0.15em;
+                      position: relative;
+                      top: 0.15em;
+                      transform: rotate(-45deg);
+                      vertical-align: top;
+                      width: 0.65em;
+                      margin-top: -0.5rem;
+                    }
 
-              </inferno-snippet-content>
+                    .chevron.bottom:before {
+                      top: 0;
+                      transform: rotate(135deg);
+                    }
+
+                    .dropdown {
+                      padding-bottom: 2rem;
+                      width: 100%;
+                      font-size: 2.4rem;
+                    }
+
+                    .event-box {
+                      display: none;
+                      width: 100%;
+                    }
+
+                    .event {
+                      width: 100%;
+                      display: flex;
+                      justify-content: flex-start;
+                      margin-bottom: 2rem;
+                      border-bottom: 1px solid black;
+                      padding-bottom: 1rem;
+                    }
+
+                    .event-time {
+                      width: 50%;
+                    }
+
+                    .event-details {
+                      width: 50%;
+                    }
+
+                    .event-notes {
+                      font-size: 1.2rem;
+                      color: blue;
+                    }
+
+                    .page-footer {
+                      height: 15rem;
+                      width: 100%;
+                      display: flex;
+                      justify-content: flex-end;
+                    }
+
+                    .seal {
+                      height: 100%;
+                      width: auto;
+                    }
+                  </style>
+
+                  <div class="content">
+                    <div id="event-list">
+                      <template id="template">
+                        <div class="day-box">
+                          <div class="main">
+                            <div class="day"></div>
+                            <button class="expand-button" onclick="toggleEvents(this)">
+                              <span class="button-text">Expand</span>
+                              <i class="chevron bottom"></i>
+                            </button>
+                          </div>
+                          <div class="dropdown">
+                            <div class="event-box"></div>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                    <footer class="page-footer">
+                      <img class="seal" src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/agenda/Seal_of_Florida.png">
+                    </footer>
+                  </div>
+
+                  <script>
+                    var days = [
+                      "Tuesday, March 16",
+                      "Wednesday, March 17",
+                      "Thursday, March 18"
+                    ];
+                    var agenda = [
+                      {
+                        day: days[0],
+                        events: [
+                          {
+                            time: `9:00am - 9:30am EST`,
+                            title: "Opening Ceremony",
+                            notes: "Enter: Auditorium"
+                          },
+                          {
+                            time: `9:30am - 6:00pm EST`,
+                            title: "Exhibition floor is open for visitors",
+                            notes: "Enter: Industry Halls"
+                          },
+                          {
+                            time: `10:00am - 11:30 am EST`,
+                            title:
+                              "Webinar: Opportunities and Advantages of Doing Business in Florida",
+                            notes: "Enter: Auditorium"
+                          },
+                          {
+                            time: `6:00pm EST`,
+                            title: "End of Day 1",
+                            notes: ""
+                          }
+                        ]
+                      },
+                      {
+                        day: days[1],
+                        events: [
+                          {
+                            time: `9:00am EST`,
+                            title: "Open of Day 2",
+                            notes: ""
+                          },
+                          {
+                            time: `9:30am - 6:00pm EST`,
+                            title: "Exhibition floor is open for visitors",
+                            notes: "Enter: Industry Halls"
+                          },
+                          {
+                            time: `10:00am - 11:30 am EST`,
+                            title:
+                              "Webinar: Florida Infrastructure at the Service of International Trade",
+                            notes: "Enter: Auditorium"
+                          },
+                          {
+                            time: `6:00pm EST`,
+                            title: "End of Day 2",
+                            notes: ""
+                          }
+                        ]
+                      },
+                      {
+                        day: days[2],
+                        events: [
+                          {
+                            time: `9:00am EST`,
+                            title: "Open of Day 3",
+                            notes: ""
+                          },
+                          {
+                            time: `9:30am - 6:00pm EST`,
+                            title: "Exhibition floor is open for visitors",
+                            notes: "Enter: Industry Halls"
+                          },
+                          {
+                            time: `10:00am - 11:30 am EST`,
+                            title:
+                              "Webinar: Florida as an Emerging Innovation and Technology Hub",
+                            notes: "Enter: Auditorium"
+                          },
+                          {
+                            time: `6:00pm EST`,
+                            title: "End of Day 3",
+                            notes: ""
+                          }
+                        ]
+                      }
+                    ];
+
+                    const toggleEvents = elem => {
+                      var day = landingPageEl.getElementById(
+                        elem.parentNode.parentNode.id
+                      );
+                      var list = day.querySelector(".event-box");
+
+                      list.style.display !== "block"
+                        ? (list.style.display = "block")
+                        : (list.style.display = "none");
+
+                      toggleButtonText(elem);
+                      toggleChevron(elem);
+                    };
+
+                    const toggleButtonText = elem => {
+                      const text = elem.querySelector(".button-text");
+                      text.innerHTML.toLowerCase() == "expand"
+                        ? (text.innerHTML = "Collapse")
+                        : (text.innerHTML = "Expand");
+                    };
+
+                    const toggleChevron = element => {
+                      const chevron = element.querySelector(".chevron");
+                      chevron.className.includes("bottom")
+                        ? chevron.classList.remove("bottom")
+                        : chevron.classList.add("bottom");
+                    };
+
+                    const createEventElement = (className, parent, value) => {
+                      const newElement = document.createElement("div");
+
+                      newElement.setAttribute("class", className);
+                      if (value) newElement.innerHTML = value;
+                      parent.appendChild(newElement);
+                    };
+
+                    const buildEventList = () => {
+                      const eventList = landingPageEl.getElementById(
+                        "event-list"
+                      );
+                      const template = landingPageEl.getElementById("template");
+
+                      agenda.map(day => {
+                        const clone = template.content.cloneNode(true);
+                        let dayItem = clone.querySelector(".day");
+                        let dayBox = clone.querySelector(".day-box");
+                        let expandButton = landingPageEl.querySelector(
+                          "button"
+                        );
+                        let eventBox = clone.querySelector(".event-box");
+                        const id = agenda.indexOf(day);
+
+                        dayItem.innerHTML = day.day;
+                        dayBox.setAttribute("id", id);
+                        eventList.appendChild(clone);
+
+                        const events = day.events;
+
+                        events.map((event, i) => {
+                          const eventItem = document.createElement("div");
+                          eventItem.setAttribute("id", `event-${i}`);
+                          eventItem.setAttribute("class", "event");
+                          eventBox.appendChild(eventItem);
+
+                          createEventElement(
+                            "event-time",
+                            eventItem,
+                            event.time
+                          );
+
+                          createEventElement("event-details", eventItem);
+
+                          const eventDetails = eventItem.querySelector(
+                            ".event-details"
+                          );
+
+                          createEventElement(
+                            "event-title",
+                            eventDetails,
+                            event.title
+                          );
+
+                          createEventElement(
+                            "event-notes",
+                            eventDetails,
+                            event.notes
+                          );
+                        });
+                      });
+                    };
+
+                    buildEventList();
+                  </script>
+                </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->

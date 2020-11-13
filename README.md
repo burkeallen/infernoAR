@@ -37,10 +37,12 @@ import users and manage their profile data via the inferno APIs
   - https://www.textfixer.com/html/convert-word-to-html.php
 - InfernoAR API - swagger documentation 
   - https://api.infernocore.jolokia.com/swagger/index.html
-  - often find it is easier to use Browser inspector network tab to see calls, payloads, return objcts, etc.
+  - often find it is easier to use Browser inspector network tab to see calls, payloads, return objects, etc.
 - generate PDF thumbnails
   - https://pdfsimpli.com/
   - https://pdf4me.com/pdf-to-image/
+ - CSS font Stack - useful for seeing what fonts are good on what systems and building out font-family
+  - https://www.cssfontstack.com/
   
   
 # Lessons Learned
@@ -72,8 +74,7 @@ from file. Majority of the time all you need is the background image out of the 
 
 - try and use % for height, width, position (top,right,bottom,left) will help when left nav bar is toggled, and 
 when browser window is resized
-
-- use CSS grid when possible, Flex when necessary
+__
 
 - only need to worry about support modern browser (no IE 11!) - take full advantage of CSS3, HTML5
 
