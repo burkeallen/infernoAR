@@ -18,6 +18,9 @@ import users and manage their profile data via the inferno APIs
 - Static Asset Server (FTP) 
   - ec2-18-219-156-215.us-east-2.compute.amazonaws.com
   - requires sftp and key file to access
+  - url - https://studio304nextechar.freetls.fastly.net/infernoAR/
+- S3 Bucket for static assets for when FTP server "fills up"
+  - url - https://inferno-event-assets.s3-us-west-2.amazonaws.com/
 - Tool to quickly crop files to same size 
   - https://birme.net
 - Free photoshop 

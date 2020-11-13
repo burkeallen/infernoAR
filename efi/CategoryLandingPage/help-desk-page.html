@@ -1,0 +1,577 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="efi" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="68aeef9e-7f54-4a82-8cda-40aed579890f">
+                <!--Help Desk Page -->
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
+                </script>
+
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
+                  .content {
+                    margin: -20px;
+                    font-family: "Helvetica Neue Condensed Bold", Verdana, sans-serif;
+                  }
+
+                  .banner img {
+                    width: 100%;
+                    height: auto;
+                    box-shadow: 0px 4px 8px 0px #888888;
+                    -moz-box-shadow: 0px 4px 8px 0px #888888;
+                    -webkit-box-shadow: 0px 4px 8px 0px #888888;
+                  }
+
+                  img::after {
+                    content: none;
+                  }
+
+                  .info {
+                    margin: 40px 10%;
+                  }
+
+                  .info h1 {
+                    margin-top: 40px;
+                    color: #00B9E4;
+                    font-weight: bold;
+                    font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+                  }
+
+                  .support-container {
+                    display: flex;
+                    justify-content: space-between;
+                  }
+
+                  .support-hours {
+                    color: #00B9E4;
+                    font-weight: bold;
+                    font-size: clamp(1.8rem, 2.2vw, 2.5rem);
+                  }
+
+                  .support-contact {
+                    color: #000000;
+                    font-size: clamp(1.6rem, 2.0vw, 2.3rem);
+                  }
+
+                  .question {
+                    color: #00B9E4;
+                    font-size: clamp(1.6rem, 2.0vw, 2.3rem);
+                  }
+
+                  .answer {
+                    color: #000;
+                    font-size: clamp(1.6rem, 2.0vw, 2.3rem);
+                  }
+
+                </style>
+
+                <div class="content">
+
+                  <div class="banner">
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/help-desk/help-desk-header.png">
+                  </div>
+
+                  <div class="info">
+
+                    <div class="support-container">
+                      <div>
+                        <div class="support-hours">Technical Support 9am-5pm EST:</div>
+                        <div class="support-contact">Email Us: <a target="_blank" href="mailto:support@jolokia.com">support@jolokia.com</a></div>
+                        <div class="support-contact">Call Us (English Only): +1 (866) 330-6655</div>
+                      </div>
+                      <div>
+                        <div class="support-hours">Event Support 9am-5pm EST:</div>
+                        <div class="support-contact">Email Us: <a target="_blank" href="mailto:floridaexpo@enterpriseflorida.com?">floridaexpo@enterpriseflorida.com</a></div>
+                      </div>
+                    </div>
+
+                    <h1>General Questions</h1>
+                    <div class="question">Can I still access the virtual conference after March 18?</div>
+                    <div class="answer">
+                      <p>You may log in to the virtual conference site for 30-days post live conference. During this time, you will continue to be able to watch sessions on-demand, visit exhibit booths, download materials, and more.</p>
+                    </div>
+                    <div class="question">My colleague has decided they want to register. May they still register?</div>
+                    <div class="answer">
+                      <p>Exhibitors may register through January 8, 2021. Contact <a target="_blank" href="mailto:floridaexpo@enterpriseflorida.com?">floridaexpo@enterpriseflorida.com</a> to either register your company or add a rep for your booth.</p>
+                      <p>We strongly encourage exhibitors to have at least two (2) company representatives at their booth, for a more effective coverage. Please note you can register up to five (5) representatives per booth/exhibitor.
+                      <p>Visitors to the event may register through Thursday, March 18th at 12:00 pm EST.</p>
+                    </div>
+                    <div class="question">How can I view videos in another language?</div>
+                    <div class="answer">
+                      <p>We have accommodated closed captioning for on-demand videos and exhibitor booth videos in the following languages: Arabic, English, French, German, Portuguese and Spanish. To turn on closed captioning, play the video and click the CC icon in the lower right hand corner. Select your language of choice to turn on this feature. </p>
+                    </div>
+                    <div class="question">How can I quickly find exhibitors of interest to me?</div>
+                    <div class="answer">
+                      <p>In each Industry Exhibit Hall, you will be able to search by company name and/or product within that industry. </p>
+                    </div>
+
+                    <h1>System Requirement</h1>
+                    <div class="question">Are there special equipment requirements?</div>
+                    <div class="answer"><p>You may participate in the virtual conference from a laptop, computer (Mac or PC) or tablets (Android or IOS). You will log on to the conference from an internet browser. Chrome and Safari browsers will provide you the best experience.</p>
+                    </div>
+                    <div class="question">What internet capacity is recommended?</div>
+                    <div class="answer">
+                      <p>You should use a strong, wired broadband connection with a speed of at least 1.4 Mbps. If your connection is slower, you may still participate but load times may be longer than normal. Other helpful tips include: Connect to the internet using a network cable rather than using a wireless network; Disconnect from VPN or corporate networks (if possible); Close an unnecessary
+                        applications; Refrain from browsing the internet, streaming media and/or downloading large files during this time.</p>
+                    </div>
+                    <div class="question">What if I have technical difficulties during the March 16-18 timeframe?</div>
+                    <div class="answer">
+                      <p>For all technical questions, please reach out to NexTech AR, our virtual conference platform provider. They will be able to assist you with technical issues and problems with logging into the system. To reach NexTech AR, please contact +1 (866) 330-6655. You may also email them at <a target="_blank" href="mailto:support@jolokia.com">.</p>
+                      <p>For all other questions and for any other help, you can reach our Conference Management Team via email at <a target="_blank" href="mailto:floridaexpo@enterpriseflorida.com?">floridaexpo@enterpriseflorida.com</a></p>
+                    </div>
+
+                    <h1>Webinars</h1>
+                    <div class="question">Can I ask speakers questions during the daily webinars?</div>
+                    <div class="answer">
+                      <p>Yes, we encourage you to ask questions at any time! Engaging our presenters in Q&A is an excellent way to build engagement and to make the most of your virtual conference experience. The live webinars in the Auditorium will have a Question box that can be found underneath the video player. At any time throughout these webinars, you may submit a question to the
+                        presenter(s). Questions will be addressed at the end of each live session.</p>
+                    </div>
+
+                    <h1>Networking</h1>
+                    <div class="question">Are chats private or public?</div>
+                    <div class="answer">
+                      <p>The chat in the webinars and exhibition halls is a public feed and all participants will see all questions and answers. To privately chat with an exhibitor, schedule a 1:1 meeting via their exhibit booth (see Connecting with Exhibitors to learn more).</p>
+                    </div>
+
+                    <div class="question">Are there opportunities to network with other attendees?</div>
+                    <div class="answer">
+                      <p>Yes, in our networking lounge, you will be able to enter into a virtual room where you can informally connect and video chat with others attending the conference.</p>
+                    </div>
+
+                    <h1>Connecting with Exhibitors</h1>
+                    <div class="question">May I chat directly with exhibitors?</div>
+                    <div class="answer">
+                      <p>Yes, in each exhibitor’s booth, there will be a link to exhibitor zoom rooms and a chat room feature where you can connect.</p>
+                    </div>
+
+                    <div class="question">Can I schedule a prearranged business meeting with a company?</div>
+                    <div class="answer">
+                      <p>Yes, we encourage you to engage with exhibitors and even request 1:1 meetings with them for a more personal discussion. To schedule a 1:1 meeting, click the Calendar icon in the blue bar at the bottom of each booth and follow the instructions provided there.</p>
+                    </div>
+
+                    <div class="question">Can I download exhibitor’s information and promotional material?</div>
+                    <div class="answer">
+                      <p>Yes, you can download all the files and e-business cards that you wish and save them in your cloud</p>
+                    </div>
+
+
+                    <h1>Press Room</h1>
+                    <div class="answer">
+                      <p>We encourage you to visit the Press Room to checkout the latest press releases from companies unveiling the latests products and services </p>
+                    </div>
+
+
+                  </div>
+
+                  <!-- Inferno Hacks -->
+                  <script>
+                    if (!window.whiteHack) {
+                      const css = `jolo-search-box .search-box-container {display: none !important}`;
+                      const head = document.head || document.getElementsByTagName('head')[0];
+                      const style = document.createElement('style');
+                      style.appendChild(document.createTextNode(css));
+                      head.appendChild(style);
+                      window.whiteHack = true;
+                    }
+                  </script>
+
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
