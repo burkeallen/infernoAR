@@ -340,34 +340,159 @@
 
                 <!-- library build  -->
                 <script>
-                  var sponsorInfoCardData = {};
-                  var industryResearchCardData = {};
+                  var sponsorInfoCardData = [
+                      {
+                        "Title":"Aprio: Federal and State R&D Tax Credit Studies",
+                        "FileName":"federala-state-r-d-tax-credit-studies"
+                      },
+                      {
+                        "Title":"Aprio: Healthcare IT Services",
+                        "FileName":"healthcare-it-services"
+                      },
+                      {
+                        "Title":"Aprio: Information Assurance Capabilities",
+                        "FileName":"information-assurance-capabilities"
+                      },
+                      {
+                        "Title":"Grant Thornton: HITRUST Services at Grant Thornton",
+                        "FileName":"hitrust-services-at-grant-thornton"
+                      },
+                      {
+                        "Title":"Grant Thornton: Navigating the impact of COVID-19 on healthcare",
+                        "FileName":"navigating-the-impact-of-covid-19-on-healthcare"
+                      },
+                      {
+                        "Title":"Grant Thornton: SOC Reporting Services at Grant Thornton",
+                        "FileName":"soc-reporting-services-at-grant-thornton"
+                      },
+                      {
+                        "Title":"Grant Thornton: Telehealth is here. Are you ready",
+                        "FileName":"telehealth-is-here-are-you-ready"
+                      },
+                      {
+                        "Title":"Juno: EHR Comprehensive Brochure",
+                        "FileName":"ehr-comprehensive-brochure"
+                      },
+                      {
+                        "Title":"Juno: The Reimagined EHR",
+                        "FileName":"the-reimagined-ehr"
+                      },
+                      {
+                        "Title":"Juno: Next Generation EHRs",
+                        "FileName":"next-generation-ehrs"
+                      },
+                      {
+                        "Title":"Juno: RX Tracker Brochure",
+                        "FileName":"rx-tracker-brochure"
+                      },
+                      {
+                        "Title":"Northside Hospital: Healers. Helpers. Heroes Poster",
+                        "FileName":"healers-helpers-heroes-poster"
+                      },
+                      {
+                        "Title":"Northside Hospital: Medical Moments Podcast",
+                        "FileName":"northside-hospital-medical-moments-podcast"
+                      },
+                      {
+                        "Title":"Northside Hospital: Top Docs",
+                        "FileName":"northside-top-docs"
+                      },
+                      {
+                        "Title":"Northside Hospital: Welcome to Your Northside Infographic",
+                        "FileName":"welcome-to-your-northside-infographic"
+                      },
+                      {
+                        "Title":"Nutanix: Accelerate Healthcare Innovation",
+                        "FileName":"accelerate-healthcare-innovation"
+                      },
+                      {
+                        "Title":"Nutanix: Enterprise Cloud Index",
+                        "FileName":"nutanix-enterprise-cloud-index"
+                      },
+                      {
+                        "Title":"Nutanix: Improve Performance and Scalability",
+                        "FileName":"improve-performance-and-scalability"
+                      },
+                      {
+                        "Title":"Nutanix: Transforming Healthcare IT with Enterprise Cloud",
+                        "FileName":"transforming-healthcare-it-with-enterprise-cloud"
+                      },
+                      {
+                        "Title":"Telliant: Application Maintenance and Support",
+                        "FileName":"application-maintenance-and-support"
+                      },
+                      {
+                        "Title":"Telliant: End-to-End Revenue Cycle Solution",
+                        "FileName":"end-to-end-revenue-cycle-solution"
+                      },
+                      {
+                        "Title":"Telliant: Digital Health",
+                        "FileName":"healthcare"
+                      },
+                      {
+                        "Title":"Telliant: Digital Health Telemedicine",
+                        "FileName":"healthcare-it-telemedicine"
+                      },
+                      {
+                        "Title":"Telliant: Telemedicine and Mobile Health for Radiology and EHRs",
+                        "FileName":"telemedicine-and-mobile-health-for-radiology-and-ehrs"
+                      },
+                      {
+                        "Title":"ToolBox9: Websites and Applications Built for Healthcare",
+                        "FileName":"websites-and-applications-built-for-healthcare-v2"
+                      },
+                      {
+                        "Title":"Wipfli: Business Services",
+                        "FileName":"business-services"
+                      },
+                      {
+                        "Title":"Wipfli: HITRUST CSF assessments and services",
+                        "FileName":"hitrust-csf-assessments-and-services"
+                      },
+                      {
+                        "Title":"Wipfli: Success Story: Centauri Health Solutions",
+                        "FileName":"success-story-centauri-health-solutions"
+                      },
+                      {
+                        "Title":"Wipfli: Technology Companies",
+                        "FileName":"technology-companies"
+                      }
+                  ]
+
+                  var industryResearchCardData = [
+                      {
+                        "Title": "Blockchain Ecosystem Report",
+                        "FileName": "blockchain-ecosystem-report"
+                      },
+                      {
+                        "Title": "IHIT Georgia Digital Health Report 2019",
+                        "FileName": "ihit-georgia-digital-health-report-2019"
+                      },
+                      {
+                        "Title": "IHIT Georgia Healthcare Technology Report",
+                        "FileName": "ihit-georgia-healthcare-technology-report"
+                      },
+                      {
+                        "Title": "TAG Digital Health Ecosystem Report 2020",
+                        "FileName": "tag-digital-health-ecosystem-report-2020"
+                      },
+                      {
+                        "Title": "TAG FinTech Ecosystem Report 2020",
+                        "FileName": "tag-fintech-ecosystem-report-2020"
+                      },
+                      {
+                        "Title": "TAG Info Security Ecosystem Report 2020",
+                        "FileName": "tag-info-security-ecosystem-report-2020"
+                      },
+                      {
+                        "Title": "TAG Supply Chain Ecosystem Report 2020",
+                        "FileName": "tag-supply-chain-ecosystem-report-2020"
+                      }
+                  ]
 
                   function buildLibrary() {
-                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/sponsor-info-v2.json',
-                      function (response) {
-                        sponsorInfoCardData = JSON.parse(response);
-                      })
-
-                    loadJSON('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/industry-research-alpha.json',
-                      function (response) {
-                        industryResearchCardData = JSON.parse(response);
-                      })
-
                     buildIndustryResearchGrid();
                     buildSponsorInfoGrid();
-                  }
-
-                  function loadJSON(file, callback) {
-                    const xobj = new XMLHttpRequest()
-                    xobj.overrideMimeType('application/json')
-                    xobj.open('GET', file, false)
-                    xobj.onreadystatechange = function () {
-                      if (xobj.readyState == 4 && xobj.status == '200') {
-                        callback(xobj.responseText)
-                      }
-                    }
-                    xobj.send(null)
                   }
 
                   function buildIndustryResearchGrid() {
