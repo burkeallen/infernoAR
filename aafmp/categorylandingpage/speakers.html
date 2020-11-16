@@ -1,0 +1,2129 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="aafmp" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="8db6fd28-1d93-4b6f-8968-55ecac1b9a67">
+                    <style>
+                        #tue-schedule,
+                        #sun-schedule,
+                        #mon-schedule,
+                        #fri-schedule,
+                        #sat-schedule {
+                          display: none;
+                        }
+  
+                        .event-details p.presenter {
+                          color: #313131;
+                          font-weight: normal;
+                          font-size: 14px;
+                          width: 90%;
+                        }
+                        .h1,
+                        .h2,
+                        .h3,
+                        .h4,
+                        .h5,
+                        .h6,
+                        h1,
+                        h2,
+                        h3,
+                        h4,
+                        h5,
+                        h6 {
+                          font-family: 'Myriad Pro', sans-serif;
+                        }
+  
+                        #ntar-bg {
+                          font-family: 'Open Sans', sans-serif;
+                          position: absolute;
+                          width: 100%;
+                          height: calc(100vh - 56px);
+                          margin: -20px;
+                          background-repeat: no-repeat;
+                          background-position: center center;
+                          /* background-attachment: fixed; */
+                          background-size: 200%;
+                          background-color: #f6f6f6;
+                          overflow-y: auto;
+                          scroll-behavior: smooth;
+                        }
+  
+                        .main {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                        }
+  
+                        .banner {
+                          display: flex;
+                          justify-content: space-between;
+                          padding: 1rem 4rem 4rem;
+                          background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/quartz/header/meet_speaker.png');
+                          background-repeat: no-repeat;
+                          background-size: cover;
+                          height: 63.6rem;
+                        }
+  
+                        .banner-info {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-self: center;
+                        }
+  
+                        #inferno-logo {
+                          height: 5rem;
+                          width: auto;
+                        }
+  
+                        .banner-info h1 {
+                          font-size: 5rem;
+                          color: white;
+                          font-weight: bold;
+                          margin: 0.5rem 0;
+                        }
+  
+                        .banner-info p {
+                          font-size: 1.8rem;
+                          font-weight: 500;
+                          line-height: 3rem;
+                          color: white;
+                          max-width: 55.8rem;
+                        }
+  
+                        .download-links {
+                          display: flex;
+                        }
+  
+                        #qr-code {
+                          height: 10rem;
+                          width: 10rem;
+                        }
+  
+                        .store-links {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: space-between;
+                        }
+  
+                        .store-links img {
+                          height: 4.6rem;
+                          width: auto;
+                          margin-left: 0.5rem;
+                        }
+  
+                        .highlight {
+                          color: #01245b;
+                        }
+  
+                        /* #banner-image {
+  width: 60rem;
+  height: 60rem;
+  margin: 0 1rem;
+  } */
+  
+                        .chevron {
+                          width: 2.1rem;
+                          height: 1.2rem;
+                        }
+  
+                        .overview-divider {
+                          background-color: rgba(255, 255, 255, 0.75);
+                          width: 100;
+                          padding: 3.8rem;
+                        }
+  
+                        .overview-divider h1 {
+                          color: #06026d;
+                          font-size: 4.6rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          line-height: 5.3rem;
+                        }
+  
+                        .menu {
+                          padding: 4.4rem;
+                        }
+  
+                        .menu h1 {
+                          font-size: 3.5rem;
+                          font-weight: bold;
+                          color: #01245b;
+                        }
+  
+                        .menu-items {
+                          display: flex;
+                          flex-wrap: wrap;
+                          justify-content: space-between;
+                          align-items: center;
+                        }
+  
+                        .menu-item {
+                          margin: 2rem 0.5rem;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                        }
+  
+                        .menu-items img {
+                          width: 39rem;
+                          height: 50.9rem;
+                          box-shadow: 11px 11px 19px 0 rgba(139, 139, 139, 0.51);
+                        }
+  
+                        .sponsors-section {
+                          padding: 4.4rem;
+                        }
+  
+                        .sponsors-header {
+                          width: 100%;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          flex-wrap: wrap;
+                        }
+  
+                        .sponsors-header h1 {
+                          font-size: 3.5rem;
+                          font-weight: bold;
+                          color: #1e70b8;
+                          margin-right: 2rem;
+                        }
+  
+                        .sponsors-header a {
+                          color: white;
+                          /* border-radius: 5px; */
+                          background-color: #1e70b8;
+                          box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                          text-decoration: none;
+                          padding: 1.2rem 0;
+                          width: 36.4rem;
+                          text-align: center;
+                          font-size: 2rem;
+                          font-weight: bold;
+                        }
+  
+                        .sponsors-list {
+                          display: flex;
+                          flex-wrap: wrap;
+                          justify-content: space-around;
+                          margin: 2rem 0;
+                        }
+  
+                        .sponsors-list img {
+                          height: 8.6rem;
+                          box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                          margin: 1rem 0;
+                        }
+  
+                        .double-sponsor {
+                          display: flex;
+                          justify-content: space-around;
+                        }
+  
+                        .double-one,
+                        .double-two {
+                          width: 100%;
+                        }
+  
+                        .double-two {
+                          display: flex;
+                          flex-direction: column;
+                        }
+  
+                        .double-two .sponsors-list {
+                          display: flex;
+                          justify-content: space-around;
+                        }
+  
+                        footer {
+                          color: white;
+                          font-size: 1.6rem;
+                          background-color: #222222;
+                          padding: 4rem;
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: flex-start;
+                        }
+  
+                        footer p {
+                          margin: 0;
+                        }
+  
+                        footer a {
+                          margin: 0;
+                        }
+  
+                        footer .info {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: space-between;
+                        }
+  
+                        footer .info {
+                          font-weight: 500;
+                        }
+  
+                        footer .info a {
+                          color: white;
+                          text-decoration: none;
+                        }
+  
+                        footer .info p {
+                          font-size: 1.4rem;
+                          font-weight: 300;
+                        }
+  
+                        .info-links {
+                          margin-bottom: 4rem;
+                        }
+  
+                        .social-links-title {
+                          margin-bottom: 2rem;
+                        }
+  
+                        .social-link {
+                          width: 4rem;
+                          height: 4rem;
+                          margin-right: 1rem;
+                        }
+  
+                        .exhibitors-divider {
+                          background-color: rgba(255, 255, 255, 0.75);
+                          width: 100;
+                          padding: 3.8rem;
+                          padding: 4.4rem;
+                        }
+  
+                        .exhibitors-divider h1 {
+                          color: #3d3d3d;
+                          font-size: 4.6rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          line-height: 5.3rem;
+                        }
+  
+                        .search-exhibitors-divider {
+                          background-color: white;
+                          width: 100%;
+                          padding: 5.8rem 0;
+                          display: flex;
+                          justify-content: center;
+                        }
+  
+                        .filter-options {
+                          width: 100%;
+                          margin: 0 3.5rem;
+                          display: flex;
+                          flex-wrap: wrap;
+                          justify-content: flex-start;
+                          align-items: center;
+                        }
+  
+                        .filter-options button {
+                          height: 6rem;
+                          width: 9.8rem;
+                          border: 2px solid #1e70b8;
+                          /* border-radius: 4px; */
+                          background-color: #ffffff;
+                          margin: 0.9rem;
+                          padding: 1.3rem 1.6rem;
+                          color: #3d3d3d;
+                          font-size: 2rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          line-height: 2.5rem;
+                          text-align: center;
+                        }
+  
+                        .filter-options button:focus {
+                          outline: none;
+                          border: 2px solid rgba(11, 38, 104, 0.6);
+                        }
+  
+                        .search-wrapper {
+                          width: 31.5rem;
+                          border: 2px solid #1e70b8;
+                          /* border-radius: 4px; */
+                          background-color: #ffffff;
+                          margin: 0.9rem;
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: center;
+                        }
+  
+                        .search-wrapper input {
+                          padding: 1.4rem;
+                          color: #3d3d3d;
+                          font-size: 2rem;
+                          font-weight: bold;
+                          width: 75%;
+                          border: none;
+                        }
+  
+                        .search-wrapper input::placeholder {
+                          /* Chrome, Firefox, Opera, Safari 10.1+ */
+                          color: #3d3d3d;
+                          opacity: 1;
+                          /* Firefox */
+                        }
+  
+                        .search-wrapper input:-ms-input-placeholder {
+                          /* Internet Explorer 10-11 */
+                          color: #3d3d3d;
+                        }
+  
+                        .search-wrapper input::-ms-input-placeholder {
+                          /* Microsoft Edge */
+                          color: #3d3d3d;
+                        }
+  
+                        .search-wrapper img {
+                          width: 2rem;
+                          margin: 1.25rem;
+                        }
+  
+                        .search-wrapper input:focus {
+                          outline: none;
+                          border: none;
+                        }
+  
+                        .select-wrapper {
+                          width: 26.6rem;
+                          margin: 0.9rem;
+                          border: 2px solid #1e70b8;
+                          /* border-radius: 4px; */
+                          background-color: #ffffff;
+                        }
+  
+                        .select-wrapper select {
+                          width: 96%;
+                          padding: 1.4rem;
+                          color: #3d3d3d;
+                          font-size: 2rem;
+                          font-weight: bold;
+                          -webkit-appearance: none;
+                          -moz-appearance: none;
+                          appearance: none;
+                          background: url('https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png')
+                            no-repeat right #fff;
+                          background-size: 8%;
+                          border: none;
+                        }
+  
+                        .select-wrapper select:focus {
+                          outline: none;
+                        }
+  
+                        .select-wrapper img {
+                          width: 2rem;
+                          margin: 1rem;
+                        }
+  
+                        .attendee-list {
+                          padding: 5.8rem 0;
+                        }
+  
+                        .attendee {
+                          margin: 1.4rem 4.4rem;
+                          padding: 2rem;
+                          /* border-radius: 9px; */
+                          background-color: #ffffff;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          flex-wrap: wrap;
+                          outline: none;
+                          transition: all 0.3s ease;
+                        }
+  
+                        .attendee:hover {
+                          cursor: pointer;
+                          opacity: 0.9;
+                          -ms-transform: scale(0.99);
+                          -webkit-transform: scale(0.99);
+                          transform: scale(0.99);
+                        }
+  
+                        .attendee .avatar {
+                          height: 15.2rem;
+                          width: 15.2rem;
+                          /* border: 2px solid #6D7278; */
+                          border-radius: 50%;
+                        }
+  
+                        .attendee .details {
+                          margin: 0 2rem;
+                          flex-grow: 3;
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: flex-start;
+                        }
+  
+                        .attendee .details .a-row {
+                          display: flex;
+                          align-items: baseline;
+                        }
+  
+                        .header h1 {
+                          font-size: 2.4rem;
+                          font-weight: bold;
+                          margin: 0;
+                        }
+  
+                        .header h2 {
+                          color: #52b952;
+                          font-size: 1.8rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          margin: 0 1rem;
+                        }
+  
+                        .attendee .details h4 {
+                          color: #313131;
+                          font-size: 1.8rem;
+                          font-weight: 500;
+                          letter-spacing: 0;
+                          line-height: 2.9rem;
+                          margin: 0;
+                        }
+  
+                        .attendee .details a {
+                          color: #1e70b8;
+                          font-size: 1.6rem;
+                          letter-spacing: 0;
+                          line-height: 2.6rem;
+                        }
+  
+                        .attendee .details .header {
+                          margin: 1.5rem 0;
+                          display: flex;
+                          flex-wrap: wrap;
+                        }
+  
+                        .attendee .details .a-footer {
+                          width: 100%;
+                          margin-top: 3rem;
+                          display: flex;
+                          justify-content: space-between;
+                          flex-wrap: wrap;
+                        }
+  
+                        .attendee .details .a-footer img {
+                          height: 1.8rem;
+                          width: auto;
+                        }
+  
+                        .contact {
+                          margin: 1rem;
+                          display: flex;
+                          justify-content: space-between;
+                          align-items: center;
+                        }
+  
+                        .contact img {
+                          margin: 0 1rem;
+                        }
+  
+                        .attendee .actions {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: space-evenly;
+                          margin: 1.5rem 0;
+                        }
+  
+                        .attendee .actions button {
+                          width: 24.4rem;
+                          height: 4.5rem;
+                          /* border-radius: 5px; */
+                          margin: 1rem;
+                          font-size: 18px;
+                          font-weight: bold;
+                          letter-spacing: 0.9px;
+                          line-height: 23px;
+                          text-align: center;
+                        }
+  
+                        .attendee .actions button:hover {
+                          cursor: pointer;
+                          outline: none;
+                          border: 1px solid rgba(168, 0, 27, 0.52);
+                        }
+  
+                        .attendee .actions button:focus {
+                          outline: none;
+                          border: 1px solid #1e70b8;
+                        }
+  
+                        .send-message {
+                          color: white;
+                          background-color: #1e70b8;
+                          border: 1px solid #1e70b8;
+                        }
+  
+                        .request-meeting {
+                          color: #1e70b8;
+                          background-color: white;
+                          border: 1px solid #1e70b8;
+                        }
+  
+                        .modal {
+                          position: absolute;
+                          top: 0px;
+                          left: 0px;
+                          z-index: 2;
+                          width: 100%;
+                          background-color: rgba(0, 0, 0, 0.5);
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
+                          display: none;
+                        }
+  
+                        .message-box {
+                          z-index: 3;
+                          display: flex;
+                          flex-direction: column;
+                          width: 90%;
+                          background-color: #f8f8f8;
+                        }
+  
+                        .mb-row {
+                          width: 100%;
+                          display: flex;
+                        }
+  
+                        .mb-actions {
+                          display: flex;
+                          align-items: flex-start;
+                        }
+  
+                        .mb-actions .close-modal {
+                          background: transparent;
+                          border: none;
+                          font-size: 2rem;
+                        }
+  
+                        .mb-actions .close-modal:hover {
+                          cursor: pointer;
+                          font-weight: bold;
+                        }
+  
+                        .mb-actions .close-modal:focus {
+                          outline: none;
+                          border: none;
+                        }
+  
+                        .mb-row textarea {
+                          resize: none;
+                          font-family: sans-serif;
+                          font-size: 1.8rem;
+  
+                          margin: 2rem 0;
+                          padding: 1rem;
+  
+                          border: 1px solid #979797;
+                          /* border-radius: 12px; */
+  
+                          flex-grow: 1;
+                          min-height: 10rem;
+                        }
+  
+                        .mb-footer {
+                          width: 100%;
+                          display: flex;
+                          justify-content: flex-end;
+                        }
+  
+                        .final-send {
+                          width: 24.4rem;
+                          height: 4.5rem;
+                          /* border-radius: 5px; */
+                          margin: 1rem;
+                          font-size: 18px;
+                          font-weight: bold;
+                          letter-spacing: 0.9px;
+                          line-height: 23px;
+                          text-align: center;
+                          color: white;
+                          background-color: #1e70b8;
+                          border: 1px solid #1e70b8;
+                          align-self: flex-end;
+                        }
+  
+                        .final-send:hover {
+                          cursor: pointer;
+                        }
+  
+                        .final-send:disabled {
+                          opacity: 0.5;
+                        }
+  
+                        .mc-row {
+                          display: flex;
+                          width: 100%;
+                        }
+  
+                        .mc-row h1 {
+                          text-align: center;
+                          line-height: 2.9rem;
+                          max-width: 50rem;
+                        }
+  
+                        .mc-flex-end {
+                          justify-content: flex-end;
+                        }
+  
+                        .mc-center {
+                          justify-content: center;
+                        }
+  
+                        .no-attendees-message {
+                          margin: 0;
+                          color: #0b2668;
+                          font-size: 2.2rem;
+                          font-weight: bold;
+                          letter-spacing: 0.092rem;
+                          line-height: 2.7rem;
+                          text-align: center;
+                        }
+                      </style>
+  
+
+  
+                      <style>
+                        /* Speaker overlay */
+                        .speaker-overlay {
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          width: 100%;
+                          height: 100%;
+                          background: rgba(255, 255, 255, 0.9);
+                          display: none;
+                          z-index: 9999;
+                        }
+  
+                        .speaker-overlay.quartz-show {
+                          display: block;
+                        }
+  
+                        .close-btn {
+                          font-size: 4vmin;
+                          line-height: 5vmin;
+                          color: #000;
+                          position: absolute;
+                          top: 20px;
+                          border: none;
+                          background: none;
+                          right: 20px;
+                        }
+  
+                        .speaker-overlay-content {
+                          width: 75%;
+                          max-height: 60vh;
+                          overflow-y: scroll;
+                          position: absolute;
+                          top: 50%;
+                          left: 50%;
+                          -ms-transform: translate(-50%, -50%);
+                          -webkit-transform: translate(-50%, -50%);
+                          transform: translate(-50%, -50%);
+                          display: flex;
+                          background: #fff;
+                          padding: 4vmin;
+                          border-radius: 4px;
+                          box-shadow: 0 8px 12px rgba(1, 1, 1, 0.2);
+                        }
+  
+                        .speaker-overlay-content img {
+                          display: block;
+                          width: 20vmin;
+                          height: 20vmin;
+                          border-radius: 100%;
+                          margin: 0 4vmin 0 0;
+                        }
+  
+                        .speaker-overlay-content h2 {
+                          color: #000;
+                          font-weight: bold;
+                          font-size: 3vmin;
+                          line-height: 3.5vmin;
+                        }
+  
+                        .speaker-overlay-content h3 {
+                          color: #333;
+                          font-weight: normal;
+                          font-size: 2vmin;
+                          line-height: 2.5vmin;
+                        }
+  
+                        .speaker-overlay-content p {
+                          color: #333;
+                          font-size: 1.8vmin;
+                          line-height: 2.5vmin;
+                        }
+  
+                        @media only screen and (max-width: 1200px) {
+                          .close-btn {
+                            font-size: 6vmin;
+                            line-height: 7vmin;
+                          }
+  
+                          .speaker-overlay-content {
+                            flex-direction: column;
+                          }
+  
+                          .speaker-overlay-content img {
+                            margin: 0 auto 4vmin;
+                            width: 40vmin;
+                            height: 40vmin;
+                          }
+  
+                          .speaker-overlay-content h2 {
+                            font-size: 4vmin;
+                            line-height: 4.5vmin;
+                          }
+  
+                          .speaker-overlay-content h3 {
+                            font-size: 3vmin;
+                            line-height: 4vmin;
+                          }
+  
+                          .speaker-overlay-content p {
+                            font-size: 2.2vmin;
+                            line-height: 4vmin;
+                          }
+                        }
+                      </style>
+  
+                      <div id="ntar-bg">
+                        <div id="main" class="main">
+                          
+  
+                          <style>
+                            .dot {
+                              height: 0.9rem;
+                              width: 0.9rem;
+                              background-color: #bbb;
+                              border-radius: 50%;
+                              background-color: #ac0c0c;
+                              margin: 0.5rem;
+                            }
+                            .event-time {
+                              min-width: 11rem;
+                            }
+                            .event-details h3 {
+                              font-size: 1.8rem;
+                            }
+                            .event-details p.presenter {
+                              font-weight: bold;
+                            }
+                            .event-details p {
+                              font-size: 13px;
+                              font-weight: normal;
+                            }
+                          </style>
+  
+                          <div id="add-event-modal" style="display: none" onclick="handleAddEventModalClick(event);">
+                            <div id="add-event-modal-box">
+                              <button id="close-event-modal">
+                                <img id="close-event-modal-img" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png">
+                              </button>
+  
+                              <h1>
+                                The live event <span id="modal-box-event-name"></span> has been added
+                                to your <a href>Agenda</a>. You will receive a reminder when the
+                                event is about to start.
+                              </h1>
+  
+                              <div id="event-modal-box-actions">
+                                <button id="undo-event-modal">Undo</button>
+                                <button id="done-event-modal">Done</button>
+                              </div>
+                            </div>
+                          </div>
+  
+                          <!-- Speaker overlay -->
+                          <div class="speaker-overlay">
+                            <button class="close-btn" onclick="toggleSpeaker()">X</button>
+                            <div class="speaker-overlay-content">
+                              <img alt="speaker">
+                              <div class="speaker-meta">
+                                <h2></h2>
+                                <h3></h3>
+                                <p></p>
+                              </div>
+                            </div>
+                          </div>
+  
+                          <div id="attendee-list" class="attendee-list">
+                            <template id="attendee-template">
+                              <div id="attendee" class="attendee">
+                                <img id="avatar" class="avatar">
+                                <div class="details">
+                                  <div class="a-row header">
+                                    <h1 id="name"></h1>
+                                    <h2 id="online-badge" style="display: none">• Online</h2>
+                                  </div>
+                                  <div class="a-row">
+                                    <h4 id="job"></h4>
+                                  </div>
+                                  <div class="a-row" style="display: none">
+                                    <h4 id="industry"></h4>
+                                  </div>
+                                  <div class="a-row a-footer">
+                                    <div class="contact" style="display: none">
+                                      <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/email-icon.png">
+                                      <a id="email" href="#" target="_blank" rel="noreferrer"></a>
+                                    </div>
+                                    <div class="contact">
+                                      <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/website-icon.png">
+                                      <a id="company-link" href="#" target="_blank" rel="noreferrer"></a>
+                                    </div>
+                                    <div class="contact" style="display: none">
+                                      <img src=" https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/business-card-icon.png">
+                                      <a id="business-card" href="#" rel="noreferrer">Linkedin</a>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="actions" style="display: none">
+                                  <button class="send-message" id="send-message-button" onclick="showModal(event)">
+                                    Send a Message
+                                  </button>
+                                  <button class="request-meeting">Request a Meeting</button>
+                                </div>
+                              </div>
+                            </template>
+  
+                            <h1 id="no-attendees-message" class="no-attendees-message" style="display: none">
+                              No attendees found.
+                            </h1>
+                          </div>
+  
+                          <div id="modal" class="modal" onclick="handleModalClick(event)">
+                            <div id="message-box" class="attendee message-box">
+                              <div class="mb-row">
+                                <img class="avatar" id="mb-avatar">
+                                <div class="details">
+                                  <div class="a-row header">
+                                    <h1 id="mb-name"></h1>
+                                    <h2 id="mb-online-badge" style="display: none">• Online</h2>
+                                  </div>
+                                  <div class="a-row">
+                                    <h4 id="mb-job"></h4>
+                                  </div>
+                                </div>
+                                <div class="mb-actions">
+                                  <button id="close-modal-1" class="close-modal">
+                                    <img id="close-modal-image-1" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png">
+                                  </button>
+                                </div>
+                              </div>
+  
+                              <div class="mb-row">
+                                <textarea id="message-textarea" oninput="turnOnSend(event)"></textarea>
+                              </div>
+  
+                              <div class="mb-footer">
+                                <button id="final-send" class="final-send" disabled onclick="sendMessage()">
+                                  Send
+                                </button>
+                              </div>
+                            </div>
+  
+                            <div id="message-confirmation" class="attendee message-box" style="display: none">
+                              <div class="mc-row mc-flex-end">
+                                <div class="mb-actions">
+                                  <button id="close-modal-2" class="close-modal">
+                                    <img id="close-modal-image-2" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png">
+                                  </button>
+                                </div>
+                              </div>
+  
+                              <div class="mc-row mc-center">
+                                <h1 id="send-confirmation"></h1>
+                              </div>
+  
+                              <div class="mc-row mc-center">
+                                <button id="done-message" class="final-send">Done</button>
+                              </div>
+                            </div>
+                          </div>
+  
+                          <style>
+                            @media only screen and (max-width: 1000px) {
+                              .sponsors-section {
+                                padding: 2rem;
+                              }
+                              .sponsors-header h1 {
+                                font-size: 2.8rem;
+                                margin-right: 0;
+                              }
+                              .sponsors-list {
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                              }
+                              .double-sponsor {
+                                flex-direction: column;
+                              }
+                              .sponsors-section a {
+                                text-align: center;
+                              }
+                              .sponsors-list img {
+                                width: 70%;
+                                height: auto;
+                                padding: 10px;
+                                box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                                margin: 1rem 0;
+                              }
+                            }
+                          </style>
+                        </div>
+                      </div>
+  
+                      <script>
+                        var attendeesBaseUrl =
+                          'https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/speakers/';
+  
+                        var messaging = '';
+  
+                        var attendees = [
+                          {
+                            firstName: 'Sandy',
+                            lastName: 'Carpenter',
+                            email: '',
+                            title: '',
+                            company: '',
+                            industry: '',
+                            companyLink: '',
+                            businessCard: 'javascript: return false',
+                            avatar: attendeesBaseUrl + 'Sandy Carpenter.jpg',
+                            online: false,
+                            visible: false,
+                            bio:
+                              '',
+                          },
+                          
+                          
+                        ];
+  
+                        function init() {
+                          // Handle query
+                          var urlParams = new URLSearchParams(window.location.search);
+                          if (urlParams.get('speaker')) {
+                            var speakerParam = urlParams.get('speaker').toLowerCase().trim();
+  
+                            // Try and find index
+                            var findIndex = -1;
+                            var iterator = 0;
+                            attendees.forEach(function (speaker) {
+                              if (
+                                speaker.firstName.toLowerCase().trim().indexOf(speakerParam) > -1 ||
+                                speaker.lastName.toLowerCase().trim().indexOf(speakerParam) > -1
+                              ) {
+                                findIndex = iterator;
+                              }
+  
+                              iterator++;
+                            });
+  
+                            if (findIndex > -1) {
+                              toggleSpeaker(true, findIndex);
+                            }
+                          }
+                        }
+  
+                        $(document).ready(init);
+  
+                        var _lastScrollPos;
+                        var _lastScrollEl;
+                        function toggleSpeaker(show, index) {
+                          if (!show || !attendees[index]) {
+                            // Close
+                            $(landingPageEl).find('.speaker-overlay').removeClass('quartz-show');
+  
+                            // Scroll back if we have a position
+                            if (_lastScrollEl && _lastScrollPos) {
+                              _lastScrollEl.scrollTop(_lastScrollPos);
+                            }
+  
+                            return;
+                          }
+  
+                          // Scroll top
+                          var bodyEl = $('html,body');
+                          var layoutEl = $(landingPageEl).find('#ntar-bg');
+                          var docEl = $(document);
+  
+                          if (bodyEl.scrollTop() > 0) {
+                            _lastScrollPos = bodyEl.scrollTop();
+                            _lastScrollEl = bodyEl;
+                            bodyEl.scrollTop(0);
+                          } else if (docEl.scrollTop() > 0) {
+                            _lastScrollPos = docEl.scrollTop();
+                            _lastScrollEl = docEl;
+                            docEl.scrollTop(0);
+                          } else {
+                            _lastScrollPos = layoutEl.scrollTop();
+                            _lastScrollEl = layoutEl;
+                            layoutEl.scrollTop(0);
+                          }
+  
+                          // Get speaker & show
+                          var speaker = attendees[index];
+                          var content = $(landingPageEl).find('.speaker-overlay-content');
+                          content.find('img').attr('src', speaker.avatar);
+                          content.find('h2').html(speaker.firstName + ' ' + speaker.lastName);
+                          content.find('h3').html(speaker.title);
+                          content.find('p').html(speaker.bio);
+                          $(landingPageEl).find('.speaker-overlay').addClass('quartz-show');
+                        }
+  
+                        var buildAttendeeList = () => {
+                          const attendeeList = landingPageEl.getElementById('attendee-list');
+                          const attendeeTemplate = landingPageEl.getElementById('attendee-template');
+                          var index = 0;
+  
+                          for (let at of attendees) {
+                            let clone = attendeeTemplate.content.cloneNode(true);
+  
+                            let attendeeDiv = clone.getElementById('attendee');
+                            attendeeDiv.id =
+                              'at-' + at.firstName.toLowerCase() + '-' + at.lastName.toLowerCase();
+                            attendeeDiv.setAttribute('onclick', 'toggleSpeaker(true, ' + index + ')');
+                            index++;
+  
+                            if (at.online) {
+                              let online = clone.getElementById('online-badge');
+                              online.style = '';
+                            }
+  
+                            let avatar = clone.getElementById('avatar');
+                            avatar.src = at.avatar;
+  
+                            let name = clone.getElementById('name');
+                            name.innerHTML = at.firstName + ' ' + at.lastName;
+  
+                            let email = clone.getElementById('email');
+                            email.innerHTML = at.email;
+                            email.href = 'mailto:' + at.email;
+  
+                            let companyLink = clone.getElementById('company-link');
+                            companyLink.innerHTML = at.companyLink;
+                            companyLink.href = at.companyLink;
+  
+                            let businessCard = clone.getElementById('business-card');
+                            businessCard.href = at.businessCard;
+  
+                            let job = clone.getElementById('job');
+                            job.innerHTML = at.title + ' – ' + '<b>' + at.company + '</b>';
+  
+                            let industry = clone.getElementById('industry');
+                            industry.innerHTML = 'Industry – ' + '<b>' + at.industry + '</b>';
+  
+                            let sendMessageButton = clone.getElementById('send-message-button');
+                            sendMessageButton.id = at.firstName + ' ' + at.lastName;
+  
+                            attendeeList.appendChild(clone);
+                          }
+                        };
+  
+                        buildAttendeeList();
+  
+                        var updateAttendees = () => {
+                          let empty = true;
+  
+                          for (let at of attendees) {
+                            let id =
+                              'at-' + at.firstName.toLowerCase() + '-' + at.lastName.toLowerCase();
+                            let el = landingPageEl.getElementById(id);
+  
+                            if (el) {
+                              if (at.visible) {
+                                empty = false;
+                                el.style.display = '';
+                              } else {
+                                el.style.display = 'none';
+                              }
+                            }
+                          }
+  
+                          let emptyMessage = landingPageEl.getElementById('no-attendees-message');
+  
+                          if (empty) {
+                            emptyMessage.style.display = '';
+                          } else {
+                            emptyMessage.style.display = 'none';
+                          }
+                        };
+  
+                        var searchAttendees = (e) => {
+                          let query = e.currentTarget.value;
+  
+                          for (let at of attendees) {
+                            if (
+                              at.firstName.toLowerCase().startsWith(query) ||
+                              at.lastName.toLowerCase().startsWith(query)
+                            ) {
+                              at.visible = true;
+                            } else {
+                              at.visible = false;
+                            }
+                          }
+  
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          updateAttendees();
+                        };
+  
+                        var filterAttendeesByIndustry = (e) => {
+                          let query = e.currentTarget.value;
+  
+                          if (query === '') {
+                            for (let at of attendees) {
+                              at.visible = true;
+                            }
+                          } else {
+                            for (let at of attendees) {
+                              if (at.industry.toLowerCase() === query) {
+                                at.visible = true;
+                              } else {
+                                at.visible = false;
+                              }
+                            }
+                          }
+  
+                          clearSearchValue();
+                          clearLetterGroupings();
+  
+                          updateAttendees();
+                        };
+  
+                        var letterGroupings = [
+                          'all-grouping',
+                          'ae-grouping',
+                          'fj-grouping',
+                          'ko-grouping',
+                          'pt-grouping',
+                          'uz-grouping',
+                        ];
+  
+                        var clearLetterGroupings = () => {
+                          for (let group of letterGroupings) {
+                            let el = landingPageEl.getElementById(group);
+                            el.style.color = '';
+                            el.style.backgroundColor = '';
+                          }
+                        };
+  
+                        var clearIndustrySelect = () => {
+                          let select = landingPageEl.getElementById('select-attendees-industry');
+                          select.selectedIndex = 0;
+                        };
+  
+                        var clearSearchValue = () => {
+                          let search = landingPageEl.getElementById('search-attendees');
+                          search.value = '';
+                        };
+  
+                        var allAttendees = () => {
+                          for (let at of attendees) {
+                            at.visible = true;
+                          }
+  
+                          clearSearchValue();
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          landingPageEl.getElementById('all-grouping').style.color = 'white';
+                          landingPageEl.getElementById('all-grouping').style.backgroundColor =
+                            '#1E70B8';
+  
+                          updateAttendees();
+                        };
+  
+                        var AE = 'abcde';
+                        var filterAttendeesAE = () => {
+                          let filtered = [];
+  
+                          for (let at of attendees) {
+                            if (
+                              AE.includes(at.firstName[0].toLowerCase()) ||
+                              AE.includes(at.lastName[0].toLowerCase())
+                            ) {
+                              at.visible = true;
+                            } else {
+                              at.visible = false;
+                            }
+                          }
+  
+                          clearSearchValue();
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          landingPageEl.getElementById('ae-grouping').style.color = 'white';
+                          landingPageEl.getElementById('ae-grouping').style.backgroundColor =
+                            '#1E70B8';
+  
+                          updateAttendees();
+                        };
+  
+                        var FJ = 'fghij';
+                        var filterAttendeesFJ = () => {
+                          for (let at of attendees) {
+                            if (
+                              FJ.includes(at.firstName[0].toLowerCase()) ||
+                              FJ.includes(at.lastName[0].toLowerCase())
+                            ) {
+                              at.visible = true;
+                            } else {
+                              at.visible = false;
+                            }
+                          }
+  
+                          clearSearchValue();
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          landingPageEl.getElementById('fj-grouping').style.color = 'white';
+                          landingPageEl.getElementById('fj-grouping').style.backgroundColor =
+                            '#1E70B8';
+  
+                          updateAttendees();
+                        };
+  
+                        var KO = 'klmno';
+                        var filterAttendeesKO = () => {
+                          for (let at of attendees) {
+                            if (
+                              KO.includes(at.firstName[0].toLowerCase()) ||
+                              KO.includes(at.lastName[0].toLowerCase())
+                            ) {
+                              at.visible = true;
+                            } else {
+                              at.visible = false;
+                            }
+                          }
+  
+                          clearSearchValue();
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          landingPageEl.getElementById('ko-grouping').style.color = 'white';
+                          landingPageEl.getElementById('ko-grouping').style.backgroundColor =
+                            '#1E70B8';
+  
+                          updateAttendees();
+                        };
+  
+                        var PT = 'pqrst';
+                        var filterAttendeesPT = () => {
+                          for (let at of attendees) {
+                            if (
+                              PT.includes(at.firstName[0].toLowerCase()) ||
+                              PT.includes(at.lastName[0].toLowerCase())
+                            ) {
+                              at.visible = true;
+                            } else {
+                              at.visible = false;
+                            }
+                          }
+  
+                          clearSearchValue();
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          landingPageEl.getElementById('pt-grouping').style.color = 'white';
+                          landingPageEl.getElementById('pt-grouping').style.backgroundColor =
+                            '#1E70B8';
+  
+                          updateAttendees();
+                        };
+  
+                        var UZ = 'uvwxyz';
+                        var filterAttendeesUZ = () => {
+                          for (let at of attendees) {
+                            if (
+                              UZ.includes(at.firstName[0].toLowerCase()) ||
+                              UZ.includes(at.lastName[0].toLowerCase())
+                            ) {
+                              at.visible = true;
+                            } else {
+                              at.visible = false;
+                            }
+                          }
+  
+                          clearSearchValue();
+                          clearIndustrySelect();
+                          clearLetterGroupings();
+  
+                          landingPageEl.getElementById('uz-grouping').style.color = 'white';
+                          landingPageEl.getElementById('uz-grouping').style.backgroundColor =
+                            '#1E70B8';
+  
+                          updateAttendees();
+                        };
+                      </script>
+  
+                      <script>
+                        // handle sponsors
+  
+                        var sponsors = ['bcc', 'c&m_logo', 'hooper', 'quartz', 'tennant'];
+  
+                        var baseUrl =
+                          'https://studio304nextechar.freetls.fastly.net/infernoAR/quartz/sponsors/';
+  
+                        var sponsorList = landingPageEl.getElementById('sponsor-list');
+  
+                        var sponsorTemplate = landingPageEl.getElementById('sponsor-template');
+  
+                        for (let sponsor of sponsors) {
+                          let clone = sponsorTemplate.content.cloneNode(true);
+  
+                          let img = clone.getElementById('sponsor-logo');
+  
+                          img.id = 'sponsor-logo-' + sponsor;
+  
+                          img.src = baseUrl + sponsor + '.png';
+  
+                          sponsorList.appendChild(clone);
+                        }
+                      </script>
+  
+                      <script>
+                        var contentSection = landingPageEl.getElementById('ntar-bg');
+  
+                        var resizeObserver = new ResizeObserver((entries) => {
+                          for (const entry of entries) {
+                            var contentWidth = contentSection.offsetWidth;
+  
+                            var bannerImg = landingPageEl.getElementById('banner-image');
+  
+                            if (contentWidth <= 930) {
+                              bannerImg.style.display = 'none';
+                            } else {
+                              bannerImg.style.display = '';
+                            }
+                          }
+                        });
+  
+                        resizeObserver.observe(contentSection);
+                      </script>
+  
+                      <script>
+                        // handle modal
+  
+                        var showModal = (e) => {
+                          // get attendee
+                          let id = e.currentTarget.id;
+  
+                          let at = attendees.find((at) => at.firstName + ' ' + at.lastName === id);
+  
+                          // set attendee data
+                          messaging = at.firstName + ' ' + at.lastName;
+  
+                          // set attendee info in message box
+  
+                          if (at.online) {
+                            let online = landingPageEl.getElementById('mb-online-badge');
+                            online.style = '';
+                          }
+  
+                          let avatar = landingPageEl.getElementById('mb-avatar');
+                          avatar.src = at.avatar;
+  
+                          let name = landingPageEl.getElementById('mb-name');
+                          name.innerHTML = at.firstName + ' ' + at.lastName;
+  
+                          let job = landingPageEl.getElementById('mb-job');
+                          job.innerHTML = at.title + ' – ' + '<b>' + at.company + '</b>';
+  
+                          let contentSection = landingPageEl.getElementById('main');
+                          let contentHeight = contentSection.offsetHeight;
+  
+                          let modal = landingPageEl.getElementById('modal');
+  
+                          modal.style.display = 'flex';
+                          modal.style.height = contentHeight.toString() + 'px';
+  
+                          let messageBox = landingPageEl.getElementById('message-box');
+                          messageBox.scrollIntoView();
+                        };
+  
+                        var handleModalClick = (e) => {
+                          let target = e.target;
+  
+                          if (
+                            target.id === 'modal' ||
+                            target.id === 'close-modal-1' ||
+                            target.id === 'close-modal-image-1' ||
+                            target.id === 'close-modal-2' ||
+                            target.id === 'close-modal-image-2' ||
+                            target.id === 'done-message'
+                          ) {
+                            // reset messageBox and confirmation
+                            let messageBox = landingPageEl.getElementById('message-box');
+                            messageBox.style.display = '';
+  
+                            let messageTextArea = landingPageEl.getElementById('message-textarea');
+                            messageTextArea.value = '';
+  
+                            let messageConfirmation = landingPageEl.getElementById(
+                              'message-confirmation'
+                            );
+                            messageConfirmation.style.display = 'none';
+  
+                            let modal = landingPageEl.getElementById('modal');
+  
+                            let messaging = '';
+  
+                            modal.style.display = '';
+                          }
+                        };
+  
+                        var turnOnSend = (e) => {
+                          let target = e.target;
+  
+                          let sendButton = landingPageEl.getElementById('final-send');
+  
+                          if (target.value.trim().length > 0) {
+                            sendButton.disabled = false;
+                          } else {
+                            sendButton.disabled = true;
+                          }
+                        };
+  
+                        var sendMessage = async (e) => {
+                          let promise = new Promise(function (resolve, reject) {
+                            setTimeout(() => resolve('done'), 0);
+                          });
+  
+                          await promise;
+  
+                          let messageBox = landingPageEl.getElementById('message-box');
+                          messageBox.style.display = 'none';
+  
+                          let messageConfirmation = landingPageEl.getElementById(
+                            'message-confirmation'
+                          );
+  
+                          messageConfirmation.style.display = '';
+  
+                          let message = landingPageEl.getElementById('send-confirmation');
+                          message.innerHTML =
+                            'Your message to ' + messaging + ' has been successfully sent!';
+                        };
+                      </script>
+  
+                      <script>
+                        // handle schedule selectors
+                        var shortDays = '{{ shortDaysCollection }}';
+  
+                        var days = shortDays.split(',');
+  
+                        var toggleSchedule = (e) => {
+                          let target = e.currentTarget;
+  
+                          if (target.style.backgroundColor !== 'white') {
+                            target.style.backgroundColor = 'white';
+                          } else {
+                            target.style.backgroundColor = '#E0E9EF';
+                          }
+  
+                          let id = target.id.replace('-schedule', '');
+  
+                          let text = landingPageEl.getElementById(id + '-schedule-text');
+                          let chevron = landingPageEl.getElementById(id + '-schedule-chevron');
+                          let schedule = landingPageEl.getElementById(id + '-schedule-wrapper');
+  
+                          if (text.style.borderBottom !== '2px solid black') {
+                            text.style.borderBottom = '2px solid black';
+                          } else {
+                            text.style.borderBottom = '';
+                          }
+  
+                          if (chevron.style.transform !== 'rotate(180deg)') {
+                            chevron.style.transform = 'rotate(180deg)';
+                          } else {
+                            chevron.style.transform = '';
+                          }
+  
+                          if (schedule.style.display === 'none') {
+                            schedule.style.display = '';
+                          } else {
+                            schedule.style.display = 'none';
+                          }
+  
+                          for (let day of days) {
+                            if (day !== id) {
+                              hideSchedule(day);
+                            }
+                          }
+                        };
+  
+                        var hideSchedule = (day) => {
+                          let buttonId = day + '-schedule';
+                          let textId = day + '-schedule-text';
+                          let chevronId = day + '-schedule-chevron';
+                          let boxId = day + '-schedule-wrapper';
+  
+                          landingPageEl.getElementById(buttonId).style.backgroundColor = '#E0E9EF';
+                          landingPageEl.getElementById(textId).style.borderBottom = '';
+                          landingPageEl.getElementById(chevronId).style.transform = '';
+                          landingPageEl.getElementById(boxId).style.display = 'none';
+                        };
+  
+                        // handle responsiveness
+                        var contentSection = landingPageEl.getElementById('ntar-bg');
+  
+                        var scheduleResizeObserver = new ResizeObserver((entries) => {
+                          for (const entry of entries) {
+                            let contentWidth = contentSection.offsetWidth;
+  
+                            for (let day of days) {
+                              // position checks
+                              let dayBox = landingPageEl.getElementById(day + '-schedule');
+                              let dayBoxOffset = dayBox.offsetLeft;
+                              let dayBoxWidth = dayBox.offsetWidth;
+                              let centerPosition = dayBoxOffset + dayBoxWidth / 2;
+  
+                              let midwayPoint = contentWidth / 2;
+  
+                              // transformations
+                              let dayWrapper = landingPageEl.getElementById(
+                                day + '-schedule-wrapper'
+                              );
+                              let dayPointer = landingPageEl.getElementById(day + '-schedule-arrow');
+  
+                              let dayTransform = 'translateX(2.5%)';
+                              let dayPointerAlignment = 'flex-start';
+  
+                              if (centerPosition < midwayPoint) {
+                                dayWrapper.style.transform = dayTransform;
+                                dayPointer.style.alignSelf = dayPointerAlignment;
+                              } else {
+                                dayWrapper.style.transform = '';
+                                dayPointer.style.alignSelf = '';
+                              }
+                            }
+                          }
+                        });
+  
+                        scheduleResizeObserver.observe(contentSection);
+  
+                        // handle agenda actions
+  
+                        var agenda = [];
+  
+                        var addingId = '';
+  
+                        var openModal = (e) => {
+                          let target = e.currentTarget;
+  
+                          let id = target.id;
+  
+                          addingId = id;
+  
+                          addToAgenda(id);
+  
+                          let eventName = landingPageEl.getElementById(id + '-name').innerHTML;
+                          eventName = eventName.replace(/<p>/g, '');
+                          eventName = eventName.replace(/<\/p>/g, '');
+                          eventName = eventName.replace(
+                            /<p class="presenter future-event-text">/g,
+                            ''
+                          );
+                          let eventNameSpan = landingPageEl.getElementById('modal-box-event-name');
+                          eventNameSpan.innerHTML = eventName;
+  
+                          // set modal overlay
+                          let contentSection = landingPageEl.getElementById('ntar-bg');
+                          let contentHeight = contentSection.offsetHeight;
+                          let modal = landingPageEl.getElementById('add-event-modal');
+                          modal.style.display = 'flex';
+                          modal.style.height = contentHeight.toString() + 'px';
+  
+                          // set modal box position
+                          let scheduleDivider = landingPageEl.getElementById('schedule-divider');
+                          let scheduleTop = scheduleDivider.offsetTop;
+                          let eventTop = target.offsetTop;
+                          let totalTop = scheduleTop + eventTop;
+                          let modalBox = landingPageEl.getElementById('add-event-modal-box');
+                          modalBox.style.transform = 'translateY(' + totalTop.toString() + 'px' + ')';
+                        };
+  
+                        var handleAddEventModalClick = (e) => {
+                          let target = e.target;
+  
+                          if (
+                            target.id === 'add-event-modal' ||
+                            target.id === 'close-event-modal' ||
+                            target.id === 'close-event-modal-img' ||
+                            target.id === 'done-event-modal'
+                          ) {
+                            closeModal();
+                          } else if (target.id === 'undo-event-modal') {
+                            removeFromAgenda(addingId);
+                            closeModal();
+                          }
+                        };
+  
+                        var closeModal = () => {
+                          let modal = landingPageEl.getElementById('add-event-modal');
+                          modal.style.display = 'none';
+                        };
+  
+                        var addToAgenda = (id) => {
+                          const urlBase = 'https://api.infernocore.jolokia.com/api/Bookmarks/';
+                          const url = urlBase + id;
+  
+                          const bearerToken = window.sessionStorage.getItem('token');
+                          const bearer = 'Bearer ' + bearerToken;
+  
+                          console.log('token ', bearer);
+                          fetch(url, {
+                            method: 'POST',
+                            withCredentials: true,
+                            headers: { Authorization: bearer },
+                          })
+                            .then((res) => console.log(res))
+                            .catch((err) => console.log(err));
+                        };
+  
+                        var removeFromAgenda = (id) => {
+                          const urlBase = 'https://api.infernocore.jolokia.com/api/Bookmarks/';
+                          const url = urlBase + id;
+  
+                          const bearerToken = window.sessionStorage.getItem('token');
+                          const bearer = 'Bearer ' + bearerToken;
+  
+                          console.log('token ', bearer);
+                          fetch(url, {
+                            method: 'DELETE',
+                            withCredentials: true,
+                            headers: { Authorization: bearer },
+                          })
+                            .then((res) => console.log(res))
+                            .catch((err) => console.log(err));
+                        };
+  
+                        var getBookmarksBasic = () => {
+                          const url = 'https://api.infernocore.jolokia.com/api/Bookmarks/Basic';
+  
+                          const bearerToken = window.sessionStorage.getItem('token');
+                          const bearer = 'Bearer ' + bearerToken;
+  
+                          fetch(url, {
+                            method: 'GET',
+                            withCredentials: true,
+                            headers: {
+                              Authorization: bearer,
+                            },
+                          })
+                            .then((res) => res.json())
+                            .then((json) => console.log(json))
+                            .catch((err) => console.log(err));
+                        };
+  
+                        var getBookmarksFull = () => {
+                          const url = 'https://api.infernocore.jolokia.com/api/Bookmarks/Full';
+  
+                          const bearerToken = window.sessionStorage.getItem('token');
+                          const bearer = 'Bearer ' + bearerToken;
+  
+                          fetch(url, {
+                            method: 'GET',
+                            withCredentials: true,
+                            headers: {
+                              Authorization: bearer,
+                            },
+                          })
+                            .then((res) => res.json())
+                            .then((json) => console.log(json))
+                            .catch((err) => console.log(err));
+                        };
+  
+                        // getBookmarksBasic();
+                        // getBookmarksFull();
+                      </script>
+  </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

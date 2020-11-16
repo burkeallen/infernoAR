@@ -10,12 +10,10 @@
   <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
@@ -187,17 +185,20 @@
     }
   </script>
   <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
+  <script>
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
+  </script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<div style="display:none" id="novoProject" name="aafmp" onload="login()"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
@@ -216,7 +217,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -227,10 +228,10 @@
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
@@ -239,127 +240,198 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="442de8ea-2571-4ae0-9b14-1ac39440e820">
+              <inferno-snippet-content id="8474fb6a-8ab4-4e82-b76e-1bd01c2456c8">
+<!-- CSS -->
+<style>
 
+    /* Resets */
+    * {
+      box-sizing: border-box;
+    }
+    
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+    h1,h2,h3,h4 {
+      margin: 0;
+      padding: 0;
+      font-weight: 400;
+    }
+    
+    button {
+      outline: none;
+      border: none;
+      background: rgb(77,127,177);
+      font-family: 'gotham', sans-serif;
+    }
+    
+    button:hover {
+      opacity: .9;
+      cursor: pointer;
+    }
+    
+    /* End Resets */
+    .aamfp-mainstage {
+      background: #fff;
+      background: url('https://studio304.nextechar.com/infernoAR/aafmp/auditorium/acpa-auditorium-bg.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center bottom;
+      width: calc(100% + 40px);
+      min-height: 100vh;
+      margin: -20px;
+      padding: 0;
+      color: #333;
+      font-family: 'gotham', sans-serif;
+      position: relative;
+    }
+    
+    .title-container {
+        background-color: white;
+        padding-bottom:15px;
+    }
 
-                <style>
-                  .content {
-                    background-color: var(--sidebar-bg-color);
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    color: var(--sidebar-text-color);
-                  }
+    #logo {
+        margin-right:10px;
+        float: right;
+        width: 11%;
+    }
 
-                </style>
+    #title {
+        width: 25%;
+        padding-bottom: 10px;
+    }
 
-                <div class="content">
+    .aamfp-mainstage-video {
+      position: absolute;
+      top: 5vh;
+      border-radius: 4px;
+      width: 65%;
+      left: 17.5%;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(1,1,1,.3);
+    }
+    
+    #inferno-video-player {
+      margin-top: 100px;
+      width: 100%;
+      background: #000;
+      max-width: none !important;
+    }
 
-                  <div>
-                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
-                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
-                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
-                    <!--                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>-->
-                    <!-- Sort events by start time -->
-                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
+  
+  .aamfp-webinar-questions {
+    flex: 1;
+    position: absolute;
+    z-index: 2;
+    margin: 0 auto 8vh;
+    width: 80%;
+    border-radius: 4px;
+    overflow: hidden;
+    bottom: 1%;
+    margin-left: 30px;
 
-                    <!-- Set nextEvent so we know if no upcoming event is found -->
-                    {% assign nextEvent = 'No Event' %}
-
-                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
-
-                    <!--                    <h2>Current Category</h2>-->
-                    <!--                    <ul>-->
-                    <!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
-                    <!--                      <li>{{ currentCategory }}</li>-->
-                    <!--                    </ul>-->
-
-                    <!-- Iterate the sorted events -->
-                    {% for event in sortedEvents %}
-
-                    <!-- Check the event category ID matches this page category ID -->
-                    {% assign thisCategory = event.FirstCategoryId | downcase %}
-                    {% if thisCategory != currentCategory%}
-                    <!-- ... and if not, skip iteration -->
-                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
-                    {% continue %}
-                    {% endif %}
-
-                    <!-- The end time is start timestamp added to video duration -->
-                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
-
-                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
-                    {% if currentTime > endTime %}
-                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
-                    {% assign nextEvent = event %}
-                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
-                    {% continue %}
-                    <!-- ...otherwise... -->
-                    {% else %}
-                    <!-- ... we set this as our next upcoming event and ... -->
-                    {% assign nextEvent = event %}
-                    {% endif %}
-
-                    <!-- ...break the iteration loop. -->
-                    {% break %}
-
-                    {% endfor %}
-
-                    <!-- If the loop didn't find any upcoming events,... -->
-                    {% if nextEvent == 'No Event' %}
-<!--                    <h1> No Sessions or Events are Currently Available </h1>-->
-<!--                    <p>Check Back Later</p>-->
-                    {% else %}
-                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
-                    <!-- set display: none when in production -->
-                    <h1> Enter the Current or Upcoming Session </h1>
-                    <p>{{nextEvent.Name}}</p>
-                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
-                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
-                    </a>
-                    {% endif %}
-
-                    <script type="text/javascript">
-                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
-                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
-                      }
-                    </script>
-                  </div>
-
-                  <div style="text-align:center; padding:20%">
-                    <h1>Checking to see where to take you.</h1>
-                    <p>If you are not automatically redirected, there are no events currently scheduled - check back later.</p>
-                  </div>
-
-                </div>
-
-                <!-- Tawk Clearing Code -->
-                <tawkto-hide>
-                  <script type="text/javascript">
-                    if (window.Tawk_API) {
-                      Tawk_API.hideWidget();
-                    }
-                  </script>
-                </tawkto-hide>
-                <!-- End Tawk Clearing Code -->
-
-                <!-- ##### Remove Chatwee ##### -->
-                <remove-chatwee>
-                  <script>
-                    if (window.ChatweeLib) {
-                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
-                      chatweeManager.Dispose();
-                    }
-                  </script>
-                </remove-chatwee>
-                <!-- ##### End Remove Chatwee ##### -->
-
-
-
-
+  }
+    
+    #inferno-questions-basic {
+      /*background: #111;*/
+      padding: 1vmax;
+      color: #fff;
+      font-size: 2.75vh;
+      overflow: hidden;
+      width: 70%;
+      margin-left: 20%;
+    }
+    
+    .inferno-input-group {
+      display: flex;
+      align-items: center;
+    }
+    
+    .inferno-input-group-addon {
+      flex: 1;
+    }
+    
+    .inferno-form-control {
+      flex: 3;
+      /*background: #222;*/
+      border: none;
+      border-radius: 8px 0 0 8px;
+      padding: 1vh;
+      font-size: 2.75vh;
+      color: black;
+    }
+    
+    .inferno-input-group-btn {
+      flex: initial;
+      /*margin: 0 0 0 1.5vw;*/
+    }
+    
+    .inferno-input-group-btn button {
+      border-radius: 0 8px 8px 0;
+      padding: 1vh 10px;
+      font-size: 3vh;
+      color: #fff;
+      background: rgb(42,57,136);
+    }
+    
+    .inferno-input-group-btn button:hover {
+      background: rgb(17,32,89);
+    }
+    
+  
+    
+    </style>
+    
+    <!-- JS -->
+    <script type="text/javascript">
+      // Add toolbar color
+        var css = '.mat-toolbar { color: #000 !important; }';
+ 	 	var head = document.head || document.getElementsByTagName('head')[0];
+ 		var style = document.createElement('style');
+ 		style.type = 'text/css';
+		style.appendChild(document.createTextNode(css));
+ 		head.appendChild(style);
+      
+      // Load custom fonts
+      var gothamFont = new FontFace('gotham', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff)');
+      gothamFont.load().then(function(loadedFont) {
+        document.fonts.add(loadedFont);
+      }).catch(function(error) {
+        // error occurred
+        console.log('Error loading gotham');
+      });
+    </script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    
+    <!-- HTML -->
+    <div class="title-container">
+        <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/auditorium/auditorium-text-blue.png" id="title" alt>
+        <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/auditorium/acpa-logo.png" id="logo" alt>
+    </div>
+    <div class="aamfp-mainstage">
+        
+      <div class="aamfp-mainstage-video">
+        <div id="inferno-video-player"></div>
+      </div>
+    <div class="aamfp-webinar-questions">
+      <div id="inferno-questions-basic"></div>
+    </div>
+      
+      
+      
+    </div>
 </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->

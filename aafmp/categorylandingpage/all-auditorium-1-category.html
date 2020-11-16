@@ -191,7 +191,7 @@
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<div style="display:none" id="novoProject" name="aafmp" onload="login()"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -239,128 +239,13 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="442de8ea-2571-4ae0-9b14-1ac39440e820">
-
-
-                <style>
-                  .content {
-                    background-color: var(--sidebar-bg-color);
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    color: var(--sidebar-text-color);
-                  }
-
-                </style>
-
-                <div class="content">
-
-                  <div>
-                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
-                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
-                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
-                    <!--                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>-->
-                    <!-- Sort events by start time -->
-                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
-
-                    <!-- Set nextEvent so we know if no upcoming event is found -->
-                    {% assign nextEvent = 'No Event' %}
-
-                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
-
-                    <!--                    <h2>Current Category</h2>-->
-                    <!--                    <ul>-->
-                    <!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
-                    <!--                      <li>{{ currentCategory }}</li>-->
-                    <!--                    </ul>-->
-
-                    <!-- Iterate the sorted events -->
-                    {% for event in sortedEvents %}
-
-                    <!-- Check the event category ID matches this page category ID -->
-                    {% assign thisCategory = event.FirstCategoryId | downcase %}
-                    {% if thisCategory != currentCategory%}
-                    <!-- ... and if not, skip iteration -->
-                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
-                    {% continue %}
-                    {% endif %}
-
-                    <!-- The end time is start timestamp added to video duration -->
-                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
-
-                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
-                    {% if currentTime > endTime %}
-                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
-                    {% assign nextEvent = event %}
-                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
-                    {% continue %}
-                    <!-- ...otherwise... -->
-                    {% else %}
-                    <!-- ... we set this as our next upcoming event and ... -->
-                    {% assign nextEvent = event %}
-                    {% endif %}
-
-                    <!-- ...break the iteration loop. -->
-                    {% break %}
-
-                    {% endfor %}
-
-                    <!-- If the loop didn't find any upcoming events,... -->
-                    {% if nextEvent == 'No Event' %}
-<!--                    <h1> No Sessions or Events are Currently Available </h1>-->
-<!--                    <p>Check Back Later</p>-->
-                    {% else %}
-                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
-                    <!-- set display: none when in production -->
-                    <h1> Enter the Current or Upcoming Session </h1>
-                    <p>{{nextEvent.Name}}</p>
-                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
-                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
-                    </a>
-                    {% endif %}
-
-                    <script type="text/javascript">
-                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
-                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
-                      }
-                    </script>
-                  </div>
-
-                  <div style="text-align:center; padding:20%">
-                    <h1>Checking to see where to take you.</h1>
-                    <p>If you are not automatically redirected, there are no events currently scheduled - check back later.</p>
-                  </div>
-
-                </div>
-
-                <!-- Tawk Clearing Code -->
-                <tawkto-hide>
-                  <script type="text/javascript">
-                    if (window.Tawk_API) {
-                      Tawk_API.hideWidget();
-                    }
-                  </script>
-                </tawkto-hide>
-                <!-- End Tawk Clearing Code -->
-
-                <!-- ##### Remove Chatwee ##### -->
-                <remove-chatwee>
-                  <script>
-                    if (window.ChatweeLib) {
-                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
-                      chatweeManager.Dispose();
-                    }
-                  </script>
-                </remove-chatwee>
-                <!-- ##### End Remove Chatwee ##### -->
-
-
-
-
-</inferno-snippet-content>
+              <inferno-snippet-content id="ee1e9ae0-1515-48e6-a60d-c80f155199b9">
+<div style="display: none;">
+	<a href="/videos/bae1d056-1551-4533-b62e-08d87c2110f2/detail/6410023b-055d-4a34-87e9-e75ede338f1f" id="redirect"></a>
+</div>
+<script type="text/javascript">
+  landingPageEl.querySelector('#redirect').dispatchEvent(new Event('click'));
+</script></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->

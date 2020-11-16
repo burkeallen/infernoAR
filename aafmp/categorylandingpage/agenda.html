@@ -1,0 +1,753 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="aafmp" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="5845ddd4-fec2-41c2-8bd9-92741eed70b0"><style>
+    /* Background Styles */
+    .ntar-landing-bg {
+      /* Image */
+      background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/agenda-bg.png');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+
+      /* Cover height minus 55px header */
+      min-height: calc(100vh - 86px);
+
+      /* Stick to Jolokia content frame */
+      position: absolute;
+      top: -20px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 100vh;
+      padding: 4rem 0;
+      font-family: -system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background-image: url('https://studio304.nextechar.com/infernoAR/aafmp/agenda-bg.png');
+      color: white;
+    }
+
+    @media only screen and (max-width: 767px) {
+      .ntar-landing-bg {
+        /* Cover height minus 55px header */
+        min-height: calc(100vh - 55px);
+
+        /* Stick to Jolokia content frame */
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
+
+    /* ./ Background Styles */
+
+    /* Page Content Container Styles */
+    .ntar-landing-content {
+      /* background-color: chartreuse; */
+
+      /* Scale to full width and height + footer space */
+      width: 100%;
+      height: calc(100% + 50px);
+
+      /* Stick to Jolokia content frame and scroll y */
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden scroll;
+
+      /* Pad Content */
+      padding: 0px;
+
+      /* Display Type */
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media only screen and (max-width: 767px) {
+      .ntar-landing-content {
+        /* Cover height minus 55px header */
+        min-height: calc(100vh - 55px);
+
+        /* Stick to Jolokia content frame */
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+    }
+
+    /* ./ Page Content Container Styles */
+.title-container {
+      background-color: white;
+      padding: 20px 0 15px 0;
+      margin-top: 30px;
+      align-self: center;
+      width: 95%;
+  }
+
+  .logo {
+      margin-right:30px;
+      float: right;
+      width: 11%;
+  }
+
+  #aafmp-logo {
+      width:35%;
+  }
+
+  #title {
+      width: 25%;
+      padding-bottom: 10px;
+  }
+table {
+      width: 90%;
+      height: 90%;
+      margin-top: 50px;
+      border-collapse: separate;
+      border-spacing: 6px;
+      overflow-y: scroll;
+      display: block;
+  }
+  #table1 {
+      display:block;
+  }
+  th,
+  td {
+      padding: 0.5rem 1rem;
+  }
+  
+  th {
+      font-weight: normal;
+      color:white;
+  }
+  
+  td {
+      font-size: 1rem;
+      font-weight: bold;
+      line-height: 1.4;
+      border: solid 1px white;
+      transition: opacity 0.3s ease;
+      width: 20%;
+  }
+  
+  .fill {
+      border:none;
+  }
+  
+  td > span {
+      font-size: 0.8em;
+      font-weight: normal;
+      display: block;
+      width: 100%;
+  }
+
+  .less-opacity {
+      padding:10px;
+      font-size:1.2rem;
+      background-color: rgb(255,255,255,.7);
+      color: rgb(11,97,46);
+  }
+.white-fill {
+background-color: rgb(255,255,255);
+color: rgb(11,97,46);
+font-size:2rem;
+}
+.workplace-team-mgmt {
+  background-color: rgb(12,96,47);
+}
+.regulated-prof {
+  background-color: rgb(52,172,65);
+}
+.aafmp-specific {
+  background-color: rgb(12,96,47);
+}
+
+.aspb-specific {
+  background-color: rgb(52,172,65);
+}
+.acpa-specific {
+  background-color: rgb(12,96,47);
+}
+
+::-webkit-scrollbar {
+width: 10px;
+}
+::-webkit-scrollbar-track {
+background: rgba(146, 231, 175, 0.22);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: rgba(13, 63, 30, 1);
+}
+  </style>
+
+  <!-- Background Frame (No Content) -->
+  <div class="ntar-landing-bg">
+    <div class="title-container">
+    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/agenda.png" id="title" alt>
+    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/auditorium/aspb-logo.png" class="logo" alt>
+    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/auditorium/acpa-logo.png" class="logo" alt>
+    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/auditorium/aafmp-logo.png" id="aafmp-logo" class="logo" alt>
+  </div>
+
+<table id="table1">
+<tbody><tr>
+  <th></th>
+  <td colspan="5" class="white-fill"> Day 1 - Wednesday, December 2, 2020</td>
+</tr>
+<tr>
+  <th>08:50</th>
+  <td colspan="5" rowspan="1" class="less-opacity">Welcome</td>
+</tr>
+<tr>
+  <th>09:00</th>
+  <td colspan="5" rowspan="3" class="less-opacity">Plenary: Indigenous Partnership Building<br><span>Michael Gubbels, Indigenoius Policy Integration Coordinator, Alberta Government, Ministry of Environment and Parks</span></td>
+</tr>
+    <tr><th>9:15</th></tr>
+    <tr><th>9:30</th></tr>
+    <tr><th>9:45</th></tr>
+<tr>
+  <th>10:00</th>
+        <td class="fill"></td>
+        <td class="fill"></td>
+        <td colspan="1" rowspan="6" class="aafmp-specific">AAFMP Busines Meeting<br></td>
+        <td colspan="1" rowspan="3" class="aspb-specific">Wetland Replacement Program<br><span>Matt WIlson, AEP, P Biol</span></td>
+        <td colspan="1" rowspan="3" class="acpa-specific">Forensic ecotoxicology: the use of biology and chemistry to identify chemicals of concern in our environmentbr><span>Detlef (Deib) Birkholz Ph.D., P.Chem., President</span></td>
+    </tr>
+    <tr><th>10:15</th></tr>
+    <tr><th>10:30</th></tr>
+    <tr><th>10:45</th></tr>
+    <tr>
+        <th>11:00</th>
+        <td class="fill"></td>
+        <td rowspan="3" class="regulated-prof">Unassigned</td>
+        <td rowspan="3" class="aspb-specific">Wetland Replacement Program Q & A <br><span>Matt WIlson, AEP, P Biol & Annie Jiang,AET, P Biol , PhD</span></td>
+        <td rowspan="3" class="acpa-specific">ACPA Session<br><span></span></td>
+    </tr>
+    <tr><th>11:15</th></tr>
+    <tr>
+        <th>11:30</th>
+        <td class="workplace-team-mgmt" rowspan="2">Attracting and Accomodating Internationally Trained Workers</td>
+        
+        <td rowspan="2" class="aafmp-specific">Forest Jobs Action Plan<br><span>Janis Braze, Alberta Agriculture and Forestry</span></td>
+    </tr>
+    <tr><th>11:45</th></tr>
+    <tr>
+        <th>12:00</th>
+        <td class="less-opacity" colspan="5" rowspan="2">Professional Lunchbox: Networking and Exhibitor Show Comments from Kathy Janzen, ACPA Executive Director</td>
+    </tr>
+    <tr><th>12:30</th></tr>
+    <tr><th>12:45</th></tr>
+    <tr>
+        <th>1:00</th>
+        <td class="workplace-team-mgmt" rowspan="3">The Forestry Workforce: Instilling the Passion by Knowing Your 'Why' <span>Jason Krips, President & CEO, AFPA, and Kevin Edgson, Chairmain, FPAC, President & CEO, EACOM Timber Corporation, with Matt Kristoff, RPF, YourForest podcast </span></td>
+        <td rowspan="3" class="regulated-prof">Increasing the Public Profile of Professional Designations <span>Alyson Gaffney, Canadian Network of Agencies for Regulation</span></td>
+        <td rowspan="3" class="aafmp-specific">The Role of Genetics and Seed in Forestry <span>Dr. Deogratias Rweyongeza, Alberta Agriculture and Forestry </span></td>
+        <td rowspan="3" class="aspb-specific">Amphibian and reptile handling <span>Leah Ward,Msc P Biol; Nicholas Cairns,MSc PHd; Stephanie Wilson MSc</span></td>
+        <td rowspan="3" class="acpa-specific">ACPA Session <span>Speaker Name</span></td>
+    </tr>
+    <tr><th>1:15</th></tr>
+    <tr><th>1:30</th></tr>
+    <tr><th>1:45</th></tr><tr>
+        <th>2:00</th>
+        <td class="less-opacity" colspan="5">Networking and Exhibitor Show</td>
+        </tr>
+    <tr>
+        <th>2:15</th>
+        <td class="less-opacity" rowspan="2">Networking Session of Choice</td>
+        <td class="less-opacity" rowspan="2">AAFMP Professional Exam Modernization</td>
+        <td class="less-opacity" rowspan="2">AFPA Campaigns - mainstage space at 2:00pm</td>
+        <td class="less-opacity" rowspan="2">ASPB Networking Session of choice</td>
+        <td class="less-opacity" rowspan="2">ACPA Networking Session of choice</td>
+    </tr>
+    <tr><th>2:30</th></tr>
+    <tr><th>2:45</th></tr>
+    <tr>
+        <th>3:00</th>
+        <td class="less-opacity" colspan="5">Plenary: Can-masks <br><span>Johan Foster, Orlando Rojas, UBC</span></td>
+    </tr>
+    <tr>
+        <th>3:30</th>
+        <td class="less-opacity" colspan="5">Closing Remaks</td>
+    </tr>
+
+
+    <!-- Day 2 -->  
+    <tr>
+        <th></th>
+        <td colspan="5" class="white-fill"> Day 2 - Thursday, December 3, 2020</td>
+      </tr>
+      <tr>
+        <th>08:50</th>
+        <td colspan="5" rowspan="1" class="less-opacity">Indigenous Land Ackowledgement <br> <span> Matthew Koehli, ASPB Chair <br>Dean Falkenberg ASPB Executive Director </span></td>
+      </tr>
+      <tr>
+        <th>09:00</th>
+        <td colspan="5" rowspan="3" class="less-opacity">Plenary: The United Nations Declaration on the Rights of Indigenous People in Alberta and its Impact on Alberta's Forest Sector<br><span>Sandy Carpenter, LLB., Canadian Regulatory & Indigenous Law</span></td>
+      </tr>
+      <tr><th>9:15</th></tr>
+      <tr><th>9:30</th></tr>
+      <tr><th>9:45</th></tr>
+      <tr>
+        <th>10:00</th>
+        <td class="workplace-team-mgmt" rowspan="2">Update on Forestry Education<span>Heath Schnieder, NAIT & Ellen Macdonald, UofA</span></td>
+        <td rowspan="2" class="regulated-prof">Emerging Trends in the Regulated Professions<span>Carla Rhyant, Executive Director, AAFMP</span></td>
+        <td rowspan="4" class="aafmp-specific">Public Involvement in Planning Herbicide Programs<span>Milo Mihajlovich, Mihajlovich Enterprises Ltd. with Matt Kristoff, RPF, YourForest Podcast</span></td>
+        <td rowspan="3" class="aspb-specific">DFO, Fisheries Act<span>Lee-Ann Smth - presenting, DFO,with  Shona Durlewich P Biol & Brandi Mogge Q & A</span></td>
+        <td rowspan="3" class="acpa-specific">Air Quality and Emission Regulations<span>Audrey Mascarenhas, P.Eng., President and CEO</span></td>
+    </tr>
+    <tr><th>10:15</th></tr>
+    <tr><th>10:30</th></tr>
+    <tr>
+        <th>10:45</th>
+        <td class="workplace-team-mgmt" rowspan="4">A Career Roadmap: Chart the course and navigate the stages of your career.<span>Gail Kastning, Purposeful Careers</span></td>
+    </tr>
+    <tr>
+        <th>11:00</th>
+        <td rowspan="3" class="regulated-prof">Conflict of Interest<span>Sandy Carpenter LLB. Canadian Regulatory & Indigenous Law<br>Tamara Bews, LLB.</span></td>
+        <td rowspan="3" class="aafmp-specific">Building and Reclaiming Roads<span>Darren Henshaw, RFT, Senior Engineering Technician, Ministry of FLNR</span></td>
+        <td rowspan="3" class="aspb-specific">Orphan Wells Program <span>Lars De Pauw, ED, Orphan Well Association</span></td>
+        <td rowspan="3" class="acpa-specific">Sustainable Remediation and Orphaned Wellsites <span>Ron Thiessen, Ph.D., P.Eng., EP, Environmental Engineer</span></td>
+    </tr>
+    <tr><th>11:15</th></tr>
+    <tr><th>11:30</th></tr>
+    <tr><th>11:45</th></tr>
+    <tr>
+        <th>12:00</th>
+        <td class="less-opacity" colspan="5" rowspan="3">Professional Lunchbox: Networking and Exhibitor Show Comments from Kathy Janzen, ACPA Executive Director</td>
+    </tr>
+    <tr><th>12:15</th></tr>
+    <tr><th>12:30</th></tr>
+    <tr>
+        <th>12:45</th>
+        <td class="workplace-team-mgmt" rowspan="4">Unconscious Bias<span>Deborah Howes, Foundation of Administrative Justice</span></td>
+    </tr>
+    <tr>
+        <th>1:00</th>
+        <td rowspan="3" class="aafmp-specific">Forestry 4.0: Automation of Forest Operation<span>Francis Charette, FPInnovations</span></td>
+        <td rowspan="1" colspan="3" class="regulated-prof">Interdiciplinary Teams in Rec/Rem</td>
+    
+    </tr>
+    <tr>
+        <th>1:15</th>
+        <td rowspan="2" colspan="1" class="aspb-specific"><span>Mike Poscente, MBA, RPFT President, Opabin Environmental Ltd. </span></td>
+        <td rowspan="2" colspan="1" class="aspb-specific"><span>Matthew Koehli, Terralogix </span></td>
+        <td rowspan="2" colspan="1" class="aspb-specific"><span>Brian Tsang, P.Chem., P.Geol., Hydrogeologist <br>Ron Thiessen, Ph.D., P.Eng., EP, Environmental Engineer</span></td>
+    </tr>
+    <tr>
+        <th>1:30</th>
+    
+    </tr>
+    <tr><th>1:45</th></tr>
+    <tr>
+        <th>2:00</th>
+        <td class="less-opacity" colspan="5">Networking and Exhibitor Show</td>
+    </tr>
+    <tr>
+        <th>2:15</th>
+        <td class="less-opacity" rowspan="2">Internationally Trained Workers software demo<span>Kimberley Worthington</span></td>
+        <td class="less-opacity" rowspan="2">Networking Session of Choice</td>
+        <td class="less-opacity" rowspan="2">Gender Equity in Canada Forest Sector Initiative <span>Luc Rainville, Past President, Canadian Institute of Forestry / Institut forestier du Canada <br>Kelly Cooper, President, Centre for Social Intelligence</span></td>
+        <td class="less-opacity" rowspan="2">ASPB Networking Session of Choice</td>
+        <td class="less-opacity" rowspan="2">ACPA Networking Session of choice</td>
+    
+    </tr>
+    <tr><th>2:30</th></tr>
+    <tr><th>2:45</th></tr>
+    <tr>
+        <th>3:00</th>
+        <td colspan="5" rowspan="3" class="less-opacity">Plenary: Can-masks <span>Johan Foster, Orlando Rojas, UBC</span></td>
+    </tr>
+    <tr><th>3:15</th></tr>
+    <tr><th>3:30</th></tr>
+    <tr>
+        <th>3:45</th>
+        <td class="less-opacity" colspan="5">Closing Remaks <span>Andrew Shandro, AAFMP Chair</span></td>
+    
+    </tr>
+</tbody></table>
+  </div>
+</inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

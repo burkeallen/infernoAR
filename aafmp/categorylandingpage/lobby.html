@@ -191,7 +191,7 @@
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<div style="display:none" id="novoProject" name="aafmp" onload="login()"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -239,128 +239,408 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="442de8ea-2571-4ae0-9b14-1ac39440e820">
+              <inferno-snippet-content id="19f8d0c6-5fd9-4882-834e-8d69354abaf0"><style>
+  /* Page Content Container Styles */
+  .ntar-landing-content {
+    background-color: #1d3c73;
+
+    /* Scale to full width and height + footer space */
+    width: 100%;
+    height: calc(100% + 55px);
+
+    /* Stick to Jolokia content frame and scroll y */
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden scroll;
+
+    /* Pad Content */
+    padding: 0px;
+
+    /* Display Type */
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media only screen and (max-width: 767px) {
+    .ntar-landing-content {
+      /* Cover height minus 55px header */
+      min-height: calc(100vh - 55px);
+
+      /* Stick to Jolokia content frame */
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  /* ./ Page Content Container Styles */
+
+  /* Lobby Styles */
+  .lobby {
+    overflow: auto;
+    position: absolute;
+    width: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .lobby-bg {
+    width: 100%;
+  }
+
+  .buttons-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .lobby-btn {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-weight: bolder;
+    color: rgb(69,126,177);
+    font-size: 1vw;
+    border-radius: 0;
+    cursor: pointer; 
+    height: 14%;
+width: 8%; 
+  }
+
+  .lobby-btn:hover {
+    transform: scale(1.10);
+    z-index: 2;
+    transition: all 0.3s;
+  }
+  .sponsor-btn {
+    position: absolute;
+    transition: all 0.5s;
+    z-index: 1;
+  }
+  .lobby-btn img {
+    width: 100%;
+  }
+
+  .lobby-btn a {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .lobby-btn.book:hover {
+    transform: scale(1.10);
+    transition: all 0.3s;
+  }
+
+  .no-access:hover::after {
+    content: "Not Used";
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 25px;
+    border: 1px #aaaaaa solid;
+    border-radius: 10px;
+    background-color: #265f9f;
+    padding: 12px;
+    color: #ffffff;
+    font-size: 1vw;
+    z-index: 1;
+  }
+
+/* Overlays */
+.ntar-pdf-view {
+position: absolute;
+top: 0px;
+left: 0px;
+right: 0px;
+bottom: 0px;
+background-color: rgba(0, 0, 0, 0.8);
+z-index: 20;
+display: none;
+}
+
+.ntar-pdf-viewer {
+position: absolute;
+top: 60px;
+left: 30px;
+right: 30px;
+width: calc(100% - 60px);
+height: calc(100% - 90px);
+bottom: 30px;
+border: none;
+}
+
+.ntar-video-view {
+position: absolute;
+top: 0px;
+left: 0px;
+right: 0px;
+bottom: 0px;
+background-color: rgba(255, 255, 255, 0.8);
+z-index: 20;
+display: none;
+}
+
+.ntar-video-viewer {
+position: absolute;
+top: 60px;
+left: 30px;
+right: 30px;
+width: calc(100% - 60px);
+max-width: 800px;
+margin: 0px auto;
+height: calc(100% - 90px);
+bottom: 30px;
+border: none;
+}
+
+a.ntar-window-close {
+padding: 0.55rem;
+width: 11rem;
+font-size: 1.3rem;
+font-weight: 100;
+line-height: 1;
+color: #333;
+background-color: #fff;
+border-radius: 4rem;
+text-align: center;
+cursor: pointer;
+text-decoration: none;
+display: inline-block;
+margin: 20px 0px 0px 30px;
+}
+
+a.ntar-window-close:hover {
+color: #333;
+text-decoration: none;
+}
+
+.dark-button {
+background-color: #333 !important;
+color: #fff !important;
+}
+
+/* ./ Overlays */
+
+  /* The popup form - hidden by default */
+  .popup {
+    display: none;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    top: 7%;
+    left:5%;
+    right: 5%;
+    position: absolute;
+    background-color: white;
+    color: black;
+    text-align: left;
+    padding:6px;
+  }
+
+  .close-popup {
+      float:right;
+      background-color:#7892c2;
+    border-radius:28px;
+    border:1px solid #4e6096;
+    display:inline-block;
+    cursor:pointer;
+    color:#ffffff;
+    font-family:Arial;
+    font-size:17px;
+    padding:1px 21px;
+    text-decoration:none;
+    text-shadow:0px 1px 0px #283966;
+  }
+  .close-popup:hover {
+    background-color:#476e9e;
+  }
+
+@media only screen and (max-width: 1015px) {
+    #btn-general-disc{
+      font-size: .8vw;
+    }
+  }
+  @media only screen and (max-width: 786px) {
+  #btn-general-disc{
+      font-size: 1.2vw;
+    }
+  .lobby-btn {
+    font-size:1.2vw;
+  }
+
+  }
+
+  @media only screen and (max-width: 485px) {
+  .bubble-text {
+    font-size: 90%;
+  }
+    
+  }
+  /* ./ Lobby Styles */
+</style>
+<!-- Page Overlays -->
+<div class="ntar-pdf-view" id="pdf-blanket">
+<a class="ntar-window-close" href="javascript:void(closePDF());">Close</a>
+<iframe class="ntar-pdf-viewer" id="pdf-frame"></iframe>
+</div>
+<div class="ntar-video-view" id="video-blanket">
+<a class="ntar-window-close dark-button" href="javascript:void(closeVideo());">Close</a>
+<iframe class="ntar-video-viewer" id="video-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+</div>
+<!-- ./ Page Overlays -->
+<!-- Page Content Container -->
+<div class="ntar-landing-content">
+   
+  <div class="lobby">
+    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/aafmp-reallobby.jpg" alt class="lobby-bg">
+    <!--Button -->
+    <!--Milo Mihajlovich background-->
+    <div class="lobby-btn" style="
+        left: 38.2%;
+        top: 52.3%;
+        height: 8%;
+        width: 6.7%;
+        background: purple;
+      " onclick="loadVideo('/embed/c29178ce-0b1f-48da-bbea-d8de11fc14e3')">
+       <img src="https://origin.infernocore.jolokia.com/thumb/clients/c4b83e18-b08c-45f8-df94-08d8389f091a/c29178ce-0b1f-48da-bbea-d8de11fc14e3/results/encoder/c81d41d7-8eb2-4fce-bae3-f3c01d269b1b/c29178ce-0b1f-48da-bbea-d8de11fc_adaptive6.mp4/thumb-48000.jpg" alt>
+    </div>
+    <!-- ./ Button -->
+ 
+    <!--Button -->
+    <!--Extinguishing fires using aqueous gels-->
+    <div class="lobby-btn" style="
+        left: 45%;
+        top: 52.3%;
+        height: 8%;
+        width: 6.7%;
+        background: rgb(148,210,247);
+      " onclick="loadVideo('/embed/db3467dd-7af0-4c2c-b242-77bae19336b4')">
+       <img src="https://origin.infernocore.jolokia.com/thumb/clients/c4b83e18-b08c-45f8-df94-08d8389f091a/db3467dd-7af0-4c2c-b242-77bae19336b4/results/encoder/cfd502f2-bec1-4fed-9c53-d39d843e1216/db3467dd-7af0-4c2c-b242-77bae193_adaptive6.mp4/thumb-2000.jpg" alt>
+</div>
+    <!-- ./ Button -->
+<!--Button -->
+    <!--Free to grow in forestry-->
+    <div class="lobby-btn" style="
+        left: 51.7%;
+        top: 52.3%;
+        height: 8%;
+        width: 6.7%;
+        background: rgb(148,210,247);
+      " onclick="loadVideo('https://www.youtube.com/embed/JVWhlGUkWMk')">
+    
+       <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/lobby/free-to-grow-thumb.png" alt>
+      
+    </div>
+    <!-- ./ Button -->
+    <!--Button -->
+    <!--Kevin Edgson Short Video-->
+    <div class="lobby-btn" style="
+        left: 58.5%;
+        top: 52.3%;
+        height: 8%;
+        width: 6.7%;
+        background: blue;
+      " onclick="loadVideo('/embed/0cd8823a-fb37-4c52-81bd-408f869a4ce3')">
+    
+       <img src="https://inferno.freetls.fastly.net/thumb/clients/c4b83e18-b08c-45f8-df94-08d8389f091a/0cd8823a-fb37-4c52-81bd-408f869a4ce3/results/encoder/f60a8a2f-408d-4f39-ae33-c900d9f58e95/0cd8823a-fb37-4c52-81bd-408f869a_adaptive6.mp4/thumb-30000.jpg" alt>
+      
+    </div>
+    <!-- ./ Button -->
+
+     <!--Jaclyn Repchuck Short Video-->
+    <div class="lobby-btn" style="
+        left: 38.2%;
+        top: 60.4%;
+        height: 8%;
+        width: 6.7%;
+        background: black;
+      " onclick="loadVideo('/embed/3ad4b51d-994d-48e6-a983-75a8af623d87')">
+    
+       <img src="https://origin.infernocore.jolokia.com/thumb/clients/c4b83e18-b08c-45f8-df94-08d8389f091a/3ad4b51d-994d-48e6-a983-75a8af623d87/results/encoder/72cd2237-d26b-44ed-9657-c45356e78b78/3ad4b51d-994d-48e6-a983-75a8af62_adaptive6.mp4/thumb-3000.jpg" alt>
+      
+    </div>
+    <!-- ./ Button -->
+    
+    
+    
+    
+    
+    
+    
+    
+<!--  Association d'Aluminum Canada Button -->
+<div class="logo-btn" style="
+left: 27.7%;
+top: 25.5%;" onclick="openPopup('aac')">
+</div>
+<!-- ./ Button -->
+<!-- Popup-->
+<div id="aac-popup" class="popup">
+<img class="company-logo" src="https://studio304nextechar.freetls.fastly.net/infernoAR/regal/logos/AAC-logo_web-01.png" alt>
+<h1 class="company-name"></h1>
+<p class="company-description"> 
+<br><br></p>
+<button class="close-popup" onclick="closePopup('aac')">close</button>  
+</div>
+<!-- ./Popup-->                    
+
+    
+    <script>
+
+function downloadXLS(url) {
+window.location.assign(url);
+
+}
+function loadPDF(url) {
+var x = landingPageEl.getElementById('pdf-frame');
+x.src = url;
+var y = landingPageEl.getElementById('pdf-blanket');
+y.style.display = 'block';
+}
+
+function loadVideo(url) {
+var x = landingPageEl.getElementById('video-frame');
+x.src = url;
+var y = landingPageEl.getElementById('video-blanket');
+y.style.display = 'block';
+}
+
+function closePDF() {
+var x = landingPageEl.getElementById('pdf-frame');
+x.src = '';
+var y = landingPageEl.getElementById('pdf-blanket');
+y.style.display = 'none';
+}
+function closeVideo() {
+var y = landingPageEl.getElementById('video-blanket');
+y.style.display = 'none';
+var x = landingPageEl.getElementById('video-frame');
+x.src = '';
+}
+</script>
+<!-- ./ Overlay popup scripts -->
+<script type="text/javascript">
+
+/* Popup */
+function openPopup(videoTitle) {
+landingPageEl.getElementById(videoTitle+"-popup").style.display = "block";
+}
+
+function closePopup(videoTitle) {
+landingPageEl.getElementById(videoTitle+"-popup").style.display = "none";
+}
+</script>
 
 
-                <style>
-                  .content {
-                    background-color: var(--sidebar-bg-color);
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    color: var(--sidebar-text-color);
-                  }
-
-                </style>
-
-                <div class="content">
-
-                  <div>
-                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
-                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
-                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
-                    <!--                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>-->
-                    <!-- Sort events by start time -->
-                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
-
-                    <!-- Set nextEvent so we know if no upcoming event is found -->
-                    {% assign nextEvent = 'No Event' %}
-
-                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
-
-                    <!--                    <h2>Current Category</h2>-->
-                    <!--                    <ul>-->
-                    <!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
-                    <!--                      <li>{{ currentCategory }}</li>-->
-                    <!--                    </ul>-->
-
-                    <!-- Iterate the sorted events -->
-                    {% for event in sortedEvents %}
-
-                    <!-- Check the event category ID matches this page category ID -->
-                    {% assign thisCategory = event.FirstCategoryId | downcase %}
-                    {% if thisCategory != currentCategory%}
-                    <!-- ... and if not, skip iteration -->
-                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
-                    {% continue %}
-                    {% endif %}
-
-                    <!-- The end time is start timestamp added to video duration -->
-                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
-
-                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
-                    {% if currentTime > endTime %}
-                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
-                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
-                    {% assign nextEvent = event %}
-                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
-                    {% continue %}
-                    <!-- ...otherwise... -->
-                    {% else %}
-                    <!-- ... we set this as our next upcoming event and ... -->
-                    {% assign nextEvent = event %}
-                    {% endif %}
-
-                    <!-- ...break the iteration loop. -->
-                    {% break %}
-
-                    {% endfor %}
-
-                    <!-- If the loop didn't find any upcoming events,... -->
-                    {% if nextEvent == 'No Event' %}
-<!--                    <h1> No Sessions or Events are Currently Available </h1>-->
-<!--                    <p>Check Back Later</p>-->
-                    {% else %}
-                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
-                    <!-- set display: none when in production -->
-                    <h1> Enter the Current or Upcoming Session </h1>
-                    <p>{{nextEvent.Name}}</p>
-                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
-                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
-                    </a>
-                    {% endif %}
-
-                    <script type="text/javascript">
-                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
-                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
-                      }
-                    </script>
-                  </div>
-
-                  <div style="text-align:center; padding:20%">
-                    <h1>Checking to see where to take you.</h1>
-                    <p>If you are not automatically redirected, there are no events currently scheduled - check back later.</p>
-                  </div>
-
-                </div>
-
-                <!-- Tawk Clearing Code -->
-                <tawkto-hide>
-                  <script type="text/javascript">
-                    if (window.Tawk_API) {
-                      Tawk_API.hideWidget();
-                    }
-                  </script>
-                </tawkto-hide>
-                <!-- End Tawk Clearing Code -->
-
-                <!-- ##### Remove Chatwee ##### -->
-                <remove-chatwee>
-                  <script>
-                    if (window.ChatweeLib) {
-                      const chatweeManager = new ChatweeLib.ChatweeManager('5f7ef3ae1e09cc38f15f19d2');
-                      chatweeManager.Dispose();
-                    }
-                  </script>
-                </remove-chatwee>
-                <!-- ##### End Remove Chatwee ##### -->
 
 
-
-
-</inferno-snippet-content>
+</div></div></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
