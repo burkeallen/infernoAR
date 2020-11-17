@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -240,1755 +240,843 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="8db6fd28-1d93-4b6f-8968-55ecac1b9a67">
-                    <style>
-                        #tue-schedule,
-                        #sun-schedule,
-                        #mon-schedule,
-                        #fri-schedule,
-                        #sat-schedule {
-                          display: none;
-                        }
-  
-                        .event-details p.presenter {
-                          color: #313131;
-                          font-weight: normal;
-                          font-size: 14px;
-                          width: 90%;
-                        }
-                        .h1,
-                        .h2,
-                        .h3,
-                        .h4,
-                        .h5,
-                        .h6,
-                        h1,
-                        h2,
-                        h3,
-                        h4,
-                        h5,
-                        h6 {
-                          font-family: 'Myriad Pro', sans-serif;
-                        }
-  
-                        #ntar-bg {
-                          font-family: 'Open Sans', sans-serif;
-                          position: absolute;
-                          width: 100%;
-                          height: calc(100vh - 56px);
-                          margin: -20px;
-                          background-repeat: no-repeat;
-                          background-position: center center;
-                          /* background-attachment: fixed; */
-                          background-size: 200%;
-                          background-color: #f6f6f6;
-                          overflow-y: auto;
-                          scroll-behavior: smooth;
-                        }
-  
-                        .main {
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: center;
-                        }
-  
-                        .banner {
-                          display: flex;
-                          justify-content: space-between;
-                          padding: 1rem 4rem 4rem;
-                          background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/quartz/header/meet_speaker.png');
-                          background-repeat: no-repeat;
-                          background-size: cover;
-                          height: 63.6rem;
-                        }
-  
-                        .banner-info {
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: center;
-                          align-self: center;
-                        }
-  
-                        #inferno-logo {
-                          height: 5rem;
-                          width: auto;
-                        }
-  
-                        .banner-info h1 {
-                          font-size: 5rem;
-                          color: white;
-                          font-weight: bold;
-                          margin: 0.5rem 0;
-                        }
-  
-                        .banner-info p {
-                          font-size: 1.8rem;
-                          font-weight: 500;
-                          line-height: 3rem;
-                          color: white;
-                          max-width: 55.8rem;
-                        }
-  
-                        .download-links {
-                          display: flex;
-                        }
-  
-                        #qr-code {
-                          height: 10rem;
-                          width: 10rem;
-                        }
-  
-                        .store-links {
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: space-between;
-                        }
-  
-                        .store-links img {
-                          height: 4.6rem;
-                          width: auto;
-                          margin-left: 0.5rem;
-                        }
-  
-                        .highlight {
-                          color: #01245b;
-                        }
-  
-                        /* #banner-image {
-  width: 60rem;
-  height: 60rem;
-  margin: 0 1rem;
-  } */
-  
-                        .chevron {
-                          width: 2.1rem;
-                          height: 1.2rem;
-                        }
-  
-                        .overview-divider {
-                          background-color: rgba(255, 255, 255, 0.75);
-                          width: 100;
-                          padding: 3.8rem;
-                        }
-  
-                        .overview-divider h1 {
-                          color: #06026d;
-                          font-size: 4.6rem;
-                          font-weight: bold;
-                          letter-spacing: 0;
-                          line-height: 5.3rem;
-                        }
-  
-                        .menu {
-                          padding: 4.4rem;
-                        }
-  
-                        .menu h1 {
-                          font-size: 3.5rem;
-                          font-weight: bold;
-                          color: #01245b;
-                        }
-  
-                        .menu-items {
-                          display: flex;
-                          flex-wrap: wrap;
-                          justify-content: space-between;
-                          align-items: center;
-                        }
-  
-                        .menu-item {
-                          margin: 2rem 0.5rem;
-                          display: flex;
-                          justify-content: center;
-                          align-items: center;
-                        }
-  
-                        .menu-items img {
-                          width: 39rem;
-                          height: 50.9rem;
-                          box-shadow: 11px 11px 19px 0 rgba(139, 139, 139, 0.51);
-                        }
-  
-                        .sponsors-section {
-                          padding: 4.4rem;
-                        }
-  
-                        .sponsors-header {
-                          width: 100%;
-                          display: flex;
-                          justify-content: center;
-                          align-items: center;
-                          flex-wrap: wrap;
-                        }
-  
-                        .sponsors-header h1 {
-                          font-size: 3.5rem;
-                          font-weight: bold;
-                          color: #1e70b8;
-                          margin-right: 2rem;
-                        }
-  
-                        .sponsors-header a {
-                          color: white;
-                          /* border-radius: 5px; */
-                          background-color: #1e70b8;
-                          box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                          text-decoration: none;
-                          padding: 1.2rem 0;
-                          width: 36.4rem;
-                          text-align: center;
-                          font-size: 2rem;
-                          font-weight: bold;
-                        }
-  
-                        .sponsors-list {
-                          display: flex;
-                          flex-wrap: wrap;
-                          justify-content: space-around;
-                          margin: 2rem 0;
-                        }
-  
-                        .sponsors-list img {
-                          height: 8.6rem;
-                          box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                          margin: 1rem 0;
-                        }
-  
-                        .double-sponsor {
-                          display: flex;
-                          justify-content: space-around;
-                        }
-  
-                        .double-one,
-                        .double-two {
-                          width: 100%;
-                        }
-  
-                        .double-two {
-                          display: flex;
-                          flex-direction: column;
-                        }
-  
-                        .double-two .sponsors-list {
-                          display: flex;
-                          justify-content: space-around;
-                        }
-  
-                        footer {
-                          color: white;
-                          font-size: 1.6rem;
-                          background-color: #222222;
-                          padding: 4rem;
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: flex-start;
-                        }
-  
-                        footer p {
-                          margin: 0;
-                        }
-  
-                        footer a {
-                          margin: 0;
-                        }
-  
-                        footer .info {
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: space-between;
-                        }
-  
-                        footer .info {
-                          font-weight: 500;
-                        }
-  
-                        footer .info a {
-                          color: white;
-                          text-decoration: none;
-                        }
-  
-                        footer .info p {
-                          font-size: 1.4rem;
-                          font-weight: 300;
-                        }
-  
-                        .info-links {
-                          margin-bottom: 4rem;
-                        }
-  
-                        .social-links-title {
-                          margin-bottom: 2rem;
-                        }
-  
-                        .social-link {
-                          width: 4rem;
-                          height: 4rem;
-                          margin-right: 1rem;
-                        }
-  
-                        .exhibitors-divider {
-                          background-color: rgba(255, 255, 255, 0.75);
-                          width: 100;
-                          padding: 3.8rem;
-                          padding: 4.4rem;
-                        }
-  
-                        .exhibitors-divider h1 {
-                          color: #3d3d3d;
-                          font-size: 4.6rem;
-                          font-weight: bold;
-                          letter-spacing: 0;
-                          line-height: 5.3rem;
-                        }
-  
-                        .search-exhibitors-divider {
-                          background-color: white;
-                          width: 100%;
-                          padding: 5.8rem 0;
-                          display: flex;
-                          justify-content: center;
-                        }
-  
-                        .filter-options {
-                          width: 100%;
-                          margin: 0 3.5rem;
-                          display: flex;
-                          flex-wrap: wrap;
-                          justify-content: flex-start;
-                          align-items: center;
-                        }
-  
-                        .filter-options button {
-                          height: 6rem;
-                          width: 9.8rem;
-                          border: 2px solid #1e70b8;
-                          /* border-radius: 4px; */
-                          background-color: #ffffff;
-                          margin: 0.9rem;
-                          padding: 1.3rem 1.6rem;
-                          color: #3d3d3d;
-                          font-size: 2rem;
-                          font-weight: bold;
-                          letter-spacing: 0;
-                          line-height: 2.5rem;
-                          text-align: center;
-                        }
-  
-                        .filter-options button:focus {
-                          outline: none;
-                          border: 2px solid rgba(11, 38, 104, 0.6);
-                        }
-  
-                        .search-wrapper {
-                          width: 31.5rem;
-                          border: 2px solid #1e70b8;
-                          /* border-radius: 4px; */
-                          background-color: #ffffff;
-                          margin: 0.9rem;
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: center;
-                        }
-  
-                        .search-wrapper input {
-                          padding: 1.4rem;
-                          color: #3d3d3d;
-                          font-size: 2rem;
-                          font-weight: bold;
-                          width: 75%;
-                          border: none;
-                        }
-  
-                        .search-wrapper input::placeholder {
-                          /* Chrome, Firefox, Opera, Safari 10.1+ */
-                          color: #3d3d3d;
-                          opacity: 1;
-                          /* Firefox */
-                        }
-  
-                        .search-wrapper input:-ms-input-placeholder {
-                          /* Internet Explorer 10-11 */
-                          color: #3d3d3d;
-                        }
-  
-                        .search-wrapper input::-ms-input-placeholder {
-                          /* Microsoft Edge */
-                          color: #3d3d3d;
-                        }
-  
-                        .search-wrapper img {
-                          width: 2rem;
-                          margin: 1.25rem;
-                        }
-  
-                        .search-wrapper input:focus {
-                          outline: none;
-                          border: none;
-                        }
-  
-                        .select-wrapper {
-                          width: 26.6rem;
-                          margin: 0.9rem;
-                          border: 2px solid #1e70b8;
-                          /* border-radius: 4px; */
-                          background-color: #ffffff;
-                        }
-  
-                        .select-wrapper select {
-                          width: 96%;
-                          padding: 1.4rem;
-                          color: #3d3d3d;
-                          font-size: 2rem;
-                          font-weight: bold;
-                          -webkit-appearance: none;
-                          -moz-appearance: none;
-                          appearance: none;
-                          background: url('https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png')
-                            no-repeat right #fff;
-                          background-size: 8%;
-                          border: none;
-                        }
-  
-                        .select-wrapper select:focus {
-                          outline: none;
-                        }
-  
-                        .select-wrapper img {
-                          width: 2rem;
-                          margin: 1rem;
-                        }
-  
-                        .attendee-list {
-                          padding: 5.8rem 0;
-                        }
-  
-                        .attendee {
-                          margin: 1.4rem 4.4rem;
-                          padding: 2rem;
-                          /* border-radius: 9px; */
-                          background-color: #ffffff;
-                          display: flex;
-                          justify-content: center;
-                          align-items: center;
-                          flex-wrap: wrap;
-                          outline: none;
-                          transition: all 0.3s ease;
-                        }
-  
-                        .attendee:hover {
-                          cursor: pointer;
-                          opacity: 0.9;
-                          -ms-transform: scale(0.99);
-                          -webkit-transform: scale(0.99);
-                          transform: scale(0.99);
-                        }
-  
-                        .attendee .avatar {
-                          height: 15.2rem;
-                          width: 15.2rem;
-                          /* border: 2px solid #6D7278; */
-                          border-radius: 50%;
-                        }
-  
-                        .attendee .details {
-                          margin: 0 2rem;
-                          flex-grow: 3;
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: center;
-                          align-items: flex-start;
-                        }
-  
-                        .attendee .details .a-row {
-                          display: flex;
-                          align-items: baseline;
-                        }
-  
-                        .header h1 {
-                          font-size: 2.4rem;
-                          font-weight: bold;
-                          margin: 0;
-                        }
-  
-                        .header h2 {
-                          color: #52b952;
-                          font-size: 1.8rem;
-                          font-weight: bold;
-                          letter-spacing: 0;
-                          margin: 0 1rem;
-                        }
-  
-                        .attendee .details h4 {
-                          color: #313131;
-                          font-size: 1.8rem;
-                          font-weight: 500;
-                          letter-spacing: 0;
-                          line-height: 2.9rem;
-                          margin: 0;
-                        }
-  
-                        .attendee .details a {
-                          color: #1e70b8;
-                          font-size: 1.6rem;
-                          letter-spacing: 0;
-                          line-height: 2.6rem;
-                        }
-  
-                        .attendee .details .header {
-                          margin: 1.5rem 0;
-                          display: flex;
-                          flex-wrap: wrap;
-                        }
-  
-                        .attendee .details .a-footer {
-                          width: 100%;
-                          margin-top: 3rem;
-                          display: flex;
-                          justify-content: space-between;
-                          flex-wrap: wrap;
-                        }
-  
-                        .attendee .details .a-footer img {
-                          height: 1.8rem;
-                          width: auto;
-                        }
-  
-                        .contact {
-                          margin: 1rem;
-                          display: flex;
-                          justify-content: space-between;
-                          align-items: center;
-                        }
-  
-                        .contact img {
-                          margin: 0 1rem;
-                        }
-  
-                        .attendee .actions {
-                          display: flex;
-                          flex-direction: column;
-                          justify-content: space-evenly;
-                          margin: 1.5rem 0;
-                        }
-  
-                        .attendee .actions button {
-                          width: 24.4rem;
-                          height: 4.5rem;
-                          /* border-radius: 5px; */
-                          margin: 1rem;
-                          font-size: 18px;
-                          font-weight: bold;
-                          letter-spacing: 0.9px;
-                          line-height: 23px;
-                          text-align: center;
-                        }
-  
-                        .attendee .actions button:hover {
-                          cursor: pointer;
-                          outline: none;
-                          border: 1px solid rgba(168, 0, 27, 0.52);
-                        }
-  
-                        .attendee .actions button:focus {
-                          outline: none;
-                          border: 1px solid #1e70b8;
-                        }
-  
-                        .send-message {
-                          color: white;
-                          background-color: #1e70b8;
-                          border: 1px solid #1e70b8;
-                        }
-  
-                        .request-meeting {
-                          color: #1e70b8;
-                          background-color: white;
-                          border: 1px solid #1e70b8;
-                        }
-  
-                        .modal {
-                          position: absolute;
-                          top: 0px;
-                          left: 0px;
-                          z-index: 2;
-                          width: 100%;
-                          background-color: rgba(0, 0, 0, 0.5);
-                          flex-direction: column;
-                          justify-content: center;
-                          align-items: center;
-                          display: none;
-                        }
-  
-                        .message-box {
-                          z-index: 3;
-                          display: flex;
-                          flex-direction: column;
-                          width: 90%;
-                          background-color: #f8f8f8;
-                        }
-  
-                        .mb-row {
-                          width: 100%;
-                          display: flex;
-                        }
-  
-                        .mb-actions {
-                          display: flex;
-                          align-items: flex-start;
-                        }
-  
-                        .mb-actions .close-modal {
-                          background: transparent;
-                          border: none;
-                          font-size: 2rem;
-                        }
-  
-                        .mb-actions .close-modal:hover {
-                          cursor: pointer;
-                          font-weight: bold;
-                        }
-  
-                        .mb-actions .close-modal:focus {
-                          outline: none;
-                          border: none;
-                        }
-  
-                        .mb-row textarea {
-                          resize: none;
-                          font-family: sans-serif;
-                          font-size: 1.8rem;
-  
-                          margin: 2rem 0;
-                          padding: 1rem;
-  
-                          border: 1px solid #979797;
-                          /* border-radius: 12px; */
-  
-                          flex-grow: 1;
-                          min-height: 10rem;
-                        }
-  
-                        .mb-footer {
-                          width: 100%;
-                          display: flex;
-                          justify-content: flex-end;
-                        }
-  
-                        .final-send {
-                          width: 24.4rem;
-                          height: 4.5rem;
-                          /* border-radius: 5px; */
-                          margin: 1rem;
-                          font-size: 18px;
-                          font-weight: bold;
-                          letter-spacing: 0.9px;
-                          line-height: 23px;
-                          text-align: center;
-                          color: white;
-                          background-color: #1e70b8;
-                          border: 1px solid #1e70b8;
-                          align-self: flex-end;
-                        }
-  
-                        .final-send:hover {
-                          cursor: pointer;
-                        }
-  
-                        .final-send:disabled {
-                          opacity: 0.5;
-                        }
-  
-                        .mc-row {
-                          display: flex;
-                          width: 100%;
-                        }
-  
-                        .mc-row h1 {
-                          text-align: center;
-                          line-height: 2.9rem;
-                          max-width: 50rem;
-                        }
-  
-                        .mc-flex-end {
-                          justify-content: flex-end;
-                        }
-  
-                        .mc-center {
-                          justify-content: center;
-                        }
-  
-                        .no-attendees-message {
-                          margin: 0;
-                          color: #0b2668;
-                          font-size: 2.2rem;
-                          font-weight: bold;
-                          letter-spacing: 0.092rem;
-                          line-height: 2.7rem;
-                          text-align: center;
-                        }
-                      </style>
-  
 
-  
-                      <style>
-                        /* Speaker overlay */
-                        .speaker-overlay {
-                          position: absolute;
-                          top: 0;
-                          left: 0;
-                          width: 100%;
-                          height: 100%;
-                          background: rgba(255, 255, 255, 0.9);
-                          display: none;
-                          z-index: 9999;
-                        }
-  
-                        .speaker-overlay.quartz-show {
-                          display: block;
-                        }
-  
-                        .close-btn {
-                          font-size: 4vmin;
-                          line-height: 5vmin;
-                          color: #000;
-                          position: absolute;
-                          top: 20px;
-                          border: none;
-                          background: none;
-                          right: 20px;
-                        }
-  
-                        .speaker-overlay-content {
-                          width: 75%;
-                          max-height: 60vh;
-                          overflow-y: scroll;
-                          position: absolute;
-                          top: 50%;
-                          left: 50%;
-                          -ms-transform: translate(-50%, -50%);
-                          -webkit-transform: translate(-50%, -50%);
-                          transform: translate(-50%, -50%);
-                          display: flex;
-                          background: #fff;
-                          padding: 4vmin;
-                          border-radius: 4px;
-                          box-shadow: 0 8px 12px rgba(1, 1, 1, 0.2);
-                        }
-  
-                        .speaker-overlay-content img {
-                          display: block;
-                          width: 20vmin;
-                          height: 20vmin;
-                          border-radius: 100%;
-                          margin: 0 4vmin 0 0;
-                        }
-  
-                        .speaker-overlay-content h2 {
-                          color: #000;
-                          font-weight: bold;
-                          font-size: 3vmin;
-                          line-height: 3.5vmin;
-                        }
-  
-                        .speaker-overlay-content h3 {
-                          color: #333;
-                          font-weight: normal;
-                          font-size: 2vmin;
-                          line-height: 2.5vmin;
-                        }
-  
-                        .speaker-overlay-content p {
-                          color: #333;
-                          font-size: 1.8vmin;
-                          line-height: 2.5vmin;
-                        }
-  
-                        @media only screen and (max-width: 1200px) {
-                          .close-btn {
-                            font-size: 6vmin;
-                            line-height: 7vmin;
-                          }
-  
-                          .speaker-overlay-content {
-                            flex-direction: column;
-                          }
-  
-                          .speaker-overlay-content img {
-                            margin: 0 auto 4vmin;
-                            width: 40vmin;
-                            height: 40vmin;
-                          }
-  
-                          .speaker-overlay-content h2 {
-                            font-size: 4vmin;
-                            line-height: 4.5vmin;
-                          }
-  
-                          .speaker-overlay-content h3 {
-                            font-size: 3vmin;
-                            line-height: 4vmin;
-                          }
-  
-                          .speaker-overlay-content p {
-                            font-size: 2.2vmin;
-                            line-height: 4vmin;
-                          }
-                        }
-                      </style>
-  
-                      <div id="ntar-bg">
-                        <div id="main" class="main">
-                          
-  
-                          <style>
-                            .dot {
-                              height: 0.9rem;
-                              width: 0.9rem;
-                              background-color: #bbb;
-                              border-radius: 50%;
-                              background-color: #ac0c0c;
-                              margin: 0.5rem;
-                            }
-                            .event-time {
-                              min-width: 11rem;
-                            }
-                            .event-details h3 {
-                              font-size: 1.8rem;
-                            }
-                            .event-details p.presenter {
-                              font-weight: bold;
-                            }
-                            .event-details p {
-                              font-size: 13px;
-                              font-weight: normal;
-                            }
-                          </style>
-  
-                          <div id="add-event-modal" style="display: none" onclick="handleAddEventModalClick(event);">
-                            <div id="add-event-modal-box">
-                              <button id="close-event-modal">
-                                <img id="close-event-modal-img" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png">
-                              </button>
-  
-                              <h1>
-                                The live event <span id="modal-box-event-name"></span> has been added
-                                to your <a href>Agenda</a>. You will receive a reminder when the
-                                event is about to start.
-                              </h1>
-  
-                              <div id="event-modal-box-actions">
-                                <button id="undo-event-modal">Undo</button>
-                                <button id="done-event-modal">Done</button>
-                              </div>
-                            </div>
+                <!-- Container -->
+                <style>
+                  #container {
+                    margin: -20px;
+                    padding-bottom: 40px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
+                  img::after {
+                    content: none;
+                  }
+
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
+                  }
+
+                </style>
+
+                <!-- banner -->
+                <style>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
+                    background-size: cover;
+                    background-position: left center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/meet-the-speakers-header.jpg');
+                  }
+
+
+                  .banner-shadow {
+                    z-index: 99;
+                    position: absolute;
+                    margin-top: 380px;
+                    width: 100%;
+                    height: 20px;
+                    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
+                    color: #fff;
+                    max-width: 90%;
+                    text-shadow: #000 0 0 .5rem;
+                  }
+
+                  .banner-text {
+                    font-weight: bold;
+                    font-size: clamp(2.5rem, 3vw, 3.5rem);
+                  }
+
+                  .banner-sub-text {
+                    font-weight: lighter;
+                    font-size: clamp(1.75rem, 2.25vw, 2.75rem);
+                  }
+                </style>
+
+                <!-- Filter -->
+                <style>
+                  .search-exhibitors-divider {
+                    background-color: rgb(246, 246, 246);
+                    width: 100%;
+                    padding: 3.8rem 0 1.8rem;
+                    display: flex;
+                    justify-content: center;
+                  }
+
+                  .filter-options {
+                    width: 100%;
+                    margin: 0 3.5rem;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                  }
+
+                  .filter-options button {
+                    height: 6rem;
+                    width: 9.8rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    padding: 1.3rem 1.6rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 2.5rem;
+                    text-align: center;
+                  }
+
+                  .filter-options button:focus {
+                    outline: none;
+                    border: 2px solid rgba(11, 38, 104, 0.6);
+                  }
+
+                  .search-wrapper {
+                    width: 31.5rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .search-wrapper input {
+                    padding: 1.4rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    width: 75%;
+                    border: none;
+                  }
+
+                  .search-wrapper input::placeholder {
+                    /* Chrome, Firefox, Opera, Safari 10.1+ */
+                    color: #3D3D3D;
+                    opacity: 1;
+                    /* Firefox */
+                  }
+
+                  .search-wrapper input:-ms-input-placeholder {
+                    /* Internet Explorer 10-11 */
+                    color: #3D3D3D;
+                  }
+
+                  .search-wrapper input::-ms-input-placeholder {
+                    /* Microsoft Edge */
+                    color: #3D3D3D;
+                  }
+
+                  .search-wrapper img {
+                    width: 2rem;
+                    margin: 1.25rem;
+                  }
+
+                  .search-wrapper input:focus {
+                    outline: none;
+                    border: none;
+                  }
+                </style>
+
+                <!-- Attendees/Speakers -->
+                <style>
+
+                  .attendee-card {
+                    display: flex;
+                    height: auto;
+                    min-width: 400px;
+                    flex-wrap: wrap;
+                    margin: 1.4rem 4.4rem;
+                    padding: 1rem 2rem;
+                    border-radius: 9px;
+                    background-color: #FFFFFF;
+                    align-items: center;
+                  }
+
+                  .attendee-avatar {
+                    height: 15.5rem;
+                    width: 15.5rem;
+                    border-radius: 50%;
+                  }
+
+                  .attendee-info {
+                    flex: 1;
+                    margin-left: 20px;
+                  }
+
+                  .attendee-name {
+                    font-size: 2rem;
+                    font-weight: bold;
+                  }
+
+                  .job-title {
+                  }
+
+                  .attendee-email {
+                    margin: .50rem 0;
+                    display: flex;
+                    align-items: center;
+                    display: none;
+                  }
+
+                  .attendee-email img {
+                    height: 1.5rem;
+                    width: auto;
+                    padding-right: 5px
+                  }
+
+                  .linked-in {
+                    margin: .50rem 0;
+                    display: flex;
+                  }
+
+                  .linked-in img {
+                    height: 2rem;
+                    width: 2.6rem;
+                    align-items: center;
+                    padding-right: 5px
+                  }
+
+                  .session-title {
+                    padding-top: 5px;
+                    font-weight: bold;
+                  }
+
+                  .speaker-bio {
+                    padding-top: 5px;
+                  }
+
+                </style>
+
+                <div id="container">
+                  <div class="banner">
+                    <div class="banner-info">
+                      <div class="banner-text">Meet the Speakers</div>
+                      <div class="banner-sub-text">Check out our speakers and panelists you’ll be hearing from at this year's virtual event.
+                      </div>
+                    </div>
+                    <div class="banner-shadow"></div>
+                  </div>
+
+                  <div class="search-exhibitors-divider">
+                    <div class="filter-options">
+                      <div class="search-wrapper">
+                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
+                      </div>
+                      <button id="all-grouping" onclick="allAttendees()">All</button>
+                      <button id="ae-grouping" onclick="filterLastName(this, 'abcde')">A - E</button>
+                      <button id="fj-grouping" onclick="filterLastName(this, 'fghij')">F - J</button>
+                      <button id="ko-grouping" onclick="filterLastName(this, 'klmno')">K - O</button>
+                      <button id="pt-grouping" onclick="filterLastName(this, 'pqrst')">P - T</button>
+                      <button id="uz-grouping" onclick="filterLastName(this, 'uvwxyz')">U - Z</button>
+                    </div>
+                  </div>
+
+                  <div id="attendee-list" class="attendee-list">
+                    <template id="attendee-template">
+                      <div id=attendee-card class="attendee-card">
+                        <img id="attendee-avatar" class="attendee-avatar"/>
+                        <div id="attendee-info" class="attendee-info">
+                          <div id="attendee-name" class="attendee-name"></div>
+                          <div id="job-title" class="job-title"></div>
+                          <div id="session" class="session"></div>
+                          <div id="speaker-bio" class="speaker-bio"></div>
+                          <div class="linked-in">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/linked-in.png"/> <a href="#" target="_blank" rel="noreferrer" id="linked-in"></a>
                           </div>
-  
-                          <!-- Speaker overlay -->
-                          <div class="speaker-overlay">
-                            <button class="close-btn" onclick="toggleSpeaker()">X</button>
-                            <div class="speaker-overlay-content">
-                              <img alt="speaker">
-                              <div class="speaker-meta">
-                                <h2></h2>
-                                <h3></h3>
-                                <p></p>
-                              </div>
-                            </div>
-                          </div>
-  
-                          <div id="attendee-list" class="attendee-list">
-                            <template id="attendee-template">
-                              <div id="attendee" class="attendee">
-                                <img id="avatar" class="avatar">
-                                <div class="details">
-                                  <div class="a-row header">
-                                    <h1 id="name"></h1>
-                                    <h2 id="online-badge" style="display: none">• Online</h2>
-                                  </div>
-                                  <div class="a-row">
-                                    <h4 id="job"></h4>
-                                  </div>
-                                  <div class="a-row" style="display: none">
-                                    <h4 id="industry"></h4>
-                                  </div>
-                                  <div class="a-row a-footer">
-                                    <div class="contact" style="display: none">
-                                      <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/email-icon.png">
-                                      <a id="email" href="#" target="_blank" rel="noreferrer"></a>
-                                    </div>
-                                    <div class="contact">
-                                      <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/website-icon.png">
-                                      <a id="company-link" href="#" target="_blank" rel="noreferrer"></a>
-                                    </div>
-                                    <div class="contact" style="display: none">
-                                      <img src=" https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/business-card-icon.png">
-                                      <a id="business-card" href="#" rel="noreferrer">Linkedin</a>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="actions" style="display: none">
-                                  <button class="send-message" id="send-message-button" onclick="showModal(event)">
-                                    Send a Message
-                                  </button>
-                                  <button class="request-meeting">Request a Meeting</button>
-                                </div>
-                              </div>
-                            </template>
-  
-                            <h1 id="no-attendees-message" class="no-attendees-message" style="display: none">
-                              No attendees found.
-                            </h1>
-                          </div>
-  
-                          <div id="modal" class="modal" onclick="handleModalClick(event)">
-                            <div id="message-box" class="attendee message-box">
-                              <div class="mb-row">
-                                <img class="avatar" id="mb-avatar">
-                                <div class="details">
-                                  <div class="a-row header">
-                                    <h1 id="mb-name"></h1>
-                                    <h2 id="mb-online-badge" style="display: none">• Online</h2>
-                                  </div>
-                                  <div class="a-row">
-                                    <h4 id="mb-job"></h4>
-                                  </div>
-                                </div>
-                                <div class="mb-actions">
-                                  <button id="close-modal-1" class="close-modal">
-                                    <img id="close-modal-image-1" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png">
-                                  </button>
-                                </div>
-                              </div>
-  
-                              <div class="mb-row">
-                                <textarea id="message-textarea" oninput="turnOnSend(event)"></textarea>
-                              </div>
-  
-                              <div class="mb-footer">
-                                <button id="final-send" class="final-send" disabled onclick="sendMessage()">
-                                  Send
-                                </button>
-                              </div>
-                            </div>
-  
-                            <div id="message-confirmation" class="attendee message-box" style="display: none">
-                              <div class="mc-row mc-flex-end">
-                                <div class="mb-actions">
-                                  <button id="close-modal-2" class="close-modal">
-                                    <img id="close-modal-image-2" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png">
-                                  </button>
-                                </div>
-                              </div>
-  
-                              <div class="mc-row mc-center">
-                                <h1 id="send-confirmation"></h1>
-                              </div>
-  
-                              <div class="mc-row mc-center">
-                                <button id="done-message" class="final-send">Done</button>
-                              </div>
-                            </div>
-                          </div>
-  
-                          <style>
-                            @media only screen and (max-width: 1000px) {
-                              .sponsors-section {
-                                padding: 2rem;
-                              }
-                              .sponsors-header h1 {
-                                font-size: 2.8rem;
-                                margin-right: 0;
-                              }
-                              .sponsors-list {
-                                display: flex;
-                                flex-direction: column;
-                                align-items: center;
-                                justify-content: center;
-                              }
-                              .double-sponsor {
-                                flex-direction: column;
-                              }
-                              .sponsors-section a {
-                                text-align: center;
-                              }
-                              .sponsors-list img {
-                                width: 70%;
-                                height: auto;
-                                padding: 10px;
-                                box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                                margin: 1rem 0;
-                              }
-                            }
-                          </style>
                         </div>
                       </div>
-  
-                      <script>
-                        var attendeesBaseUrl =
-                          'https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/speakers/';
-  
-                        var messaging = '';
-  
-                        var attendees = [
-                          {
-                            firstName: 'Sandy',
-                            lastName: 'Carpenter',
-                            email: '',
-                            title: '',
-                            company: '',
-                            industry: '',
-                            companyLink: '',
-                            businessCard: 'javascript: return false',
-                            avatar: attendeesBaseUrl + 'Sandy Carpenter.jpg',
-                            online: false,
-                            visible: false,
-                            bio:
-                              '',
-                          },
-                          
-                          
-                        ];
-  
-                        function init() {
-                          // Handle query
-                          var urlParams = new URLSearchParams(window.location.search);
-                          if (urlParams.get('speaker')) {
-                            var speakerParam = urlParams.get('speaker').toLowerCase().trim();
-  
-                            // Try and find index
-                            var findIndex = -1;
-                            var iterator = 0;
-                            attendees.forEach(function (speaker) {
-                              if (
-                                speaker.firstName.toLowerCase().trim().indexOf(speakerParam) > -1 ||
-                                speaker.lastName.toLowerCase().trim().indexOf(speakerParam) > -1
-                              ) {
-                                findIndex = iterator;
-                              }
-  
-                              iterator++;
-                            });
-  
-                            if (findIndex > -1) {
-                              toggleSpeaker(true, findIndex);
-                            }
-                          }
+                    </template>
+                  </div>
+
+                </div>
+
+                <!-- Attendees/Speakers -->
+                <script>
+
+                  var attendees =
+                    [
+                      {
+                        "FullName": "Janis Braze",
+                        "FirstName": "Janis",
+                        "LastName": "Braze",
+                        "AvatarFileName": "janis-braze.jpg",
+                        "JobTitle": "RPF, Director, Forest Resource Management, Agriculture and Forestry",
+                        "SessionTitle1": "Forest Jobs Action Plan",
+                        "SessionAbstract1": "This presentation will cover the Ministry's short-term actions to support forest companies and forest jobs while ensuring continued sustainable forest management principles and practices.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Janis is from Latvia where he finished his forestry technical degree. In 1997 Yanis graduated from Louisiana State University; he obtained a Master of Science degree from Penn State University in Forest Management and Economics in 1999. In 2006 Yanis graduated from the MBA program at Heriot-Watt University, Edinburgh, Scotland. Since 2000, Yanis has been working in Alberta. First, as a consultant in various forestry consolation firms, including GDC and Timberline/Teco. He later ran his own business, then became the Regional Manager for Foresite. In 2013, Yanis joined the Government of Alberta, and is currently assuming the role of Director of Forest Resource Management for the section responsible for assisting industry in preparing their Forest Management Plans, OGR's and FOMP."
+                      },
+                      {
+                        "FullName": "Nicholas A. Cairns, MSc., PhD.",
+                        "FirstName": "Nicholas A.",
+                        "LastName": "Cairns",
+                        "AvatarFileName": "nicholas-a-cairns.jpg",
+                        "JobTitle": "Wildlife Field Biologist / Herpetologist",
+                        "SessionTitle1": "",
+                        "SessionAbstract1": "",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Nick is a herpetologist with over 15 years of experience working with a variety of wildlife across Canada and the US, particularly with amphibians and reptiles. He has thousands of hours surveying for and handling salamanders, frogs, snakes, turtles and lizards including those native to Alberta. Nick has a MSc from Carleton and University of Ottawa focusing on applied conservation of turtles and a PhD from Queen's University on the phylogenomics of the spring peeper. He is based in Southwestern Saskatchewan where he works as a researcher and consultant for Canadian Wildlife Service, Parks Canada and Western EcoSystems Technology, ULC."
+                      },
+                      {
+                        "FullName": "Francis Charette, f.eng., MBA",
+                        "FirstName": "Francis",
+                        "LastName": "Charette",
+                        "AvatarFileName": "francis-charette.jpg",
+                        "JobTitle": "Manager, Digitalization, FPInnovations",
+                        "SessionTitle1": "Forestry 4.0 (Automation of Forest Operations)",
+                        "SessionAbstract1": "FPInnovations not-for-profit R&D organization that specializes in the creation of solutions that accelerate the growth of the Canadian forest sector and its affiliated industries to enhance their global competitiveness. This presentation will overview some of the challenges facing the industry as well as some innovative solutions that are being researched through the project Forestry 4.0. The project includes automated harvesting, autonomous transport and in-forest connectivity.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Francis Charette is a forester, graduating from Laval University in 2006. Then he did a master’s in business administration (MBA) at Université du Québec à Montreal in 2011. He started his professional career as a planner for Tembec in the Abitibi region from 2006-2009. Next, he joined a consultation firm specializing in R&D tax credit from 2009-2012. Finally, he joined FPInnovations in 2012, as a researcher, where he participated in many research projects on forest operation, and for the last 3 years, has coordinated the Forestry 4.0 project. Francis is now the manager of a new group, called Digitalization, whose objective is getting the forest up to speed with digitalization potential."
+                      },
+                      {
+                        "FullName": "Kelly Cooper, MA,",
+                        "FirstName": "Kelly",
+                        "LastName": "Cooper",
+                        "AvatarFileName": "kelly-cooper.jpg",
+                        "JobTitle": "President, Centre for Social Intelligence",
+                        "SessionTitle1": "Gender Equity in Canada-Forest Sector Initiative",
+                        "SessionAbstract1": "This presentation will discuss the Gender Equity in Canada’s Forest Sector National Action Plan project. This 3-year project includes private, public, not-for-profit, Indigenous and academia representatives from across the forest sector who work collaboratively to shift their workplace cultures across the whole of the sector. Through comprehensive data collection, best practices that foster an inclusive culture and repositioning the sector through coordinated and strategic communications, this project aims to create sustained change that addresses gender inequality and makes the sector more welcoming to women and minorities.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Kelly Cooper is the Founder and President of the Centre for Social Intelligence (CSI). She holds an M.A. in International Environment, Development and Policy from the University of Sussex, UK, and an Honours BSc. from the University of Toronto, and holds certifications in GBA+, EQ-i 2.0 and ProSci change management (ADKAR model).<p>Ms. Cooper guides leaders and change agents to create a gender equality transformation within their organizations by conducting gender gap audit assessments, gender strategies and national sector gender action plans. Her message is clear – gender equality is an everybody’s issue – not a woman’s issue. Engaging men in a positive way by showing the benefits to them is key to affecting sustainable change.<p>Ms. Cooper has led the development of the Women in Mining Canada’s National Action Plan and is currently spearheading another three-year comprehensive national action plan in the forest sector. She believes that taking this issue on by sector is an effective and efficient means of achieving a sustainable shift in the workplace culture. She is a strong advocate for applying EQ skills such as empathy, impulse control, assertiveness, among others to help everyone to find greater understanding of the benefits to gender diversity and inclusion – both social and economic."
+                      },
+                      {
+                        "FullName": "Shona Derlukewich,",
+                        "FirstName": "Shona",
+                        "LastName": "Derlukewich",
+                        "AvatarFileName": "shona-derlukewich.jpg",
+                        "JobTitle": "Senior Biologist",
+                        "SessionTitle1": "Overview of the Modernized Fisheries Act",
+                        "SessionAbstract1": "Lee-Ann Smith, the acting Manager of Provincial/Territorial Partnerships, will provide highlights of key changes to the Fisheries Act, general information about processes when conducting works, undertakings or activities in or near water, tips on how to complete a Request for Review form and finally what happens after a project is submitted to DFO for review. The goal of this session is to help proponents understand when they should submit their projects to DFO for review and what information they should include in the Request for Review form to allow for a timely review and assessment of their project. Shona Derlukewich and Brandi Mogge will respond to questions in the Q & A session.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Shona Derlukewich, P.Biol., is a Senior Biologist in the Fish and Fish Habitat Protection Program with Fisheries and Oceans Canada. Shona has worked with DFO over the past 2 years in the Linear Development group in Regina, SK and is now transferring into the Mining, Oil and Gas – North in Edmonton, AB. Shona’s previous experience includes 13 years of environmental consulting, fish identification instructor, small business owner, contracts with the Alberta government and seasonal work with not-for-profit organizations."
+                      },
+                      {
+                        "FullName": "Sarah Dougherty, M.A.Sc., P.Chem",
+                        "FirstName": "Sarah",
+                        "LastName": "Dougherty",
+                        "AvatarFileName": "sarah-dougherty.jpg",
+                        "JobTitle": "Environmental Chemist, Advisian",
+                        "SessionTitle1": "The Importance of Interdisciplinary Planning and Execution of Remediation Projects for Contaminated Sites",
+                        "SessionAbstract1": "Construction and remediation projects at contaminated sites are dynamic and complex. Planning these types of projects involves many professions from a broad range of backgrounds, including professional engineers, scientists, health and safety personnel, construction personnel, and managers. While many construction projects are very complex, contaminated sites have the added complication of having toxic substances affecting different media, including soils, bedrock, groundwater, surface water, and/or air. Remediating these toxic substances can produce dangerous conditions. Planning for these dangerous conditions is of the utmost importance to help protect wildlife, vegetation, workers, and the public. Ms. Dougherty will discuss the importance of nary project planning and execution, focusing on remediation of contaminated sites to repurpose lands for new uses.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Sarah Dougherty is an Environmental Chemist who helps municipalities and companies monitor and remediate contaminated sites. Ms. Dougherty grew up in Ottawa, Ontario, to two scientists, who instilled a curiosity that resulted in her studying environmental chemistry at Queen's University for her undergraduate studies. Ms. Dougherty then pursued a master's degree in Environmental Science at the University of Sydney in Australia, fulfilling a lifelong desire to visit that environmentally unique country. She moved to Calgary to contribute to the environmental consulting industry in Alberta and to spend time with her aging grandparents. Ms. Dougherty is an avid alpine skier, soccer player, and amateur musician in her personal time."
+                      },
+                      {
+                        "FullName": "Kevin Edgson MBA, CPA,",
+                        "FirstName": "Kevin",
+                        "LastName": "Edgson",
+                        "AvatarFileName": "kevin-edgson.jpg",
+                        "JobTitle": "President and CEO EACOM Timber",
+                        "SessionTitle1": "The Forestry Workforce: Instilling the passion by knowing your ‘why’",
+                        "SessionAbstract1": "In this coffee table discussion, industry experts Jason Krips and Kevin Edgson share industry insightswith YourForest Podcaster, Matthew Kristoff. The three have a candid conversation about the driversbehind forestry workforce development and discovering the personal meaning that ignites yourpassion to be a part of this workforce.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Kevin started his career more than 30 years ago, initially in the plywood and veneer business, thenentering the pulp and paper sector before focusing on solid and engineered wood products. Kevin hasworked in British Columbia, Alberta, Saskatchewan, Ontario and Quebec, holding roles in all facets of thebusiness from finance and accounting to operations management, sales and marketing. Kevin is aCertified Public Accountant (CPA) with an Economics degree from the University of Victoria and aMaster’s in Business Administration from the University of Alberta. Kevin currently serves on the Boardof Directors of the Forest Products Association of Canada (FPAC), the voice of Canada’s wood, pulp andpaper producers; the Sustainable Forestry Initiative (SFI), FPInnovations. the Softwood Lumber Board,and the Binational Softwood Lumber Council (BSLC)."
+                      },
+                      {
+                        "FullName": "Dr. Johan Foster",
+                        "FirstName": "Dr. Johan",
+                        "LastName": "Foster",
+                        "AvatarFileName": "dr-johan-foster.jpg",
+                        "JobTitle": "Associate Professor, Department of Chemical and Biological Engineering, Faculty of Applied Science, UBC",
+                        "SessionTitle1": "Can-Mask",
+                        "SessionAbstract1": "The Canadian-Mask, or Can-Mask is an excellent example of how research and innovation in partnership with government and industry can develop products that leverage our collective strengths, lead to tangible results, and foster economic growth in Canada while securing the supply chain of our current and future PPE needs.<p>The Can-Mask, is being designed to use wood fibres, to be easily produced and, more importantly, to be fully compostable and biodegradable. Drs. Orlando Rojas and Johan Foster of the UBC BioProducts Institute are leading a multidisciplinary effort to produce a biomaterial-based N95 mask.<p>The mask design is from a combination of in-house expertise in the areas of complex fluids, fiber processing, surface chemistry and nanotechnologies. The mask is designed in two parts; the passive, frame component and the filtration medium to allow the opportunity quickly enter the market using an off the shelf filtration medium. The team is working to evaluate the possibility of subsequent generation mask systems, incorporating antiviral and antibacterial coatings.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Johan Foster holds the Canfor/NSERC Industrial Research Chair in Advanced Bioproducts. Previously, he was an associate professor in Materials Science and Engineering at Virginia Tech University. Dr. Foster has co-authored over 120 original research papers, as well as three patents. His research focuses on the design, synthesis and engineering of bio-inspired functional polymers and nanocomposites, including nanocellulose. In the past year he was recognized by his peers with two major international awards: the Kingfa Young Investigator by the American Chemical Society Cellulose Division (2019), and the Technical Association of the Pulp and Paper Nanotechnology Division Mid-Career Award (2020).<p>Johan serves as Co-Chair of the nanotechnology division of the Technical Association of the Pulp and Paper Industry, and was co-chair and organizer of TAPPI NANO 2016. He is an expert for the European Research Commission (ERC) Marie Curie Innovative Training Networks (ITN), an expert for International Organization for Standardization (ISO), ISO/TC 229 WG 2 and is the official departmental evaluator, University of Ghana, Department of Biomedical Engineering (2017-2019)."
+                      },
+                      {
+                        "FullName": "Alyson Gaffney",
+                        "FirstName": "Alyson",
+                        "LastName": "Gaffney",
+                        "AvatarFileName": "alyson-gaffney.jpg",
+                        "JobTitle": "Executive Director, Canadian Network of Agencies for Regulation",
+                        "SessionTitle1": "Increasing the Public Profile of Professional Designations",
+                        "SessionAbstract1": "The belief voiced from conference registrants was that the perceived value of their designation is notalways present with Alberta’s public nor is the public widely aware of the role they play in supportingAlbertan’s interests. The objective of this talk is for the attendees to garner some fresh ideas, usablebusiness tools, processes and insights from an industry thought leader and notable businessdevelopment and marketing executive that you may use to develop and execute a targeted strategy toincrease awareness and mindshare with your chosen target audience.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Alyson Gaffney has over 20 years’ experience successfully helped a variety of organizations achieve their business objectives from global 1000 companies, to small startups, non-profits, and Canadian regulators. She is a former Corporate Marketing executive for a Fortune 1000 company, sales and marketing consultant for small and medium sized businesses, Founder of Women in Data Science Conference (Ottawa), and Co-Founder Women for Mental Health at the Royal Ottawa Hospital. As the Executive Director for CNAR she is responsible for continuously connecting Canada's provincial and national regulators, licensing boards, accrediting agencies, examining bodies, and government officials at all levels to discuss challenges, share ideas and develop best practices related to a wide range of issues relevant to organizations engaged in the self-regulation of professions and occupations.."
+                      },
+                      {
+                        "FullName": "Michael Gubbels",
+                        "FirstName": "Michael",
+                        "LastName": "Gubbels",
+                        "AvatarFileName": "michael-gubbels.jpg",
+                        "JobTitle": "Indigenous Policy Integration Coordinator, Alberta Environment and Parks",
+                        "SessionTitle1": "Indigenous Partnership Building",
+                        "SessionAbstract1": "Michael will present on building Indigenous partnerships in forestry. He will explain the importance ofbuilding relationships, how to build good relationships, and how that can lead to effective consultation.He will share tips he has learned from his experience in working with Indigenous peoples, and providesome examples of Indigenous history, cultural practices, values, and worldview. This presentation willgive you knowledge, skills and tools to enable good partnerships with Indigenous peoples and seekmutually beneficial opportunities.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Michael Gubbels is a father of 2 and a husband of 1, living in Edmonton Alberta. He is Métis from Manitoba, Dutch from Vancouver Island and grew up in BC, Saskatchewan and Alberta. He works for the Alberta Government in the Ministry of Environment and Parks as an Indigenous Policy Integration Coordinator. He has worked with Indigenous peoples throughput his 13 year career with the Alberta Government in fields of dispute resolution, governance, economic development and environmental monitoring. He began his working life in electrical engineering then switched careers to work with Indigenous peoples, starting a new job working with kids in care. He is a passionate believer in the benefits of building partnerships, reconciliation and the power of knowledge. He has organized and led many learning opportunities for the Alberta Public Service, including 2 Spirit Learning Workshops, Elder Teachings, Safe Zone Training and even a little Kung Fu here and there. For this work he recently received the Premier's Public Service Award. He is here today to share with you his experience working with Indigenous peoples and how to build good relationships."
+                      },
+                      {
+                        "FullName": "Darren Henshaw, RFT",
+                        "FirstName": "Darren",
+                        "LastName": "Henshaw",
+                        "AvatarFileName": "darren-henshaw.jpg",
+                        "JobTitle": "Senior Engineering Technician, Ministry of Forests, Lands, Natural Resource Operations, and Rural Development",
+                        "SessionTitle1": "Deactivating and Reclaiming Roads",
+                        "SessionAbstract1": "Forest professionals face many challenges when it comes to effectively managing road deactivation and reclamation. This presentation provides discussion on forest road deactivation and reclamation issues from a perspective based on experience gained working in southern British Columbia. Topics that will be discussed are planning, consultation, implementation, and good practices. It is hoped that useful parallels will be found in this presentation between forestry practices in Alberta and British Columbia.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Darren Henshaw is a Registered Forestry Technologist working for the Ministry of Forests, Lands, Natural Resource Operations, and Rural Development out of Grand Forks in Southern B.C. Darren is currently the Senior Engineering Technician for the Selkirk Resource District in the Boundary Area. With over 25 years of forestry experience both with government and industry, Darren has gained a unique level of knowledge on road deactivation and road reclamation."
+                      },
+                      {
+                        "FullName": "Deborah M. Howes, B.A., LL.B., ACCI, FCCI, CTAJ, C. Arb., C. Med., IMI Cert.",
+                        "FirstName": "Deborah M.",
+                        "LastName": "Howes",
+                        "AvatarFileName": "deborah-m-howes.jpg",
+                        "JobTitle": "",
+                        "SessionTitle1": "Unconscious Bias in the Workplace",
+                        "SessionAbstract1": "Unconscious biases are the attitudes, stereotypes or assumptions we accumulate throughout life that can influence our decision making, particularly when something must be decided quickly. This session will explore what biases impact the workplace and how. It will also provide individual and organizational actions to reduce or eliminate unconscious bias from the workplace.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Deborah M. Howes is a Chartered Arbitrator and Chartered Mediator and an IMI Certified Mediator. She is the curriculum developer and instructor for the Foundation of Administrative Justice and President of High Clouds Incorporated, a Canadian company providing seminars and dispute resolution services. From 2007 to 2014 Ms. Howes served as a part-time member of the Public Service Labour Relations Board. Between 1991 and 2002, she was full-time Vice Chair with the Alberta Labour Relations Board. She served as acting Chair for the ALRB in 1999. Prior to her appointment to the ALRB, Ms. Howes practiced law with the Edmonton firm of Duncan & Craig.<p>In 1998, Ms. Howes co- founded the Foundation of Administrative Justice (FOAJ), a non-profit society dedicated to training for members and staff of administrative tribunals. Until December 2014 Ms. Howes was the Executive Director of FOAJ during which she led the organization to a national profile. In addition to her Bachelor of Laws and Bachelor of Arts degrees, Ms. Howes holds Certificates in Arbitration and Conflict Management from the ADR Institute of Alberta and a Certificate in Tribunal Administrative JusticeTM from the Foundation of Administrative Justice. She is currently completing a Curriculum Development and Instructional Design Extension Certificate through Mount Royal University."
+                      },
+                      {
+                        "FullName": "Annie Jian, P. Biol., MSc",
+                        "FirstName": "Annie",
+                        "LastName": "Jian",
+                        "AvatarFileName": "annie-jian.jpg",
+                        "JobTitle": "Water Quality Specialist (Limnologist), AER",
+                        "SessionTitle1": "Wetland Replacement Program Part 1",
+                        "SessionAbstract1": "Annie Jian, AER, joins Matthew Wilson from the Grants and Program Delivery Section of AEP presents Changing Gears to meet the Wetlands Policy Outcomes. Part 1 of this presentation provides a refresher of the Wetland Policythat came into effect in 2013. Along with updates to the policy and a review of policy requirements, thispresentation identifies red tape reduction initiatives.",
+                        "SessionTitle2": "Wetland Replacement Program Part 2",
+                        "SessionAbstract2": "Part Two of the Changing Gears to meet the Wetlands Policy Outcomes expands into the details of replacing wetlands on the ground. This is a walk-through of the Wetland Replacement Program, identifying definitions and concepts, the process for contracting with partners, and a summary of the program’s accomplishments.",
+                        "Bio": "Annie Jian is a Water Quality Specialist and Limnologist at the Alberta Energy Regulator (AER). Annie specializes in regulatory approvals, policy, and regulatory development in managing wetland and aquatic ecosystems to support energy development decisions for Alberta’s oil, natural gas, and coal industries. Through her 10-plus years of experience working in various energy and water management roles with the Government of Alberta and the AER, Annie has had the privilege of being a core member on the implementation of the Alberta Wetland Policy, including design of the OneStop system for Water Act applications. Her regulatory expertise includes the Water Act, Environmental Protection and Enhancement Act, Public Lands Act, and Oil Sands Conservation Act. Annie holds a B.Sc. in Biological Sciences from the University of Alberta and is a candidate for Masters of Earth & Energy Resources Leadership at Queen’s University."
+                      },
+                      {
+                        "FullName": "Gail Kastning, B.Ed., CCS,",
+                        "FirstName": "Gail",
+                        "LastName": "Kastning",
+                        "AvatarFileName": "gail-kastning.jpg",
+                        "JobTitle": "Certified Career Strategist, Purposeful Careers",
+                        "SessionTitle1": "A Career Roadmap: Chart the course and navigate the stages of your career",
+                        "SessionAbstract1": "Navigating our careers can be both exciting and challenging. In the beginning stages, we want to land our first job, build skills and get traction. In mid-career, we have skills and experience built, but we may be uncertain about our next direction. In the later stages, we wonder how we can best share the experience and skills we’ve build over the course of time in our industry.This webinar is divided into three parts:<p>1. Create a Career Roadmap<br>2. Chart Your Course and Choose a Destination<br>3. Navigate the Stages of Your Career<p>By the end of the webinar, participants will have the tools and training needed to create a roadmap, begin to chart direction and navigate next steps.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Gail Kastning is a Calgary based Certified Career Strategist and owner of Purposeful Careers. With over 10 years in the field of career development and workplace training, Gail has supported thousands of Albertans in their work search and career management goals. Over the past five years, she has diligently researched the changing world of work and global trend. As someone who has adjusted to changing economies, Gail has come up with a simple and effective roadmap that helps her chart the course of her own career. She shares her roadmap strategy with her clients so they too can navigate their careers in a changing world of work. Gail has been a guest lecturer at the University of Calgary and has spoken at the Alberta Career Development Conference, Alberta Job Search Boot Camps, GoldMind Project Events, and Laid Off Calgary. She has been a contributing writer to Career Momentum and CERIC."
+                      },
+                      {
+                        "FullName": "Jason Krips",
+                        "FirstName": "Jason",
+                        "LastName": "Krips",
+                        "AvatarFileName": "jason-krips.jpg",
+                        "JobTitle": "CEO AFPA",
+                        "SessionTitle1": "The Forestry Workforce: Instilling the passion by knowing your ‘why’",
+                        "SessionAbstract1": "In this coffee table discussion, industry experts Jason Krips and Kevin Edgson share industry insightswith YourForest Podcaster, Matthew Kristoff. The three have a candid conversation about the driversbehind forestry workforce development and discovering the personal meaning that ignites yourpassion to be a part of this workforce.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Jason Krips was appointed as President and CEO of the Alberta Forest Products Association in April 2020.Jason is excited to be working with the forest industry and policy makers to grow this vitally importantrenewable and sustainable sector, which currently creates jobs for over 40,000 Albertans andcontributes more than $7 Billion to the provincial economy.<p>Previous to joining AFPA, Jason spent nearly 20 years with the Government of Alberta in numerousroles, with his last 6.5 years as Deputy Minister Economic Development, Trade and Tourism andAgriculture and Forestry. As Deputy Minister of Economic Development, Trade and Tourism, Jasonoversaw the stand up and build of this new ministry and was responsible for leading the developmentand implementation of economic development strategies, trade policy, market access and investmentattraction initiatives. As Deputy Minister of Agriculture and Forestry, Jason was responsible forpromoting strong, competitive and sustainable agriculture, food and forestry industries.<p>A lawyer by profession, Jason has a strong and diverse background in the areas of industry policy, issuesmanagement, and stakeholder engagement."
+                      },
+                      {
+                        "FullName": "Matt Kristoff, RPF",
+                        "FirstName": "Matt",
+                        "LastName": "Kristoff",
+                        "AvatarFileName": "matt-kristoff.jpg",
+                        "JobTitle": "YourForest Podcast",
+                        "SessionTitle1": "The Forestry Workforce: Instilling the passion by knowing your ‘why’",
+                        "SessionAbstract1": "In this coffee table discussion, industry experts Jason Krips and Kevin Edgson share industry insightswith YourForest Podcaster, Matthew Kristoff. The three have a candid conversation about the driversbehind forestry workforce development and discovering the personal meaning that ignites yourpassion to be a part of this workforce.",
+                        "SessionTitle2": "Public Involvement in Planning Herbicide Programs",
+                        "SessionAbstract2": "This session is coffee table conversation between Milo Mihajlovich and YourForest podcast host, Matthew Kristoff, discussing the importance of involving the public when planning herbicide programs. Milo shares extensive experience in this mentoring chat with Matt, underpinning key understandings forest professionals must appreciate when working with the public.",
+                        "Bio": "YourForest is a podcast series that hopes to educate the public and forest management communityabout sustainability. It delivers the latest and most important ideas around environmental managementin a format people find easy to understand and fun to listen to. Each episode is a passionate discussionwith an expert regarding the subject they have dedicated their lives to understanding.<br>Matthew Kristoff is the creator and host of YourForest. He is an RPF who discovered a passion forecology and sustainability while working as an Inventory Forester for GreenLink Forestry. Matthewcreated the podcast as a means to explore and learn more about our natural world, and to share thatexploration with others."
+                      },
+                      {
+                        "FullName": "Ellen Macdonald, PhD",
+                        "FirstName": "Ellen",
+                        "LastName": "Macdonald",
+                        "AvatarFileName": "ellen-macdonald.jpg",
+                        "JobTitle": "Department Chair and Professor, University of Alberta, Department of Renewable Resources",
+                        "SessionTitle1": "Update on Forestry Education",
+                        "SessionAbstract1": "The covid-19 pandemic forced a rapid and dramatic change in delivery of undergraduate education. This was particularly challenging for programs like forestry, for which hands on learning is a critical component. In this casual discussion the presenters explore the implications of the pandemic for delivery of courses, assessment of learning, financial considerations for students and institutions, and the future outlook for graduates. A great attitude by students and creative approaches by instructors have resulted in a surprisingly smooth transition to the new reality.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Ellen Macdonald is a Professor of Forest Ecology and Chair of the Department of Renewable Resources at the University of Alberta. She teaches Forest Ecology and has taught Restoration Ecology, Environmental Assessment, and graduate-level statistics, among other subjects. She has taught at Spring Field School almost every year since 1989. For the past 30 years her research has focused on the ecology of northern forests - particularly forest regeneration, stand dynamics, understory plant communities and relationships among these. As an applied researcher she greatly values the productive partnerships with industry and government partners, which help ensure that research results are applied to practice and policy. She has published over 145 refereed journal articles and supervised 41 MSc and 15 PhD students to completion. She has been recognized for research excellence by receiving Scientific Achievement Awards from both the Canadian Institute of Forestry (in 2014) and the International Union of Forest Research Organizations (in 2019). She was the 2019 recipient of the University Cup, the University of Alberta’s highest honour for excellence in research, teaching, and service."
+                      },
+                      {
+                        "FullName": "Audrey Mascarenhas, P.Eng",
+                        "FirstName": "Audrey",
+                        "LastName": "Mascarenhas",
+                        "AvatarFileName": "audrey-mascarenhas.jpg",
+                        "JobTitle": "President and CEO Questor Technology Inc.",
+                        "SessionTitle1": "Air Quality and Emission Regulations",
+                        "SessionAbstract1": "Over the last few decades, there has been an increasing attention towards environmental regulations to minimize air emissions. That is mainly because the connection between air quality, rising global temperatures, and the human health is better understood. According to The World Health Organizations, one third of fatalities from heart disease, lung cancer and stroke are linked to air pollution.<p>In addition to regulatory requirements for VOCs, particulate matter, and the recent attention to greenhouse gas emissions, there are new regulations that require refineries to monitor benzene emissions at the fence line. This is to ensure the concentration of emissions leaving the fence is in compliance with the National Ambient Air Quality Standards. High efficiency waste gas combustion provided by Questor Technology, ensure zero fence line harmful emissions by dealing cleanly with the emissions at each process unit.<p>The deployment of 99.99% verified clean combustion technology ensures zero harmful emissions at the fence line at the same time as reducing capital and operating costs and improving facility safety.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Audrey Mascarenhas has worked in energy for over 35 years with Gulf Canada Resources Ltd. and Questor Technology Inc. She holds a bachelor's degree in Chemical Engineering from the University of Toronto and a master's degree in Petroleum Engineering from the University of Calgary. She is a fellow of the Canadian Academy of Engineers. Audrey served as a distinguished lecturer with the Society of Petroleum Engineers in 2010/2011. She is a member of the Schulich Industry Engineering Advisory Council and currently chairs the Canadian federal government clean technology strategy table.<p>Audrey was the recipient of the Ernst & Young Entrepreneur of the Year 2011 Prairies Award for Cleantech and Environmental Services and received a national citation for Values-Based Innovation. She was chosen by Business in Calgary as a 2014 Leaders of Tomorrow, is a 2014 Board Diversity 50 cohort and one of Canada's 2017 Clean50. Audrey is a fellow of the Energy Futures Lab, co-chairs the Governor General's Innovation Awards assessment committee. Questor was recently recognized by the Cleantech Innovation exchange (CIX) as one of the Top 10 Most Innovative Cleantech Canadian Companies."
+                      },
+                      {
+                        "FullName": "Milo Mihajlovich",
+                        "FirstName": "Milo",
+                        "LastName": "Mihajlovich",
+                        "AvatarFileName": "milo-mihajlovich.jpg",
+                        "JobTitle": "Mihajlovich Enterprises Ltd.",
+                        "SessionTitle1": "Public Involvement in Planning Herbicide Programs",
+                        "SessionAbstract1": "\"This session is coffee table conversation between Milo Mihajlovich and YourForest podcast host, Matthew Kristoff, discussing the importance of involving the public when planning herbicide programs. Milo shares extensive experience in this mentoring chat with Matt, underpinning key understandings forest professionals must appreciate when working with the public.\"",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Milo is a native Albertan who graduated from U of A in forest science in 1976. Since then he has worked primarily in reforestation, reclamation, and woody plant management on pasture lands. He has been employed by Alberta Forest Service, Dow Chemical/Dow Elanco, Woods and Forests South Australia, Conservation and Land Management Western Australia, Ace Vegetation Control Service Ltd., and for the last 22 years, as a self-employed consultant in post-establishment silviculture working across Canada and into the US Pacific Northwest. His consulting focused on helping silviculturists develop sustainable, cost effective reforestation processes in the boreal environment. Over the past 10 years Milo has been actively engaged in trying to bring the forest industry into the carbon economy. Milo retired as a registered professional forester in 2020. His current interest is restoration of peatlands harvested for peat moss production."
+                      },
+                      {
+                        "FullName": "Brandi Mogge",
+                        "FirstName": "Brandi",
+                        "LastName": "Mogge",
+                        "AvatarFileName": "brandi-mogge.jpg",
+                        "JobTitle": "Team Leader",
+                        "SessionTitle1": "Overview of the Modernized Fisheries Act",
+                        "SessionAbstract1": "Lee-Ann Smith, the acting Manager of Provincial/Territorial Partnerships, will provide highlights of key changes to the Fisheries Act, general information about processes when conducting works, undertakings or activities in or near water, tips on how to complete a Request for Review form and finally what happens after a project is submitted to DFO for review. The goal of this session is to help proponents understand when they should submit their projects to DFO for review and what information they should include in the Request for Review form to allow for a timely review and assessment of their project. Shona Derlukewich and Brandi Mogge will respond to questions in the Q & A session.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Brandi Mogge is a Team Leader in the Fish and Fish Habitat Protection Program with Fisheries and Oceans Canada. She has worked for DFO for a collective total of nine years, currently in the Mining, Oil, and Gas – South unit based in Edmonton, AB. She has a wealth of knowledge with various versions of the Fisheries Act and DFO's policies and guidelines. In addition, Brandi was a Land Access Manager with the Alberta Biodiversity Monitoring Institute."
+                      },
+                      {
+                        "FullName": "Joel Neuheimer",
+                        "FirstName": "Joel",
+                        "LastName": "Neuheimer",
+                        "AvatarFileName": "joel-neuheimer.jpg",
+                        "JobTitle": "",
+                        "SessionTitle1": "Gender Equity in Canada-Forest Sector Initiative",
+                        "SessionAbstract1": "This presentation will discuss the Gender Equity in Canada’s Forest Sector National Action Plan project. This 3-year project includes private, public, not-for-profit, Indigenous and academia representatives from across the forest sector who work collaboratively to shift their workplace cultures across the whole of the sector. Through comprehensive data collection, best practices that foster an inclusive culture and repositioning the sector through coordinated and strategic communications, this project aims to create sustained change that addresses gender inequality and makes the sector more welcoming to women and minorities.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Joel has over 25 years of both federal government and industry experience working with the Canadian forest industry and its partners worldwide.<p>In his current role, Joel works with FPAC members and their partners to continually improve the global cost competitiveness of FPAC members. This includes legislation, regulations, and agreements to reduce costs, improve service, and to accelerate improvements to the supply chain for members.<p>Joel holds a Bachelor of Arts in Political Science from McGill University and a Master of Arts in Communications from the University of Alaska in Fairbanks."
+                      },
+                      {
+                        "FullName": "Dr. Hieu Van Ngo",
+                        "FirstName": "Dr. Hieu Van",
+                        "LastName": "Ngo",
+                        "AvatarFileName": "dr-hieu-van-ngo.jpg",
+                        "JobTitle": "Associate Professor, University of Calgary, Faculty of Social Work",
+                        "SessionTitle1": "Creating Culturally Competent Organizations",
+                        "SessionAbstract1": "Open, responsive organizations function in synch with the rhymes and rhythms of our communities.They continually interact with social, political, and economic realities, and in the process, evolve andstay relevant. At present, the various social movements, including anti-Black racism protests and calls toaction to redress the legacy of colonization against Indigenous people, have challenged Canadianinstitutions and organizations to identify and to address systemic barriers against community memberson the basis of race, gender, ability and other social locations.<p>In this presentation, is focused on diversity competence and organizational change. It will examine thevarious demographic, social, political, economic and legislative contexts that create an impetus fororganizational change. A framework to think about diversity competence will be provided and thepractical strategies to integrate diversity into all aspects of organizational structures and functions willbe suggested. Participants are invited to join in critical dialogues that examine contemporary issuesfacing communities and organizations and explore solutions to those issues.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Hieu Van Ngo is grounded in life experience, professional practice, and community leadership. Since2001, he has led more than 15 collaborative projects that promote diversity and inclusion, anti-racistpractice, organizational change, leadership development, and crime prevention. He has mentoredstudents and community members across the globe and is the author of many publications, includingCultural Competency- A Guide to Organizational Change."
+                      },
+                      {
+                        "FullName": "Dr. Peter Nunoda, PhD,",
+                        "FirstName": "Dr. Peter",
+                        "LastName": "Nunoda",
+                        "AvatarFileName": "dr-peter-nunoda.jpg",
+                        "JobTitle": "President Red Deer College",
+                        "SessionTitle1": "Internationally Trained Workers Software Demo",
+                        "SessionAbstract1": "Red Deer College (RDC) is partnering with Vametric, the developers of the Valid-8 state-of-theart competency assessment and validation tool, to deploy Valid-8 for educators and employers across Alberta and BC. While RDC has focused primarily on the use of Valid-8 to transform trades and apprenticeship training, it is clear that Valid-8 has much more universal applicability for a wide variety of educational purposes including: essential and human skills, gap training, upskilling and reskilling that are integral to the future of work in a post-COVID world. For employers, Valid-8 provides cost effective “just in time” training supported by video evidence of competency mastery.<p>This software can be used to also determine competencies of internationally trained workers who may otherwise be required to train and test in Canada before being able to practice their trade regardless of whether they have already arrived in Canada or if their skill set is being determined to fill a skill gap prior to the immigration process.<p>Today’s demonstration will focus on the specific application of Valid-8 to occupations in Canada’s forestry sector followed by a Q & A session.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Dr. Nunoda, who holds a Ph.D. in History, brings more than 30 years of post-secondary experience to the College. He was an instructor in the Departments of History and Native Studies for 12 years at the University of Manitoba.<p>Dr. Nunoda served as the Program Director for Aboriginal Focus Programs from 2000-2002 and Director of Access Programs for the next five years at the University of Manitoba. From 2007-2011, he was the Dean of Faculty of Health at the University College of the North. Then, he served as Vice President, Academic and Research at Northern Lights College (NLC) for three years. His subject matter expertise in Aboriginal health led him to a position at James Cook University in Australia.<p>Since August 2014, Dr. Nunoda served as the President of Vancouver Community College (VCC)."
+                      },
+                      {
+                        "FullName": "Luc Rainville",
+                        "FirstName": "Luc",
+                        "LastName": "Rainville",
+                        "AvatarFileName": "luc-rainville.jpg",
+                        "JobTitle": "Past President, Canadian Institute of Forestry / Institut forestier du Canada",
+                        "SessionTitle1": "Gender Equity in Canada-Forest Sector Initiative",
+                        "SessionAbstract1": "This presentation will discuss the Gender Equity in Canada’s Forest Sector National Action Plan project. This 3-year project includes private, public, not-for-profit, Indigenous and academia representatives from across the forest sector who work collaboratively to shift their workplace cultures across the whole of the sector. Through comprehensive data collection, best practices that foster an inclusive culture and repositioning the sector through coordinated and strategic communications, this project aims to create sustained change that addresses gender inequality and makes the sector more welcoming to women and minorities.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Luc has been involved in the environmental and forest sector for over 15 years while working with public institutions at the federal and municipal levels, in the private sector, as well as in the not for profit context in Canada. In addition, having earned a Forestry Technician Diploma from La Cite collegial in Ottawa and an Environment degree from the University of Ottawa, he holds certifications as an Arborist with the International Society of Arboriculture (ISA), and as an Environmental Professional (EP) with the Environmental Careers Organization of Canada (ECO Canada). An engaged member of Canadian Institute of Forestry (CIF-IFC or Institute) since college, Luc joined the CIF-IFC Board as an Executive Officer in 2017. In his current role with the CIF-IFC, Luc works with Partners in the Canadian Forest Sector and for the Institute’s Members to serve as the voice of forest sector practitioners representing foresters, technologists, technicians, ecologists, biologists, educators, and many others with a professional interest in forests and forestry."
+                      },
+                      {
+                        "FullName": "Lea A. Randall, MSc., P. Biol.",
+                        "FirstName": "Lea A.",
+                        "LastName": "Randall",
+                        "AvatarFileName": "lea-a-randall.jpg",
+                        "JobTitle": "",
+                        "SessionTitle1": "Amphibian and Reptile Handling",
+                        "SessionAbstract1": "Three experts share their knowledge on handling amphibians and reptiles in Alberta. Lea Randall from the Calgary Zoo describes the proper handling of amphibians, including salamanders. Nicholas Cairns will speak on Western Painted Turtle and Greater Short Horned Lizard handling, capture and survey. Stephanie Winton follows Nicholas with an in-depth review of identification, capture and handling of rattlesnakes.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Lea received her BSc in Biology from the University of Victoria and received her MSc in Ecology from the University of Calgary. Her master’s thesis focused on the impact of forest disturbance on little brown bats. She worked for the Yukon Department of Environment and NatureServe as a wildlife and habitat technician, which gave her the opportunity to work on a variety of projects including monitoring bats and other small mammals, birds, insects, elk, wolverine and pine marten. For the last nine years, Lea has worked as a population ecologist and leads the Northern Leopard Frog conservation program at the Calgary Zoo’s Centre for Conservation Research. Her primary research focuses on the population dynamics, genetics, reproduction and reintroduction of Northern Leopard Frogs. She is a member of the BC northern leopard frog recovery team, the COSEWIC amphibian and reptile subcommittee, the IUCN Species Survival Commission Amphibian Specialist Group, and is on the City of Calgary’s BiodiverCity Advisory Committee."
+                      },
+                      {
+                        "FullName": "Carla Rhyant, MAL",
+                        "FirstName": "Carla",
+                        "LastName": "Rhyant",
+                        "AvatarFileName": "carla-rhyant.jpg",
+                        "JobTitle": "Executive Director, Association of Alberta Forest Management Professionals",
+                        "SessionTitle1": "Emerging Trends in the Regulated Professions",
+                        "SessionAbstract1": "Canada is the last jurisdiction that allows self‐regulated professions. The regulatory environment that currently exists is changing. Society has elevated expectations around public safety and consumer protection, there are more internationally trained individuals immigrating and working in Canada and there is increasing legislation requiring regulatory organizations to be transparent, objective, impartial and procedurally fair.<p>This presentation will provide an overview on the trends and pending changes that are emerging in the regulated professions across Canada.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Carla Rhyant has lived and worked in rural communities her entire life, having grown up in a logging family and on a farm in the interior of BC. She attended NWCC in Smithers BC for integrated resource management and worked in a First Nation’s organization prior to relocating to Alberta in 2006. In 2017 she completed a Master of Arts in Leadership through Royal Roads University.<p>Carla has served the non-profit sector for over 16 years expanding the profile of non-profit organizations through solid programming, good communication, and building a strong network of supporters. She is committed to creating strong leadership, governance and policy. Through her career of working with natural resource sectors, Carla recognizes the demographics, complexities, challenges and opportunities facing individuals and businesses in rural Alberta. Carla has served on numerous boards provincially and nationally and is currently the Chair of the Forestry Professional Regulators of Canada."
+                      },
+                      {
+                        "FullName": "Dr. Orlando Rojas",
+                        "FirstName": "Dr. Orlando",
+                        "LastName": "Rojas",
+                        "AvatarFileName": "dr-orlando-rojas.jpg",
+                        "JobTitle": "Department of Chemical & Biological Engineering, UBC",
+                        "SessionTitle1": "Can-Mask",
+                        "SessionAbstract1": "The Canadian-Mask, or Can-Mask is an excellent example of how research and innovation in partnership with government and industry can develop products that leverage our collective strengths, lead to tangible results, and foster economic growth in Canada while securing the supply chain of our current and future PPE needs.<p>The Can-Mask, is being designed to use wood fibres, to be easily produced and, more importantly, to be fully compostable and biodegradable. Drs. Orlando Rojas and Johan Foster of the UBC BioProducts Institute are leading a multidisciplinary effort to produce a biomaterial-based N95 mask.<p>The mask design is from a combination of in-house expertise in the areas of complex fluids, fiber processing, surface chemistry and nanotechnologies. The mask is designed in two parts; the passive, frame component and the filtration medium to allow the opportunity quickly enter the market using an off the shelf filtration medium. The team is working to evaluate the possibility of subsequent generation mask systems, incorporating antiviral and antibacterial coatings.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Dr. Orlando Rojas is the Canada Excellence Research Chair (CERC) in Forest Bioproducts, with shared affiliation in the Departments of Chemistry and Wood Science. He came to UBC from Aalto University in Finland, where he led a national cluster to advance the Finnish materials bioeconomy. His research group, Biobased Colloids and Materials (BiCMat), expands a network of more than 54 PhD students and 36 postdoctoral fellows he is supervising.<p>Prof. Rojas is the 2018 Recipient of the Anselme Payen Award and is an elected Fellow of the American Chemical Society and the Finnish Academy of Science and Letters. In UBC, he leads the UBC BioProducts Institute, an enabler of the transition to a sustainable bio-based circular economy by using plant-based resources. He has published over 350 peer-review papers and is recognized worldwide for his scientific impact in the area of nanocelluloses."
+                      },
+                      {
+                        "FullName": "Deogratias Rweyongeza, P.Biol",
+                        "FirstName": "Deogratias",
+                        "LastName": "Rweyongeza",
+                        "AvatarFileName": "deogratias-rweyongeza.jpg",
+                        "JobTitle": "Senior Geneticist, Forestry Division, Alberta",
+                        "SessionTitle1": "The Role of Genetics and Seed in Forestry",
+                        "SessionAbstract1": "Tree seed is a primary foundation on which the health and productivity of the forest depends. Throughmany generations of reproduction and survival (natural selection), trees species have evolved intomosaics of populations each adapted to environmental conditions. Variation in climate and day lengthare primary abiotic drivers of natural selection in plants. Whenever there is variation in theenvironment, there is genetic variation in the species. We use a wide range of plant characteristics, suchas mortality, growth rate, morphology, phenology, physiological attributes and molecular signatures toreveal the size and pattern of genetic variation in the species. Planting and managing trees is the mostefficient and fastest way to grow wood fibre for the lumber and pulp industry. As opposed to naturalregeneration, planting and managing trees accelerates growth to produce wood fibre at a shorterrotation. However, through the choice and use of seed, planting trees carries a risk of altering thebalance between trees and their environment. Use of wrong seed source will adversely affects thehealth and productivity of the forest on which the forestry industry depends. The basic theme of thisseminar is “why we select seed sources in forestry”. It is designed to provide in plain language andsimple illustrations, the biological evidence of population genetic variation in forest trees, and theapplication of this knowledge to reforestation. All illustrations are based on Alberta conifer speciesprovenance trials and tree breeding programs. The seminar will benefit practicing foresters, biologistsand anybody who plant forest trees for commercial purposes and reclamation.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Deogratias Rweyongeza is a forest geneticist and tree breeder in the Forestry Division, Alberta Agriculture and Forestry in Edmonton. He holds a Bachelor of Science (BSc) in Forestry from Sokoine University of Agriculture, Tanzania, and the Master of Science (MSc) and PhD in Forest Biology and Management from the University of Alberta, Edmonton. Before joining the Forestry Division, he worked as a Forest Officer at the National Tree Seed Centre in Tanzania, and Post Doctoral Fellow and Research Associate at the University of Alberta. In addition to tree breeding, his work includes climate change adaptation with focus on selection and use of forest reproductive materials, especially in coniferous species."
+                      },
+                      {
+                        "FullName": "Heath Schnieder, RPFT,",
+                        "FirstName": "Heath",
+                        "LastName": "Schnieder",
+                        "AvatarFileName": "heath-schnieder.jpg",
+                        "JobTitle": "Program Chair, NAIT, Forest Technology program",
+                        "SessionTitle1": "Update on Forestry Education",
+                        "SessionAbstract1": "The covid-19 pandemic forced a rapid and dramatic change in delivery of undergraduate education. This was particularly challenging for programs like forestry, for which hands on learning is a critical component. In this casual discussion the presenters explore the implications of the pandemic for delivery of courses, assessment of learning, financial considerations for students and institutions, and the future outlook for graduates. A great attitude by students and creative approaches by instructors have resulted in a surprisingly smooth transition to the new reality.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "A graduate of the Forest Technology program at NAIT in 1992, Heath has worked in both government and industry roles. He has broad experience in every phase of forestry including wildfire operations, timber harvesting, road construction/reclamation, operational harvest planning, silviculture, and stakeholder consultation. In 2008, Heath took on a role as an instructor with the Forest Technology program, providing instruction in many of the areas that he had gained experience. In 2019 he took on the role of Program Chair."
+                      },
+                      {
+                        "FullName": "Lee-Ann Smith",
+                        "FirstName": "Lee-Ann",
+                        "LastName": "Smith",
+                        "AvatarFileName": "lee-ann-smith.jpg",
+                        "JobTitle": "Manager of Provincial/Territorial Partnerships",
+                        "SessionTitle1": "Overview of the Modernized Fisheries Act",
+                        "SessionAbstract1": "Lee-Ann Smith, the acting Manager of Provincial/Territorial Partnerships, will provide highlights of key changes to the Fisheries Act, general information about processes when conducting works, undertakings or activities in or near water, tips on how to complete a Request for Review form and finally what happens after a project is submitted to DFO for review. The goal of this session is to help proponents understand when they should submit their projects to DFO for review and what information they should include in the Request for Review form to allow for a timely review and assessment of their project. Shona Derlukewich and Brandi Mogge will respond to questions in the Q & A session.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Lee-Ann Smith has held various positions with Fisheries and Oceans Canada since joining the Department over 15 years ago. She began her career in Human Resources, moved to becoming a Policy Advisor with the regional Policy and Economics sector and finally joined the Aquatic Ecosystems sector in 2015 as a Partnerships Coordinator in the Fish and Fish Habitat Protection Program. Initially Lee-Ann was responsible for partnerships and outreach in Ontario, Manitoba, Saskatchewan, and Alberta but with the renewal of the Fish and Fish Habitat Protection program, she focuses on Ontario as there are now Partnership Coordinators for the other provinces. Lee-Ann is currently acting as the Manager of Provincial/Territorial Partnerships."
+                      },
+                      {
+                        "FullName": "Ron Thiessen, Ph.D., P.Eng., EP",
+                        "FirstName": "Ron",
+                        "LastName": "Thiessen",
+                        "AvatarFileName": "ron-thiessen.jpg",
+                        "JobTitle": "Environmental Engineer",
+                        "SessionTitle1": "Sustainable Remediation and Orphaned Wellsites",
+                        "SessionAbstract1": "The increasing number of orphaned wells in Alberta warrants a pragmatic and sustainable approach to soil and groundwater remediation during wellsite closure activities. Using the United Nations' Sustainable Development Goals as a motivation, a selection of recent peer-reviewed and grey literature on sustainable remediation approaches will be discussed. Given the technical and logistical challenges of both in situ and ex situ remediation methods, the use of life cycle assessment (LCA) and life cycle sustainability assessment (LCSA) for remediation technology evaluation will be introduced and published examples will be reviewed. Sustainable remediation approaches that are applied in Alberta will be discussed, and attendees will be encouraged to share their examples of sustainable remediation successes and challenges.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Dr. Ron Thiessen in an environmental engineer who focuses on pragmatic and sustainable environmental restoration approaches. The majority of Ron's professional experience has been in the energy industry and environmental consulting, and he has practiced his craft in Alberta, British Columbia, Manitoba, Northwest Territories, Nunavut, Ontario, and Saskatchewan. His doctoral dissertation examined one of multiple ways that Alberta's abandoned or orphaned wellsites could be prioritized for cleanup. Periodically, Dr. Thiessen teaches at the University of Calgary as a sessional instructor; his most recent graduate courses were in life cycle assessment and contaminated site remediation. He has also published several peer-reviewed journal articles and a book chapter on topics related to remediation"
+                      },
+                      {
+                        "FullName": "Mathew Wilson, P. Biol., MSc",
+                        "FirstName": "Mathew",
+                        "LastName": "Wilson",
+                        "AvatarFileName": "mathew-wilson.jpg",
+                        "JobTitle": "Team Lead Grants and Program Delivery Section of AEP",
+                        "SessionTitle1": "Wetland Replacement Program Part 1",
+                        "SessionAbstract1": "Matthew Wilson from the Grants and Program Delivery Section of AEP presents Changing Gears to meetthe Wetlands Policy Outcomes. Part 1 of this presentation provides a refresher of the Wetland Policythat came into effect in 2013. Along with updates to the policy and a review of policy requirements, thispresentation identifies red tape reduction initiatives. Annie Jian, AER, joins in for the Q & A session.",
+                        "SessionTitle2": "Wetland Replacement Program Part 2",
+                        "SessionAbstract2": "Part Two of the Changing Gears to meet the Wetlands Policy Outcomes expands into the details of replacing wetlands on the ground. This is a walk-through of the Wetland Replacement Program, identifying definitions and concepts, the process for contracting with partners, and a summary of the program’s accomplishments. Annie Jian, AER, joins in for the Q & A session.",
+                        "Bio": "Matthew is a registered professional biologist with ASPB. He grew up in Victoria, BC, and moved to Alberta in 2009 to do a Masters in Biology, researching wetland communities and assessing wetland health using biological indicators. In 2013, he joined Alberta Environment and Parks, and has spent the last eight years leading wetland policy implementation. Most recently, he and his team developed a program to oversee wetland replacement across the province, focusing on enabling delivery by key stakeholders such as municipalities and Ducks Unlimited."
+                      },
+                      {
+                        "FullName": "Stephanie Winton, MSc.",
+                        "FirstName": "Stephanie",
+                        "LastName": "Winton",
+                        "AvatarFileName": "stephanie-winton.jpg",
+                        "JobTitle": "Conservation Program Land Use Biologist",
+                        "SessionTitle1": "",
+                        "SessionAbstract1": "",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "Stephanie Winton is a conservaon biologist in the South Okanagan, BC. Her research interests focus on the ecology of amphibians and reples in disturbed landscapes, and she received the Governor General's Academic Gold Medal for her MSc thesis invesgang the impact of road mortality on the persistence of a threatened Western Ratlesnake populaon. She has experience in environmental planning for industrial and residenal development in Alberta and BC, as well as providing science-based advice to local governments and parcipang on reple recovery working groups. When not at her desk, you can find her exploring local lakes and mountains."
+                      },
+                      {
+                        "FullName": "Kimberly Worthingdon",
+                        "FirstName": "Kimberly",
+                        "LastName": "Worthingdon",
+                        "AvatarFileName": "kimberly-worthingdon.jpg",
+                        "JobTitle": "",
+                        "SessionTitle1": "Internationally Trained Workers Software Demo",
+                        "SessionAbstract1": "Red Deer College (RDC) is partnering with Vametric, the developers of the Valid-8 state-of-theart competency assessment and validation tool, to deploy Valid-8 for educators and employers across Alberta and BC. While RDC has focused primarily on the use of Valid-8 to transform trades and apprenticeship training, it is clear that Valid-8 has much more universal applicability for a wide variety of educational purposes including: essential and human skills, gap training, upskilling and reskilling that are integral to the future of work in a post-COVID world. For employers, Valid-8 provides cost effective “just in time” training supported by video evidence of competency mastery.<p>This software can be used to also determine competencies of internationally trained workers who may otherwise be required to train and test in Canada before being able to practice their trade regardless of whether they have already arrived in Canada or if their skill set is being determined to fill a skill gap prior to the immigration process.<p>Today’s demonstration will focus on the specific application of Valid-8 to occupations in Canada’s forestry sector followed by a Q & A session.",
+                        "SessionTitle2": "",
+                        "SessionAbstract2": "",
+                        "Bio": "With an entrepreneurial spirit, Kimberley Worthington leads communities to implement proactive economic development initiatives to grow sustainable prosperity. She is known for collaborating and leading on many award-winning projects. Internationally, Kim has volunteered with Federation Canadian Municipalities in the Sustainable and Inclusive Communities in Latin America program facilitating and training municipalities in Colombia to work collaboratively on local economic development initiatives. Currently, Kimberley supports regional initiatives at the Central Alberta Economic Partnership, locally known as CAEP - one of Alberta’s nine Regional Economic Development Alliances. This work supports her academic research on whether smaller municipalities can or should play in the global economy."
+                      }
+                    ]
+
+                  var buildAttendeeList = () => {
+                    const attendeeList = landingPageEl.getElementById("attendee-list");
+                    const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+                    const baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp";
+
+                    for (let user of attendees) {
+                      let clone = attendeeTemplate.content.cloneNode(true);
+
+                      let attendeeDiv = clone.getElementById("attendee-card");
+                      attendeeDiv.id = user.FullName.toLowerCase().replaceAll(" ", "-");
+
+                      const avatarImage = clone.getElementById("attendee-avatar");
+                      avatarImage.onerror = function () {
+                        avatarImage.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/speakers/generic-avatar.jpg';
+                      }
+                      avatarImage.src = baseUrl + "/speakers/" + user.AvatarFileName;
+
+                      let fullName = clone.getElementById("attendee-name");
+                      fullName.innerHTML = user.FullName;
+
+                      let jobTitle = clone.getElementById("job-title");
+                      jobTitle.innerHTML = user.JobTitle ? user.JobTitle : "";
+
+                      let session = clone.getElementById("session");
+                      session.innerHTML += user.SessionTitle1 ? "<div class='session-title'>Session: " + user.SessionTitle1 + "</div>" : "";
+                      session.innerHTML += user.SessionTitle2 ? "<div class='session-title'>Session: " + user.SessionTitle2 + "</div>" : "";
+
+                      let speakerBio = clone.getElementById("speaker-bio");
+                      speakerBio.innerHTML = user.Bio ? '<p>' + user.Bio : "";
+
+                      if (user.socialLinkedIn) {
+                        let linkedIn = clone.getElementById("linked-in");
+                        linkedIn.href = user.socialLinkedIn ? user.socialLinkedIn : "";
+                        linkedIn.innerHTML = user.socialLinkedIn ? user.socialLinkedIn : "";
+                      } else {
+                        let linkedInClass = clone.querySelector(".linked-in");
+                        linkedInClass.style.display = "none";
+                      }
+
+                      attendeeList.appendChild(clone);
+                    }
+                  }
+
+                  var updateAttendees = () => {
+                    let empty = true;
+                    for (let user of attendees) {
+                      const id = user.FullName.toLowerCase().replaceAll(" ", "-");
+                      const el = landingPageEl.getElementById(id);
+                      if (el) {
+                        if (user.visible) {
+                          empty = false;
+                          el.style.display = ""
+                        } else {
+                          el.style.display = "none";
                         }
-  
-                        $(document).ready(init);
-  
-                        var _lastScrollPos;
-                        var _lastScrollEl;
-                        function toggleSpeaker(show, index) {
-                          if (!show || !attendees[index]) {
-                            // Close
-                            $(landingPageEl).find('.speaker-overlay').removeClass('quartz-show');
-  
-                            // Scroll back if we have a position
-                            if (_lastScrollEl && _lastScrollPos) {
-                              _lastScrollEl.scrollTop(_lastScrollPos);
-                            }
-  
-                            return;
-                          }
-  
-                          // Scroll top
-                          var bodyEl = $('html,body');
-                          var layoutEl = $(landingPageEl).find('#ntar-bg');
-                          var docEl = $(document);
-  
-                          if (bodyEl.scrollTop() > 0) {
-                            _lastScrollPos = bodyEl.scrollTop();
-                            _lastScrollEl = bodyEl;
-                            bodyEl.scrollTop(0);
-                          } else if (docEl.scrollTop() > 0) {
-                            _lastScrollPos = docEl.scrollTop();
-                            _lastScrollEl = docEl;
-                            docEl.scrollTop(0);
-                          } else {
-                            _lastScrollPos = layoutEl.scrollTop();
-                            _lastScrollEl = layoutEl;
-                            layoutEl.scrollTop(0);
-                          }
-  
-                          // Get speaker & show
-                          var speaker = attendees[index];
-                          var content = $(landingPageEl).find('.speaker-overlay-content');
-                          content.find('img').attr('src', speaker.avatar);
-                          content.find('h2').html(speaker.firstName + ' ' + speaker.lastName);
-                          content.find('h3').html(speaker.title);
-                          content.find('p').html(speaker.bio);
-                          $(landingPageEl).find('.speaker-overlay').addClass('quartz-show');
-                        }
-  
-                        var buildAttendeeList = () => {
-                          const attendeeList = landingPageEl.getElementById('attendee-list');
-                          const attendeeTemplate = landingPageEl.getElementById('attendee-template');
-                          var index = 0;
-  
-                          for (let at of attendees) {
-                            let clone = attendeeTemplate.content.cloneNode(true);
-  
-                            let attendeeDiv = clone.getElementById('attendee');
-                            attendeeDiv.id =
-                              'at-' + at.firstName.toLowerCase() + '-' + at.lastName.toLowerCase();
-                            attendeeDiv.setAttribute('onclick', 'toggleSpeaker(true, ' + index + ')');
-                            index++;
-  
-                            if (at.online) {
-                              let online = clone.getElementById('online-badge');
-                              online.style = '';
-                            }
-  
-                            let avatar = clone.getElementById('avatar');
-                            avatar.src = at.avatar;
-  
-                            let name = clone.getElementById('name');
-                            name.innerHTML = at.firstName + ' ' + at.lastName;
-  
-                            let email = clone.getElementById('email');
-                            email.innerHTML = at.email;
-                            email.href = 'mailto:' + at.email;
-  
-                            let companyLink = clone.getElementById('company-link');
-                            companyLink.innerHTML = at.companyLink;
-                            companyLink.href = at.companyLink;
-  
-                            let businessCard = clone.getElementById('business-card');
-                            businessCard.href = at.businessCard;
-  
-                            let job = clone.getElementById('job');
-                            job.innerHTML = at.title + ' – ' + '<b>' + at.company + '</b>';
-  
-                            let industry = clone.getElementById('industry');
-                            industry.innerHTML = 'Industry – ' + '<b>' + at.industry + '</b>';
-  
-                            let sendMessageButton = clone.getElementById('send-message-button');
-                            sendMessageButton.id = at.firstName + ' ' + at.lastName;
-  
-                            attendeeList.appendChild(clone);
-                          }
-                        };
-  
-                        buildAttendeeList();
-  
-                        var updateAttendees = () => {
-                          let empty = true;
-  
-                          for (let at of attendees) {
-                            let id =
-                              'at-' + at.firstName.toLowerCase() + '-' + at.lastName.toLowerCase();
-                            let el = landingPageEl.getElementById(id);
-  
-                            if (el) {
-                              if (at.visible) {
-                                empty = false;
-                                el.style.display = '';
-                              } else {
-                                el.style.display = 'none';
-                              }
-                            }
-                          }
-  
-                          let emptyMessage = landingPageEl.getElementById('no-attendees-message');
-  
-                          if (empty) {
-                            emptyMessage.style.display = '';
-                          } else {
-                            emptyMessage.style.display = 'none';
-                          }
-                        };
-  
-                        var searchAttendees = (e) => {
-                          let query = e.currentTarget.value;
-  
-                          for (let at of attendees) {
-                            if (
-                              at.firstName.toLowerCase().startsWith(query) ||
-                              at.lastName.toLowerCase().startsWith(query)
-                            ) {
-                              at.visible = true;
-                            } else {
-                              at.visible = false;
-                            }
-                          }
-  
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          updateAttendees();
-                        };
-  
-                        var filterAttendeesByIndustry = (e) => {
-                          let query = e.currentTarget.value;
-  
-                          if (query === '') {
-                            for (let at of attendees) {
-                              at.visible = true;
-                            }
-                          } else {
-                            for (let at of attendees) {
-                              if (at.industry.toLowerCase() === query) {
-                                at.visible = true;
-                              } else {
-                                at.visible = false;
-                              }
-                            }
-                          }
-  
-                          clearSearchValue();
-                          clearLetterGroupings();
-  
-                          updateAttendees();
-                        };
-  
-                        var letterGroupings = [
-                          'all-grouping',
-                          'ae-grouping',
-                          'fj-grouping',
-                          'ko-grouping',
-                          'pt-grouping',
-                          'uz-grouping',
-                        ];
-  
-                        var clearLetterGroupings = () => {
-                          for (let group of letterGroupings) {
-                            let el = landingPageEl.getElementById(group);
-                            el.style.color = '';
-                            el.style.backgroundColor = '';
-                          }
-                        };
-  
-                        var clearIndustrySelect = () => {
-                          let select = landingPageEl.getElementById('select-attendees-industry');
-                          select.selectedIndex = 0;
-                        };
-  
-                        var clearSearchValue = () => {
-                          let search = landingPageEl.getElementById('search-attendees');
-                          search.value = '';
-                        };
-  
-                        var allAttendees = () => {
-                          for (let at of attendees) {
-                            at.visible = true;
-                          }
-  
-                          clearSearchValue();
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          landingPageEl.getElementById('all-grouping').style.color = 'white';
-                          landingPageEl.getElementById('all-grouping').style.backgroundColor =
-                            '#1E70B8';
-  
-                          updateAttendees();
-                        };
-  
-                        var AE = 'abcde';
-                        var filterAttendeesAE = () => {
-                          let filtered = [];
-  
-                          for (let at of attendees) {
-                            if (
-                              AE.includes(at.firstName[0].toLowerCase()) ||
-                              AE.includes(at.lastName[0].toLowerCase())
-                            ) {
-                              at.visible = true;
-                            } else {
-                              at.visible = false;
-                            }
-                          }
-  
-                          clearSearchValue();
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          landingPageEl.getElementById('ae-grouping').style.color = 'white';
-                          landingPageEl.getElementById('ae-grouping').style.backgroundColor =
-                            '#1E70B8';
-  
-                          updateAttendees();
-                        };
-  
-                        var FJ = 'fghij';
-                        var filterAttendeesFJ = () => {
-                          for (let at of attendees) {
-                            if (
-                              FJ.includes(at.firstName[0].toLowerCase()) ||
-                              FJ.includes(at.lastName[0].toLowerCase())
-                            ) {
-                              at.visible = true;
-                            } else {
-                              at.visible = false;
-                            }
-                          }
-  
-                          clearSearchValue();
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          landingPageEl.getElementById('fj-grouping').style.color = 'white';
-                          landingPageEl.getElementById('fj-grouping').style.backgroundColor =
-                            '#1E70B8';
-  
-                          updateAttendees();
-                        };
-  
-                        var KO = 'klmno';
-                        var filterAttendeesKO = () => {
-                          for (let at of attendees) {
-                            if (
-                              KO.includes(at.firstName[0].toLowerCase()) ||
-                              KO.includes(at.lastName[0].toLowerCase())
-                            ) {
-                              at.visible = true;
-                            } else {
-                              at.visible = false;
-                            }
-                          }
-  
-                          clearSearchValue();
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          landingPageEl.getElementById('ko-grouping').style.color = 'white';
-                          landingPageEl.getElementById('ko-grouping').style.backgroundColor =
-                            '#1E70B8';
-  
-                          updateAttendees();
-                        };
-  
-                        var PT = 'pqrst';
-                        var filterAttendeesPT = () => {
-                          for (let at of attendees) {
-                            if (
-                              PT.includes(at.firstName[0].toLowerCase()) ||
-                              PT.includes(at.lastName[0].toLowerCase())
-                            ) {
-                              at.visible = true;
-                            } else {
-                              at.visible = false;
-                            }
-                          }
-  
-                          clearSearchValue();
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          landingPageEl.getElementById('pt-grouping').style.color = 'white';
-                          landingPageEl.getElementById('pt-grouping').style.backgroundColor =
-                            '#1E70B8';
-  
-                          updateAttendees();
-                        };
-  
-                        var UZ = 'uvwxyz';
-                        var filterAttendeesUZ = () => {
-                          for (let at of attendees) {
-                            if (
-                              UZ.includes(at.firstName[0].toLowerCase()) ||
-                              UZ.includes(at.lastName[0].toLowerCase())
-                            ) {
-                              at.visible = true;
-                            } else {
-                              at.visible = false;
-                            }
-                          }
-  
-                          clearSearchValue();
-                          clearIndustrySelect();
-                          clearLetterGroupings();
-  
-                          landingPageEl.getElementById('uz-grouping').style.color = 'white';
-                          landingPageEl.getElementById('uz-grouping').style.backgroundColor =
-                            '#1E70B8';
-  
-                          updateAttendees();
-                        };
-                      </script>
-  
-                      <script>
-                        // handle sponsors
-  
-                        var sponsors = ['bcc', 'c&m_logo', 'hooper', 'quartz', 'tennant'];
-  
-                        var baseUrl =
-                          'https://studio304nextechar.freetls.fastly.net/infernoAR/quartz/sponsors/';
-  
-                        var sponsorList = landingPageEl.getElementById('sponsor-list');
-  
-                        var sponsorTemplate = landingPageEl.getElementById('sponsor-template');
-  
-                        for (let sponsor of sponsors) {
-                          let clone = sponsorTemplate.content.cloneNode(true);
-  
-                          let img = clone.getElementById('sponsor-logo');
-  
-                          img.id = 'sponsor-logo-' + sponsor;
-  
-                          img.src = baseUrl + sponsor + '.png';
-  
-                          sponsorList.appendChild(clone);
-                        }
-                      </script>
-  
-                      <script>
-                        var contentSection = landingPageEl.getElementById('ntar-bg');
-  
-                        var resizeObserver = new ResizeObserver((entries) => {
-                          for (const entry of entries) {
-                            var contentWidth = contentSection.offsetWidth;
-  
-                            var bannerImg = landingPageEl.getElementById('banner-image');
-  
-                            if (contentWidth <= 930) {
-                              bannerImg.style.display = 'none';
-                            } else {
-                              bannerImg.style.display = '';
-                            }
-                          }
-                        });
-  
-                        resizeObserver.observe(contentSection);
-                      </script>
-  
-                      <script>
-                        // handle modal
-  
-                        var showModal = (e) => {
-                          // get attendee
-                          let id = e.currentTarget.id;
-  
-                          let at = attendees.find((at) => at.firstName + ' ' + at.lastName === id);
-  
-                          // set attendee data
-                          messaging = at.firstName + ' ' + at.lastName;
-  
-                          // set attendee info in message box
-  
-                          if (at.online) {
-                            let online = landingPageEl.getElementById('mb-online-badge');
-                            online.style = '';
-                          }
-  
-                          let avatar = landingPageEl.getElementById('mb-avatar');
-                          avatar.src = at.avatar;
-  
-                          let name = landingPageEl.getElementById('mb-name');
-                          name.innerHTML = at.firstName + ' ' + at.lastName;
-  
-                          let job = landingPageEl.getElementById('mb-job');
-                          job.innerHTML = at.title + ' – ' + '<b>' + at.company + '</b>';
-  
-                          let contentSection = landingPageEl.getElementById('main');
-                          let contentHeight = contentSection.offsetHeight;
-  
-                          let modal = landingPageEl.getElementById('modal');
-  
-                          modal.style.display = 'flex';
-                          modal.style.height = contentHeight.toString() + 'px';
-  
-                          let messageBox = landingPageEl.getElementById('message-box');
-                          messageBox.scrollIntoView();
-                        };
-  
-                        var handleModalClick = (e) => {
-                          let target = e.target;
-  
-                          if (
-                            target.id === 'modal' ||
-                            target.id === 'close-modal-1' ||
-                            target.id === 'close-modal-image-1' ||
-                            target.id === 'close-modal-2' ||
-                            target.id === 'close-modal-image-2' ||
-                            target.id === 'done-message'
-                          ) {
-                            // reset messageBox and confirmation
-                            let messageBox = landingPageEl.getElementById('message-box');
-                            messageBox.style.display = '';
-  
-                            let messageTextArea = landingPageEl.getElementById('message-textarea');
-                            messageTextArea.value = '';
-  
-                            let messageConfirmation = landingPageEl.getElementById(
-                              'message-confirmation'
-                            );
-                            messageConfirmation.style.display = 'none';
-  
-                            let modal = landingPageEl.getElementById('modal');
-  
-                            let messaging = '';
-  
-                            modal.style.display = '';
-                          }
-                        };
-  
-                        var turnOnSend = (e) => {
-                          let target = e.target;
-  
-                          let sendButton = landingPageEl.getElementById('final-send');
-  
-                          if (target.value.trim().length > 0) {
-                            sendButton.disabled = false;
-                          } else {
-                            sendButton.disabled = true;
-                          }
-                        };
-  
-                        var sendMessage = async (e) => {
-                          let promise = new Promise(function (resolve, reject) {
-                            setTimeout(() => resolve('done'), 0);
-                          });
-  
-                          await promise;
-  
-                          let messageBox = landingPageEl.getElementById('message-box');
-                          messageBox.style.display = 'none';
-  
-                          let messageConfirmation = landingPageEl.getElementById(
-                            'message-confirmation'
-                          );
-  
-                          messageConfirmation.style.display = '';
-  
-                          let message = landingPageEl.getElementById('send-confirmation');
-                          message.innerHTML =
-                            'Your message to ' + messaging + ' has been successfully sent!';
-                        };
-                      </script>
-  
-                      <script>
-                        // handle schedule selectors
-                        var shortDays = '{{ shortDaysCollection }}';
-  
-                        var days = shortDays.split(',');
-  
-                        var toggleSchedule = (e) => {
-                          let target = e.currentTarget;
-  
-                          if (target.style.backgroundColor !== 'white') {
-                            target.style.backgroundColor = 'white';
-                          } else {
-                            target.style.backgroundColor = '#E0E9EF';
-                          }
-  
-                          let id = target.id.replace('-schedule', '');
-  
-                          let text = landingPageEl.getElementById(id + '-schedule-text');
-                          let chevron = landingPageEl.getElementById(id + '-schedule-chevron');
-                          let schedule = landingPageEl.getElementById(id + '-schedule-wrapper');
-  
-                          if (text.style.borderBottom !== '2px solid black') {
-                            text.style.borderBottom = '2px solid black';
-                          } else {
-                            text.style.borderBottom = '';
-                          }
-  
-                          if (chevron.style.transform !== 'rotate(180deg)') {
-                            chevron.style.transform = 'rotate(180deg)';
-                          } else {
-                            chevron.style.transform = '';
-                          }
-  
-                          if (schedule.style.display === 'none') {
-                            schedule.style.display = '';
-                          } else {
-                            schedule.style.display = 'none';
-                          }
-  
-                          for (let day of days) {
-                            if (day !== id) {
-                              hideSchedule(day);
-                            }
-                          }
-                        };
-  
-                        var hideSchedule = (day) => {
-                          let buttonId = day + '-schedule';
-                          let textId = day + '-schedule-text';
-                          let chevronId = day + '-schedule-chevron';
-                          let boxId = day + '-schedule-wrapper';
-  
-                          landingPageEl.getElementById(buttonId).style.backgroundColor = '#E0E9EF';
-                          landingPageEl.getElementById(textId).style.borderBottom = '';
-                          landingPageEl.getElementById(chevronId).style.transform = '';
-                          landingPageEl.getElementById(boxId).style.display = 'none';
-                        };
-  
-                        // handle responsiveness
-                        var contentSection = landingPageEl.getElementById('ntar-bg');
-  
-                        var scheduleResizeObserver = new ResizeObserver((entries) => {
-                          for (const entry of entries) {
-                            let contentWidth = contentSection.offsetWidth;
-  
-                            for (let day of days) {
-                              // position checks
-                              let dayBox = landingPageEl.getElementById(day + '-schedule');
-                              let dayBoxOffset = dayBox.offsetLeft;
-                              let dayBoxWidth = dayBox.offsetWidth;
-                              let centerPosition = dayBoxOffset + dayBoxWidth / 2;
-  
-                              let midwayPoint = contentWidth / 2;
-  
-                              // transformations
-                              let dayWrapper = landingPageEl.getElementById(
-                                day + '-schedule-wrapper'
-                              );
-                              let dayPointer = landingPageEl.getElementById(day + '-schedule-arrow');
-  
-                              let dayTransform = 'translateX(2.5%)';
-                              let dayPointerAlignment = 'flex-start';
-  
-                              if (centerPosition < midwayPoint) {
-                                dayWrapper.style.transform = dayTransform;
-                                dayPointer.style.alignSelf = dayPointerAlignment;
-                              } else {
-                                dayWrapper.style.transform = '';
-                                dayPointer.style.alignSelf = '';
-                              }
-                            }
-                          }
-                        });
-  
-                        scheduleResizeObserver.observe(contentSection);
-  
-                        // handle agenda actions
-  
-                        var agenda = [];
-  
-                        var addingId = '';
-  
-                        var openModal = (e) => {
-                          let target = e.currentTarget;
-  
-                          let id = target.id;
-  
-                          addingId = id;
-  
-                          addToAgenda(id);
-  
-                          let eventName = landingPageEl.getElementById(id + '-name').innerHTML;
-                          eventName = eventName.replace(/<p>/g, '');
-                          eventName = eventName.replace(/<\/p>/g, '');
-                          eventName = eventName.replace(
-                            /<p class="presenter future-event-text">/g,
-                            ''
-                          );
-                          let eventNameSpan = landingPageEl.getElementById('modal-box-event-name');
-                          eventNameSpan.innerHTML = eventName;
-  
-                          // set modal overlay
-                          let contentSection = landingPageEl.getElementById('ntar-bg');
-                          let contentHeight = contentSection.offsetHeight;
-                          let modal = landingPageEl.getElementById('add-event-modal');
-                          modal.style.display = 'flex';
-                          modal.style.height = contentHeight.toString() + 'px';
-  
-                          // set modal box position
-                          let scheduleDivider = landingPageEl.getElementById('schedule-divider');
-                          let scheduleTop = scheduleDivider.offsetTop;
-                          let eventTop = target.offsetTop;
-                          let totalTop = scheduleTop + eventTop;
-                          let modalBox = landingPageEl.getElementById('add-event-modal-box');
-                          modalBox.style.transform = 'translateY(' + totalTop.toString() + 'px' + ')';
-                        };
-  
-                        var handleAddEventModalClick = (e) => {
-                          let target = e.target;
-  
-                          if (
-                            target.id === 'add-event-modal' ||
-                            target.id === 'close-event-modal' ||
-                            target.id === 'close-event-modal-img' ||
-                            target.id === 'done-event-modal'
-                          ) {
-                            closeModal();
-                          } else if (target.id === 'undo-event-modal') {
-                            removeFromAgenda(addingId);
-                            closeModal();
-                          }
-                        };
-  
-                        var closeModal = () => {
-                          let modal = landingPageEl.getElementById('add-event-modal');
-                          modal.style.display = 'none';
-                        };
-  
-                        var addToAgenda = (id) => {
-                          const urlBase = 'https://api.infernocore.jolokia.com/api/Bookmarks/';
-                          const url = urlBase + id;
-  
-                          const bearerToken = window.sessionStorage.getItem('token');
-                          const bearer = 'Bearer ' + bearerToken;
-  
-                          console.log('token ', bearer);
-                          fetch(url, {
-                            method: 'POST',
-                            withCredentials: true,
-                            headers: { Authorization: bearer },
-                          })
-                            .then((res) => console.log(res))
-                            .catch((err) => console.log(err));
-                        };
-  
-                        var removeFromAgenda = (id) => {
-                          const urlBase = 'https://api.infernocore.jolokia.com/api/Bookmarks/';
-                          const url = urlBase + id;
-  
-                          const bearerToken = window.sessionStorage.getItem('token');
-                          const bearer = 'Bearer ' + bearerToken;
-  
-                          console.log('token ', bearer);
-                          fetch(url, {
-                            method: 'DELETE',
-                            withCredentials: true,
-                            headers: { Authorization: bearer },
-                          })
-                            .then((res) => console.log(res))
-                            .catch((err) => console.log(err));
-                        };
-  
-                        var getBookmarksBasic = () => {
-                          const url = 'https://api.infernocore.jolokia.com/api/Bookmarks/Basic';
-  
-                          const bearerToken = window.sessionStorage.getItem('token');
-                          const bearer = 'Bearer ' + bearerToken;
-  
-                          fetch(url, {
-                            method: 'GET',
-                            withCredentials: true,
-                            headers: {
-                              Authorization: bearer,
-                            },
-                          })
-                            .then((res) => res.json())
-                            .then((json) => console.log(json))
-                            .catch((err) => console.log(err));
-                        };
-  
-                        var getBookmarksFull = () => {
-                          const url = 'https://api.infernocore.jolokia.com/api/Bookmarks/Full';
-  
-                          const bearerToken = window.sessionStorage.getItem('token');
-                          const bearer = 'Bearer ' + bearerToken;
-  
-                          fetch(url, {
-                            method: 'GET',
-                            withCredentials: true,
-                            headers: {
-                              Authorization: bearer,
-                            },
-                          })
-                            .then((res) => res.json())
-                            .then((json) => console.log(json))
-                            .catch((err) => console.log(err));
-                        };
-  
-                        // getBookmarksBasic();
-                        // getBookmarksFull();
-                      </script>
-  </inferno-snippet-content>
+                      }
+                    }
+                  }
+
+                  var searchAttendees = e => {
+                    let query = e.currentTarget.value.toLowerCase();
+                    for (let user of attendees) {
+                      const jobTitle = user.JobTitle ? user.JobTitle : "";
+                      const sessionTitle = user.SessionTitle ? user.SessionTitle : "";
+                      if (
+                        user.FirstName.toLowerCase().startsWith(query)
+                        || user.LastName.toLowerCase().startsWith(query)
+                        || user.FullName.toLowerCase().includes(query)
+                        || jobTitle.toLowerCase().includes(query)
+                        || sessionTitle.toLowerCase().includes(query)
+                      ) {
+                        user.visible = true;
+                      } else {
+                        user.visible = false;
+                      }
+                    }
+
+                    clearLetterGroupings();
+
+                    updateAttendees();
+
+                  }
+
+                  var letterGroupings = [
+                    "all-grouping",
+                    "ae-grouping",
+                    "fj-grouping",
+                    "ko-grouping",
+                    "pt-grouping",
+                    "uz-grouping",
+                  ];
+
+                  var clearLetterGroupings = () => {
+                    for (let group of letterGroupings) {
+                      const el = landingPageEl.getElementById(group);
+                      el.style.color = "";
+                      el.style.backgroundColor = "";
+                    }
+                  }
+
+                  var clearSearchValue = () => {
+                    const search = landingPageEl.getElementById("search-attendees")
+                    search.value = "";
+                  }
+
+                  var allAttendees = () => {
+                    for (let user of attendees) {
+                      user.visible = true;
+                    }
+                    clearSearchValue();
+                    clearLetterGroupings();
+                    landingPageEl.getElementById("all-grouping").style.color = "white";
+                    landingPageEl.getElementById("all-grouping").style.backgroundColor = "#41578B";
+                    updateAttendees();
+                  }
+
+                  var filterLastName = (element, letters) => {
+                    attendees.forEach(user => {
+                      user.visible = letters.includes(user.LastName[0].toLowerCase());
+                    });
+                    clearSearchValue();
+                    clearLetterGroupings();
+                    landingPageEl.getElementById(element.id).style.color = "white";
+                    landingPageEl.getElementById(element.id).style.backgroundColor = "#41578B";
+                    updateAttendees();
+                  }
+
+                  if (window.isLocalTemplate) {
+                    window.addEventListener('load', function () {
+                      buildAttendeeList();
+                    });
+                  } else {
+                    buildAttendeeList();
+                  }
+
+                </script>
+
+                <!-- Inferno Hacks -->
+                <script>
+                  if (!window.whiteHack) {
+                    const css = `jolo-search-box .search-box-container {display: none !important}`;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
+
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -2006,8 +1094,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -2123,7 +1209,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
