@@ -217,7 +217,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -240,462 +240,468 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="51977abe-c758-477c-b080-db4b84052173"><style>
-
-      
-  /* Background Styles */
-  .ntar-landing-bg {
-    /* Image */
-    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/lobby/lobby-bg.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-
-    /* Cover height minus 55px header */
-    min-height: calc(100vh - 86px);
-
-    /* Stick to Jolokia content frame */
-    position: absolute;
-    top: -20px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-
-  /* AAFMP Styling */
-  .button-container {
-    position: absolute;
-    width: 14%;
-    right: 6%;
-    top: 4%;
-
-  }
-
-  button {
-    width: 100%;
-    background-color: rgb(40,174,73);
-    color: white;
-    border: solid 2px rgb(143,214,158);
-    margin:2px;
-    padding:5px 0;
-    font-size: 95%;
-  }
-
-  button:hover {
-  background-color: rgb(0,139,52);
-  border: solid 2px rgb(53,183,96);
-}
-
-#register-button{
-background-color: rgb(50,56,135);
-position: absolute;
-width: 150px;
-height: 50px;
-border: solid 2px white;
-letter-spacing: 1.2px;
-bottom: 0;
-left: 42%;
-}
-
-  #register-button:hover {
-   background-color: #14104b;
-  }
-
-a {
-  color: white;
-}
-
- a:hover {
-  color: white;
-  text-decoration: none;
-}
-
-
-  @media only screen and (max-width: 767px) {
-    .ntar-landing-bg {
-      /* Cover height minus 55px header */
-      min-height: calc(100vh - 55px);
-
-      /* Stick to Jolokia content frame */
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-  }
-
-  /* ./ Background Styles */
-
-  /* Page Content Container Styles */
-  .ntar-landing-content {
-    /* background-color: chartreuse; */
-
-    /* Scale to full width and height + footer space */
-    width: 100%;
-    height: calc(100% + 50px);
-
-    /* Stick to Jolokia content frame and scroll y */
-    position: absolute;
-    top: 0;
-    left: 0;
-    overflow: hidden scroll;
-
-    /* Pad Content */
-    padding: 0px;
-
-    /* Display Type */
-    display: flex;
-    flex-direction: column;
-  }
-
-  @media only screen and (max-width: 767px) {
-    .ntar-landing-content {
-      /* Cover height minus 55px header */
-      min-height: calc(100vh - 55px);
-
-      /* Stick to Jolokia content frame */
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-  }
-
-  /* ./ Page Content Container Styles */
-</style>
-
-
-
-<div class="ntar-landing-bg"></div>
-
-
-<style>
-::-webkit-scrollbar {
-height: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-box-shadow: inset 0 0 9px grey; 
-border-radius: 10px;
-background-color: rgba(50,56,174,.5)
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-background: rgb(30,36,105);  
-border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-background: rgb(20,16,75); 
-}
-div.scrollmenu {
-background-color: rgb(50,56,135);
-overflow-x: auto;
-overflow-y: hidden;
-position: absolute;
-bottom: 10%;
-display: flex;
-white-space: nowrap;
-height:170px;
-margin-left: -20px;
-width: 100%;
-border: solid 1px rgb(255,255,255);
-color: white;
-}
-div.item-container h3 {
-margin-left: 12px;
-width: 130px;
-}
-.img-placeholder {
-width:auto;
-height:150px;
-background-color: lavender;
-margin: 4px 10px;
-border: 2px solid white;
-}
-
-.img-placeholder:hover {
-cursor: pointer; 
-}
-
-div.scrollmenu a {
-display: inline-block;
-color: white;
-text-align: center;
-text-decoration: none;
-}
-
-div.scrollmenu a:hover {
-background-color: #777;
-}
-
-/* Overlays */
-.ntar-pdf-view {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-color: rgba(0, 0, 0, 0.8);
-  z-index: 20;
-  display: none;
-}
-
-.ntar-pdf-viewer {
-  position: absolute;
-  top: 60px;
-  left: 30px;
-  right: 30px;
-  width: calc(100% - 60px);
-  height: calc(100% - 90px);
-  bottom: 30px;
-  border: none;
-}
-
-.ntar-video-view {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.8);
-  z-index: 20;
-  display: none;
-}
-
-.ntar-video-viewer {
-  position: absolute;
-  top: 60px;
-  left: 30px;
-  right: 30px;
-  width: calc(100% - 60px);
-  max-width: 800px;
-  margin: 0px auto;
-  height: calc(100% - 90px);
-  bottom: 30px;
-  border: none;
-}
-
-a.ntar-window-close {
-  padding: 0.55rem;
-  width: 11rem;
-  font-size: 1.3rem;
-  font-weight: 100;
-  line-height: 1;
-  color: #333;
-  background-color: #fff;
-  border-radius: 4rem;
-  text-align: center;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
-  margin: 20px 0px 0px 30px;
-}
-
-a.ntar-window-close:hover {
-  color: #333;
-  text-decoration: none;
-}
-
-.dark-button {
-  background-color: #333 !important;
-  color: #fff !important;
-}
-
-/* ./ Overlays */
-</style>
-
-<!-- Flickity carousel/slider  -->
-<style>
-
-  .slider-container {
-    position: absolute;
-    width: 100%;
-    margin: 0 -24px;
-    border: solid 1px #dddddd;
-    padding: .5em 0;
-    bottom: 10%;
-    background-color: rgb(50,56,135);
-  }
-
-.slider {
-  margin: 1rem;
-}
-
-.slider img {
-  display: block;
-  width: 300px;
-  height: 150px;
-}
-
-/* setting display none cause issues with flickity rendering */
-/* so we hide it by moving it off the screen */
-.is-hidden {
-  position: absolute;
-  left: -3000px;
-}
-
-/* position dots up a bit */
-.flickity-page-dots {
-  bottom: -22px !important;
-}
-
-/* dots are lines */
-.flickity-page-dots .dot {
-  height: 4px !important;
-  width: 40px !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-}
-
-/* no circle */
-.flickity-button {
-  display: none;
-}
-
-</style>
-
-
-<div class="slider-container is-hidden">
-
-
-  <div class="slider">
-<div class="item-container">
-  <img class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/ACPA 2020 Joint Virtual Conference - Exhibitor - Landing Page.png" alt="about">
-</div>
-<div class="item-container">
-  <img onclick="window.open('http://www.aafmp.ca')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aafmp.png" alt="about aafmp">
-</div>
-<div class="item-container">
-  <img onclick="window.open('https://www.pchem.ca')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-acpa.png" alt="about acpa">
-</div>
-<div class="item-container">
-  <img onclick="window.open('https://aspb.org/')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aspb.png" alt="about acpa">
-</div>
-    <div class="item-container">
-      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/2020 Conference Agenda 11.17.2020.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/aafmp-2020-agenda.png" alt="agenda">
-    </div>
-<div class="item-container">
-  <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-C1 Air Quality and Emission Regulations, Audrey Mascarenhas abstract and bio.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/audrey-mascarenhas.png" alt="audrey-mascarenhas">
-</div>
-<div class="item-container">
-  <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-F1 Public Involvement in Planning Herbicide Programs, Milo Mihajlovich abstract and bio.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/mile-mihajlovich.png" alt="mile-mihajlovich-thumbnail">
-</div>
-<div class="item-container">
-  <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-C2 Sustainable Remediation and Orphaned Wellsites, Thiessen Bio and Abstract.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/ron-thiessen.png" alt="ron-thiessen">
-</div>
-<div class="item-container">
-  <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-B1 Overview of the Modernized Fisheries Act, Smith,Derlukewich,Mogge.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-B1 Overview of the Modernized Fisheries Act, Smith,Derlukewich,Mogge.png" alt="modernized fisheries">
-</div>
-<div class="item-container">
-  <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/Jason Krips and Kevin Edgson.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/Jason-Krips.jpg" alt="jason krips">
-</div>
-<div class="item-container">
-  <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D1-B3 Amphibian and Reptile Handling, Randall, Winton and Cairns.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D1-B3 Amphibian and Reptile Handling, Randall, Winton and Cairns.png" alt="amphibian handling">
-</div>
-  </div>
-
-</div>
-<button id="register-button" onclick="(window.open('http://conference-online.ca/'))">Register Today!</button>
-
-<!-- Page Overlays -->
-<div class="ntar-pdf-view" id="pdf-blanket">
-<a class="ntar-window-close" href="javascript:void(closePDF());">Close</a>
-<iframe class="ntar-pdf-viewer" id="pdf-frame"></iframe>
-</div>
-<div class="ntar-video-view" id="video-blanket">
-<a class="ntar-window-close dark-button" href="javascript:void(closeVideo());">Close</a>
-<iframe class="ntar-video-viewer" id="video-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-</div>
-<!-- ./ Page Overlays -->
-<!-- Overlay popup scripts -->
-
-<script>
-
-function downloadXLS(url) {
-window.location.assign(url);
-
-}
-function loadPDF(url) {
-var x = landingPageEl.getElementById('pdf-frame');
-x.src = url;
-var y = landingPageEl.getElementById('pdf-blanket');
-y.style.display = 'block';
-}
-
-function loadVideo(url) {
-var x = landingPageEl.getElementById('video-frame');
-x.src = url;
-var y = landingPageEl.getElementById('video-blanket');
-y.style.display = 'block';
-}
-
-function closePDF() {
-var x = landingPageEl.getElementById('pdf-frame');
-x.src = '';
-var y = landingPageEl.getElementById('pdf-blanket');
-y.style.display = 'none';
-}
-function closeVideo() {
-var y = landingPageEl.getElementById('video-blanket');
-y.style.display = 'none';
-var x = landingPageEl.getElementById('video-frame');
-x.src = '';
-}
-</script>
-
-<!-- Carousel Slider Script -->
-<script>
-  function loadFkty() {
-    // add css style sheet
-    const styleTag = document.createElement("link");
-    styleTag.setAttribute('rel', 'stylesheet');
-    styleTag.setAttribute('type', 'text/css');
-    styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
-    landingPageEl.appendChild(styleTag);
-
-    if (!window.flktyLoaded) {
-      // add external JS file
-      const scriptTag = document.createElement("script");
-      scriptTag.onload = function (loadEvent) {
-        initFlkty();
-      }
-      scriptTag.type = "text/javascript";
-      scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
-      document.getElementsByTagName("head")[0].appendChild(scriptTag);
-      window.flktyLoaded = true;
-    } else {
-      initFlkty();
-    }
-  }
-
-  function initFlkty() {
-    const elem = landingPageEl.querySelector('.slider');
-    const flkty = new Flickity(elem, {
-      // options
-      cellAlign: 'left',
-      freeScroll: true,
-      wrapAround: true,
-      groupCells: 1,
-      autoPlay: 3000,
-      on: {
-        ready: function () {
-          const el = landingPageEl.querySelector('.slider-container').classList.remove('is-hidden');
-        }
-      }
-    });
-  }
-
-  loadFkty();
-</script>
-
-<!-- ./ Overlay popup scripts -->
-</inferno-snippet-content>
+              <inferno-snippet-content id="51977abe-c758-477c-b080-db4b84052173">
+                <style>
+
+
+                  /* Background Styles */
+                  .ntar-landing-bg {
+                    /* Image */
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/lobby/lobby-bg.png');
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+
+                    /* Cover height minus 55px header */
+                    min-height: calc(100vh - 86px);
+
+                    /* Stick to Jolokia content frame */
+                    position: absolute;
+                    top: -20px;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                  }
+
+                  /* AAFMP Styling */
+                  .button-container {
+                    position: absolute;
+                    width: 14%;
+                    right: 6%;
+                    top: 4%;
+
+                  }
+
+                  button {
+                    width: 100%;
+                    background-color: rgb(40, 174, 73);
+                    color: white;
+                    border: solid 2px rgb(143, 214, 158);
+                    margin: 2px;
+                    padding: 5px 0;
+                    font-size: 95%;
+                  }
+
+                  button:hover {
+                    background-color: rgb(0, 139, 52);
+                    border: solid 2px rgb(53, 183, 96);
+                  }
+
+                  #register-button {
+                    background-color: rgb(50, 56, 135);
+                    position: absolute;
+                    width: 150px;
+                    height: 50px;
+                    border: solid 2px white;
+                    letter-spacing: 1.2px;
+                    bottom: 0;
+                    left: 42%;
+                  }
+
+                  #register-button:hover {
+                    background-color: #14104b;
+                  }
+
+                  a {
+                    color: white;
+                  }
+
+                  a:hover {
+                    color: white;
+                    text-decoration: none;
+                  }
+
+
+                  @media only screen and (max-width: 767px) {
+                    .ntar-landing-bg {
+                      /* Cover height minus 55px header */
+                      min-height: calc(100vh - 55px);
+
+                      /* Stick to Jolokia content frame */
+                      position: fixed;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                    }
+                  }
+
+                  /* ./ Background Styles */
+
+                  /* Page Content Container Styles */
+                  .ntar-landing-content {
+                    /* background-color: chartreuse; */
+
+                    /* Scale to full width and height + footer space */
+                    width: 100%;
+                    height: calc(100% + 50px);
+
+                    /* Stick to Jolokia content frame and scroll y */
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    overflow: hidden scroll;
+
+                    /* Pad Content */
+                    padding: 0px;
+
+                    /* Display Type */
+                    display: flex;
+                    flex-direction: column;
+                  }
+
+                  @media only screen and (max-width: 767px) {
+                    .ntar-landing-content {
+                      /* Cover height minus 55px header */
+                      min-height: calc(100vh - 55px);
+
+                      /* Stick to Jolokia content frame */
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                    }
+                  }
+
+                  /* ./ Page Content Container Styles */
+                </style>
+
+
+                <div class="ntar-landing-bg"></div>
+
+
+                <style>
+                  ::-webkit-scrollbar {
+                    height: 10px;
+                  }
+
+                  /* Track */
+                  ::-webkit-scrollbar-track {
+                    box-shadow: inset 0 0 9px grey;
+                    border-radius: 10px;
+                    background-color: rgba(50, 56, 174, .5)
+                  }
+
+                  /* Handle */
+                  ::-webkit-scrollbar-thumb {
+                    background: rgb(30, 36, 105);
+                    border-radius: 10px;
+                  }
+
+                  /* Handle on hover */
+                  ::-webkit-scrollbar-thumb:hover {
+                    background: rgb(20, 16, 75);
+                  }
+
+                  div.scrollmenu {
+                    background-color: rgb(50, 56, 135);
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    position: absolute;
+                    bottom: 10%;
+                    display: flex;
+                    white-space: nowrap;
+                    height: 170px;
+                    margin-left: -20px;
+                    width: 100%;
+                    border: solid 1px rgb(255, 255, 255);
+                    color: white;
+                  }
+
+                  div.item-container h3 {
+                    margin-left: 12px;
+                    width: 130px;
+                  }
+
+                  .img-placeholder {
+                    width: auto;
+                    height: 150px;
+                    background-color: lavender;
+                    margin: 4px 10px;
+                    border: 2px solid white;
+                  }
+
+                  .img-placeholder:hover {
+                    cursor: pointer;
+                  }
+
+                  div.scrollmenu a {
+                    display: inline-block;
+                    color: white;
+                    text-align: center;
+                    text-decoration: none;
+                  }
+
+                  div.scrollmenu a:hover {
+                    background-color: #777;
+                  }
+
+                  /* Overlays */
+                  .ntar-pdf-view {
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 20;
+                    display: none;
+                  }
+
+                  .ntar-pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  .ntar-video-view {
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    z-index: 20;
+                    display: none;
+                  }
+
+                  .ntar-video-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    max-width: 800px;
+                    margin: 0px auto;
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.ntar-window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0px 0px 30px;
+                  }
+
+                  a.ntar-window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+
+                  .dark-button {
+                    background-color: #333 !important;
+                    color: #fff !important;
+                  }
+
+                  /* ./ Overlays */
+                </style>
+
+                <!-- Flickity carousel/slider  -->
+                <style>
+
+                  .slider-container {
+                    position: absolute;
+                    width: 100%;
+                    margin: 0 -24px;
+                    border: solid 1px #dddddd;
+                    padding: .5em 0;
+                    bottom: 10%;
+                    background-color: rgb(50, 56, 135);
+                  }
+
+                  .slider {
+                    margin: 1rem;
+                  }
+
+                  .slider img {
+                    display: block;
+                    width: 300px;
+                    height: 150px;
+                  }
+
+                  /* setting display none cause issues with flickity rendering */
+                  /* so we hide it by moving it off the screen */
+                  .is-hidden {
+                    position: absolute;
+                    left: -3000px;
+                  }
+
+                  /* position dots up a bit */
+                  .flickity-page-dots {
+                    bottom: -22px !important;
+                  }
+
+                  /* dots are lines */
+                  .flickity-page-dots .dot {
+                    height: 4px !important;
+                    width: 40px !important;
+                    margin: 0 !important;
+                    border-radius: 0 !important;
+                  }
+
+                  /* no circle */
+                  .flickity-button {
+                    display: none;
+                  }
+
+                </style>
+
+
+                <div class="slider-container is-hidden">
+
+
+                  <div class="slider">
+                    <div class="item-container">
+                      <img class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/ACPA 2020 Joint Virtual Conference - Exhibitor - Landing Page.png" alt="about">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="window.open('http://www.aafmp.ca')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aafmp.png" alt="about aafmp">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="window.open('https://www.pchem.ca')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-acpa.png" alt="about acpa">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="window.open('https://aspb.org/')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aspb.png" alt="about acpa">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/2020 Conference Agenda 11.17.2020.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/aafmp-2020-agenda.png" alt="agenda">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-C1 Air Quality and Emission Regulations, Audrey Mascarenhas abstract and bio.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/audrey-mascarenhas.png" alt="audrey-mascarenhas">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-F1 Public Involvement in Planning Herbicide Programs, Milo Mihajlovich abstract and bio.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/mile-mihajlovich.png" alt="mile-mihajlovich-thumbnail">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-C2 Sustainable Remediation and Orphaned Wellsites, Thiessen Bio and Abstract.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/ron-thiessen.png" alt="ron-thiessen">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-B1 Overview of the Modernized Fisheries Act, Smith,Derlukewich,Mogge.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-B1 Overview of the Modernized Fisheries Act, Smith,Derlukewich,Mogge.png"
+                        alt="modernized fisheries">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/Jason Krips and Kevin Edgson.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/Jason-Krips.jpg" alt="jason krips">
+                    </div>
+                    <div class="item-container">
+                      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D1-B3 Amphibian and Reptile Handling, Randall, Winton and Cairns.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D1-B3 Amphibian and Reptile Handling, Randall, Winton and Cairns.png" alt="amphibian handling">
+                    </div>
+                  </div>
+
+                </div>
+                <button id="register-button" onclick="(window.open('http://conference-online.ca/'))">Register Today!</button>
+
+                <!-- Page Overlays -->
+                <div class="ntar-pdf-view" id="pdf-blanket">
+                  <a class="ntar-window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe class="ntar-pdf-viewer" id="pdf-frame"></iframe>
+                </div>
+                <div class="ntar-video-view" id="video-blanket">
+                  <a class="ntar-window-close dark-button" href="javascript:void(closeVideo());">Close</a>
+                  <iframe class="ntar-video-viewer" id="video-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                </div>
+                <!-- ./ Page Overlays -->
+                <!-- Overlay popup scripts -->
+
+                <script>
+
+                  function downloadXLS(url) {
+                    window.location.assign(url);
+
+                  }
+
+                  function loadPDF(url) {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = url;
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'block';
+                  }
+
+                  function loadVideo(url) {
+                    var x = landingPageEl.getElementById('video-frame');
+                    x.src = url;
+                    var y = landingPageEl.getElementById('video-blanket');
+                    y.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function closeVideo() {
+                    var y = landingPageEl.getElementById('video-blanket');
+                    y.style.display = 'none';
+                    var x = landingPageEl.getElementById('video-frame');
+                    x.src = '';
+                  }
+                </script>
+
+                <!-- Carousel Slider Script -->
+                <script>
+                  function loadFkty() {
+                    // add css style sheet
+                    const styleTag = document.createElement("link");
+                    styleTag.setAttribute('rel', 'stylesheet');
+                    styleTag.setAttribute('type', 'text/css');
+                    styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
+                    landingPageEl.appendChild(styleTag);
+
+                    if (!window.flktyLoaded) {
+                      // add external JS file
+                      const scriptTag = document.createElement("script");
+                      scriptTag.onload = function (loadEvent) {
+                        initFlkty();
+                      }
+                      scriptTag.type = "text/javascript";
+                      scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
+                      document.getElementsByTagName("head")[0].appendChild(scriptTag);
+                      window.flktyLoaded = true;
+                    } else {
+                      initFlkty();
+                    }
+                  }
+
+                  function initFlkty() {
+                    const elem = landingPageEl.querySelector('.slider');
+                    const flkty = new Flickity(elem, {
+                      // options
+                      cellAlign: 'left',
+                      freeScroll: true,
+                      wrapAround: true,
+                      groupCells: 1,
+                      autoPlay: 3000,
+                      on: {
+                        ready: function () {
+                          const el = landingPageEl.querySelector('.slider-container').classList.remove('is-hidden');
+                        }
+                      }
+                    });
+                  }
+
+                  loadFkty();
+                </script>
+
+                <!-- ./ Overlay popup scripts -->
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -713,8 +719,6 @@ x.src = '';
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -830,7 +834,6 @@ x.src = '';
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
