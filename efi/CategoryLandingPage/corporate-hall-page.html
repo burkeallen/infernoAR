@@ -242,29 +242,6 @@
               <inferno-snippet-content id="c1d9afdd-483d-42e9-8b3a-27ebc4440557">
 
                 <!-- Institutional & Corporate Hall Page -->
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
-
-
-                </script>
-
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -273,29 +250,135 @@
                   }
 
                   h1, h2, h3, h4, h5 {
-                    font-family: "CustomFont1", sans-serif !important;
+                    font-family: "HelveticaNeue-CondensedBold", "Helvetica Neue", Arial Narrow, Arial, sans-serif;
+                  }
+
+                  header {
+                    width: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                  }
+
+                  header img {
+                    width: 100%;
+                    height: auto;
+                    
                   }
 
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/placeholders/bkg4.jpg');
-                    /*background-attachment: fixed;*/
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
+                    background-image: url("https://studio304nextechar.freetls.fastly.net/infernoAR/efi/corporate-hall/background_copy.png");
+                    box-shadow: inset 0 0 0 1000px #740427aa;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial, sans-serif;
+                  }
+
+                  #sponsor-list {
+                    display: flex;
+                    flex-direction: column;
+                    margin-top: 24%;
+                    z-index: 5;
+                  }
+
+                  .sponsor-header {
+                    background-color: #4a1f6861;
+                    color: white;
+                    font-size: 2.4rem;
+                    text-align: center;
+                    width: 100%;
+                    height: 4rem;
+                  }
+
+                  .sponsors {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: space-evenly;
+                    width: 100%;
+                    height: 30rem;
+                  }
+
+                  .sponsor {
+                    background-color: white;
+                    width: 10rem;
+                    height: 12rem;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                  }
+
+                  .logo {
+                    width: 100%;
+                    height: auto;
                   }
                 </style>
 
                 <div class="content">
-
-                  <h2 style="color:white">Institutional & Corporate Hall Placeholder</h2>
-
+                  <div class="bg"></div>
+                  <header>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/corporate-hall/header with logo_corporate hall.png">
+                  </header>
+                  <div id="sponsor-list">
+                    </div>
                 </div>
+                <template id="template">
+                  <div class="sponsor-header"></div>
+                </template>
 
+                <script>
+                  var sponsorLevels = ['Platinum Sponsor', 'Gold Sponsor', 'Silver Sponsor'];
+                  var sponsors = [
+                    {
+                      level: sponsorLevels[0], 
+                      companies: [{logo: '', url:''}, {logo: '', url: '' }]
+                    },
+                    {
+                      level: sponsorLevels[1],
+                      companies: [{logo: '', url: '' }]
+                    },
+                    { 
+                      level: sponsorLevels[2], 
+                      companies: [{logo: '', url: '' }] 
+                    }];
+
+                    var buildSponsorList = () => {
+                        const sponsorList = landingPageEl.getElementById(
+                          "sponsor-list"
+                        );
+                        const template = landingPageEl.getElementById("template");
+
+                        sponsors.forEach(level => {
+                          const clone = template.content.cloneNode(true);
+                          let headerItem = clone.querySelector(".sponsor-header");
+                          const text = level.companies.length > 1 ? `${level.level}s` : level.level;
+                          headerItem.innerHTML = text;
+                          sponsorList.appendChild(clone);
+                          const sponsors = document.createElement("div");
+                          sponsors.setAttribute("class", "sponsors");
+                          sponsorList.appendChild(sponsors);
+                          level.companies.forEach(company => {
+                            const sponsorLink = document.createElement("a");
+                            sponsorLink.setAttribute("target", "__blank");
+                            sponsorLink.href = level.url;
+                            sponsors.appendChild(sponsorLink);
+                            const sponsorBox = document.createElement("div");
+                            sponsorBox.setAttribute("class", "sponsor");
+                            sponsorLink.appendChild(sponsorBox);
+                            const sponsorLogo = document.createElement("img");
+                            sponsorLogo.setAttribute("class", "logo");
+                            sponsorLogo.src = level.logo;
+                            sponsorBox.appendChild(sponsorLogo);
+                          });
+                        });
+                      
+                      }
+
+                      buildSponsorList();
+
+
+                </script>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->

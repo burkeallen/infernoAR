@@ -267,34 +267,34 @@
                     );
                   </script>
                   <script>
-                    //Alert Click
-                    function handleClick() {
-                      alert("Hotspot clicked!");
-                    }
-
                     //VIDEO MODAL
-                    var closeModal = landingPageEl.querySelector(
-                      ".close-modal"
-                    );
+                    
                     var modal = landingPageEl.querySelector(".video-modal");
 
-                    function toggleModal() {
+                    function toggleModal(videoElement) {
                       landingPageEl
                         .querySelector(".video-modal")
                         .classList.toggle("visible");
+
+                        const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                      let video = videoWrapper.querySelector('#video-frame');
+
+                      const temp = landingPageEl.querySelector('template');
+                      const clone = temp.content.cloneNode(true);
+                      video = clone.querySelector('iframe');
+                      video.id = 'video-frame';
+                      video.src = '/embed/' + videoElement.getAttribute('video');
+                      videoWrapper.appendChild(clone);
                     }
 
-                    function closeModal(event) {
-                      if (
-                        event.target ==
-                        landingPageEl.querySelector(".video-modal")
-                      ) {
+                    function closeModal() {
+                      const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                      let video = videoWrapper.querySelector('#video-frame');
+                      video.remove();
                         landingPageEl
                           .querySelector(".video-modal")
                           .classList.remove("visible");
                       }
-                    }
-                    landingPageEl.addEventListener("click", closeModal);
                   </script>
                   <style>
                     /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -430,18 +430,39 @@
                     }
                     .modal-content {
                       position: absolute;
+                      display: flex;
+                      flex-direction: column;
                       top: 50%;
                       left: 50%;
                       transform: translate(-50%, -50%);
-                      background-color: white;
-                      padding: 1rem 1.5rem;
-                      width: 24rem;
+                      background-color: rgba(0, 0, 0, 0.9);
+                      padding: 4rem 2rem 2rem 2rem;
+                      width: 80%;
                       border-radius: 0.5rem;
                     }
+
+                    .videoWrapper {
+                      position: relative;
+                      width: 100%;
+                      height: 0;
+                      padding-bottom: 51%;
+                    }
+
+                    .videoWrapper iframe {
+                      position: absolute;
+                      width: 100%;
+                      height: 100%;
+                      left: 0; top: 0;
+                      
+                    }
+                    
                     .close-modal {
-                      float: right;
-                      width: 1.5rem;
-                      line-height: 1.5rem;
+                      position: absolute;
+                      top: 1rem;
+                      right: 2rem;
+                      width: 2rem;
+                      line-height: 2rem;
+                      font-size: 1.6rem;
                       text-align: center;
                       cursor: pointer;
                       border-radius: 0.25rem;
@@ -453,24 +474,30 @@
                   </style>
                   <div class="content">
                     <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/bkg-lobby-v4.jpg">
-                    <div class="hotspot welcome" onclick="toggleModal()"></div>
-                    <div class="hotspot virtual" onclick="handleClick()"></div>
-                    <div class="hotspot right-hotspot navigate" onclick="toggleModal()"></div>
-                    <div class="hotspot right-hotspot win" onclick="handleClick()"></div>
-                    <div class="hotspot wolseley" onclick="handleClick()"></div>
-                    <div class="hotspot button learning" onclick="handleClick()"></div>
-                    <div class="hotspot button home" onclick="handleClick()"></div>
-                    <div class="hotspot button library" onclick="handleClick()"></div>
-                    <div class="hotspot button hvp" onclick="handleClick()"></div>
-                    <div class="hotspot info" onclick="handleClick()"></div>
+                    <div class="hotspot welcome" video="welcome" onclick="toggleModal(this)"></div>
+                    <div class="hotspot virtual"><a href="#"></a></div>
+                    <div class="hotspot right-hotspot navigate" video="navigate" onclick="toggleModal(this)"></div>
+                    <div class="hotspot right-hotspot win"><a href="#"></a></div>
+                    <div class="hotspot wolseley"><a href="#"></a></div>
+                    <div class="hotspot button learning"><a href="#"></a></div>
+                    <div class="hotspot button home"><a href="#"></a></div>
+                    <div class="hotspot button library"><a href="#"></a></div>
+                    <div class="hotspot button hvp"><a href="#"></a></div>
+                    <div class="hotspot info"><a href="#"></a></div>
                   </div>
                   <!-- The Modal -->
                   <div class="video-modal">
                     <div class="modal-content">
-                      <span class="close-modal" onclick="toggleModal()">×</span>
-                      <h1>Video Popup!</h1>
+                      <span class="close-modal" onclick="closeModal()">×</span>
+                      <div class="videoWrapper"></div>
                     </div>
                   </div>
+
+                  <!-- Iframe Template -->
+                  <template>
+                    <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                    </iframe>
+                  </template>
                 </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->

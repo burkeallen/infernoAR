@@ -1,15 +1,19 @@
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta content="IE=edge" http-equiv="X-UA-Compatible">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+        rel="stylesheet">
+  <link href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+        rel="stylesheet">
   <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
+  <link href="../inferno-client.css" rel="stylesheet">
   <script>
     let landingPageEl = null
     window.isLocalTemplate = true
@@ -81,7 +85,9 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+          onload="login()"
+          src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
@@ -186,22 +192,29 @@
       })
     }
   </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+  <script
+      onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+      onload="buildLocalMenu()"
+      src="../menu.js"></script>
 
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="novo" onload="login()"></div>
+<div id="novoProject" name="novo" onload="login()" style="display:none"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
+        <mat-toolbar
+            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+            color="primary">
+          <div class="navbar-header"><a routerlink="/dashboard" class="navbar-brand" href="/dashboard">LOGO</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button onclick="mtTriggerMenu()"
+                    show-gt-sm
+                    trigger-resize>
               <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                  <mat-icon aria-hidden="true" class="mat-icon material-icons mat-icon-no-color" role="img">
                     menu
                   </mat-icon>
               </span>
@@ -216,7 +229,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -240,8 +253,17 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="4fad2314-d04f-429e-8d99-b38e2e227cd5"><h1>Hello World</h1>
-<h3>Welcome, ${firstName} ${lastName}</h3>
-<p>to the ${clientName} InfernoAR Sandbox</p>
+                <h3>Welcome, ${firstName} ${lastName}</h3>
+                <p>to the ${clientName} InfernoAR Sandbox</p>
+
+                <script>
+
+                  var oldNavbarLogo = document.querySelector('div.navbar-header a.navbar-brand');
+                  var newNavbarLogo = oldNavbarLogo.cloneNode(true);
+                  var homepage = 'videos/ec603c54-875d-4aa1-527f-08d83f9b50d8/landing/4fad2314-d04f-429e-8d99-b38e2e227cd5';
+                  newNavbarLogo.href = homepage;
+                  oldNavbarLogo.parentNode.replaceChild(newNavbarLogo, oldNavbarLogo);
+                </script>
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
                 <script>
@@ -252,7 +274,8 @@
                   style.type = 'text/css';
                   style.appendChild(document.createTextNode(css));
                   head.appendChild(style);
-                </script></inferno-snippet-content>
+                </script>
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -270,8 +293,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -387,7 +408,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->

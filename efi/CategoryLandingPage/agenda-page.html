@@ -243,28 +243,28 @@
                   <!-- Agenda Page -->
                   <!--  Load custom fonts -->
                   <script type="text/javascript">
-                    function loadFont(name, url) {
-                      if (document.fonts.check("1em " + name)) {
-                        return;
-                      }
-                      const fontFace = new FontFace(name, "url(" + url + ")");
+                    // function loadFont(name, url) {
+                    //   if (document.fonts.check("1em " + name)) {
+                    //     return;
+                    //   }
+                    //   const fontFace = new FontFace(name, "url(" + url + ")");
 
-                      fontFace
-                        .load()
-                        .then(function (loadedFont) {
-                          document.fonts.add(loadedFont);
-                          console.log("Loaded custom font ", name);
-                        })
-                        .catch(function (error) {
-                          // error occurred
-                          console.log("Error loading ", name);
-                        });
-                    }
+                    //   fontFace
+                    //     .load()
+                    //     .then(function (loadedFont) {
+                    //       document.fonts.add(loadedFont);
+                    //       console.log("Loaded custom font ", name);
+                    //     })
+                    //     .catch(function (error) {
+                    //       // error occurred
+                    //       console.log("Error loading ", name);
+                    //     });
+                    // }
 
-                    loadFont(
-                      "CustomFont1",
-                      "https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2"
-                    );
+                    // loadFont(
+                    //   "CustomFont1",
+                    //   "https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2"
+                    // );
                   </script>
 
                   <style>
@@ -279,7 +279,8 @@
                     h3,
                     h4,
                     h5 {
-                      font-family: "CustomFont1", sans-serif !important;
+                      font-family: "HelveticaNeue-CondensedBold",
+                        "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
                     }
 
                     .content {
@@ -292,7 +293,8 @@
                       margin: -20px;
                       padding: 20px 24px;
                       z-index: 1;
-                      font-family: "CustomFont1", sans-serif !important;
+                      font-family: "Helvetica Neue", Arial Narrow, Arial,
+                        sans-serif !important;
                       display: flex;
                       align-items: center;
                       flex-direction: column;
@@ -303,7 +305,7 @@
                       flex-direction: column;
                       justify-content: center;
                       align-items: center;
-                      margin: 25rem 0 10rem 0;
+                      margin: 28rem 0 10rem 0;
                       width: 90%;
                     }
 
@@ -311,9 +313,10 @@
                       display: flex;
                       flex-direction: column;
                       background-color: rgba(255, 255, 255, 0.9);
+                      border: 1px solid #d7e3e9;
                       margin-bottom: 2rem;
                       align-items: center;
-                      padding: 0 2rem;
+                      padding: 0 1rem;
                       width: 100%;
                       color: #01245b;
                     }
@@ -321,9 +324,10 @@
                     .main {
                       width: 100%;
                       display: flex;
+                      flex-wrap: wrap;
                       justify-content: space-between;
                       align-items: center;
-                      padding: 2rem;
+                      padding: 2.4rem 1.6rem;
                     }
 
                     .day {
@@ -332,9 +336,11 @@
 
                     .expand-button {
                       border: none;
+                      border-radius: 3px;
                       outline: none;
                       background-color: #d7e3e9;
-                      padding: 1rem 2rem;
+                      font-size: 1.2rem;
+                      padding: 1rem 1.5rem;
                       display: flex;
                       justify-content: space-between;
                       align-items: center;
@@ -354,7 +360,6 @@
                       transform: rotate(-45deg);
                       vertical-align: top;
                       width: 0.65em;
-                      margin-top: -0.5rem;
                     }
 
                     .chevron.bottom:before {
@@ -363,13 +368,15 @@
                     }
 
                     .dropdown {
-                      padding-bottom: 2rem;
                       width: 100%;
-                      font-size: 2.4rem;
+                      font-size: 2.2rem;
+                      font-weight: 700;
                     }
 
                     .event-box {
                       display: none;
+                      margin-top: 2rem;
+                      padding: 2rem;
                       width: 100%;
                     }
 
@@ -378,8 +385,11 @@
                       display: flex;
                       justify-content: flex-start;
                       margin-bottom: 2rem;
-                      border-bottom: 1px solid black;
-                      padding-bottom: 1rem;
+                    }
+
+                    .event:not(:last-child) {
+                      border-bottom: 2px solid black;
+                      padding-bottom: 2rem;
                     }
 
                     .event-time {
@@ -387,19 +397,21 @@
                     }
 
                     .event-details {
-                      width: 50%;
+                      width: 45%;
                     }
 
-                    .event-notes {
-                      font-size: 1.2rem;
-                      color: blue;
+                    .event-link {
+                      font-size: 1.6rem;
+                      color: #00b9e4;
                     }
 
                     .page-footer {
-                      height: 15rem;
+                      height: 13rem;
                       width: 100%;
                       display: flex;
                       justify-content: flex-end;
+                      padding: 0 5rem;
+                      margin-bottom: 2rem;
                     }
 
                     .seal {
@@ -436,6 +448,19 @@
                       "Wednesday, March 17",
                       "Thursday, March 18"
                     ];
+
+                    var links = [
+                      {
+                        text: "Enter: Auditorium",
+                        url:
+                          "../videos/4a246fc4-5caa-419d-58cd-08d86c3cf09a/detail/20906811-64ae-4d4a-81e1-82a79f784b27"
+                      },
+                      {
+                        text: "Enter: Industry Halls",
+                        url:
+                          "../videos/2eb5759b-2501-42e8-58cc-08d86c3cf09a/landing/a2f1d168-16c6-4428-8363-d694af383a95"
+                      }
+                    ];
                     var agenda = [
                       {
                         day: days[0],
@@ -443,23 +468,23 @@
                           {
                             time: `9:00am - 9:30am EST`,
                             title: "Opening Ceremony",
-                            notes: "Enter: Auditorium"
+                            link: links[0]
                           },
                           {
                             time: `9:30am - 6:00pm EST`,
                             title: "Exhibition floor is open for visitors",
-                            notes: "Enter: Industry Halls"
+                            link: links[1]
                           },
                           {
                             time: `10:00am - 11:30 am EST`,
                             title:
                               "Webinar: Opportunities and Advantages of Doing Business in Florida",
-                            notes: "Enter: Auditorium"
+                            link: links[0]
                           },
                           {
                             time: `6:00pm EST`,
                             title: "End of Day 1",
-                            notes: ""
+                            link: null
                           }
                         ]
                       },
@@ -469,23 +494,23 @@
                           {
                             time: `9:00am EST`,
                             title: "Open of Day 2",
-                            notes: ""
+                            link: ""
                           },
                           {
                             time: `9:30am - 6:00pm EST`,
                             title: "Exhibition floor is open for visitors",
-                            notes: "Enter: Industry Halls"
+                            link: links[1]
                           },
                           {
                             time: `10:00am - 11:30 am EST`,
                             title:
                               "Webinar: Florida Infrastructure at the Service of International Trade",
-                            notes: "Enter: Auditorium"
+                            link: links[0]
                           },
                           {
                             time: `6:00pm EST`,
                             title: "End of Day 2",
-                            notes: ""
+                            link: ""
                           }
                         ]
                       },
@@ -495,29 +520,29 @@
                           {
                             time: `9:00am EST`,
                             title: "Open of Day 3",
-                            notes: ""
+                            link: ""
                           },
                           {
                             time: `9:30am - 6:00pm EST`,
                             title: "Exhibition floor is open for visitors",
-                            notes: "Enter: Industry Halls"
+                            link: links[1]
                           },
                           {
                             time: `10:00am - 11:30 am EST`,
                             title:
                               "Webinar: Florida as an Emerging Innovation and Technology Hub",
-                            notes: "Enter: Auditorium"
+                            link: links[0]
                           },
                           {
                             time: `6:00pm EST`,
                             title: "End of Day 3",
-                            notes: ""
+                            link: ""
                           }
                         ]
                       }
                     ];
 
-                    const toggleEvents = elem => {
+                    var toggleEvents = elem => {
                       var day = landingPageEl.getElementById(
                         elem.parentNode.parentNode.id
                       );
@@ -531,35 +556,47 @@
                       toggleChevron(elem);
                     };
 
-                    const toggleButtonText = elem => {
+                    var toggleButtonText = elem => {
                       const text = elem.querySelector(".button-text");
                       text.innerHTML.toLowerCase() == "expand"
                         ? (text.innerHTML = "Collapse")
                         : (text.innerHTML = "Expand");
                     };
 
-                    const toggleChevron = element => {
+                    var toggleChevron = element => {
                       const chevron = element.querySelector(".chevron");
                       chevron.className.includes("bottom")
                         ? chevron.classList.remove("bottom")
                         : chevron.classList.add("bottom");
                     };
 
-                    const createEventElement = (className, parent, value) => {
-                      const newElement = document.createElement("div");
+                    var createEventElement = (
+                      className,
+                      parent,
+                      type,
+                      value
+                    ) => {
+                      const newElement = document.createElement(type);
 
                       newElement.setAttribute("class", className);
-                      if (value) newElement.innerHTML = value;
+                      if (type === "a" && value) {
+                        console.log(window.location.href);
+                        newElement.innerHTML = value.text;
+                        newElement.setAttribute("href", value.url);
+                      } else {
+                        if (value) newElement.innerHTML = value;
+                      }
+
                       parent.appendChild(newElement);
                     };
 
-                    const buildEventList = () => {
+                    var buildEventList = () => {
                       const eventList = landingPageEl.getElementById(
                         "event-list"
                       );
                       const template = landingPageEl.getElementById("template");
 
-                      agenda.map(day => {
+                      agenda.forEach(day => {
                         const clone = template.content.cloneNode(true);
                         let dayItem = clone.querySelector(".day");
                         let dayBox = clone.querySelector(".day-box");
@@ -575,7 +612,7 @@
 
                         const events = day.events;
 
-                        events.map((event, i) => {
+                        events.forEach((event, i) => {
                           const eventItem = document.createElement("div");
                           eventItem.setAttribute("id", `event-${i}`);
                           eventItem.setAttribute("class", "event");
@@ -584,6 +621,7 @@
                           createEventElement(
                             "event-time",
                             eventItem,
+                            "div",
                             event.time
                           );
 
@@ -596,13 +634,15 @@
                           createEventElement(
                             "event-title",
                             eventDetails,
+                            "div",
                             event.title
                           );
 
                           createEventElement(
-                            "event-notes",
+                            "event-link",
                             eventDetails,
-                            event.notes
+                            "a",
+                            event.link
                           );
                         });
                       });

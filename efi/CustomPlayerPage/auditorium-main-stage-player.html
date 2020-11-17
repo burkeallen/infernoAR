@@ -242,25 +242,17 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="24233654-ea0d-49d8-ac88-35340d80a4f7">
 
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+                <script>
+                    //Add input placeholder text
+                      var addPlaceholder = (text) => {
+                        var inputElement = landingPageEl.getElementById("inferno-questions-basic").querySelector("input");
+                        inputElement.placeholder = text;
+                      }
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
+                      document.addEventListener("DOMContentLoaded", function () {
+                        // Handler when the DOM is fully loaded
+                        addPlaceholder("Type a Question Here");
+                      });
 
                 </script>
 
@@ -271,8 +263,17 @@
                     content: none;
                   }
 
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5 {
+                      font-family: "HelveticaNeue-CondensedBold",
+                        "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+                  }
+
                   .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/main-stage/bkg-main-stage.jpg');
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/efi/auditorium/background image_auditorium.jpg');
                     /*background-attachment: fixed;*/
                     background-repeat: no-repeat;
                     background-size: cover;
@@ -281,22 +282,77 @@
                     margin: -20px;
                     padding: 20px 24px;
                     z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial,
+                        sans-serif !important;
                   }
+
+                  .header {
+                    position: absolute;
+                    top:0;
+                    left: 0;
+                    width: 100%;
+                    height: 8rem;  
+                    background-color: rgba(255,255,255, 1);
+                    color: #01245b;
+                    padding: 0rem 2rem;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .header-title {
+                    font-size: 3.2rem;
+                  }
+
+                  .header-image {
+                    height: 3rem;
+                    width: auto;
+                  }
+
+                  .brand-squares {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                  }
+
+                  .square {
+                    height: 4rem;
+                    width: 4rem;
+                    margin-bottom: 1rem;
+                  }
+
+                  .purple {
+                    background-color: #952D98;
+                  }
+
+                  .blue {
+                    background-color: #00B9E4;
+                  }
+
+                  .green {
+                    background-color: #7AB800;
+                  }
+
+                  .gold {
+                    background-color: #F0AB00;
+                  }
+
+
                 </style>
 
                 <!-- Stage Grid -->
                 <style>
                   .stage-grid {
                     display: grid;
-                    grid-template-columns: 2.5fr 1fr;
+                    grid-template-columns: .25fr 2.5fr 1fr;
                     grid-template-rows: auto;
                     gap: 0 0;
-                    margin-top: 20px;
+                    margin-top: 15rem;
 
                   }
 
-                  .leftCol {
+                  .col2 {
                     display: grid;
                     grid-template-columns: 1fr;
                     grid-template-rows: repeat(2, auto);
@@ -304,8 +360,24 @@
                   }
 
                   @media only screen and (max-width: 1020px) {
-                    .stage-grid, .leftCol, .rightCol {
+                    .stage-grid, .col2, .col3 {
                       display: block;
+                    }
+
+                    .col1 {
+                      width: 100%;
+                      align-items: center;
+                    }
+
+                    .brand-squares{
+                      justify-content: center;
+                      align-items: center;
+                      width: 100%;
+                      flex-direction: row;
+                    }
+
+                    .square:not(:last-child) {
+                      margin-right: 1rem; 
                     }
                   }
                 </style>
@@ -343,7 +415,7 @@
                   .group_chat {
                     position: relative;
                     width: 100%;
-                    height: 122.5%;
+                    height: 70%;
                     top: -8px;
                   }
 
@@ -375,80 +447,84 @@
 
                 <!-- QA Question Box -->
                 <style>
+
+                  .question-label {
+                    color: white;
+                    margin-top: 1rem;
+                    font-size: 1.4rem;
+                  }
                   .inferno-input-group {
-                    padding: 1em 2em;
-                    border-radius: 0 0 .5em .5em;
-                    background-color: var(--branding-primary);
+                    margin-top: 1rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    height:5rem;
+                    border-radius: .5rem;
                   }
 
                   .inferno-input-group input {
-                    margin: .5rem;
-                    min-width: 65%;
+                    padding-left: 1rem;                   
+                    border-radius: .5rem 0 0 .5rem;
+                    border: none;
+                    width: 85%;
+                    height: 100%;
                   }
 
-                  .inferno-input-group span {
-                    font-size: 16px;
+                  ::placeholder {
+                    color: #01245b;
+                  }
+
+                  .inferno-input-group-addon {
+                    display: none;
+                  }
+
+                  .inferno-input-group-btn {
+                    background-color: var(--branding-primary);
                     color: white;
+                    height: 100%;
+                    width: 15%;
+                    border: none;
+                    border-radius: 0 .5rem .5rem 0;
+                    
                   }
 
-                  .inferno-input-group button {
-                    margin-top: .5rem;
-                    background-color: white;
-                    color: var(--branding-primary);
-                    border: solid 1px white;
-                    float: right;
+                  .inferno-btn {
+                    background-color: var(--branding-primary);  
+                    outline: none;
+                    box-shadow: initial;
+                    border: none;
+                    border-radius: 0 .5rem .5rem 0;
+                    height: 100%;
+                    width: 100%;
+                    
                   }
 
                   .inferno-input-group button:hover {
                     filter: brightness(70%);
-                    transform: scale(1.1);
                   }
                 </style>
-
-                <!-- Sponsors -->
-                <style>
-                  .sponsors-grid {
-                    display: grid;
-                    margin: 0 auto;
-                    max-width: 1100px;
-                    grid-auto-columns: max-content;
-                    grid-auto-rows: max-content;
-                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                    gap: 10px 10px;
-                    padding: 0 5% 0 5%;
-                  }
-
-                  .sponsors-grid img {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    max-width: 200px;
-                    text-align: center;
-                    background-color: #ffffff;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                  }
-
-                  .sponsors-header {
-                    margin: 0 30px 20px 30px;
-                  }
-
-                  .sponsors-header h1 {
-                    font-size: 2rem;
-                    font-weight: bold;
-                    color: #ffffff;
-                  }
-
-                </style>
-
                 <div class="content">
+                  <div class="header">
+                    <h1 class="header-title">Auditorium</h1>
+                    <img class="header-image" src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/auditorium/EFI_logo_4C.png">
+                  </div>
+                  
                   <div class="stage-grid">
-
-                    <div class="leftCol">
+                    <div class="col1">
+                      <div class="brand-squares">
+                        <div class="square purple"></div>
+                        <div class="square blue"></div>
+                        <div class="square green"></div>
+                        <div class="square gold"></div>
+                      </div>
+                    </div>
+                    <div class="col2">
+                      
                       <div class="ntar-video-container">
                         <div class="ntar-video" id="inferno-video-player"></div>
                       </div>
                       <div class="ntar-qna-container">
+                        <div class="question-label">Ask a Question</div>
                         <div id="inferno-questions-basic"></div>
                       </div>
                     </div>
@@ -457,33 +533,9 @@
                       <iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=tag-main-stage" class="ntar-chat-iframe"></iframe>
                     </div>
                   </div>
-
-                  <div class="sponsors-header">
-                    <h1>Our Sponsors</h1>
                   </div>
-                  <div id="sponsors-grid" class="sponsors-grid"></div>
-                  <template id="sponsor-template">
-                    <img id="sponsor-logo" src>
-                  </template>
-                </div>
 
-                <!-- Sponsors -->
-                <script>
-                  var baseUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/sponsors/"
-                  var sponsors = ["aprio", "azalea-health", "grant-thornton", "ksu", "northside-hospital", "toolbox-no-9"]
-                  var sponsorsGrid = landingPageEl.getElementById("sponsors-grid");
-                  var sponsorTemplate = landingPageEl.getElementById("sponsor-template");
-
-                  for (let sponsor of sponsors) {
-                    let clone = sponsorTemplate.content.cloneNode(true);
-                    let img = clone.getElementById("sponsor-logo");
-                    img.id = "sponsor-logo-" + sponsor;
-                    img.src = baseUrl + sponsor + ".png";
-                    sponsorsGrid.appendChild(clone);
-                  }
-                </script>
-
-              </inferno-snippet-content>
+                </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
