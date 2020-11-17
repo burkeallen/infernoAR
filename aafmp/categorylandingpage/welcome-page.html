@@ -164,6 +164,7 @@
     }
 
   </style>
+
   <script>
     function buildLocalMenu() {
       window.addEventListener('load', (event) => {
@@ -509,20 +510,76 @@ a.ntar-window-close:hover {
 /* ./ Overlays */
 </style>
 
+<!-- Flickity carousel/slider  -->
+<style>
 
-<div class="scrollmenu">
+  .slider-container {
+    position: absolute;
+    width: 100%;
+    margin: 0 -24px;
+    border: solid 1px #dddddd;
+    padding: .5em 0;
+    bottom: 10%;
+    background-color: rgb(50,56,135);
+  }
+
+.slider {
+  margin: 1rem;
+}
+
+.slider img {
+  display: block;
+  width: 300px;
+  height: 150px;
+}
+
+/* setting display none cause issues with flickity rendering */
+/* so we hide it by moving it off the screen */
+.is-hidden {
+  position: absolute;
+  left: -3000px;
+}
+
+/* position dots up a bit */
+.flickity-page-dots {
+  bottom: -22px !important;
+}
+
+/* dots are lines */
+.flickity-page-dots .dot {
+  height: 4px !important;
+  width: 40px !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* no circle */
+.flickity-button {
+  display: none;
+}
+
+</style>
+
+
+<div class="slider-container is-hidden">
+
+
+  <div class="slider">
 <div class="item-container">
   <img class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/ACPA 2020 Joint Virtual Conference - Exhibitor - Landing Page.png" alt="about">
 </div>
 <div class="item-container">
-  <img onclick="window.open("http://www.aafmp.ca")" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aafmp.png" alt="about aafmp">
+  <img onclick="window.open('http://www.aafmp.ca')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aafmp.png" alt="about aafmp">
 </div>
 <div class="item-container">
-  <img onclick="window.open("https://www.pchem.ca")" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-acpa.png" alt="about acpa">
+  <img onclick="window.open('https://www.pchem.ca')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-acpa.png" alt="about acpa">
 </div>
 <div class="item-container">
-  <img onclick="window.open("https://aspb.org/")" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aspb.png" alt="about acpa">
+  <img onclick="window.open('https://aspb.org/')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/about-aspb.png" alt="about acpa">
 </div>
+    <div class="item-container">
+      <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/2020 Conference Agenda 11.17.2020.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/aafmp-2020-agenda.png" alt="agenda">
+    </div>
 <div class="item-container">
   <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D2-C1 Air Quality and Emission Regulations, Audrey Mascarenhas abstract and bio.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/audrey-mascarenhas.png" alt="audrey-mascarenhas">
 </div>
@@ -541,6 +598,8 @@ a.ntar-window-close:hover {
 <div class="item-container">
   <img onclick="loadPDF('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D1-B3 Amphibian and Reptile Handling, Randall, Winton and Cairns.pdf')" class="img-placeholder" src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/welcome-page/D1-B3 Amphibian and Reptile Handling, Randall, Winton and Cairns.png" alt="amphibian handling">
 </div>
+  </div>
+
 </div>
 <button id="register-button" onclick="(window.open('http://conference-online.ca/'))">Register Today!</button>
 
@@ -589,6 +648,52 @@ var x = landingPageEl.getElementById('video-frame');
 x.src = '';
 }
 </script>
+
+<!-- Carousel Slider Script -->
+<script>
+  function loadFkty() {
+    // add css style sheet
+    const styleTag = document.createElement("link");
+    styleTag.setAttribute('rel', 'stylesheet');
+    styleTag.setAttribute('type', 'text/css');
+    styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
+    landingPageEl.appendChild(styleTag);
+
+    if (!window.flktyLoaded) {
+      // add external JS file
+      const scriptTag = document.createElement("script");
+      scriptTag.onload = function (loadEvent) {
+        initFlkty();
+      }
+      scriptTag.type = "text/javascript";
+      scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
+      document.getElementsByTagName("head")[0].appendChild(scriptTag);
+      window.flktyLoaded = true;
+    } else {
+      initFlkty();
+    }
+  }
+
+  function initFlkty() {
+    const elem = landingPageEl.querySelector('.slider');
+    const flkty = new Flickity(elem, {
+      // options
+      cellAlign: 'left',
+      freeScroll: true,
+      wrapAround: true,
+      groupCells: 1,
+      autoPlay: 3000,
+      on: {
+        ready: function () {
+          const el = landingPageEl.querySelector('.slider-container').classList.remove('is-hidden');
+        }
+      }
+    });
+  }
+
+  loadFkty();
+</script>
+
 <!-- ./ Overlay popup scripts -->
 </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
