@@ -242,448 +242,314 @@
 
               <inferno-snippet-content id="7cf76e30-c362-4aa9-9662-e912157b3094">
 
+                <!-- Container -->
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
                   img::after {
                     content: none;
                   }
 
-                  .content {
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/bg.jpg');
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
+                  }
+
+                </style>
+
+                <!-- banner -->
+                <style>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
                     background-size: cover;
-                    background-position: right bottom;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    z-index: 1;
-                    font-family: 'gothamMed', sans-serif;
+                    background-position: left center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/attendees/attendees_header_v2.jpg');
                   }
 
-                </style>
-
-                <!-- Search Bar Banner -->
-                <style>
-                  .search-banner {
-                    display: grid;
-                    grid-template-columns: 1fr 3fr 1fr;
-                    grid-template-rows: 1fr;
-                    gap: 10px 10px;
-                    justify-content: center;
-                    align-items: center;
-                    width: 100%;
-                    background-color: white;
-                    min-height: 50px;
-                    padding: 10px 50px;
-                    line-height: 60px;
-                    color: var(--branding-primary);
-                    font-size: 32px;
-                  }
-
-                  .search-banner h1 {
-                    font-size: 1em;
-                    color: var(--sidebar-bg-color);
-                  }
-
-                  .search-input {
-                    position: relative;
-                  }
-
-                  .search-input input {
-                    width: 100%;
-                    font-size: .75em;
-                    line-height: 1em;
-                    border-radius: .5em;
-                    padding: 0 .5em;
-                    border: solid 1px #ccc;
-                    color: #000000;
-                  }
-
-                  .search-input input::placeholder {
-                    color: #696969;
-                  }
-
-                  .search-icon {
+                  .banner-shadow {
+                    z-index: 99;
                     position: absolute;
-                    top: .4em;
-                    right: 0;
-                    speak: none;
-                    font-family: 'Material Icons';
-                    font-size: .8em;
-                    line-height: 1.75em;
-                    padding: 0 .25em;
-                    color: #cccc;
+                    margin-top: 380px;
+                    width: 100%;
+                    height: 20px;
+                    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.4);
                   }
 
-                  .search-banner .logo img {
-                    width: 250px;
-                    margin: 13px 0;
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
                   }
 
+                  .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
+                    color: #fff;
+                    max-width: 90%;
+                    text-shadow: #000 0 0 .5rem;
+                  }
 
+                  .banner-text {
+                    font-weight: bold;
+                    font-size: clamp(2.5rem, 3vw, 3.5rem);
+                  }
+
+                  .banner-sub-text {
+                    font-weight: lighter;
+                    font-size: clamp(1.75rem, 2.25vw, 2.75rem);
+                  }
                 </style>
 
+                <!-- Filter -->
                 <style>
-                  .attendee-list {
+                  .search-exhibitors-divider {
+                    background-color: rgb(246, 246, 246);
+                    width: 100%;
+                    padding: 3.8rem 0 1.8rem;
                     display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    max-width: 80%;
-                    padding: 10px;
+                    justify-content: center;
                   }
 
-                  .card {
-                    position: relative;
+                  .filter-options {
+                    width: 100%;
+                    margin: 0 3.5rem;
                     display: flex;
-                    flex-direction: column;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                  }
+
+                  .filter-options button {
+                    height: 6rem;
+                    width: 9.8rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    padding: 1.3rem 1.6rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 2.5rem;
+                    text-align: center;
+                  }
+
+                  .filter-options button:focus {
+                    outline: none;
+                    border: 2px solid rgba(11, 38, 104, 0.6);
+                  }
+
+                  .search-wrapper {
+                    width: 31.5rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    width: 20%;
-                    min-width: 240px;
-                    background-color: white;
-                    margin: 10px;
-                    padding: 10px;
-                    text-align: center;
-                    border-radius: .3em;
                   }
 
-                  .avatar {
-                    width: 128px;
-                    height: 128px;
-                  }
-
-                  .avatar img {
-                    width: 100%;
-                    border-radius: 50%;
-                    border: solid 1px #cccccc;
-                  }
-
-                  .person {
-                    width: 100%;
-                    margin-top: 4px;
-                    font-size: 1.2em;
-                    overflow-wrap: break-word;
-                  }
-
-                  .company {
-                    width: 100%;
-                    font-size: 1em;
+                  .search-wrapper input {
+                    padding: 1.4rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
                     font-weight: bold;
-                    overflow-wrap: break-word;
-                  }
-
-                  .job-title {
-                    width: 100%;
-                    font-size: 1em;
-                    overflow-wrap: break-word;
-                  }
-
-                  .no-results-message {
-                    font-size: 2.2rem;
-                    font-weight: bold;
-                    letter-spacing: 0.092rem;
-                    line-height: 2.7rem;
-                    text-align: center;
-                    color: white;
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                  }
-
-                  .social {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-content: center;
-                    width: 100%;
-                  }
-
-                  .social img {
-                    width: 32px;
-                    margin: 1em;
-                    float: left;
-                  }
-
-                  .social a {
-                    display: block;
-                    text-decoration: none;
-                  }
-
-                  .social :hover {
-                    text-decoration: none;
-                    -ms-transform: scale(1.1) translateY(-.5vh);
-                    -webkit-transform: scale(1.1) translateY(-.5vh);
-                    transform: scale(1.1) translateY(-.5vh);
-                    cursor: pointer;
-                  }
-
-
-                  @media only screen and (max-width: 1024px) {
-                    .grid {
-                      width: 100%;
-                    }
-                  }
-                </style>
-
-
-                <!-- Modal Window Style -->
-                <style>
-                  .modal-window {
-                    position: fixed;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    opacity: 0;
-                    pointer-events: none;
-                    -webkit-transition: all 0.7s;
-                    -moz-transition: all 0.7s;
-                    transition: all 0.7s;
-                    display: none;
-                  }
-
-                  .modal-window.open {
-                    opacity: 1;
-                    pointer-events: auto;
-                    display: inline-block;
-                    z-index: 99999999;
-                    padding: 5%;
-                  }
-
-                  .modal-window .contentWrapper {
-                    display: flex;
-                    justify-content: center;
-                    width: 100%;
-                  }
-
-                  .videoWrapper {
-                    position: relative;
-                    padding-bottom: 56.5%; /* 16:9 */
-                    height: 0;
-                  }
-
-                  .videoWrapper iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-
-
-                  .modal-window .modal-box {
-                    position: relative;
-                    min-width: 500px;
-                    width: 80%;
-                    margin: 2% auto;
-                    padding: 2rem 0;
-                    background-color: transparent;
+                    width: 75%;
                     border: none;
                   }
 
-                  .modal-window h1 {
-                    font-size: 150%;
-                    margin: 0 0 15px;
+                  .search-wrapper input::placeholder {
+                    /* Chrome, Firefox, Opera, Safari 10.1+ */
+                    color: #3D3D3D;
+                    opacity: 1;
+                    /* Firefox */
                   }
 
-                  .modal-window header {
-                    font-weight: bold;
+                  .search-wrapper input:-ms-input-placeholder {
+                    /* Internet Explorer 10-11 */
+                    color: #3D3D3D;
                   }
 
-                  .modal-close {
-                    position: absolute;
-                    right: 3%;
-                    top: -11px;
-                    color: #fff;
-                    font-size: 1.5em;
-                    text-decoration: none;
-                    font-weight: bold;
+                  .search-wrapper input::-ms-input-placeholder {
+                    /* Microsoft Edge */
+                    color: #3D3D3D;
                   }
 
-                  .modal-close:hover {
-                    filter: brightness(130%);
-                    text-decoration: none;
-                    color: #fff;
-                    cursor: pointer;
+                  .search-wrapper img {
+                    width: 2rem;
+                    margin: 1.25rem;
                   }
 
-                  .modal-grid {
-                    display: grid;
-                    grid-template-columns: 0.6fr 1.4fr;
-                    grid-template-rows: 1fr;
-                    gap: 0px 20px;
-                    padding: 2%;
-                    color: white;
-                    font-family: "gothamBook", Helvetica, Arial, sans-serif;
-                    background-color: var(--sidebar-bg-color);
-                    border-radius: .5em;
+                  .search-wrapper input:focus {
+                    outline: none;
+                    border: none;
                   }
+                </style>
 
-                  .left {
-                    position: relative;
+                <!-- Attendees -->
+                <style>
+
+                  .attendee-card {
                     display: flex;
-                    flex-direction: column;
-                    justify-content: start;
+                    height: auto;
+                    min-width: 400px;
+                    flex-wrap: wrap;
+                    margin: 1.4rem 4.4rem;
+                    padding: 1rem 2rem;
+                    border-radius: 9px;
+                    background-color: #FFFFFF;
                     align-items: center;
-                    width: 100%;
-                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/common/arrows-v.png');
-                    background-repeat: no-repeat;
-                    background-position: center bottom;
-                    background-size: 50%;
                   }
 
-                  .left > div {
-                    text-align: center;
-                  }
-
-                  .left img {
+                  .attendee-avatar {
+                    height: 13.2rem;
+                    width: 13.2rem;
                     border-radius: 50%;
-                    width: 60%;
-                    margin-top: 10%;
                   }
 
-                  .left .name {
-                    font-size: 1.3em;
+                  .attendee-info {
+                    flex: 1;
+                    margin-left: 20px;
                   }
 
-                  .left .title {
-                    margin-bottom: 40px;
+                  .attendee-name {
+                    font-size: 2rem;
+                    font-weight: bold;
                   }
-                  .right {
-                    font-size: 1.1em;
-                    padding: 1em;
+
+                  .company-title {
+                  }
+
+                  .attendee-email {
+                    margin: .50rem 0;
+                    display: flex;
+                    align-items: center;
+                  }
+
+                  .attendee-email img {
+                    height: 1.5rem;
+                    width: auto;
+                    padding-right: 5px
+                  }
+
+                  .linked-in {
+                    margin: .50rem 0;
+                    display: flex;
+                  }
+
+                  .linked-in img{
+                    height: 2rem;
+                    width: 2.6rem;
+                    align-items: center;
+                    padding-right: 5px
                   }
 
                 </style>
-                <!-- Modal Window Script -->
-                <template id="modalWindow">
-                  <div class="modal-grid">
-                    <div class="left">
-                      <img src="">
-                      <div class="name"></div>
-                      <div class="title"></div>
+
+                <!-- Sponsors -->
+                <style>
+                  .sponsor-container {
+                    padding-bottom: 40px;
+                  }
+
+                  .sponsors-header {
+                    margin: 0 30px;
+                  }
+
+                  .sponsors-header h1 {
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                    color: #01245B;
+                  }
+
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 10px 10px;
+                    padding: 10px 10% 0 10%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 240px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
+                </style>
+
+                <div id="container">
+                  <div class="banner">
+                    <div class="banner-info">
+                      <div class="banner-text">Attendees</div>
+                      <div class="banner-sub-text">See who else is attending the Digital Health Leadership Summit and network away.</div>
                     </div>
-                    <div class="right"></div>
+                    <div class="banner-shadow"></div>
                   </div>
-                </template>
 
-                <!-- Toggle Modal on and off -->
-                <script>
-                  function toggleModal(id) {
-                    const baseUrl = 'https://studio304nextechar.freetls.fastly.net/infernoAR/namd/fall/directors/';
-                    const contentWrapper = landingPageEl.querySelector('.contentWrapper');
-                    let modalClose = landingPageEl.querySelector('.modal-close');
-                    const modalOpen = contentWrapper.querySelector('.modal-grid');
-                    modalClose.addEventListener('click', function () {
-                      toggleModal(id);
-                    });
-
-
-                    if (modalOpen) {
-                      modalOpen.remove();
-                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
-                      return;
-                    } else {
-                      modalClose = document.createElement("div");
-                      modalClose.id = 'modalOpen';
-                      contentWrapper.appendChild(modalClose);
-
-                    }
-
-                    const template = landingPageEl.querySelector('#modalWindow');
-                    const clone = template.content.cloneNode(true);
-
-                    const baseImgUrl = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/';
-                    const list = attendees;
-                    const user = list.filter(item => item.userId === id)[0];
-                    console.log(user, id);
-
-                    const avatar = clone.querySelector('img');
-                    avatar.src = baseImgUrl + user.userId + '/250/250';
-                    clone.querySelector('.name').innerHTML = user.firstName + ' ' + user.lastname;
-                    clone.querySelector('.title').innerHTML = user.contactInfoTitle;
-                    clone.querySelector('.right').innerHTML = user.bio;
-                    contentWrapper.appendChild(clone);
-                    const modal = landingPageEl.querySelector('#open-modal');
-                    setModalPosition(modal);
-                    modal.classList.toggle('open');
-                  }
-
-                  function setModalPosition(el) {
-                    el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
-                  }
-                </script>
-
-                <div class="content">
-                  <div class="search-banner">
-                    <div><h1>Attendee List</h1></div>
-                    <div class="search-input">
-                      <input type="text" placeholder="Search Attendees" oninput="searchAttendees(event)"/>
-                      <mat-icon class=" search-icon mat-icon material-icons mat-icon-no-color" role="img"
-                                aria-hidden="true">
-                        search
-                      </mat-icon>
-                    </div>
-                    <div class="logo">
-                      <img
-                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                  <div class="search-exhibitors-divider">
+                    <div class="filter-options">
+                      <div class="search-wrapper">
+                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"/> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/search-icon.png"/>
+                      </div>
+                      <button id="all-grouping" onclick="allAttendees()">All</button>
+                      <button id="ae-grouping" onclick="filterLastName(this, 'abcde')">A - E</button>
+                      <button id="fj-grouping" onclick="filterLastName(this, 'fghij')">F - J</button>
+                      <button id="ko-grouping" onclick="filterLastName(this, 'klmno')">K - O</button>
+                      <button id="pt-grouping" onclick="filterLastName(this, 'pqrst')">P - T</button>
+                      <button id="uz-grouping" onclick="filterLastName(this, 'uvwxyz')">U - Z</button>
                     </div>
                   </div>
 
-                  <div class="attendee-list">
-                    <template id="card">
-                      <div class="card" id="1">
-                        <div class="avatar"><img src=""></div>
-                        <div style="text-align: center">
-                          <div class="person"></div>
-                          <div class="company"></div>
-                          <div class="job-title"></div>
-                        </div>
-                        <div class="social">
-                          <div class="bio" href="" target="" id="bio"><img src=""></div>
-                          <a class="linked-in" href="" target="" id="linkedin"><img src=""></a>
+                  <div id="attendee-list" class="attendee-list">
+
+                    <template id="attendee-template">
+                      <div id=attendee-card class="attendee-card">
+                        <img id="attendee-avatar" class="attendee-avatar"/>
+                        <div id="attendee-info" class="attendee-info">
+                          <div id="attendee-name" class="attendee-name"></div>
+                          <div id="company-title" class="company-title"></div>
+                          <div class="attendee-email">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/email-icon.png"/>
+                            <a id="attendee-email-link" href="" target="_blank" rel="noreferrer"></a>
+                          </div>
+                          <div class="linked-in">
+                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/tag/speakers/linked-in.png"/>
+                            <a href="#" target="_blank" rel="noreferrer" id="linked-in"></a>
+                          </div>
                         </div>
                       </div>
                     </template>
-
-                    <h1 id="no-results-message" class="no-results-message" style="display:none;">No people found.</h1>
-
                   </div>
 
+                  <hr/>
 
-                  <div id="open-modal" class="modal-window">
-                    <div class="modal-box">
-                      <div title="Close" class="modal-close">Close</div>
-                      <div class="contentWrapper"></div>
-                    </div>
-                  </div>
 
                 </div>
 
-                <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
+                <!-- Attendees using API -->
                 <script>
-                  if (!window.whiteHack) {
-                    // console.log('loading color overrides for --branding-primary = white');
-                    const css = `
-                          jolo-search-box .search-box-container {display: none !important}
-                          span.i, div.g, ly-icon.material-icons.ab, .cp, .mat-toolbar, .mat-toolbar button.menu-btn.mat-icon-button, .mat-toolbar .mat-title { color: #000 !important; }
-                    `;
-                    const head = document.head || document.getElementsByTagName('head')[0];
-                    const style = document.createElement('style');
-                    style.appendChild(document.createTextNode(css));
-                    head.appendChild(style);
-                    window.whiteHack = true;
-                  }
-                </script>
 
-                <script>
-                  var attendees = [];
-                  var totalAttendees = null;
+                  var attendees =[];
 
-                  function fetchUsers(pageNumber) {
+                  var fetchUsers = (pageNumber) => {
                     const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
                     // max pagesize = 1000
                     // page start at 1 not 0
@@ -718,6 +584,7 @@
                           // keep fetching until we run out of attendees to get
                           fetchUsers(pageNumber + 1);
                         } else {
+                          attendees = sortList(attendees, 'lastname');
                           buildAttendeeList();
                         }
                         totalAttendees = xhr.getResponseHeader('X-Pagination-TotalItems');
@@ -728,388 +595,184 @@
                       }
                     });
 
-                    function filterList(res) {
-                      return res.filter(item => {
-                        // remove users who have not yet opted in
-                        if (item.hideProfilePrivacyOptOut) {
-                          return false;
-                        }
+                  }
 
-                        //remove bad users who have no name
-                        if (!item.firstName && !item.lastname) {
-                          return false;
+                  var filterList = (res) => {
+                    return res.filter(item => {
+                      // remove users who have not yet opted in
+                      if (item.hideProfilePrivacyOptOut) {
+                        return false;
+                      }
+                      // remove users who are not in a specified group
+                      return item.userGroups.some(group => {
+                          const name = group.name.toLowerCase();
+                          return true; // comment out to set for specific group
+                          // return name.includes('attendee');
                         }
-                        // remove users who are not in a specified group
-                        return item.userGroups.some(group => {
-                            const name = group.name.toLowerCase();
-                            return name.includes('public') || name.includes('admin');
-                          }
-                        );
-                      });
+                      );
+                    });
+                  }
+
+                  var sortList = (list, key) => {
+                    list = list.sort(function (a, b) {
+                      if (a[key].toLowerCase() > b[key].toLowerCase()) {
+                        return 1;
+                      }
+                      if (a[key].toLowerCase() < b[key].toLowerCase()) {
+                        return -1;
+                      }
+                      return 0;
+                    });
+
+                    return list;
+                  }
+
+                  var buildAttendeeList = () => {
+                    const attendeeList = landingPageEl.getElementById("attendee-list");
+                    const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+                    const avatarURL = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/';
+                    const avatarSize = '/300/300';
+
+                    for (let user of attendees) {
+                      let clone = attendeeTemplate.content.cloneNode(true);
+
+                      let attendeeDiv = clone.getElementById("attendee-card");
+                      attendeeDiv.id = user.id.toString();
+
+                      clone.getElementById("attendee-avatar").src =  avatarURL + user.userId + avatarSize;
+
+                      let fullName = clone.getElementById("attendee-name");
+                      fullName.innerHTML = user.firstName + " " + user.lastname;
+
+                      if (user.contactInfoEmail) {
+                        let emailLink = clone.getElementById("attendee-email-link");
+                        emailLink.innerHTML = user.contactInfoEmail;
+                        emailLink.href = "mailto:" + user.contactInfoEmail;
+                      } else {
+                        let emailClass = clone.querySelector(".attendee-email");
+                        emailClass.style.display = "none";
+                      }
+
+                      if (user.socialLinkedIn) {
+                        let linkedIn = clone.getElementById("linked-in");
+                        linkedIn.href = user.socialLinkedIn ? user.socialLinkedIn : "";
+                        linkedIn.innerHTML = user.socialLinkedIn ? user.socialLinkedIn : "";
+                      } else {
+                        let linkedInClass = clone.querySelector(".linked-in");
+                        linkedInClass.style.display = "none";
+                      }
+
+                      let companyTitle = clone.getElementById("company-title");
+                      const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
+                      const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
+                      const hyphen = contactInfoTitle !== "" && contactInfoCompany != "" ? " - " : "";
+                      companyTitle.innerHTML = contactInfoTitle + hyphen + contactInfoCompany;
+
+                      attendeeList.appendChild(clone);
                     }
+                  }
+
+                  var updateAttendees = () => {
+                    let empty = true;
+                    for (let user of attendees) {
+                      const id = user.id.toString();
+                      const el = landingPageEl.getElementById(id);
+                      if (el) {
+                        if (user.visible) {
+                          empty = false;
+                          el.style.display = ""
+                        } else {
+                          el.style.display = "none";
+                        }
+                      }
+                    }
+                  }
+
+                  var searchAttendees = e => {
+                    let query = e.currentTarget.value.toLowerCase();
+                    for (let user of attendees) {
+                      const contactInfoTitle = user.contactInfoTitle ? user.contactInfoTitle : "";
+                      const contactInfoCompany = user.contactInfoCompany ? user.contactInfoCompany : "";
+                      if (user.firstName.toLowerCase().startsWith(query)
+                        || user.lastname.toLowerCase().startsWith(query)
+                        || contactInfoTitle.toLowerCase().includes(query)
+                        || contactInfoCompany.toLowerCase().includes(query)) {
+                        user.visible = true;
+                      } else {
+                        user.visible = false;
+                      }
+                    }
+
+                    clearLetterGroupings();
+
+                    updateAttendees();
 
                   }
 
-                  function buildAttendeeList() {
-                    // filter out users who have opted out of sharing their data
-                    const container = landingPageEl.querySelector('.attendee-list');
-                    const template = landingPageEl.querySelector('template#card');
-                    const baseImgUrl = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/';
+                  var letterGroupings = [
+                    "all-grouping",
+                    "ae-grouping",
+                    "fj-grouping",
+                    "ko-grouping",
+                    "pt-grouping",
+                    "uz-grouping",
+                  ];
 
-                    if (!attendees || !attendees.length) {
-                      landingPageEl.getElementById("no-results-message").style.display = '';
+                  var clearLetterGroupings = () => {
+                    for (let group of letterGroupings) {
+                      const el = landingPageEl.getElementById(group);
+                      el.style.color = "";
+                      el.style.backgroundColor = "";
+                    }
+                  }
+
+                  var clearSearchValue = () => {
+                    const search = landingPageEl.getElementById("search-attendees")
+                    search.value = "";
+                  }
+
+                  var allAttendees = () => {
+                    for (let user of attendees) {
+                      user.visible = true;
                     }
 
+                    clearSearchValue();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("all-grouping").style.color = "white";
+                    landingPageEl.getElementById("all-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var filterLastName = (element, letters) => {
                     attendees.forEach(user => {
-                        const clone = template.content.cloneNode(true);
-                        const card = clone.querySelector('.card');
-                        card.querySelector('.avatar img').src = baseImgUrl + user.userId + '/250/250';
-                        const firstName = user.firstName ?? '';
-                        const lastName = user.lastname ?? '';
-                        card.querySelector('.person').innerHTML = firstName + ' ' + lastName;
-                        card.querySelector('.company').innerHTML = user.contactInfoCompany ?? '';
-                        card.querySelector('.job-title').innerHTML = user.contactInfoTitle ?? '';
-
-                        const bio = card.querySelector('.bio');
-                        if (user.bio) {
-                          const bioBtn = bio.querySelector('img');
-                          bioBtn.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/bio3.png'
-                          bio.onclick = function () {
-                            toggleModal(user.userId);
-                          }
-                        } else {
-                          bio.classList.toggle('hidden');
-                        }
-
-                        const linkedIn = card.querySelector('.linked-in');
-                        if (user.socialLinkedIn) {
-                          const img = linkedIn.querySelector('img');
-                          img.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/attendee-list/linkedin.png';
-                          linkedIn.href = user.socialLinkedIn;
-                          const fullName = firstName + ' ' + lastName;
-                          linkedIn.id = fullName.replace(/[^A-Z0-9]/ig, "_") + 'click_linkedIn';
-                        } else {
-                          linkedIn.classList.toggle('hidden');
-                        }
-
-
-                        card.id = user.id.toString();
-                        container.appendChild(clone);
-                      }
-                    );
-
+                      user.visible = letters.includes(user.lastname[0].toLowerCase());
+                    });
+                    clearSearchValue();
+                    clearLetterGroupings();
+                    landingPageEl.getElementById(element.id).style.color = "white";
+                    landingPageEl.getElementById(element.id).style.backgroundColor = "#41578B";
+                    updateAttendees();
                   }
 
                   fetchUsers(1);
+
                 </script>
 
-                <!-- Search -->
+                <!-- Inferno Hacks -->
                 <script>
-                  function searchAttendees(event) {
-                    const emptyMessage = landingPageEl.getElementById("no-results-message");
-                    const substring = event.currentTarget.value.toLowerCase();
-                    let noResults = true;
-                    attendees.forEach(user => {
-                      const card = landingPageEl.getElementById(user.id.toString());
-                      const firstName = user.firstName ?? '';
-                      const lastName = user.lastname ?? '';
-                      const org = user.contactInfoCompany ?? '';
-                      const title = user.contactInfoTitle ?? '';
-
-                      let stringToSearch = firstName
-                        + lastName
-                        + org
-                        + title;
-
-                      stringToSearch = stringToSearch.toLowerCase();
-
-                      if (stringToSearch.includes(substring)) {
-                        noResults = false;
-                        card.style.display = "";
-                      } else {
-                        card.style.display = "none";
-                      }
-
-                    })
-
-                    emptyMessage.style.display = noResults ? '' : 'none';
+                  if (!window.searchBoxHack) {
+                    const css = `jolo-search-box .search-box-container {display: none !important}`;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    style.id ='search-box-hack';
+                    head.appendChild(style);
+                    window.searchBoxHack = true;
                   }
-
                 </script>
-
-                <chatwee-initialize>
-                  <!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
-                  {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
-                  {%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
-
-                  <!-- get duration till end of conference plus one day for buffer -->
-                  <!-- this determines the length of time to set the chatwee cookie expiration too -->
-                  {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
-                  {%- assign lastEvent = eventsByDate.last -%}
-
-                  {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
-                  {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
-                  {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
-
-                  <!-- difference in seconds -->
-                  {%- assign diffSeconds = eventEnd | minus:nowTimestamp -%}
-                  {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
-                  {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
-
-                  <div style="display:none;">
-                    <p id="user-inferno-first-name">${firstName}</p>
-                    <p id="user-inferno-last-name">${lastName}</p>
-                  </div>
-
-                  <script async>
-
-                    var userInfernoId = window.sessionStorage.getItem("userId");
-                    var firstName = window.isLocalTemplate ? 'TEST' : landingPageEl.getElementById("user-inferno-first-name").innerHTML;
-                    var lastName = window.isLocalTemplate ? 'USER' : landingPageEl.getElementById("user-inferno-last-name").innerHTML;
-
-                    var chatDuration = "{{ chatDuration }}";
-                    var hasProfileImage = false;
-
-                    // global chat manager
-                    var chatManager = null;
-
-                    var chatweeValues = {
-                      userIdKey: "chatwee-user-id",
-                      sessionCookieKey: "chatwee-SID-5f7ef4b1ebaa9f3cf83ed7fa",
-                      chatId: "5f7ef4b1ebaa9f3cf83ed7fa",
-                      clientApiKey: "a6feff42c070b4633a876aec",
-                      isAdmin: 0,
-                      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
-                    }
-
-                    var loadChatScript = () => {
-                      // don't load script if already on page
-                      let chatScript = document.getElementById("chat-script");
-                      if (chatScript) return;
-
-                      (function () {
-                        var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                        s1.id = "chat-script";
-                        s1.async = true;
-                        s1.src = 'https://static.chatwee-api.com/v2/script.js';
-                        s1.charset = 'UTF-8';
-                        s0.parentNode.insertBefore(s1, s0);
-                      })();
-
-                      return;
-                    }
-
-                    var loadChatStyles = () => {
-                      return;  // no custom styling for this instance
-
-                      // dont load styles if already on page
-                      // let chatStyleSheet = document.getElementById("chat-replacement-styling");
-                      // if (chatStyleSheet) return;
-                      //
-                      // (function () {
-                      //   var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
-                      //
-                      //   link1.setAttribute("id", "chat-replacement-styling")
-                      //   link1.setAttribute("rel", "stylesheet")
-                      //   link1.setAttribute("type", "text/css")
-                      //   link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
-                      //   link1.setAttribute("media", "all")
-                      //   body.parentNode.insertBefore(link1, body);
-                      // })();
-
-                      return;
-                    }
-
-                    var startChat = async () => {
-                      if (!chatManager) {
-                        chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
-                        chatManager.Run();
-                      }
-                    }
-
-                    var openChat = () => {
-                      // close bubble
-                      let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
-                      let bubble = bubbleChild.parentNode;
-                      bubble.style.display = "none";
-
-                      // open chat
-                      let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
-                      let chat = chatChild.parentNode;
-                      chat.style.display = "block";
-                      return;
-                    }
-
-                    // Chatwee UserId must be set as the Id for the button
-                    var triggerConversation = e => {
-                      let userId = e.target.id;
-                      openChat();
-                      chatManager.TriggerConversation(userId);
-                    }
-
-                    // helper functions
-                    var getCookie = key => {
-                      let cookieValue = "";
-
-                      const cookieList = document.cookie;
-                      if (cookieList) {
-                        const cookie = cookieList
-                          .split("; ")
-                          .find(row => row.startsWith(key));
-
-                        if (cookie) {
-                          cookieValue = cookie.split("=")[1];
-                        }
-
-                      }
-                      return cookieValue;
-                    }
-
-                    var setCookie = (key, value, age) => {
-                      document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
-                    }
-
-                    var validateChatSessionId = sessionId => {
-                      const url = chatweeValues.ssoBaseUrl
-                        + "validate-session?"
-                        + "chatId="
-                        + chatweeValues.chatId
-                        + "&clientKey="
-                        + chatweeValues.clientApiKey
-                        + "&sessionId="
-                        + sessionId;
-
-                      return fetch(url).then(res => res.json());
-                    }
-
-                    var loginChat = userId => {
-                      const url = chatweeValues.ssoBaseUrl
-                        + "login?"
-                        + "chatId="
-                        + chatweeValues.chatId
-                        + "&clientKey="
-                        + chatweeValues.clientApiKey
-                        + "&userId="
-                        + userId;
-
-                      return fetch(url).then(res => res.json());
-                    }
-
-                    var registerChat = () => {
-                      const name = firstName + " " + lastName;
-
-                      // TO DO: get default chat icon
-                      let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/chatwee/_avatar.jpg";
-
-                      if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
-
-                      const url = chatweeValues.ssoBaseUrl
-                        + "register?"
-                        + "chatId="
-                        + chatweeValues.chatId
-                        + "&clientKey="
-                        + chatweeValues.clientApiKey
-                        + "&login="
-                        + name
-                        + "&isAdmin="
-                        + chatweeValues.isAdmin
-                        + "&avatar="
-                        + avatarUrl;
-
-                      return fetch(url).then(res => res.json());
-                    }
-
-                    // connect to Chatwee
-                    var connectChat = async () => {
-
-                      // see if session id locally
-                      let sessionId = getCookie(chatweeValues.sessionCookieKey);
-
-                      if (sessionId) {
-                        // validate session id with chatwee
-                        let valid
-                        try {
-                          valid = await validateChatSessionId(sessionId);
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        // if true, do nothing
-                        if (valid) return;
-
-                      }
-
-                      // if false, check if user id is present locally
-                      const userId = getCookie(chatweeValues.userIdKey);
-
-                      // if true, login and set session id locally
-                      if (userId) {
-                        let sessionId = ""
-                        try {
-                          sessionId = await loginChat(userId);
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
-                      }
-                      // if false, register and set user id and log in user
-                      else {
-                        let userId = ""
-                        try {
-                          userId = await registerChat();
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        setCookie(chatweeValues.userIdKey, userId, chatDuration);
-
-                        let sessionId = ""
-                        try {
-                          sessionId = await loginChat(userId);
-                        } catch (e) {
-                          throw new Error(e);
-                        }
-
-                        setCookie(chatweeValues.sessionCookieKey, sessionId, chatDuration);
-
-                      }
-
-                      return;
-                    }
-
-                    var getProfileImage = () => {
-                      let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
-                      return fetch(url);
-                    }
-
-                    var waitForGlobal = async (key, callback1, callback2) => {
-                      if (window[key]) {
-                        await callback1();
-                        await callback2();
-                      } else {
-                        setTimeout(function () {
-                          waitForGlobal(key, callback1, callback2);
-                        }, 100);
-                      }
-                    };
-
-                    var setUpChat = async () => {
-                      loadChatScript();
-                      loadChatStyles();
-                      const res = await getProfileImage();
-                      if (res.status === 200) {
-                        hasProfileImage = true;
-                      }
-
-                      waitForGlobal("ChatweeLib", connectChat, startChat);
-                    }
-
-                    setUpChat();
-
-                  </script>
-
-                </chatwee-initialize>
 
               </inferno-snippet-content>
 
