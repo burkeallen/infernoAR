@@ -1,25 +1,88 @@
-<!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
@@ -44,127 +107,130 @@
     var data = {}
     loadJSON('../liquid.json', function (response) {
       // Parse JSON string into object
-      const x = JSON.parse(response);
-      data = x[0];
-      console.log('liquid', data);
+      const x = JSON.parse(response)
+      data = x[0]
     })
 
   </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
   <script>
-    let landingPageEl = null;
-    window.isLocalTemplate = true;
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
   </script>
-
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/';
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password'
-      };
-
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain};
-
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem("domain", project.domain);
-          storeUser(JSON.parse(res));
-        },
-        error: function (err) {
-          alert(JSON.stringify(err));
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain);
-        }
-      });
-
-    }
-
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem("clientId", data.ClientId);
-      sessionStorage.setItem("token", data.AccessToken);
-      sessionStorage.setItem("refreshToken", data.RefreshToken);
-    }
-
-    function login() {
-      const currentProject = projects.filter(project => {
-        return project.name === 'halldale';
-      })[0];
-      if (!currentProject) {
-        alert('could not log into Inferno');
-      }
-      authenticate(currentProject);
-    }
-
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-          src="/inferno.config.js"></script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
 
 </head>
 
 <body>
-
-<app-root class='layout-fixed has-menu'>
+<div style="display:none" id="novoProject" name="halldale" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
                   </mat-icon>
               </span>
             </button>
-            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
           </div>
         </mat-toolbar>
       </app-header>
       <!-- SIDEBAR -->
       <videos-sidebar class="aside">
         <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close="">
-            <ul class="nav">
-              <li><a href="../">Menu</a></li>
-            </ul>
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          </nav>
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
-      <section class="IE-FlexAuto" flex="">
+      <section class="IE-FlexAuto" flex>
         <div class="content-wrapper">
           <landing-page class="ng-star-inserted">
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
@@ -173,9 +239,32 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="41ec7f83-05e6-41fc-b911-aa799c202d43">
+              <inferno-snippet-content id="c9ac055a-f5bc-47bd-884a-c20cb578aad1">
 
-                <!-- Main Snippet -->
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('gothamMed', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Medium.otf');
+                  loadFont('gothamBlack', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Black.otf');
+                  loadFont('gothamBook', 'https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/GothamHTF-Book.otf');
+
+                </script>
+
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -184,218 +273,77 @@
                   }
 
                   .content {
-                    background-image: none;
-                    background-color: var(--sidebar-bg-color);
+                    background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/agenda-logo-bg.jpg');
+                    background-attachment: fixed;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: right bottom;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
-                    padding: 20px 24px;
                     z-index: 1;
-                    font-family: Verdana, sans-serif !important;
+                    font-family: 'gothamMed', sans-serif;
                   }
 
-                  .content > img {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
+                  .top-banner {
+                    padding: 10px 50px;
+                    line-height: 60px;
+                    color: var(--branding-primary);
+                    font-size: 32px;
+                    background-color: #ffffff;
 
-                <!-- Video Panel -->
-                <style>
-                  .video-panel {
-                    position: absolute;
-                    left: 3%;
-                    top: 26.3%;
-                    width: 20%;
-                    height: 35.3%;
-                    clip-path: polygon(4% 2%, 97% 39%, 97% 98%, 3% 94%);
-                    background-color: rgba(255, 0, 0, 0.5);
-                    z-index: 99;
                   }
 
-                  .video-panel > img {
-                    width: 100%;
-                    height: 100%;
-                    transform: matrix(2, .3, -.1, 1, 2, 25) skew(1deg, 4deg);
+                  .top-banner span {
+                    color: var(--sidebar-bg-color);
                   }
-                </style>
 
-                <!-- Lobby Menu -->
-                <style>
-                  .menu {
-                    position: absolute;
+                  .top-banner img {
+                    float: right;
+                    width: 250px;
+                    margin: 13px 0;
+                  }
+
+                  .grid {
                     display: grid;
-                    top: 5%;
-                    right: 5%;
-                    z-index: 99;
-                    width: 300px;
-                    padding: 2%;
-                    background-color: rgba(255, 255, 255, .9);
-                    border-radius: .5em;
+                    align-content: center;
+                    justify-content: center;
                   }
 
-                  .menu img {
-                    width: 100%;
-                    margin-bottom: 5%;
-                  }
-
-                  .menu-button {
+                  .grid div {
+                    display: grid;
+                    align-content: center;
+                    justify-content: center;
+                    margin-top: 10%;
+                    min-width: 80%;
+                    min-height: 400px;
+                    background-color: rgba(0, 0, 0, .4);
+                    color: white;
+                    font-size: 2em;
                     text-align: center;
-                    background-color: white;
-                    border: solid 1px var(--sidebar-bg-color);
-                    color: var(--sidebar-bg-color);
-                    font-size: 1.4em;
-                    line-height: 2em;
-                    margin: 2% 0;
+                    padding: 5%;
                     border-radius: .5em;
-                    text-transform: uppercase;
-                  }
-
-                  .menu-button:hover {
-                    filter: brightness(120%);
-                    transform: scale(1.1);
-                    text-decoration: none;
-                    color: var(--sidebar-bg-color);
-                  }
-
-                </style>
-
-                <!-- Sponsors -->
-                <style>
-                  .sponsor-container {
-                    position: absolute;
-                    bottom: 0;
-                    width: 100%;
-                    margin: 0 -24px;
-                    border: solid 1px #dddddd;
-                    background: white;
-                    padding: .5em 0;
-                  }
-
-                  .fixed-sponsor {
-                    width: 200px;
-                    height: 100px;
-                    position: absolute;
                   }
                 </style>
 
-                <!-- Flickity carousel/slider  -->
-                <style>
-                  .slider {
-                    margin-left: calc(200px + 6em);
-                  }
-
-                  .slider img {
-                    display: block;
-                    width: 200px;
-                    height: 100px;
-                    margin-right: 6em;
-                  }
-
-                  /* setting display none cause issues with flickity rendering */
-                  /* so we hide it by moving it off the screen */
-                  .is-hidden {
-                    position: absolute;
-                    left: -3000px;
-                  }
-
-                  /* position dots up a bit */
-                  .flickity-page-dots {
-                    bottom: -22px !important;
-                  }
-
-                  /* dots are lines */
-                  .flickity-page-dots .dot {
-                    height: 4px !important;
-                    width: 40px !important;
-                    margin: 0 !important;
-                    border-radius: 0 !important;
-                  }
-
-                  /* no circle */
-                  .flickity-button {
-                    display: none;
-                  }
-
-                </style>
 
                 <div class="content">
-                  <img
-                      src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/lobby-bg.jpg">
 
-                  <div class="menu">
-                    <img
-                        src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/global-atvs-logo.png">
-
-                    <a id="lobby_mainstage_click" class="menu-button"
-                       href="/videos/f327acd4-64a0-4f8f-406c-08d8704aa40b/landing/1871201f-7cf3-4e6e-923d-a2ef6fb9edb4">
-                      Main Stage</a>
-
-                    <a id="lobby_agenda_click" class="menu-button"
-                       href="/videos/27537673-91a8-4a62-f2e9-08d8702d4f1d/landing/c9985737-d030-4fdd-8ac7-33de79771c9f">
-                      Conference Agenda</a>
-
-                    <a id="lobby_expo_hall_click" class="menu-button"
-                       href="/videos/0a3afe30-1f11-46d7-d0be-08d87041ed91/landing/0998455f-14ec-47e2-953e-5d3ad9e3cea6">
-                      Exhibition Hall</a>
-
-                    <a id="lobby_library_click" class="menu-button"
-                       href="/videos/3449584d-3a91-4b5e-f2ea-08d8702d4f1d/landing/2728770f-e580-4d29-bc2c-1a5e9c183b65">
-                      Resource Library</a>
-
-                    <a id="lobby_attendee_list_click" class="menu-button"
-                       href="/videos/d6b02c97-666c-4746-406d-08d8704aa40b/landing/87b222ae-d33d-4c65-ba0b-fbf266483416">
-                      Attendee List</a>
-
-                    <img style="width:70%; margin: 5% auto;"
-                         src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/lobby/logo.png">
-
+                  <div class="top-banner">
+                    <span>Support</span>
+                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
                   </div>
 
-                  <div class="sponsor-container is-hidden">
-                    <img class="fixed-sponsor" alt="CAE"
-                         src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/diamond_cae.png">
-                    <div class="slider">
-                      <img alt="Aviation eLearning"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/ael.png">
-                      <img alt="Alsim"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_allsim.png">
-                      <img alt="AMST"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_amst.png">
-                      <img alt="Avion Group"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_avion.png">
-                      <img alt="Bihrle"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_bihrle.png">
-                      <img alt="CESI"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/cesi.png">
-                      <img alt="CPaT"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_cpat.png">
-                      <img alt="Drillster"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_drillster.png">
-                      <img alt="Entrol"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_entrol.png">
-                      <img alt="FSC"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_fsc.png">
-                      <img alt="JetPubs"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_jetpubs.png">
-                      <img alt="MINT"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/mint.png">
-                      <img alt="PACE"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_pace.png">
-                      <img alt="ProSim"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_prosim2.png">
-                      <img alt="Simnest"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_simnest.png">
-                      <img alt="SmartEye"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/smarteye.png">
-                      <img alt="WBFT"
-                           src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/sponsor/bronze_wbft.png">
-
+                  <div class="grid">
+                    <div>
+                      <p>If you need tech support</p>
+                      <p>email us at
+                        <a id="support_email_jolkia_Click" target="_blank" href="mailto:support@jolokia.com">support@jolokia.com</a> OR
+                        <a id="support_email_halldale_Click" target="_blank" href="mailto:support@halldale.com">support@halldale.com</a></p>
+                      <p>or call us at
+                        <a id="support_phone_jolokia_Click" target="_blank" href="tel:(866) 330-6655">(866) 330-6655</a>
+                      </p>
                     </div>
                   </div>
-
 
                 </div>
 
@@ -414,51 +362,6 @@
                     head.appendChild(style);
                     window.whiteHack = true;
                   }
-                </script>
-
-                <!-- Carousel Slider Script -->
-                <script>
-                  function loadFkty() {
-                    // add css style sheet
-                    const styleTag = document.createElement("link");
-                    styleTag.setAttribute('rel', 'stylesheet');
-                    styleTag.setAttribute('type', 'text/css');
-                    styleTag.setAttribute('href', 'https://unpkg.com/flickity@2/dist/flickity.min.css');
-                    landingPageEl.appendChild(styleTag);
-
-                    if (!window.flktyLoaded) {
-                      // add external JS file
-                      const scriptTag = document.createElement("script");
-                      scriptTag.onload = function (loadEvent) {
-                        initFlkty();
-                      }
-                      scriptTag.type = "text/javascript";
-                      scriptTag.src = "https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
-                      document.getElementsByTagName("head")[0].appendChild(scriptTag);
-                      window.flktyLoaded = true;
-                    } else {
-                      initFlkty();
-                    }
-                  }
-
-                  function initFlkty() {
-                    const elem = landingPageEl.querySelector('.slider');
-                    const flkty = new Flickity(elem, {
-                      // options
-                      cellAlign: 'left',
-                      freeScroll: true,
-                      wrapAround: true,
-                      groupCells: 3,
-                      autoPlay: 2500,
-                      on: {
-                        ready: function () {
-                          const el = landingPageEl.querySelector('.sponsor-container').classList.remove('is-hidden');
-                        }
-                      }
-                    });
-                  }
-
-                  loadFkty();
                 </script>
 
                 <chatwee-initialize>
@@ -546,8 +449,8 @@
 
                     var startChat = async () => {
                       if (!chatManager) {
-                        chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
-                        chatManager.Run();
+                        chatManager = chatManager ?? new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+                        // chatManager.Run();
                       }
                     }
 
@@ -746,7 +649,7 @@
       </section>
       <!-- LANDING -->
       <!-- FOOTER -->
-      <footer app-footer="" layout="row" layout-align="start center">
+      <footer app-footer layout="row" layout-align="start center">
         Inferno Footer
       </footer>
       <!-- ./ FOOTER -->
@@ -754,9 +657,9 @@
   </videos-layout>
 </app-root>
 
-</body>
 
-<!-- Menu Collapse Script -->
+
+
 <script>
 
   // LIQUID PROCESSING (Set the data variable above)
@@ -872,4 +775,5 @@
 </script>
 
 
-</html>
+
+</body><!-- Menu Collapse Script -->

@@ -1,25 +1,88 @@
-<!DOCTYPE html>
-<html lang="en"
-      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
-      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
@@ -49,57 +112,125 @@
     })
 
   </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
   <script>
-    let landingPageEl = null
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
   </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
 </head>
 
 <body>
-
-<app-root class='layout-fixed has-menu'>
+<div style="display:none" id="novoProject" name="halldale" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
-          <div class="navbar-header">LOCAL</div>
-          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
-                    trigger-resize="" onclick="mtTriggerMenu()">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
                   </mat-icon>
               </span>
             </button>
-            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
           </div>
         </mat-toolbar>
       </app-header>
       <!-- SIDEBAR -->
       <videos-sidebar class="aside">
         <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close="">
-            <ul class="nav">
-              <li><a href="../">Menu</a></li>
-            </ul>
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          </nav>
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
-      <section class="IE-FlexAuto" flex="">
+      <section class="IE-FlexAuto" flex>
         <div class="content-wrapper">
           <landing-page class="ng-star-inserted">
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
@@ -108,7 +239,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="c9ac055a-f5bc-47bd-884a-c20cb578aad1">
+              <inferno-snippet-content id="3b4d22f0-4983-4ee0-963e-43bd8482c58d">
 
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
@@ -172,25 +303,145 @@
                     margin: 13px 0;
                   }
 
-                  .grid {
-                    display: grid;
-                    align-content: center;
-                    justify-content: center;
+                  .on-demand-grid {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    max-width: 80%;
+                    padding: 10px;
                   }
 
-                  .grid div {
-                    display: grid;
-                    align-content: center;
+                  .on-demand {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    background-color: rgba(255, 255, 255, .4);
+                    border-radius: 1em;
+                    margin: 10px;
+                    padding: 2px;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .on-demand-thumb {
+                    width: 240px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .on-demand-title {
+                    display: flex;
+                    position: absolute;
+                    top: 15px;
+                    height: 40px;
+                    font-size: 1.25rem;
                     justify-content: center;
-                    margin-top: 10%;
-                    min-width: 80%;
-                    min-height: 400px;
-                    background-color: rgba(0, 0, 0, .4);
-                    color: white;
-                    font-size: 2em;
                     text-align: center;
-                    padding: 5%;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .on-demand  img:hover {
+                    cursor: pointer;
+                    transform: scale(1.06);
+                    transition: 1s ease;
+                  }
+
+                  /*.playBtn {*/
+                  /*  position: absolute;*/
+                  /*  top: 85px;*/
+                  /*  left: 60px;*/
+                  /*  width: 80px;*/
+                  /*  height: 80px;*/
+                  /*}*/
+
+                </style>
+
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
                     border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: #fff;
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(130%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
                   }
                 </style>
 
@@ -198,26 +449,82 @@
                 <div class="content">
 
                   <div class="top-banner">
-                    <span>Support</span>
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
+                    <span>On Demand</span> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/agenda/cat-logo.png">
                   </div>
 
-                  <div class="grid">
-                    <div>
-                      <p>If you need tech support</p>
-                      <p>email us at
-                        <a id="support_email_jolkia_Click" target="_blank"
-                            href="mailto:support@jolokia.com">support@jolokia.com</a> OR
-                        <a id="support_email_halldale_Click" target="_blank"
-                            href="mailto:support@halldale.com">support@halldale.com</a></p>
-                      <p>or call us at
-                        <a id="support_phone_jolokia_Click" target="_blank"
-                           href="tel:(866) 330-6655">(866) 330-6655</a>
-                      </p>
+<!--                  {{data.CurrentlyViewedCategory.Id}}-->
+
+
+                  <div class="on-demand-grid">
+                    {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                    {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                    {% for event in sortedEvents %}
+                    {% for category in event.Categories %}
+                    {% assign cat = category.Id | downcase %}
+                    {% if cat == currentCat %}
+
+<!--                   {{event | json}}-->
+
+                    <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">
+                      <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
+<!--                      <img class="playBtn" src="https://studio304nextechar.freetls.fastly.net/infernoAR/halldale/on-demand/play-btn.png">-->
+                      <div class="on-demand-title">{{event.Name}}</div>
                     </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endfor %}
                   </div>
+
 
                 </div>
+
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <template>
+                  <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                  </iframe>
+                </template>
+
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      scrollTop();
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('template');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                    scrollTop();
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
 
 
                 <!-- hack to get the main header text readable when --branding-primary = white or other really light color -->
@@ -236,24 +543,23 @@
                   }
                 </script>
 
+
                 <chatwee-initialize>
                   <!-- {%- assign userInfernoId = data.CurrentViewingUser.Id -%}
                   {%- assign userFirstName = data.CurrentViewingUser.FirstName -%}
                   {%- assign userLastName = data.CurrentViewingUser.LastName -%} -->
 
                   <!-- get duration till end of conference plus one day for buffer -->
-                  <!-- this determines the length of time to set the chatwee cookie expiration too -->
-                  {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
-                  {%- assign lastEvent = eventsByDate.last -%}
+                  <!-- this determines the length of time to set the chatwee cookie expiration too -->{%- assign
+                  eventsByDate = data.Events | sort: "StartTime" -%} {%- assign lastEvent = eventsByDate.last -%}
 
-                  {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%}
-                  {%- assign eventEnd = eventStart | plus: lastEvent.VideoDuration -%}
-                  {%- assign nowTimestamp = "now" | date: "%s" | plus: 0 -%}
+                  {%- assign eventStart = lastEvent.StartTime | date: "%s" | plus: 0 -%} {%- assign eventEnd =
+                  eventStart | plus: lastEvent.VideoDuration -%} {%- assign nowTimestamp = "now" | date: "%s" | plus: 0
+                  -%}
 
-                  <!-- difference in seconds -->
-                  {%- assign diffSeconds = eventEnd | minus:nowTimestamp -%}
-                  {%- assign secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%}
-                  {%- assign chatDuration = diffSeconds | plus: secondsInADay -%}
+                  <!-- difference in seconds -->{%- assign diffSeconds = eventEnd | minus:nowTimestamp -%} {%- assign
+                  secondsInADay = 5 | times: 24 | times: 60 | times: 60 -%} {%- assign chatDuration = diffSeconds |
+                  plus: secondsInADay -%}
 
                   <div style="display:none;">
                     <p id="user-inferno-first-name">${firstName}</p>
@@ -321,8 +627,8 @@
 
                     var startChat = async () => {
                       if (!chatManager) {
-                        chatManager = chatManager ?? new ChatweeLib.ChatweeManager(chatweeValues.chatId);
-                        chatManager.Run();
+                        chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+                        // chatManager.Run();
                       }
                     }
 
@@ -521,7 +827,7 @@
       </section>
       <!-- LANDING -->
       <!-- FOOTER -->
-      <footer app-footer="" layout="row" layout-align="start center">
+      <footer app-footer layout="row" layout-align="start center">
         Inferno Footer
       </footer>
       <!-- ./ FOOTER -->
@@ -529,9 +835,9 @@
   </videos-layout>
 </app-root>
 
-</body>
 
-<!-- Menu Collapse Script -->
+
+
 <script>
 
   // LIQUID PROCESSING (Set the data variable above)
@@ -647,4 +953,5 @@
 </script>
 
 
-</html>
+
+</body><!-- Menu Collapse Script -->
