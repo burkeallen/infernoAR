@@ -244,6 +244,7 @@
                 <!-- Container -->
                 <style>
                   #container {
+                    padding-bottom: 20px;
                     margin: -20px;
                     min-height: calc(100vh - 114px);
                     background-color: #ccc;
@@ -252,11 +253,6 @@
 
                   img::after {
                     content: none;
-                  }
-
-                  hr {
-                    border: 1px solid rgba(11, 38, 104, 0.32);
-                    margin: 2rem 0;
                   }
 
                 </style>
@@ -269,7 +265,7 @@
                     background-size: cover;
                     background-position: left center;
                     background-blend-mode: multiply;
-                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/attendees/attendees-header.jpg');
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/aafmp/attendees/attendees-header.jpg');
                   }
 
                   .banner-shadow {
@@ -404,7 +400,7 @@
                     height: auto;
                     min-width: 400px;
                     flex-wrap: wrap;
-                    margin: 1.4rem 4.4rem;
+                    margin: 2rem 4.4rem;
                     padding: 1rem 2rem;
                     border-radius: 9px;
                     background-color: #FFFFFF;
@@ -453,45 +449,6 @@
                     align-items: center;
                     padding-right: 5px
                   }
-
-                </style>
-
-                <!-- Sponsors -->
-                <style>
-                  .sponsor-container {
-                    padding-bottom: 40px;
-                  }
-
-                  .sponsors-header {
-                    margin: 0 30px;
-                  }
-
-                  .sponsors-header h1 {
-                    font-size: 2.25rem;
-                    font-weight: bold;
-                    color: #01245B;
-                  }
-
-                  .sponsors-grid {
-                    display: grid;
-                    margin: 0 auto;
-                    grid-auto-columns: max-content;
-                    grid-auto-rows: max-content;
-                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-                    gap: 10px 10px;
-                    padding: 10px 10% 0 10%;
-                  }
-
-                  .sponsors-grid img {
-                    position: relative;
-                    top: 0;
-                    left: 0;
-                    margin: 0 auto;
-                    max-width: 240px;
-                    text-align: center;
-                    background-color: #ffffff;
-                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
-                  }
                 </style>
 
                 <div id="container">
@@ -506,7 +463,7 @@
                   <div class="search-exhibitors-divider">
                     <div class="filter-options">
                       <div class="search-wrapper">
-                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"> <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/attendees/search-icon.png">
+                        <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)"> <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/aafmp/attendees/search-icon.png">
                       </div>
                       <button id="all-grouping" onclick="allAttendees()">All</button>
                       <button id="ae-grouping" onclick="filterLastName(this, 'abcde')">A - E</button>
@@ -526,27 +483,15 @@
                           <div id="attendee-name" class="attendee-name"></div>
                           <div id="company-title" class="company-title"></div>
                           <div class="attendee-email">
-                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/attendees/email-icon.png">
+                            <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/aafmp/attendees/email-icon.png">
                             <a id="attendee-email-link" href target="_blank" rel="noreferrer"></a>
                           </div>
                           <div class="linked-in">
-                            <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp/attendees/linked-in.png">
+                            <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/aafmp/attendees/linked-in.png">
                             <a href="#" target="_blank" rel="noreferrer" id="linked-in"></a>
                           </div>
                         </div>
                       </div>
-                    </template>
-                  </div>
-
-                  <hr>
-
-                  <div class="sponsor-container">
-                    <div class="sponsors-header">
-                      <h1>Our Sponsors</h1>
-                    </div>
-                    <div id="sponsors-grid" class="sponsors-grid"></div>
-                    <template id="sponsor-template">
-                      <img id="sponsor-logo" src>
                     </template>
                   </div>
 
@@ -767,41 +712,6 @@
                   fetchUsers(1);
 
                 </script>
-
-                <!-- Sponsors -->
-<!--                <script>-->
-<!--                  var myLanding = landingPageEl ?? document;-->
-<!--                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");-->
-<!--                  var sponsorTemplate = myLanding.getElementById("sponsor-template");-->
-<!--                  var baseUrl = baseUrl ?? "https://studio304nextechar.freetls.fastly.net/infernoAR/aafmp"-->
-
-<!--                  var sponsorsJson = {};-->
-<!--                  loadJSON(baseUrl + '/sponsors/all-sponsors-v2.json',-->
-<!--                    function (response) {-->
-<!--                      sponsorsJson = JSON.parse(response);-->
-<!--                    })-->
-
-<!--                  for (let sponsor of sponsorsJson['sponsors']) {-->
-<!--                    let clone = sponsorTemplate.content.cloneNode(true);-->
-<!--                    let img = clone.getElementById("sponsor-logo");-->
-<!--                    img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');-->
-<!--                    img.src = baseUrl + '/sponsors/' + sponsor.image;-->
-<!--                    sponsorsGrid.appendChild(clone);-->
-<!--                  }-->
-
-<!--                  function loadJSON(file, callback) {-->
-<!--                    const xobj = new XMLHttpRequest()-->
-<!--                    xobj.overrideMimeType('application/json')-->
-<!--                    xobj.open('GET', file, false) // Replace 'my_data' with the path to your file-->
-<!--                    xobj.onreadystatechange = function () {-->
-<!--                      if (xobj.readyState == 4 && xobj.status == '200') {-->
-<!--                        callback(xobj.responseText)-->
-<!--                      }-->
-<!--                    }-->
-<!--                    xobj.send(null)-->
-<!--                  }-->
-
-<!--                </script>-->
 
                 <!-- Inferno Hacks -->
                 <script>
