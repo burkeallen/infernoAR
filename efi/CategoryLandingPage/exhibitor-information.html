@@ -253,7 +253,7 @@
                     /* standard inferno static assets url = https://studio304nextechar.freetls.fastly.net/infernoAR/{projectname} */
                     /* s3 bucket assets url = https://inferno-event-assets.s3-us-west-2.amazonaws.com/{projectname} */
                     position: relative;
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/bkg-exhibitor-info.jpg');
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibitor-info/bkg-exhibitor-info.jpg');
                     background-attachment: local;
                     background-repeat: no-repeat;
                     background-size: cover;
@@ -451,6 +451,52 @@
                   }
                 </style>
 
+                <!-- PDF  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+                </style>
+
                 <div class="content">
                   <div id="heading">
                     <div class="heading">Exhibitor</div>
@@ -474,8 +520,9 @@
                       <li>
                         View spec sheets and decide what size booth is best given your available assets.
                         <div class="buttons">
-                          <a href="https://nextecharsolutions.sharepoint.com/:w:/s/Delivery/EcBYQrXcHyJDsxmdJjlI7bMBClmxOMeyyUaXSw4A8DCjBw?e=58UmYT" class="button" target="_blank">Small Checklist</a> <a href="https://nextecharsolutions.sharepoint.com/:w:/s/Delivery/EcpO6CYOr1lAjd4_jVOt0GkBRYhD6eK36iKBN8i00bt2jQ?e=Np0mbA" class="button" target="_blank">Medium Checklist</a> <a
-                          href="https://nextecharsolutions.sharepoint.com/:w:/s/Delivery/Eeo1kYQcpbhEpgDapM3PJ5UBWtTv6nkivp1lcUlL6C891Q?e=9eQXsF" class="button" target="_blank">Large Checklist</a>
+                          <div class="button" onclick="loadPDF('SmallBooth-Checklist.pdf')">Small Booth</div>
+                          <div class="button" onclick="loadPDF('MediumBooth-Checklist.pdf')">Medium Booth</div>
+                          <div class="button" onclick="loadPDF('LargeBooth-Checklist.pdf')">Large Booth</div>
                         </div>
                       </li>
                       </li>
@@ -525,6 +572,7 @@
 
                     </ul>
                   </div>
+
                 </div>
 
                 <!-- modal pop-up -->
@@ -568,6 +616,39 @@
                     videoWrapper.appendChild(clone);
                     landingPageEl.querySelector('#open-modal').classList.toggle('open');
                     // scrollTop();
+                  }
+                </script>
+
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                </div>
+
+                <!-- PDF -->
+                <script>
+                  function loadPDF(id) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibitor-info/" + id;
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
                   }
                 </script>
 
