@@ -373,9 +373,30 @@
 
                   .chat-wrapper {
                     width: 740px;
+                    min-width: 80%;
                     height: 500px;
-                    background-color: #cccccc;
                     margin: 20px;
+                  }
+
+                  .chatwee-widget {
+                    display: block;
+                    position: relative;
+                  }
+
+                  .chch-fixedPane {
+                    position: absolute !important;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    right: 0;
+                  }
+
+                  .chch-resizablePane {
+                    display: block;
+                    position: relative;
+                    width: 100% !important;
+                    height: 100% !important;
+                    min-height: 450px;
                   }
                 </style>
                 <!-- bottom Menu-->
@@ -416,7 +437,9 @@
 
                   <div id="chat-container">
                     <div class="chat-wrapper">
-                      <div id="chatwee-widget" class="chatwee-widget"></div>
+                      <div id="chatwee-widget" class="chatwee-widget">
+                        <h1 style="color:white; font-size:2em; text-align: center; width: 100%">GETTING NETWORKING ROLLIN<br>HANG TIGHT</h1>
+                      </div>
                     </div>
                   </div>
 
@@ -445,15 +468,16 @@
 
                     var chatWeeDuration = (84600 * 365).toString(); // 1 year
                     var chatWeeHasProfileImage = false;
+                    var _chatweeLoaded = false;
 
                     // global chat manager
                     var chatWeeManager = null;
-                    var chatWeeMainID = '5f7ef3ae1e09cc38f15f19d2'; // get from chatWee Admin Panel
+                    var chatWeeMainID = '5f7ef4b1ebaa9f3cf83ed7fa'; // get from chatWee Admin Panel
                     var chatweeValues = {
                       userIdKey: "chatwee-user-id", // do not change
                       sessionCookieKey: "chatwee-SID-" + chatWeeMainID, // do not change
                       chatId: chatWeeMainID, // do not change
-                      clientApiKey: "5dfd2fde304b85bf4f1dfa67", // get from chatWee Admin Panel
+                      clientApiKey: "a6feff42c070b4633a876aec", // get from chatWee Admin Panel
                       isAdmin: 0, // do not change
                       ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/" // do not change
                     }
@@ -479,6 +503,7 @@
                       s1.id = "chatWee-script";
                       s1.async = true;
                       s1.src = 'https://static.chatwee-api.com/v2/script.js';
+
                       s0.parentNode.insertBefore(s1, s0);
                     }
 
@@ -564,10 +589,8 @@
                     function startChatWee() {
                       if (!chatWeeManager) {
                         chatWeeManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
-                        chatWeeManager.SetChatProperty("chatweeLayout", "fixed");
-                        chatWeeManager.SetChatProperty("desktopDisplayMode", "fixed");
-                        chatWeeManager.SetChatProperty("fixedModeDefaultState", "maximized");
                         chatWeeManager.Run();
+                        moveToMiddle();
                       }
                     }
 
@@ -656,9 +679,50 @@
                       }
                     };
 
+
+
+                    function moveToMiddle() {
+                      document.addEventListener("DOMNodeInserted", function (e) {
+                        if (!e) return;
+                        if (!e.target) return;
+
+                        if (e.target.id && e.target.id.toString().includes('chch-dynamic')) {
+                          landingPageEl.appendChild(e.target)
+                          return;
+                        }
+
+                        if (!e.target.className) return;
+
+                        if (e.target.className.toString().includes('chch-fixedPane')) {
+                          if (!_chatweeLoaded) {
+                            moveChatwee(e.target);
+                          }
+                          _chatweeLoaded = true;
+                          return;
+                        }
+
+                      }, false);
+                    }
+
+                    function moveChatwee(chatwee) {
+                      console.log('moving', chatwee);
+                      const styleTag = document.createElement("link");
+                      const chatWeeEmbedEl = landingPageEl.querySelector('.chatwee-widget');
+
+                      styleTag.setAttribute('rel', 'stylesheet');
+                      styleTag.setAttribute('type', 'text/css');
+                      styleTag.setAttribute('href', 'https://chatwee-api.com/style.css');
+                      landingPageEl.appendChild(styleTag);
+
+                      console.log(chatwee);
+
+                      chatWeeEmbedEl.appendChild(chatwee);
+                    }
+
                     setUpChatWee();
 
                   </script>
+
 
                 </chatwee-initialize>
 
