@@ -1,0 +1,791 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="efi" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="a3d57be5-a4d9-4de6-84aa-e18476bf3b63">
+
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
+                  .content {
+                    /* standard inferno static assets url = https://studio304nextechar.freetls.fastly.net/infernoAR/{projectname} */
+                    /* s3 bucket assets url = https://inferno-event-assets.s3-us-west-2.amazonaws.com/{projectname} */
+                    position: relative;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibitor-info/bkg-exhibitor-info.jpg');
+                    background-attachment: local;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    padding: 40px 0;
+                    z-index: 1;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial, sans-serif;
+                  }
+
+                  #heading {
+                    margin-bottom: 40px;
+                    align-items: center;
+                  }
+
+                  .heading {
+                    color: #ffffff;
+                    line-height: 1.25;
+                    text-align: center;
+                    font-size: 3.5rem;
+                    text-shadow: 2px 2px 8px #3D3D3D;
+                  }
+
+                  .welcome {
+                    width: 100%;
+                    padding: 1% 3%;
+                    color: #000000;
+                    text-align: center;
+                    background-color: #ffffff;
+                  }
+
+                  .prep {
+                    padding: 30px 5%;;
+                    color: #ffffff;
+                  }
+
+                  .special-text {
+                    margin-top: 5px;
+                    width: 100%;
+                    padding: 5px 15px;
+                    color: red;
+                    background-color: #ffffff;
+                  }
+
+                  .special-text ul {
+                    padding-top: 2px;
+                  }
+
+                  .buttons {
+                    width: 100%;
+                    display: flex;
+                    flex-flow: wrap;
+                    margin-top: 10px;
+                  }
+
+                  .button {
+                    margin: 5px 20px;
+                    box-shadow: 0px 0px 0px 1px #9fb4f2;
+                    background: #28acea linear-gradient(to bottom, #28acea 5%, #388eeb 100%);
+                    border-radius: 10px;
+                    border: 1px solid #ffffff;
+                    display: inline-block;
+                    cursor: pointer;
+                    color: #ffffff;
+                    font-family: Arial;
+                    padding: 2px 16px;
+                    text-decoration: none;
+                    text-shadow: 0px 1px 0px #283966;
+                  }
+
+                  .small-button {
+                    font-size:12px;
+                    margin: 5px;
+                    padding: 1px 10px;
+                  }
+
+                  .button:hover, a:hover {
+                    color: #ffffff;
+                    transform: scale(1);
+                    filter: brightness(120%);
+                    text-decoration: none;
+                  }
+
+                  a {
+                    color: #ffffff;
+                    text-decoration: none;
+                  }
+
+                  ol li {
+                    padding-bottom: 30px;
+                  }
+
+                  ol li p {
+                    margin: 5px 0 0px;
+                  }
+
+                  ul li {
+                    padding-bottom: 0px;
+                  }
+
+                  ul.dashed {
+                    list-style: none;
+                    padding-left: 0;
+                  }
+
+                  ul.dashed > li {
+                    margin-left: 10px;
+                    padding-bottom: 5px;
+                  }
+
+                  ul.dashed > li::before {
+                    content: "-";
+                    margin-left: -5px;
+                  }
+
+                </style>
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: var(--sidebar-text-color);
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(80%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+
+                <!-- PDF  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+                </style>
+
+                <div class="content">
+                  <div id="heading">
+                    <div class="heading">Exhibitor</div>
+                    <div class="heading">To-Do Checklist</div>
+                  </div>
+
+                  <div class="welcome">
+                    We are thrilled to have you participate in our 2021 Virtual Trade Show.<br> There are a few things we need you to take care of by January 31, 2021 in preparation for the event
+                  </div>
+
+                  <div class="prep">
+                    <ol>
+                      <li>
+                        Watch a quick video to prep yourself on available booth size options.
+                        <div class="buttons">
+                          <div class="button" onclick="toggleModal('55bd2588-a9fc-40dd-b43c-479f9d064442')">Small Booth</div>
+                          <div class="button" onclick="toggleModal('55bd2588-a9fc-40dd-b43c-479f9d064442')">Medium Booth</div>
+                          <div class="button" onclick="toggleModal('55bd2588-a9fc-40dd-b43c-479f9d064442')">Large Booth</div>
+                        </div>
+                      </li>
+                      <li>
+                        View spec sheets and decide what size booth is best given your available assets.
+                        <div class="buttons">
+                          <div class="button" onclick="loadPDF('SmallBooth-Checklist.pdf')">Small Booth</div>
+                          <div class="button" onclick="loadPDF('MediumBooth-Checklist.pdf')">Medium Booth</div>
+                          <div class="button" onclick="loadPDF('LargeBooth-Checklist.pdf')">Large Booth</div>
+                        </div>
+                      </li>
+                      </li>
+                      <li>
+                        Collect all assets to build your booth.
+                        <div class="special-text">You must have all assets created and ready for upload before beginning to build your booth. You will not be able to save and come back to make changes later. You must complete in one sitting.</div>
+                      </li>
+                      <li>
+                        Click<a href="https://boothgenerator.nextechar.com/generator" class="button small-button" target="_blank">Here</a>to create your booth. <a href="https://boothgenerator.nextechar.com/generator" target="_blank">(https://boothgenerator.nextechar.com/generator)</a><br>
+                        <p>Domain: enterpriseflorida.infernoar.com<br> Username: booth.nextechar+efi@gmail.com<br> Password: Welcome1!</p>
+                      </li>
+                      <li>
+                        Follow the steps provided in the booth generator.<br>
+                        <p>
+                          For CATEGORY PAGE, select Exhibit Hall.<br> For DEFAULT USER GROUP, select Admin. </p>
+                      </li>
+                      <li>
+                        Follow the steps provided in the booth generator.
+                        <div class="special-text">
+                          <ul class="dashed">
+                            <li>This is your final chance to test your booth. Make sure it looks how you want it to for the day of the event, and make sure all links work. Go back and make adjustments as needed. Once you hit Submit, you cannot make any further changes or revisions to your booth.</li>
+                            <li>We recommend taking a screenshot of the booth in the final preview mode to share on your team.</li>
+                          </ul>
+
+                        </div>
+                      <li>
+                        Need other team members to have access to the booth?
+                        <p>
+                          Submit their information through the registration form. Colleagues will be added on a weekly basis to the platform starting February 12th. You will be copied on their email approval notice when this has been completed. </p>
+                      </li>
+                    </ol>
+
+                    <div style="padding:0 0 20px 30px;">Want to submit a pdf for our Press Room or Innovation Room?
+                      <p style="padding: 5px 0 0 10px">Submit materials and contact information to floridaexpo@enterpriseflorida.com by January 31, 2021. A representative will be in touch with you to review your submission.</p>
+                    </div>
+
+                    <ul><strong>IMPORTANT DATES</strong>
+                      <li>1/31/2021 - Deadline to create, test, finalize, & publish booth</li>
+                      <li>1/31/2021 - Deadline to add any additional team members
+                      <li>1/31/2021 - Deadline to submit materials for Press Room and Innovation Room.</li>
+                      <li>3/16/2021 - Start of Expo</li>
+                    </ul>
+
+                    <div style="padding:30px 0 0 30px;">
+                      Technical Support: <a href="mailto:support@jolokia.com" target="_blank">support@jolokia.com</a> | Event Support: <a href="mailto:floridaexpo@enterpriseflorida.com" target="_blank">floridaexpo@enterpriseflorida.com</a>
+                    </div>
+
+                    </ul>
+                  </div>
+
+                </div>
+
+                <!-- modal pop-up -->
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <template id="template-video-player">
+                  <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true"
+                    mozallowfullscreen="true">
+                  </iframe>
+                </template>
+
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      // scrollTop();
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('#template-video-player');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    // video.src = '/embed/' + vidElement.id;
+                    video.src = 'https://player.vimeo.com/video/476243893';
+
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                    // scrollTop();
+                  }
+                </script>
+
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                </div>
+
+                <!-- PDF -->
+                <script>
+                  function loadPDF(id) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibitor-info/" + id;
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER --></div>
+  </videos-layout>
+</app-root>
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src=""
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+</body><!-- Menu Collapse Script -->
