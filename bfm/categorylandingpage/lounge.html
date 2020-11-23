@@ -250,48 +250,60 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="07231910-4a46-4cf6-b6ce-076952f1a805">
+                <!-- Script to insert header with marquee and botton nav-->
+                <script>
+
+                  var fetchLayout = () => {
+
+                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    $.ajax({
+                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
+                      type: 'GET',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      success: function (res, status, xhr) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(res, "text/html");
+
+                        var header = doc.getElementById("bfm-header");
+                        var menu = doc.getElementById("bottom-nav");
+                        //script element for menu navigation
+                        var script = doc.getElementById("layout-script");
+
+                        //parent element where menu navigation will be inserted into on the page
+                        const contentElement = landingPageEl.getElementById("content");
+
+                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
+                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
+                        eval(script.innerHTML);
+                      },
+                      error: function (err) {
+                        console.error('Error Fetching HTML', err);
+                      }
+                    });
+
+
+                  };
+
+                  fetchLayout();
+                </script>
+
                 <style>
-
-                  @font-face {
-                    font-family: tk-adobe-clean-n4;
-                    src: url(https://use.typekit.net/af/cb695f/000000000000000000017701/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3) format("woff2"), url(https://use.typekit.net/af/cb695f/000000000000000000017701/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3) format("woff"), url(https://use.typekit.net/af/cb695f/000000000000000000017701/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3) format("opentype");
-                    font-weight: 400;
-                    font-style: normal;
-                    font-display: auto;
-                  }
-
-                  @font-face {
-                    font-family: tk-adobe-clean-i4;
-                    src: url(https://use.typekit.net/af/74ffb1/000000000000000000017702/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3) format("woff2"), url(https://use.typekit.net/af/74ffb1/000000000000000000017702/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3) format("woff"), url(https://use.typekit.net/af/74ffb1/000000000000000000017702/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i4&v=3) format("opentype");
-                    font-weight: 400;
-                    font-style: italic;
-                    font-display: auto;
-                  }
-
-                  @font-face {
-                    font-family: tk-adobe-clean-n7;
-                    src: url(https://use.typekit.net/af/eaf09c/000000000000000000017703/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3) format("woff2"), url(https://use.typekit.net/af/eaf09c/000000000000000000017703/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3) format("woff"), url(https://use.typekit.net/af/eaf09c/000000000000000000017703/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n7&v=3) format("opentype");
-                    font-weight: 700;
-                    font-style: normal;
-                    font-display: auto;
-                  }
-
-                  @font-face {
-                    font-family: tk-adobe-clean-i7;
-                    src: url(https://use.typekit.net/af/a9f5e6/000000000000000000017708/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i7&v=3) format("woff2"), url(https://use.typekit.net/af/a9f5e6/000000000000000000017708/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i7&v=3) format("woff"), url(https://use.typekit.net/af/a9f5e6/000000000000000000017708/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=i7&v=3) format("opentype");
-                    font-weight: 700;
-                    font-style: italic;
-                    font-display: auto;
-                  }
-
-                  @font-face {
-                    font-family: tk-source-code-pro-n4;
-                    src: url(https://use.typekit.net/af/3c21b3/0000000000000000000179cf/27/l?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3) format("woff2"), url(https://use.typekit.net/af/3c21b3/0000000000000000000179cf/27/d?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3) format("woff"), url(https://use.typekit.net/af/3c21b3/0000000000000000000179cf/27/a?primer=7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191&fvd=n4&v=3) format("opentype");
-                    font-weight: 400;
-                    font-style: normal;
-                    font-display: auto;
-                  }
-
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
                   img::after {
@@ -318,51 +330,7 @@
                   }
                 </style>
 
-                <!-- common Header -->
-                <style>
-                  .header {
-                    position: relative;
-                    width: calc(100% + 48px);
-                    height: 10rem;
-                    background-color: rgba(255, 255, 255, 1);
-                    color: #FF5200;
-                    padding: 0rem 2rem;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    margin: -20px -24px;
-                  }
-
-                  .header img {
-                    height: 80%;
-                  }
-
-                  .header div {
-                    width: 50%
-                  }
-
-                  .header hr {
-                    border: 4px solid #FF5200;
-                    margin: 0 3rem;
-                  }
-                </style>
-
-                <!-- Marquee -->
-                <style>
-                  marquee {
-                    width: calc(100% + 48px);
-                    background: #A0A0A0 padding-box;
-                    color: white;
-                    text-transform: uppercase;
-                    font-size: 1.5em;
-                    height: 3em;
-                    padding: 1.25em 4em;
-                    margin: 0 -24px;
-                  }
-                </style>
-
-
+                <!-- Chatwee -->
                 <style>
                   #chat-container {
                     display: flex;
@@ -371,84 +339,41 @@
                     align-items: center;
                   }
 
-                  .chat-wrapper {
-                    width: 740px;
-                    min-width: 80%;
-                    height: 500px;
-                    margin: 20px;
-                  }
-
                   .chatwee-widget {
                     display: block;
                     position: relative;
+                    width: 740px;
+                    height: 480px;
+                    margin: 20px auto;
                   }
 
                   .chch-fixedPane {
                     position: absolute !important;
                     top: 0;
-                    left: 0;
-                    bottom: 0;
                     right: 0;
+                    bottom: 0;
+                    left: 0;
                   }
 
-                  .chch-resizablePane {
-                    display: block;
-                    position: relative;
+                  .chch-brandToolBar {
+                    display: none !important;
+                  }
+
+                  .chch-compactOnlineLayout {
                     width: 100% !important;
-                    height: 100% !important;
-                    min-height: 450px;
-                  }
-                </style>
-                <!-- bottom Menu-->
-                <style>
-                  .menu {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: space-around;
-                    align-items: center;
-                  }
-
-                  .menu div {
-                    min-width: 250px;
-                    max-height: 100px;
-                    height: 150px;
-                    border: solid 2px #ff5200;
-                    background-color: #cccccc;
-                    text-align: center;
                   }
                 </style>
 
-                <div class="content">
-                  <div class="header">
-                    <div>
-                      <hr>
-                    </div>
-                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/rollin-logo.png">
-                    <div>
-                      <hr>
-                    </div>
-                  </div>
 
-                  <marquee id="ticker" behavior="scroll" direction="left">
-                    First Drawing for falken plinko to be help at 1:00pm - Check Out the trade show special on the show
-                    floor - Mr Tire Seminar Will
-                  </marquee>
+                <div id="content" class="content">
 
                   <div id="chat-container">
-                    <div class="chat-wrapper">
-                      <div id="chatwee-widget" class="chatwee-widget">
-                        <h1 style="color:white; font-size:2em; text-align: center; width: 100%">GETTING NETWORKING ROLLIN<br>HANG TIGHT</h1>
-                      </div>
+                    <div id="chatwee-widget" class="chatwee-widget hidden">
+                      <h1 style="color:white; font-size:2em; text-align: center; width: 100%">
+                        GETTING THE NETWORKING ROLLIN<br>HANG TIGHT<br>
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/spinner.gif">
+                      </h1>
                     </div>
-                  </div>
-
-                  <div class="menu">
-                    <div>Lobby</div>
-                    <div>Help/Registration</div>
-                    <div>Lounge</div>
-                    <div>Trade Show</div>
-                    <div class="active">Seminars</div>
                   </div>
 
                 </div>
@@ -462,6 +387,7 @@
 
                   <script>
 
+
                     var userInfernoId = window.sessionStorage.getItem("userId");
                     var firstName = window.isLocalTemplate ? 'TEST' : landingPageEl.getElementById("user-inferno-first-name").innerHTML;
                     var lastName = window.isLocalTemplate ? 'USER' : landingPageEl.getElementById("user-inferno-last-name").innerHTML;
@@ -471,7 +397,6 @@
                     var _chatweeLoaded = false;
 
                     // global chat manager
-                    var chatWeeManager = null;
                     var chatWeeMainID = '5f7ef4b1ebaa9f3cf83ed7fa'; // get from chatWee Admin Panel
                     var chatweeValues = {
                       userIdKey: "chatwee-user-id", // do not change
@@ -587,11 +512,18 @@
                     }
 
                     function startChatWee() {
-                      if (!chatWeeManager) {
-                        chatWeeManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
-                        chatWeeManager.Run();
-                        moveToMiddle();
-                      }
+
+                      window.chatweeManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+                      window.chatweeManager.SetChatProperty("mainLabel", "ROLLIN THE CONVERSATION");
+                      window.chatweeManager.SetChatProperty("desktopDisplayMode", "fixed");
+                      window.chatweeManager.SetChatProperty("fixedModeDefaultState", "maximized");
+                      window.chatweeManager.SetChatProperty("fixedModeDefaultWidth", "100%");
+                      window.chatweeManager.SetChatProperty("desktopLayout", "compact");
+                      window.chatweeManager.SetChatProperty("supportEnabled", false);
+                      window.chatweeManager.SetChatProperty("communityEnabled", false);
+                      window.chatweeManager.SetChatProperty("conversationsEnabled", false);
+                      window.chatweeManager.Run();
+                      landingPageEl.querySelector('.chatwee-widget').classList.toggle('hidden');
                     }
 
                     function validateChatWeeSessionId(sessionId) {
@@ -679,44 +611,54 @@
                       }
                     };
 
+                    var _stylesLoaded = 0;
 
+                    var chatWeeObserver = new MutationObserver(mutations => {
+                      mutations.forEach(mutation => {
 
-                    function moveToMiddle() {
-                      document.addEventListener("DOMNodeInserted", function (e) {
-                        if (!e) return;
-                        if (!e.target) return;
-
-                        if (e.target.id && e.target.id.toString().includes('chch-dynamic')) {
-                          landingPageEl.appendChild(e.target)
+                        if (_stylesLoaded >= 3 && _chatweeLoaded) {
                           return;
                         }
 
-                        if (!e.target.className) return;
-
-                        if (e.target.className.toString().includes('chch-fixedPane')) {
-                          if (!_chatweeLoaded) {
-                            moveChatwee(e.target);
+                        mutation.addedNodes.forEach(node => {
+                          // looking for chatwee main outer div
+                          if ((node instanceof HTMLElement) && node.className.toString().includes('chch-fixedPane')) {
+                            moveToMiddle(node);
+                          } else if (node.id && node.id.includes('chch-dynamic')) {
+                            const curId = landingPageEl.getElementById(node.id);
+                            if (!curId) {
+                              ++_stylesLoaded;
+                              console.log('adding style ' + _stylesLoaded, node.id);
+                              landingPageEl.appendChild(node);
+                            }
                           }
-                          _chatweeLoaded = true;
-                          return;
-                        }
+                        });
+                      });
+                    });
 
-                      }, false);
-                    }
+                    // observe document body for addition of chatwee dom elements
+                    chatWeeObserver.observe(document, {
+                      childList: true, // observe direct children
+                      subtree: true, // and lower descendants too
+                      characterDataOldValue: true // pass old data to callback
+                    });
 
-                    function moveChatwee(chatwee) {
-                      console.log('moving', chatwee);
+                    function moveToMiddle(node) {
+                      if (_chatweeLoaded || !node) return;
+
                       const styleTag = document.createElement("link");
                       const chatWeeEmbedEl = landingPageEl.querySelector('.chatwee-widget');
-
                       styleTag.setAttribute('rel', 'stylesheet');
                       styleTag.setAttribute('type', 'text/css');
                       styleTag.setAttribute('href', 'https://chatwee-api.com/style.css');
                       landingPageEl.appendChild(styleTag);
+                      chatWeeEmbedEl.appendChild(node);
+                      _chatweeLoaded = true;
+                      chatWeeObserver.disconnect();
+                    }
 
-                      console.log(chatwee);
-
-                      chatWeeEmbedEl.appendChild(chatwee);
+                    if (window.chatweeManager) {
+                      window.chatweeManager.Dispose();
                     }
 
                     setUpChatWee();

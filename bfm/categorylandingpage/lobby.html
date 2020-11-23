@@ -240,7 +240,58 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="52f8e7a0-c244-4c81-b630-215c42c364dc">
+                <!-- Script to insert header with marquee and botton nav-->
+                <script>
 
+                  
+
+                  var fetchLayout = () => {
+
+                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    $.ajax({
+                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
+                      type: 'GET',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      success: function (res, status, xhr) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(res, "text/html");
+
+                        var snippet = doc.getElementById("layout");
+                        //script element for menu navigation
+                        var script = doc.getElementById("layout-script");
+
+                        //parent element where menu navigation will be inserted into on the page
+                        const contentElement = landingPageEl.getElementById("content");
+
+                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                        if (!landingPageEl.getElementById("layout")) contentElement.appendChild(snippet);
+                        eval(script.innerHTML);
+                      },
+                      error: function (err) {
+                        console.error('Error Fetching HTML', err);
+                      }
+                    });
+
+
+                  };
+
+                  fetchLayout();
+                </script>
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -253,9 +304,13 @@
                   "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
                   }
                   
-                  .content {
-                  background-image: url('');
-                  /*background-attachment: fixed;*/
+                  #content {
+                  background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/lobby/lobby-bg.png');
+                  background-attachment: fixed;
+                  display: flex;
+                  flex-direction: column;
+                  justify-content: space-between;
+                  align-items: center;
                   background-repeat: no-repeat;
                   background-size: cover;
                   background-position: center;
@@ -266,23 +321,40 @@
                   font-family: "Helvetica Neue", Arial Narrow, Arial,
                   sans-serif !important;
                   }
+
+                  /*Video Player */
+
+                  .video-box {
+                    width: 50%;
+                    min-width: 30rem;
+                    margin-top: 18rem;
+                   
+                  }
+                  .video-container {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                    
+                  }
+
+                  .video-box iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 30px;
+                  }
+
                 </style>
-                <div id="bfm-header" style="width: 100%; position: absolute; top: 0; left: 0; display: flex; flex-direction: column; justify-content: center; align-items: center">
-                  <div style="display: flex; align-items: center; width: 100%; padding: 1.5rem 0;">
-                  <div style="width: 50%;">
-                    <hr style="border: 4px solid #FF5200;
-                    margin: 0 3rem;">
-                  </div>
-                  <img style="height: 6.8rem; width: auto;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/main-stage/rollin-logo.png">
-                  <div style="width: 50%;">
-                    <hr style="border: 4px solid #FF5200;
-                    margin: 0 3rem;">
+
+                  <div id="content">
+                    <div class="video-box">
+                      <div class="video-container">
+                      <iframe src="/embed/{{ data.Events[0].Id }}"></iframe>
+                      </div>
+                      </div>
                     </div>
-                    </div>
-                    <marquee style="background-color: #A0A0A0; padding: 1.5rem; color: white; font-size: 1.5rem; " id="ticker" behavior="scroll" direction="left">First Drawing for falken plinko to be help at 1:00pm - Check Out the
-                      trade show special on the show
-                      floor - Mr Tire Seminar Will</marquee>
-                  </div>
                
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
