@@ -241,61 +241,6 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="76a59c54-f553-4061-ad88-b174f8b496b5">
                   <!-- Lobby Page -->
-                  <!--  Load custom fonts -->
-                  <script type="text/javascript">
-                    function loadFont(name, url) {
-                      if (document.fonts.check("1em " + name)) {
-                        return;
-                      }
-                      const fontFace = new FontFace(name, "url(" + url + ")");
-
-                      fontFace
-                        .load()
-                        .then(function (loadedFont) {
-                          document.fonts.add(loadedFont);
-                          console.log("Loaded custom font ", name);
-                        })
-                        .catch(function (error) {
-                          // error occurred
-                          console.log("Error loading ", name);
-                        });
-                    }
-
-                    loadFont(
-                      "CustomFont1",
-                      "https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2"
-                    );
-                  </script>
-                  <script>
-                    //VIDEO MODAL
-                    
-                    var modal = landingPageEl.querySelector(".video-modal");
-
-                    function toggleModal(videoElement) {
-                      landingPageEl
-                        .querySelector(".video-modal")
-                        .classList.toggle("visible");
-
-                        const videoWrapper = landingPageEl.querySelector('.videoWrapper');
-                      let video = videoWrapper.querySelector('#video-frame');
-
-                      const temp = landingPageEl.querySelector('template');
-                      const clone = temp.content.cloneNode(true);
-                      video = clone.querySelector('iframe');
-                      video.id = 'video-frame';
-                      video.src = '/embed/' + videoElement.getAttribute('video');
-                      videoWrapper.appendChild(clone);
-                    }
-
-                    function closeModal() {
-                      const videoWrapper = landingPageEl.querySelector('.videoWrapper');
-                      let video = videoWrapper.querySelector('#video-frame');
-                      video.remove();
-                        landingPageEl
-                          .querySelector(".video-modal")
-                          .classList.remove("visible");
-                      }
-                  </script>
                   <style>
                     /* prevent entire screen from going black if you try to reference an image that does not exist*/
                     /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -313,7 +258,6 @@
                       margin: -20px;
                       padding: 20px 24px;
                       z-index: 1;
-                      font-family: "CustomFont1", sans-serif !important;
                     }
                     .content img {
                       position: absolute;
@@ -366,7 +310,7 @@
                       top: 30%;
                     }
 
-                    .wolseley {
+                    .networking {
                       clip-path: polygon(9% 0%, 66% 16%, 66% 98%, 9% 91%);
                       left: 7%;
                       top: 50%;
@@ -380,19 +324,19 @@
                       width: 14.5%;
                     }
 
-                    .learning {
+                    .auditorium {
                       left: 26%;
                     }
 
-                    .home {
+                    .exhibition {
                       left: 43%;
                     }
 
-                    .library {
+                    .innovation {
                       right: 25.5%;
                     }
 
-                    .hvp {
+                    .press {
                       clip-path: polygon(9% 26%, 66% 7%, 66% 93%, 9% 98%);
                       right: 0%;
                       top: 49%;
@@ -407,97 +351,20 @@
                       width: 16.5%;
                     }
 
-                    /* Modal */
-                    .video-modal {
-                      position: absolute;
-                      left: 0;
-                      top: 0;
-                      width: 100%;
-                      height: 100%;
-                      background-color: rgba(0, 0, 0, 0.5);
-                      opacity: 0;
-                      visibility: hidden;
-                      transform: scale(1.1);
-                      z-index: 200;
-                    }
-
-                    .visible {
-                      opacity: 1;
-                      visibility: visible;
-                      transform: scale(1);
-                      transition: visibility 0s linear 0s, opacity 0.25s 0s,
-                        transform 0.25s;
-                    }
-                    .modal-content {
-                      position: absolute;
-                      display: flex;
-                      flex-direction: column;
-                      top: 50%;
-                      left: 50%;
-                      transform: translate(-50%, -50%);
-                      background-color: rgba(0, 0, 0, 0.9);
-                      padding: 4rem 2rem 2rem 2rem;
-                      width: 80%;
-                      border-radius: 0.5rem;
-                    }
-
-                    .videoWrapper {
-                      position: relative;
-                      width: 100%;
-                      height: 0;
-                      padding-bottom: 51%;
-                    }
-
-                    .videoWrapper iframe {
-                      position: absolute;
-                      width: 100%;
-                      height: 100%;
-                      left: 0; top: 0;
-                      
-                    }
                     
-                    .close-modal {
-                      position: absolute;
-                      top: 1rem;
-                      right: 2rem;
-                      width: 2rem;
-                      line-height: 2rem;
-                      font-size: 1.6rem;
-                      text-align: center;
-                      cursor: pointer;
-                      border-radius: 0.25rem;
-                      background-color: lightgray;
-                    }
-                    .close-modal:hover {
-                      background-color: darkgray;
-                    }
                   </style>
                   <div class="content">
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/grundfos/assets/lobby/bkg-lobby-v4.jpg">
-                    <div class="hotspot welcome" video="welcome" onclick="toggleModal(this)"></div>
-                    <div class="hotspot virtual"><a href="#"></a></div>
-                    <div class="hotspot right-hotspot navigate" video="navigate" onclick="toggleModal(this)"></div>
-                    <div class="hotspot right-hotspot win"><a href="#"></a></div>
-                    <div class="hotspot wolseley"><a href="#"></a></div>
-                    <div class="hotspot button learning"><a href="#"></a></div>
-                    <div class="hotspot button home"><a href="#"></a></div>
-                    <div class="hotspot button library"><a href="#"></a></div>
-                    <div class="hotspot button hvp"><a href="#"></a></div>
-                    <div class="hotspot info"><a href="#"></a></div>
+                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/bg.jpg">
+                    <div class="platinum"></div>
+                    <div class="gold"></div>
+                    <div class="gold"></div>
+                    <a class="hotspot networking" href="/videos/b258cb81-8b53-440e-b029-08d86c522066/landing/7eca15b2-3029-498a-babe-63ff0ccdf2f2"></a>
+                    <a class="hotspot button auditorium" href="/videos/4a246fc4-5caa-419d-58cd-08d86c3cf09a/detail/20906811-64ae-4d4a-81e1-82a79f784b27"></a>
+                    <a class="hotspot button exhibition" href="/videos/2eb5759b-2501-42e8-58cc-08d86c3cf09a/landing/a2f1d168-16c6-4428-8363-d694af383a95"></a>
+                    <a class="hotspot button innovation" href="/videos/341a9737-fa27-4099-85d9-08d86c6e9162/landing/1f3e9b29-de0e-4f79-a342-a433177c6049"></a>
+                    <a class="hotspot button press" href="/videos/c2877484-0580-455a-85da-08d86c6e9162/landing/9c053468-203a-4d46-9f44-02d7c5c58878"></a>
+                    <a class="hotspot info" href="/videos/6fc53473-ca40-4181-b028-08d86c522066/landing/68aeef9e-7f54-4a82-8cda-40aed579890f"></a>
                   </div>
-                  <!-- The Modal -->
-                  <div class="video-modal">
-                    <div class="modal-content">
-                      <span class="close-modal" onclick="closeModal()">×</span>
-                      <div class="videoWrapper"></div>
-                    </div>
-                  </div>
-
-                  <!-- Iframe Template -->
-                  <template>
-                    <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
-                    </iframe>
-                  </template>
                 </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
