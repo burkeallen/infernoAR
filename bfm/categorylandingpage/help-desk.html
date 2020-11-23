@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -242,9 +242,10 @@
               <inferno-snippet-content id="881fe87f-ff5a-4428-94cd-ee1f8f35d599">
                 <!-- Script to insert header with marquee and botton nav-->
                 <script>
-                        var header;
-                        var menu;
-                        var fetchLayout = () => {
+
+                    var fetchLayout = () => {
+
+                        var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
                         // Set header
                         const headers = {
                           'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
@@ -258,7 +259,7 @@
                         }
 
                         $.ajax({
-                          url: `https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/52f8e7a0-c244-4c81-b630-215c42c364dc`,
+                          url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
                           type: 'GET',
                           async: true,
                           accept: 'application/json',
@@ -268,26 +269,18 @@
                             var parser = new DOMParser();
                             var doc = parser.parseFromString(res, "text/html");
 
-                            //style element for the menu navigation
-                            var menuStyle = doc.getElementById("menu-style");
-
+                            var header = doc.getElementById("bfm-header");
+                            var menu = doc.getElementById("bottom-nav");
                             //script element for menu navigation
-                            var menuScript = doc.getElementById("menu-script");
+                            var script = doc.getElementById("layout-script");
 
                             //parent element where menu navigation will be inserted into on the page
                             const contentElement = landingPageEl.getElementById("content");
 
-                            //elements to be inserted
-                            header = doc.getElementById("bfm-header");
-                            menu = doc.getElementById("bottom-nav");
-
                             //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                            if (!landingPageEl.getElementById("menu-style")) landingPageEl.appendChild(menuStyle);
-                            if (!landingPageEl.getElementById("menu-script")) landingPageEl.appendChild(menuScript);
-                            if (!landingPageEl.getElementById("bfm-header")) landingPageEl.appendChild(header);
+                            if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
                             if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
-
-                            eval(menuScript.innerHTML);
+                            eval(script.innerHTML);
                           },
                           error: function (err) {
                             console.error('Error Fetching HTML', err);
@@ -297,14 +290,8 @@
 
                       };
 
-                        if(window.isLocalTemplate) {
-                          document.addEventListener("load", function () {
-                           fetchLayout();
-                         });
-                        } else {
-                          fetchLayout();
-                        }
-                </script>
+                      fetchLayout();
+                    </script>
 
                 <style>
                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -312,14 +299,14 @@
                   img::after {
                   content: none;
                   }
-
+                  
                   h1, h2, h3, h4, h5 {
                   font-family: "HelveticaNeue-CondensedBold",
                   "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
                   }
-
+                  
                   #content {
-                  background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/lobby/lobby-bg.png');
+                  background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help desk background.jpg');
                   display: flex;
                   flex-direction: column;
                   justify-content: space-between;
@@ -335,17 +322,13 @@
                   sans-serif !important;
                   }
 
-                  .help-desk {
-                    margin-top: 18rem;
-                  }
                 </style>
                 <div id="content">
                   <div class="help-desk">
-                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help-desk.png">
+                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/helpdesk.png">
                   </div>
                 </div>
-
-               </inferno-snippet-content>
+                </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
