@@ -4,10 +4,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <script>
@@ -81,7 +85,9 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+  <script onload="login()"
+          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+          src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
@@ -186,7 +192,9 @@
       })
     }
   </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+  <script onload="buildLocalMenu()"
+          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+          src="../menu.js"></script>
 
 </head>
 
@@ -196,10 +204,13 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+        <mat-toolbar
+            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+            color="primary">
           <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
+                    onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -216,7 +227,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -239,7 +250,136 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="b1f9b882-77ab-4629-b5c0-60534dc975a8"><h1>Game Room</h1></inferno-snippet-content>
+              <inferno-snippet-content id="b1f9b882-77ab-4629-b5c0-60534dc975a8">
+                <!-- Script to insert header with marquee and botton nav-->
+                <script>
+
+                  var fetchLayout = () => {
+
+                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    $.ajax({
+                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
+                      type: 'GET',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      success: function (res, status, xhr) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(res, "text/html");
+
+                        var header = doc.getElementById("bfm-header");
+                        var menu = doc.getElementById("bottom-nav");
+                        //script element for menu navigation
+                        var script = doc.getElementById("layout-script");
+
+                        //parent element where menu navigation will be inserted into on the page
+                        const contentElement = landingPageEl.getElementById("content");
+
+                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
+                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
+                        eval(script.innerHTML);
+                      },
+                      error: function (err) {
+                        console.error('Error Fetching HTML', err);
+                      }
+                    });
+
+
+                  };
+
+                  fetchLayout();
+                </script>
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
+                  h1, h2, h3, h4, h5 {
+                    font-family: "HelveticaNeue-CondensedBold",
+                    "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+                  }
+
+                  .content {
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png');
+                    /*background-attachment: fixed;*/
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    padding: 20px 24px;
+                    z-index: 1;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial,
+                    sans-serif !important;
+                  }
+
+                  .game-banner {
+                    text-align: center;
+                    width: 100%;
+                  }
+
+                  .game-banner img {
+                    width: 50%;
+                  }
+
+                  .games {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 24px 0;
+                  }
+
+                  img.game {
+                    width: 22%;
+                    cursor: pointer;
+                  }
+
+                  img.game:hover {
+                    filter: brightness(110%);
+                    transform: translateY(-2px) translateX(2px);
+                  }
+                </style>
+
+                <script>
+                  function goGame(url) {
+                    window.open(url);
+                  }
+                </script>
+
+                <div id="content" class="content">
+                  <div class="game-banner">
+                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/game_banner.png">
+                  </div>
+                  <div class="games">
+                    <img class="game" onclick="goGame('')"
+                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/plink.png">
+                    <img class="game" onclick="goGame('')"
+                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bowling.png">
+                    <img class="game" onclick="goGame('')"
+                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/got-talent.png">
+                    <img class="game" onclick="goGame('')"
+                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/cash-grab.png">
+                  </div>
+                </div>
+
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -257,8 +397,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -374,7 +512,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->

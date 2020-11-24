@@ -217,7 +217,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -241,6 +241,58 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="01b0cc4b-d98f-4e1a-a862-0c3d60e7d904">
+                <!-- Script to insert header with marquee and botton nav-->
+                <script>
+
+                  var fetchLayout = () => {
+
+                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    $.ajax({
+                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
+                      type: 'GET',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      success: function (res, status, xhr) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(res, "text/html");
+
+                        var header = doc.getElementById("bfm-header");
+                        var menu = doc.getElementById("bottom-nav");
+                        //script element for menu navigation
+                        var script = doc.getElementById("layout-script");
+
+                        //parent element where menu navigation will be inserted into on the page
+                        const contentElement = landingPageEl.getElementById("content");
+
+                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
+                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
+                        eval(script.innerHTML);
+                      },
+                      error: function (err) {
+                        console.error('Error Fetching HTML', err);
+                      }
+                    });
+
+
+                  };
+
+                  fetchLayout();
+                </script>
 
                 <script>
                   //Add input placeholder text
@@ -282,45 +334,6 @@
                     sans-serif !important;
                   }
 
-                  .header {
-                    position: relative;
-                    width: calc(100% + 48px);
-                    height: 10rem;
-                    background-color: rgba(255, 255, 255, 1);
-                    color: #FF5200;
-                    padding: 0rem 2rem;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
-                    margin: -20px -24px;
-                  }
-
-                  .header img {
-                    height: 80%;
-                  }
-
-                  .header div {
-                    width: 50%
-                  }
-
-                  .header hr {
-                    border: 4px solid #FF5200;
-                    margin: 0 3rem;
-                  }
-
-                  .news-ticker {
-
-                    left: 0;
-                    width: calc(100% + 48px);
-                    background: #A0A0A0 padding-box;
-                    color: white;
-                    text-transform: uppercase;
-                    font-size: 1.5em;
-                    line-height: 3em;
-                    padding: .5em 35px;
-                    margin: 0 -24px;
-                  }
                 </style>
 
                 <!-- Stage Grid -->
@@ -399,6 +412,13 @@
                     text-align: center;
                   }
 
+                  .takeaway img {
+                    width: 80%;
+                  }
+                  .takeaway img:hover {
+                    filter: brightness(110%) drop-shadow(0 0.5rem 1rem rgba(255, 82, 0, 0.4))
+                  }
+
                   .schedule ul {
                     list-style-type: none;
                     padding: 0;
@@ -436,20 +456,7 @@
                   }
                 </style>
 
-                <div class="content">
-                  <div class="header">
-                    <div>
-                      <hr>
-                    </div>
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/main-stage/rollin-logo.png">
-                    <div>
-                      <hr>
-                    </div>
-                  </div>
-                  <div class="news-ticker">
-                    First Drawing for falken plinko to be help at 1:00pm - Check Out the trade show special on the show
-                    floor - Mr Tire Seminar Will
-                  </div>
+                <div id="content" class="content">
 
                   <div class="stage-grid">
                     <div class="col1">
@@ -474,18 +481,12 @@
                     <div class="col3">
                       <div class="takeaway">
                         <h1>Takeaway</h1>
+                        <a href="https://www.kmtire.com/" target="_blank"><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/takeaway.png"></a>
                       </div>
                     </div>
 
                   </div>
 
-                  <div class="menu">
-                    <div>Lobby</div>
-                    <div>Help/Registration</div>
-                    <div>Lounge</div>
-                    <div>Trade Show</div>
-                    <div class="active">Seminars</div>
-                  </div>
 
                 </div>
 
