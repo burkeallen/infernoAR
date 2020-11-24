@@ -267,8 +267,10 @@
                   }
 
                   .content {
-                    background-image: url("https://studio304nextechar.freetls.fastly.net/infernoAR/efi/corporate-hall/background_copy.png");
-                    box-shadow: inset 0 0 0 1000px #740427aa;
+                    background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/background_copy.png");
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    box-shadow: inset 0 0 0 1000px #3f003bd4;
                     min-height: calc(100vh - 114px);
                     margin: -20px;
                     z-index: 1;
@@ -283,64 +285,86 @@
                   }
 
                   .sponsor-header {
-                    background-color: #4a1f6861;
+                    background-color: #33005782;
                     color: white;
                     font-size: 2.4rem;
                     text-align: center;
                     width: 100%;
-                    height: 4rem;
+                    padding: 1.6rem 0;
                   }
 
                   .sponsors {
                     display: flex;
                     flex-wrap: wrap;
                     align-items: center;
-                    justify-content: space-evenly;
+                    justify-content: center;
                     width: 100%;
                     height: 30rem;
                   }
 
                   .sponsor {
                     background-color: white;
-                    width: 10rem;
-                    height: 12rem;
+                    width: 15rem;
+                    height: 18rem;
                     border-radius: 10px;
                     display: flex;
                     align-items: center;
+                    margin: 0 1rem;
                   }
 
                   .logo {
                     width: 100%;
                     height: auto;
                   }
+
+                  .footer {
+                    width: 100%;
+                    height: 24.5rem;
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 5.6rem;
+
+                  }
+
+                  .footer-image {
+                    height: 100%;
+                    width: auto;
+                  }
                 </style>
 
                 <div class="content">
                   <div class="bg"></div>
                   <header>
-                    <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/efi/corporate-hall/header with logo_corporate hall.png">
+                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/header with logo_corporate hall.png">
                   </header>
                   <div id="sponsor-list">
-                    </div>
+                  </div>
+                  <div class="footer">
+                    <img class="footer-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/2000px-Seal_of_Florida.png">
+                  </div>
                 </div>
                 <template id="template">
                   <div class="sponsor-header"></div>
                 </template>
 
                 <script>
-                  var sponsorLevels = ['Platinum Sponsor', 'Gold Sponsor', 'Silver Sponsor'];
+                  var sponsorLevels = ['Platinum Sponsor', 'Gold Sponsor', 'Silver Sponsor', 'Affiliate Sponsor'];
                   var sponsors = [
                     {
                       level: sponsorLevels[0], 
-                      companies: [{logo: '', url:''}, {logo: '', url: '' }]
+                      companies: [{logo: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/sample_logo.png', url:''}, {logo: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/sample_logo.png', url: '' }]
                     },
                     {
                       level: sponsorLevels[1],
-                      companies: [{logo: '', url: '' }]
+                      companies: [{logo: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/sample_logo.png', url: '' }]
                     },
                     { 
                       level: sponsorLevels[2], 
-                      companies: [{logo: '', url: '' }] 
+                      companies: [{logo: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/sample_logo.png', url: '' }]
+                    },
+                  {
+                      level: sponsorLevels[3],
+                      companies: [{ logo: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/corporate-hall/sample_logo.png', url: '' }]
                     }];
 
                     var buildSponsorList = () => {
@@ -361,14 +385,14 @@
                           level.companies.forEach(company => {
                             const sponsorLink = document.createElement("a");
                             sponsorLink.setAttribute("target", "__blank");
-                            sponsorLink.href = level.url;
+                            sponsorLink.href = company.url;
                             sponsors.appendChild(sponsorLink);
                             const sponsorBox = document.createElement("div");
                             sponsorBox.setAttribute("class", "sponsor");
                             sponsorLink.appendChild(sponsorBox);
                             const sponsorLogo = document.createElement("img");
                             sponsorLogo.setAttribute("class", "logo");
-                            sponsorLogo.src = level.logo;
+                            sponsorLogo.src = company.logo;
                             sponsorBox.appendChild(sponsorLogo);
                           });
                         });

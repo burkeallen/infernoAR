@@ -245,30 +245,28 @@
                     <style>
                     
                       #bfm-header {
-                        width: 100vw;
+                        width: 100%;
                         background-color: white;
                         display: flex;
-                        justify-content: flex-start;
+                        justify-content: center;
                         align-items: center;
                         flex-direction: column;
-                        margin: -20px -20px 2rem -20px;
+                        margin-bottom: 2rem;
+                        padding: 0 !important;
                       }
                     
                       .header-logo {
                         display: flex;
                         align-items: center;
-                        justify-content: center;
+                        justify-content: space-between;
                         width: 100%;
                         padding: 1.5rem;
                       }
                     
                       .horizontal-bar {
                         width: 40%;
-                      }
-                    
-                      .horizontal-bar hr {
-                        border: 4px solid #FF5200;
-                        margin: 0 3rem;
+                        height: 8px;
+                        background-color: #FF5200;
                       }
                     
                       #ticker {
@@ -285,14 +283,12 @@
                       <div class="horizontal-bar">
                         <hr>
                       </div>
-                      <img style="height: 6.8rem; width: auto;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/main-stage/rollin-logo.png">
+                      <img style="height: auto; width: 16rem;" src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/main-stage/rollin-logo.png">
                       <div class="horizontal-bar">
                         <hr>
                       </div>
                     </div>
-                    <marquee id="ticker" behavior="scroll" direction="left">First Drawing for falken plinko to be help at 1:00pm - Check Out the
-                      trade show special on the show
-                      floor - Mr Tire Seminar Will</marquee>
+                    <marquee id="ticker" behavior="scroll" direction="left"></marquee>
                   </div>
                   <div id="bottom-nav">
                     <style id="menu-style">
@@ -380,6 +376,24 @@
                       })
                     }
                     setActive();
+
+                    var fetchMarquee = () => {
+                        fetch('https://script.googleusercontent.com/macros/echo?user_content_key=nQtExRwpr5CBtLKS-8_YhPXRMVCiy23YC4AF5ZYCwRk-2-8oyPrpeOtMqmEKsOmafAiErAdLQS4Fx7eHvYFdWTWt3Z9MiljNm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnHEdA6bEwFynEiaaRE8RYfClGxc_rsAEslIUj961opfVWUA86LVywNGyW4TjebJhRzOmbnRGq-tk&lib=Mku-XWMY73h9IMLKcnJfzf917PYyW6k45')
+                        .then(response => response.json())
+                        .then(data => {
+
+                        const tickerElement = landingPageEl.getElementById("ticker");
+                        tickerElement.innerHTML = data[0].ticker;
+                        });
+                    };
+
+                    fetchMarquee();
+                  </script>
+
+                  <!-- Marquee Script -->
+                  <script>
+
+
                   </script>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
