@@ -459,7 +459,7 @@
                   //     console.log(data.Events);
                   //   })
 
-                  //   var lq = data;
+                    // var lq = data;
                   
                     //for production
                   var lq = {{ data | json }};
@@ -468,10 +468,17 @@
                     event.Categories[0].Name.toLowerCase().includes("bowling")
                   ));
 
-                  
+                  //sort by start time
+                  var sortedVideos = videos.sort((a, b) =>  {
+                     var dateA = new Date(a.StartTime);
+                    var dateB = new Date(b.StartTime);
+                    return dateA > dateB ? 1 : -1;  
+                  });
+
+                  console.log(sortedVideos);
+
                   var formatTime = (value) => {
                     var d = new Date(value);
-                    console.log(d);
                     var hr = d.getHours();
                     var min = d.getMinutes();
                     var ampm = "am";
@@ -487,13 +494,13 @@
                     var videoBoxes = landingPageEl.querySelectorAll(".video");
                     console.log(videoBoxes);
                     videoBoxes.forEach((videoBox, index) => {
-                      videoBox.setAttribute("id", videos[index].Id);
-                      var drawing = videos[index].Description.substring(videos[index].Description.length - 9);
+                      videoBox.setAttribute("id", sortedVideos[index].Id);
+                      var drawing = sortedVideos[index].Description.substring(sortedVideos[index].Description.length - 9);
                       var label = document.createElement("div");
                       label.setAttribute("class", "video-box-label");
                       videoBox.appendChild(label);
                       createElement("drawing", drawing + ":", label);
-                      createElement("time", formatTime(videos[index].StartTime), label);
+                      createElement("time", formatTime(sortedVideos[index].StartTime), label);
                     });
                   }
 
