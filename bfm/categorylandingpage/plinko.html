@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -289,13 +289,14 @@
 
                   fetchLayout();
                 </script>
+
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
                   img::after {
                     content: none;
                   }
-                
+
                   h1,
                   h2,
                   h3,
@@ -304,7 +305,7 @@
                     font-family: "HelveticaNeue-CondensedBold",
                       "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
                   }
-                
+
                   #content {
                     background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png');
                     background-repeat: no-repeat;
@@ -317,16 +318,16 @@
                     font-family: "Helvetica Neue", Arial Narrow, Arial,
                       sans-serif !important;
                   }
-                
+
                   .page-contents {
                     display: flex;
                     flex-direction: row;
                     justify-content: space-between;
                     align-items: center;
                     width: 100%;
-                
+
                   }
-                
+
                   .column {
                     display: flex;
                     flex-direction: column;
@@ -334,19 +335,19 @@
                     align-items: center;
                     height: 100%;
                   }
-                
+
                   .col2 img {
                     height: auto;
                   }
-                
+
                   .banner {
                     width: 100%;
                   }
-                
+
                   .plinko {
                     width: 90%;
                   }
-                
+
                   .video {
                     cursor: pointer;
                     background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/bowling-for-bucks/video-bg.png');
@@ -358,7 +359,7 @@
                     justify-content: flex-end;
                     align-items: center;
                   }
-                
+
                   .video-box-label {
                     width: 100%;
                     background-color: #707070;
@@ -369,11 +370,11 @@
                     font-size: 2.0rem;
                     text-transform: uppercase;
                   }
-                
+
                   .drawing {
                     font-weight: bold;
                   }
-                
+
                   #video-popup {
                     display: none;
                     position: absolute;
@@ -385,7 +386,7 @@
                     background-color: rgba(0, 0, 0, 0.386);
                     z-index: 99;
                   }
-                
+
                   .video-container {
                     padding: 2rem;
                     color: white;
@@ -402,7 +403,7 @@
                     align-items: center;
                     justify-content: flex-start;
                   }
-                
+
                   .close-popup {
                     cursor: pointer;
                     font-weight: bold;
@@ -410,8 +411,31 @@
                     width: 100%;
                     height: 4rem;
                   }
+
+                  .banner {
+                    font-size: 3em;
+                    text-align: center;
+                    color: #d4c667;
+                    animation: glow 1s ease-in-out infinite alternate;
+                    background-color: #000000;
+                    padding: .5em;
+                    border-radius: .25em;
+                    border: solid 2px #d4c667;
+                    font-weight: lighter;
+                    font-family: Roboto, "Helvetica Neue", sans-serif;
+                    text-align: center;
+                  }
+
+                  @keyframes glow {
+                    from {
+                      text-shadow: 0 0 0px #d4c667, 0 0 10px #d4c667, 0 0 20px #d4c667, 0 0 30px #d4c667, 0 0 40px #d4c667;
+                    }
+                    to {
+                      text-shadow: 0 0 10px #d4c667, 0 0 20px #d4c667, 0 0 30px #d4c667, 0 0 40px #d4c667, 0 0 50px #d4c667;
+                    }
+                  }
                 </style>
-                
+
                 <div id="content">
                   <div class="page-contents">
                     <div class="column col1">
@@ -422,7 +446,10 @@
                       </div>
                     </div>
                     <div class="column col2">
-                      <img class="banner" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/game_banner.png">
+                      <div class="banner">
+                        Current Winnings Total: $8,500
+                      </div>
+<!--                      <img class="banner" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/game_banner.png">-->
                       <img class="plinko" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/plink-bg.png">
                     </div>
                     <div class="column col3">
@@ -439,7 +466,7 @@
                     </div>
                   </div>
                 </div>
-                
+
                 <!-- Video Popup-->
                 <script>
                   var videoIds = ['video-1', 'video-2', 'video-3', 'video-4', 'video-5', 'video-6']
