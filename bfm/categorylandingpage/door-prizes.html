@@ -239,7 +239,232 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="a6a1aed6-eb20-42ff-bf1a-786cc68acd3a"><h1>Door Prizes</h1></inferno-snippet-content>
+              <inferno-snippet-content id="a6a1aed6-eb20-42ff-bf1a-786cc68acd3a">
+                <!-- Script to insert header with marquee and botton nav-->
+                <script>
+                  var fetchLayout = () => {
+
+                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    $.ajax({
+                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
+                      type: 'GET',
+                      async: true,
+                      accept: 'application/json',
+                      contentType: 'application/json',
+                      headers: headers,
+                      success: function (res, status, xhr) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(res, "text/html");
+
+                        var header = doc.getElementById("bfm-header");
+                        var menu = doc.getElementById("bottom-nav");
+                        //script element for menu navigation
+                        var script = doc.getElementById("layout-script");
+
+                        //parent element where menu navigation will be inserted into on the page
+                        const contentElement = landingPageEl.getElementById("content");
+
+                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
+                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
+                        eval(script.innerHTML);
+                      },
+                      error: function (err) {
+                        console.error('Error Fetching HTML', err);
+                      }
+                    });
+                  };
+
+                  fetchLayout();
+                </script>
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+                
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5 {
+                    font-family: "HelveticaNeue-CondensedBold",
+                      "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+                  }
+                
+                  #content {
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    padding: 20px 24px;
+                    z-index: 1;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial,
+                      sans-serif !important;
+                  }
+                
+                  .page-contents {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    width: 100%;
+                
+                  }
+                
+                  .column {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 100%;
+                  }
+
+                  .day-image {
+                    width: 100%;
+                    height: auto;
+                    cursor: pointer;
+                  }
+
+                  .day-image:hover{
+                    filter: brightness(.6);
+                  }
+                
+                  .col2 img {
+                    height: auto;
+                  }
+
+                  .prizes {
+                    width: 50%;
+                  }
+
+                  .prize-container {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                  }
+
+                  .prize-image {
+                    width: 33%;
+                    height: auto;
+                  }
+                
+                  #pdf-popup {
+                    display: none;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.386);
+                    z-index: 99;
+                  }
+                
+                  .pdf-container {
+                    padding: 2rem;
+                    color: white;
+                    font-size: 2.4rem;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    height: 50%;
+                    width: 50%;
+                    background-color: rgba(0, 0, 0, 1);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: flex-start;
+                  }
+                
+                  .close-popup {
+                    cursor: pointer;
+                    font-weight: bold;
+                    text-align: right;
+                    width: 100%;
+                    height: 4rem;
+                  }
+                </style>
+                
+                <div id="content">
+                  <div class="page-contents">
+                    <div class="column day" id="pdf-1" onclick="togglePdf(this)">
+                      <img class="day-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/day_1.png">
+                    </div>
+                    <div class="column prizes">
+                      <img class="banner" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/game_banner.png">
+                      <div class="prize-container">
+                        <img class="prize-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/prize-01.png">
+                        <img class="prize-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/prize-02.png">
+                        <img class="prize-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/prize-03.png">
+                        <img class="prize-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/prize-04.png">
+                        <img class="prize-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/prize-05.png">
+                        <img class="prize-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/prize-06.png">
+                      </div>
+                    </div>
+                    <div class="column day" id="pdf-2" onclick="togglePdf(this)">
+                      <img class="day-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/day_2.png">
+                    </div>
+                  </div>
+                  <div id="pdf-popup">
+                    <div class="pdf-container">
+                      <div class="close-popup" onclick="togglePdf()">X</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- pdf Popup-->
+                <script>
+                  
+                  var pdfLinks = [
+                    {
+                      id: "pdf-1",
+                      url: ""
+                    },
+                    {
+                      id: "pdf-2",
+                      url: ""
+                    }
+                  ];
+
+                  //open popup and get pdf
+                  var togglePdf = (element) => {
+                    var popupElement = landingPageEl.getElementById("pdf-popup");
+                    var iframe;
+                    if (element) {
+                      var videoId = element.id;
+                      popupElement.style.display = "block";
+                      var pdfContainer = landingPageEl.querySelector(".pdf-container");
+                      iframe = document.createElement("iframe");
+                      iframe.setAttribute("class", "pdf-iframe");
+                      pdfContainer.appendChild(iframe);
+                    } else {
+                      popupElement.style.display = "none";
+                      iframe = landingPageEl.querySelector(".pdf-iframe")
+                      iframe.remove();
+                    }
+
+                  }
+                </script>
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
