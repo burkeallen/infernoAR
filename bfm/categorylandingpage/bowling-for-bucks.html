@@ -109,6 +109,7 @@
       // Parse JSON string into object
       const x = JSON.parse(response)
       data = x[0]
+      console.log(data.Events);
     })
 
   </script>
@@ -419,7 +420,6 @@
                     height: 4rem;
                   }
                 </style>
-
                 <div id="content">
                   <div class="page-contents">
                       <div class="column col1">
@@ -450,63 +450,50 @@
 
                 <!-- Video Popup-->
                 <script>
-                  var videoIds = ['video-1', 'video-2', 'video-3', 'video-4', 'video-5', 'video-6']
-                  var videos = [
-                    {
-                      id: videoIds[0],
-                      drawing: "Drawing 1:",
-                      time: "2:00PM",
-                      company: "ABC Tire",
-                      embedCode: ""
-                    },
-                    {
-                      id: videoIds[1],
-                      drawing: "Drawing 2:",
-                      time: "3:00PM",
-                      company: "DEF Tire",
-                      embedCode: ""
-                    },
-                    {
-                      id: videoIds[2],
-                      drawing: "Drawing 3:",
-                      time: "4:00PM",
-                      company: "GHI Tire",
-                      embedCode: ""
-                    },
-                    {
-                      id: videoIds[3],
-                      drawing: "Drawing 5:",
-                      time: "5:00PM",
-                      company: "JKL Tire",
-                      embedCode: ""
-                    },
-                    {
-                      id: videoIds[4],
-                      drawing: "Drawing 6:",
-                      time: "6:00PM",
-                      company: "MNO Tire",
-                      embedCode: ""
-                    },
-                    {
-                      id: videoIds[5],
-                      drawing: "Drawing 8:",
-                      time: "7:00PM",
-                      company: "POR Tire",
-                      embedCode: ""
-                    }
-                  ];
+                  //for local testing only
+                  //  var data = {}
+                  //   loadJSON('../liquid.json', function (response) {
+                  //     // Parse JSON string into object
+                  //     const x = JSON.parse(response)
+                  //     data = x[0]
+                  //     console.log(data.Events);
+                  //   })
 
+                  //   var lq = data;
+                  
+                    //for production
+                  var lq = {{ data | json }};
+
+                  var videos = lq.Events.filter(event => (
+                    event.Categories[0].Name.toLowerCase().includes("bowling")
+                  ));
+
+                  
+                  var formatTime = (value) => {
+                    var d = new Date(value);
+                    console.log(d);
+                    var hr = d.getHours();
+                    var min = d.getMinutes();
+                    var ampm = "am";
+                    if (hr > 12) {
+                      hr -= 12;
+                      ampm = "pm";
+                    }
+
+                    return (hr + ":" + min + ampm);
+                  }
                   //Add video box labels
                   var addLabels = () => {
                     var videoBoxes = landingPageEl.querySelectorAll(".video");
                     console.log(videoBoxes);
                     videoBoxes.forEach((videoBox, index) => {
+                      videoBox.setAttribute("id", videos[index].Id);
+                      var drawing = videos[index].Description.substring(videos[index].Description.length - 9);
                       var label = document.createElement("div");
                       label.setAttribute("class", "video-box-label");
                       videoBox.appendChild(label);
-                      createElement("drawing", videos[index].drawing, label);
-                      createElement("time", videos[index].time, label);
-                      createElement("company", videos[index].company, label);
+                      createElement("drawing", drawing + ":", label);
+                      createElement("time", formatTime(videos[index].StartTime), label);
                     });
                   }
 
@@ -530,6 +517,7 @@
                       var videoContainer = landingPageEl.querySelector(".video-container");
                       iframe = document.createElement("iframe");
                       iframe.setAttribute("class", "video-iframe");
+                      iframe.src = "/embed/" + videoId;
                       videoContainer.appendChild(iframe);
                     } else {
                       popupElement.style.display = "none";
