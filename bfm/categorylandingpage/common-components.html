@@ -418,12 +418,11 @@
 
                   // Get Marquee data and ping the endpoint every 5 minutes
                   var fetchMarquee = () => {
-                    fetch('https://script.googleusercontent.com/macros/echo?user_content_key=nQtExRwpr5CBtLKS-8_YhPXRMVCiy23YC4AF5ZYCwRk-2-8oyPrpeOtMqmEKsOmafAiErAdLQS4Fx7eHvYFdWTWt3Z9MiljNm5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnHEdA6bEwFynEiaaRE8RYfClGxc_rsAEslIUj961opfVWUA86LVywNGyW4TjebJhRzOmbnRGq-tk&lib=Mku-XWMY73h9IMLKcnJfzf917PYyW6k45')
+                    fetch('https://api.npoint.io/a882eb40505e926a52f4')
                       .then(response => response.json())
                       .then(data => {
-
                         const tickerElement = landingPageEl.getElementById("ticker");
-                        tickerElement.innerHTML = data[0].ticker;
+                        tickerElement.innerHTML = data.ticker;
                       });
                   };
 
@@ -438,6 +437,21 @@
                   window.onbeforeunload = function () {
                     clearInterval(marqueeInterval)
                   }
+
+                  //poll marquee api every hour
+                  var checkTime = () => {
+                    var d = new Date();
+                    return d.getMinutes();
+                  }
+
+                  var hourlyInterval;
+
+                  hourlyInterval = setInterval(function () {
+                    var minute = checkTime();
+                    if (minute === 0) {
+                      fetchMarquee()};
+                  }, 60000);
+                  
 
                   // Hacks for jolokia user interface
                   if (!window.jolokiaHack) {
