@@ -239,311 +239,218 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="a88b02a7-143c-4296-aa0a-83d5f21faa9c">
-                <!-- Script to insert header with marquee and botton nav-->
-                <script>
-                  function goPage(id) {
-                    const pages = landingPageEl.querySelector('#category-page-links');
-                    const link = pages.querySelector('#link_' +id);
-                    if (link) {
-                      link.dispatchEvent(new MouseEvent('click'));
-                    } else {
-                      alert('link you selected does not exists');
-                    }
-                  }
-                  var fetchLayout = () => {
-
-                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
-                    // Set header
-                    const headers = {
-                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                    };
-
-                    // add a header property for users accessing with SA credentials
-                    if (window.sessionStorage.overrideId) {
-                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                    }
-
-                    $.ajax({
-                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
-                      type: 'GET',
-                      async: true,
-                      accept: 'application/json',
-                      contentType: 'application/json',
-                      headers: headers,
-                      success: function (res, status, xhr) {
-                        var parser = new DOMParser();
-                        var doc = parser.parseFromString(res, "text/html");
-
-                        var header = doc.getElementById("bfm-header");
-                        var menu = doc.getElementById("bottom-nav");
-                        //script element for menu navigation
-                        var script = doc.getElementById("layout-script");
-
-                        //parent element where menu navigation will be inserted into on the page
-                        const contentElement = landingPageEl.getElementById("content");
-
-                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
-                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
-                        eval(script.innerHTML);
-                      },
-                      error: function (err) {
-                        console.error('Error Fetching HTML', err);
-                      }
-                    });
-                  };
-
-                  fetchLayout();
-                </script>
-
-                <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-
-                  h1,
-                  h2,
-                  h3,
-                  h4,
-                  h5 {
-                    font-family: "HelveticaNeue-CondensedBold",
-                      "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
-                  }
-
-                  #content {
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png');
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: "Helvetica Neue", Arial Narrow, Arial,
-                      sans-serif !important;
-                  }
-
-                  .page-contents {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-between;
-                    align-items: center;
-                    width: 100%;
-
-                  }
-
-                  .column {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-between;
-                    align-items: center;
-                    height: 100%;
-                  }
-
-                  .col2 img {
-                    height: auto;
-                  }
-
-                  .custom-banner {
-                    margin-bottom: 2rem;
-                    border: 3px solid #c4b21c;
-                    border-radius: 10px;
-                    background-color: black;
-                    font-weight: 100;
-                    font-size: 4.2rem;
-                    color: #cbc165;
-                    text-shadow: 0px 0px 10px #c4b21c,0px 0px 10px #c4b21c,0px 0px 10px #c4b21c;
-                    padding: 3rem 2rem;
-                  }
-
-                  .plinko {
-                    width: 90%;
-                  }
-
-                  .video {
-                    cursor: pointer;
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/bowling-for-bucks/video-bg.png');
-                    height: 15.4rem;
-                    width: 25.2rem;
-                    margin: 1rem;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: flex-end;
-                    align-items: center;
-                  }
-
-                  .video-box-label {
-                    width: 100%;
-                    background-color: #707070;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    color: white;
-                    font-size: 2.0rem;
-                    text-transform: uppercase;
-                  }
-
-                  .drawing {
-                    font-weight: bold;
-                  }
-
-                  #video-popup {
-                    display: none;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0.386);
-                    z-index: 99;
-                  }
-
-                  .video-container {
-                    padding: 2rem;
-                    color: white;
-                    font-size: 2.4rem;
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    height: 50%;
-                    width: 50%;
-                    background-color: rgba(0, 0, 0, 1);
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: flex-start;
-                  }
-
-                  .close-popup {
-                    cursor: pointer;
-                    font-weight: bold;
-                    text-align: right;
-                    width: 100%;
-                    height: 4rem;
-                  }
-                </style>
-                <category-page-links id="category-page-links" style="display:none">
-                  <!--
-                    these links will allow navigating ot booth pages without page refreshing
-                    this will print all categories not just the booths, no way around that at the time of this writing
-                    links generated using liquid get picked up by the Angular Routing mechanism
-                    links generated by by JS do not and cause a page/app reload
-                    even when navigating within the app using relative URLS
-                    -->
-                  {% for category in data.Categories %}
-                  {% assign page = category.Id | downcase %}
-                  {% assign snippet = category.LandingPageSnippetId | downcase %}
-                  <a href="/videos/{{ page }}/landing/{{ snippet }}" id="link_{{ page }}" pageid="{{ page }}">{{ category.Name }}</a>
-                  {% endfor %}
-                </category-page-links>
-                <div id="content">
-                  <div class="page-contents">
-                    <div class="column col1">
-                      <div class="videos">
-                        <div class="video" id="video-1" onclick="toggleVideo(this)"></div>
-                        <div class="video" id="video-2" onclick="toggleVideo(this)"></div>
-                        <div class="video" id="video-3" onclick="toggleVideo(this)"></div>
-                      </div>
-                    </div>
-                    <div class="column col2">
-                      <div class="custom-banner">DRAWING 1: ABC TIRE</div>
-                      <img class="plinko" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/plink-bg.png">
-                    </div>
-                    <div class="column col3">
-                      <div class="videos">
-                        <div class="video" id="video-4" onclick="toggleVideo(this)"></div>
-                        <div class="video" id="video-5" onclick="toggleVideo(this)"></div>
-                        <div class="video" id="video-6" onclick="toggleVideo(this)"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="video-popup">
-                    <div class="video-container">
-                      <div class="close-popup" onclick="toggleVideo()">X</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Video Popup-->
-                <script>
-                  var lq = {{ data | json }};
-
-                  var videos = lq.Events.filter(event => (
-                    event.Categories[0].Name.toLowerCase().includes("plinko")
-                  ));
-
-                  //sort by start time
-                  var sortedVideos = videos.sort((a, b) =>  {
-                     var dateA = new Date(a.StartTime);
-                    var dateB = new Date(b.StartTime);
-                    return dateA > dateB ? 1 : -1;
-                  });
+              <inferno-snippet-content id="37c8499c-09bd-4b93-aa6e-05fe81ed3176">
 
 
-                  var formatTime = (value) => {
-                    var d = new Date(value);
-                    var hr = d.getHours();
-                    var min = d.getMinutes();
-                    var ampm = "am";
-                    if (hr > 12) {
-                      hr -= 12;
-                      ampm = "pm";
-                    }
 
-                    return (hr + ":" + min + ampm);
-                  }
-                  //Add video box labels
-                  var addLabels = () => {
-                    var videoBoxes = landingPageEl.querySelectorAll(".video");
-                    videoBoxes.forEach((videoBox, index) => {
-                      videoBox.setAttribute("id", sortedVideos[index].Id);
-                      var drawing = sortedVideos[index].Description.substring(sortedVideos[index].Description.length - 9);
-                      var label = document.createElement("div");
-                      label.setAttribute("class", "video-box-label");
-                      videoBox.appendChild(label);
-                      createElement("drawing", drawing + ":", label);
-                      createElement("time", formatTime(sortedVideos[index].StartTime), label);
-                    });
-                  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width" initial-scale="1">
+  <!--[if !mso]>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <![endif]-->
+  <meta name="x-apple-disable-message-reformatting">
+  <title></title>
+  <!--[if mso]>
+      <style>
+        * {
+          font-family: sans-serif !important;
+        }
+      </style>
+    <![endif]-->
+  <!--[if !mso]><!-->
+  <!-- Insert font reference, e.g. <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet"> -->
+  <!--<![endif]-->
+  <style>
+    *,
+    *:after,
+    *:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
 
-                  var createElement = (type, value, parent) => {
-                    var element = document.createElement("div");
-                    element.setAttribute("class", type);
-                    element.innerHTML = value;
-                    parent.appendChild(element);
+    * {
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
 
-                  }
+    html,
+    body,
+    .document {
+      /*width: 100% !important;*/
+      /*height: 100% !important;*/
+      margin: 0;
+      padding: 0;
+    }
 
-                  addLabels();
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
 
-                  //open popup and get embeded tiktok video
-                  var toggleVideo = (element) => {
-                    var popupElement = landingPageEl.getElementById("video-popup");
-                    var iframe;
-                    if (element) {
-                      var videoId = element.id;
-                      popupElement.style.display = "block";
-                      var videoContainer = landingPageEl.querySelector(".video-container");
-                      iframe = document.createElement("iframe");
-                      iframe.setAttribute("class", "video-iframe");
-                      iframe.src = "/embed/" + videoId;
-                      videoContainer.appendChild(iframe);
-                    } else {
-                      popupElement.style.display = "none";
-                      iframe = landingPageEl.querySelector(".video-iframe")
-                      iframe.remove();
-                    }
+    div[style*='margin: 16px 0'] {
+      margin: 0 !important;
+    }
 
-                  }
-                </script>
-              </inferno-snippet-content>
+    table,
+    td {
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin: 0 auto;
+    }
+
+    img {
+      -ms-interpolation-mode: bicubic;
+      max-width: 100%;
+      border: 0;
+    }
+
+    *[x-apple-data-detectors] {
+      color: inherit !important;
+      text-decoration: none !important;
+    }
+
+    .x-gmail-data-detectors,
+    .x-gmail-data-detectors *,
+    .aBn {
+      border-bottom: 0 !important;
+      cursor: default !important;
+    }
+
+    .btn {
+      -webkit-transition: all 200ms ease;
+      transition: all 200ms ease;
+    }
+
+    .btn:hover {
+      background-color: dodgerblue;
+    }
+	  
+	.centerbox {
+	  margin: auto;
+	  width: 45%;
+	  padding: 20px
+	}
+	  
+   .backgd {
+		background: url("https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/assests/img/tire_portal_email_background3.png");
+        border: 2px solid black;
+        padding: 25px;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+	    height: 1400px;
+        width: 750px;
+	}
+
+    @media screen and (max-width: 750px) {
+      .container {
+        width: 50%;
+        margin: auto;
+      }
+
+      .stack {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+      }
+    }
+  </style>
+
+
+
+  <div style="display: none; max-height: 0px; overflow: hidden">
+    <!-- Preheader message here -->
+  </div>
+  <div style="display: none; max-height: 0px; overflow: hidden">
+     ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ 
+	  
+  </div>
+	
+  <div class="centerbox">
+  <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" class="document backgd">
+    <tbody><tr>
+      <td valign="top">
+        <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="750" class="container">
+          <tbody><tr>
+            <td>
+              <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%">
+                <tbody><tr>
+                  <td></td>
+                </tr>
+              </tbody></table>
+            </td>
+          </tr>
+        </tbody></table>
+		  
+	   <div style="position: relative; top: 300px;">
+		   
+       <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="750" class="container">
+			
+          <tbody><tr>
+			<td>
+            <div style="width: 750px; padding: 20px;">
+                <table aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" style="float: left; margin-right:10px; width:350px;">
+                    <tbody><tr>
+                        <td><a href="https://twitter.com/kandmtire" target="_blank"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/assests/img/twitter_logo.png" style="width: 80px; height: 80px;"></a></td>
+                        <td><a href="https://www.youtube.com/user/TheMrTire/videos" target="_blank"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/assests/img/youtube_logo.png" style="width: 80px; height: 80px;"></a></td>
+                        <td><a href="https://www.facebook.com/KandMTire/" target="_blank"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/assests/img/facebook_logo.png" style="width: 80px; height: 80px;"></a></td>
+                        <td><a href="https://www.linkedin.com/in/kmtire/" target="_blank"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/assests/img/linkedin_logo.png" style="width: 80px; height: 80px;"></a></td>
+                    </tr>
+                </tbody></table>
+                <table aria-hidden="true" cellspacing="0" cellpadding="0" border="0" style="float: right; width: 350px; position: relative; top: -100px">
+                    <tbody><tr><td><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/bfm/assests/img/rollin_logo.png"></td></tr>
+                </tbody></table>
+              </div>
+			</td>
+			</tr>
+          <tr>
+            <td colspan="5">
+              
+              <div style="width: 750px; font-family: sans-serif; line-height: 1.5; font-size: 18px; position: relative; top: -100px; padding: 20px;">
+			  <p>Thank you for registering for the 2021 K&M Tire Virtual Trade Show! We have received your registration information and we have you confirmed as attending our first ever virtual trade show. Your next step is to create and customize your Virtual Business Card! If at any time you would like to view or edit your V-Card info / profile, please log in at <a href="https://kmkeeponrollin.com" style="color: #052c51;font-weight: bold;" target="_blank">kmkeeponrollin.com</a> with your username and password. You will want to save your login information as you’ll need it to log in once the show opens on January 20th-21st. </p>
+
+              <p style="padding: 10px 0 0 0;">
+                <b>SETTING UP YOUR TRADE SHOW V-Card:</b>
+              </p>
+
+              <p style="padding: 10px 0 0 0;"><strong>Step 1:</strong> After logging in, choose the 3-dot menu icon on the top right of your browser and select Profile.</p>
+				  
+              <p style="padding: 10px 0 0 0;"><strong>Step 2:</strong> Let’s set a profile picture, Click on the Camera icon in the middle of the page. A file selection screen will appear and let you choose the picture you would like to display. Click the photo you would like displayed and click the Upload button. Once the image is uploaded it will give you the option to center and scale to your liking, and click Done.</p> 
+
+              <p style="padding: 10px 0 0 0;"><strong>Step 3: </strong>Let’s setup your Bio, Click on the Pencil icon. This will allow you to add your email address, and any Social Media accounts. Click the SAVE button and you are all set!
+              As we get a little closer to show time, we will be sending you complete details on all aspects of the virtual trade show.  In the meantime, we’d love it if you could check out our social media pages. 
+              </p>
+
+              <p style="padding: 10px 0 0 0;">Thank you again for your registration. If you have any questions, please feel free to let us know!</p>
+
+              <p style="padding: 10px 0 0 0;">
+                Sincerely,
+              </p>
+              <p>
+                K&M Tire Trade Show Team <br>
+                <a href="mailto:Marketing@kmtire.com" style="color: #052c51;font-weight: bold;">Marketing@kmtire.com</a>
+              </p>
+              </div>
+            </td>
+          </tr>
+        </tbody></table>
+		   
+ 
+	   </div>
+	  
+      </td>
+    </tr>
+  </tbody></table>
+
+
+</div></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
