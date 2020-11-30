@@ -618,6 +618,8 @@
                     x.src = url;
                     var y = landingPageEl.getElementById('pdf-blanket');
                     y.style.display = 'block';
+
+                    playFlikty();
                   }
 
                   function loadVideo(url) {
@@ -632,6 +634,8 @@
                     x.src = '';
                     var y = landingPageEl.getElementById('pdf-blanket');
                     y.style.display = 'none';
+
+                    playFlikty();
                   }
 
                   function closeVideo() {
@@ -644,6 +648,8 @@
 
                 <!-- Carousel Slider Script -->
                 <script>
+                  var flkty = null;
+
                   function loadFkty() {
                     // add css style sheet
                     const styleTag = document.createElement("link");
@@ -669,7 +675,7 @@
 
                   function initFlkty() {
                     const elem = landingPageEl.querySelector('.slider');
-                    const flkty = new Flickity(elem, {
+                    let flkty = new Flickity(elem, {
                       // options
                       cellAlign: 'left',
                       freeScroll: true,
@@ -679,7 +685,10 @@
                       on: {
                         ready: function () {
                           const el = landingPageEl.querySelector('.slider-container').classList.remove('is-hidden');
-                        }
+                        },
+                        pointerUp: function (index) {
+                          flkty.player.play();
+                        },
                       }
                     });
                   }
