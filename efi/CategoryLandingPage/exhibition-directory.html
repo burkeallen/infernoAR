@@ -414,6 +414,44 @@
                   }
                 </style>
 
+                <!-- Sponsors -->
+                <style>
+                  .sponsor-container {
+                    padding-bottom: 40px;
+                  }
+
+                  .sponsors-header {
+                    margin: 0 30px;
+                  }
+
+                  .sponsors-header h1 {
+                    font-size: 2.25rem;
+                    font-weight: bold;
+                    color: #ffffff;
+                  }
+
+                  .sponsors-grid {
+                    display: grid;
+                    margin: 0 auto;
+                    grid-auto-columns: max-content;
+                    grid-auto-rows: max-content;
+                    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                    gap: 10px 10px;
+                    padding: 10px 10% 0 10%;
+                  }
+
+                  .sponsors-grid img {
+                    position: relative;
+                    top: 0;
+                    left: 0;
+                    margin: 0 auto;
+                    max-width: 240px;
+                    text-align: center;
+                    background-color: #ffffff;
+                    box-shadow: 10px 10px 17px 0 rgba(139, 139, 139, 0.51);
+                  }
+                </style>
+
                 <div id="container">
                   <div class="banner">
                     <div class="banner-info">
@@ -464,6 +502,18 @@
 
                     </div>
 
+                    <hr/>
+
+                    <div class=sponsor-container>
+                      <div class="sponsors-header">
+                        <h1>Our Sponsors</h1>
+                      </div>
+                      <div id="sponsors-grid" class="sponsors-grid"></div>
+                      <template id="sponsor-template">
+                        <img id="sponsor-logo" src=""/>
+                      </template>
+                    </div>
+
                     <footer class="page-footer">
                       <img class="seal" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/public/florida-seal.gif">
                     </footer>
@@ -472,6 +522,48 @@
 
 
                 </div>
+
+                <!-- Sponsors -->
+                <script>
+                  var myLanding = landingPageEl ?? document;
+                  var sponsorsGrid = myLanding.getElementById("sponsors-grid");
+                  var sponsorTemplate = myLanding.getElementById("sponsor-template");
+                  var baseUrl = baseUrl ?? "https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/sponsors/"
+
+                  const sponsorsJson =
+                    [
+                      {
+                        "name":"Viaconmbs",
+                        "image":"https://i.ibb.co/GdVC7T1/viacomcbs-img.png"
+                      },
+                      {
+                        "name":"dell",
+                        "image":"https://i.ibb.co/6nLSpSg/dell-tech-img.png"
+                      },
+                      {
+                        "name":"Johnson-Johnson",
+                        "image":"https://i.ibb.co/12X3nr8/johnsonandjohnson-img.png"
+                      },
+                      {
+                        "name":"Staubli",
+                        "image":"https://i.ibb.co/KVHMR9r/staubli-img.png"
+                      },
+                      {
+                        "name":"Poly",
+                        "image":"https://i.ibb.co/tp5dbNn/poly-img.png"
+                      }
+                    ]
+
+                  for (let sponsor of sponsorsJson) {
+                    let clone = sponsorTemplate.content.cloneNode(true);
+                    let img = clone.getElementById("sponsor-logo");
+                    img.id = "sponsor-logo-" + sponsor.image.replace('.png', '');
+                    // img.src = baseUrl + sponsor.image;
+                    img.src = sponsor.image;
+                    sponsorsGrid.appendChild(clone);
+                  }
+
+                </script>
 
                 <!-- Inferno Hacks -->
                 <script>
