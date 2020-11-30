@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -240,55 +240,250 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="a2f1d168-16c6-4428-8363-d694af383a95">
-                <!--Expo Hall Page -->
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
+                <!-- Container -->
+                <style>
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
                   }
 
-                               loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
-
-                </script>
-
-                <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
                   img::after {
                     content: none;
                   }
 
-                  .content {
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/placeholders/bkg3.jpg');
-                    /*background-attachment: fixed;*/
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
                   }
                 </style>
 
-                <div class="content">
+                <!-- banner -->
+                <style>
 
-                  <h2>Expo Hall Placeholder</h2>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
+                    background-size: cover;
+                    background-position: center left;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/exhibition-hall-directory-header.jpg');
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .banner-info {
+                    position: absolute;
+                    top: 20px;
+                    left: 20px;
+                    color: #fff;
+                    opacity: 24;
+                    text-shadow: 0 0 16px #171718;
+                  }
+
+                  .banner-text {
+                    font-size: 3rem;
+                  }
+
+                  .banner-sub-text {
+                    font-size: 3rem;
+                    margin-top: -3px;
+                  }
+
+                </style>
+
+                <!-- directory grid section -->
+                <style>
+                  .directory-section {
+                    padding: 20px 20px;
+                    background-color: #ffffff;
+                  }
+
+                  .directory-section-title {
+                    font-size: 2rem;
+                    font-weight: bold;
+                    color: var(--branding-primary);
+                  }
+
+                  .directory-section-description {
+                  }
+
+                  .directory-grid-container {
+                    background-size: cover;
+                    background-position: center center;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/exhibition-directory-background.jpg');
+                  }
+
+                  .directory-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    max-width: 100%;
+                    padding: 10px;
+                  }
+
+                  .directory-card {
+                    display: flex;
+                    flex-direction: column;
+                    background-color: #ffffff;
+                    border-radius: .5em;
+                    margin: 10px;
+                    color: white;
+                  }
+
+                  .directory-item {
+                    position: relative;
+                    width: 240px;
+                    height: 340px;
+                  }
+
+                  .directory-type {
+                    width: 100%;
+                    padding-top: 10px;
+                    text-align: center;
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    color: var(--branding-primary);
+                  }
+
+                  .directory-item img {
+                    border-radius: .5em .5rem 0 0;
+                    width: 240px;
+                    height: auto;
+                    transition: filter .5s ease-in-out;
+                    -webkit-filter: grayscale(0%);
+                    filter: grayscale(0%);
+                  }
+
+                  .directory-item img:hover {
+                    -webkit-filter: grayscale(100%);
+                    filter: grayscale(100%);
+                  }
+
+                </style>
+
+                <!-- View Hall Button -->
+                <style>
+
+                  .view-hall {
+                    position: absolute;
+                    bottom: 5%;
+                    width: 100%;
+                    text-align: center;
+                  }
+
+                  .view-button {
+                    color: #ffffff;
+                    font-size: 14px;
+                    border-radius: 3px;
+                    border: 1px solid #0b2668;
+                    display: inline-block;
+                    cursor: pointer;
+                    padding: 6px 24px;
+                    text-decoration: none;
+                    background: #0b2668 linear-gradient(to bottom, #0b2668 5%, #0d2e7f 100%);
+                  }
+
+                  .view-button:hover {
+                    color: #ffffff;
+                    text-decoration: none;
+                    background: #103796 linear-gradient(to bottom, #103796 5%, #123fad 100%);
+                  }
+
+                </style>
+
+                <!-- footer -->
+                <style>
+                  .page-footer {
+                    width: 100%;
+                    display: flex;
+                    justify-content: flex-end;
+                  }
+
+                  .seal {
+                    width: auto;
+                    height: 140px;
+                    margin: 20px;
+                    padding: 0 5rem;
+                  }
+                </style>
+
+                <div id="container">
+                  <div class="banner">
+                    <div class="banner-info">
+                      <div class="banner-text">Exhibition Hall</div>
+                      <div class="banner-sub-text">Directory</div>
+                    </div>
+                  </div>
+
+                  <!-- Industry Halls -->
+                  <div class="directory-section">
+                    <div class="directory-section-title">Industry Halls</div>
+                    <div class="directory-section-description"></div>
+                  </div>
+
+                  <div class="directory-grid-container">
+                    <div class="directory-grid">
+
+                      <div class="directory-card directory-item">
+                        <a class="" target="_blank" href=""> <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/aviation-and-aerospace.jpg"> </a>
+                        <div class="directory-type">Aviation & Aerospace</div>
+                        <div class="view-hall"><a href="#" class="view-button">View Hall</a></div>
+                      </div>
+
+                      <div class="directory-card directory-item">
+                        <a target="_blank" href=""><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/clean-technology.jpg"> </a>
+                        <div class="directory-type">Clean Technology</div>
+                        <div class="view-hall"><a href="#" class="view-button">View Hall</a></div>
+                      </div>
+
+                      <div class="directory-card directory-item">
+                        <a target="_blank" href=""><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/consumer-goods.jpg"> </a>
+                        <div class="directory-type">Consumer Goods</div>
+                        <div class="view-hall"><a href="#" class="view-button">View Hall</a></div>
+                      </div>
+
+                      <div class="directory-card directory-item">
+                        <a target="_blank" href=""><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/defense-and-homeland-security.jpg"> </a>
+                        <div class="directory-type">Defense and Homeland Security</div>
+                        <div class="view-hall"><a href="#" class="view-button">View Hall</a></div>
+                      </div>
+
+                      <div class="directory-card directory-item">
+                        <a target="_blank" href=""><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/financial-and-professional-services.jpg"> </a>
+                        <div class="directory-type">Financial and Planning Services</div>
+                        <div class="view-hall"><a href="#" class="view-button">View Hall</a></div>
+                      </div>
+
+
+                    </div>
+
+                    <footer class="page-footer">
+                      <img class="seal" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/public/florida-seal.gif">
+                    </footer>
+
+                  </div>
+
 
                 </div>
+
+                <!-- Inferno Hacks -->
+                <script>
+                  if (!window.whiteHack) {
+                    const css = `jolo-search-box .search-box-container {display: none !important}`;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -308,8 +503,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -425,7 +618,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
