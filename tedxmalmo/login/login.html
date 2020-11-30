@@ -1,0 +1,427 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- SNIPPET CONTENT START -->
+<inferno-snippet-content id="91cee57c-ccbc-4566-9f78-4c3f2ea7b96a">
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+    /* prevent entire screen from going black if you try to reference an image that does not exist*/
+    /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+    img::after {
+      content: none;
+    }
+
+    #fallback-link {
+      display: none;
+    }
+
+    .content h1 {
+      font-family: inherit !important;
+      font-size: 48px;
+      font-weight: bold;
+      letter-spacing: 0.65px;
+      color: #363636;
+      margin: 0;
+    }
+
+    p {
+      letter-spacing: 0.65px;
+      color: #363636;
+      font-size: 20px;
+      opacity: 1;
+      margin: 0;
+    }
+
+    .content {
+      min-height: 100vh;
+      min-width: calc(100vw - 40px);
+      z-index: 1;
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .content-grid {
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      width: 90%;
+      height: 100%;
+      position: relative;
+    }
+
+    #videoBG {
+      object-fit: cover;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+  </style>
+
+  <!--  Left Column styles -->
+  <style>
+    .sponsor-card {
+      width: 50%;
+    }
+
+    .event-logo {
+      display: block;
+      position: relative;
+      width: 100%;
+    }
+
+    .event-logo img {
+      width: 90%;
+    }
+
+    .event-date {
+      font: normal normal bold 66px/81px 'Montserrat';
+      letter-spacing: 0;
+      color: #FFFFFF;
+      opacity: 1;
+      position: absolute;
+      bottom: -10%;
+      left: 11%;
+    }
+  </style>
+
+  <!-- form - Right column -->
+  <style>
+    /* will get injected by inferno if errors */
+    /* will not look exactly right locally as other styles are getting applied on server */
+    .form-error {
+      color: #FFFFFF;
+      font-size: 1.3em;
+      background-color: var(--branding-danger);
+      width: 81%;
+      margin: 0 9.5% 12px 9.5%;
+    }
+
+    .email-error, .password-error {
+      padding: 8px;
+      color: var(--branding-danger);
+      font-size: 1.3em;
+    }
+
+    .form-card {
+      background-color: #FFFFFF;
+      width: 50%;
+      height: 100%;
+      border: 1px solid #707070;
+      opacity: 0.9;
+      padding: 4%;
+    }
+
+    form {
+      letter-spacing: 0.65rem;
+      color: #363636;
+      opacity: 1;
+    }
+
+    input {
+      border: none;
+      border-bottom-color: rgba(0, 0, 0, .42);
+      color: rgba(0, 0, 0, .87);
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-font-smoothing: antialiased;
+      font-size: 20px;
+      font-weight: 400;
+      letter-spacing: .009375em;
+      text-decoration: inherit;
+      text-transform: inherit;
+      align-self: flex-end;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 20px 16px 6px;
+      transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      border-bottom: 1px solid;
+      border-radius: 0;
+      background: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin-top: 1em;
+    }
+
+    input::placeholder {
+      color: #696969;
+    }
+
+    form button {
+      background: #CC0E09 0% 0% no-repeat padding-box;
+      height: 70px;
+      opacity: 0.79;
+      cursor: pointer;
+      width: 100%;
+      border: none;
+      margin-top: 2em;
+    }
+
+    form button span {
+      font: normal normal bold 17px/20px 'Montserrat';
+      letter-spacing: 5.1px;
+      color: #FFFFFF;
+      opacity: 1;
+      color: white;
+      text-transform: uppercase;
+    }
+
+    form button:hover {
+      filter: brightness(110%);
+    }
+
+    button:after {
+      content: '\003E';
+      float: right;
+      color: white;
+      font-size: 42px;
+      line-height: 21px;
+      font-family: serif;
+      font-weight: lighter;
+      margin-right: 2%;
+    }
+
+    .field div {
+      text-align: left;
+      margin-left: 40px;
+    }
+
+    .forgot {
+        text-align: right;
+    }
+
+  </style>
+
+  <!-- Form Validation Styles -->
+  <style>
+    .sponsor img {
+      width: 230px;
+      height: auto;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Validation Styles */
+    .field-warning {
+      font-size: 1.2em;
+      color: #fa867e;
+      padding-left: 4px;
+
+    }
+
+    .is-invalid {
+      background-color: rgb(255, 188, 188);
+    }
+
+    .warning-shake {
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+      animation: shake 0.5s;
+
+      /* When the animation is finished, start again */
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translate(1px, 1px) rotate(0deg);
+      }
+
+      10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+      }
+
+      20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+      }
+
+      30% {
+        transform: translate(3px, 2px) rotate(0deg);
+      }
+
+      40% {
+        transform: translate(1px, -1px) rotate(1deg);
+      }
+
+      50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+      }
+
+      60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+      }
+
+      70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+      }
+
+      80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+      }
+
+      90% {
+        transform: translate(1px, 2px) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+      }
+    }
+  </style>
+
+  <!--  Media Breaks  -->
+  <style>
+    @media only screen and (max-width: 1024px) {
+      .content, .content-grid {
+        display: block;
+        flex-direction: unset;
+        align-content: unset;
+        margin: 0 auto;
+        height: 100%;
+        min-height: auto;
+      }
+
+      .form-card h1 {
+        font-size: 32px;
+      }
+
+      .form-card {
+        height: unset;
+        width: 100%;
+        max-height: fit-content;
+        padding: 2%;
+        margin: 40px 0;
+      }
+
+      .sponsor-card {
+        min-height: auto;
+        width: 100%;
+      }
+
+      .event-date {
+        position: relative;
+        margin: 0;
+        font-size: 50px;
+        padding: 0;
+      }
+
+      input {
+        height: unset;
+      }
+    }
+  </style>
+
+
+  <div class="content">
+    <video id="videoBG" poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg.jpg" autoplay muted
+           loop>
+      <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg.mp4" type="video/mp4">
+    </video>
+
+    <div class="content-grid">
+      <div class="sponsor-card">
+        <div class="event-logo">
+          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/tedx-logo.png">
+          <div class="event-date">12.12.2020</div>
+        </div>
+      </div>
+
+      <div class="form-card">
+
+        <h1>LOG IN</h1>
+        <p>Enter your details below</p>
+
+        <!-- id must be "login" -->
+        <form id="login">
+          <!-- optional, not required if events handled with js -->
+          <div class="form-error"></div>
+          <!-- name must be "email" -->
+          <input type="email" class="field" placeholder="Email Address" name="email"><br>
+          <!-- optional, not required if events handled with js -->
+          <div class="email-error"></div>
+          <!-- name must be "password" -->
+          <input type="password" class="field" placeholder="Password" name="password"><br>
+          <!-- optional, not required if events handled with js -->
+          <div class="password-error"></div>
+          <!-- optional, name must be "remember" and type must be checkbox-->
+          <div style="display:none">
+            <input type="checkbox" name="remember"> Remember me<br>
+          </div>
+          <div class="forgot m-sm float right">
+            <a href="/forgotpassword">Forgot Password?</a>
+          </div>
+          <button name="submit"><span>Login</span></button>
+
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+    // For custom error handling
+    window.loginPageEl.addEventListener("rendered", (e) => {
+      console.log("Error", e);
+    });
+  </script>
+
+  <!-- hack to remove extra height of login page on server  -->
+  <script>
+    var css = `app-login > div {height: auto !important}`;
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(css));
+    head.appendChild(style);
+  </script>
+
+  <!-- Init LandingElement -->
+  <script type="text/javascript">
+    // Check if landingPageEl is supplied
+    var landingElement;
+    if ('landingPageEl' in window) {
+      landingElement = landingPageEl;
+    } else {
+      landingElement = document;
+    }
+  </script>
+
+</inferno-snippet-content>
+<!--  SNIPPET CONTENT END  -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+
+
+</body>

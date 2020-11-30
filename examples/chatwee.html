@@ -1,0 +1,247 @@
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+
+<h1> ChatWee Test</h1>
+<h4 class="loading">Loading Chatwee....</h4>
+<div class="test-buttons">
+  <button onclick="toggleChatWee()" class="hidden">Toggle Chatwee</button>
+  <button onclick="window.chatweeManager.Dispose()" class="hidden">Dispose Chatwee</button>
+  <button onclick="window.chatweeManager.Run()" class="hidden">Start Chatwee Again</button>
+</div>
+
+<div style="display: none">
+  <span id="chatwee-userid">xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</span>
+  <span id="chatwee-username">My Name is Earl</span>
+</div>
+
+<script>
+
+  var infernoUserId = document.querySelector('span#chatwee-userid').innerText;
+  var infernoUsername = document.querySelector('span#chatwee-username').innerText;
+  var chatWeeDuration = 8400 * 365;
+  var chatWeeHasProfileImage = false;
+
+  var chatWeeMainID = '5f7ef4b1ebaa9f3cf83ed7fa'; // get from chatWee Admin Panel
+  var chatweeValues = {
+    userIdKey: "chatwee-user-id", // do not change
+    sessionCookieKey: "chatwee-SID-" + chatWeeMainID, // do not change
+    chatId: chatWeeMainID, // do not change
+    clientApiKey: "4c06adfd83edbb05e9a548c2", // get from chatWee Admin Panel
+    isAdmin: 0, // do not change
+    ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/" // do not change
+  }
+
+  async function setUpChatWee() {
+    loadChatWeeScript();
+    waitForGlobal("ChatweeLib", connectChatWee, startChatWee);
+  }
+
+  function loadChatWeeScript() {
+    // don't load script again if already loaded
+    let chatScript = document.getElementById("chatWee-script");
+    if (chatScript) return;
+
+    const s1 = document.createElement("script");
+    const s0 = document.getElementsByTagName("script")[0];
+    s1.id = "chatWee-script";
+    s1.async = true;
+    s1.src = 'https://static.chatwee-api.com/v2/script.js';
+    s0.parentNode.insertBefore(s1, s0);
+  }
+
+  async function connectChatWee() {
+
+    // see if session id locally
+    let sessionId = getCookie(chatweeValues.sessionCookieKey);
+    console.log('sessionId', sessionId);
+
+    if (sessionId) {
+      // validate session id with chatwee
+      let valid
+      try {
+        valid = await validateChatWeeSessionId(sessionId);
+        console.log('session is valid', valid);
+      } catch (e) {
+        console.error('connectChatWee - validateChatWeeSessionId - ERROR ', e);
+        throw new Error(e);
+      }
+      // if true, do nothing
+      if (valid) return;
+    }
+
+    // if false, check if user id is present locally
+    let chatWeeUserId = getCookie(chatweeValues.userIdKey);
+
+    // if true, login and set session id locally
+    if (chatWeeUserId) {
+      try {
+        sessionId = await loginChatWee(chatWeeUserId);
+      } catch (e) {
+        console.error('connectChatWee - loginChatWee - ERROR ', e);
+        throw new Error(e);
+      }
+
+      setCookie(chatweeValues.sessionCookieKey, sessionId, chatWeeDuration);
+    }
+    // if false, register and set user id and log in user
+    else {
+      try {
+        chatWeeUserId = await registerChatWee();
+        console.log('logging in new chatwee user', chatWeeUserId)
+      } catch (e) {
+        console.error('connectChatWee - registerChatWee - ERROR ', e);
+        throw new Error(e);
+      }
+
+      setCookie(chatweeValues.userIdKey, chatWeeUserId, chatWeeDuration);
+
+      let sessionId = ""
+      try {
+        sessionId = await loginChatWee(chatWeeUserId);
+      } catch (e) {
+        console.error('connectChatWee 2 - loginChatWee - ERROR ', e);
+        throw new Error(e);
+      }
+
+      setCookie(chatweeValues.sessionCookieKey, sessionId, chatWeeDuration);
+
+    }
+
+    return;
+  }
+
+  /**
+   * startChatWee();
+   * creates new instance of ChatweeManager if it does not already exist
+   * Run()s chatweeManager
+   **/
+  async function startChatWee() {
+    if (!window.chatweeManager) {
+      window.chatweeManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+      window.chatweeManager.On("load", function () {
+        console.log("Chatwee loaded!")
+        window.chatweeManager.Maximize();
+        console.log(window.chatweeManager.GetVersion());
+        const buttons = document.querySelectorAll('.test-buttons button');
+        [...buttons].forEach(btn => {
+          btn.classList.toggle('hidden');
+        })
+        document.querySelector('h4.loading').classList.toggle('hidden');
+      });
+    }
+
+    window.chatweeManager.Run();
+  }
+
+  function toggleChatWee() {
+    const chatwee = document.querySelectorAll('div[class*="chch-"]');
+    [...chatwee].forEach(el => {
+      el.classList.toggle('hidden');
+    })
+  }
+
+  /**
+   * validateChatWeeSessionId(sessionId)
+   * Checks whether there is a valid chatwee session identified by the given chatwee session ID.
+   */
+  function validateChatWeeSessionId(sessionId) {
+    const url = chatweeValues.ssoBaseUrl + "validate-session?"
+      + "chatId="
+      + chatweeValues.chatId
+      + "&clientKey="
+      + chatweeValues.clientApiKey
+      + "&sessionId="
+      + sessionId;
+
+    return fetch(url).then(res => res.json());
+  }
+
+  /**
+   * loginChatWee(chatWeeUserId)
+   * Logs in the user identified by his chatwee user ID.
+   * This method should be called if a valid chatwee user id and chatwee Session Id cookie does not exist.
+   * This method returns the ID of the newly created session.
+   */
+  function loginChatWee(chatWeeUserId) {
+    console.log('Attempting to log in existing chatwee user', chatWeeUserId);
+    const url = chatweeValues.ssoBaseUrl + "login?"
+      + "chatId="
+      + chatweeValues.chatId
+      + "&clientKey="
+      + chatweeValues.clientApiKey
+      + "&userId="
+      + chatWeeUserId;
+
+    return fetch(url).then(res => res.json());
+  }
+
+  /**
+   * registerChatWee()
+   * Creates an SSO user in the Chatwee database.
+   * This method should be called whenever a valid chatwee user id cookie can not be found
+   * The method returns the newly created user ID which is required for the SSO login method and for
+   * targeting the user that we want to start a conversation with.
+   */
+  function registerChatWee() {
+    const url = chatweeValues.ssoBaseUrl + "register?"
+      + "chatId="
+      + chatweeValues.chatId
+      + "&clientKey="
+      + chatweeValues.clientApiKey
+      + "&login="
+      + infernoUsername
+      + "&isAdmin="
+      + chatweeValues.isAdmin
+      + "&avatar="
+      + "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + infernoUserId + "/70" + "/70";
+
+    return fetch(url).then(res => res.json());
+  }
+
+  // helper functions
+  function getCookie(key) {
+    let cookieValue = "";
+    if (document.cookie) {
+      const cookie = document.cookie
+        .split("; ")
+        .find(row => row.startsWith(key));
+      if (cookie) {
+        cookieValue = cookie.split("=")[1];
+      }
+    }
+    return cookieValue;
+  }
+
+  function setCookie(key, value, age) {
+    document.cookie = key + "=" + value + "; max-age=" + age + "; path=/";
+  }
+
+  function getProfileImage() {
+    let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + infernoUserId + "/1" + "/1";
+    return fetch(url);
+  }
+
+  async function waitForGlobal(key, callback1, callback2) {
+    if (window[key]) {
+      await callback1();
+      await callback2();
+    } else {
+      setTimeout(function () {
+        waitForGlobal(key, callback1, callback2);
+      }, 100);
+    }
+  };
+
+  setUpChatWee();
+
+  function getMethods(o) {
+    return Object.getOwnPropertyNames(Object.getPrototypeOf(o))
+      .filter(m => 'function' === typeof o[m])
+  }
+
+</script>
+
+
