@@ -429,7 +429,7 @@
                       </div>
                       </div>
                       <div class="logo-footer">
-                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/assests/img/footer-logo.png"/>
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/assests/img/footer-logo.png">
                         <div class="footer-nav">
                           <div onclick="goPage('358079a2-2675-4f09-c090-08d88b301cce')">Lobby</div>
                           <div onclick="goPage('984354b4-1e39-4e68-9e87-08d88aff31f5')">Help / Registration</div>
@@ -476,6 +476,11 @@
                   setActive();
 
                   // Get Marquee data and ping the endpoint every 5 minutes
+                    if(document.referrer !== window.location.href){
+                      clearInterval(marqueeInterval);
+                      clearInterval(hourlyInterval);
+                    }
+
                   var fetchMarquee = () => {
                     fetch('https://api.npoint.io/a882eb40505e926a52f4')
                       .then(response => response.json())
@@ -493,9 +498,7 @@
                     fetchMarquee();
                   }, 300000);
 
-                  window.onbeforeunload = function () {
-                    clearInterval(marqueeInterval)
-                  }
+
 
                   //poll marquee api every hour
                   var checkTime = () => {
