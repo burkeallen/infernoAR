@@ -239,7 +239,375 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="0b3d41aa-142a-4b3c-bee7-29cbc91dfc42"><h1>Agenda</h1></inferno-snippet-content>
+              <inferno-snippet-content id="0b3d41aa-142a-4b3c-bee7-29cbc91dfc42">
+                <style>
+                  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+                              
+                                                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                  content: none;
+                  }
+
+
+                  #content {
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_bg2.png');
+                    background-position: no-repeat;
+                    background-size: cover;
+                    background-position: 50% 50%;
+                    min-height: calc(100vh -114px);
+                    margin: -20px -20px -80px -20px;
+                    z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    color: white;
+                    padding: 2rem;
+                  }
+
+                  .page-contents {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    width: 100%;
+                    padding-bottom: 5rem;
+
+                  }
+
+                  .clock {
+                    position: relative;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/clock.png');
+                    width: 59rem;
+                    height: 35rem;
+                    font-size: 29px;
+                    margin-bottom: 2rem;
+                  }
+
+                  .date {
+                    position: absolute;
+                    top: 40%;
+                    left: 2%;
+                  }
+
+                  .time-box {
+                    font-size: 41px;
+                    position: absolute;
+                    top: 33%;
+                    right: 8.5%;
+                    width: 15rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  }
+
+                  #agenda {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    font-size: 31px;
+                    padding: 2rem;
+                  }
+
+                  .agenda-item{
+                    width: 90%;
+                    
+                  }
+
+                  .agenda-item-main {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
+                    height: 10rem;
+                    margin-bottom: 2rem;
+                    
+                  }
+
+                  .time {
+                    cursor: pointer;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_time_bg.png');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: 97%;
+                    cursor: pointer;
+                    position: relative;
+                    height: 100%;
+                    width: 40rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-right: 2rem;
+
+                  }
+
+                  .agenda-title {
+                    display: flex;
+                    align-items: center;
+                    background: linear-gradient(rgba(11, 68, 242, .3), #101010);
+                    width: 75%;
+                    padding: 1.5rem 2em;
+                  }
+
+                  .agenda-item-details {
+                    display: none;
+                    margin: 4rem 0;
+                    background: linear-gradient(rgba(11, 68, 242, .3), #101010);
+                    flex-direction: row;
+                    align-items: center;
+                    border-radius: 50px;
+                    width: 100%;
+                    height: 17rem;
+                  }
+
+                  .speaker-image {
+                    width: 20rem;
+                    height: 20rem;
+                    
+                  }
+
+                  .description {
+                    width: 75%;
+                    margin-left: 2rem;
+                  }
+
+              </style>
+
+                <div id="content">
+                  <div class="page-contents">
+                    <div class="clock">
+                      <div class="date">December 12, 2020</div>
+                      <div class="time-box"><div class="current-time">10:00</div></div>
+                    </div>
+                    <div id="agenda">
+                    </div>
+                  </div>
+
+                </div>
+
+                <template id="template">
+                  <div class="agenda-item">
+                    <div class="agenda-item-main">
+                      <div class="time" onclick="toggleDetails(this)">
+                      </div>
+                     
+                      <div class="agenda-title"></div>
+                    </div>
+                    <div class="agenda-item-details">
+                      <div class=description></div>
+                    </div>
+                  </div>
+                </template>
+
+                <script>
+                  var parseDate = (date) => {
+                    var h = date.getHours();
+                    var m = date.getMinutes();
+                    var ampm = "am";
+                    if (h > 12) {
+                      h = h - 12;
+                      ampm = "pm";
+                    }
+                    if (m.toString().length < 2) m = m + "0";
+                    
+                    return h + ":" + m + ampm;
+                  }
+                  var setTime = () => {
+                    var d = new Date();
+                                        
+                    var currentTimeElement = landingPageEl.querySelector(".current-time");
+                    var currentTime = parseDate(d);
+                    currentTimeElement.innerHTML = currentTime.substring(0, currentTime.length-2);
+                  }
+
+                  setTime();
+
+                  var toggleDetails = elem => {
+                      var agendaItem = landingPageEl.getElementById(
+                        elem.parentNode.parentNode.id
+                      );
+
+                      var details = agendaItem.querySelector(".agenda-item-details");
+
+                      details.style.display !== "flex"
+                        ? (details.style.display = "flex")
+                        : (details.style.display = "none");
+                    };
+
+                  var agendaList = [
+                      {
+                        startTime: "1899-12-30T18:00:00.000Z",
+                        duration: 15,
+                        title: "Intro",
+                        speaker: "Caroline Ravn (host)",
+                        speakerImage: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/sample_speaker.png',
+                        description: "Welcome to TEDxMalmö!"
+                      },
+                      {
+                        startTime: "1899-12-30T18:15:00.000Z",
+                        duration: 25,
+                        speaker: "Per Holknekt",
+                        description: "TED TALK + Q&A"
+                      },
+                      {
+                        startTime: "1899-12-30T18:40:00.000Z",
+                        duration: 25,
+                        speaker: "Atrium Ljungberg",
+                        description: "TED TALK #cityinnovation #culture #placemaking"
+                      },
+                      {
+                        startTime: "1899-12-30T19:05:00.000Z",
+                        duration: 20,
+                        speaker: "Heather Mills",
+                        description: "TED TALK "
+                      },
+                      {
+                        startTime: "1899-12-30T19:25:00.000Z",
+                        duration: 30,
+                        speaker: "RWE renewables  (+PICK ME UP BY CAROLINE)",
+                        description: "MASTER CLASS #greenenergy #future"
+                      },
+                      {
+                        startTime: "1899-12-30T19:55:00.000Z",
+                        duration: 10,
+                        speaker: "Kami Compliance",
+                        description: "MASTER CLASS #knowyourrights #data"
+                      },
+                      {
+                        startTime: "1899-12-30T20:05:00.000Z",
+                        duration: 15,
+                        title: "Break ",
+                        speaker: "-",
+                        description: "Go and test of our acitivies on the platform!"
+                      },
+                      {
+                        startTime: "1899-12-30T20:20:00.000Z",
+                        duration: 20,
+                        speaker: "Wim Hof",
+                        description: "TED TALK + Q&A #selfdevelopment #inflammation"
+                      },
+                      {
+                        startTime: "1899-12-30T20:40:00.000Z",
+                        duration: 30,
+                        speaker: "King",
+                        description: "MASTER CLASS #innovation #creativity #teams"
+                      },
+                      {
+                        startTime: "1899-12-30T21:10:00.000Z",
+                        duration: 25,
+                        speaker: "Lovette Jallow",
+                        description: "TED TALK + Q&A"
+                      },
+                      {
+                        startTime: "1899-12-30T21:55:00.000Z",
+                        duration: 20,
+                        speaker: "Therese Lindgren",
+                        description: "TED TALK "
+                      },
+                      {
+                        startTime: "1899-12-30T10:15:00.000Z",
+                        duration: 40,
+                        speaker: "Jävligt Gott",
+                        description: "MASTER CLASS"
+                      },
+                      {
+                        startTime: "1899-12-30T10:55:00.000Z",
+                        duration: 25,
+                        title: "Break",
+                        speaker: "-",
+                        description: "Go and test of our acitivies on the platform!"
+                      },
+                      {
+                        startTime: "1899-12-30T21:35:00.000Z",
+                        duration: 20,
+                        title: "???????",
+                        speaker: "???????",
+                        description: "MASTER CLASS "
+                      },
+                      {
+                        startTime: "1899-12-30T11:20:00.000Z",
+                        duration: 25,
+                        speaker: "Bruce Dickinson",
+                        description: "TED TALK + Q&A"
+                      },
+                      {
+                        startTime: "1899-12-30T11:50:00.000Z",
+                        duration: 20,
+                        speaker: "Josef Fallesen @ Vaam",
+                        description: "MASTER CLASS"
+                      },
+                      {
+                        startTime: "1899-12-31T00:10:00.000Z",
+                        duration: 20,
+                        speaker: "Amy Purdy",
+                        description: "TED TALK + Q&A"
+                      },
+                      {
+                        startTime: "1899-12-31T00:30:00.000Z",
+                        duration: 20,
+                        title: "MYSTERY SPEAKER (TBD)",
+                        speaker: "We do not know yet (trying to get 1 more speaker)",
+                        description: "TED TALK "
+                      },
+                      {
+                        startTime: "1899-12-31T00:45:00.000Z",
+                        duration: 10,
+                        title: "Outro",
+                        speaker: "Caroline Ravn (host)",
+                        description: "Bye bye see ya!!"
+                      }
+                    ]
+
+                    var convertTime = (start, duration) => {
+                      if (!start || !duration) return "TBD";
+                      var startDate = new Date(start);
+                      var endDate = new Date(startDate.getTime() + duration * 60000);
+                      
+                      return parseDate(startDate) + " - " + parseDate(endDate);
+
+                    }
+                    var buildEventList = () => {
+                      const agenda = landingPageEl.getElementById(
+                        "agenda"
+                      );
+                      const template = landingPageEl.getElementById("template");
+
+                      agendaList.forEach(item => {
+                        const clone = template.content.cloneNode(true);
+                        let time = clone.querySelector(".time");
+                        let agendaItem = clone.querySelector(".agenda-item");
+                        let title = clone.querySelector(".agenda-title");
+                        
+                        let description = clone.querySelector(".description");
+                        
+                        const id = agendaList.indexOf(item);
+
+                        time.innerHTML = convertTime(item.startTime, item.duration);
+                        title.innerHTML = item.title;
+                        description.innerHTML = item.description;
+
+                        let agendaDetails = clone.querySelector(".agenda-item-details");
+
+                        if(item.speakerImage) {
+                          console.log(item.speakerImage);
+                          let imgElement = document.createElement("img");
+                          imgElement.setAttribute("class", "speaker-image");
+                          imgElement.src = item.speakerImage;
+                          agendaDetails.prepend(imgElement);
+                          console.log(agendaDetails.childNodes);
+                          agendaDetails.style.borderRadius = "100px 50px 50px 100px";
+                        }
+
+                        agendaItem.setAttribute("id", id);
+                        agenda.appendChild(clone);
+
+
+                      });
+                    };
+
+                    buildEventList();
+                </script>
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
