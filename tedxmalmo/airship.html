@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>InfernoAr Airship Integration</title>
+</head>
+<body>
+
+<h1>Airship Push Notification Embedd</h1>
+
+<script type="text/javascript">
+
+  function getURLParam(name) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    return urlParams.get(name) ?? 'unknown user';
+  }
+    // 86acbd31cd7c09cf30acb66d2fbedc91daa48b86:1606839336.4928298
+    !function (n, r, e, t, c) {
+      var i, o = "Promise" in n, u = {
+          then: function () {
+            return u
+          }, catch: function (n) {
+            return n(new Error("Airship SDK Error: Unsupported browser")), u
+          }
+        }, s = o ? new Promise((function (n, r) {
+          i = function (e, t) {
+            e ? r(e) : n(t)
+          }
+        })) : u
+      ;s._async_setup = function (n) {
+        if (o) try {
+          i(null, n(c))
+        } catch (n) {
+          i(n)
+        }
+      }, n[t] = s;
+      var a = r.createElement("script");
+      a.src = e, a.async = !0, a.id = "_uasdk",
+        a.rel = t, r.head.appendChild(a)
+    }(window, document, 'https://aswpsdkus.com/notify/v1/ua-sdk.min.js',
+      'UA', {
+        vapidPublicKey: 'BLzyHWmv5yEO-Z8DaRPKQfAPvPHMm9RITO67RpOdW_Xr77Nckz49lpurTzHDVL0l9jIyas1k3u9nZjy06q-U2G0=',
+        appKey: '9l2dzczFRD2GMQwnwhGRxg',
+        token: 'MTo5bDJkemN6RlJEMkdNUXdud2hHUnhnOk00SFM2eWtyMkhNYVlYRXo0R3NkMFRjZ0J5UXNYbDRHN0FmelE3UXU0QkU'
+      });
+
+
+    UA.then(sdk => {
+      sdk.register();
+      sdk.getChannel().then(channel => {
+        const userId = getURLParam('userId');
+        channel.namedUser.set(userId);
+        console.log("Airship Channel ID: ", channel.id);
+        console.log("Airship Channel Named User: ", channel.namedUser.channel.named_user_id);
+      }).catch(err => {
+        console.log("AirShip Error", err);
+      })
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/push-worker.js').then(function (registration) {
+          // Registration was successful
+          console.log('Airship ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+          // registration failed :(
+          console.log('Airship ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+
+  UA.then(sdk => {
+    sdk.addEventListener('push', ev => {
+      console.log('airship push notification', ev.push);
+    })
+  })
+
+</script>
+
+</body>
+</html>
