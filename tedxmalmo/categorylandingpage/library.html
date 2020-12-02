@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -239,7 +239,706 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="8137087e-2e1e-4998-8eaf-5f88ee23700b"><h1>Library</h1></inferno-snippet-content>
+              <inferno-snippet-content id="8137087e-2e1e-4998-8eaf-5f88ee23700b">
+
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                </script>
+
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
+                  .content {
+                    background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg") no-repeat;
+                    background-size: cover;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    z-index: 1;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial, sans-serif;
+                  }
+
+                  #backgroundVideo {
+                    position: fixed;
+                    right: 0;
+                    bottom: 0;
+                    min-width: 100%;
+                    min-height: 100%;
+                    z-index:0;
+                  }
+
+                </style>
+
+                <!-- Top Navigation -->
+                <style>
+                  .top-navigation {
+                    display: flex;
+                    flex-flow: row wrap;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    margin: 40px;
+                  }
+
+                  .top-navigation > * {
+                    padding: 10px;
+                    flex: 1 100%;
+                  }
+
+                  .chip-1 {
+                    text-align: right;
+                  }
+
+                  .chip-1 img {
+                    max-width: 200px;
+                    height: auto;
+                  }
+
+                  .chip-2 {
+                    text-align: left;
+                  }
+
+                  .chip-2 img  {
+                    max-width: 200px;
+                    height: auto;
+                  }
+
+                  .circuit img {
+                    max-width: 400px;
+                    height: auto;
+                  }
+
+                  @media all and (min-width: 600px) {
+                    .item { flex: 1 0 0; }
+                  }
+
+                  @media all and (min-width: 800px) {
+                    .circuit  { flex: 2 0px; }
+                    .chip-1 { order: 1; }
+                    .chip-2 { order: 2; }
+                    .circuit { order: 3; }
+                  }
+
+                  .item img {
+                    filter: grayscale(0);
+                  }
+
+                  .item img:hover {
+                    cursor: pointer;
+                    filter: grayscale(100%);
+                  }
+
+                </style>
+
+                <!-- PDF Library -->
+                <style>
+                  .library-grid {
+                    display: flex;
+                    align-self: center;
+                    justify-content: center;
+                    margin-top: 40px;
+                  }
+
+                  @media (max-width: 767px) {
+                    .library-grid {
+                      flex-direction: column;
+                      align-items: center;
+                      margin-bottom: 2rem;
+                    }
+                  }
+
+                  .pdf-card {
+                    position: relative;
+                    margin-left: 15px;
+                    margin-right: 15px;
+                  }
+
+                  .pdf-card img {
+                    width: 280px;
+                    height: auto;
+                    filter: grayscale(0%);
+                  }
+
+                  .pdf-card img:hover {
+                    cursor: pointer;
+                    filter: grayscale(100%);
+                  }
+
+                  .pdf-card-logo {
+                    position: absolute;
+                    top: 20%;
+                    width: 100%;
+                    text-align: center;
+                  }
+
+                  .pdf-card-logo img {
+                    width: 95px;
+                    height: auto;
+                  }
+
+                  .pdf-card-name {
+                    width: 100%;
+                    top: 190px;
+                    color: #ffffff;
+                    font-size: 2rem;
+                    text-align: center;
+                    position: absolute;
+                  }
+
+                </style>
+
+                <!-- Page Overlay -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 20;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  .video-view {
+                    position: absolute;
+                    top: 0px;
+                    left: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    background-color: rgba(255, 255, 255, 0.8);
+                    z-index: 20;
+                    display: none;
+                  }
+
+                  .video-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    max-width: 800px;
+                    margin: 0px auto;
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  .dark-button {
+                    background-color: #333 !important;
+                    color: #fff !important;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0px 0px 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+
+                </style>
+
+                <!-- PDF Overlays -->
+                <div class="pdf-view" id="pdf-blanket">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe class="pdf-viewer" id="pdf-frame"></iframe>
+                </div>
+
+                <!-- Video Overlays -->
+                <div class="video-view" id="video-blanket">
+                  <a class="window-close dark-button" href="javascript:void(closeVideo());">Close</a>
+                  <iframe class="video-viewer" id="video-frame" allowfullscreen="true"
+                    webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                </div>
+
+                <!-- jkar Modal -->
+                <style>
+                  .jkar-modal {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.3);
+                    overflow-y: auto;
+                    overflow-x: auto;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 100;
+                  }
+
+                  .jkar-modal.hidden {
+                    display: none;
+                  }
+
+                  .jkar-modal-content {
+                    max-width: 850px;
+                    max-height: 1100px;
+                    background-color: lightgray;
+                  }
+                </style>
+
+                <div class="content">
+
+                  <video autoplay muted loop id="backgroundVideo">
+                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                  </video>
+
+                  <div class="top-navigation">
+                      <div class="chip-1 item" onclick="pdfClicked()">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/nav-pdf.png">
+                      </div>
+                      <div class="chip-2 item" onclick="videoClicked()">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/nav-video.png">
+                      </div>
+                    <div class="circuit item" onclick="circuitsClicked()">
+                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/nav-data.png">
+                    </div>
+                  </div>
+
+                  <comment>
+                  <!-- Top Navigation -->
+<!--                  <div class="top-navigation">-->
+<!--                    <div class="chip-container">-->
+<!--                      <div class="item chip" onclick="pdfClicked()">-->
+<!--                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/nav-pdf.png">-->
+<!--                      </div>-->
+<!--                      <div class="item chip" onclick="videoClicked()">-->
+<!--                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/nav-video.png">-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="item circuits" onclick="circuitsClicked()">-->
+<!--                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/nav-data.png">-->
+<!--                    </div>-->
+<!--                  </div>-->
+                  </comment>
+
+                  <comment>
+                  <!-- Library List -->
+<!--                  <div class="page-grid featured-exhibitor-list library-container" id="library-container">-->
+<!--                    &lt;!&ndash; Liquid Render Section 1 &ndash;&gt;-->
+<!--                    {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}-->
+<!--                    {% assign sorted_events = data.Events | sort: "StartTime" %}-->
+<!--                    {% assign render_count = 0 %}-->
+<!--                    {% for event in sorted_events %}-->
+<!--&lt;!&ndash;                 <br><div style="background: #ffffff; color:#000000">{{view_category_id}} <br> {{event.FirstCategoryId}}</div>&ndash;&gt;-->
+<!--                    {% if view_category_id == event.FirstCategoryId | downcase %}-->
+<!--                    {% assign video_url = "/embed/" | append: event.Id %}-->
+<!--                    {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}-->
+<!--                    {% assign video_description = event.Description %}-->
+<!--                    {% assign render_count = render_count | plus: 1 %}-->
+<!--                    {% assign next_event = event %}-->
+<!--                    {% assign action = 'display' %}-->
+<!--                    {% assign type = 'application/pdf' %}-->
+
+<!--                    &lt;!&ndash; Session Card &ndash;&gt;-->
+<!--                    <div class="highlight">-->
+<!--                      <div class="header">-->
+<!--                        <h2>{{ event.Name }}</h2>-->
+<!--                      </div>-->
+<!--                      <div class="image-wrapper">-->
+<!--                        <img src="{{ event.VideoThumbnail }}"-->
+<!--                          alt="https://place-hold.it/297x110">-->
+<!--                      </div>-->
+<!--                      <div class="caption">-->
+<!--                        <p></p>-->
+<!--                        <div-->
+<!--                          class="cta-wrapper pdf-card BoothAttachment-{% increment attCounter1 %}">-->
+<!--                          {% if event.Attachments | size > 0 %}-->
+<!--                          <button-->
+<!--                            onclick="fetchAttachment('.BoothAttachment-{% increment attCounter2 %}', '{{ event.Attachments[0].Id }}', '{{action}}', '.BoothAttachment-{% increment attCounter3 %}', '{{type}}')">Overview</button>-->
+<!--                          &lt;!&ndash; onclick=" downloadPDF('{{ event.Name }}', '{{ event.Attachments[0].Id }}')">Overview</button> &ndash;&gt;-->
+<!--                          {% endif %}-->
+<!--                          <button-->
+<!--                            class="show-video-button"-->
+<!--                            data-src="{{ video_url }}"-->
+<!--                            event-id="{{ event.Id }}"-->
+<!--                            onclick="loadVideo('{{ video_url }}')">Video</button>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; ./ Session Card &ndash;&gt;-->
+
+<!--                    {% endif %}-->
+<!--                    {% endfor %}-->
+
+<!--                    {% if next_event == 'No Event' %}-->
+<!--                    <div class="no-results" id="no-session-results">-->
+<!--                      <span>Videos will be available 48 hours after each session finishes.</span>-->
+<!--                    </div>-->
+<!--                    {% endif %}-->
+<!--                  </div>-->
+                  </comment>
+
+                  <!--  testing -->
+                  <div id="pdf-library" class="library-grid" >
+                  {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}
+                  {% assign sorted_events = data.Events | sort: "Name" %}
+                  {% assign render_count = 0 %}
+                  {% for event in sorted_events %}
+                  {% if view_category_id == event.FirstCategoryId | downcase %}
+                  {% assign video_url = "/embed/" | append: event.Id %}
+                  {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}
+                  {% assign video_description = event.Description %}
+                  {% assign render_count = render_count | plus: 1 %}
+                  {% if event.Attachments and event.Attachments | size > 0 %}
+                  {% for attachment in event.Attachments %}
+                    <div class="pdf-card" onclick="fetchAttachment('{{ attachment.Name }}', '{{ attachment.Id }}')">
+                     <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"
+                     <div class="pdf-card-logo">
+                       <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/pdf.png">"
+                     </div>
+                       <div class="pdf-card-name">{{ attachment.Name }}</div>
+                    </div>
+
+                  {% endfor %} {% endif %} {% endif %} {% endfor %}
+                  </div>
+
+
+                </div>
+
+                <div class="jkar-modal hidden" onclick="hidePdf()">
+                  <div class="jkar-modal-content">
+                    <iframe src="about:blank" class="jkar-pdf" width="850px"
+                      height="1100px"></iframe>
+                  </div>
+                </div>
+
+                <!-- Navigation -->
+                <script>
+                  function pdfClicked() {
+                    console.log('Clicked the PDF');
+                  }
+
+                  function videoClicked() {
+                    console.log('Clicked the Video');
+                  }
+
+                  function circuitsClicked() {
+                    toggleVideoPlay();
+                  }
+
+                  function toggleVideoPlay() {
+                    const myLanding = landingPageEl ?? document;
+                    const video= myLanding.getElementById("backgroundVideo");
+
+                    if (video.paused) {
+                      video.play();
+                    } else {
+                      video.pause();
+                    }
+                  }
+                </script>
+
+                <script>
+                  function checkIfEmbedsHaveVideo() {
+                    console.log("Fetching videos...");
+                    $(landingPageEl).find(".show-video-button").each(function() {
+                      console.log("Looking at a video...");
+                      var embedLink = $(this).attr("data-src");
+                      var eventId = $(this).attr("event-id");
+                      var hasVideo = false;
+                      console.log(embedLink, eventId);
+                      var _headers = {
+                        "Authorization": "Bearer " + window.sessionStorage.token,
+                        "X-InfernoCore-Domain": "tahit.infernoar.com"
+                      };
+                      if (window.sessionStorage.overrideId) {
+                        _headers["X-Client-Override"] = window.sessionStorage.overrideId;
+                        _headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      }
+                      $.ajax({
+                        url: "https://ingress.infernocore.jolokia.com/api/Videos/GetByEventId/"+eventId,
+                        type: "GET",
+                        headers: _headers,
+                        success: function(result){
+                          if(result.duration == 0) {
+                            $(landingPageEl).find(".show-video-button[event-id='"+eventId+"']").css("display", "none");
+                          }
+                        },
+                        error: function(error) {
+                          console.log("error!", error);
+                        }
+                      })
+                    });
+                  }
+
+                  function checkIfEvents() {
+                    var container = $(landingPageEl).find("#pdf-library");
+                    if (container.children().length == 0) {
+                      container.append(
+                        `<div class="coming-soon">
+                            <h1>Coming Soon!<h1>
+                        </div>`)
+                    }
+                  }
+
+                  checkIfEmbedsHaveVideo();
+
+                  checkIfEvents();
+
+                  // Call to grab attachment, mode 'display' to display, 'download' to download
+                  function fetchAttachment(referrer, id, mode = 'display', params = '', type = 'application/pdf') {
+                    // console.log(referrer)
+                    // landingPageEl.querySelector(referrer).classList.add('is-loading');
+                    var reqHeaders = new Headers();
+                    reqHeaders.append("Authorization", "Bearer " + window.sessionStorage
+                      .token);
+                    if (window.sessionStorage.getItem('overrideId')) {
+                      reqHeaders.append("X-Client-Override", window.sessionStorage
+                        .getItem('overrideId'));
+                    }
+
+                    var requestOptions = {
+                      method: 'GET',
+                      headers: reqHeaders,
+                      redirect: 'follow'
+                    };
+
+                    fetch("https://ingress.infernocore.jolokia.com/api/Attachment/DownloadHandout/" +
+                      id, requestOptions)
+                      .then(r => r.blob())
+                      .then((blob) => {
+                        // It is necessary to create a new blob object with mime-type explicitly set
+                        // otherwise only Chrome works like it should
+                        var newBlob = new Blob([blob], {
+                          type
+                        })
+
+                        // IE doesn't allow using a blob object directly as link href
+                        // instead it is necessary to use msSaveOrOpenBlob
+                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                          window.navigator.msSaveOrOpenBlob(newBlob);
+                          return;
+                        }
+
+                        // landingPageEl.querySelector(referrer).classList.remove('is-loading');
+
+                        // For other browsers:
+                        // Create a link pointing to the ObjectURL containing the blob.
+                        const data = window.URL.createObjectURL(newBlob);
+                        if (mode === 'display') {
+                          loadPDF(data, params);
+                        } else {
+                          window.open(data, '_blank')
+                        }
+                        setTimeout(function () {
+                          // For Firefox it is necessary to delay revoking the ObjectURL
+                          window.URL.revokeObjectURL(data);
+                        }, 100);
+                      });
+                  }
+
+                </script>
+
+                <!-- View/Hide PDF -->
+                <script>
+                  function viewPdf(attachmentName, attachmentId) {
+                    console.log("Viewing PDF", attachmentId, attachmentName);
+                    $(landingPageEl).find(".jkar-modal").removeClass("hidden");
+                    if (!window.sessionStorage) {
+                      return;
+                    }
+                    var img = element;
+
+                    var headers = new Headers();
+                    headers.append("Authorization", "Bearer " + window.sessionStorage
+                      .token);
+
+                    if (window.sessionStorage.overrideId) {
+                      headers.append("X-Client-Override", window.sessionStorage
+                        .overrideId);
+                    }
+
+                    // Make request
+                    var requestOptions = {
+                      method: "GET",
+                      headers: headers,
+                      redirect: "follow",
+                    };
+
+                    fetch(
+                      "https://ingress.infernocore.jolokia.com/api/Attachment/DownloadHandout/" +
+                      attachmentId,
+                      requestOptions
+                    )
+                      .then((blob) => {
+                        // It is necessary to create a new blob object with mime-type explicitly set
+                        // otherwise only Chrome works like it should
+                        var newBlob = new Blob([blob], {
+                          type
+                        })
+
+                        // IE doesn't allow using a blob object directly as link href
+                        // instead it is necessary to use msSaveOrOpenBlob
+                        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                          window.navigator.msSaveOrOpenBlob(newBlob);
+                          return;
+                        }
+
+                        landingPageEl.querySelector(referrer).classList.remove(
+                          'is-loading');
+
+                        // For other browsers:
+                        // Create a link pointing to the ObjectURL containing the blob.
+                        const data = window.URL.createObjectURL(newBlob);
+                        if (mode === 'display') {
+                          loadPDF(data, params);
+                        } else {
+                          window.open(data, '_blank')
+                        }
+                        setTimeout(function () {
+                          // For Firefox it is necessary to delay revoking the ObjectURL
+                          window.URL.revokeObjectURL(data);
+                        }, 100);
+                      });
+
+                  }
+
+                  function hidePdf() {
+                    console.log("Hiding PDF");
+                    $(landingPageEl).find(".jkar-modal").addClass("hidden");
+
+                    $(landingPageEl).find(".jkar-pdf").prop("src", "about:blank");
+                  }
+                </script>
+
+                <!-- Pop-up script-->
+                <script>
+                  function downloadXLS(url) {
+                    window.location.assign(url);
+                  }
+
+                  function downloadPPT(url) {
+                    window.location.assign(url);
+                  }
+
+                  function loadPDF(url) {
+                    console.log("load pdf");
+                    var x = landingPageEl.getElementById("pdf-frame");
+                    x.src = url;
+                    var y = landingPageEl.getElementById("pdf-blanket");
+                    y.style.display = "block";
+                  }
+                  function loadVideo(url) {
+                    var x = landingPageEl.getElementById("video-frame");
+                    x.src = url;
+                    var y = landingPageEl.getElementById("video-blanket");
+                    y.style.display = "block";
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById("pdf-frame");
+                    x.src = "";
+                    var y = landingPageEl.getElementById("pdf-blanket");
+                    y.style.display = "none";
+                  }
+
+                  function closeVideo() {
+                    var y = landingPageEl.getElementById("video-blanket");
+                    y.style.display = "none";
+                    var x = landingPageEl.getElementById("video-frame");
+                    x.src = "";
+                  }
+                </script>
+
+                <!-- Download PDF Script -->
+                <script>
+                  function downloadPDF(attachmentName, attachmentId, element) {
+                    if (!window.sessionStorage) {
+                      return;
+                    }
+                    var img = element;
+
+                    var headers = new Headers();
+                    headers.append("Authorization", "Bearer " + window.sessionStorage
+                      .token);
+
+                    if (window.sessionStorage.overrideId) {
+                      headers.append("X-Client-Override", window.sessionStorage
+                        .overrideId);
+                    }
+
+                    // Make request
+                    var requestOptions = {
+                      method: "GET",
+                      headers: headers,
+                      redirect: "follow",
+                    };
+
+                    fetch(
+                      "https://ingress.infernocore.jolokia.com/api/Attachment/DownloadHandout/" +
+                      attachmentId,
+                      requestOptions
+                    )
+                      .then(function (res) {
+                        return res.blob();
+
+                      })
+                      .then(function (blob) {
+                        var url = window.URL.createObjectURL(blob);
+                        var a = document.createElement("a");
+                        a.href = url;
+                        a.download = attachmentName.replace(/[\W_]+/g, "") + ".pdf";
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        setTimeout(function () {
+                          window.URL.revokeObjectURL(blob);
+                        }, 100);
+                      });
+                  }
+                </script>
+
+
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -257,8 +956,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -374,7 +1071,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
