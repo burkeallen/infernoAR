@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.6/mediaelementplayer.css">
   <style>
+    html {
+      overflow-x: hidden;
+    }
+
     .mejs__container.mejs__video,
     .mejs-container.mejs-video {
       overflow: hidden;
@@ -18,8 +22,9 @@
 
     .mejs__container.mejs__audio,
     .mejs-container.mejs-audio {
-      min-height: 300px !important;
-      min-width: 100% !important;
+      height: 300px !important;
+      min-width: unset !important;
+      width: 100% !important;
     }
 
     .mejs__container.mejs__audio.mejs__no-playlist,
@@ -77,6 +82,9 @@
       opacity: 0.7;
     }
 
+    .mejs__playlist-selector {
+      border-radius: 1em;
+    }
     .mejs__playlist-button > .mejs__playlist-selector,
     .mejs-playlist-button > .mejs-playlist-selector {
       background: rgba(50, 50, 50, 0.7);
@@ -201,6 +209,14 @@
       width: 30%;
     }
 
+    .mejs__container {
+     background-color: transparent;
+    }
+
+    .mejs__controls:not([style*='display: none']) {
+      background: transparent;
+    }
+
     .mejs__container.mejs__audio .mejs__playlist-item-thumbnail,
     .mejs-container.mejs-audio .mejs-playlist-item-thumbnail {
       padding: 5px;
@@ -209,7 +225,7 @@
 
     .mejs__playlist-item-thumbnail > img,
     .mejs-playlist-item-thumbnail > img {
-      height: 96px;
+      height: 72px;
       width: auto;
     }
 
@@ -235,7 +251,7 @@
 
     .mejs__playlist-current,
     .mejs-playlist-current {
-      background: #000;
+      background: transparent;
       bottom: -46px;
       height: auto !important;
       left: 0;
@@ -264,13 +280,25 @@
       font-style: italic;
     }
 
-    body { background-color: black}
+    .mejs__controls {
+      bottom: 20px !important;
+      height: unset !important;
+      padding: 0 !important;
+    }
 
-    div#container {
-      padding: .5rem;
+    body { background-color: transparent}
+
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: #8B8787;
+      border-radius: 20px;
     }
 
   </style>
+
 
 </head>
 <body>
