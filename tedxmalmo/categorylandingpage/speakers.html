@@ -248,15 +248,22 @@
                   img::after {
                     content: none;
                   }
+                
+                  .bg-video {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    width: auto;
+                    min-width: 100%;
+                    height: auto;
+                    min-height: 100%;
+                    transform: translateX(-50%) translateY(-50%);
+                    z-index: -1;
 
-
+                  }
                    .content {
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_bg2.png');
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
                     min-height: calc(100vh - 114px);
-                    margin: -24px -50px -20px -40px;
+                    margin: -20px;
                     z-index: 1;
                     font-family: 'Montserrat', sans-serif;
                     color: white;
@@ -276,7 +283,7 @@
                   }
 
                   .card {
-                    cursor: pointer;
+                    position: relative;
                     background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/card_border.png');
                     background-repeat: no-repeat;
                     background-size: contain;
@@ -291,28 +298,69 @@
                     border-radius: 50px;
                   }
 
+                  .video {
+                    display: none;
+                    cursor: pointer;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .video:hover {
+                    background-color: rgba(255, 255, 255, 0.1);
+                    border-radius: 50%;
+                  }
+
                   .card-contents {
                     width: 90%;
+                    height: 100%;
                     display: flex;
                     flex-direction: row;
                     align-items: center;
                     padding: 3rem;
                   }
 
-                  .card:hover {
-                    background-color: rgba(0, 0, 0, 0.1);
-                    color: rgb(210, 206, 206);
+                  .photo-box {
+                    cursor: pointer;
+                    position: relative;
+                    width: 30%;
+                  }
+
+                  .photo-hover-effect {
+                    position: absolute;
+                    top:0;
+                    left:0;
+                    border-radius: 50%;
+                    height: 100%;
+                    width: 100%;
                   }
 
                   .speaker-photo {
-                    width: 30%;
+                    width: 100%;
                     height: auto;
                   }
 
+                  .photo-box:hover .speaker-photo{
+                    display: none;
+                  }
+
+                  .photo-box:hover .video {
+                    display: block;
+                  }
+
+
                   .speaker-details {
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                     margin-left: 3rem;
                     font-weight: bold;
                     width: 50%;
+                    height: 100%;
+                  }
+
+                  .speaker-details:hover {
+                    color: rgb(210, 206, 206);
                   }
 
                   .name {
@@ -322,6 +370,8 @@
                   .summary {
                     font-size: 1.4rem;
                   }
+
+                  /* Modal Styling */
 
                   #modal {
                     position: fixed;
@@ -433,16 +483,23 @@
                    }
 
                   </style>
+
                   <div class="content">
-                    <div class="page-contents">
+                    <video class="bg-video" playsinline autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
+                      <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board.mp4" type="video/mp4">
+                    </video>
+                    <div class="page-contents"> 
                     </div>
                   </div>
 
                   <template id="card-template">
-                    <div class="card" onclick="toggleModal(this)">
-                      <div class="card-contents" >
-                        <img class="speaker-photo"/>
-                        <div class="speaker-details">
+                    <div class="card">
+                      <div class="card-contents">
+                        <div class="photo-box" onclick="toggleModal(this, 'video')">
+                          <div class="photo-hover-effect"></div>
+                          <img class="speaker-photo">
+                        </div>
+                        <div class="speaker-details" onclick="toggleModal(this, 'profile')">
                           <div class="name"></div>
                           <div class="summary"></div>
                         </div>
@@ -453,18 +510,9 @@
                   <template id="modal-template">
                     <div id="modal">
                       <div class="modal-content">
-                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png" class="close-modal" onclick="toggleModal(this)"/>
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png" class="close-modal" onclick="toggleModal(this)">
                         <div class="modal-main">
-                          <div class="left-column">
-                            <img class="modal-image" />
-                            <div class="modal-summary"></div>
-                          </div>
-                          <div class="right-column">
-                            <div class="modal-name"></div>
-                            <div class="bio"></div>
-                          </div>
                         </div>
-
                       </div>
                     </div>
                   </template>
@@ -475,34 +523,44 @@
                         name: 'Heather Mills',
                         summary: 'Entrepreneur, philantropist, activist, world recording holding sports star and TV personality',
                         image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png',
-                        bio: "Heather Mills is an entrepreneur, philanthropist, activist, world recording holding sports star and TV personality. <br/> Heather has won many awards and much acclaim in particular for her charitable work clearing landmines across the world, leading the scientific development of prosthetics and leading the food tech development and expansion of the global plant- based food sector, through her multi award - winning company, Vbites. <br/><br/> Highlights of her extensive career to date include: <br/><br/>  <ul><li> Starting and initially funding the largest landmine charity in the world  - ‘Adopt A Minefield’ - helping raise funds to clear over 21 million sq.meters of mine-filled land and assistIng over 400, 000 amputees </li><br/>  <li> Campaigning extensively for animal rights and effecting key law changes e.g.the law on banning the dog and cat fur trade in the European Union</li></ul>"
+                        video: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Heather.mp4',
+                        bio: 'Heather Mills is an entrepreneur, philanthropist, activist, world recording holding sports star and TV personality. <br/> Heather has won many awards and much acclaim in particular for her charitable work clearing landmines across the world, leading the scientific development of prosthetics and leading the food tech development and expansion of the global plant- based food sector, through her multi award - winning company, Vbites. <br/><br/> Highlights of her extensive career to date include: <br/><br/>  <ul><li> Starting and initially funding the largest landmine charity in the world  - ‘Adopt A Minefield’ - helping raise funds to clear over 21 million sq.meters of mine-filled land and assistIng over 400, 000 amputees </li><br/>  <li> Campaigning extensively for animal rights and effecting key law changes e.g.the law on banning the dog and cat fur trade in the European Union</li></ul>'
 
                       },
                       {
                         name: 'Bruce Dickinson',
                         summary: '',
-                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png'
+                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png',
+                        video: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/bruce.mp4',
 
                       },
                       {
                         name: 'Per Holknekt',
                         summary: '',
-                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png'
+                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png',
+                        video: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per.mp4',
 
                       },
                       {
                         name: 'Therese Lindgren',
                         summary: '',
-                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png'
+                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png',
+                        video: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Terese.mp4',
 
                       },
                       {
                         name: 'Wim Hof',
                         summary: '',
-                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png'
+                        image: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png',
+                        video: 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim.mp4'
 
                       }
                     ];
+
+                    var getLastName = (string) => {
+                      const array = string.split(' ');
+                      return array[1];
+                    }
 
                     var buildSpeakerList = () => {
                         const contentElement = landingPageEl.querySelector(
@@ -510,12 +568,33 @@
                         );
                         const template = landingPageEl.getElementById("card-template");
 
-                        speakers.forEach((speaker, index) => {
+                        const sortedSpeakers = speakers.sort(function(a, b) {
+
+                          aLastName = getLastName(a.name);
+                          bLastName = getLastName(b.name)
+                        if (aLastName < bLastName) {
+                          return -1;
+                        }
+                        if (aLastName > bLastName) {
+                          return 1;
+                        }
+                        return 0;
+                      });
+
+                        sortedSpeakers.forEach((speaker, index) => {
                           const clone = template.content.cloneNode(true);
-                          let card = clone.querySelector(".card");
-                          let imageElement = clone.querySelector(".speaker-photo");
-                          let nameElement = clone.querySelector(".name");
-                          let summaryElement = clone.querySelector(".summary");
+                          var card = clone.querySelector(".card");
+                          var photoBox = clone.querySelector(".photo-box");
+
+                          if (speaker.video) {
+                            var videoButton = document.createElement("img");
+                            videoButton.setAttribute("class", "video");
+                            videoButton.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/white-play-icon-png-8.jpg";
+                            photoBox.appendChild(videoButton);
+                          }
+                          var imageElement = clone.querySelector(".speaker-photo");
+                          var nameElement = clone.querySelector(".name");
+                          var summaryElement = clone.querySelector(".summary");
 
                           card.setAttribute("id", index);
                           imageElement.src = speaker.image;
@@ -528,42 +607,79 @@
 
                       buildSpeakerList();
 
-                      var toggleModal = (element) => {
-                        var id = element.id;
+                      var toggleModal = (element, type) => {
 
                         var modalElement = landingPageEl.getElementById("modal");
                         var content = landingPageEl.querySelector(".content");
 
                         if (modalElement) {
                           modalElement.remove();
-
                           document.body.style.overflow = 'auto';
-                        } else {
+                        } 
 
-                          var speaker = speakers[id];
-                          var template = landingPageEl.getElementById("modal-template");
-                          var clone = template.content.cloneNode(true);
+                        var template = landingPageEl.getElementById("modal-template");
+                        var clone = template.content.cloneNode(true);
+                        var mainContent = clone.querySelector(".modal-main");
 
-                          var summary = clone.querySelector(".modal-summary");
-                          summary.innerHTML = speaker.summary;
+                        var id = element.parentNode.parentNode.id;
+                        var speaker = speakers[id];
 
-                          var photo = clone.querySelector(".modal-image");
-                          photo.src = speaker.image;
+                        if (type === 'profile'){
 
-                          var name = clone.querySelector(".modal-name");
-                          name.innerHTML = speaker.name;
+                            //Create Left Column
+                            var leftColumn = document.createElement("div");
+                            leftColumn.setAttribute("class", "left-column");
 
-                          if (speaker.bio) {
-                            var bio = clone.querySelector(".bio");
-                            bio.innerHTML = speaker.bio;
+                            var photo = document.createElement("img");
+                            photo.setAttribute("class", "modal-image");
+                            photo.src = speaker.image;
+
+                            var summary = document.createElement("div");
+                            summary.setAttribute("class", "modal-summary");
+                            summary.innerHTML = speaker.summary;
+
+                            leftColumn.appendChild(photo);
+                            leftColumn.appendChild(summary);
+                            mainContent.appendChild(leftColumn);
+
+                            //Create Right Column
+                            var rightColumn = document.createElement("div");
+                            rightColumn.setAttribute("class", "right-column");
+
+                            var name = document.createElement("div");
+                            name.setAttribute("class", "modal-name");
+                            name.innerHTML = speaker.name;
+                            rightColumn.appendChild(name);
+
+                            if (speaker.bio) {
+                              var bio = document.createElement("div");
+                              bio.setAttribute("class", "bio");
+                              bio.innerHTML = speaker.bio;
+                              rightColumn.appendChild(bio);
+                            }
+
+                            mainContent.appendChild(rightColumn);
+
+                          } else {
+
+                            //Add video to modal
+                            var video = document.createElement("video");
+                            video.setAttribute("class", "speaker-video");
+                            video.controls = true;
+                            video.autoplay = true;
+                            
+                            var source = document.createElement("source");
+                            source.src = speaker.video;
+                            source.type = "video/mp4";
+
+                            video.appendChild(source);
+                            mainContent.appendChild(video);
                           }
 
                           content.appendChild(clone);
                           document.body.style.overflow = "hidden";
                         }
 
-
-                      }
                   </script>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
