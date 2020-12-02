@@ -1,0 +1,1503 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="60418a2c-c67d-49a0-ba18-5407beb9caf2">
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+
+                </script>
+
+                <style>
+                  h1, h2, h3, h4, h5, h6 {
+                    font-family: 'Montserrat', Arial, sans-serif;
+                  }
+
+                  #ntar-bg {
+                    position: absolute;
+                    width: 100%;
+                    height: calc(100vh - 56px);
+                    margin: -20px;
+                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/bg.png");
+                    background-repeat: no-repeat;
+                    background-position: top center;
+                    background-attachment: fixed;
+                    background-size: cover;
+                    background-color: #f6f6f6;
+                    overflow-y: auto;
+                    scroll-behavior: smooth;
+                    font-family: 'Montserrat', Arial, sans-serif;
+                  }
+
+                  .main {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                  }
+
+                  .banner {
+                    min-height:52rem;
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 1rem 4rem 4rem;
+                  }
+
+                  .banner-info {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                  }
+
+                  #inferno-logo {
+                    height: 5rem;
+                    width: auto;
+                  }
+
+                  .banner-info h1 {
+                    font-size: 5rem;
+                    color: white;
+                    font-weight: bold;
+                    margin: 0.5rem 0;
+                  }
+
+                  .banner-info p {
+                    font-size: 1.8rem;
+                    font-weight: 500;
+                    line-height: 3rem;
+                    color: #cccccc;
+                  }
+
+                  .download-links {
+                    display: flex;
+                  }
+
+                  #qr-code {
+                    height: 10rem;
+                    width: 10rem;
+                  }
+
+                  .store-links {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                  }
+
+                  .store-links img {
+                    height: 4.6rem;
+                    width: auto;
+                    margin-left: 0.5rem;
+                  }
+
+                  .highlight {
+                    color: #01245B;
+                  }
+
+                  #banner-image {
+                    position: relative;
+                    width: 48rem;
+                    margin: 40px 10px;
+                  }
+
+                  .tron {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 3;
+                  }
+
+                  .animation {
+                    position: absolute;
+                    top: 2rem;
+                    left: 3rem;
+                    width: 32.5rem;
+                    height: 36.5rem;
+                    z-index: 2;
+                  }
+
+                  .chevron {
+                    width: 2.1rem;
+                    height: 1.2rem;
+                  }
+
+                  .overview-divider {
+                    background-color: rgba(255, 255, 255, 0.75);
+                    width: 100%;
+                    padding: 3.8rem;
+                  }
+
+                  .overview-divider h1 {
+                    color: #06026D;
+                    font-size: 4.6rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 5.3rem;
+                  }
+
+                  .menu {
+                    padding: 4.4rem;
+                  }
+
+                  .menu h1 {
+                    font-size: 3.5rem;
+                    font-weight: bold;
+                    color: #01245B;
+                  }
+
+                  .menu-items {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .menu-item {
+                    margin: 2rem 0.5rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+
+                  .menu-items img {
+                    width: 39rem;
+                    height: 50.9rem;
+                    box-shadow: 11px 11px 19px 0 rgba(139, 139, 139, 0.51);
+                  }
+
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2.8rem 0;
+                  }
+
+
+                  .exhibitors-divider {
+                    background-color: rgba(255, 255, 255, 0.75);
+                    width: 100;
+                    padding: 3.8rem;
+                    padding: 4.4rem;
+                  }
+
+                  .exhibitors-divider h1 {
+                    color: #3D3D3D;
+                    font-size: 4.6rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 5.3rem;
+                  }
+
+                  .search-exhibitors-divider {
+                    background-color: rgba(225, 233, 247, 0.78);
+                    width: 100%;
+                    padding: 5.8rem 0;
+                    display: flex;
+                    justify-content: center;
+                  }
+
+                  .filter-options {
+                    width: 100%;
+                    margin: 0 3.5rem;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-start;
+                    align-items: center;
+                  }
+
+                  .filter-options button {
+                    height: 6rem;
+                    width: 9.8rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    padding: 1.3rem 1.6rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    line-height: 2.5rem;
+                    text-align: center;
+                  }
+
+                  .filter-options button:focus {
+                    outline: none;
+                    border: 2px solid rgba(11, 38, 104, 0.6);
+                  }
+
+                  .search-wrapper {
+                    width: 31.5rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                    margin: 0.9rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .search-wrapper input {
+                    padding: 1.4rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    width: 75%;
+                    border: none;
+                  }
+
+                  .search-wrapper input::placeholder {
+                    /* Chrome, Firefox, Opera, Safari 10.1+ */
+                    color: #3D3D3D;
+                    opacity: 1;
+                    /* Firefox */
+                  }
+
+                  .search-wrapper input:-ms-input-placeholder {
+                    /* Internet Explorer 10-11 */
+                    color: #3D3D3D;
+                  }
+
+                  .search-wrapper input::-ms-input-placeholder {
+                    /* Microsoft Edge */
+                    color: #3D3D3D;
+                  }
+
+                  .search-wrapper img {
+                    width: 2rem;
+                    margin: 1.25rem;
+                  }
+
+                  .search-wrapper input:focus {
+                    outline: none;
+                    border: none;
+                  }
+
+                  .select-wrapper {
+                    width: 26.6rem;
+                    margin: 0.9rem;
+                    border: 2px solid rgba(11, 38, 104, 0.32);
+                    border-radius: 4px;
+                    background-color: #FFFFFF;
+                  }
+
+                  .select-wrapper select {
+                    width: 96%;
+                    padding: 1.4rem;
+                    color: #3D3D3D;
+                    font-size: 2rem;
+                    font-weight: bold;
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                    background: url("https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png") no-repeat right #fff;
+                    background-size: 8%;
+                    border: none;
+                  }
+
+                  .select-wrapper select:focus {
+                    outline: none;
+                  }
+
+                  .select-wrapper img {
+                    width: 2rem;
+                    margin: 1rem;
+                  }
+
+                  .attendee-list {
+                    padding: 5.8rem 0;
+                  }
+
+                  .attendee {
+                    margin: 1.4rem 4.4rem;
+                    padding: 2rem;
+                    border-radius: 9px;
+                    background-color: #FFFFFF;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+
+                  }
+
+                  .attendee .avatar {
+                    height: 15.2rem;
+                    width: 15.2rem;
+                    /* border: 2px solid #6D7278; */
+                    border-radius: 50%;
+                    background-color: #c7e0f0;
+                  }
+
+                  .attendee .details {
+                    margin: 0 2rem;
+                    flex-grow: 3;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: flex-start;
+                  }
+
+                  .attendee .details .a-row {
+                    display: flex;
+                    align-items: baseline;
+                  }
+
+                  .header h1 {
+                    font-size: 2.4rem;
+                    font-weight: bold;
+                    margin: 0;
+                  }
+
+                  .header h2 {
+                    color: #52b952;
+                    font-size: 1.8rem;
+                    font-weight: bold;
+                    letter-spacing: 0;
+                    margin: 0 1rem;
+                  }
+
+                  .attendee .details h4 {
+                    color: #313131;
+                    font-size: 1.8rem;
+                    font-weight: 500;
+                    letter-spacing: 0;
+                    line-height: 2.9rem;
+                    margin: 0;
+                  }
+
+                  .attendee .details a {
+                    color: #0B2668;
+                    font-size: 1.6rem;
+                    letter-spacing: 0;
+                    line-height: 2.6rem;
+                  }
+
+                  .attendee .details .header {
+                    margin: 1.5rem 0;
+                    display: flex;
+                    flex-wrap: wrap;
+                  }
+
+                  .attendee .details .a-footer {
+                    width: 100%;
+                    margin-top: 3rem;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-wrap: wrap;
+                  }
+
+                  .attendee .details .a-footer img {
+                    height: 1.8rem;
+                    width: auto;
+                  }
+
+                  .contact {
+                    margin: 1rem;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  }
+
+                  .contact img {
+                    margin: 0 1rem;
+                  }
+
+                  .attendee .actions {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    margin: 1.5rem 0;
+                  }
+
+
+                  .attendee .actions button {
+                    width: 24.4rem;
+                    height: 4.5rem;
+                    border-radius: 5px;
+                    margin: 1rem;
+                    font-size: 18px;
+                    font-weight: bold;
+                    letter-spacing: 0.9px;
+                    line-height: 23px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+
+                  .attendee .actions button:hover {
+                    cursor: pointer;
+                    outline: none;
+                    border: 1px solid #0B2668;
+                  }
+
+                  .attendee .actions button:focus {
+                    outline: none;
+                    border: 1px solid #0B2668;
+                  }
+
+
+                  .attendee .actions a {
+                    width: 24.4rem;
+                    height: 4.5rem;
+                    border-radius: 5px;
+                    margin: 1rem;
+                    font-size: 18px;
+                    font-weight: bold;
+                    letter-spacing: 0.9px;
+                    line-height: 23px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                  }
+
+                  .attendee .actions a:hover {
+                    text-decoration: none;
+                  }
+
+                  .send-message {
+                    color: white;
+                    background-color: #0B2668;
+                    border: 1px solid #0B2668;
+                  }
+
+                  .request-meeting {
+                    color: #0B2668;
+                    background-color: white;
+                    border: 1px solid #0B2668;
+                  }
+
+                  .load-more {
+                    width: 24.4rem;
+                    height: 4.5rem;
+                    border-radius: 5px;
+                    margin: 1rem 1rem 8rem;
+                    font-size: 18px;
+                    font-weight: bold;
+                    letter-spacing: 0.9px;
+                    line-height: 23px;
+                    text-align: center;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    align-self: center;
+
+                  }
+
+                  .no-attendees-message {
+                    margin: 0;
+                    color: #0B2668;
+                    font-size: 2.2rem;
+                    font-weight: bold;
+                    letter-spacing: 0.092rem;
+                    line-height: 2.7rem;
+                    text-align: center;
+                  }
+                </style>
+
+                <script>
+
+                </script>
+
+                <div id="ntar-bg">
+                  <div id="main" class="main">
+                    <div class="banner">
+
+                      <div class="banner-info">
+                        <h1>Attendee List</h1>
+                        <p>
+                          Reach out and connect with others here. Send messages, emails, and request meetings all in
+                          one spot.
+                        </p>
+                      </div>
+                      <div id="banner-image">
+                        <img class="tron" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/attendees/tron.svg">
+                        <img class="animation" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/attendees/animation.webp">
+                      </div>
+
+                    </div>
+
+                    <!-- schedule divider -->
+
+                    <!-- end of schedule divider -->
+
+                    <div class="search-exhibitors-divider">
+                      <div class="filter-options">
+                        <div class="search-wrapper">
+                          <input id="search-attendees" placeholder="Search Attendees" oninput="searchAttendees(event)">
+                          <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/search-icon.png">
+                        </div>
+
+                        <!-- <div class="select-wrapper">
+            <select id="select-attendees-industry" onchange="filterAttendeesByIndustry(event)">
+              <option class="option" value="">By Industry</option>
+              <option value="commerce">Commerce</option>
+              <option value="education">Education</option>
+              <option value="robotics">Robotics</option>
+              <option value="technology">Technology</option>
+            </select>
+          </div> -->
+
+                        <button id="all-grouping" onclick="allAttendees()">All</button>
+                        <button id="ae-grouping" onclick="filterAttendeesAE()">A - E</button>
+                        <button id="fj-grouping" onclick="filterAttendeesFJ()">F - J</button>
+                        <button id="ko-grouping" onclick="filterAttendeesKO()">K - O</button>
+                        <button id="pt-grouping" onclick="filterAttendeesPT()">P - T</button>
+                        <button id="uz-grouping" onclick="filterAttendeesUZ()">U - Z</button>
+                      </div>
+                    </div>
+
+                    <div id="attendee-list" class="attendee-list">
+
+                      <template id="attendee-template">
+                        <div id="attendee" class="attendee">
+                          <img id="avatar" class="avatar">
+                          <div class="details">
+                            <div class="a-row header">
+                              <h1 id="name"></h1>
+                              <h2 id="online-badge" style="display:none;">• Online</h2>
+                            </div>
+                            <div class="a-row">
+                              <h4 id="job">
+                              </h4>
+                            </div>
+                            <div class="a-row">
+                              <h4 id="industry"></h4>
+                            </div>
+                            <div class="a-row a-footer">
+                              <div class="contact" id="linkedin-contact">
+                                <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/attendee-list/linkedin.png">
+                                <a id="business-card" href target="_blank" rel="noreferrer"></a>
+                              </div>
+                              <div class="contact" id="email-contact">
+                                <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/attendee-list/twitter.png">
+                                <a id="email" href target="_blank" rel="noreferrer"></a>
+                              </div>
+                              <div class="contact" id="company-contact">
+                                <img id="company-contact-icon" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/attendees/website-icon.png">
+                                <a id="company-link" href target="_blank" rel="noreferrer"></a>
+                              </div>
+
+                            </div>
+
+                          </div>
+                          <div class="actions">
+                            <button class="send-message" id="send-message-button" style="display:none" onclick="triggerConversation(event);">
+                              Send a Message
+                            </button>
+                            <a class="request-meeting" id="request-meeting-button" target="_blank" rel="noreferrer">
+                              Request a Meeting
+                            </a>
+
+                          </div>
+                        </div>
+                      </template>
+
+
+                      <h1 id="no-attendees-message" class="no-attendees-message" style="display:none;">No attendees
+                                                                                                       found.</h1>
+
+                    </div>
+                    <button onclick="addToPage()" id="load-more-button" class="send-message load-more">Load
+                                                                                                       More
+                    </button>
+
+                    <!-- <hr /> -->
+
+                    <!-- start of sponsor section -->
+
+                    <!-- end of sponsor section -->
+
+
+                    <!-- start of footer -->
+
+                    <!-- end of footer -->
+
+                  </div>
+                </div>
+
+
+                <script>
+
+                  var attendees = [];
+                  var userIdToKVP = new Map([]);
+                  var pageNumber = 1;
+                  var pageSize = 1000;
+                  var groupId = "1521fbe8-c8b7-4949-370e-08d8962b61ce" // Attendee groupId
+
+                  var nextAttendeeIdx = 0;
+
+                  var getAllProfiles = async () => {
+                    const BASE_URL = 'https://ingress.infernocore.jolokia.com/api/';
+
+                    const bearerToken = window.sessionStorage.getItem("token");
+                    const bearer = 'Bearer ' + bearerToken;
+
+                    let headers = new Headers();
+                    headers.set('Authorization', bearer)
+                    headers.set('Accept', 'application/json')
+                    headers.set('Content-Type', 'application/json')
+
+                    // for super user accounts
+                    let overrideId = window.sessionStorage.getItem("overrideId");
+                    if (overrideId) {
+                      headers.set('X-InfernoCore-Domain', 'jolokia.inferno.jolokia.com');
+                      headers.set("X-Client-Override", overrideId);
+                    }
+
+                    const req = {
+                      pageNumber: pageNumber,
+                      pageSize: pageSize,
+                      groupId: groupId
+                    }
+
+                    await fetch(BASE_URL + 'UserProfileExport', {
+                      method: 'POST',
+                      withCredentials: true,
+                      headers: headers,
+                      body: JSON.stringify(req),
+                    })
+                      .then(res => res.json())
+                      .then(json => {
+                        attendees = attendees.concat(json);
+                        if (json.length < pageSize) hideLoadMoreButton();
+                      })
+                      .catch(err => console.log(err));
+
+                  }
+
+                  var hideLoadMoreButton = () => {
+                    let btn = landingPageEl.getElementById('load-more-button')
+                    btn.style.display = "none";
+                  }
+
+                  var getUserIdToKVP = async () => {
+                    const url = "https://ingress.infernocore.jolokia.com/api/users/paginate";
+
+                    const bearerToken = window.sessionStorage.getItem("token");
+                    const bearer = 'Bearer ' + bearerToken;
+
+                    let headers = new Headers();
+                    headers.set('Authorization', bearer)
+                    headers.set('Accept', 'application/json')
+                    headers.set('Content-Type', 'application/json')
+
+                    // for super user accounts
+                    let overrideId = window.sessionStorage.getItem("overrideId");
+                    if (overrideId) {
+                      headers.set('X-InfernoCore-Domain', 'jolokia.inferno.jolokia.com');
+                      headers.set("X-Client-Override", overrideId);
+                    }
+
+                    const req = {
+                      pageNumber: pageNumber,
+                      pageSize: pageSize,
+                    }
+
+                    await fetch(url, {
+                      method: 'POST',
+                      withCredentials: true,
+                      headers: headers,
+                      body: JSON.stringify(req)
+                    })
+                      .then(res => res.json())
+                      .then(json => {
+                        let map = new Map(json.map(i => [i.id, i.customStoreKVPs]));
+                        userIdToKVP = new Map([...userIdToKVP, ...map])
+                      })
+                      .catch(err => console.log(err));
+                  }
+
+                  var buildAttendeeList = () => {
+
+                    const attendeeList = landingPageEl.getElementById("attendee-list");
+                    const attendeeTemplate = landingPageEl.getElementById("attendee-template");
+
+                    for (let idx = nextAttendeeIdx; idx < attendees.length; idx++) {
+
+                      let at = attendees[idx];
+
+                      if (at.HideProfilePrivacyOptOut) continue;
+
+
+                      // set visibility for search
+                      attendees[idx]['visible'] = true;
+
+                      let clone = attendeeTemplate.content.cloneNode(true);
+
+                      let attendeeDiv = clone.getElementById("attendee");
+                      attendeeDiv.id = "at-" + at.userId;
+
+                      let avatar = clone.getElementById("avatar");
+                      avatar.src = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + at.userId + '/74/74';
+
+                      let name = clone.getElementById("name");
+                      name.innerHTML = at.firstName + " " + at.lastname;
+
+                      if (at.socialLinkedIn) {
+                        console.log("sli", at.socialLinkedIn);
+                        if (!at.socialLinkedIn.startsWith("https://") && !at.socialLinkedIn.startsWith("http://")) {
+                          at.socialLinkedIn = "https://" + at.socialLinkedIn;
+                        }
+                        let businessCard = clone.getElementById("business-card");
+                        businessCard.href = at.socialLinkedIn;
+                        businessCard.innerHTML = "LinkedIn";
+                      } else {
+                        let c = clone.getElementById("linkedin-contact")
+                        c.style.visibility = "hidden";
+                      }
+
+                      // put twitter link instead of email
+                      // can be changed as needed
+                      if (at.socialTwitter) {
+                        if (!at.socialTwitter.startsWith("https://") && !at.socialTwitter.startsWith("http://")) {
+                          at.socialTwitter = "https://" + at.socialTwitter;
+                        }
+                        let email = clone.getElementById("email");
+                        email.innerHTML = "Twitter";
+                        email.href = at.socialTwitter;
+                      } else {
+                        let c = clone.getElementById("email-contact")
+                        c.style.visibility = "hidden";
+                      }
+
+                      if (at.contactInfoCompanyLink) { // doesn't exist yet
+                        let companyLink = clone.getElementById("company-link");
+                        companyLink.innerHTML = at.contactInfoCompanyLink;
+                        companyLink.href = at.contactInfoCompanyLink;
+                      } else {
+                        let c = clone.getElementById("company-contact-icon")
+                        c.style.visibility = "hidden";
+                      }
+
+                      let job = clone.getElementById("job");
+                      if (at.contactInfoTitle) {
+                        job.innerHTML += at.contactInfoTitle
+                      }
+                      if (at.contactInfoTitle && at.contactInfoCompany) {
+                        job.innerHTML += " – "
+                      }
+                      if (at.contactInfoCompany) {
+                        job.innerHTML += "<b>" + at.contactInfoCompany + "</b>";
+                      }
+
+                      let industry = clone.getElementById("industry");
+                      // industry.innerHTML = "Industry – " + "<b>" + at.industry + "</b>"
+
+                      let sendMessageButton = clone.getElementById("send-message-button");
+                      sendMessageButton.id = at.userId;
+
+                      if (userIdToKVP.get(at.userId) != null) {
+                        for (let i = 0; i < userIdToKVP.get(at.userId).length; i++) {
+                          if (userIdToKVP.get(at.userId)[i].key == "chatwee-user-id" && userIdToKVP.get(at.userId)[i].public) {
+                            sendMessageButton.setAttribute("chatwee-user-id", userIdToKVP.get(at.userId)[i].value);
+                            sendMessageButton.style["display"] = "block";
+                          }
+                        }
+                      }
+
+                      let requestMeetingButton = clone.getElementById("request-meeting-button");
+                      if (at.contactCalendarLink) {
+                        requestMeetingButton.href = at.contactCalendarLink
+                      } else {
+                        requestMeetingButton.style.visibility = "hidden";
+                      }
+
+                      attendeeList.appendChild(clone);
+                    }
+
+                  }
+
+
+                  var letterGroupings = [
+                    "all-grouping",
+                    "ae-grouping",
+                    "fj-grouping",
+                    "ko-grouping",
+                    "pt-grouping",
+                    "uz-grouping",
+                  ];
+
+
+                  var clearLetterGroupings = () => {
+                    for (let group of letterGroupings) {
+                      let el = landingPageEl.getElementById(group);
+                      el.style.color = "";
+                      el.style.backgroundColor = "";
+                    }
+
+                  }
+
+                  var clearIndustrySelect = () => {
+                    // let select = landingPageEl.getElementById("select-attendees-industry");
+                    // select.selectedIndex = 0;
+                  }
+
+                  var clearSearchValue = () => {
+                    let search = landingPageEl.getElementById("search-attendees")
+                    search.value = "";
+                  }
+
+                  var showAllAttendees = () => {
+
+                    for (let at of attendees) {
+
+                      at.visible = true;
+
+                      let id = "at-" + at.userId;
+                      let el = landingPageEl.getElementById(id);
+
+                      if (el) el.style.display = "";
+                    }
+                  }
+
+                  var addToPage = async () => {
+
+                    // clear any searches
+                    clearLetterGroupings();
+                    clearSearchValue();
+                    let emptyMessage = landingPageEl.getElementById("no-attendees-message");
+                    emptyMessage.style.display = "none";
+                    showAllAttendees();
+
+                    // get data
+                    await getAllProfiles();
+                    await getUserIdToKVP();
+
+                    // build page
+                    buildAttendeeList();
+                    pageNumber++;
+                    nextAttendeeIdx = attendees.length; //if more added, they will start at this index in the array
+
+                  }
+
+                  addToPage();
+
+
+                  var updateAttendees = () => {
+
+                    let empty = true;
+
+                    for (let at of attendees) {
+
+                      let id = "at-" + at.userId;
+                      let el = landingPageEl.getElementById(id);
+
+                      if (el) {
+                        if (at.visible) {
+                          empty = false;
+                          el.style.display = ""
+                        } else {
+                          el.style.display = "none";
+                        }
+                      }
+                    }
+
+                    let emptyMessage = landingPageEl.getElementById("no-attendees-message");
+
+                    if (empty) {
+                      emptyMessage.style.display = "";
+                    } else {
+                      emptyMessage.style.display = "none";
+                    }
+                  }
+
+                  var searchAttendees = e => {
+                    let query = e.currentTarget.value.toLowerCase();
+
+                    for (let at of attendees) {
+
+                      if (at.firstName.toLowerCase().startsWith(query) || at.lastname.toLowerCase().startsWith(query)) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    updateAttendees();
+
+                  }
+
+                  var filterAttendeesByIndustry = e => {
+                    let query = e.currentTarget.value;
+
+                    if (query === "") {
+                      for (let at of attendees) {
+                        at.visible = true;
+                      }
+                    } else {
+                      for (let at of attendees) {
+                        if (at.industry.toLowerCase() === query) {
+                          at.visible = true;
+                        } else {
+                          at.visible = false;
+                        }
+                      }
+                    }
+
+                    clearSearchValue();
+                    clearLetterGroupings();
+
+                    updateAttendees();
+                  }
+
+                  var allAttendees = () => {
+
+                    for (let at of attendees) {
+                      at.visible = true;
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("all-grouping").style.color = "white";
+                    landingPageEl.getElementById("all-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var AE = "abcde";
+                  var filterAttendeesAE = () => {
+
+                    let filtered = []
+
+                    for (let at of attendees) {
+
+                      if (at.firstName && AE.includes(at.firstName[0].toLowerCase()) || at.lastname && AE.includes(at.lastname[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("ae-grouping").style.color = "white";
+                    landingPageEl.getElementById("ae-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var FJ = "fghij";
+                  var filterAttendeesFJ = () => {
+
+                    for (let at of attendees) {
+
+                      if (at.firstName && FJ.includes(at.firstName[0].toLowerCase()) || at.lastname && FJ.includes(at.lastname[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("fj-grouping").style.color = "white";
+                    landingPageEl.getElementById("fj-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var KO = "klmno";
+                  var filterAttendeesKO = () => {
+
+                    for (let at of attendees) {
+
+                      if (at.firstName && KO.includes(at.firstName[0].toLowerCase()) || at.lastname && KO.includes(at.lastname[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("ko-grouping").style.color = "white";
+                    landingPageEl.getElementById("ko-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                  var PT = "pqrst";
+                  var filterAttendeesPT = () => {
+
+                    for (let at of attendees) {
+
+                      if (at.firstName && PT.includes(at.firstName[0].toLowerCase()) || at.lastname && PT.includes(at.lastname[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("pt-grouping").style.color = "white";
+                    landingPageEl.getElementById("pt-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+
+                  var UZ = "uvwxyz";
+                  var filterAttendeesUZ = () => {
+
+                    for (let at of attendees) {
+
+                      if (at.firstName && UZ.includes(at.firstName[0].toLowerCase()) || at.lastname && UZ.includes(at.lastname[0].toLowerCase())) {
+                        at.visible = true;
+                      } else {
+                        at.visible = false;
+                      }
+
+                    }
+
+                    clearSearchValue();
+                    clearIndustrySelect();
+                    clearLetterGroupings();
+
+                    landingPageEl.getElementById("uz-grouping").style.color = "white";
+                    landingPageEl.getElementById("uz-grouping").style.backgroundColor = "#41578B";
+
+                    updateAttendees();
+
+                  }
+
+                </script>
+
+                <script>
+
+                  var contentSection = landingPageEl.getElementById("ntar-bg")
+
+                  var resizeObserver = new ResizeObserver(entries => {
+                    for (const entry of entries) {
+                      var contentWidth = contentSection.offsetWidth;
+
+                      var bannerImg = landingPageEl.getElementById("banner-image");
+
+                      if (contentWidth <= 930) {
+                        bannerImg.style.display = "none";
+                      } else {
+                        bannerImg.style.display = "";
+                      }
+
+                    }
+                  });
+
+                  resizeObserver.observe(contentSection);
+                </script>
+
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

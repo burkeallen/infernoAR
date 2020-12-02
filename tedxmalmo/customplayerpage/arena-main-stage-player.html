@@ -4,14 +4,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
@@ -83,9 +79,7 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-          src="/inferno.config.js"></script>
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
@@ -190,9 +184,7 @@
       })
     }
   </script>
-  <script onload="buildLocalMenu()"
-          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-          src="../menu.js"></script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
   <script>
     let landingPageEl = null;
     window.isLocalTemplate = true;
@@ -205,13 +197,10 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header">LOCAL</div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
-                    onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -228,7 +217,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -268,25 +257,16 @@
                   .content {
                     display: flex;
                     flex-direction: column;
-                    height: 100%;
+                    min-height: calc(100vh - 114px);
                     width: calc(100% + 40px);
                     z-index: 1;
                     font-family: 'Montserrat', sans-serif;
-                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/bg.png");
+                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/bg.jpg");
                     background-position: bottom center;
                     background-repeat: no-repeat;
                     background-size: cover;
                     margin: -20px;
                     padding: 20px;
-                  }
-
-                  #videoBG {
-                    object-fit: cover;
-                    width: 100%;
-                    height: 100%;
-                    position: fixed;
-                    top: 0;
-                    left: 0;
                   }
 
                 </style>
@@ -303,17 +283,9 @@
                     height: 100%;
                   }
 
-                  .stage-grid img {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    background: rgba(0,0,0,.5);
-                  }
-
                   .col {
                     width: 80%;
-                    margin: 10% auto;
+                    margin: 0 auto;
                   }
                 </style>
 
@@ -327,7 +299,6 @@
 
                   videos-detail {
                     background-color: black !important;
-                    padding: 28%;
                   }
 
                   #inferno-video-player {
@@ -347,8 +318,6 @@
                 <div id="content" class="content">
 
                   <div class="stage-grid">
-                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/panel-simple.png"
-                         alt="video panel overlay"/>
                     <div class="col">
                       <div class="ntar-video-container">
                         <div class="ntar-video" id="inferno-video-player"></div>
@@ -358,23 +327,6 @@
                   </div>
 
                 </div>
-
-                <script>
-                  if (window.isLocalTemplate) {
-                    window.addEventListener('load', function () {
-                      getVideo();
-                    })
-                  } else {
-                    getVideo();
-                  }
-
-                  function getVideo() {
-                    const iframe = landingPageEl.querySelector('.ntar-video iframe');
-                    const video = iframe.contentWindow.document.querySelector('video');
-                    console.log('video', video);
-                  }
-
-                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -394,6 +346,8 @@
     </div>
   </videos-layout>
 </app-root>
+
+
 
 
 <script>
@@ -509,6 +463,7 @@
   }
 
 </script>
+
 
 
 </body><!-- Menu Collapse Script -->

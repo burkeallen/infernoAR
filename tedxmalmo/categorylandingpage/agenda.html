@@ -249,18 +249,37 @@
                   content: none;
                   }
 
+                    .bg-video {
+                    position: fixed;
+                    top: 0%;
+                    left: 0%;
+                    width: auto;
+                    min-width: 100%;
+                    height: auto;
+                    min-height: 100%;
+                    z-index: -1;
+
+                  }
+
+                  .overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, .2);
+                    pointer-events: none;
+                  }
 
                   #content {
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_bg2.png');
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: 50% 50%;
-                    min-height: calc(100vh -114px);
-                    margin: -20px -20px -80px -20px;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
                     z-index: 1;
                     font-family: 'Montserrat', sans-serif;
                     color: white;
                     padding: 2rem;
+                    display: flex;
+                    flex-direction: column;
                   }
 
                   .page-contents {
@@ -318,7 +337,7 @@
                     width: 100%;
                     display: flex;
                     flex-direction: row;
-                    align-items: center;
+                    align-items: flex-start;
                     justify-content: space-between;
                     height: 10rem;
                     margin-bottom: 2rem;
@@ -345,6 +364,7 @@
                     align-items: center;
                     background: linear-gradient(rgba(11, 68, 242, .3), #101010);
                     width: 75%;
+                    height: 80%;
                     padding: 1.5rem 2em;
                   }
 
@@ -373,6 +393,10 @@
               </style>
 
                 <div id="content">
+                  <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
+                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board.mp4" type="video/mp4">
+                  </video>
+                  <div class="overlay"></div>
                   <div class="page-contents">
                     <div class="clock">
                       <div class="date">December 12, 2020</div>
@@ -586,7 +610,7 @@
                         const id = agendaList.indexOf(item);
 
                         time.innerHTML = convertTime(item.startTime, item.duration);
-                        title.innerHTML = item.title;
+                        if (item.title) title.innerHTML = item.title;
                         description.innerHTML = item.description;
 
                         let agendaDetails = clone.querySelector(".agenda-item-details");
