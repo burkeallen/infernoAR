@@ -46,6 +46,10 @@ import users and manage their profile data via the inferno APIs
   - https://pdf4me.com/pdf-to-image/
  - CSS font Stack - useful for seeing what fonts are good on what systems and building out font-family
   - https://www.cssfontstack.com/
+ - Clip-Path Editor - useful for creating hotspot areas for lobbys and other graphic menus
+  - https://bennettfeely.com/clippy/
+  
+  
   
   
 # Lessons Learned

@@ -85,6 +85,7 @@
     .mejs__playlist-selector {
       border-radius: 1em;
     }
+
     .mejs__playlist-button > .mejs__playlist-selector,
     .mejs-playlist-button > .mejs-playlist-selector {
       background: rgba(50, 50, 50, 0.7);
@@ -210,7 +211,7 @@
     }
 
     .mejs__container {
-     background-color: transparent;
+      background-color: transparent;
     }
 
     .mejs__controls:not([style*='display: none']) {
@@ -286,7 +287,9 @@
       padding: 0 !important;
     }
 
-    body { background-color: transparent}
+    body {
+      background-color: transparent
+    }
 
     ::-webkit-scrollbar {
       width: 12px;
@@ -304,18 +307,14 @@
 <body>
 <div id="container">
   <div class="media-wrapper">
-    <audio id="player2" preload="none" controls width="750"
-           data-cast-title="Daniel Fridell - Mayflower"
-           data-cast-description="Funk - Relaxing and Laid Back"
-           data-cast-poster="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5380.jpg">
-
+    <audio id="player2" preload="none" controls width="750">
       <source
           type="audio/mp3"
           title="Daniel Fridell - Mayflower"
           data-playlist-description="Genre - Funk"
           data-playlist-thumbnail="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5380.jpg"
           src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/ES_Mayflower - Daniel Fridell.mp3"
-          >
+      >
 
       <source
           type="audio/mp3"
@@ -323,7 +322,7 @@
           data-playlist-description="Funk - Euphoric, Running"
           data-playlist-thumbnail="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5535.jpg"
           src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/ES_I'm Exactly Where I Need to Be (Instrumental Version) - Vincent Vega.mp3"
-          >
+      >
 
       <source
           type="audio/mp3"
@@ -332,8 +331,6 @@
           data-playlist-thumbnail="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5519.jpg"
           src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/ES_Struts - Wildo.mp3"
       >
-
-
     </audio>
   </div>
 
@@ -342,13 +339,31 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.6/mediaelement-and-player.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mediaelement-plugins@2.5.1/dist/playlist/playlist.min.js"></script>
 <script>
-  var mediaElements = document.querySelectorAll('audio');
 
-  for (var i = 0, total = mediaElements.length; i < total; i++) {
-    new MediaElementPlayer(mediaElements[i], {
-      features: ['prevtrack', 'playpause', 'nexttrack', 'current', 'progress', 'duration', 'volume', 'playlist', 'shuffle', 'loop', 'fullscreen'],
-    });
-  }
+  var audioElement = document.querySelector('audio');
+  var lastPlayedTrack = sessionStorage.getItem('now-playing');
+  var player = null;
+  new MediaElementPlayer(audioElement, {
+    isVideo: false,
+    currentMessage: 'now playing...',
+    startVolume: 0.05,
+    features: ['prevtrack', 'playpause', 'nexttrack', 'current', 'progress', 'duration', 'volume', 'playlist'],
+    success: function (mediaElement) {
+      player = mediaElement;
+      player.setVolume(0.05);
+      if(lastPlayedTrack) {
+        player.setSrc(lastPlayedTrack);
+      }
+      player.play();
+      player.addEventListener('playing', function () {
+        if (player.getSrc()) {
+          console.log('now playing', player.getSrc())
+          sessionStorage.setItem('now-playing', player.getSrc());
+        }
+      });
+    }
+  });
+
 </script>
 </body>
 </html>
