@@ -301,22 +301,6 @@
 
                   }
 
-                  .video {
-                    opacity: 0;
-                    position: absolute;
-                    left: 0;
-                    top: 53%;
-                    transform: translateY(-50%);
-                    cursor: pointer;
-                    width: 100%;
-                    height: auto;
-                  }
-
-                  .video:hover {
-                    background-color: rgba(255, 255, 255, 0.1);
-                    border-radius: 50%;
-                  }
-
                   .card-contents {
                     position: relative;
                     width: 100%;
@@ -346,18 +330,6 @@
 
                   .card:hover {
                     background-color: rgba(0, 0, 0, 0.5);
-                  }
-
-                  .card:hover .speaker-photo{
-                    animation: fadeOut ease .5s;
-                    -webkit-animation: fadeOut ease .5s;
-                    opacity: .4;
-                  }
-
-                  .card:hover .video {
-                    opacity: 1;
-                    animation: fadeIn ease .5s;
-                    -webkit-animation: fadeIn ease .5s;
                   }
 
                   .speaker-details {
@@ -428,7 +400,7 @@
                     background: linear-gradient(#052A9A, #101010);
                     border-radius: 50px;
                     width: 60%;
-                    height: 50rem;
+                    height: 70%;
                     margin-left: 15%;
                     margin-top: 15rem;
                     padding: 3rem;
@@ -466,7 +438,7 @@
                   }
 
                   .right-column {
-                    width: 65%;
+                    width: 60%;
                     height: 100%;
 
                   }
@@ -554,14 +526,14 @@
                       <img class="card-border"
                         src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/card_border.png">
                       <div class="card-contents">
-                        <div class="photo-box" onclick="toggleModal(this, 'video')">
+                        <div class="photo-box">
                           <img class="speaker-photo">
                         </div>
                         <div class="speaker-details">
                             <div class="name"></div>
                             <div class="summary"></div>
                         </div>
-                        <button class="open-bio" onclick="toggleModal(this, 'profile')">Read More</button>
+                        <button class="open-bio" onclick="toggleModal(this)">Read More</button>
                       </div>
                     </div>
                   </template>
@@ -651,12 +623,6 @@
                           var card = clone.querySelector(".card");
                           var photoBox = clone.querySelector(".photo-box");
 
-                          if (speaker.video) {
-                            var videoButton = document.createElement("img");
-                            videoButton.setAttribute("class", "video");
-                            videoButton.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/white-play-icon-png-8.jpg";
-                            photoBox.appendChild(videoButton);
-                          }
                           var imageElement = clone.querySelector(".speaker-photo");
                           var nameElement = clone.querySelector(".name");
                           var summaryElement = clone.querySelector(".summary");
@@ -672,7 +638,7 @@
 
                       buildSpeakerList();
 
-                      var toggleModal = (element, type) => {
+                      var toggleModal = (element) => {
 
                         var modalElement = landingPageEl.getElementById("modal");
                         var content = landingPageEl.querySelector(".content");
@@ -680,6 +646,7 @@
                         if (modalElement) {
                           modalElement.remove();
                           document.body.style.overflow = 'auto';
+                          return;
                         } 
 
                         var template = landingPageEl.getElementById("modal-template");
@@ -688,22 +655,38 @@
 
                         var id = element.parentNode.parentNode.id;
                         var speaker = speakers[id];
-                       
 
-                        if (type === 'profile'){
                             //Create Left Column
                             var leftColumn = document.createElement("div");
                             leftColumn.setAttribute("class", "left-column");
 
-                            var photo = document.createElement("img");
-                            photo.setAttribute("class", "modal-image");
-                            photo.src = speaker.image;
+                            if (speaker.video){
+                              var video = document.createElement("video");
+                              video.setAttribute("class", "speaker-video");
+                              video.width = "300";
+                              video.height = "300";
+                              video.controls = true;
+                              video.autoplay = true;
+
+                              var source = document.createElement("source");
+                              source.src = speaker.video;
+                              source.type = "video/mp4";
+
+                              video.appendChild(source);
+                              leftColumn.appendChild(video);
+                            } else {
+                              var photo = document.createElement("img");
+                              photo.setAttribute("class", "modal-image");
+                              photo.src = speaker.image;
+                              leftColumn.appendChild(photo);
+                            }
+
 
                             var summary = document.createElement("div");
                             summary.setAttribute("class", "modal-summary");
                             summary.innerHTML = speaker.summary;
 
-                            leftColumn.appendChild(photo);
+                            
                             leftColumn.appendChild(summary);
                             mainContent.appendChild(leftColumn);
 
@@ -724,26 +707,6 @@
                             }
 
                             mainContent.appendChild(rightColumn);
-
-                          } else {
-                            var container = clone.querySelector(".modal-content");
-                            container.style.width = "700px";
-                            container.style.background = "black";
-                            //Add video to modal
-                            var video = document.createElement("video");
-                            video.setAttribute("class", "speaker-video");
-                            video.width = "600";
-                            video.height = "450";
-                            video.controls = true;
-                            video.autoplay = true;
-                            
-                            var source = document.createElement("source");
-                            source.src = speaker.video;
-                            source.type = "video/mp4";
-
-                            video.appendChild(source);
-                            mainContent.appendChild(video);
-                          }
 
                           content.appendChild(clone);
                           document.body.style.overflow = "hidden";
