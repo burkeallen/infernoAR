@@ -250,19 +250,16 @@
                   }
 
                   .bg-video {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
+                    position: fixed;
+                    top: 0%;
+                    left: 0%;
                     width: auto;
                     min-width: 100%;
                     height: auto;
                     min-height: 100%;
-                    transform: translateX(-50%) translateY(-50%);
                     z-index: -1;
 
                   }
-                
-                
                   .content {
                     min-height: calc(100vh - 114px);
                     margin: -20px;
@@ -307,17 +304,30 @@
                 
                   .card-contents {
                     width: 100%;
+                    height: 100%;
                     display: flex;
-                    flex-direction: row;
+                    flex-direction: column;
                     align-items: center;
                     justify-content: center;
                     font-size: 1.8rem;
-                    padding: 2rem;
+                    padding: 4rem 2rem;
+                    
+                  }
+
+                  .sponsor-main {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-evenly;
+                  }
+
+                  .logo-box {
+                    width: 30%;
                     
                   }
 
                   .logo {
-                    width: 30%;
+                    width: 100%;
                     height: auto;
                     background-color: white;
                     padding: 2rem;
@@ -361,7 +371,7 @@
                 </style>
                 <div class="content">
                   <video class="bg-video" playsinline autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board.mp4" type="video/mp4">
+                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                   </video>
                   <div class="page-contents">
                   </div>
@@ -371,12 +381,14 @@
                   <div class="card">
                     <img class="card-border" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/card_border.png">
                     <div class="card-contents">
-                      <img class="logo">
-                      <div class="sponsor-details">
-                        <div class="name"></div>
-                        <div>Website: <span><a class="website" target="__blank"></a></span></div>
-                        <div class="description"></div>
-                        <div class="hashtags"></div>
+                      <div class="name"></div>
+                      <div class="sponsor-main">
+                        <div class="logo-box"><img class="logo"></div>
+                        <div class="sponsor-details">
+                          <div>Website: <span><a class="website" target="__blank"></a></span></div>
+                          <div class="description"></div>
+                          <div class="hashtags"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -384,45 +396,44 @@
           
                 <script>
                   var sponsors = [
-                   {
-                      
-                        name: "Minc",
-                        logo: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/minc.png",
-                        website: "https://www.minc.se/",
-                        description: "Assisting startups that have global ambitions by offering them advice in business development, fundraising, marketing and team building.",
-                        hashtags: "#startuphouse #workspace #incubator #businessdevelopment"
+                      {
+                        "name": "Minc",
+                        "logo": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/minc.png",
+                        "website": "https://www.minc.se/",
+                        "description": "Assisting startups that have global ambitions by offering them advice in business development, fundraising, marketing and team building.",
+                        "hashtags": "#startuphouse #workspace #incubator #businessdevelopment"
                       },
                       {
-                        name: "RWE Renewables",
-                        logo: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/rwe.png",
-                        website: "https://www.group.rwe/en",
-                        description: "One of the largest global players in power generation from renewable energies with a total installed generation capacity of 9 gigawatts.",
-                        hashtags: "#renewable #energy #sustainability #innovativetechnology"
+                        "name": "RWE Renewables",
+                        "logo": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/rwe.png",
+                        "website": "https://www.group.rwe/en",
+                        "description": "One of the largest global players in power generation from renewable energies with a total installed generation capacity of 9 gigawatts.",
+                        "hashtags": "#renewable #energy #sustainability #innovativetechnology"
                       },
                       {
-                        name: "Sproud",
-                        logo: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/sproud-logo.png",
-                        website: "https://www.besproud.com",
-                        description: "Innovative and environmentally friendly food and drink that, in a time marked by great challenges, works on the basis of the conviction that plant-based products are part of the solution.",
-                        hashtags: "#sustainability #innovation #plantbased #vegan"
+                        "name": "Sproud",
+                        "logo": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/sproud-logo.png",
+                        "website": "https://www.besproud.com",
+                        "description": "Innovative and environmentally friendly food and drink that, in a time marked by great challenges, works on the basis of the conviction that plant-based products are part of the solution.",
+                        "hashtags": "#sustainability #innovation #plantbased #vegan"
                       },
                       {
-                        name: "Hela Sverige Samlas",
-                        logo: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/hela.png",
-                        website: "https://helasverigesamlas.se/?affiliate=tarja",
-                        description: "An inspiring online kickoff with 35 speakers and experts who have the tools for you to flourish your own self development.",
-                        hashtags: "#inspiration #networking #digitalevent #leadership"
+                        "name": "Hela Sverige Samlas",
+                        "logo": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/hela.png",
+                        "website": "https://helasverigesamlas.se/?affiliate=tarja",
+                        "description": "An inspiring online kickoff with 35 speakers and experts who have the tools for you to flourish your own self development.",
+                        "hashtags": "#inspiration #networking #digitalevent #leadership"
                       },
                       {
-                        name: "Almi",
-                        logo: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/almi.png",
-                        website: "https://www.almi.se/",
-                        description: "Almi helps businesses in Sweden reach their full growth potential by offering loans and business development services.",
-                        hashtags: "#companyloans #businessdevelopment #finance #growth"
+                        "name": "Almi",
+                        "logo": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/almi.png",
+                        "website": "https://www.almi.se/",
+                        "description": "Almi helps businesses in Sweden reach their full growth potential by offering loans and business development services.",
+                        "hashtags": "#companyloans #businessdevelopment #finance #growth"
                       }
                     ];
 
-                  const sortedSponsors = sponsors.sort((a, b) => (a.name > b.name) ? 1 : -1);
+                  var sortedSponsors = sponsors.sort((a, b) => (a.name > b.name) ? 1 : -1);
 
                   var buildSponsorList = () => {
                     const contentElement = landingPageEl.querySelector(
