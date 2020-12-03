@@ -280,10 +280,136 @@
 
                 </script>
 
+                <style>
+                  .content {
+                    position: relative;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    width: 100%;
+                    font-family: 'Montserrat', sans-serif;
+                  }
+
+                  .background {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 1;
+                  }
+
+                  .hotspot {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    z-index: 2;
+                    cursor: pointer;
+                  }
+
+                  .hotspot:hover {
+                    background-color: rgba(0, 0, 0, .3);
+                  }
+
+                  .photo-booth {
+                    clip-path: polygon(20% 8%, 32% 0, 44% 0%, 48% 6%, 48% 21%, 29% 35%, 23% 25%, 22% 21%, 20% 18%);
+                  }
+
+                  .social-wall {
+                    clip-path: polygon(78% 41%, 81.5% 37%, 82% 29%, 90% 23%, 100% 35%, 100% 45%, 88% 56%);
+                  }
+
+                  .arena {
+                    clip-path: polygon(33% 45%, 33% 32%, 50% 20%, 50% 27%, 53% 25%, 66% 51%, 48% 66%, 30% 56%, 29% 43%, 33% 39%);
+                  }
+
+                  .dj {
+                    clip-path: polygon(44% 0%, 48% 6%, 48% 14%, 56% 9%, 63% 17%, 63% 10%, 68% 6%, 68% 4%, 65% 0%);
+                  }
+
+                  #modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 999;
+                  }
+
+                  .modal-content {
+                    position: relative;
+                    background: linear-gradient(#052A9A, #101010);
+                    border-radius: 50px;
+                    width: 60%;
+                    height: 60%;
+                    margin-left: 15%;
+                    margin-top: 15rem;
+                    padding: 3rem;
+                  }
+
+                  .close-modal {
+                    position: absolute;
+                    top: -20%;
+                    right: -10%;
+                    width: 20%;
+                    cursor: pointer;
+                  }
+
+                  .modal-main {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                  }
+
+                  .modal-main iframe {
+                    width: 100%;
+                    height: 380px;
+                    border: none;
+                  }
+
+                </style>
+
                 <div class="content">
+                  <img class="background"
+                       src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/lobby/bg-temp.jpg">
+
+                  <a class="hotspot photo-booth" alt="Photo Booth" title="Photo Booth"
+                     href="videos/20fa7766-ff63-4c74-390f-08d895e594fd/landing/0a3258b4-25a5-48a8-a925-a1974f228eef">
+                  </a>
+
+                  <a class="hotspot social-wall" alt="Get Social" title="Get Social"
+                     href="videos/083a35d7-efba-40de-3914-08d895e594fd/landing/3dec6d53-44b3-419d-8166-23ba3991466e">
+                  </a>
+
+                  <a class="hotspot arena" alt="Arena" title="Arena (Main Stage)"
+                     href="videos/93817ba4-a9c3-4053-36b5-08d89144b732/landing/1a9dc51b-89aa-4239-85b8-83dbee9487ac">
+                  </a>
+
+                  <div class="hotspot dj" alt="DJ Booth" title="DJ Booth" onclick="toggleDJ()"></div>
+
+                  <div id="modal" class="hidden">
+                    <div class="modal-content">
+                      <img
+                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
+                          class="close-modal" onclick="toggleDJ()"/>
+                      <div class="modal-main">
+                        <iframe
+                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/audio-player.html"></iframe>
+                      </div>
+                    </div>
+                  </div>
 
                 </div>
-
+                <script>
+                  function toggleDJ() {
+                    landingPageEl.querySelector('#modal').classList.toggle('hidden');
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
