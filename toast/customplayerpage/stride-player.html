@@ -1,0 +1,895 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+  <script>
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
+  </script>
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="toast" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header">LOCAL</div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="a3279092-ef36-40b3-a269-6dbba1ccf2fb"><style>
+                      /* Background Styles */
+                      .ntar-landing-bg {
+                        /* Image */
+                        /*
+                        AKT_stage_v3.jpg
+                        ClubPirates_stage_v3.jpg
+                        Cyclebar_stage_v3.jpg
+                        PureBarre_stage_v3.jpg
+                        RowHouse_Stage_v3.jpg
+                        Streachlab_Stage_v3.jpg
+                        
+                        YogaSix_Stage_v3.jpg
+                        */
+                        background-color: rgb(0, 0, 0);
+                        background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/breakouts/Stride_Stage_v3.jpg");
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center bottom;
+
+                        /* Cover height minus 55px header */
+                        min-height: calc(100vh - 86px);
+
+                        /* Stick to Jolokia content frame */
+                        position: absolute;
+                        top: -20px;
+                        left: 0;
+                        right: -50px;
+                        bottom: 0;
+
+                        overflow: auto;
+
+                        /* Modifying style to fix hamburger menu issue */
+                        position: absolute;
+                        left: 0px;
+                        margin-bottom: -60px;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-bg {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: fixed;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+                        }
+                      }
+
+                      /* ./ Background Styles */
+
+                      /* Page Content Container Styles */
+                      .ntar-landing-content {
+                        /* background-color: chartreuse; */
+
+                        /* Scale to full width and height + footer space */
+                        width: 100%;
+                        height: calc(100% + 60px);
+
+                        /* Stick to Jolokia content frame and scroll y */
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        overflow: hidden auto;
+
+                        /* Pad Content */
+                        padding: 0px;
+
+                        /* Display Type */
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-end;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-content {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+
+                          justify-content: space-between;
+                        }
+                      }
+                      /* ./ Page Content Container Styles */
+
+                      .center-player,
+                      iframe {
+                        width: fit-content;
+                        height: fit-content;
+                      }
+
+                      iframe {
+                        display: block;
+                        border-style: none;
+                      }
+
+                      input {
+                        color: #003b3e;
+                      }
+
+                      @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-device-pixel-ratio: 3) {
+                        iframe {
+                          width: 256px;
+                          height: 144px;
+                        }
+
+                        .question-center {
+                          position: absolute;
+                          top: 50%;
+                        }
+
+                        .inferno-input-group {
+                          display: inline-flex;
+                          color: white;
+                          margin-top: 25%;
+                        }
+
+                        .inferno-form-control {
+                          width: 50vw;
+                          height: 20px;
+                          border-top-left-radius: 10px;
+                          border-bottom-left-radius: 10px;
+                          border: none;
+                          font-size: 27px;
+                          margin-left: 10px;
+                        }
+
+                        .inferno-btn {
+                          height: 100%;
+                          background: none;
+                          background-color: #003b3e;
+                          border: none;
+                        }
+
+                        .inferno-input-group-btn {
+                          height: 20px;
+                          border-top-right-radius: 8px;
+                          border-bottom-right-radius: 8px;
+                          border: none;
+                          background-color: #003b3e;
+                          color: white;
+                          font-weight: 300;
+                          letter-spacing: 1px;
+                          padding-left: 20px;
+                          padding-right: 20px;
+                        }
+                      }
+
+                      @media only screen and (max-width: 999px) {
+                        .ntar-video-vertcenter {
+                          width: 60vw !important;
+                        }
+
+                        .main-container {
+                          flex-direction: column;
+                          margin-bottom: 3vh;
+                        }
+
+                        .question-center {
+                          position: absolute;
+                          top: 60%;
+                          left: 15%;
+                        }
+
+                        .inferno-input-group {
+                          display: inline-flex;
+                          color: white;
+                          margin-top: 25%;
+                        }
+
+                        .inferno-form-control {
+                          width: 35vw;
+                          height: 20px;
+                          border-top-left-radius: 10px;
+                          border-bottom-left-radius: 10px;
+                          border: none;
+                          font-size: 27px;
+                          margin-left: 10px;
+                        }
+
+                        .inferno-btn {
+                          height: 100%;
+                          background: none;
+                          background-color: #003b3e;
+                          border: none;
+                        }
+
+                        .inferno-input-group-btn {
+                          height: 20px;
+                          border-top-right-radius: 8px;
+                          border-bottom-right-radius: 8px;
+                          border: none;
+                          background-color: #003b3e;
+                          color: white;
+                          font-weight: 300;
+                          letter-spacing: 1px;
+                          padding-left: 20px;
+                          padding-right: 20px;
+                        }
+                      }
+
+                      @media only screen and (min-width: 1000px) {
+                        .question-center {
+                          width: fit-content;
+                          margin-left: auto;
+                          margin-right: auto;
+                        }
+
+                        .inferno-input-group {
+                          margin-top: 8vh;
+                          display: inline-flex;
+                          width: 50vw;
+                          color: white;
+                        }
+
+                        .inferno-form-control {
+                          width: 100%;
+                          height: 35px;
+                          border-top-left-radius: 10px;
+                          border-bottom-left-radius: 10px;
+                          border: none;
+                          font-size: 27px;
+                        }
+
+                        .inferno-btn {
+                          padding-top: 7px;
+                          padding-bottom: 3px;
+                          background-color: #1e7da1;
+                          border: none;
+                          font-size: 15px;
+                          letter-spacing: 1px;
+                        }
+
+                        .inferno-input-group-btn {
+                          height: 35px;
+                          border-top-right-radius: 8px;
+                          border-bottom-right-radius: 8px;
+                          border: none;
+                          background-color: #1e7da1;
+                          color: white;
+                          font-weight: 300;
+                          letter-spacing: 1px;
+                          padding-left: 20px;
+                          padding-right: 20px;
+                        }
+                      }
+
+                      iframe {
+                        margin: 0;
+                      }
+
+                      .main-container {
+                        display: flex;
+                        flex-direction: column;
+                        width: 100%;
+                        justify-content: center;
+                        align-items: center;
+                        margin-bottom: 5vh;
+                      }
+
+                      .main-container a {
+                        color: #fff;
+                        z-index: 1;
+                        text-align: center;
+                        background-color: #000000ee;
+                        padding: 1rem 3rem;
+                        border-radius: 25px;
+                        transition: 0.1s ease-in-out;
+                        font-size: 2rem;
+                        visibility: hidden;
+                      }
+
+                      .main-container a:hover {
+                        transform: scale(1.1);
+                      }
+
+                      .center-player {
+                        width: 100%;
+                        margin-top: -2vh;
+                      }
+
+                      .hidden {
+                        display: none;
+                      }
+
+                      .ntar-video-container {
+                        background-color: rgba(0, 0, 0, 0);
+                        min-height: 100px;
+                        min-width: 100px;
+                        width: 100%;
+                        height: calc(100% - 55px);
+                        max-height: calc(100% - 55px);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        padding: 2vh;
+                      }
+
+                      .ntar-video-vertcenter {
+                        width: 67%;
+                        margin: 0 auto;
+                        margin-top: 5vh;
+                      }
+
+                      .ntar-video-wrapper-16x9 {
+                        position: relative;
+                        /* Set for 16x9 ratio */
+                        padding-bottom: 56.25%;
+                        height: 0;
+                      }
+
+                      .ntar-video-wrapper-16x9 iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                      }
+
+                      .ntar-video-wrapper-16x9 > #inferno-video-player {
+                        max-width: unset !important;
+                      }
+
+                      .page-sp {
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-evenly;
+                        align-items: center;
+                        background-color: #000000;
+                        padding: 2rem 0 0.5rem;
+                      }
+
+                      .sp {
+                        width: 15%;
+                      }
+
+                      @media only screen and (max-width: 1024px) {
+                        .ntar-landing-content {
+                          justify-content: space-between;
+                        }
+
+                        .main-container {
+                          height: 100%;
+                        }
+                      }
+
+                      @media only screen and (max-width: 484px) {
+                        .page-sp {
+                          flex-direction: column;
+                          justify-content: unset;
+                        }
+                        .sp {
+                          width: 50%;
+                        }
+
+                        .main-container {
+                          margin-top: 5vh;
+                        }
+                      }
+                    </style>
+                    <div class="ntar-landing-bg"></div>
+                    <div class="ntar-landing-content">
+                      <div class="main-container">
+                        <div class="center-player">
+                          <div class="ntar-video-container">
+                            <div class="ntar-video-vertcenter">
+                              <div class="ntar-video-wrapper-16x9">
+                                <div id="inferno-video-player"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <a href="javascript:void(0)" target="_blank" class="zoom-link" id="zoom-room-link">Join Zoom Room</a>
+                      </div>
+                      <div class="page-sp">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/bo-sponsors/sp_presented.png" alt="sp_presented" class="sp">
+                        <!--use with rowhouse only <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/bo-sponsors/sp0_concept.png" alt="sp0_concept" class="sp">-->
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/bo-sponsors/sp1_cr_components.png" alt="sp1_cr_components" class="sp">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/bo-sponsors/sp2_clubready.png" alt="sp2_clubready" class="sp">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/bo-sponsors/sp3_colepronic.png" alt="sp3_colepronic" class="sp">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/bo-sponsors/sp4_paris.png" alt="sp4_paris" class="sp">
+                      </div>
+                    </div>
+
+					<script type="text/javascript">
+                      var landingElement;
+                      if (typeof landingPageEl !== "undefined" && landingPageEl !== null) {
+                        landingElement = landingPageEl;
+                      } else {
+                        landingElement = document;
+                      }
+                    </script>
+
+                    <script type="text/javascript">
+                      // Declare Domain
+                      var DOMAIN = "convention.xponential.com"; //convention.xponential.com //Alternative Domain: xponential.infernoar.com
+
+                      // Get Event ID
+                      function extractEventId(path) {
+                        var groups = path.match(/^.*\/detail\/(.*)$/);
+                        return groups ? groups[1] : "bcee2552-084d-45e0-8177-b2373d421b01";
+                      }
+                      var eventId = extractEventId(window.location.pathname);
+
+                      function linkDisplay(event) {
+                        // To create way to display Zoom Link button at 5 min left in event - eventFeaturesZoomTrackedUrl - dont show link 1 hr after event end for on demand
+
+                        // set link properties and id
+                        let name = event.name;
+
+                        var link = landingElement.querySelector(".zoom-link");
+                        link.id = "TRACK-BreakOut-" + name.replaceAll(" ", "") + "-ZoomUrl";
+
+                        // If no Zoom Link, Skip displaying button
+                        if (!event.eventFeaturesZoomTrackedUrl) {
+                          return;
+                        }
+
+                        link.href = event.eventFeaturesZoomTrackedUrl;
+
+                        //Get event duration
+                        var videoDur = event.video.duration;
+                        // Get current Time
+                        var now = new Date();
+                        var currentMsEpoch = now.getTime();
+                        //Change to sec
+                        var currentSecEpoch = Math.round(currentMsEpoch / 1000);
+
+                        //Get Event start Time
+                        var eventStartTime = new Date(event.startTime);
+                        var eventStartSecEpoch = Math.round(eventStartTime.getTime() / 1000);
+
+                        // 5 min before end
+                        var showLinkTime = eventStartSecEpoch + videoDur - 300;
+
+                        // 1 hr after eventStart + Duration
+                        var noShowLinkTime = eventStartSecEpoch + videoDur + 3600;
+
+                        var timeOutTime = showLinkTime - currentSecEpoch;
+
+                        // Do Not Display Link if past eventStartTime + Duration + 1hr
+                        if (currentSecEpoch > noShowLinkTime) {
+                          console.log("Past 1 Hr, Event is On demand, No Zoom Link");
+                          return;
+                        }
+                        // Display Link if past showLinkTime and before noShowLinkTime
+                        if (currentSecEpoch >= showLinkTime && currentSecEpoch < noShowLinkTime) {
+                          console.log("Show Zoom Link");
+                          // Display Link
+                          link.style.visibility = "visible";
+                        }
+                        // Display Link with 5 mins left in event
+                        if (currentSecEpoch < showLinkTime) {
+                          console.log("Showing Zoom Link in: " + timeOutTime + "s");
+                          setTimeout(() => {
+                            // Display Link
+                            console.log("Zoom Link Activated");
+                            link.style.visibility = "visible";
+                          }, timeOutTime * 1000);
+                        }
+                      }
+
+                      // API Fetch Event
+                      function fetchEvent(id) {
+                        const BASE_URL = "https://ingress.infernocore.jolokia.com/api/";
+                        var headers;
+
+                        if (!DOMAIN) {
+                          headers = {
+                            Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                          };
+                          console.log("Domain NOT Present");
+                        } else {
+                          headers = {
+                            Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                            "X-InfernoCore-Domain": DOMAIN,
+                          };
+                          console.log("Domain Present");
+                        }
+
+                        // Add client override if Super Admin
+                        if (window.sessionStorage.getItem("overrideId")) {
+                          headers["X-InfernoCore-Domain"] = "jolokia.inferno.jolokia.com";
+                          headers["X-Client-Override"] = window.sessionStorage.getItem("overrideId");
+                          // headers['X-Client-Override'] = '6dce2bdb-0c86-487f-969e-08d85a3df765';
+                        }
+                        $.ajax({
+                          url: BASE_URL + "Events/" + id,
+                          type: "GET",
+                          accept: "application/json",
+                          contentType: "application/json",
+                          headers,
+                          success: function (res) {
+                            //console.log(res);
+                            linkDisplay(res);
+                          },
+                          error: function (err) {
+                            console.log(err);
+                          },
+                          complete: function () {
+                            console.log("Api Call Finished");
+                          },
+                        });
+                      }
+                      fetchEvent(eventId);
+                    </script></inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

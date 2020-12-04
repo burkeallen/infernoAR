@@ -4,14 +4,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <script>
@@ -85,9 +81,7 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-          src="/inferno.config.js"></script>
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
@@ -192,25 +186,20 @@
       })
     }
   </script>
-  <script onload="buildLocalMenu()"
-          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-          src="../menu.js"></script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
 
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
+<div style="display:none" id="novoProject" name="toast" onload="login()"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
           <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
-                    onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -227,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -250,206 +239,182 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="151c7fbe-5964-400a-98d7-5a305d7c41cb">
-                <airship-push-notifications>
-                  <iframe id="airship"
-                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/airship/airship.html?userId={{data.CurrentViewingUser.Email}}"
-                          style="height: 1px; width: 1px; position: fixed; top: -20px; left: 20px;"></iframe>
-                </airship-push-notifications>
+              <inferno-snippet-content id="be235aa3-00ec-4ea9-abac-e4a4d015b1a5"><!-- MAINSTAGE REDIRECT CATEGORY PAGE -->
+<!-- Get current timestamp by casting NOW to seconds since 1970 -->
+{% assign currentTime = "now" | date: "%s" %}
+<!-- Sort events by start time -->
+{% assign sortedEvents = data.Events | sort: 'StartTime' %}
+<!-- Set nextEvent so we know if no upcoming event is found -->
+{% assign nextEvent = 'No Event' %}
+<!-- Iterate the sorted events -->
+{% for event in sortedEvents %}
+<!-- Check the event catgory ID matches this page category ID -->
+{% if event.FirstCategoryId | downcase != data.CurrentlyViewedCategory.Id |
+downcase %}
+<!-- ... and if not, skip iteration -->
+{% continue %} {% endif %}
+<!-- The end time is start timestamp added to video duration -->
+{% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
+<!-- Force currentTime & endTime to number by adding 0 and compare...  -->
+{% if currentTime | plus: 0 > endTime | plus: 0 %} {% assign nextEvent = event
+%}
+<!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
+{% continue %}
+<!-- ...otherwise... -->
+{% else %}
+<!-- ... we set this as our next upcoming event and ... -->
+{% assign nextEvent = event %} {% endif %}
+<!-- ...break the iteration loop. -->
+{% break %} {% endfor %}
+<!-- If the loop didn't find any upcoming events,... -->
+{% if nextEvent == 'No Event' %}
+<!-- ...we'll write 'none' into a hidden div, ... -->
+<a style="display: none" id="redirect-link" href="#">none</a>
+{% else %}
+<!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
+<a style="display: none" id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
+  /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+</a>
+{% endif %}
+<script type="text/javascript">
+  // Redirect to the link we grab out of the hidden div
+  if (landingPageEl.querySelector("#redirect-link").textContent !== "none") {
+    landingPageEl
+      .querySelector("#redirect-link")
+      .dispatchEvent(new Event("click"));
+  }
+</script>
 
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+<style>
+  /* Background Styles */
+  .ntar-landing-bg {
+    /* Image */
+    background-color: rgb(0, 0, 0);
+    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/Main_Stage.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
+    /* Cover height minus 55px header */
+    min-height: calc(100vh - 86px);
 
-                  }
+    /* Stick to Jolokia content frame */
+    position: absolute;
+    top: -20px;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+    /* Modifying style to fix hamburger menu issue */
+    position: absolute;
+    left: 0px;
+    margin-bottom: -64px;
+  }
 
-                </script>
+  @media only screen and (max-width: 767px) {
+    .ntar-landing-bg {
+      /* Cover height minus 55px header */
+      min-height: calc(100vh - 55px);
 
-                <style>
-                  .content {
-                    position: relative;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    width: 100%;
-                    font-family: 'Montserrat', sans-serif;
-                  }
+      /* Stick to Jolokia content frame */
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
 
-                  .background {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 104%;
-                    height: 100%;
-                    z-index: 1;
-                  }
+  /* ./ Background Styles */
 
-                  .hotspot {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    z-index: 2;
-                    cursor: pointer;
-                  }
+  /* Page Content Container Styles */
+  .ntar-landing-content {
+    /* background-color: chartreuse; */
 
-                  .hotspot:hover {
-                    background-color: rgba(0, 0, 0, .3);
-                  }
+    /* Scale to full width and height + footer space */
+    width: 100%;
+    height: calc(100% + 50px);
 
-                  .photo-booth {
-                    clip-path: polygon(78% 41%, 81.5% 37%, 82% 29%, 90% 23%, 100% 35%, 100% 45%, 88% 56%);
-                  }
+    /* Stick to Jolokia content frame and scroll y */
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
 
-                  .social-wall {
-                    clip-path: polygon(44% 3%, 48% 0%, 65% 0%, 69% 8%, 54% 18%);
-                  }
+    /* Pad Content */
+    padding: 0px;
 
-                  .arena {
-                    clip-path: polygon(33% 45%, 33% 32%, 50% 20%, 50% 27%, 53% 25%, 66% 51%, 48% 66%, 30% 56%, 29% 43%, 33% 39%);
-                  }
+    /* Display Type */
+    display: flex;
+    flex-direction: column;
+  }
 
-                  .dj {
-                    clip-path: polygon(72% 74%, 64% 82%, 71% 95%, 91% 76%, 89% 73%, 90% 64%, 74% 61%);
-                  }
+  @media only screen and (max-width: 767px) {
+    .ntar-landing-content {
+      /* Cover height minus 55px header */
+      min-height: calc(100vh - 55px);
 
-                  .partners {
-                    clip-path: polygon(7% 31%, 23% 21%, 25% 24%, 26% 30%, 29% 42%, 27% 47%, 12% 59%, 8% 51%, 7% 47%);
-                  }
+      /* Stick to Jolokia content frame */
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+  }
 
-                  .little-malmo {
-                    clip-path: polygon(61% 15%, 69% 9%, 81% 22%, 81% 27%, 77% 30%, 77% 35%, 72% 38%, 61% 23%);
-                  }
-                  .speakers {
-                    clip-path: polygon(65% 47%, 71% 46%, 74% 51%, 73% 54%, 74% 63%, 67% 70%, 59% 66%, 58% 58%, 59% 53%, 59% 47%);
-                  }
+  /* ./ Page Content Container Styles */
 
-                  .library {
-                      clip-path: polygon(49% 75%, 58% 84%, 53% 100%, 47% 100%, 42% 95%);
-                    }
+  .no-events {
+    margin: 45vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 
-                  .attendees  {
-                    clip-path: polygon(11% 59%, 21% 59%, 26% 55%, 29% 59%, 38% 59%, 38% 77%, 41% 83%, 26% 96%, 21% 85%, 11% 85%);
-                  }
+  .company-logo {
+    margin: 0;
+    max-width: 300px;
+  }
 
-                  #modalDJ {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 999;
-                    background: rgba(0,0,0,.8);
-                  }
+  .message {
+    min-width: 300px;
+    margin-left: 10vh;
+    padding: 0;
+    color: white;
+    text-align: center;
+  }
 
-                  .modal-dj-content {
-                    position: relative;
-                    background: transparent;
-                    border: none;
-                    width: 60%;
-                    height: 70%;
-                    margin-left: 15%;
-                    margin-top: 15rem;
-                    padding: 1rem;
-                  }
+  @media only screen and (max-width: 1150px) {
+    .no-events {
+      margin-top: 10vh;
+      justify-content: flex-start;
+      align-items: center;
+    }
 
-                  .close-modal-dj {
-                    position: absolute;
-                    top: -20px;
-                    right: -10%;
-                    width: 20%;
-                    cursor: pointer;
-                    filter: drop-shadow(1px 1px 32px blue);
-                  }
+    .message {
+      min-width: 400px;
+      margin: 2vh;
+    }
+  }
+</style>
 
-                  .modal-dj-main {
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                  }
+<!-- Background Frame (No Content) -->
+<div class="ntar-landing-bg"></div>
+<!-- ./ Background Frame -->
 
-                </style>
-
-                <div class="content">
-                  <img class="background"
-                       src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/lobby/bg.png">
-
-                  <a class="hotspot photo-booth" alt="Photo Booth" title="Photo Booth"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-                  <a class="hotspot social-wall" alt="Get Social" title="Get Social"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-                  <a class="hotspot attendees" alt="Little Malmo" title="Little Malmo"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-
-                  <a class="hotspot arena" alt="Arena" title="Arena (Main Stage)"
-                     href="videos/93817ba4-a9c3-4053-36b5-08d89144b732/landing/1a9dc51b-89aa-4239-85b8-83dbee9487ac">
-                  </a>
-
-                  <a class="hotspot partners" alt="Partners" title="Partners"
-                     href="videos/1ef90a20-ff9c-4c82-e5c8-08d895ffdee5/landing/da76af09-36d8-473f-8dad-040abf2617dd">
-                  </a>
-
-                  <a class="hotspot speakers" alt="Speakers" title="Speakers"
-                     href="videos/e841093a-11d9-427c-cf3a-08d8914ddffa/landing/62c198fc-a4d2-4847-be45-6c57ade36de5">
-                  </a>
-
-                  <a class="hotspot little-malmo" alt="Attendees" title="Attendees"
-                     href="videos/3b8d6447-5353-42ae-3912-08d895e594fd/landing/60418a2c-c67d-49a0-ba18-5407beb9caf2">
-                  </a>
-
-                  <a class="hotspot library" alt="Library" title="Library"
-                     href="videos/3b8d6447-5353-42ae-3912-08d895e594fd/landing/60418a2c-c67d-49a0-ba18-5407beb9caf2">
-                  </a>
-
-                  <div class="hotspot dj" alt="DJ Booth" title="DJ Booth" onclick="toggleDJ()"></div>
-
-                  <div id="modalDJ" class="hidden">
-                    <div class="modal-dj-content">
-                      <img
-                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
-                          class="close-modal-dj" onclick="toggleDJ()"/>
-                        <iframe class="modal-dj-main" src="" allowtransparency="true"></iframe>
-                    </div>
-                  </div>
-
-                </div>
-                <script>
-                  var audioPlayer = landingPageEl.querySelector('iframe.modal-dj-main');
-                  if (window.isLocalTemplate) {
-                    audioPlayer.src = '../audio-player.html';
-                  } else {
-                    audioPlayer.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/audio-player.html'
-                  }
-                  function toggleDJ() {
-                    landingPageEl.querySelector('#modalDJ').classList.toggle('hidden');
-                  }
-                </script>
-
-              </inferno-snippet-content>
+<!-- Page Content Container -->
+<div class="ntar-landing-content">
+  <div class="no-events">
+    <div class="message">
+      <h1>There are no upcoming events.</h1>
+    </div>
+  </div>
+</div>
+<!-- ./ Page Content Container -->
+</inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -467,6 +432,8 @@
     </div>
   </videos-layout>
 </app-root>
+
+
 
 
 <script>
@@ -582,6 +549,7 @@
   }
 
 </script>
+
 
 
 </body><!-- Menu Collapse Script -->

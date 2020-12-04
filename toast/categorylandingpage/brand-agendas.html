@@ -1,0 +1,1567 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="toast" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="42731203-e901-44e6-8d58-815faf794639">
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- SNIPPET CONTENT START -->
+
+                    <!-- Import Fonts -->
+                    <script type="text/javascript">
+                      function loadCustomFont(fontName, url) {
+                        console.log("Loading " + fontName);
+                        var customFont = new FontFace(fontName, "url(" + url + ")");
+                        customFont
+                          .load()
+                          .then(function (loadedFont) {
+                            document.fonts.add(loadedFont);
+                          })
+                          .catch(function (error) {
+                            // error occurred
+                            console.log("Error loading " + fontName);
+                          });
+                      }
+                      var fontUrlBase = "https://studio304nextechar.freetls.fastly.net/infernoAR/toast/font/";
+
+                      loadCustomFont("Graphik Bold", fontUrlBase + "Graphik-Bold.ttf");
+                      loadCustomFont("Graphik Medium", fontUrlBase + "Graphik-Medium.ttf");
+                      loadCustomFont("Graphik Regular", fontUrlBase + "Graphik-Regular.ttf");
+                      loadCustomFont(
+                        "Gobold",
+                        "https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/font/Gobold_Uplow.ttf"
+                      );
+                      // Load custom fonts
+                    </script>
+                    <!-- ./ Import Fonts -->
+
+                    <script>
+                      var DOMAIN = "convention.xponential.com"; //convention.xponential.com //Alternative Domain: xponential.infernoar.com
+                      // first id is category brand specific  and 2nd id is globalEventsHidden category - events shared by all brands
+                      var DISPLAY_CATEGORIES = [
+                        "{{data.CurrentlyViewedCategory.Id}}",
+                        "2bd88746-9f81-4fd7-1975-08d890813e67",
+                      ];
+                      var FROM_DATE = "2020-12-07";
+                      var NUM_DAYS = 2;
+                      var UTC_OFFSET = "Z"; // Z for GMT, or +HH:MM / -HH:MM for base timezone
+                    </script>
+
+                    <style>
+                      /* Background Styles */
+                      .ntar-landing-bg {
+                        /* Image */
+                        /*
+                        AKT_stage_v3.jpg
+                        ClubPirates_stage_v3.jpg
+                        Cyclebar_stage_v3.jpg
+                        PureBarre_stage_v3.jpg
+                        RowHouse_Stage_v3.jpg
+                        Streachlab_Stage_v3.jpg
+                        Stride_Stage_v3.jpg
+                        YogaSix_Stage_v3.jpg
+                        */
+                        background-color: #000000;
+                        background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/Main_Stage.jpg");
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center bottom;
+
+                        /* Cover height minus 55px header */
+                        min-height: calc(100vh - 86px);
+
+                        /* Stick to Jolokia content frame */
+                        position: absolute;
+                        top: -20px;
+                        left: 0;
+                        right: -50px;
+                        bottom: 0;
+
+                        overflow: auto;
+
+                        /* Modifying style to fix hamburger menu issue */
+                        position: absolute;
+                        left: 0px;
+                        margin-bottom: -60px;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-bg {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: fixed;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+                        }
+                      }
+
+                      /* ./ Background Styles */
+
+                      /* Page Content Container Styles */
+                      .ntar-landing-content {
+                        /* background-color: chartreuse; */
+
+                        /* Scale to full width and height + footer space */
+                        width: 100%;
+                        height: calc(100% + 60px);
+
+                        /* Stick to Jolokia content frame and scroll y */
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        overflow: hidden auto;
+
+                        /* Pad Content */
+                        padding: 0px;
+
+                        /* Display Type */
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+
+                        /* Set Variable */
+                        --brandPrimary: ;
+                        --brandSecondary: ;
+                        --brandThree: ;
+                        --brandGlobal: #245ca6;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-content {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+                        }
+                      }
+
+                      /* ./ Page Content Container Styles */
+                      ul {
+                        list-style-type: none;
+                        padding-left: 0;
+                      }
+
+                      .programme-days {
+                        width: 75%;
+                      }
+
+                      .section {
+                        display: block;
+                        width: 100%;
+                        transition: 0.5s ease-in;
+                        opacity: 0;
+                      }
+
+                      .section .day-name {
+                        color: #fff;
+                        background-color: var(--brandPrimary);
+                        padding: 1.5rem 2rem;
+                        border-radius: 10px;
+                        font-family: "Gobold";
+                        text-transform: uppercase;
+                        font-size: 3rem;
+                      }
+
+                      .event-list {
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                      }
+
+                      .event-list li {
+                        width: 30%;
+                        margin: 1rem 1.75rem;
+                        transition: 0.5s ease-in;
+                        opacity: 0;
+                      }
+
+                      .event-container {
+                        display: flex;
+                        flex-direction: row;
+                        justify-content: left;
+                        align-items: center;
+                        min-height: 112px;
+                        position: relative;
+                      }
+
+                      .event-time {
+                        align-self: flex-start;
+                        color: white;
+                        font-weight: 500;
+                        font-size: 2.5rem;
+                        width: fit-content;
+                        max-width: 100%;
+                        font-family: "Gobold";
+                        text-transform: uppercase;
+                        margin: 0 0 1rem 1rem;
+                        box-shadow: 0px 0px 15px 8px #00000044;
+                        background-color: #00000041;
+                        background-blend-mode: color-burn;
+                      }
+
+                      .event-detail {
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        border: 5px solid var(--brandSecondary);
+                        background-color: #fff;
+                        border-radius: 15px;
+                        margin: 2px;
+                        overflow: hidden;
+                      }
+
+                      .event-detail-text {
+                      }
+
+                      .event-header {
+                        background-color: var(--brandThree);
+                        border-bottom: 5px solid var(--brandSecondary);
+                        display: flex;
+                        align-items: center;
+                        padding-left: 3.75rem;
+                        border-radius: 5px 5px 0 0;
+                      }
+
+                      .event-title {
+                        font-family: "Gobold";
+                        font-size: 2rem;
+                        text-transform: uppercase;
+                        color: white;
+                      }
+
+                      .event-desc {
+                        margin: 5px 5px 0 0;
+                        overflow: hidden;
+                        padding-left: 3.75rem;
+                        font-family: "Graphik Regular";
+                      }
+
+                      .event-speaker {
+                        margin: 5px 5px 5px 0;
+                        max-height: 64px;
+                        overflow: hidden;
+                        padding-left: 3.75rem;
+                        font-family: "Graphik Medium";
+                      }
+
+                      .event-thumb {
+                        position: absolute;
+                        align-self: flex-start;
+                        text-align: center;
+                        margin: 0.75rem -3rem auto -6.5rem;
+                        color: black;
+                        font-size: 18px;
+                        z-index: 2;
+                      }
+
+                      .event-thumb img {
+                        max-width: 50%;
+                      }
+
+                      .event-bookmark {
+                        position: relative;
+
+                        width: 32px;
+                        color: black;
+                        font-weight: 300;
+                        font-size: 2em;
+                        font-family: "Graphik Medium";
+                        align-self: flex-start;
+                      }
+
+                      button.bookmark {
+                        background-color: transparent;
+                        outline: none;
+                        border: none;
+                        color: black;
+                      }
+
+                      button.bookmark:hover {
+                        color: #fd734f;
+                      }
+
+                      .event-nav {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-evenly;
+                      }
+
+                      .event-link {
+                        color: black;
+                        font-family: "Graphik Medium";
+                      }
+
+                      .event-link:hover {
+                        color: black;
+                      }
+
+                      .time-list {
+                        width: 100%;
+                      }
+                    </style>
+
+                    <div class="ntar-landing-bg"></div>
+
+                    <div class="ntar-landing-content">
+                      <ul class="programme-days main-content-wrapper">
+                        <template class="day-template">
+                          <!-- DAY TEMPLATE -->
+                          <li class="programme-day section">
+                            <h2 class="day-name"></h2>
+                            <ul class="event-list">
+                              <!-- EVENT TEMPLATE -->
+                              <template class="event-template">
+                                <li>
+                                  <div class="event-time"></div>
+                                  <div class="event-container">
+                                    <div class="event-thumb">
+                                      <img src>
+                                    </div>
+                                    <div class="event-detail">
+                                      <div class="event-detail-text">
+                                        <div class="event-header">
+                                          <h4 class="event-title"></h4>
+                                        </div>
+                                        <p class="event-desc"></p>
+                                        <p class="event-speaker"></p>
+                                      </div>
+                                      <div class="event-nav">
+                                        <div class="event-bookmark"><button class="bookmark">+</button></div>
+                                        <a class="event-link">Join</a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </li>
+                              </template>
+                            </ul>
+                          </li>
+                        </template>
+                      </ul>
+                    </div>
+
+                    <div class="hidden-links" style="display: none">
+                      {% for event in data.Events %}
+                      <a href="/videos/{{data.CurrentlyViewedCategory.Id}}/detail/{{event.Id}}" id="link_{{event.Id}}"></a>
+                      {% endfor %}
+                    </div>
+
+                    <!--
+                        AKT_stage_v3.jpg
+                        ClubPirates_stage_v3.jpg
+                        Cyclebar_stage_v3.jpg
+                        PureBarre_stage_v3.jpg
+                        RowHouse_Stage_v3.jpg
+                        Streachlab_Stage_v3.jpg
+                        Stride_Stage_v3.jpg
+                        YogaSix_Stage_v3.jpg
+                    -->
+
+                    <script type="text/javascript">
+                      var currentViewCat = "{{data.CurrentlyViewedCategory.Id}}";
+                      var baseBgUrl =
+                        "https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/breakouts/";
+                      var baseIconUrl =
+                        "https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/agenda-icons/";
+                      var brandIcon;
+                      var brandId;
+                      var brands = [
+                        {
+                          id: "dc13f09b-1223-40d3-583c-08d890814749",
+                          name: "AKT",
+                          colorOne: "#4F2D86",
+                          colorTwo: "#502D85",
+                          colorThree: "#000000",
+                          iconImg: baseIconUrl + "icon_akt.png",
+                          bgImg: baseBgUrl + "AKT_stage_v3.jpg",
+                        },
+                        {
+                          id: "7bc50cb1-0283-4079-5470-08d890949b45",
+                          name: "Club Pilates",
+                          colorOne: "#87BEC2",
+                          colorTwo: "#86BDC2",
+                          colorThree: "#6C94CB",
+                          iconImg: baseIconUrl + "icon_clubpirate.png",
+                          bgImg: baseBgUrl + "ClubPirates_stage_v3.jpg",
+                        },
+                        {
+                          id: "76170f0e-7ab9-44a0-ee73-08d89097c6fd",
+                          name: "CycleBar",
+                          colorOne: "#BF1416",
+                          colorTwo: "#BD1616",
+                          colorThree: "#000000",
+                          iconImg: baseIconUrl + "icon_cb.png",
+                          bgImg: baseBgUrl + "Cyclebar_stage_v3.jpg",
+                        },
+                        {
+                          id: "75a52217-7566-4b26-5471-08d890949b45",
+                          name: "Pure Barre",
+                          colorOne: "#D03139",
+                          colorTwo: "#D03339",
+                          colorThree: "#000000",
+                          iconImg: baseIconUrl + "icon_pb.png",
+                          bgImg: baseBgUrl + "PureBarre_stage_v3.jpg",
+                        },
+                        {
+                          id: "c1191b11-c1bd-4bb7-583d-08d890814749",
+                          name: "Row House",
+                          colorOne: "#F9DB03",
+                          colorTwo: "#FAD631",
+                          colorThree: "#000000",
+                          iconImg: baseIconUrl + "icon_rh.png",
+                          bgImg: baseBgUrl + "RowHouse_Stage_v3.jpg",
+                        },
+                        {
+                          id: "40063b79-c601-48b0-583e-08d890814749",
+                          name: "Stretch Lab",
+                          colorOne: "#072442",
+                          colorTwo: "#3BB4C2",
+                          colorThree: "#0A2C4F",
+                          iconImg: baseIconUrl + "icon_stretch.png",
+                          bgImg: baseBgUrl + "Streachlab_Stage_v3.jpg",
+                        },
+                        {
+                          id: "620cea47-c58c-439a-ee74-08d89097c6fd",
+                          name: "Stride",
+                          colorOne: "#ED1060",
+                          colorTwo: "#891A9B",
+                          colorThree: "#000000",
+                          iconImg: baseIconUrl + "icon_stride.png",
+                          bgImg: baseBgUrl + "Stride_Stage_v3.jpg",
+                        },
+                        {
+                          id: "d09c5b10-b3dd-48ee-64ce-08d890814b05",
+                          name: "YogaSix",
+                          colorOne: "#0F3E51",
+                          colorTwo: "#0F3E51",
+                          colorThree: "#55632B",
+                          iconImg: baseIconUrl + "icon_yoga.png",
+                          bgImg: baseBgUrl + "YogaSix_Stage_v3.jpg",
+                        },
+                        {
+                          id: "7475860f-6f5c-4199-2289-08d863a0bb93",
+                          name: "Main Stage",
+                          colorOne: "#245CA6",
+                          colorTwo: "#245CA6",
+                          colorThree: "#000000",
+                          iconImg: baseIconUrl + "icon_global.png",
+                          bgImg:
+                            "https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/Main_Stage.jpg",
+                        },
+                      ];
+
+                      function setBrand() {
+                        for (let brand of brands) {
+                          if (brand.id == DISPLAY_CATEGORIES[0]) {
+                            brandId = brand.id;
+                            landingPageEl.querySelector(".ntar-landing-bg").style.backgroundImage =
+                              'url("' + brand.bgImg + '")';
+                            brandIcon = brand.iconImg;
+
+                            landingPageEl.querySelector(".ntar-landing-content").style.cssText =
+                              "--brandPrimary: " +
+                              brand.colorOne +
+                              "; --brandSecondary: " +
+                              brand.colorTwo +
+                              "; --brandThree: " +
+                              brand.colorThree +
+                              ";";
+                          }
+                        }
+                      }
+
+                      // Set Color and Branding
+                      setBrand();
+                    </script>
+
+                    <script type="text/javascript">
+                      // Zero pad two digits
+                      function zeroPad(num) {
+                        return ("00" + num.toString()).slice(-2);
+                      }
+
+                      // Renders the UTC day of the date
+                      function renderDay(day, events, bookmarks) {
+                        // Day Dictionary
+                        const DAYS = {
+                          0: "Sunday",
+                          1: "Monday, December 7",
+                          2: "Tuesday, December 8",
+                          3: "Wednesday, December 9",
+                          4: "Thursday",
+                          5: "Friday",
+                          6: "Saturday",
+                        };
+                        const tHour = {
+                          0: "12",
+                          1: "1",
+                          2: "2",
+                          3: "3",
+                          4: "4",
+                          5: "5",
+                          6: "6",
+                          7: "7",
+                          8: "8",
+                          9: "9",
+                          10: "10",
+                          11: "11",
+                          12: "12",
+                          13: "1",
+                          14: "2",
+                          15: "3",
+                          16: "4",
+                          17: "5",
+                          18: "6",
+                          19: "7",
+                          20: "8",
+                          21: "9",
+                          22: "10",
+                          23: "11",
+                        };
+
+                        const tZone = {
+                          240: "AST",
+                          300: "EST",
+                          360: "CST",
+                          420: "MST",
+                          480: "PST",
+                          540: "AKST",
+                        };
+                        const MSECONDS_IN_24_HOURS = 1000 * 60 * 60 * 24;
+                        const dayListElement = landingPageEl.querySelector("ul.programme-days");
+                        const dayTemplate = landingPageEl.querySelector("template.day-template");
+                        const thisUTCDay = new Date(day).getUTCDay();
+                        const thisDayStartEpoch = new Date(day).getTime();
+                        const thisDayEndEpoch = thisDayStartEpoch + MSECONDS_IN_24_HOURS;
+                        // Create Template Clone
+                        const dayClone = dayTemplate.content.cloneNode(true);
+                        dayClone.querySelector("li").dataset.day = thisUTCDay;
+                        dayClone.querySelector("li .day-name").textContent = DAYS[thisUTCDay];
+
+                        // Render events
+                        const eventListElement = dayClone.querySelector("ul.event-list");
+                        const eventTemplate = dayClone.querySelector("template.event-template");
+                        const todaysEvents = events.filter((event) => {
+                          const startEpoch = new Date(event.startTime).getTime() - 18000000;
+                          if (startEpoch < thisDayStartEpoch || startEpoch > thisDayEndEpoch) {
+                            return false;
+                          }
+                          return true;
+                        });
+
+                        var currentTimeList;
+                        var prevEventTime = "";
+                        var listNumber = 0;
+
+                        todaysEvents.forEach((event) => {
+                          const eventClone = eventTemplate.content.cloneNode(true);
+
+                          // if bookmarks
+                          if (bookmarks) {
+                            var eventBookmarked =
+                              bookmarks.filter((bookmark) => bookmark.eventId === event.id).length > 0;
+                          } else {
+                            var eventBookmarked = false;
+                          }
+
+                          // Temporarily use Programme category ID
+                          const eventLink = "/videos/" + brandId + "/detail/" + event.id;
+                          const isExternalLink = event.eventFeaturesZoomTrackedUrl ? true : false;
+                          const time = new Date(event.startTime);
+                          //console.log(time);
+                          eventClone.querySelector("li").dataset.eventid = event.id;
+                          eventClone.querySelector("li").dataset.bookmarked = eventBookmarked;
+                          let timeAP = time.getHours() >= 12 ? " PM " : " AM ";
+                          eventClone.querySelector(".event-time").textContent =
+                            tHour[time.getHours()] + ":" + zeroPad(time.getMinutes()) + timeAP;
+                          eventClone.querySelector(".event-thumb img").src = brandIcon;
+                          eventClone.querySelector(".event-title").textContent = event.name;
+                          eventClone.querySelector(".event-link").href =
+                            "javascript:void(linkClick('" + event.id + "'))";
+                          eventClone.querySelector(".event-link").id =
+                            "TRACK-event-" +
+                            event.name
+                              .replaceAll(" ", "-")
+                              .replaceAll(":", "")
+                              .replaceAll("&", "and")
+                              .replaceAll("'", "")
+                              .replaceAll('"', "")
+                              .replaceAll("+", "plus")
+                              .replaceAll("=", "equals");
+                          let eventDes = event.description.replace("]", "").split("[");
+                          if (eventDes[0] == "") {
+                            eventClone.querySelector(".event-desc").style.display = "none";
+                          } else {
+                            eventClone.querySelector(".event-desc").textContent = eventDes[0];
+                          }
+
+                          if (eventDes[1] == "") {
+                            eventClone.querySelector(".event-speaker").style.display = "none";
+                          } else if (eventDes[1] == "^") {
+                            eventClone.querySelector(".event-speaker").style.display = "none";
+                            eventClone.querySelector(".event-link").href = event.eventFeaturesZoomTrackedUrl;
+                            eventClone.querySelector(".event-link").target = "_blank";
+                          } else {
+                            eventClone.querySelector(".event-speaker").textContent = eventDes[1];
+                          }
+
+                          eventClone.querySelector("button.bookmark").textContent = eventBookmarked
+                            ? "-"
+                            : "+";
+                          const bookmarkFunc = async () => toggleBookmark(event.id);
+                          eventClone.querySelector("button.bookmark").addEventListener("click", bookmarkFunc);
+
+                          //Branding Changes if global
+                          for (let cat of event.categories) {
+                            if (cat.id == "2bd88746-9f81-4fd7-1975-08d890813e67") {
+                              eventClone.querySelector(".event-detail").style.border =
+                                "5px solid var(--brandGlobal)";
+                              eventClone.querySelector(".event-header").style.borderBottomColor =
+                                "var(--brandGlobal)";
+                              eventClone.querySelector(".event-header").style.backgroundColor = "#000000";
+                              eventClone.querySelector(".event-thumb img").src =
+                                baseIconUrl + "icon_global.png";
+                            }
+                          }
+
+                          //eventListElement.appendChild(eventClone);
+
+                          // if time = to previous event time, append to time ul, else make new ul and append
+                          if (!prevEventTime) {
+                            var newTimeList = document.createElement("ul");
+                            newTimeList.classList.add("event-list");
+                            newTimeList.classList.add("time-list")
+                            newTimeList.classList.add("list-" + listNumber);
+                            newTimeList.appendChild(eventClone);
+                            eventListElement.appendChild(newTimeList);
+
+                            prevEventTime = time.getTime();
+                            //console.log("no time set");
+                            
+                          } else if (prevEventTime == time.getTime()) {
+                            //console.log("time the same");
+                            let list = eventListElement.querySelector(".list-" + listNumber);
+                            list.appendChild(eventClone);
+
+                            prevEventTime = time.getTime();
+                            //console.log("time the same");
+                          } else {
+                            listNumber++;
+
+                            var newTimeList = document.createElement("ul");
+                            newTimeList.classList.add("event-list");
+                            newTimeList.classList.add("time-list")
+                            newTimeList.classList.add("list-" + listNumber);
+                            newTimeList.appendChild(eventClone);
+                            eventListElement.appendChild(newTimeList);
+
+                            prevEventTime = time.getTime();
+                            //console.log("time different");
+                          }
+                          
+                          
+
+                        });
+
+                        // Append Elements
+                        dayListElement.appendChild(dayClone);
+
+                        showLi();
+                      }
+
+                      function showLi() {
+                        let liAll = landingPageEl.querySelectorAll("li");
+
+                        for (let x = 0; x < liAll.length; x++) {
+                          const listItem = liAll[x];
+                          setTimeout(() => {
+                            listItem.style.opacity = 1;
+                          }, (x*100));
+                        }
+                      }
+
+                      async function toggleBookmark(eventId) {
+                        const eventLi = landingPageEl.querySelector('[data-eventid="' + eventId + '"]');
+                        const isBookmarked = eventLi.dataset.bookmarked === "true";
+                        let reqAction = isBookmarked ? "DELETE" : "POST";
+
+                        const result = await updateBookmark(eventId, reqAction);
+
+                        if (result.eventId && result.eventId === eventId) {
+                          // Reverse icon
+                          eventLi.querySelector("button.bookmark").textContent = isBookmarked ? "+" : "-";
+                          eventLi.dataset.bookmarked = !isBookmarked;
+                        }
+                        // Need to add error handling
+                      }
+
+                      async function buildDays(from, numberOfDays, offset) {
+                        const MSECONDS_IN_24_HOURS = 1000 * 60 * 60 * 24;
+                        const fromDate = new Date(from + offset);
+                        const fromEpoch = fromDate.getTime();
+                        const toEpoch = fromEpoch + MSECONDS_IN_24_HOURS * numberOfDays;
+                        // Get event list and filter
+                        const eventList = await getEventsList();
+                        const bookmarks = await getBasicBookmarks();
+                        // Sort and filter
+                        const events = eventList
+                          .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+                          .filter((event) => {
+                            const startEpoch = new Date(event.startTime).getTime();
+
+                            // Reject events out of time period
+                            if (startEpoch < fromEpoch || startEpoch > toEpoch) {
+                              return false;
+                            }
+                            // Reject uncategorized events
+                            if (!event.categories || event.categories.length === 0) {
+                              return false;
+                            }
+                            // Reject events out of category filter list
+                            if (
+                              event.categories.filter((cat) => DISPLAY_CATEGORIES.includes(cat.id)).length ===
+                              0
+                            ) {
+                              return false;
+                            }
+                            return true;
+                          });
+
+                        for (let dayNum = 0; dayNum < numberOfDays; dayNum++) {
+                          const thisDayEpoch = fromEpoch + MSECONDS_IN_24_HOURS * dayNum;
+                          renderDay(thisDayEpoch, events, bookmarks);
+                        }
+                      }
+                      buildDays(FROM_DATE, NUM_DAYS, UTC_OFFSET);
+
+                      function createHeaders() {
+                        // Set header
+                        const headers = {
+                          Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                          "X-InfernoCore-Domain": DOMAIN,
+                        };
+                        if (window.sessionStorage.getItem("overrideId")) {
+                          headers["X-Client-Override"] = window.sessionStorage.getItem("overrideId");
+                          headers["X-InfernoCore-Domain"] = "jolokia.inferno.jolokia.com";
+                        }
+                        return headers;
+                      }
+
+                      // Pull all event listings
+                      async function getEventsList() {
+                        const requestUrl = "https://ingress.infernocore.jolokia.com/api/Events";
+                        const result = await $.ajax({
+                          url: requestUrl,
+                          type: "GET",
+                          headers: createHeaders(),
+                        });
+
+                        //console.log(result);
+                        return result;
+                      }
+
+                      // Get BASIC bookmark list
+                      async function getBasicBookmarks() {
+                        const requestUrl = "https://ingress.infernocore.jolokia.com/api/Bookmarks/Basic";
+                        const result = await $.ajax({
+                          url: requestUrl,
+                          type: "GET",
+                          headers: createHeaders(),
+                        });
+
+                        //console.log(result);
+                        return result;
+                      }
+
+                      // Specify POST or DELETE
+                      async function updateBookmark(eventId, addOrDelete = "POST") {
+                        // XHR
+                        const requestUrl = "https://ingress.infernocore.jolokia.com/api/Bookmarks/" + eventId;
+
+                        try {
+                          const result = await $.ajax({
+                            url: requestUrl,
+                            type: addOrDelete,
+                            headers: createHeaders(),
+                          });
+                          return result;
+                        } catch (error) {
+                          console.log(error.status);
+                          return error.status;
+                        }
+                      }
+
+                      function linkClick(id) {
+                        var linkC = landingPageEl.getElementById("link_" + id);
+                        linkC.dispatchEvent(new MouseEvent("click"));
+                        return false;
+                      }
+                    </script>
+
+<!-- ##### chat widget ##### -->
+
+<div style="display:none;">
+  <p id="user-inferno-first-name">${firstName}</p>
+  <p id="user-inferno-last-name">${lastName}</p>
+</div>
+
+<script async>
+
+  var userInfernoId = window.sessionStorage.getItem("userId");
+  var firstName = landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+  var lastName = landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+
+  // var userInfernoId = "{{ userInfernoId }}";
+  // var firstName = "{{ userFirstName }}";
+  // var lastName = "{{ userLastName }}";
+
+  var hasProfileImage = false;
+
+  // global chat manager
+  var chatManager = null;
+
+  var chatweeValues = {
+      userIdKey: "chatwee-user-id",
+      sessionCookieKey: "chatwee-SID-5f7ef630366e2e515565f9a2",
+      chatId: "5f7ef630366e2e515565f9a2",
+      clientApiKey: "a017666f3879cc833eaba23e",
+      isAdmin: 0,
+      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+  }
+
+  var checkAdmin = () => {
+
+      const moderatorWhitelist = ["c8240590-94c1-4043-b5ef-961e5be0edcc"];
+
+      if (moderatorWhitelist.includes(userInfernoId)) {
+          chatweeValues.isAdmin = 1;
+      }
+
+  }
+
+  var loadChatScript = () => {
+      // don't load script if already on page
+      let chatScript = document.getElementById("chat-script");
+      if (chatScript) return;
+
+      (function () {
+          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+          s1.id = "chat-script";
+          s1.async = true;
+          s1.src = 'https://static.chatwee-api.com/v2/script.js';
+          s1.charset = 'UTF-8';
+          s0.parentNode.insertBefore(s1, s0);
+      })();
+
+      return;
+  }
+
+  var loadChatStyles = () => {
+      // dont load styles if already on page
+      let chatStyleSheet = document.getElementById("chat-styling");
+      if (chatStyleSheet) return;
+
+      (function () {
+          var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+
+          link1.setAttribute("id", "chat-styling")
+          link1.setAttribute("rel", "stylesheet")
+          link1.setAttribute("type", "text/css")
+          link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+          link1.setAttribute("media", "all")
+          body.parentNode.insertBefore(link1, body);
+      })();
+
+      return;
+  }
+
+  var startChat = async () => {
+      if (!chatManager) {
+          chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+          chatManager.Run();
+      }
+      return;
+  }
+
+  var openChat = () => {
+      // close bubble
+      let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+      let bubble = bubbleChild.parentNode;
+      bubble.style.display = "none";
+
+      // open chat
+      let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
+      let chat = chatChild.parentNode;
+      chat.style.display = "block";
+
+      return;
+  }
+
+  // Chatwee UserId must be set as the Id for the button
+  var triggerConversation = e => {
+      // let userId = e.currentTarget.id; // use this if stored in id attribute
+      let userId = e.currentTarget.getAttribute('chatwee-user-id'); // use this if stored in chatwee-user-id attribute
+      openChat();
+      chatManager.TriggerConversation(userId);
+  }
+
+  // helper functions
+  var getCookie = key => {
+      let cookieValue = "";
+
+      const cookieList = document.cookie;
+      if (cookieList) {
+          const cookie = cookieList
+              .split("; ")
+              .find(row => row.startsWith(key));
+
+          if (cookie) {
+              cookieValue = cookie.split("=")[1];
+          }
+
+      }
+      return cookieValue;
+  }
+
+  var setCookie = (key, value, age) => {
+      document.cookie = key + "=" + value + "; path=/";
+  }
+
+  var getKVPsByKey = key => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+      return fetch(url, {
+          method: 'GET',
+          withCredentials: true,
+          headers: {
+              'Authorization': bearer
+          }
+      });
+
+  }
+
+  var postKVP = (key, value) => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
+
+      const kvp = {
+          key: key,
+          value: value,
+          public: true
+      }
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+      let headers = new Headers();
+      headers.set('Authorization', bearer)
+      headers.set('Accept', 'application/json')
+      headers.set('Content-Type', 'application/json')
+
+      // for super user accounts
+      var overrideId = window.sessionStorage.getItem("overrideId");
+      if (overrideId) headers.set("X-Client-Override", overrideId);
+
+      fetch(url, {
+          method: 'POST',
+          withCredentials: true,
+          headers: headers,
+          body: JSON.stringify(kvp)
+      })
+
+  }
+
+
+  var validateChatSessionId = sessionId => {
+      const url = chatweeValues.ssoBaseUrl
+          + "validate-session?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&sessionId="
+          + sessionId;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var loginChat = userId => {
+      const url = chatweeValues.ssoBaseUrl
+          + "login?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&userId="
+          + userId;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var registerChat = () => {
+      const name = firstName + " " + lastName;
+
+      let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-profile-image.png";
+
+      if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
+
+      const url = chatweeValues.ssoBaseUrl
+          + "register?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&login="
+          + name
+          + "&isAdmin="
+          + chatweeValues.isAdmin
+          + "&avatar="
+          + avatarUrl;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var editChatweeAvatar = (chatweeUserId, newAvatarUrl) => {
+
+      const url = chatweeValues.ssoBaseUrl
+          + "edit?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&userId="
+          + chatweeUserId
+          + "&login="
+          + "NewLogin"
+          + "&avatar="
+          + newAvatarUrl;
+
+      return fetch(url);
+
+  }
+
+  // connect to Chatwee
+  var connectChat = async () => {
+
+      // see if session id locally
+      let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+      if (sessionId && sessionId !== "[object Object]") {
+          // validate session id with chatwee
+          let valid
+          try {
+              valid = await validateChatSessionId(sessionId);
+          } catch (e) {
+              throw new Error(e);
+          }
+
+          // if true, do nothing
+          if (valid) return;
+
+      }
+
+      // if false, check if user id is present in api
+      let userId = ""
+      try {
+          const res = await getKVPsByKey(chatweeValues.userIdKey);
+
+          if (res.status === 200) {
+              const json = await res.json();
+              userId = json.value;
+          } else {
+              console.log("no chatwee user id from api")
+          }
+
+      } catch (e) {
+          throw new Error(e);
+      }
+
+      // if true, login and set session id locally
+      if (userId) {
+          let sessionId = ""
+
+          try {
+              sessionId = await loginChat(userId);
+          } catch (e) {
+              throw new Error(e);
+          }
+          setCookie(chatweeValues.sessionCookieKey, sessionId);
+      }
+      // if false, register and set user id and log in user
+      else {
+          let userId = ""
+          try {
+              userId = await registerChat();
+          } catch (e) {
+              throw new Error(e);
+          }
+
+          try {
+              const res = await postKVP(chatweeValues.userIdKey, userId);
+          } catch (e) {
+              throw new Error(e)
+          }
+
+          let sessionId = ""
+          try {
+              sessionId = await loginChat(userId);
+          }
+          catch (e) {
+              throw new Error(e);
+          }
+
+          setCookie(chatweeValues.sessionCookieKey, sessionId);
+
+      }
+
+      return;
+  }
+
+  var getProfileImage = () => {
+      let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+      return fetch(url);
+  }
+
+  var waitForGlobal = async (key, callback1, callback2) => {
+      if (window[key]) {
+          await callback1();
+          await callback2();
+      } else {
+          setTimeout(function () {
+              waitForGlobal(key, callback1, callback2);
+          }, 100);
+      }
+  };
+
+  var setUpChat = async () => {
+      checkAdmin()
+      loadChatScript();
+      loadChatStyles();
+
+      const res = await getProfileImage();
+      if (res.status === 200) {
+          hasProfileImage = true;
+      }
+
+      waitForGlobal("ChatweeLib", connectChat, startChat);
+  }
+
+  setUpChat();
+
+</script>
+
+<script>
+
+  // delete link between Chatwee account and Inferno account if needed
+  var deleteChatweeUserIdByKey = key => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+
+      fetch(url, {
+          method: 'DELETE',
+          withCredentials: true,
+          headers: {
+              'Authorization': bearer
+          }
+      }).then(res => console.log("delete res is ", res))
+          .catch(e => console.log("delete error is ", e));
+
+  }
+
+</script>
+
+
+<!-- ##### end of  chat widget ##### --></inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

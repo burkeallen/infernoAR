@@ -1,0 +1,1855 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="toast" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="f9934e8d-7c97-4848-9b5d-c60e013facfc"><script>
+                        // Change to Match Client Site
+                        //convention.xponential.com //Alternative Domain: xponential.infernoar.com
+                        var DOMAIN = "convention.xponential.com";
+                        var PARENTID = "d3b65615-03cb-4219-7218-08d8660c77b4";
+                        // CHANGE ME
+
+                        var items = [
+                          {
+                            fileName: "33threads",
+                            boothTileUrl:
+                              "https://boothgenerator.nextechar.com/booths/33Threads_1606262301783/inferno-booth-udf-company-logo.png",
+                            boothName: "33 Threads",
+                            link: "01278ba2-980f-46e1-0243-08d8914c7577",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "amerifund",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Amerifund_1606659995832/inferno-booth-udf-company-logo.png",
+                            boothName: "Amerifund",
+                            link: "fb05cd14-c0cf-47b0-36c5-08d89144b732",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "astral",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Astral_1606665396624/inferno-booth-udf-company-logo.png",
+                            boothName: "Astral",
+                            link: "38d99614-9d04-4ec2-9d0d-08d89141c0fe",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "bala",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Bala_1606879884421/inferno-booth-udf-company-logo.png",
+                            boothName: "Bala",
+                            link: "66e0f60a-52de-47e0-0f6c-08d89613cf91",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "balancedbody",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BalancedBody_1606844515055/inferno-booth-udf-company-logo.png",
+                            boothName: "Balanced Body",
+                            link: "20fe9003-119c-4354-9c69-08d895e0f2f0",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "boodyecowear",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BoodyEcoWear_1606660934335/inferno-booth-udf-company-logo.jpg",
+                            boothName: "Boody Eco-Wear",
+                            link: "a7f15460-39ae-47f2-9d0c-08d89141c0fe",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "campaignmonitor",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CampaignMonitor_1606783227933/inferno-booth-udf-company-logo.png",
+                            boothName: "Campaign Monitor",
+                            link: "1779918a-e545-40df-a6a9-08d8914e0948",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "classpass",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ClassPass_1606661720659/inferno-booth-udf-company-logo.png",
+                            boothName: "ClassPass",
+                            link: "cf463bea-ff66-42d7-e5c9-08d895ffdee5",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "clubready",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ClubReady_1606841645613/inferno-booth-udf-company-logo.png",
+                            boothName: "Club Ready",
+                            link: "efb1fc07-5608-485d-e5c7-08d895ffdee5",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "coleproinc",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ColeproInc_1606842408103/inferno-booth-udf-company-logo.png",
+                            boothName: "Colepro Inc.",
+                            link: "c9a74e1f-9c33-4675-1808-08d8960eb892",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "epic",
+                            boothTileUrl:
+                              "https://boothgenerator.nextechar.com/booths/EPIC_1606661411109/inferno-booth-udf-company-logo.png",
+                            boothName: "EPIC",
+                            link: "a0eff5ba-93e1-422a-e5ca-08d895ffdee5",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "elivatefitness",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ElivateFitness_1606843011515/inferno-booth-udf-company-logo.png",
+                            boothName: "Elivate Fitness",
+                            link: "afc140fd-2e3b-41b9-0f66-08d89613cf91",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "facesoft",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/FACESOFT_1606671958738/inferno-booth-udf-company-logo.png",
+                            boothName: "FACESOFT",
+                            link: "a4f69f5d-f3e0-4836-024e-08d8914c7577",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "fmgroup",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/FMGroup_1606660808239/inferno-booth-udf-company-logo.png",
+                            boothName: "FM Group",
+                            link: "76bc3f88-f5d0-43dc-a851-08d895f88cda",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "fishmanpr",
+                            boothTileUrl:
+                              "https://boothgenerator.nextechar.com/booths/FishmanPR_1606313557656/inferno-booth-udf-company-logo.png",
+                            boothName: "Fishman PR",
+                            link: "b8a401d7-3cfb-4d96-4059-08d8915dcc0f",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "flowater",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/FloWater_1606837649885/inferno-booth-udf-company-logo.png",
+                            boothName: "FloWater",
+                            link: "a99862d8-3ba0-485b-1807-08d8960eb892",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "franchisefocusedmarketing",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/FranchiseFocusedMarketing_1606837325132/inferno-booth-udf-company-logo.png",
+                            boothName: "Franchise Focused Marketing",
+                            link: "4e09625c-a5d9-4c4f-0f41-08d89607b5e0",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "franchiseramp",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/FranchiseRamp_1606662384454/inferno-booth-udf-company-logo.png",
+                            boothName: "Franchise Ramp",
+                            link: "9917b6c4-bc2d-4a29-b61b-08d895e07bc4",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "glyder",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Glyder_1606769015841/inferno-booth-udf-company-logo.png",
+                            boothName: "Glyder",
+                            link: "f1d1be3d-781f-4d64-405f-08d8915dcc0f",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "howard&howardattorneyspllc",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/HowardHowardAttorneysPLLC_1606851134544/inferno-booth-udf-company-logo.png",
+                            boothName: "Howard & Howard Attorneys PLLC",
+                            link: "98b72737-5cac-4d04-5243-08d895dfcf3b",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "hyperice",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Hyperice_1606844594211/inferno-booth-udf-company-logo.png",
+                            boothName: "Hyperice",
+                            link: "d874cc4a-de02-4319-0f67-08d89613cf91",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "j&lmarketing",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/JLMarketing_1606853389770/inferno-booth-udf-company-logo.png",
+                            boothName: "J&L Marketing",
+                            link: "92a4fc1a-809e-44bf-b619-08d895e07bc4",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "kinisiperformance",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/KinisiPerformance_1606666578064/inferno-booth-udf-company-logo.png",
+                            boothName: "Kinisi Performance",
+                            link: "feba01a3-860c-472a-36c8-08d89144b732",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "manduka",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Manduka_1606859673551/inferno-booth-udf-company-logo.png",
+                            boothName: "Manduka",
+                            link: "f29b9519-d3ee-4970-5247-08d895dfcf3b",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "massmovement",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MassMovement_1606662942574/inferno-booth-udf-company-logo.png",
+                            boothName: "Mass Movement",
+                            link: "49746fc2-1e83-4a8a-0f6b-08d89613cf91",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "nux",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/NUX_1606668695599/inferno-booth-udf-company-logo.png",
+                            boothName: "NUX",
+                            link: "24b0253b-b64b-4d51-5c59-08d8915658bc",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "onebeat",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/OneBeat_1606844905212/inferno-booth-udf-company-logo.png",
+                            boothName: "OneBeat",
+                            link: "c5baaf02-53fc-42d4-0f42-08d89607b5e0",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "onzie",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Onzie_1606661552540/inferno-booth-udf-company-logo.jpg",
+                            boothName: "Onzie",
+                            link: "8213c721-c25f-4d9f-36c6-08d89144b732",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "psaarchitects",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/PSAArchitects_1606852525061/inferno-booth-udf-company-logo.png",
+                            boothName: "PSA Architects",
+                            link: "c593b21d-51c3-47df-1809-08d8960eb892",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "paychex",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Paychex_1606856494315/inferno-booth-udf-company-logo.png",
+                            boothName: "Paychex",
+                            link: "0226000a-93c6-4ab9-0f43-08d89607b5e0",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "platinumslvllc",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/PlatinumSLVLLC_1606770730041/inferno-booth-udf-company-logo.png",
+                            boothName: "Platinum SLV LLC",
+                            link: "abb238e4-a66a-4913-4060-08d8915dcc0f",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "prioritysign",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/PrioritySign_1606843093456/inferno-booth-udf-company-logo.png",
+                            boothName: "Priority Sign",
+                            link: "42e0aaac-dd3e-46e5-b618-08d895e07bc4",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "stratus",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Stratus_1606660418059/inferno-booth-udf-company-logo.png",
+                            boothName: "Stratus",
+                            link: "b7ccd6c1-1c46-4f04-a6a6-08d8914e0948",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "topknotinc",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TopKnotInc_1606676481733/inferno-booth-udf-company-logo.png",
+                            boothName: "Top Knot Inc.",
+                            link: "f7ae4328-f5e5-4721-36c9-08d89144b732",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "woodwayusa",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/WoodwayUSA_1606779885346/inferno-booth-udf-company-logo.png",
+                            boothName: "Woodway USA",
+                            link: "1c1cefb5-4cab-494b-a2af-08d891567490",
+                            weight: "0",
+                          },
+                          {
+                            fileName: "zipwhip",
+                            boothTileUrl:
+                              "https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Zipwhip_1606662345411/inferno-booth-udf-company-logo.png",
+                            boothName: "Zipwhip",
+                            link: "94fef3b3-9331-4306-024c-08d8914c7577",
+                            weight: "0",
+                          },
+                        ];
+                      </script>
+                    
+
+<!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- SNIPPET CONTENT START -->
+
+                    <!-- Import Fonts -->
+                    <script type="text/javascript">
+                      function loadCustomFont(fontName, url) {
+                        console.log("Loading " + fontName);
+                        var customFont = new FontFace(fontName, "url(" + url + ")");
+                        customFont
+                          .load()
+                          .then(function (loadedFont) {
+                            document.fonts.add(loadedFont);
+                          })
+                          .catch(function (error) {
+                            // error occurred
+                            console.log("Error loading " + fontName);
+                          });
+                      }
+                      var fontUrlBase = "https://studio304nextechar.freetls.fastly.net/infernoAR/toast/font/";
+
+                      loadCustomFont("Graphik Bold", fontUrlBase + "Graphik-Bold.ttf");
+                      loadCustomFont("Graphik Medium", fontUrlBase + "Graphik-Medium.ttf");
+                      loadCustomFont("Graphik Regular", fontUrlBase + "Graphik-Regular.ttf");
+                      loadCustomFont(
+                        "Gobold",
+                        "https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/font/Gobold_Uplow.ttf"
+                      );
+                      // Load custom fonts
+                    </script>
+                    <!-- ./ Import Fonts -->
+
+                    <!-- CSS -->
+                    <style>
+                      /* Background Styles */
+                      .ntar-landing-bg {
+                        /* Image */
+                        background-color: rgb(0, 0, 0);
+                        background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/vv_bg.jpg");
+                        background-size: cover;
+                        background-repeat: no-repeat;
+                        background-position: center center;
+
+                        /* Cover height minus 55px header */
+                        min-height: calc(100vh - 55px);
+
+                        /* Stick to Jolokia content frame */
+                        position: fixed;
+                        top: -20px;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-bg {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: fixed;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+                        }
+                      }
+
+                      /* Resets */
+                      * {
+                        box-sizing: border-box;
+                      }
+                      img:after {
+                        content: none;
+                      }
+                      ul {
+                        list-style: none;
+                        margin: 0;
+                        padding: 0;
+                      }
+                      h1,
+                      h2,
+                      h3,
+                      h4 {
+                        margin: 0;
+                        padding: 0;
+                        font-weight: 400;
+                      }
+                      body {
+                        width: 100%;
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                      }
+                      button {
+                        outline: none;
+                        border: none;
+                        background: transparent;
+                        font-family: "Graphik Medium", Roboto, "Helvetica Neue", sans-serif;
+                      }
+                      button:hover {
+                        opacity: 0.9;
+                        cursor: pointer;
+                      }
+                      /* End Resets */
+
+                      .swe-hall {
+                        width: calc(100% + 40px);
+                        min-height: 1vh;
+                        margin: -20px;
+                        padding: 0;
+                        color: #333;
+                        font-family: "Graphik Medium", Roboto, "Helvetica Neue", sans-serif;
+                        position: relative;
+                      }
+
+                      .ntar-banner-carousel-container {
+                        width: 100%;
+                        position: relative;
+                        top: -2px;
+                      }
+
+                      .swe-hall-header {
+                        /* position: absolute;
+                    top: 40px; */
+                        left: 0;
+                        width: 100%;
+                        background: transparent;
+
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+
+                        /* align-items: center; */
+                      }
+                      .swe-hall h1 {
+                        color: #fff;
+                        font-family: "Graphik Medium", Roboto, "Helvetica Neue", sans-serif;
+                        text-transform: uppercase;
+                        font-size: 4vh;
+                        padding: 0 2vw 0 5%;
+                      }
+
+                      /* Banner Carousel Styles */
+                      .ntar-banner-img {
+                        width: 100%;
+                      }
+                      .ntar-banner-card {
+                        display: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        min-width: 100%;
+                      }
+
+                      .ntar-banner-is-active {
+                        display: block;
+                        transition: transform 1s;
+                      }
+                      .ntar-banner-is-out-left {
+                        display: block;
+                        transform: translateX(-100%);
+                        transition: transform 1s;
+                      }
+                      .ntar-banner-is-standby-right {
+                        display: block;
+                        transform: translateX(100%);
+                      }
+                      .ntar-banner-is-standby-left {
+                        display: block;
+                        transform: translateX(-100%);
+                      }
+                      .ntar-banner-is-out-right {
+                        display: block;
+                        transform: translateX(100%);
+                        transition: transform 1s;
+                      }
+
+                      .ntar-banner-spacer {
+                        position: relative;
+                        opacity: 0;
+                        z-index: -5;
+                      }
+
+                      #ntar-banner-left {
+                        display: block;
+                        position: absolute;
+                        top: 0;
+                        left: 15px;
+                        width: 48px;
+                        min-height: 100%;
+                        z-index: 10;
+                      }
+                      #ntar-banner-right {
+                        display: block;
+                        position: absolute;
+                        top: 0;
+                        right: 15px;
+                        width: 48px;
+                        min-height: 100%;
+                        z-index: 10;
+                      }
+                      #ntar-banner-bottom {
+                        display: flex;
+                        justify-content: center;
+                        position: absolute;
+                        bottom: 0;
+                        left: calc(50% - 64px);
+                        width: 128px;
+                        min-height: 24px;
+                        background-color: transparent;
+                        z-index: 10;
+                      }
+
+                      .ntar-banner-node {
+                        display: flex;
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 6px;
+                        border: 1px solid rgba(68, 68, 68, 0.5);
+                        background-color: rgb(133, 133, 133);
+                        opacity: 0.3;
+                        margin: 4px;
+                        transition: 0.6s;
+                      }
+                      .ntar-banner-node.ntar-is-active {
+                        border: 1px solid rgba(68, 68, 68, 0.5);
+                        background-color: rgb(255, 255, 255);
+                        opacity: 0.6;
+                        -webkit-box-shadow: 0px 0px 6px 2px rgba(255, 255, 255, 0.5);
+                        box-shadow: 0px 0px 6px 2px rgba(255, 255, 255, 0.5);
+                        transition: 0.6s;
+                      }
+
+                      .ntar-arrow-button {
+                        position: absolute;
+                        top: calc(50% - 14px);
+                        width: 28px;
+                        height: 28px;
+                      }
+                      .ntar-arrow {
+                        position: relative;
+                        display: inline-block;
+                        margin: 0px;
+                        padding: 14px;
+                        box-shadow: 6px -6px 0 0 rgb(255, 255, 255) inset;
+                        cursor: pointer;
+                        opacity: 0.2;
+                      }
+                      .ntar-arrow:hover {
+                        box-shadow: 6px -6px 0 0 rgb(86, 207, 255) inset;
+                        opacity: 0.6;
+                      }
+                      .ntar-arrow:active {
+                        box-shadow: 6px -6px 0 0 rgb(255, 255, 255) inset;
+                        opacity: 1;
+                      }
+                      .ntar-arrow-left {
+                        transform: rotate(45deg);
+                        left: 16px;
+                      }
+                      .ntar-arrow-right {
+                        transform: rotate(225deg);
+                        right: 16px;
+                      }
+
+                      .ntar-banner-button {
+                        position: absolute;
+                        background-color: white;
+                        border: none;
+                        outline: none;
+                        color: #c31f5e;
+                        font-size: 24px;
+                        font-weight: 500;
+                      }
+
+                      #b1-booth-link {
+                        height: 20%;
+                        width: 15%;
+                        min-height: 24px;
+                        min-width: 80px;
+                        bottom: 15%;
+                        left: 6%;
+                      }
+                      #b1-direct-link {
+                        height: 20%;
+                        width: 15%;
+                        min-height: 24px;
+                        min-width: 80px;
+                        bottom: 15%;
+                        left: 33%;
+                      }
+                      @media only screen and (max-width: 767px) {
+                        .ntar-arrow-button {
+                          position: absolute;
+                          top: calc(50%);
+                          width: 16px;
+                          height: 16px;
+                        }
+                        .ntar-arrow {
+                          position: relative;
+                          display: inline-block;
+                          margin: 0px;
+                          padding: 8px;
+                          box-shadow: 4px -4px 0 0 rgb(255, 255, 255) inset;
+                          cursor: pointer;
+                          opacity: 0.2;
+                        }
+                        .ntar-arrow:hover {
+                          box-shadow: 4px -4px 0 0 rgb(86, 207, 255) inset;
+                          opacity: 0.6;
+                        }
+                        .ntar-arrow:active {
+                          box-shadow: 4px -4px 0 0 rgb(255, 255, 255) inset;
+                          opacity: 1;
+                        }
+                        #ntar-banner-bottom {
+                          min-height: 16px;
+                        }
+                        .ntar-banner-node {
+                          display: flex;
+                          width: 6px;
+                          height: 6px;
+                          border-radius: 3px;
+                          border: 1px solid rgba(68, 68, 68, 0.5);
+                          background-color: rgb(133, 133, 133);
+                          opacity: 0.3;
+                          margin: 4px;
+                          transition: 0.6s;
+                        }
+                        .ntar-banner-node.ntar-is-active {
+                          border: 1px solid rgba(68, 68, 68, 0.5);
+                          background-color: rgb(255, 255, 255);
+                          opacity: 0.6;
+                          -webkit-box-shadow: 0px 0px 3px 2px rgba(255, 255, 255, 0.5);
+                          box-shadow: 0px 0px 3px 2px rgba(255, 255, 255, 0.5);
+                          transition: 0.6s;
+                        }
+                      }
+                      /* ./ Banner Carousel Styles */
+                    </style>
+
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <!-- HTML -->
+                    <div class="ntar-landing-bg"></div>
+
+                    <div class="swe-hall">
+                      <div class="swe-hall-header">
+                        <div class="ntar-banner-carousel-container">
+                          <div id="ntar-banner-left">
+                            <div class="ntar-arrow-button ntar-arrow-left">
+                              <div class="ntar-arrow" id="ntar-aleft"></div>
+                            </div>
+                          </div>
+                          <div id="ntar-banner-bottom">
+                            <div class="ntar-banner-node ntar-is-active"></div>
+                            <div class="ntar-banner-node"></div>
+                            <div class="ntar-banner-node"></div>
+                            <div class="ntar-banner-node"></div>
+                          </div>
+                          <div id="ntar-banner-right">
+                            <div class="ntar-arrow-button ntar-arrow-right">
+                              <div class="ntar-arrow" id="ntar-aright"></div>
+                            </div>
+                          </div>
+                          <a href="javascript:void(0)">
+                            <div class="ntar-banner-card ntar-banner-is-active">
+                              <!-- <button class="ntar-banner-button" id="b1-booth-link">Booth Link</button>
+                              <button class="ntar-banner-button" id="b1-direct-link">Direct Link</button> -->
+                              <img class="ntar-banner-img" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/scroll-imgs/candr.jpg">
+                            </div>
+                          </a>
+                          <a href="javascript:void(0)">
+                            <div class="ntar-banner-card">
+                              <img class="ntar-banner-img" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/scroll-imgs/clubready.jpg">
+                            </div>
+                          </a>
+                          <a href="javascript:void(0)">
+                            <div class="ntar-banner-card">
+                              <img class="ntar-banner-img" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/scroll-imgs/colepro.jpg">
+                            </div>
+                          </a>
+                          <a href="javascript:void(0)">
+                            <div class="ntar-banner-card">
+                              <img class="ntar-banner-img" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/scroll-imgs/pa.jpg">
+                            </div>
+                          </a>
+
+                          <!-- Leave this one alone! -->
+                          <div class="ntar-banner-spacer">
+                            <img class="ntar-banner-img" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/page-imgs/scroll-imgs/candr.jpg">
+                          </div>
+                          <!-- ./ Leave this one alone! -->
+                        </div>
+                      </div>
+                      <style>
+                        .item-list {
+                          padding: 0;
+                          display: flex;
+                          flex-wrap: wrap;
+                          justify-content: space-evenly;
+                        }
+
+                        .item-list .no-items-message {
+                          margin: 0;
+                          color: #0b2668;
+                          font-size: 2.2rem;
+                          font-weight: bold;
+                          letter-spacing: 0.092rem;
+                          line-height: 2.7rem;
+                          text-align: center;
+                          width: 100%;
+                        }
+
+                        .item-list a {
+                          text-decoration: none;
+                        }
+
+                        .item-list a:hover {
+                          transform: scale(1.1);
+                        }
+
+                        .item {
+                          margin: 4rem 3rem;
+                          min-width: 350px;
+                          max-width: 350px;
+                          min-height: 350px;
+                          background-color: #ffffff;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          flex-wrap: wrap;
+                          border-radius: 5px;
+                        }
+
+                        .item .body {
+                          display: flex;
+                          flex-direction: column;
+                          align-items: flex-start;
+                          padding: 2.2rem 4rem;
+                        }
+
+                        .item .body .item-img {
+                          width: 26.9rem;
+                        }
+
+                        .item .text {
+                          width: 100%;
+                          display: flex;
+                          flex-direction: column;
+                          color: #313131;
+                          padding: 1rem 4rem 2.2rem;
+                          background-color: #f5f5f5;
+                        }
+                        .item .text .description-main-details {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
+                        }
+
+                        .item .text h2 {
+                          font-size: 2.8rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          line-height: 3.4rem;
+                          margin: 0;
+                        }
+
+                        .item .text h3 {
+                          color: #313131;
+                          text-align: center;
+                          font-size: 2.2rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          line-height: 3.48rem;
+                          margin: 1rem 1rem 0 0;
+                          font-family: "Graphik Regular";
+                        }
+
+                        .item .text h4 {
+                          font-size: 2.16rem;
+                          font-weight: 500;
+                          letter-spacing: 0;
+                          line-height: 3.48rem;
+                          margin: 0;
+                        }
+
+                        .item .text p {
+                          font-size: 1.8rem;
+                          letter-spacing: 0;
+                          line-height: 2.7rem;
+                          margin: 1rem 0;
+                        }
+
+                        .item .text hr {
+                          margin: 2rem 0;
+                          border: 1px solid rgba(168, 0, 27, 0.52);
+                        }
+
+                        .item .text .description {
+                          display: flex;
+                          flex-direction: column;
+                          justify-content: center;
+                          align-items: center;
+                        }
+
+                        .item .text .fake-button {
+                          font-size: 1.9rem;
+                          font-weight: bold;
+                          letter-spacing: 0;
+                          line-height: 2.7rem;
+                          color: white;
+                          margin-top: 1rem;
+                          padding: 1rem 2rem;
+                          text-align: center;
+                          background-color: #1e70b8;
+                        }
+
+                        .item .text .fake-button:hover {
+                          transform: scale(1.1);
+                        }
+
+                        @media only screen and (max-width: 875px) {
+                          .body {
+                            flex-direction: column;
+                          }
+                        }
+
+                        .sp-level {
+                          width: 100%;
+                        }
+
+                        .top-level h1 {
+                          color: #d5a23b;
+                        }
+
+                        .middle-level h1 {
+                          color: silver;
+                        }
+                      </style>
+
+                      <div id="item-list" class="item-list">
+                        <template id="item-template">
+                          <a href="javascript:void(0)" id="link">
+                            <div id="item" class="item" onclick>
+                              <div id="item-card-body" class="body">
+                                <img id="item-img" class="item-img" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/booth/dell-booth/keynote-speaker.png" onerror="this.src='https://studio304nextechar.freetls.fastly.net/infernoAR/swe_20/hall/booths/img/null.jpg'">
+                              </div>
+                              <div class="text" style="display: none;">
+                                <div class="description">
+                                  <div class="description-main-details">
+                                    <h3 id="item-name" style="display: none;"></h3>
+                                    <h4 id="item-descreiption" style="display: none;"></h4>
+                                    <div class="fake-button" style="display: none;">Learn More</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </a>
+                        </template>
+
+                        <h1 id="no-items-message" class="no-items-message" style="display: none">
+                          No Items found.
+                        </h1>
+                      </div>
+
+                      <div class="hidden-links" style="display: none">
+                        <!-- Used to create hidden Links for All Categories -->
+                        {% for category in data.Categories %}
+                        <a href="/videos/{{category.Id}}/landing/{{category.LandingPageSnippetId}}" id="link_{{category.Id}}">{{category.Name}}</a>
+
+                        {% endfor %}
+                      </div>
+
+                      
+
+                      <script>
+                        var categories;
+                        var baseUrl =
+                          "https://studio304nextechar.freetls.fastly.net/infernoAR/becma/assets/booths/logos/";
+
+                        var messaging = "";
+
+                        var buildItemList = () => {
+                          const itemList = landingPageEl.getElementById("item-list");
+                          const itemTemplate = landingPageEl.getElementById("item-template");
+
+                          for (let cat of categories) {
+                            for (let item of items) {
+                              if (
+                                item.link == cat.id &&
+                                cat.parentId == "907eec4b-d63a-45ff-1de5-08d861d9aa99"
+                              ) {
+                                item.goodLink = true;
+                                if (item.weight != cat.weight) {
+                                  item.weight = cat.weight;
+                                }
+                              }
+                            }
+                          }
+
+                          // Sort Booths by weight
+                          items.sort(function (a, b) {
+                            if (parseInt(a.weight) < parseInt(b.weight)) {
+                              return -1;
+                            }
+                            if (parseInt(a.weight) > parseInt(b.weight)) {
+                              return 1;
+                            }
+                            return 0;
+                          });
+
+                          // Build Items
+                          for (let item of items) {
+                            let clone = itemTemplate.content.cloneNode(true);
+
+                            let itemLink = clone.getElementById("link");
+                            itemLink.href = "javascript:linkClick('" + item.link + "')";
+                            itemLink.id = "TRACK-ACTIVITY[Booth_Link]-Booth[" + item.boothName + "]";
+
+                            let itemDiv = clone.getElementById("item");
+                            itemDiv.id = "booth-" + item.fileName;
+                            itemDiv.onclick = "no";
+
+                            let itemImg = clone.getElementById("item-img");
+                            if (item.boothTileUrl) {
+                              itemImg.src = item.boothTileUrl;
+                            } else {
+                              itemImg.src = baseUrl + item.fileName + ".jpg";
+                            }
+
+                            let itemDesName = clone.getElementById("item-name");
+                            itemDesName.innerHTML = item.boothName;
+
+                            itemList.appendChild(clone);
+                          }
+                        };
+
+                        // Get Current Client Categories
+                        function fetchCategories() {
+                          const BASE_URL = "https://ingress.infernocore.jolokia.com/api/";
+                          const headers = {
+                            Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                            "X-InfernoCore-Domain": DOMAIN,
+                          };
+                          // Add client override if Super Admin
+                          if (window.sessionStorage.getItem("overrideId")) {
+                            headers["X-InfernoCore-Domain"] = "jolokia.inferno.jolokia.com";
+                            headers["X-Client-Override"] = window.sessionStorage.getItem("overrideId");
+                            // headers['X-Client-Override'] = '6dce2bdb-0c86-487f-969e-08d85a3df765';
+                          }
+                          $.ajax({
+                            url: BASE_URL + "Categories",
+                            type: "get",
+                            accept: "application/json",
+                            contentType: "application/json",
+                            headers,
+                            success: function (res) {
+                              categories = res;
+                            },
+                            error: function (err) {
+                              console.log(err);
+                            },
+                            complete: function () {
+                              //console.log("Cats Finished");
+                              buildItemList();
+                            },
+                          });
+                        }
+
+                        // Click Liquid made Links based on Item
+                        function linkClick(id) {
+                          var linkC = landingPageEl.getElementById("link_" + id);
+                          linkC.dispatchEvent(new MouseEvent("click"));
+                          return false;
+                        }
+
+                        // Start By Grabbing Categories
+                        fetchCategories();
+                      </script>
+                    </div>
+
+                    <exhibit-hall-canary></exhibit-hall-canary>
+                    <!-- Banner Carousel Script -->
+                    <script>
+                      var ntarBannerCards = landingPageEl.querySelectorAll(".ntar-banner-card");
+                      var ntarBannerNodes = landingPageEl.querySelectorAll(".ntar-banner-node");
+                      var ntarBannerCurrent = 0;
+                      var ignoreClick = false;
+                      var autoScrollTime = 15000;
+
+                      function triggerClick() {
+                        clearInterval(ntarBannerTimer);
+                        ignoreClick = true;
+                        setTimeout(function () {
+                          ignoreClick = false;
+                        }, 600);
+                        ntarBannerTimer = ntarStartAutoScroll(autoScrollTime);
+                      }
+
+                      // 1 for forward, -1 for back
+                      function ntarGoToBanner(direction) {
+                        var dirForward = false;
+                        var standby = "right";
+                        var out = "left";
+                        var nextBanner = null;
+                        // Do nothing if the carousel should not advance
+                        if (direction !== -1 && direction !== 1) return;
+                        // Direction Forward
+                        if (direction === 1) {
+                          dirForward = true;
+                          standby = "left";
+                          out = "right";
+                          if (ntarBannerCurrent === ntarBannerCards.length - 1) {
+                            nextBanner = 0;
+                          } else {
+                            nextBanner = ntarBannerCurrent + 1;
+                          }
+                        }
+                        // Direction Backward
+                        if (direction === -1) {
+                          if (ntarBannerCurrent === 0) {
+                            nextBanner = ntarBannerCards.length - 1;
+                          } else {
+                            nextBanner = ntarBannerCurrent - 1;
+                          }
+                        }
+
+                        // Preposition next banner
+                        ntarBannerCards[nextBanner].className =
+                          "ntar-banner-card ntar-banner-is-standby-" + standby;
+
+                        // Reset z-Indexes
+                        for (var x = 0; x < ntarBannerCards.length; x++) {
+                          if (x === nextBanner) {
+                            ntarBannerCards[x].style.zIndex = 8;
+                            continue;
+                          }
+                          if (x === ntarBannerCurrent) {
+                            ntarBannerCards[x].style.zIndex = 7;
+                            continue;
+                          }
+                          ntarBannerCards[x].style.zIndex = 6;
+                        }
+
+                        // Set new styles
+                        setTimeout(function () {
+                          ntarBannerCards[ntarBannerCurrent].className =
+                            "ntar-banner-card ntar-banner-is-out-" + out;
+                          ntarBannerCards[nextBanner].className = "ntar-banner-card ntar-banner-is-active";
+                          ntarBannerNodes[ntarBannerCurrent].className = "ntar-banner-node";
+                          ntarBannerNodes[nextBanner].className = "ntar-banner-node ntar-is-active";
+                          ntarBannerCurrent = nextBanner;
+                        }, 150);
+                      }
+
+                      function ntarStartAutoScroll(autoScrollDelay = 10000) {
+                        return setInterval(function () {
+                          if (landingPageEl.querySelector("exhibit-hall-canary")) {
+                            ntarGoToBanner(1);
+                          } else {
+                            console.log("Unloading:", ntarBannerTimer);
+                            clearInterval(ntarBannerTimer);
+                          }
+                          console.log("Timer: ", ntarBannerTimer);
+                        }, autoScrollDelay);
+                      }
+
+                      if (ntarBannerTimer) {
+                        console.log("Unloading:", ntarBannerTimer);
+                        clearInterval(ntarBannerTimer);
+                      }
+
+                      var ntarBannerTimer = ntarStartAutoScroll(autoScrollTime);
+                      console.log("Starting:", ntarBannerTimer);
+
+                      // Register Click Handlers
+                      landingPageEl.querySelector("#ntar-aleft").addEventListener("click", function (e) {
+                        if (ignoreClick) return;
+                        triggerClick();
+                        ntarGoToBanner(-1);
+                      });
+
+                      landingPageEl.querySelector("#ntar-aright").addEventListener("click", function (e) {
+                        if (ignoreClick) return;
+                        triggerClick();
+                        ntarGoToBanner(1);
+                      });
+                    </script>
+                    <!-- ./ Banner Carousel Script -->
+
+<!-- ##### chat widget ##### -->
+
+<div style="display:none;">
+  <p id="user-inferno-first-name">${firstName}</p>
+  <p id="user-inferno-last-name">${lastName}</p>
+</div>
+
+<script async>
+
+  var userInfernoId = window.sessionStorage.getItem("userId");
+  var firstName = landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+  var lastName = landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+
+  // var userInfernoId = "{{ userInfernoId }}";
+  // var firstName = "{{ userFirstName }}";
+  // var lastName = "{{ userLastName }}";
+
+  var hasProfileImage = false;
+
+  // global chat manager
+  var chatManager = null;
+
+  var chatweeValues = {
+      userIdKey: "chatwee-user-id",
+      sessionCookieKey: "chatwee-SID-5f7ef630366e2e515565f9a2",
+      chatId: "5f7ef630366e2e515565f9a2",
+      clientApiKey: "a017666f3879cc833eaba23e",
+      isAdmin: 0,
+      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+  }
+
+  var checkAdmin = () => {
+
+      const moderatorWhitelist = ["c8240590-94c1-4043-b5ef-961e5be0edcc"];
+
+      if (moderatorWhitelist.includes(userInfernoId)) {
+          chatweeValues.isAdmin = 1;
+      }
+
+  }
+
+  var loadChatScript = () => {
+      // don't load script if already on page
+      let chatScript = document.getElementById("chat-script");
+      if (chatScript) return;
+
+      (function () {
+          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+          s1.id = "chat-script";
+          s1.async = true;
+          s1.src = 'https://static.chatwee-api.com/v2/script.js';
+          s1.charset = 'UTF-8';
+          s0.parentNode.insertBefore(s1, s0);
+      })();
+
+      return;
+  }
+
+  var loadChatStyles = () => {
+      // dont load styles if already on page
+      let chatStyleSheet = document.getElementById("chat-styling");
+      if (chatStyleSheet) return;
+
+      (function () {
+          var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+
+          link1.setAttribute("id", "chat-styling")
+          link1.setAttribute("rel", "stylesheet")
+          link1.setAttribute("type", "text/css")
+          link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+          link1.setAttribute("media", "all")
+          body.parentNode.insertBefore(link1, body);
+      })();
+
+      return;
+  }
+
+  var startChat = async () => {
+      if (!chatManager) {
+          chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+          chatManager.Run();
+      }
+      return;
+  }
+
+  var openChat = () => {
+      // close bubble
+      let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+      let bubble = bubbleChild.parentNode;
+      bubble.style.display = "none";
+
+      // open chat
+      let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
+      let chat = chatChild.parentNode;
+      chat.style.display = "block";
+
+      return;
+  }
+
+  // Chatwee UserId must be set as the Id for the button
+  var triggerConversation = e => {
+      // let userId = e.currentTarget.id; // use this if stored in id attribute
+      let userId = e.currentTarget.getAttribute('chatwee-user-id'); // use this if stored in chatwee-user-id attribute
+      openChat();
+      chatManager.TriggerConversation(userId);
+  }
+
+  // helper functions
+  var getCookie = key => {
+      let cookieValue = "";
+
+      const cookieList = document.cookie;
+      if (cookieList) {
+          const cookie = cookieList
+              .split("; ")
+              .find(row => row.startsWith(key));
+
+          if (cookie) {
+              cookieValue = cookie.split("=")[1];
+          }
+
+      }
+      return cookieValue;
+  }
+
+  var setCookie = (key, value, age) => {
+      document.cookie = key + "=" + value + "; path=/";
+  }
+
+  var getKVPsByKey = key => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+      return fetch(url, {
+          method: 'GET',
+          withCredentials: true,
+          headers: {
+              'Authorization': bearer
+          }
+      });
+
+  }
+
+  var postKVP = (key, value) => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
+
+      const kvp = {
+          key: key,
+          value: value,
+          public: true
+      }
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+      let headers = new Headers();
+      headers.set('Authorization', bearer)
+      headers.set('Accept', 'application/json')
+      headers.set('Content-Type', 'application/json')
+
+      // for super user accounts
+      var overrideId = window.sessionStorage.getItem("overrideId");
+      if (overrideId) headers.set("X-Client-Override", overrideId);
+
+      fetch(url, {
+          method: 'POST',
+          withCredentials: true,
+          headers: headers,
+          body: JSON.stringify(kvp)
+      })
+
+  }
+
+
+  var validateChatSessionId = sessionId => {
+      const url = chatweeValues.ssoBaseUrl
+          + "validate-session?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&sessionId="
+          + sessionId;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var loginChat = userId => {
+      const url = chatweeValues.ssoBaseUrl
+          + "login?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&userId="
+          + userId;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var registerChat = () => {
+      const name = firstName + " " + lastName;
+
+      let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-profile-image.png";
+
+      if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
+
+      const url = chatweeValues.ssoBaseUrl
+          + "register?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&login="
+          + name
+          + "&isAdmin="
+          + chatweeValues.isAdmin
+          + "&avatar="
+          + avatarUrl;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var editChatweeAvatar = (chatweeUserId, newAvatarUrl) => {
+
+      const url = chatweeValues.ssoBaseUrl
+          + "edit?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&userId="
+          + chatweeUserId
+          + "&login="
+          + "NewLogin"
+          + "&avatar="
+          + newAvatarUrl;
+
+      return fetch(url);
+
+  }
+
+  // connect to Chatwee
+  var connectChat = async () => {
+
+      // see if session id locally
+      let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+      if (sessionId && sessionId !== "[object Object]") {
+          // validate session id with chatwee
+          let valid
+          try {
+              valid = await validateChatSessionId(sessionId);
+          } catch (e) {
+              throw new Error(e);
+          }
+
+          // if true, do nothing
+          if (valid) return;
+
+      }
+
+      // if false, check if user id is present in api
+      let userId = ""
+      try {
+          const res = await getKVPsByKey(chatweeValues.userIdKey);
+
+          if (res.status === 200) {
+              const json = await res.json();
+              userId = json.value;
+          } else {
+              console.log("no chatwee user id from api")
+          }
+
+      } catch (e) {
+          throw new Error(e);
+      }
+
+      // if true, login and set session id locally
+      if (userId) {
+          let sessionId = ""
+
+          try {
+              sessionId = await loginChat(userId);
+          } catch (e) {
+              throw new Error(e);
+          }
+          setCookie(chatweeValues.sessionCookieKey, sessionId);
+      }
+      // if false, register and set user id and log in user
+      else {
+          let userId = ""
+          try {
+              userId = await registerChat();
+          } catch (e) {
+              throw new Error(e);
+          }
+
+          try {
+              const res = await postKVP(chatweeValues.userIdKey, userId);
+          } catch (e) {
+              throw new Error(e)
+          }
+
+          let sessionId = ""
+          try {
+              sessionId = await loginChat(userId);
+          }
+          catch (e) {
+              throw new Error(e);
+          }
+
+          setCookie(chatweeValues.sessionCookieKey, sessionId);
+
+      }
+
+      return;
+  }
+
+  var getProfileImage = () => {
+      let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+      return fetch(url);
+  }
+
+  var waitForGlobal = async (key, callback1, callback2) => {
+      if (window[key]) {
+          await callback1();
+          await callback2();
+      } else {
+          setTimeout(function () {
+              waitForGlobal(key, callback1, callback2);
+          }, 100);
+      }
+  };
+
+  var setUpChat = async () => {
+      checkAdmin()
+      loadChatScript();
+      loadChatStyles();
+
+      const res = await getProfileImage();
+      if (res.status === 200) {
+          hasProfileImage = true;
+      }
+
+      waitForGlobal("ChatweeLib", connectChat, startChat);
+  }
+
+  setUpChat();
+
+</script>
+
+<script>
+
+  // delete link between Chatwee account and Inferno account if needed
+  var deleteChatweeUserIdByKey = key => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+
+      fetch(url, {
+          method: 'DELETE',
+          withCredentials: true,
+          headers: {
+              'Authorization': bearer
+          }
+      }).then(res => console.log("delete res is ", res))
+          .catch(e => console.log("delete error is ", e));
+
+  }
+
+</script>
+
+
+<!-- ##### end of  chat widget ##### -->
+                  </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
