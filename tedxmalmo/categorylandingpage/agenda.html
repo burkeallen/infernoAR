@@ -313,12 +313,12 @@
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
-                    font-size: 31px;
-                    padding: 2rem;
+                    font-size: 28px;
+                    padding: 0rem 2rem 2rem 1rem;
                   }
 
                   .agenda-item{
-                    width: 90%;
+                    width: 100%;
                     
                   }
 
@@ -332,6 +332,25 @@
                     height: 10rem;
                     margin-bottom: 2rem;
                     
+                  }
+
+                  .checkbox-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    padding-left: 2rem;
+                    background-color: rgba(0,0,0,.5);
+                  }
+
+                  input.agenda-checkbox {
+                    width: 3rem;
+                    height: 3rem;
+                    cursor: pointer;  
+                  }
+
+                  .checkbox-label {
+                    font-size: 2rem;
+                    margin: 2rem;
                   }
 
                   .time {
@@ -349,13 +368,18 @@
                     margin-right: 2rem;
                   }
 
-                  .agenda-title {
+                  .agenda-title-box {
+                    position: relative;
                     display: flex;
                     align-items: center;
                     background: linear-gradient(rgba(11, 68, 242, .3), #101010);
-                    width: 75%;
+                    width: 60%;
                     height: 80%;
-                    padding: 1.5rem 2em;
+                    padding: 2rem 2em;
+                  }
+
+                  .agenda-title {
+                    margin-right: 2rem;
                   }
 
                   .agenda-item-details {
@@ -400,11 +424,20 @@
 
                 <template id="template">
                   <div class="agenda-item">
-                    <div class="agenda-item-main" onclick="toggleDetails(this)">
-                      <div class="time">
+                    <div class="agenda-item-main" >
+                      
+                      <div class="time" onclick="toggleDetails(this)">
                       </div>
                      
-                      <div class="agenda-title"></div>
+                      <div class="agenda-title-box" onclick="toggleDetails(this)">
+                        <div class="agenda-title"></div>
+                        
+                      
+                      </div>
+                      <div class="checkbox-container">
+                        <input type="checkbox" class="agenda-checkbox" onchange="bookmarkEvent(this)" /><label
+                          class="checkbox-label">Save</label>
+                      </div>
                     </div>
                     <div class="agenda-item-details">
                       <div class="description"></div>
@@ -421,8 +454,8 @@
                       h = h - 12;
                       ampm = "pm";
                     }
-                    if (m.toString().length < 2) m = m + "0";
-                    
+                    if (m.toString().length < 2) m = "0" + m;
+
                     return h + ":" + m + ampm;
                   }
                   var setTime = () => {
@@ -437,7 +470,7 @@
 
                   var toggleDetails = elem => {
                       var agendaItem = landingPageEl.getElementById(
-                        elem.parentNode.id
+                        elem.parentNode.parentNode.id
                       );
 
                       var details = agendaItem.querySelector(".agenda-item-details");
@@ -635,16 +668,28 @@
                       );
                       const template = landingPageEl.getElementById("template");
 
+                      //get bookmarks from local storage
+                      var bookmarks = localStorage.getItem("myAgenda");
+
                       agendaList.forEach(item => {
                         const clone = template.content.cloneNode(true);
                         let time = clone.querySelector(".time");
                         let agendaItem = clone.querySelector(".agenda-item");
+                        let checkbox = clone.querySelector(".agenda-checkbox");
+
                         let title = clone.querySelector(".agenda-title");
                         
                         let description = clone.querySelector(".description");
                         
                         const id = agendaList.indexOf(item);
+                       
 
+                        //set bookmarked event checkboxes to checked
+                        if (bookmarks && bookmarks.includes(item.startTime.toString())) {
+                          checkbox.setAttribute('checked', true);
+                          var label = clone.querySelector(".checkbox-label");
+                          label.innerHTML = "Saved";
+                        }
                         time.innerHTML = convertTime(item.startTimeAMPM, item.duration);
                         if (item.title) title.innerHTML = item.title;
                         description.innerHTML = item.description;
@@ -656,7 +701,6 @@
                           imgElement.setAttribute("class", "speaker-image");
                           imgElement.src = item.speakerImage;
                           agendaDetails.prepend(imgElement);
-                          console.log(agendaDetails.childNodes);
                           agendaDetails.style.borderRadius = "100px 50px 50px 100px";
                         }
 
@@ -668,6 +712,30 @@
                     };
 
                     buildEventList();
+
+                    //Agenda Bookmarking
+                    var bookmarkEvent = (checkbox) => {
+                      var id = checkbox.parentNode.parentNode.parentNode.id;
+                      var label = checkbox.parentNode.querySelector(".checkbox-label");
+                      var savedItem = agendaList[id].startTime.toString();
+                      //get local storage
+                      var bookmarks = localStorage.getItem("myAgenda");
+                      if (checkbox.checked === true){
+                        //add agenda item
+                        if (!bookmarks) {
+                          bookmarks = savedItem;
+                        } else {
+                          bookmarks = bookmarks + " " + savedItem;
+                        }
+                        label.innerHTML = "Saved"
+                      } else {
+                        //remove agenda item
+                       bookmarks = bookmarks.replace(savedItem, "");
+                       label.innerHTML = "Save"
+                      }
+                      //send back to local storage
+                      localStorage.setItem("myAgenda", bookmarks.replace(/^\s+|\s+$/gm, ''));
+                    }
                 </script>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
