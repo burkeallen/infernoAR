@@ -240,6 +240,12 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="da76af09-36d8-473f-8dad-040abf2617dd">
+                <script>
+                  setTimeout(function () {
+                  var blocker = landingPageEl.getElementById("blocker");
+                  blocker.remove();
+                  }, 1000);
+                </script>
                 <style>
                   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
                 
@@ -247,6 +253,17 @@
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
                   img::after {
                     content: none;
+                  }
+
+                  #blocker{
+                    position:fixed;
+                    width:100%;
+                    height:100%;
+                    left:0;
+                    top:0;
+                    right:0;
+                    bottom:0;
+                    z-index:9999;
                   }
 
                   .bg-video {
@@ -293,10 +310,6 @@
                     height: fit-content;
                   }
 
-                  .hover .card-contents {
-                    opacity: 0;
-                  }
-
                   .card-border {
                     position: absolute;
                     top:0;
@@ -316,27 +329,36 @@
                     justify-content: center;
                     font-size: 1.8rem;
                     padding: 4rem 2rem;
-                    transition: opacity ease .5s;
+                    
                     
                   }
 
-                  .has-video:hover .card-contents {
+                  .has-video:hover .logo {
                     opacity: 0;
+                    
                   }
 
                   .video-button {
                     position: absolute;
                     top: 55%;
-                    left: 50%;
+                    left: 20%;
                     transform: translate(-50%, -50%);
                     height: 50%;
                     width: auto;
                     opacity: 0;
-                    transition: opacity ease .5s;
+                    transition: all ease .5s;
+                    border-radius: 50%;
+
+                  }
+
+                  .video-button:hover {
+                    background-color: rgba(255,255,255,.1);
+                    
                   }
 
                   .has-video:hover .video-button {
                     opacity: 1;
+                    
                   }
 
                   .sponsor-main {
@@ -356,6 +378,7 @@
                     height: auto;
                     background-color: white;
                     padding: 2rem;
+                    transition: opacity ease .5s;
                   }
 
                   .sponsor-details {
@@ -454,6 +477,7 @@
                     <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                   </video>
                   <div class="page-contents">
+                    <div id="blocker"></div>
                   </div>
                 </div>
                 
@@ -489,7 +513,7 @@
                 </template>
           
                 <script>
-
+                   
                   var sponsors = [
                       {
                         "name": "Minc",

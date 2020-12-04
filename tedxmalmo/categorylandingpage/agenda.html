@@ -717,24 +717,20 @@
                     var bookmarkEvent = (checkbox) => {
                       var id = checkbox.parentNode.parentNode.parentNode.id;
                       var label = checkbox.parentNode.querySelector(".checkbox-label");
-                      var savedItem = agendaList[id].startTime.toString();
+                      var savedItem = agendaList[id];
                       //get local storage
-                      var bookmarks = localStorage.getItem("myAgenda");
+                      var bookmarks = JSON.parse(localStorage.getItem("myAgenda"));
                       if (checkbox.checked === true){
                         //add agenda item
-                        if (!bookmarks) {
-                          bookmarks = savedItem;
-                        } else {
-                          bookmarks = bookmarks + " " + savedItem;
-                        }
-                        label.innerHTML = "Saved"
+                        bookmarks.push(savedItem);
+                        label.innerHTML = "Saved";
                       } else {
                         //remove agenda item
-                       bookmarks = bookmarks.replace(savedItem, "");
-                       label.innerHTML = "Save"
+                       bookmarks = bookmarks.filter(bookmark => bookmark.startTime !== savedItem.startTime);
+                       label.innerHTML = "Save";
                       }
                       //send back to local storage
-                      localStorage.setItem("myAgenda", bookmarks.replace(/^\s+|\s+$/gm, ''));
+                      localStorage.setItem("myAgenda", JSON.stringify(bookmarks));
                     }
                 </script>
               </inferno-snippet-content>
