@@ -4,10 +4,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
   <script>
@@ -81,7 +85,9 @@
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+  <script onload="login()"
+          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+          src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
@@ -186,7 +192,9 @@
       })
     }
   </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+  <script onload="buildLocalMenu()"
+          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+          src="../menu.js"></script>
 
 </head>
 
@@ -196,10 +204,13 @@
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+        <mat-toolbar
+            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+            color="primary">
           <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
+                    onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
@@ -216,7 +227,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -287,10 +298,7 @@
                     justify-content: center;
                     align-content: center;
                     align-items: center;
-                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/bg.png");
-                    background-repeat: no-repeat;
-                    background-position: center;
-                    background-size: cover;
+                    background: transparent;
                     margin: -20px;
                     padding: 20px;
                   }
@@ -304,10 +312,18 @@
                     text-align: center;
                   }
 
-
                   .welcome img {
                     width: 100%;
-                    max-width: 1132px;
+                  }
+
+                  #videoBG {
+                    object-fit: cover;
+                    width: 100vw;
+                    height: 100vh;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    z-index: -1;
                   }
 
                   .sub-heading {
@@ -323,15 +339,51 @@
                     color: #E62B1E;
                   }
 
-                </style>
+                  .message {
+                    margin: 40px;
+                    font: normal normal bold 24px/32px 'MontserratBold';
+                    background: linear-gradient(90deg, #E62B1E, #fff, #E62B1E) no-repeat;
+                    background-size: 80%;
+                    animation: animate 3s linear infinite;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: rgba(255, 255, 255, .2);
+                  }
 
+                  @keyframes animate {
+                    0% {
+                      background-position: -500%;
+                    }
+                    100% {
+                      background-position: 500%;
+                    }
+                  }
+
+                </style>
                 <div class="content">
                   <div class="welcome">
                     <div>Welcome to</div>
-                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/logo.png" alt="TEDx Malmo Logo">
+                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/logo.png"
+                         alt="TEDx Malmo Logo">
                     <div class="sub-heading"><span class="x">X</span> = Independently organized TED event</div>
+                    <div class="message">Hang tight while we escort you to the lobby</div>
                   </div>
+                  <video id="videoBG"
+                         poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome/bg.jpg"
+                         onended="goLobby(true)"
+                         autoplay muted>
+                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome.mp4"
+                            type="video/mp4">
+                  </video>
                 </div>
+
+                <a id="lobbyLink" style="display: none;"
+                   href="videos/deeec0bd-23c8-4fb6-36b4-08d89144b732/landing/151c7fbe-5964-400a-98d7-5a305d7c41cb"></a>
+                <script>
+                  function goLobby(redirect = false) {
+                    if (!redirect) return;
+                    landingPageEl.getElementById('lobbyLink').dispatchEvent(new MouseEvent("click"));
+                  }
+                </script>
 
                 <airship>
                   <script>
@@ -356,8 +408,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -473,7 +523,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
