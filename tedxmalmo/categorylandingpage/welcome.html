@@ -358,6 +358,43 @@
                     }
                   }
 
+
+                  .ready-player-one {
+                    width: 90%;
+                    font: normal normal bold 55px/67px 'Montserrat';
+                    letter-spacing: 0px;
+                    color: #FFFFFF;
+                    margin: 0 48px;
+                    text-align: center;
+                  }
+
+                  .ready-player-one img {
+                    width: 100%;
+                  }
+
+                  .pulsate {
+                    filter: drop-shadow(0 6px 20px white);
+                    transform: scale(1);
+                    animation: pulse 1s infinite;
+                  }
+
+                  @keyframes pulse {
+                    0% {
+                      transform: scale(0.95);
+                      filter: unset;
+                    }
+
+                    70% {
+                      transform: scale(1.2);
+                      filter: drop-shadow(0 6px 20px white);
+                    }
+
+                    100% {
+                      transform: scale(0.95);
+                      filter: unset;
+                    }
+                  }
+
                 </style>
                 <div class="content">
                   <div class="welcome">
@@ -367,21 +404,57 @@
                     <div class="sub-heading"><span class="x">X</span> = Independently organized TED event</div>
                     <div class="message">Hang tight while we escort you to the lobby</div>
                   </div>
+
+                  <div class="ready-player-one hidden">
+                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/logo.png"
+                         alt="TEDx Malmo Logo">
+                    Your Future Is Now, Are you ready?
+                    <br>
+                    <a id="lobbyLink" class="pulsate"
+                       href="videos/deeec0bd-23c8-4fb6-36b4-08d89144b732/landing/151c7fbe-5964-400a-98d7-5a305d7c41cb?welcome=1">
+                      YES!
+                    </a>
+                  </div>
+
                   <video id="videoBG"
-                         poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome/bg.jpg"
+                         poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome.jpg"
                          onended="goLobby(true)"
-                         autoplay muted>
-                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome.mp4"
-                            type="video/mp4">
+                         autoplay
+                         muted
+                         preload="metadata"
+                  >
+                    <source type="video/mp4"
+                            preload="auto"
+                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome.mp4#t=5"
+                    >
                   </video>
+
+                  <audio
+                      type="audio/mp3"
+                      autoplay
+                      volume="0.5"
+                      preload="auto"
+                      src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome.mp3"
+                      onended="playLoop()"
+                  ></audio>
                 </div>
 
-                <a id="lobbyLink" style="display: none;"
-                   href="videos/deeec0bd-23c8-4fb6-36b4-08d89144b732/landing/151c7fbe-5964-400a-98d7-5a305d7c41cb"></a>
+
                 <script>
+
+                  function playLoop() {
+                    const audio = landingPageEl.querySelector('audio');
+                    audio.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/login/welcome2.mp3";
+                    audio.loop = true;
+                    audio.currentTime = 120;
+                    audio.onended = function () {
+                      // waiting on player one....
+                    }
+                  }
+
                   function goLobby(redirect = false) {
-                    if (!redirect) return;
-                    landingPageEl.getElementById('lobbyLink').dispatchEvent(new MouseEvent("click"));
+                    landingPageEl.querySelector('.welcome').classList.toggle('hidden');
+                    landingPageEl.querySelector('.ready-player-one').classList.toggle('hidden');
                   }
                 </script>
 
