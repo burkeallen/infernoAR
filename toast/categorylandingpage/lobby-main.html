@@ -1,0 +1,1138 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="toast" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="aa3ab6f7-5c04-483f-8490-3963eb5c2b32">
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- SNIPPET CONTENT START -->
+
+                    <style>
+                      /* Page Content Container Styles */
+                      .ntar-landing-content {
+                        background-color: rgba(255, 255, 255, 0.6);
+                        background-color: rgb(0, 0, 0);
+
+                        /* Scale to full width and height + footer space */
+                        width: 100%;
+                        height: calc(100% + 60px);
+
+                        /* Stick to Jolokia content frame and scroll y */
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        overflow: hidden auto;
+
+                        /* Pad Content */
+                        padding: 0px;
+
+                        /* Display Type */
+                        display: flex;
+                        flex-direction: column;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-content {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+                        }
+                      }
+
+                      /* ./ Page Content Container Styles */
+
+                      /* Lobby Styles */
+                      .lobby {
+                        overflow: hidden;
+                        position: absolute;
+                        width: 100%;
+                        top: -40px;
+                      }
+
+                      .lobby-bg {
+                        width: 100%;
+                      }
+
+                      .buttons-overlay {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                      }
+
+                      .lobby-btn {
+                        position: absolute;
+                        filter: hue-rotate(0deg);
+                        transition: all 0.5s;
+                        z-index: 1;
+                      }
+
+                      .lobby-btn a {
+                      }
+
+                      .lobby-btn:hover {
+                        transition: all 0.3s;
+                        filter: hue-rotate(8deg);
+                      }
+                      .sponsor-btn {
+                        position: absolute;
+                        filter: hue-rotate(0deg);
+                        transition: all 0.5s;
+                        z-index: 1;
+                      }
+                      .lobby-btn img {
+                        width: 100%;
+                      }
+
+                      /* Overlays */
+
+                      .ntar-video-view {
+                        position: absolute;
+                        top: 0px;
+                        left: 0px;
+                        right: 0px;
+                        bottom: -60px;
+                        background-color: rgb(0, 0, 0);
+                        z-index: 20;
+                        display: none;
+                      }
+
+                      .ntar-video-viewer {
+                        position: absolute;
+                        top: 60px;
+                        left: 30px;
+                        right: 30px;
+                        width: calc(100% - 60px);
+                        margin: 0px auto;
+                        height: calc(100% - 90px);
+                        bottom: 30px;
+                        border: none;
+                        background-color: black;
+                      }
+
+                      .ntar-video-viewer > app-root {
+                        background-color: black;
+                      }
+
+                      a.ntar-window-close {
+                        padding: 0.55rem;
+                        width: 11rem;
+                        font-size: 1.3rem;
+                        font-weight: 100;
+                        line-height: 1;
+                        color: #333;
+                        background-color: rgb(0, 0, 0);
+                        border-radius: 4rem;
+                        text-align: center;
+                        cursor: pointer;
+                        text-decoration: none;
+                        display: inline-block;
+                        margin: 20px 0px 0px 30px;
+                      }
+
+                      a.ntar-window-close:hover {
+                        color: #333;
+                        text-decoration: none;
+                      }
+
+                      .dark-button {
+                        background-color: #333 !important;
+                        color: #fff !important;
+                      }
+
+                      .button-video {
+                        border-radius: 4px;
+                        font-size: 1.5em;
+                        font-weight: bold;
+                        color: black;
+                        background-color: #eeeae1;
+                        outline: none;
+                        border: 2px solid black;
+                        border-radius: 15px;
+                        min-width: 70px;
+                        padding: 1rem 2rem;
+                        text-align: center;
+                      }
+
+                      .button-video:hover {
+                        transform: scale(1.1);
+                      }
+
+                      .glass-links {
+                        display: none;
+                      }
+
+                      .side-links {
+                        display: none;
+                      }
+
+                      /* ./ Overlays */
+
+                      @media only screen and (max-width: 786px) {
+                        .lobby {
+                          top: -25px;
+                        }
+                      }
+
+                      @media only screen and (max-width: 485px) {
+                        .lobby {
+                          top: -5px;
+                        }
+                      }
+                      /* ./ Lobby Styles */
+
+                      .ntar-video-container-screen {
+                        position: absolute;
+                        top: 28.25%;
+                        left: 41.75%;
+                        background-color: rgba(0, 0, 0, 0);
+                        width: 18%;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                      }
+
+                      .ntar-video-container-screen .ntar-video-vertcenter {
+                        width: 100%;
+                        margin: 0 auto;
+                      }
+
+                      .ntar-video-container {
+                        background-color: rgba(0, 0, 0, 0);
+                        min-height: 100px;
+                        min-width: 100px;
+                        width: 100%;
+                        height: calc(100% - 55px);
+                        max-height: calc(100% - 55px);
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        padding: 2vh;
+                      }
+
+                      .ntar-video-vertcenter {
+                        width: 90%;
+                        margin: 0 auto;
+                      }
+
+                      .ntar-video-wrapper-16x9 {
+                        position: relative;
+                        /* Set for 16x9 ratio */
+                        padding-bottom: 56.25%;
+                        height: 0;
+                      }
+
+                      .ntar-video-wrapper-16x9 iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                      }
+
+                      .ntar-video-wrapper-16x9 > #inferno-video-player {
+                        max-width: unset !important;
+                      }
+
+                      .info-text {
+                        color: white;
+                        font-size: 1.1vw;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: flex-end;
+                      }
+
+                      .info-text:hover {
+                        font-size: 1.2vw;
+                      }
+                    </style>
+
+                    <!-- Page Overlays -->
+                    <div class="ntar-video-view" id="video-blanket">
+                      <a class="ntar-window-close dark-button" href="javascript:void(closeVideo());">Close</a>
+                      <div class="ntar-video-container">
+                        <div class="ntar-video-vertcenter">
+                          <div class="ntar-video-wrapper-16x9">
+                            <iframe class="ntar-video-viewer" id="video-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowtransparency="true" scrolling="no" src="/embed/bcee2552-084d-45e0-8177-b2373d421b01"></iframe>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- ./ Page Overlays -->
+
+                    <!-- Page Content Container -->
+                    <div class="ntar-landing-content">
+                      <div class="lobby">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/lobbies/main_lobby_v2.jpg" alt class="lobby-bg">
+                        <div class="ntar-video-container ntar-video-view" id="ntar-video-container-screen">
+                          <div class="ntar-video-vertcenter" id="ntar-video-vertcenter">
+                            <div class="ntar-video-wrapper-16x9">
+                              <iframe class="ntar-video-viewer" id="video-frame-two" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" allowtransparency="true" scrolling="no" src></iframe>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Pilates Link -->
+                        <a href="/videos/0d8e7159-ddd8-4227-583a-08d890814749/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 23%; top: 30%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- CB Link -->
+                        <a href="/videos/30e90396-9d65-45c4-583b-08d890814749/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 33%; top: 30%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Stretch Link -->
+                        <a href="/videos/e016c99c-7272-4f90-1973-08d890813e67/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 63.5%; top: 30%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Row House Link -->
+                        <a href="/videos/3973f907-5d73-4d5a-ee71-08d89097c6fd/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 73%; top: 30%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- AKT Link -->
+                        <a href="/videos/e564bf20-286f-4be2-546e-08d890949b45/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 23%; top: 48%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Yoga Link -->
+                        <a href="/videos/4633b666-44e5-4709-546f-08d890949b45/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 33%; top: 48%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Purre Link -->
+                        <a href="/videos/0b781322-e2c0-4e09-ee70-08d89097c6fd/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 63.5%; top: 48%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Stride Link -->
+                        <a href="/videos/3080eebd-a7b3-4973-ee72-08d89097c6fd/landing/2291ec64-3477-4fb3-9049-409fc40a6184">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 73%; top: 48%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Keynote Link -->
+                        <a href="javascript:void(loadVideo('/embed/e240ae3a-a1d7-46c1-9a87-00c7b875b84c'))">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 26.5%; top: 62%; width: 7.5%; height: 12%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Vender Link -->
+                        <a href="/videos/d3b65615-03cb-4219-7218-08d8660c77b4/landing/f9934e8d-7c97-4848-9b5d-c60e013facfc">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 62.5%; top: 62%; width: 6.5%; height: 12%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Boutique Link -->
+                        <a href="/videos/497b83f3-da19-4438-7142-08d89092fc58/landing/9770c611-07ab-4650-b2c3-61706f38db71">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 73%; top: 62%; width: 6.5%; height: 12%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+
+                        <!-- Info Link -->
+                        <a href="javascript:void(popInfo())" id="info-desk" style="display: none">
+                          <!-- Button -->
+                          <div class="lobby-btn info-text" style="left: 40%; top: 65%; width: 21.5%; height: 11%">
+                            Info Desk
+                          </div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+
+                        <style>
+                          .popup-box {
+                            width: 400px;
+                            height: 300px;
+                            background-color: #919095;
+                            color: white;
+                            position: absolute;
+                            top: calc(50% - 150px);
+                            left: calc(50% - 200px);
+                            border-radius: 24px;
+                            z-index: 20;
+                            box-shadow: 0 3px 12px 12px rgba(0, 0, 0, 0.5);
+                            padding: 12px 24px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            display: none;
+                          }
+
+                          .popup-box .close-button {
+                            background-color: transparent;
+                            position: absolute;
+                            right: -16px;
+                            top: -16px;
+                            padding: 0;
+                            border: none;
+                            outline: none;
+                          }
+
+                          .popup-box .close-icon {
+                            filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+                          }
+
+                          .popup-box .content {
+                            width: 100%;
+                            text-align: center;
+                            font-size: 16px;
+                            max-height: 152px;
+                            overflow: hidden auto;
+                          }
+                        </style>
+                        <div class="popup-box">
+                          <button class="close-button" onclick="closeInfo()">
+                            <img class="close-icon" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='48' height='48'%3E%3Cpath fill='none' d='M0 0h24v24H0z'/%3E%3Cpath d='M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-11.414L9.172 7.757 7.757 9.172 10.586 12l-2.829 2.828 1.415 1.415L12 13.414l2.828 2.829 1.415-1.415L13.414 12l2.829-2.828-1.415-1.415L12 10.586z' fill='%23ffffff'/%3E%3C/svg%3E" alt="X">
+                          </button>
+                          <div class="content">
+                            <p><strong>Need technical assistance?</strong></p>
+                            <p>Contact us at support@jolokia.com or 1.866.330.6655</p>
+                          </div>
+                        </div>
+
+                        <script>
+                          function popInfo() {
+                            // landingPageEl.querySelector('.popup-box .content').textContent = infoText;
+                            landingPageEl.querySelector(".popup-box").style.display = "flex";
+                            return false;
+                          }
+                          function closeInfo() {
+                            //landingPageEl.querySelector(".popup-box .content").textContent = "";
+                            landingPageEl.querySelector(".popup-box").style.display = "none";
+                          }
+                        </script>
+
+                        <!-- Wall AD Links -->
+
+                        <!-- Left Top Front Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 7%; top: 29%; width: 4.5%; height: 25%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Left Top Back Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 13%; top: 32%; width: 4%; height: 22%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Left Bottom Front Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 7%; top: 57.5%; width: 4.5%; height: 25%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Left Bottom Back Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 13%; top: 57%; width: 4%; height: 22%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+
+                        <!-- Right Top Front Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 88%; top: 29%; width: 4.5%; height: 25%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Right Top Back Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 83%; top: 32%; width: 4%; height: 22%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Right Bottom Front Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 88%; top: 57.5%; width: 4.5%; height: 25%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Right Bottom Back Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn side-links" style="left: 83%; top: 57%; width: 4%; height: 22%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+
+                        <!-- Glass AD Links From Left to Right -->
+
+                        <!-- 1 plat Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 3%; top: 89.5%; width: 5.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 2 w Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 9%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 3 sneeze it Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 14%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 4 psa Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 20%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 5 ll marketing Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 28%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 6 paychex Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 35%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 7 ikizmet Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 42%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 8 bridgetech Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 59%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 9 drive Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 66%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 10 elivate Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 72%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 11 fm Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 80%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 12 f ramp Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 86%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- 13 hyper Link -->
+                        <a href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn glass-links" style="left: 93%; top: 89.5%; width: 4.5%; height: 8%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                      </div>
+                    </div>
+
+                    <!-- Overlay popup scripts-->
+
+                    <script>
+                      function loadVideo(url, frame) {
+                        var x = landingPageEl.getElementById("video-frame-two");
+                        x.src = url;
+                      }
+
+                      function closeVideo() {
+                        var y = landingPageEl.getElementById("video-blanket");
+                        y.style.display = "none";
+                        var x = landingPageEl.getElementById("video-frame");
+                        x.src = "";
+                      }
+                    </script>
+
+                    <!-- ./ Overlay popup scripts -->
+
+                    <script type="text/javascript">
+                      // Declare Event ID and Domain
+                      var EVENTID = "bcee2552-084d-45e0-8177-b2373d421b01";
+                      var eventStart = "2020-12-01T16:00:00-05:00";
+                      var eventDur = 11;
+
+                      var DOMAIN = ""; //convention.xponential.com //Alternative Domain: xponential.infernoar.com
+
+                      function refresh(firstLoad = false) {
+                        // page load - set time out if current time before 2 min mark before video start - am in refresh window - refresh -- if not set time out again
+
+                        var now = new Date();
+                        var utcMillisecondsSinceEpoch = now.getTime();
+                        var utcSecondsSinceEpoch = Math.round(utcMillisecondsSinceEpoch / 1000);
+
+                        var eventStartTime = new Date(eventStart);
+                        var eventStartMsEpoch = eventStartTime.getTime();
+
+                        var refreshWindowMsEpoch = eventStartTime.getTime() - 120000;
+
+                        if (utcMillisecondsSinceEpoch <= refreshWindowMsEpoch) {
+                          console.log("Page will Reload in refresh Window, waiting 30s to check again");
+                          setTimeout(() => {
+                            refresh();
+                          }, 30000);
+                          return;
+                        }
+
+                        console.log("In refresh Window, Refreshing Page");
+                        if (!firstLoad) {
+                          location.reload();
+                        }
+                      }
+
+                      function autoCloseVideo() {
+                        // To create way to close video and display lobby
+                        var videoDur = eventDur * 1000;
+
+                        var now = new Date();
+                        var utcMillisecondsSinceEpoch = now.getTime();
+                        var utcSecondsSinceEpoch = Math.round(utcMillisecondsSinceEpoch / 1000);
+
+                        var eventStartTime = new Date(eventStart);
+                        var eventStartMsEpoch = eventStartTime.getTime();
+
+                        var closeTime = eventStartTime.getTime() + videoDur - utcMillisecondsSinceEpoch;
+
+                        // If Current time Greater then end of event, Stop Func
+                        var lbBg = landingPageEl.querySelector(".lobby-bg");
+                        if (utcMillisecondsSinceEpoch > eventStartTime.getTime() + videoDur) {
+                          let overlay = landingPageEl.querySelector("#ntar-video-container-screen");
+                          overlay.classList.remove("ntar-video-view");
+                          overlay.classList.add("ntar-video-container-screen");
+                          overlay.classList.remove("ntar-video-container");
+
+                          landingPageEl.querySelector("#info-desk").style.display = "block";
+
+                          loadVideo("/embed/bcee2552-084d-45e0-8177-b2373d421b01");
+
+                          return;
+                        }
+
+                        lbBg.style.visibility = "hidden";
+
+                        var lbButtons = landingPageEl.querySelectorAll(".lobby-bn");
+                        for (let lbB of lbButtons) {
+                          lbB.style.display = "none";
+                        }
+                        loadVideo("/embed/bcee2552-084d-45e0-8177-b2373d421b01");
+
+                        console.log("Closing Video in: " + closeTime / 1000 + "s");
+
+                        setTimeout(() => {
+                          let overlay = landingPageEl.querySelector("#ntar-video-container-screen");
+                          overlay.classList.remove("ntar-video-view");
+                          overlay.classList.add("ntar-video-container-screen");
+                          overlay.classList.remove("ntar-video-container");
+
+                          lbBg.style.visibility = "";
+                          for (let lbB of lbButtons) {
+                            lbB.style.display = "block";
+                          }
+
+                          landingPageEl.querySelector("#info-desk").style.display = "block";
+
+                          //closeVideo();
+                          //landingPageEl.querySelector(".ntar-window-close").style.display = "inline-block"
+                        }, 8000);
+                      }
+
+                      function timeThings() {
+                        var currentTime = new Date();
+                        console.log(currentTime);
+                        var dayTwo = new Date("10-16-2020");
+
+                        if (currentTime.getTime() < dayTwo.getTime()) {
+                          console.log("day one links");
+                        } else {
+                          console.log("day two link");
+                        }
+                      }
+
+                      // API Fetch Event
+                      function fetchEvent() {
+                        const BASE_URL = "https://ingress.infernocore.jolokia.com/api/";
+                        var headers;
+
+                        if (!DOMAIN) {
+                          headers = {
+                            Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                          };
+                          console.log("Domain NOT Present");
+                        } else {
+                          headers = {
+                            Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                            "X-InfernoCore-Domain": DOMAIN,
+                          };
+                          console.log("Domain Present");
+                        }
+
+                        // Add client override if Super Admin
+                        if (window.sessionStorage.getItem("overrideId")) {
+                          headers["X-InfernoCore-Domain"] = "jolokia.inferno.jolokia.com";
+                          headers["X-Client-Override"] = window.sessionStorage.getItem("overrideId");
+                          // headers['X-Client-Override'] = '6dce2bdb-0c86-487f-969e-08d85a3df765';
+                        }
+                        $.ajax({
+                          url: BASE_URL + "Events/" + EVENTID,
+                          type: "GET",
+                          accept: "application/json",
+                          contentType: "application/json",
+                          headers,
+                          success: function (res) {
+                            console.log(res);
+                            //send date to refresh
+                            //refreshStart(res.startTime);
+                          },
+                          error: function (err) {
+                            console.log(err);
+                          },
+                          complete: function () {
+                            console.log("Api Call Finished");
+                          },
+                        });
+                      }
+                      //fetchEvent(); NOT NEEDED
+
+                      //Uncomment for Lobby Lock out and auto video close used for day of event!!!
+                      //refresh(true);
+                      autoCloseVideo();
+                    </script>
+
+                    <!-- SNIPPET CONTENT END -->
+                    <!-- ******************* -->
+                    <!-- ******************* -->
+                    <!-- ******************* -->
+                  </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

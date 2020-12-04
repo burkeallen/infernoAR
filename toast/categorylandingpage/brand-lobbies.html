@@ -1,0 +1,1122 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="toast" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="2291ec64-3477-4fb3-9049-409fc40a6184">
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- ********************* -->
+                    <!-- SNIPPET CONTENT START -->
+
+                    <style>
+                      /* Page Content Container Styles */
+                      .ntar-landing-content {
+                        background-color: rgba(255, 255, 255, 0.6);
+                        background-color: rgb(0, 0, 0);
+
+                        /* Scale to full width and height + footer space */
+                        width: 100%;
+                        height: calc(100% + 60px);
+
+                        /* Stick to Jolokia content frame and scroll y */
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        overflow: hidden auto;
+
+                        /* Pad Content */
+                        padding: 0px;
+
+                        /* Display Type */
+                        display: flex;
+                        flex-direction: column;
+                      }
+
+                      @media only screen and (max-width: 767px) {
+                        .ntar-landing-content {
+                          /* Cover height minus 55px header */
+                          min-height: calc(100vh - 55px);
+
+                          /* Stick to Jolokia content frame */
+                          position: absolute;
+                          top: 0;
+                          left: 0;
+                          right: 0;
+                          bottom: 0;
+                        }
+                      }
+
+                      /* ./ Page Content Container Styles */
+
+                      /* Lobby Styles */
+                      .lobby {
+                        overflow: hidden;
+                        position: absolute;
+                        width: 100%;
+                      }
+
+                      .lobby-bg {
+                        width: 100%;
+                        transition: .5s ease-in;
+                        opacity: 0;
+                      }
+
+                      .buttons-overlay {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                      }
+
+                      .lobby-btn {
+                        position: absolute;
+                        filter: hue-rotate(0deg);
+                        transition: all 0.5s;
+                        z-index: 1;
+                      }
+
+                      .lobby-btn a {
+                      }
+
+                      .lobby-btn:hover {
+                        transition: all 0.3s;
+                        filter: hue-rotate(8deg);
+                      }
+                      .sponsor-btn {
+                        position: absolute;
+                        filter: hue-rotate(0deg);
+                        transition: all 0.5s;
+                        z-index: 1;
+                      }
+                      .lobby-btn img {
+                        width: 100%;
+                      }
+
+                      /* Overlays */
+
+                      .ntar-video-view {
+                        position: absolute;
+                        top: 0px;
+                        left: 0px;
+                        right: 0px;
+                        bottom: -60px;
+                        background-color: rgba(255, 255, 255, 0.8);
+                        z-index: 20;
+                        display: none;
+                      }
+
+                      .ntar-video-viewer {
+                        position: absolute;
+                        top: 60px;
+                        left: 30px;
+                        right: 30px;
+                        width: calc(100% - 60px);
+                        max-width: 800px;
+                        margin: 0px auto;
+                        height: calc(100% - 90px);
+                        bottom: 30px;
+                        border: none;
+                      }
+
+                      a.ntar-window-close {
+                        padding: 0.55rem;
+                        width: 11rem;
+                        font-size: 1.3rem;
+                        font-weight: 100;
+                        line-height: 1;
+                        color: #333;
+                        background-color: #fff;
+                        border-radius: 4rem;
+                        text-align: center;
+                        cursor: pointer;
+                        text-decoration: none;
+                        display: inline-block;
+                        margin: 20px 0px 0px 30px;
+                      }
+
+                      a.ntar-window-close:hover {
+                        color: #333;
+                        text-decoration: none;
+                      }
+
+                      .dark-button {
+                        background-color: #333 !important;
+                        color: #fff !important;
+                      }
+
+                      .button-video {
+                        border-radius: 4px;
+                        font-size: 1.5em;
+                        font-weight: bold;
+                        color: black;
+                        background-color: #eeeae1;
+                        outline: none;
+                        border: 2px solid black;
+                        border-radius: 15px;
+                        min-width: 70px;
+                        padding: 1rem 2rem;
+                        text-align: center;
+                      }
+
+                      .button-video:hover {
+                        transform: scale(1.1);
+                      }
+
+                      /* ./ Overlays */
+
+                      @media only screen and (max-width: 786px) {
+                        .lobby-bg {
+                          position: relative;
+                          top: 3px;
+                        }
+                      }
+
+                      @media only screen and (max-width: 485px) {
+                        .lobby-bg {
+                          position: relative;
+                          top: 5px;
+                        }
+                      }
+                      /* ./ Lobby Styles */
+                    </style>
+
+                    <!-- Page Overlays -->
+                    <div class="ntar-video-view" id="video-blanket">
+                      <a class="ntar-window-close dark-button" href="javascript:void(closeVideo());">Close</a>
+                      <iframe class="ntar-video-viewer" id="video-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" src></iframe>
+                    </div>
+                    <!-- ./ Page Overlays -->
+
+                    <!-- Page Content Container -->
+                    <div class="ntar-landing-content">
+                      <div class="lobby">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/lobbies/akt_lobby.jpg" alt class="lobby-bg" onload="fadeIn()">
+
+                        <!-- Boutique Link -->
+                        <a href="/videos/497b83f3-da19-4438-7142-08d89092fc58/landing/9770c611-07ab-4650-b2c3-61706f38db71" id="TRACK-Link-Boutique">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 16.5%; top: 60%; width: 9.5%; height: 18%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Theater Link -->
+                        <a class="theater" href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 46%; top: 60%; width: 10%; height: 18%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!--  Agenda Link -->
+                        <a class="agenda" href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 88%; top: 26%; width: 9.5%; height: 26%"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                        <!-- Ad Link -->
+                        <a class="ad" href="javascript:void(0)">
+                          <!-- Button -->
+                          <div class="lobby-btn" style="left: 5.5%; top: 24.5%; width: 9.5%; height: 27%; display: non"></div>
+                          <!-- ./ Button -->
+                        </a>
+                        <!-- ./ Link -->
+                      </div>
+                    </div>
+
+                    <div class="hidden-links" style="display: none">
+                      {% for cat in data.Categories %}
+                      <a href="/videos/{{cat.Id}}/landing/{{cat.LandingPageSnippetId}}" id="link_{{cat.Id}}"></a>
+                      {% endfor %}
+                    </div>
+
+                    <!-- Overlay popup scripts-->
+
+                    <script>
+
+                      function loadVideo(url) {
+                        var x = landingPageEl.getElementById("video-frame");
+                        x.src = url;
+                        var y = landingPageEl.getElementById("video-blanket");
+                        y.style.display = "block";
+                      }
+
+                      function closeVideo() {
+                        var y = landingPageEl.getElementById("video-blanket");
+                        y.style.display = "none";
+                        var x = landingPageEl.getElementById("video-frame");
+                        x.src = "";
+                      }
+                    </script>
+
+                    <!-- ./ Overlay popup scripts -->
+
+                    <script type="text/javascript">
+                      var baseBgUrl = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/toast/bg/lobbies/";
+                      var currentCat = "{{data.CurrentlyViewedCategory.Id}}";
+                      var brands = [
+                        {
+                          name: "akt",
+                          bg: "akt_lobby.jpg",
+                          catId: "e564bf20-286f-4be2-546e-08d890949b45",
+                          agendaId: "dc13f09b-1223-40d3-583c-08d890814749",
+                          theaterId: "dc13f09b-1223-40d3-583c-08d890814749",
+                          adLink: "",
+                        },
+                        {
+                          name: "cycle bar",
+                          bg: "cb_lobby.jpg",
+                          catId: "30e90396-9d65-45c4-583b-08d890814749",
+                          agendaId: "76170f0e-7ab9-44a0-ee73-08d89097c6fd",
+                          theaterId: "76170f0e-7ab9-44a0-ee73-08d89097c6fd",
+                          adLink: "",
+                        },
+                        {
+                          name: "club pilates",
+                          bg: "pilates_lobby.jpg",
+                          catId: "0d8e7159-ddd8-4227-583a-08d890814749",
+                          agendaId: "7bc50cb1-0283-4079-5470-08d890949b45",
+                          theaterId: "7bc50cb1-0283-4079-5470-08d890949b45",
+                          adLink: "",
+                        },
+                        {
+                          name: "pure barre",
+                          bg: "pure_lobby.jpg",
+                          catId: "0b781322-e2c0-4e09-ee70-08d89097c6fd",
+                          agendaId: "75a52217-7566-4b26-5471-08d890949b45",
+                          theaterId: "75a52217-7566-4b26-5471-08d890949b45",
+                          adLink: "",
+                        },
+                        {
+                          name: "yoga six",
+                          bg: "yoga_lobby.jpg",
+                          catId: "4633b666-44e5-4709-546f-08d890949b45",
+                          agendaId: "d09c5b10-b3dd-48ee-64ce-08d890814b05",
+                          theaterId: "d09c5b10-b3dd-48ee-64ce-08d890814b05",
+                          adLink: "",
+                        },
+                        {
+                          name: "stride",
+                          bg: "stride_lobby.jpg",
+                          catId: "3080eebd-a7b3-4973-ee72-08d89097c6fd",
+                          agendaId: "620cea47-c58c-439a-ee74-08d89097c6fd",
+                          theaterId: "620cea47-c58c-439a-ee74-08d89097c6fd",
+                          adLink: "",
+                        },
+                        {
+                          name: "stretch lab",
+                          bg: "stretch_lobby.jpg",
+                          catId: "e016c99c-7272-4f90-1973-08d890813e67",
+                          agendaId: "40063b79-c601-48b0-583e-08d890814749",
+                          theaterId: "40063b79-c601-48b0-583e-08d890814749",
+                          adLink: "",
+                        },
+                        {
+                          name: "row house",
+                          bg: "row_lobby.jpg",
+                          catId: "3973f907-5d73-4d5a-ee71-08d89097c6fd",
+                          agendaId: "c1191b11-c1bd-4bb7-583d-08d890814749",
+                          theaterId: "c1191b11-c1bd-4bb7-583d-08d890814749",
+                          adLink: "",
+                        },
+                      ];
+
+                      for (let brand of brands) {
+                        /*if (currentCat == "{{data.CurrentlyViewedCategory.Id}}") {
+                          currentCat = "e016c99c-7272-4f90-1973-08d890813e67";
+                        }*/
+                        if (brand.catId != currentCat){
+                          continue;
+                        }
+                        if (brand.theaterId){
+                          let theater = landingPageEl.querySelector(".theater")
+                          theater.href =
+                          "javascript:void(linkClick('" + brand.theaterId + "'))";
+                          theater.id = "TRACK-Link-Player-" + brand.name.replaceAll(" ", "");
+                        }
+
+                        if (brand.adLink){
+                          let ad = landingPageEl.querySelector(".ad")
+                          ad.href = brand.adLink;
+                          ad.id = "TRACK-Link-Player-" + brand.name.replaceAll(" ", "");
+                        }
+                        
+
+                        let agenda = landingPageEl.querySelector(".agenda");
+                        agenda.href =
+                          "javascript:void(linkClick('" + brand.agendaId + "'))";
+                          agenda.id = "TRACK-Link-Agenda-" + brand.name.replaceAll(" ", "");
+
+                        let bg = landingPageEl.querySelector(".lobby-bg");
+                        bg.src = baseBgUrl + brand.bg;
+
+                      }
+
+                      function fadeIn(){
+                        let bg = landingPageEl.querySelector(".lobby-bg");
+                        bg.style.opacity = 1;
+                      }
+
+                      function linkClick(id) {
+                        var linkC = landingPageEl.getElementById("link_" + id);
+                        linkC.dispatchEvent(new MouseEvent("click"));
+                        return false;
+                      }
+                    </script>
+
+<!-- ##### chat widget ##### -->
+
+<div style="display:none;">
+  <p id="user-inferno-first-name">${firstName}</p>
+  <p id="user-inferno-last-name">${lastName}</p>
+</div>
+
+<script async>
+
+  var userInfernoId = window.sessionStorage.getItem("userId");
+  var firstName = landingPageEl.getElementById("user-inferno-first-name").innerHTML;
+  var lastName = landingPageEl.getElementById("user-inferno-last-name").innerHTML;
+
+  // var userInfernoId = "{{ userInfernoId }}";
+  // var firstName = "{{ userFirstName }}";
+  // var lastName = "{{ userLastName }}";
+
+  var hasProfileImage = false;
+
+  // global chat manager
+  var chatManager = null;
+
+  var chatweeValues = {
+      userIdKey: "chatwee-user-id",
+      sessionCookieKey: "chatwee-SID-5f7ef630366e2e515565f9a2",
+      chatId: "5f7ef630366e2e515565f9a2",
+      clientApiKey: "a017666f3879cc833eaba23e",
+      isAdmin: 0,
+      ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
+  }
+
+  var checkAdmin = () => {
+
+      const moderatorWhitelist = ["c8240590-94c1-4043-b5ef-961e5be0edcc"];
+
+      if (moderatorWhitelist.includes(userInfernoId)) {
+          chatweeValues.isAdmin = 1;
+      }
+
+  }
+
+  var loadChatScript = () => {
+      // don't load script if already on page
+      let chatScript = document.getElementById("chat-script");
+      if (chatScript) return;
+
+      (function () {
+          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+          s1.id = "chat-script";
+          s1.async = true;
+          s1.src = 'https://static.chatwee-api.com/v2/script.js';
+          s1.charset = 'UTF-8';
+          s0.parentNode.insertBefore(s1, s0);
+      })();
+
+      return;
+  }
+
+  var loadChatStyles = () => {
+      // dont load styles if already on page
+      let chatStyleSheet = document.getElementById("chat-styling");
+      if (chatStyleSheet) return;
+
+      (function () {
+          var link1 = document.createElement("link"), body = document.getElementsByTagName("body")[0];
+
+          link1.setAttribute("id", "chat-styling")
+          link1.setAttribute("rel", "stylesheet")
+          link1.setAttribute("type", "text/css")
+          link1.setAttribute("href", "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chat-styling.css")
+          link1.setAttribute("media", "all")
+          body.parentNode.insertBefore(link1, body);
+      })();
+
+      return;
+  }
+
+  var startChat = async () => {
+      if (!chatManager) {
+          chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
+          chatManager.Run();
+      }
+      return;
+  }
+
+  var openChat = () => {
+      // close bubble
+      let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
+      let bubble = bubbleChild.parentNode;
+      bubble.style.display = "none";
+
+      // open chat
+      let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
+      let chat = chatChild.parentNode;
+      chat.style.display = "block";
+
+      return;
+  }
+
+  // Chatwee UserId must be set as the Id for the button
+  var triggerConversation = e => {
+      // let userId = e.currentTarget.id; // use this if stored in id attribute
+      let userId = e.currentTarget.getAttribute('chatwee-user-id'); // use this if stored in chatwee-user-id attribute
+      openChat();
+      chatManager.TriggerConversation(userId);
+  }
+
+  // helper functions
+  var getCookie = key => {
+      let cookieValue = "";
+
+      const cookieList = document.cookie;
+      if (cookieList) {
+          const cookie = cookieList
+              .split("; ")
+              .find(row => row.startsWith(key));
+
+          if (cookie) {
+              cookieValue = cookie.split("=")[1];
+          }
+
+      }
+      return cookieValue;
+  }
+
+  var setCookie = (key, value, age) => {
+      document.cookie = key + "=" + value + "; path=/";
+  }
+
+  var getKVPsByKey = key => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+      return fetch(url, {
+          method: 'GET',
+          withCredentials: true,
+          headers: {
+              'Authorization': bearer
+          }
+      });
+
+  }
+
+  var postKVP = (key, value) => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
+
+      const kvp = {
+          key: key,
+          value: value,
+          public: true
+      }
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+      let headers = new Headers();
+      headers.set('Authorization', bearer)
+      headers.set('Accept', 'application/json')
+      headers.set('Content-Type', 'application/json')
+
+      // for super user accounts
+      var overrideId = window.sessionStorage.getItem("overrideId");
+      if (overrideId) headers.set("X-Client-Override", overrideId);
+
+      fetch(url, {
+          method: 'POST',
+          withCredentials: true,
+          headers: headers,
+          body: JSON.stringify(kvp)
+      })
+
+  }
+
+
+  var validateChatSessionId = sessionId => {
+      const url = chatweeValues.ssoBaseUrl
+          + "validate-session?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&sessionId="
+          + sessionId;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var loginChat = userId => {
+      const url = chatweeValues.ssoBaseUrl
+          + "login?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&userId="
+          + userId;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var registerChat = () => {
+      const name = firstName + " " + lastName;
+
+      let avatarUrl = "https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/default-profile-image.png";
+
+      if (hasProfileImage) avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
+
+      const url = chatweeValues.ssoBaseUrl
+          + "register?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&login="
+          + name
+          + "&isAdmin="
+          + chatweeValues.isAdmin
+          + "&avatar="
+          + avatarUrl;
+
+      return fetch(url).then(res => res.json());
+  }
+
+  var editChatweeAvatar = (chatweeUserId, newAvatarUrl) => {
+
+      const url = chatweeValues.ssoBaseUrl
+          + "edit?"
+          + "chatId="
+          + chatweeValues.chatId
+          + "&clientKey="
+          + chatweeValues.clientApiKey
+          + "&userId="
+          + chatweeUserId
+          + "&login="
+          + "NewLogin"
+          + "&avatar="
+          + newAvatarUrl;
+
+      return fetch(url);
+
+  }
+
+  // connect to Chatwee
+  var connectChat = async () => {
+
+      // see if session id locally
+      let sessionId = getCookie(chatweeValues.sessionCookieKey);
+
+      if (sessionId && sessionId !== "[object Object]") {
+          // validate session id with chatwee
+          let valid
+          try {
+              valid = await validateChatSessionId(sessionId);
+          } catch (e) {
+              throw new Error(e);
+          }
+
+          // if true, do nothing
+          if (valid) return;
+
+      }
+
+      // if false, check if user id is present in api
+      let userId = ""
+      try {
+          const res = await getKVPsByKey(chatweeValues.userIdKey);
+
+          if (res.status === 200) {
+              const json = await res.json();
+              userId = json.value;
+          } else {
+              console.log("no chatwee user id from api")
+          }
+
+      } catch (e) {
+          throw new Error(e);
+      }
+
+      // if true, login and set session id locally
+      if (userId) {
+          let sessionId = ""
+
+          try {
+              sessionId = await loginChat(userId);
+          } catch (e) {
+              throw new Error(e);
+          }
+          setCookie(chatweeValues.sessionCookieKey, sessionId);
+      }
+      // if false, register and set user id and log in user
+      else {
+          let userId = ""
+          try {
+              userId = await registerChat();
+          } catch (e) {
+              throw new Error(e);
+          }
+
+          try {
+              const res = await postKVP(chatweeValues.userIdKey, userId);
+          } catch (e) {
+              throw new Error(e)
+          }
+
+          let sessionId = ""
+          try {
+              sessionId = await loginChat(userId);
+          }
+          catch (e) {
+              throw new Error(e);
+          }
+
+          setCookie(chatweeValues.sessionCookieKey, sessionId);
+
+      }
+
+      return;
+  }
+
+  var getProfileImage = () => {
+      let url = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/1" + "/1";
+      return fetch(url);
+  }
+
+  var waitForGlobal = async (key, callback1, callback2) => {
+      if (window[key]) {
+          await callback1();
+          await callback2();
+      } else {
+          setTimeout(function () {
+              waitForGlobal(key, callback1, callback2);
+          }, 100);
+      }
+  };
+
+  var setUpChat = async () => {
+      checkAdmin()
+      loadChatScript();
+      loadChatStyles();
+
+      const res = await getProfileImage();
+      if (res.status === 200) {
+          hasProfileImage = true;
+      }
+
+      waitForGlobal("ChatweeLib", connectChat, startChat);
+  }
+
+  setUpChat();
+
+</script>
+
+<script>
+
+  // delete link between Chatwee account and Inferno account if needed
+  var deleteChatweeUserIdByKey = key => {
+
+      const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
+
+      const bearerToken = window.sessionStorage.getItem("token");
+      const bearer = 'Bearer ' + bearerToken;
+
+
+      fetch(url, {
+          method: 'DELETE',
+          withCredentials: true,
+          headers: {
+              'Authorization': bearer
+          }
+      }).then(res => console.log("delete res is ", res))
+          .catch(e => console.log("delete error is ", e));
+
+  }
+
+</script>
+
+
+<!-- ##### end of  chat widget ##### -->
+                  </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
