@@ -3,366 +3,976 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>MediaElement.js 3.0 - Playlist Plugin</title>
+  <title>NovoLogic Audio Player</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-  <link rel="icon" href="favicon.ico" type="image/x-icon">
-
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.6/mediaelementplayer.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:400,400i" rel="stylesheet">
   <style>
     html {
-      overflow-x: hidden;
-    }
-
-    .mejs__container.mejs__video,
-    .mejs-container.mejs-video {
-      overflow: hidden;
-    }
-
-    .mejs__container.mejs__audio,
-    .mejs-container.mejs-audio {
-      height: 300px !important;
-      min-width: unset !important;
-      width: 100% !important;
-    }
-
-    .mejs__container.mejs__audio.mejs__no-playlist,
-    .mejs-container.mejs-audio.mejs__no-playlist {
-      min-height: 60px;
-    }
-
-    .mejs__playlist-button,
-    .mejs-playlist-button {
-      position: relative;
-    }
-
-    .mejs__playlist-button > button,
-    .mejs-playlist-button > button,
-    .mejs__next-button > button,
-    .mejs-next-button > button,
-    .mejs__prev-button > button,
-    .mejs-prev-button > button,
-    .mejs__loop-button > button,
-    .mejs-loop-button > button,
-    .mejs__shuffle-button > button,
-    .mejs-shuffle-button > button {
-      background: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/playlist-controls.svg') transparent no-repeat;
-    }
-
-    .mejs__playlist-button > button,
-    .mejs-playlist-button > button {
-      background-position: -80px 0;
-    }
-
-    .mejs__next-button > button,
-    .mejs-next-button > button {
-      background-position: 0 0;
-    }
-
-    .mejs__prev-button > button,
-    .mejs-prev-button > button {
-      background-position: -20px 0;
-    }
-
-    .mejs__loop-button > button,
-    .mejs-loop-button > button {
-      background-position: -120px 0;
-    }
-
-    .mejs__shuffle-button > button,
-    .mejs-shuffle-button > button {
-      background-position: -100px 0;
-    }
-
-    .mejs__loop-button.mejs__loop-off > button,
-    .mejs-loop-button.mejs-loop-off > button,
-    .mejs__shuffle-button.mejs__shuffle-off > button,
-    .mejs-shuffle-button.mejs-shuffle-off > button {
-      opacity: 0.7;
-    }
-
-    .mejs__playlist-selector {
-      border-radius: 1em;
-    }
-
-    .mejs__playlist-button > .mejs__playlist-selector,
-    .mejs-playlist-button > .mejs-playlist-selector {
-      background: rgba(50, 50, 50, 0.7);
-      border: solid 1px transparent;
-      border-radius: 0;
-      bottom: 100%;
-      margin-right: -43px;
-      overflow: hidden;
-      padding: 0;
-      position: absolute;
-      right: 50%;
-      visibility: visible;
-      width: 86px;
-    }
-
-    .mejs__playlist-selector-list,
-    .mejs-playlist-selector-list {
-      height: 100%;
-      list-style-type: none !important;
-      margin: 0;
-      overflow-y: auto;
-      padding: 0;
-    }
-
-    .mejs__playlist-selector-list-item,
-    .mejs-playlist-selector-list-item {
-      border-bottom: 1px solid #c8c8c8;
-      border-collapse: collapse;
-      cursor: pointer;
-      display: table;
-      list-style-type: none !important;
-      position: relative;
-      width: 100%;
-    }
-
-    .mejs__playlist-item-inner {
-      display: table-row;
-      overflow: hidden;
-    }
-
-    .mejs__playlist-selector-list-item:hover,
-    .mejs-playlist-selector-list-item:hover {
-      background-color: rgb(200, 200, 200) !important;
-      background-color: rgba(255, 255, 255, 0.4) !important;
-    }
-
-    .mejs__playlist-selector-list-item:focus,
-    .mejs-playlist-selector-list-item:focus {
-      outline: none;
-    }
-
-    .mejs__playlist-selector-input,
-    .mejs-playlist-selector-input {
-      left: -1000px;
-      position: absolute;
-    }
-
-    .mejs__playlist-selector-label,
-    .mejs-playlist-selector-label {
-      cursor: pointer;
-      float: left;
-      font-size: 1.3em;
-      margin: 0;
-    }
-
-    /*noinspection CssInvalidPropertyValue*/
-    .mejs__playlist-selector-label > span,
-    .mejs-playlist-selector-label > span {
-      -webkit-background-clip: text;
-      background-clip: text;
-      background-color: #eb5802;
-      background-image: -webkit-linear-gradient(top, #eb5802, #f3ad39);
-      background-image: linear-gradient(to bottom, #eb5802, #f3ad39);
-      color: transparent;
-      font-size: 0.65em;
-      vertical-align: middle;
-    }
-
-    .mejs__playlist-selected,
-    .mejs-playlist-selected {
-      background-color: #3a3a3a;
-    }
-
-    .mejs__playlist-layer,
-    .mejs-playlist-layer {
-      background: #222;
-      bottom: 40px;
-      color: #fff;
-      font-size: 12px;
-      height: calc(100% - 40px) !important;
-      overflow: hidden;
-      position: absolute;
-      right: 0;
-      text-align: center;
-      top: 0;
-      -webkit-transition: 0.5s;
-      transition: 0.5s;
-      width: 33.33333% !important;
-      z-index: 2;
-    }
-
-    .mejs__container.mejs__audio .mejs__playlist-layer,
-    .mejs-container.mejs-audio .mejs-playlist-layer {
-      bottom: 85px;
-      height: calc(100% - 85px) !important;
-      overflow: auto;
-      width: 100% !important;
-    }
-
-    .mejs__playlist-hidden,
-    .mejs-playlist-hidden {
-      right: -33.33333%;
-      -webkit-transition: 0.5s;
-      transition: 0.5s;
-    }
-
-    .mejs__playlist-item-thumbnail,
-    .mejs-playlist-item-thumbnail {
-      display: table-cell;
-      padding: 7px 5px;
-      vertical-align: top;
-      width: 30%;
-    }
-
-    .mejs__container {
-      background-color: transparent;
-    }
-
-    .mejs__controls:not([style*='display: none']) {
-      background: transparent;
-    }
-
-    .mejs__container.mejs__audio .mejs__playlist-item-thumbnail,
-    .mejs-container.mejs-audio .mejs-playlist-item-thumbnail {
-      padding: 5px;
-      width: 15%;
-    }
-
-    .mejs__playlist-item-thumbnail > img,
-    .mejs-playlist-item-thumbnail > img {
-      height: 72px;
-      width: auto;
-    }
-
-    .mejs__playlist-item-content,
-    .mejs-playlist-item-content {
-      display: table-cell;
-      padding: 10px;
-      width: 70%;
-    }
-
-    .mejs__container.mejs__audio .mejs__playlist-item-content,
-    .mejs-container.mejs-audio .mejs-playlist-item-content {
-      margin: 0;
-      width: 85%;
-    }
-
-    .mejs__playlist-item-description,
-    .mejs-playlist-item-description {
-      clear: left;
-      padding: 5px 0;
-      text-align: left;
-    }
-
-    .mejs__playlist-current,
-    .mejs-playlist-current {
-      background: transparent;
-      bottom: -46px;
-      height: auto !important;
-      left: 0;
-      position: absolute;
-      z-index: 3;
-    }
-
-    .mejs__playlist-current p,
-    .mejs-playlist-current p {
-      color: #fff;
-      font-size: 0.8em;
-      margin: 15px 10px;
-    }
-
-    .mejs__playlist-current > img,
-    .mejs-playlist-current > img {
-      float: left;
-      margin: 5px 10px;
-      max-height: 35px;
-    }
-
-    .mejs__playlist-current-title,
-    .mejs-playlist-current-title,
-    .mejs__playlist-current-description,
-    .mejs-playlist-current-description {
-      font-style: italic;
-    }
-
-    .mejs__controls {
-      bottom: 20px !important;
-      height: unset !important;
-      padding: 0 !important;
-    }
-
-    body {
       background-color: transparent
     }
 
-    ::-webkit-scrollbar {
-      width: 12px;
+    div#list-screen {
+      background-color: #141920;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 9999;
+      display: none;
     }
 
-    ::-webkit-scrollbar-thumb {
-      background-color: #8B8787;
+    div#list-screen div#list-screen-header {
+      background-color: #141920;
+      padding: 15px;
+      text-align: center;
+      height: 25px;
+      position: relative;
+      color: white;
+      font-family: "Lato", sans-serif;
+      cursor: pointer;
+    }
+
+    div#list-screen div#list-screen-header img#up-arrow {
+      position: absolute;
+      top: 23px;
+      left: 15px;
+      cursor: pointer;
+    }
+
+    div#list-screen div#list-screen-header span.list-active-song-name {
+      color: #fff;
+      line-height: 25px;
+      font-size: 16px;
+      font-family: "Lato", sans-serif;
+      letter-spacing: 0.5px;
+    }
+
+    div#list-screen div#list {
+      overflow-y: scroll;
+    }
+
+    div#list-screen div#list div.song {
+      padding: 15px;
+      background-color: #242b33;
+      margin-bottom: 1px;
+      cursor: pointer;
+      line-height: 24px;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      color: #cccccc;
+    }
+
+    div#list-screen div#list div.song img {
+      max-height: 64px;
+      margin-right: 10px;
+    }
+
+
+    div#list-screen div#list div.song.amplitude-active-song-container {
+      background-color: #30363e;
+    }
+
+    div#list-screen div#list div.song div.song-meta-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    div#list-screen div#list div.song div.song-meta-container .song-name {
+      font-family: "Lato", sans-serif;
+      font-size: 14px;
+      line-height: 16px;
+      color: #03a9f4;
+      letter-spacing: 0.47px;
+      display: block;
+    }
+
+    div#list-screen div#list div.song div.song-meta-container .song-artist-album {
+      font-family: "Lato", sans-serif;
+      font-size: 12px;
+      line-height: 14px;
+      color: #fff;
+      letter-spacing: 0.47px;
+      display: block;
+    }
+
+    div#list-screen div#list div.song .song-duration {
+      display: inline-block;
+      opacity: 0.5;
+      font-family: 'Lato', sans-serif;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      width: 35px;
+      text-align: center;
+    }
+
+    div#list-screen div#list div.song .song-artist-album {
+      color: #5277b0;
+    }
+
+    div#list-screen div#list-screen-footer {
+      height: 80px;
+      padding: 15px;
+    }
+
+    div#list-screen div#list-screen-footer div#list-screen-meta-container {
+      width: calc(100% - 123px);
+      float: left;
+    }
+
+    div#list-screen div#list-screen-footer div#list-screen-meta-container span.song-name {
+      font-family: "Lato", sans-serif;
+      font-size: 16px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 24px;
+    }
+
+    div#list-screen div#list-screen-footer div#list-screen-meta-container div.song-artist-album {
+      opacity: 0.5;
+      font-family: "Lato", sans-serif;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 16px;
+    }
+
+    div#list-screen div#list-screen-footer div.list-controls {
+      width: 90px;
+      float: right;
+      margin-top: 8px;
+    }
+
+    div#list-screen div#list-screen-footer div.list-controls div.list-previous {
+      cursor: pointer;
+      width: 15px;
+      height: 17px;
+      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-previous.svg");
+      background-repeat: no-repeat;
+      float: left;
+      margin-right: 15px;
+      margin-top: 4px;
+    }
+
+    div#list-screen div#list-screen-footer div.list-controls div.list-play-pause {
+      cursor: pointer;
+      width: 17px;
+      height: 24px;
+      background-repeat: no-repeat;
+      float: left;
+    }
+
+    div#list-screen div#list-screen-footer div.list-controls div.list-play-pause.amplitude-playing {
+      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-pause.svg");
+    }
+
+    div#list-screen div#list-screen-footer div.list-controls div.list-play-pause.amplitude-paused {
+      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-play.svg");
+    }
+
+    div#list-screen div#list-screen-footer div.list-controls div.list-next {
+      cursor: pointer;
+      width: 15px;
+      height: 17px;
+      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-next.svg");
+      background-repeat: no-repeat;
+      float: left;
+      margin-left: 15px;
+      margin-top: 4px;
+    }
+
+    div.player-header {
+      background-color: #141920;
+      padding: 15px;
+      text-align: center;
+      height: 25px;
+      position: relative;
+      margin-top: 40px;
+      cursor: pointer;
+      color: white;
+      font-family: "Lato", sans-serif;
+    }
+
+    div.player-header img#down {
+      position: absolute;
+      top: 23px;
+      left: 15px;
+      cursor: pointer;
+    }
+
+    div#player-top {
+      position: relative;
+      background-color: #000000;
+      text-align: center;
+    }
+
+    div#player-progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background-color: #000;
+      position: relative;
+      margin-top: -6px;
+    }
+
+    div#player-progress-bar-container progress#song-played-progress {
+      width: 100%;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      height: 8px;
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 9;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+    }
+
+    div#player-progress-bar-container progress#song-played-progress[value]::-webkit-progress-bar {
+      background: none;
+    }
+
+    div#player-progress-bar-container progress#song-played-progress[value]::-webkit-progress-value {
+      background: blue;
+    }
+
+    div#player-progress-bar-container progress#song-played-progress[value]::-moz-progress-bar {
+      background: blue;
+    }
+
+    div#player-progress-bar-container progress#song-buffered-progress {
+      width: 100%;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      height: 8px;
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 2;
+      border: none;
+      background: transparent;
+    }
+
+    div#player-progress-bar-container progress#song-buffered-progress[value]::-webkit-progress-bar {
+      background: none;
+    }
+
+    div#player-progress-bar-container progress#song-buffered-progress[value]::-webkit-progress-value {
+      background-color: rgba(255, 255, 255, 0.5);
+      transition: width 0.1s ease;
+    }
+
+    div#player-progress-bar-container progress#song-buffered-progress[value]::-moz-progress-bar {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    div#player-middle {
+      background-color: #000;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      text-align: center;
+      position: relative;
+    }
+
+    div#player-middle div#time-container {
+      color: white;
+      width: 100%;
+      background-color: #000;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    div#player-middle div#time-container span.amplitude-duration-time {
+      position: absolute;
+      top: 0px;
+      right: 5px;
+    }
+
+    div#player-middle div#time-container span.amplitude-current-time {
+      position: absolute;
+      top: 0px;
+      left: 5px;
+    }
+
+    div#player-middle span.song-name {
+      font-family: Lato, sans-serif;
+      font-size: 16px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 24px;
+      display: block;
+    }
+
+    div#player-middle div.song-artist-album {
+      opacity: 0.5;
+      font-family: Lato, sans-serif;
+      font-size: 14px;
+      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 16px;
+    }
+
+    div#player-bottom {
+      background-color: #192029;
+      padding-left: 25px;
+      padding-right: 25px;
+    }
+
+    div#player-bottom div#control-container {
+      height: 60px;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+
+    div#player-bottom div#control-container div#shuffle-container {
+      float: left;
+      width: 20%;
+      height: 60px;
+      padding-top: 21px;
+    }
+
+    div#player-bottom div#control-container div#shuffle-container div#shuffle {
+      width: 16px;
+      height: 17px;
+      cursor: pointer;
+      margin: auto;
+      opacity: 0.7;
+    }
+
+    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-off {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle.svg");
+    }
+
+    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-off:hover {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle-on.svg");
+      opacity: 0.8;
+    }
+
+    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-on {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle-on.svg");
+      opacity: 1;
+    }
+
+    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-on:hover {
+      opacity: 1;
+    }
+
+    div#player-bottom div#control-container div#prev-container {
+      width: 20%;
+      float: left;
+      height: 60px;
+      padding-top: 18px;
+    }
+
+    div#player-bottom div#control-container div#prev-container div#previous {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/previous.svg");
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      margin: auto;
+    }
+
+    div#player-bottom div#control-container div#prev-container div#previous:hover {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/previous-hover.svg");
+    }
+
+    div#player-bottom div#control-container div#play-pause-container {
+      width: 20%;
+      float: left;
+      height: 60px;
+    }
+
+    div#player-bottom div#control-container div#play-pause-container div#play-pause {
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      margin: auto;
+    }
+
+    div#player-bottom div#control-container div#play-pause-container div#play-pause.amplitude-playing {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/pause.svg");
+    }
+
+    div#player-bottom div#control-container div#play-pause-container div#play-pause.amplitude-paused {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/play.svg");
+    }
+
+    div#player-bottom div#control-container div#next-container {
+      width: 20%;
+      float: left;
+      height: 60px;
+      padding-top: 18px;
+    }
+
+    div#player-bottom div#control-container div#next-container div#next {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/next.svg");
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      margin: auto;
+    }
+
+    div#player-bottom div#control-container div#next-container div#next:hover {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/next-hover.svg");
+    }
+
+    div#player-bottom div#control-container div#repeat-container {
+      float: left;
+      width: 20%;
+      height: 60px;
+      padding-top: 20px;
+    }
+
+    div#player-bottom div#control-container div#repeat-container div#repeat {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat.svg");
+      width: 18px;
+      height: 20px;
+      cursor: pointer;
+      margin: auto;
+      opacity: 0.7;
+    }
+
+    div#player-bottom div#control-container div#repeat-container div#repeat:hover {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat-on.svg");
+      opacity: 0.8;
+    }
+
+    div#player-bottom div#control-container div#repeat-container div#repeat.amplitude-repeat-on {
+      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat-on.svg");
+      opacity: 1;
+    }
+
+    div#player-bottom div#control-container div#repeat-container div#repeat.amplitude-repeat-on:hover {
+      opacity: 1;
+    }
+
+    div#player-bottom div#control-container::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    div#player-bottom div#volume-container {
+      padding-bottom: 20px;
+      text-align: center;
+    }
+
+    div#player-bottom div#volume-container img {
+      display: block;
+      float: left;
+      margin-top: -9px;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+      width: calc(100% - 30px);
+      -webkit-appearance: none;
+      display: block;
+      margin-left: 10px;
+      float: left;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus {
+      outline: none;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-webkit-slider-runnable-track {
+      width: 75%;
+      height: 2px;
+      cursor: pointer;
+      animate: 0.2s;
+      background: #cfd8dc;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-webkit-slider-thumb {
+      height: 18px;
+      width: 18px;
+      background-color: white;
+      cursor: pointer;
+      margin-top: -8px;
+      -webkit-appearance: none;
       border-radius: 20px;
     }
 
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus::-webkit-slider-runnable-track {
+      background: #cfd8dc;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-moz-range-track {
+      width: 100%;
+      height: 1px;
+      cursor: pointer;
+      animate: 0.2s;
+      background: #cfd8dc;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-moz-range-thumb {
+      height: 18px;
+      width: 18px;
+      background-color: white;
+      cursor: pointer;
+      margin-top: -8px;
+      -webkit-appearance: none;
+      border-radius: 20px;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-track {
+      width: 100%;
+      height: 2px;
+      cursor: pointer;
+      animate: 0.2s;
+      background: #cfd8dc;
+      border-width: 15px 0;
+      color: transparent;
+      border-color: #192029;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-lower {
+      background: transparent;
+      border-radius: 2.6px;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-upper {
+      background: transparent;
+      border-radius: 2.6px;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-thumb {
+      height: 18px;
+      width: 18px;
+      background-color: white;
+      cursor: pointer;
+      margin-top: 0px;
+      border: 20px;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus::-ms-fill-lower {
+      background: #cfd8dc;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-upper {
+      background: #cfd8dc;
+    }
+
+    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-tooltip {
+      display: none;
+    }
+
+    div#player-bottom div#volume-container:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    @-moz-document url-prefix() {
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+        margin-top: 0px;
+      }
+    }
+
+    @supports (-ms-ime-align: auto) {
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+        margin-top: -4px;
+        height: 30px;
+        background-color: #192029 !important;
+      }
+    }
+
+    @media all and (-ms-high-contrast: none) {
+      div#player-bottom div#volume-container *::-ms-backdrop,
+      div#flat-black-player-container div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+        margin-top: -8px;
+        background-color: #192029 !important;
+        background: #192029 !important;
+      }
+    }
+
+    /*
+      3. Layout
+    */
+    body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.5;
+      font-family: "Lato", sans-serif;
+      overflow: hidden;
+    }
+
+    div#flat-black-player-container {
+      position: relative;
+      width: 100%;
+      margin: auto;
+    }
+
+    .slide-in-top {
+      -webkit-animation: slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      animation: slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+    }
+
+    /* ----------------------------------------------
+     * Generated by Animista on 2019-3-25 18:39:54
+     * w: http://animista.net, t: @cssanimista
+     * ---------------------------------------------- */
+    /**
+     * ----------------------------------------
+     * animation slide-in-top
+     * ----------------------------------------
+     */
+    @-webkit-keyframes slide-in-top {
+      0% {
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes slide-in-top {
+      0% {
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+      100% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .slide-out-top {
+      -webkit-animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+      animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+    }
+
+    /* ----------------------------------------------
+     * Generated by Animista on 2019-3-25 18:45:17
+     * w: http://animista.net, t: @cssanimista
+     * ---------------------------------------------- */
+    /**
+     * ----------------------------------------
+     * animation slide-out-top
+     * ----------------------------------------
+     */
+    @-webkit-keyframes slide-out-top {
+      0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes slide-out-top {
+      0% {
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        -webkit-transform: translateY(-10px);
+        transform: translateY(-10px);
+        opacity: 0;
+      }
+    }
+
+    #player-top {
+      display: inline-block;
+      display: block;
+      color: white;
+      height: 100%;
+    }
+
+    .thumbnail {
+      width: 30%;
+    }
+
+    .thumbnail img {
+      width: 100%;
+      height: auto !important;
+    }
+
+    .song-info {
+      display: inline-block;
+      position: absolute;
+      min-height: 185px;
+      top: 0;
+      left: 30.5%;
+      width: 68.5%;
+      height: 95%;
+      text-align: center;
+    }
+
+    .song-name {
+      font-size: 1.25em;
+      padding-top: 10px;
+    }
+
+
+    .amplitude-visualization {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+    }
+
+
   </style>
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/amplitudejs/5.0.3/amplitude.min.js"></script>
+  <script src="./audioBar.js"></script>
 </head>
 <body>
-<div id="container">
-  <div class="media-wrapper">
-    <audio id="player2" preload="none" controls width="750">
-      <source
-          type="audio/mp3"
-          title="Daniel Fridell - Mayflower"
-          data-playlist-description="Genre - Funk"
-          data-playlist-thumbnail="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5380.jpg"
-          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/ES_Mayflower - Daniel Fridell.mp3"
-      >
 
-      <source
-          type="audio/mp3"
-          title="Vincent Vega - I'm Exactly Where I Need to Be (Instrumental Version)"
-          data-playlist-description="Funk - Euphoric, Running"
-          data-playlist-thumbnail="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5535.jpg"
-          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/ES_I'm Exactly Where I Need to Be (Instrumental Version) - Vincent Vega.mp3"
-      >
+<div class="content">
+  <div id="flat-black-player-container">
+    <div id="list-screen" class="slide-in-top">
+      <div id="list-screen-header" class="hide-playlist">
+        <img id="up-arrow" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/up.svg"/>
+        Hide Playlist
+      </div>
 
-      <source
-          type="audio/mp3"
-          title="Wildo - Struts"
-          data-playlist-description="Funk - Happy, Hopeful"
-          data-playlist-thumbnail="https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/5519.jpg"
-          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/ES_Struts - Wildo.mp3"
-      >
-    </audio>
+      <template id="audioSource">
+        <div class="song amplitude-song-container amplitude-play-pause" data-amplitude-song-index="0">
+          <div class="song-number-now-playing">
+            <img class="now-playing"
+                 src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/now-playing.svg"/>
+          </div>
+          <div class="song-meta-container">
+            <div class="song-desc">
+              <div class="song-name" data-amplitude-song-info="name" data-amplitude-song-index="0"></div>
+              <div class="song-artist" data-amplitude-song-info="artist" data-amplitude-song-index="0"></div>
+            </div>
+            <div class="song-duration">3:30</div>
+          </div>
+        </div>
+      </template>
+
+      <div id="list"></div>
+
+      <div id="list-screen-footer">
+        <div id="list-screen-meta-container">
+          <span data-amplitude-song-info="name" class="song-name"></span>
+
+          <div class="song-artist-album">
+            <span data-amplitude-song-info="artist"></span>
+          </div>
+        </div>
+        <div class="list-controls">
+          <div class="list-previous amplitude-prev"></div>
+          <div class="list-play-pause amplitude-play-pause"></div>
+          <div class="list-next amplitude-next"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div id="player-screen">
+      <div class="player-header down-header">
+        <img id="down" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/down.svg"/>
+        Show Playlist
+      </div>
+      <div id="player-top">
+        <div class="thumbnail">
+          <img data-amplitude-song-info="cover_art_url"/>
+        </div>
+        <div class="song-info">
+          <div data-amplitude-song-info="name" class="song-name"></div>
+          <div data-amplitude-song-info="artist" class="song-artist"></div>
+          <div class="amplitude-visualization"></div>
+        </div>
+
+      </div>
+      <div id="player-progress-bar-container">
+        <progress id="song-played-progress" class="amplitude-song-played-progress"></progress>
+        <progress id="song-buffered-progress" class="amplitude-buffered-progress" value="0"></progress>
+      </div>
+      <div id="player-middle">
+        <div id="time-container">
+          <span class="amplitude-current-time time-container"></span>
+          <span class="amplitude-duration-time time-container"></span>
+        </div>
+      </div>
+      <div id="player-bottom">
+        <div id="control-container">
+
+          <div id="shuffle-container">
+            <div class="amplitude-shuffle amplitude-shuffle-off" id="shuffle"></div>
+          </div>
+
+          <div id="prev-container">
+            <div class="amplitude-prev" id="previous"></div>
+          </div>
+
+          <div id="play-pause-container">
+            <div class="amplitude-play-pause" id="play-pause"></div>
+          </div>
+
+          <div id="next-container">
+            <div class="amplitude-next" id="next"></div>
+          </div>
+
+          <div id="repeat-container">
+            <div class="amplitude-repeat" id="repeat"></div>
+          </div>
+
+        </div>
+
+        <div id="volume-container">
+          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/volume.svg"/><input
+            type="range" class="amplitude-volume-slider" step=".1"/>
+        </div>
+      </div>
+    </div>
   </div>
-
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/4.2.6/mediaelement-and-player.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mediaelement-plugins@2.5.1/dist/playlist/playlist.min.js"></script>
 <script>
+  window.onkeydown = function (e) {
+    return !(e.keyCode == 32);
+  };
 
-  var audioElement = document.querySelector('audio');
-  var lastPlayedTrack = sessionStorage.getItem('now-playing');
-  var player = null;
-  new MediaElementPlayer(audioElement, {
-    isVideo: false,
-    currentMessage: 'now playing...',
-    startVolume: 0.05,
-    features: ['prevtrack', 'playpause', 'nexttrack', 'current', 'progress', 'duration', 'volume', 'playlist'],
-    success: function (mediaElement) {
-      player = mediaElement;
-      player.setVolume(0.05);
-      if(lastPlayedTrack) {
-        player.setSrc(lastPlayedTrack);
-      }
-      player.play();
-      player.addEventListener('playing', function () {
-        if (player.getSrc()) {
-          console.log('now playing', player.getSrc())
-          sessionStorage.setItem('now-playing', player.getSrc());
-        }
-      });
-    }
+  /*
+    Handles a click on the down button to slide down the playlist.
+  */
+  document.getElementsByClassName('down-header')[0].addEventListener('click', function () {
+    var list = document.getElementById('list');
+
+    list.style.height = (parseInt(document.getElementById('flat-black-player-container').offsetHeight) - 135) + 'px';
+
+    document.getElementById('list-screen').classList.remove('slide-out-top');
+    document.getElementById('list-screen').classList.add('slide-in-top');
+    document.getElementById('list-screen').style.display = "block";
   });
+
+  /*
+    Handles a click on the up arrow to hide the list screen.
+  */
+  document.getElementsByClassName('hide-playlist')[0].addEventListener('click', function () {
+    document.getElementById('list-screen').classList.remove('slide-in-top');
+    document.getElementById('list-screen').classList.add('slide-out-top');
+    document.getElementById('list-screen').style.display = "none";
+  });
+
+  /*
+    Handles a click on the song played progress bar.
+  */
+  document.getElementById('song-played-progress').addEventListener('click', function (e) {
+    var offset = this.getBoundingClientRect();
+    var x = e.pageX - offset.left;
+
+    Amplitude.setSongPlayedPercentage((parseFloat(x) / parseFloat(this.offsetWidth)) * 100);
+  });
+
+  document.querySelector('img[data-amplitude-song-info="cover_art_url"]').style.height = document.querySelector('img[data-amplitude-song-info="cover_art_url"]').offsetWidth + 'px';
+
+  var audioPath = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/";
+  var thumbPath = "https://d34qmkt8w5wll9.cloudfront.net/commercial-releases/cover_art/jpeg/";
+
+  var playlist = [
+    {
+      "name": "I'm Exactly Where I Need to Be (Instrumental Version)",
+      "artist": "Vincent Vega",
+      "url": audioPath + "ES_I'm Exactly Where I Need to Be (Instrumental Version) - Vincent Vega.mp3",
+      "album": "TEDxMamlo Master Jam",
+      "cover_art_url": thumbPath + "5535.jpg",
+      "visualization": "bar_visualization",
+      "duration": "3:30"
+    },
+    {
+      "name": "Struts",
+      "artist": "Wildo",
+      "url": audioPath + "ES_Struts - Wildo.mp3",
+      "album": "TEDxMamlo Master Jam",
+      "cover_art_url": thumbPath + "5519.jpg",
+      "visualization": "bar_visualization",
+      "duration": "3:30"
+    },
+    {
+      "name": "Mayflower",
+      "artist": "Daniel Fridell",
+      "url": audioPath + "ES_Mayflower - Daniel Fridell.mp3",
+      "album": "TEDxMamlo Master Jam",
+      "cover_art_url": thumbPath + "5380.jpg",
+      "visualization": "bar_visualization",
+      "duration": "3:30"
+    }
+  ]
+
+  const template = document.querySelector('template#audioSource');
+  const list = document.querySelector('#list');
+  let songIndex = 0;
+
+  playlist.forEach(song => {
+
+    const clone = template.content.cloneNode(true);
+    clone.querySelector('.song').setAttribute('data-amplitude-song-index', songIndex.toString());
+    clone.querySelector('.song-name').setAttribute('data-amplitude-song-index', songIndex.toString());
+    clone.querySelector('.now-playing').src = song.cover_art_url;
+    clone.querySelector('.song-duration').innerHTML = song.duration;
+    list.appendChild(clone);
+    ++songIndex;
+  })
+
+
+  const lastPlayed = sessionStorage.getItem('lastSong') ?? 0;
+  const lastVolume = sessionStorage.getItem('lastVolume') ?? 10;
+  const vizElement = document.querySelector('.amplitude-visualization');
+  console.log(vizElement);
+
+  Amplitude.init({
+    "bindings": {
+      37: 'prev',
+      39: 'next',
+      32: 'play_pause'
+    },
+    "volume": lastVolume,
+    "continue_next": true,
+    "songs": playlist,
+    visualizations: [
+      {
+        object: BarVisualization,
+        params: {
+          container: vizElement
+        }
+      },
+    ],
+    callbacks: {
+      song_change: function () {
+        const songIndex = Amplitude.getActiveIndex();
+        sessionStorage.setItem('lastSong', songIndex);
+        Amplitude.playSongAtIndex(songIndex);
+      },
+      initialized: function () {
+        Amplitude.playSongAtIndex(lastPlayed);
+      },
+      volumechange: function () {
+        sessionStorage.setItem('lastVolume', Amplitude.getVolume());
+      }
+    },
+  });
+
 
 </script>
 </body>
