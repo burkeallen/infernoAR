@@ -419,6 +419,22 @@
                     text-align: center;
                     position: absolute;
                   }
+
+                  .hidden {
+                    display: none;
+                  }
+
+                  .loading {
+                    position: absolute;
+                    font-weight: bold;
+                    top: 100px;
+                    width: 100%;
+                    color: #000000;
+                    font-size: 2rem;
+                    text-align: center;
+                    z-index: 999;
+                  }
+
                 </style>
 
                 <!-- Video Card-->
@@ -608,6 +624,7 @@
                   <template id="pdf-card-template">
                     <div id="pdf-card" class="pdf-card">
                       <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"
+                      <div id="loading" class="loading">Loading</div>
                       <div class="pdf-card-logo">
                         <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/pdf.png">"
                       </div>
@@ -660,7 +677,6 @@
                       video.style.display = "";
                       videoNav.style.filter = "drop-shadow(8px 8px 10px rgba(255, 255, 255, .7))"
                     }
-
                   }
 
                   function circuitsClicked() {
@@ -685,8 +701,8 @@
                 <script>
                   // Call to grab attachment, mode 'display' to display, 'download' to download
                   function fetchAttachment(id, description, mode = 'display', params = '', type = 'application/pdf') {
-                    // console.log(id)
-                    // landingPageEl.querySelector(id).classList.add('is-loading');
+                    landingPageEl.querySelector('#loading-' + id).classList.toggle('hidden');
+
                     var reqHeaders = new Headers();
                     reqHeaders.append("Authorization", "Bearer " + window.sessionStorage.token);
                     if (window.sessionStorage.getItem('overrideId')) {
@@ -725,6 +741,7 @@
                           const modelTitle = landingPageEl.querySelector("#modal-title")
                           modelTitle.innerHTML = description;
                           loadModal(data, params);
+                          landingPageEl.querySelector('#loading-' + id).classList.toggle('hidden');
                         } else {
                           window.open(data, '_blank')
                         }
@@ -853,6 +870,10 @@
                     const pdfCardTemplate = landingPageEl.getElementById("pdf-card-template");
 
                     let clone = pdfCardTemplate.content.cloneNode(true);
+                    let loading = clone.getElementById("loading");
+                    loading.classList.add("hidden");
+                    loading.id = 'loading-' + attachment.id.toString();
+
                     let pdfCard = clone.getElementById("pdf-card");
                     pdfCard.id = attachment.id.toString();
                     pdfCard.onclick = function () {
