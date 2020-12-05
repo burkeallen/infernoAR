@@ -367,6 +367,7 @@
                 <style>
                   .library-grid {
                     display: flex;
+                    flex-wrap: wrap;
                     align-self: center;
                     justify-content: center;
                     margin-top: 40px;
@@ -408,15 +409,6 @@
                   .pdf-card-logo img {
                     width: 95px;
                     height: auto;
-                  }
-
-                  .pdf-card-name {
-                    width: 100%;
-                    top: 190px;
-                    color: #ffffff;
-                    font-size: 2rem;
-                    text-align: center;
-                    position: absolute;
                   }
 
                   .pdf-card-title {
@@ -613,26 +605,6 @@
                   </div>
 
                   <div id="pdf-library" class="library-grid">
-<!--                  {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}-->
-<!--                  {% assign sorted_events = data.Events | sort: "Name" %}-->
-<!--                  {% assign render_count = 0 %}-->
-<!--                  {% for event in sorted_events %}-->
-<!--                  {% if view_category_id == event.FirstCategoryId | downcase %}-->
-<!--                  {% assign video_url = "/embed/" | append: event.Id %}-->
-<!--                  {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}-->
-<!--                  {% assign video_description = event.Description %}-->
-<!--                  {% assign render_count = render_count | plus: 1 %}-->
-<!--                  {% if event.Attachments and event.Attachments | size > 0 %}-->
-<!--                  {% for attachment in event.Attachments %}-->
-<!--                  <div class="pdf-card" onclick="fetchAttachment('{{ attachment.Name }}', '{{ attachment.Id }}')">-->
-<!--                    <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"-->
-<!--                    <div class="pdf-card-logo">-->
-<!--                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/pdf.png">"-->
-<!--                    </div>-->
-<!--                    <div class="pdf-card-name">{{ attachment.Name }}</div>-->
-<!--                  </div>-->
-<!--                  {% endfor %} {% endif %} {% endif %} {% endfor %}-->
-
                   <template id="pdf-card-template">
                     <div id="pdf-card" class="pdf-card">
                       <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"
@@ -641,7 +613,7 @@
                       </div>
                       <div id="pdf-card-title" class="pdf-card-title"></div>
                     </div>
-
+                  </template>
                 </div>
 
                   <div id="video-library" class="library-grid">
