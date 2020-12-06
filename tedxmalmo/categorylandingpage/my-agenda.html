@@ -463,14 +463,14 @@
                 </template>
 
                 <script>
-                  const toggleDetails = elem => {
+                  var toggleDetails = elem => {
                     const agendaItem = landingPageEl.getElementById(elem.parentNode.parentNode.id);
                     let details = agendaItem.querySelector(".agenda-item-details");
                     details.style.display !== "flex"
                       ? (details.style.display = "flex")
                       : (details.style.display = "none");
                   };
-                  const convertTime = (start, duration) => {
+                  var convertTime = (start, duration) => {
                     if (!start || !duration) return "TBD";
                     var startDate = new Date(start);
                     var endDate = new Date(startDate.getTime() + duration * 60000);
@@ -478,7 +478,7 @@
                     return parseDate(startDate) + " - " + parseDate(endDate);
 
                   }
-                  const parseDate = (date) => {
+                  var parseDate = (date) => {
                     let h = date.getHours();
                     let m = date.getMinutes();
                     let ampm = "am";
@@ -489,7 +489,7 @@
                     if (m.toString().length < 2) m = "0" + m;
                     return h + ":" + m + ampm;
                   }
-                  const setTime = () => {
+                  var setTime = () => {
                     const d = new Date();
                     const currentTimeElement = landingPageEl.querySelector(".current-time");
                     const currentTime = parseDate(d);
@@ -501,9 +501,9 @@
 
                 <!-- build myAgenda from the CustomUserDataStore (bookmarks) -->
                 <script>
-                  let myAgenda = []
+                  var myAgenda = []
 
-                  let getBookmarks = async () => {
+                  var getBookmarks = async () => {
                     try {
                       const response = await fetchUserBookmarks();
                       if (response.status === 200) {
@@ -518,7 +518,7 @@
                     }
                   }
 
-                  let fetchUserBookmarks = () => {
+                  var fetchUserBookmarks = () => {
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks";
                     const bearerToken = window.sessionStorage.getItem("token");
                     const bearer = 'Bearer ' + bearerToken;
@@ -531,7 +531,7 @@
                     });
                   }
 
-                  let buildMyAgendaCard = (bookmark, id) => {
+                  var buildMyAgendaCard = (bookmark, id) => {
                     const agenda = landingPageEl.getElementById("agenda");
                     const template = landingPageEl.getElementById("template");
                     const clone = template.content.cloneNode(true);
@@ -562,7 +562,7 @@
                     agenda.appendChild(clone);
                   }
 
-                  let removeBookmark = (element) => {
+                  var removeBookmark = (element) => {
                     let agendaItem = landingPageEl.getElementById('agenda-item-' + element.id);
                     agendaItem.remove();                    // removes the agendaItem from DOM
                     myAgenda.splice(element.id, 1);         // removes the agendaItem from array
@@ -570,12 +570,12 @@
                          // adds-back updated bookmark data
                   }
 
-                  let updateCustomUserDataStoreBookmark = async () => {
+                  var updateCustomUserDataStoreBookmark = async () => {
                     await deleteCustomUserDataStoreBookmark();
                     await addCustomUserDataStoreBookmark();
                   }
 
-                  let deleteCustomUserDataStoreBookmark = () => {
+                  var deleteCustomUserDataStoreBookmark = () => {
                     const bearerToken = window.sessionStorage.getItem("token");
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks";
                     return fetch(url, {
@@ -593,7 +593,7 @@
                       });
                   }
 
-                  let addCustomUserDataStoreBookmark = () => {
+                  var addCustomUserDataStoreBookmark = () => {
                     if (myAgenda.length < 1) {
                       return;
                     }
