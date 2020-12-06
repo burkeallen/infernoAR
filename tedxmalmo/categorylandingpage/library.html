@@ -621,16 +621,16 @@
                   </div>
 
                   <div id="pdf-library" class="library-grid">
-                  <template id="pdf-card-template">
-                    <div id="pdf-card" class="pdf-card">
-                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"
-                      <div id="loading" class="loading">Loading</div>
-                      <div class="pdf-card-logo">
-                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/pdf.png">"
+                    <template id="pdf-card-template">
+                      <div id="pdf-card" class="pdf-card">
+                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"
+                        <div id="loading" class="loading">Loading</div>
+                        <div class="pdf-card-logo">
+                          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/pdf.png">"
+                        </div>
+                        <div id="pdf-card-title" class="pdf-card-title"></div>
                       </div>
-                      <div id="pdf-card-title" class="pdf-card-title"></div>
-                    </div>
-                  </template>
+                    </template>
                 </div>
 
                   <div id="video-library" class="library-grid">
@@ -644,12 +644,12 @@
                     {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}
                     {% assign video_description = event.Description %}
                     {% assign render_count = render_count | plus: 1 %}
-                    <div id="{{ event.Id }}" class="video-card" onclick="loadModal('{{video_url}}')">
+                    <div id="{{event.Id}}" class="video-card" onclick="loadModal('{{video_url}}')">
                       <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/library/chip.png">"
                       <div class="video-card-logo">
-                        <img src="https://origin.infernocore.jolokia.com/thumb/clients/8984934e-7bdf-47c2-07ce-08d8909494ef/f7f2aa94-77d5-4ef1-adf6-ef5b8db498ec/results/encoder/b83bd040-1093-46d0-9a7c-317771b4a567/f7f2aa94-77d5-4ef1-adf6-ef5b8db4_adaptive6.mp4/thumb-5000.jpg">"
+                        <img src="{{ event.VideoThumbnail }}" alt="Library Video">
                       </div>
-                      <div class="video-card-name">{{video_name }}</div>
+                      <div class="video-card-name">{{video_name}}</div>
                     </div>
                   </template>
                     {% endif %} {% endif %} {% endfor %}
