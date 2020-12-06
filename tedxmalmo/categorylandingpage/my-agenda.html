@@ -462,36 +462,47 @@
                   </div>
                 </template>
 
-                <!-- clock -->
                 <script>
+                  const toggleDetails = elem => {
+                    const agendaItem = landingPageEl.getElementById(elem.parentNode.parentNode.id);
+                    let details = agendaItem.querySelector(".agenda-item-details");
+                    details.style.display !== "flex"
+                      ? (details.style.display = "flex")
+                      : (details.style.display = "none");
+                  };
+                  const convertTime = (start, duration) => {
+                    if (!start || !duration) return "TBD";
+                    var startDate = new Date(start);
+                    var endDate = new Date(startDate.getTime() + duration * 60000);
+
+                    return parseDate(startDate) + " - " + parseDate(endDate);
+
+                  }
                   const parseDate = (date) => {
-                    var h = date.getHours();
-                    var m = date.getMinutes();
-                    var ampm = "am";
+                    let h = date.getHours();
+                    let m = date.getMinutes();
+                    let ampm = "am";
                     if (h > 12) {
                       h = h - 12;
                       ampm = "pm";
                     }
                     if (m.toString().length < 2) m = "0" + m;
-
                     return h + ":" + m + ampm;
                   }
                   const setTime = () => {
-                    var d = new Date();
-
-                    var currentTimeElement = landingPageEl.querySelector(".current-time");
-                    var currentTime = parseDate(d);
+                    const d = new Date();
+                    const currentTimeElement = landingPageEl.querySelector(".current-time");
+                    const currentTime = parseDate(d);
                     currentTimeElement.innerHTML = currentTime.substring(0, currentTime.length - 2);
-
-                    var t = setTimeout(setTime, 1000);
+                    const t = setTimeout(setTime, 1000);
                   }
-
                   setTime();
                 </script>
 
                 <!-- build myAgenda from the CustomUserDataStore (bookmarks) -->
                 <script>
                   let myAgenda = []
+
                   let getBookmarks = async () => {
                     try {
                       const response = await fetchUserBookmarks();
@@ -553,15 +564,18 @@
 
                   let removeBookmark = (element) => {
                     let agendaItem = landingPageEl.getElementById('agenda-item-' + element.id);
-
-                    agendaItem.remove(); // removes from DOM
-                    myAgenda.splice(element.id, 1); // removes from array
-
-                    deleteCustomUserDataStore();  // removes CustomUserDataStore
-
+                    agendaItem.remove();                    // removes the agendaItem from DOM
+                    myAgenda.splice(element.id, 1);         // removes the agendaItem from array
+                    updateCustomUserDataStoreBookmark();    // removes this users bookmark data
+                         // adds-back updated bookmark data
                   }
 
-                  let deleteCustomUserDataStore = () => {
+                  let updateCustomUserDataStoreBookmark = async () => {
+                    await deleteCustomUserDataStoreBookmark();
+                    await addCustomUserDataStoreBookmark();
+                  }
+
+                  let deleteCustomUserDataStoreBookmark = () => {
                     const bearerToken = window.sessionStorage.getItem("token");
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks";
                     return fetch(url, {
@@ -579,146 +593,36 @@
                       });
                   }
 
-                  getBookmarks();
-                </script>
+                  let addCustomUserDataStoreBookmark = () => {
+                    if (myAgenda.length < 1) {
+                      return;
+                    }
+                    let myAgendaString = JSON.stringify(myAgenda);
+                    let myBookmarks = JSON.stringify({
+                      "key" : "bookmarks",
+                      "value" : myAgendaString,
+                      "public" : true,
+                    });
 
-
-                <script>
-                  var toggleDetails = elem => {
-                    var agendaItem = landingPageEl.getElementById(
-                      elem.parentNode.parentNode.id
-                    );
-
-                    var details = agendaItem.querySelector(".agenda-item-details");
-
-                    details.style.display !== "flex"
-                      ? (details.style.display = "flex")
-                      : (details.style.display = "none");
-                  };
-
-                  var convertTime = (start, duration) => {
-                    if (!start || !duration) return "TBD";
-                    var startDate = new Date(start);
-                    var endDate = new Date(startDate.getTime() + duration * 60000);
-
-                    return parseDate(startDate) + " - " + parseDate(endDate);
-
+                    const bearerToken = window.sessionStorage.getItem("token");
+                    fetch("https://ingress.infernocore.jolokia.com/api/CustomUserDataStore", {
+                      method: 'POST',
+                      headers: {
+                        "Authorization": 'Bearer ' + bearerToken,
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
+                      },
+                      body: myBookmarks
+                    })
+                      .then(function (data) {
+                        console.log('Request succeeded with JSON response', data);
+                      })
+                      .catch(function (error) {
+                        console.log('Request failed', error);
+                      });
                   }
 
-                  // send bookmarks to API
-                  // var sendBookmarks = (bookmark, actionType) => {
-                  //   let url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
-                  //   let method = 'POST';
-                  //   let value;
-                  //   var currentBookmarks = [...bookmarks];
-                  //
-                  //   //if bookmark kvp exists, set method to 'PUT'
-                  //   if (currentBookmarks.length > 0) method = 'PUT';
-                  //
-                  //   if (actionType === "add") {
-                  //     currentBookmarks.push(bookmark);
-                  //     value = currentBookmarks;
-                  //   } else {
-                  //     value = currentBookmarks.filter(item => item.startTime !== bookmark.startTime);
-                  //     if (value.length < 1) {
-                  //       method = 'DELETE';
-                  //       url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks"
-                  //     };
-                  //   }
-                  //
-                  //   const kvp = {
-                  //     key: "bookmarks",
-                  //     value: JSON.stringify(value),
-                  //     public: true
-                  //   }
-                  //
-                  //   const bearerToken = window.sessionStorage.getItem("token");
-                  //   const bearer = 'Bearer ' + bearerToken;
-                  //
-                  //   let headers = new Headers();
-                  //   headers.set('Authorization', bearer)
-                  //   headers.set('Accept', 'application/json')
-                  //   headers.set('Content-Type', 'application/json')
-                  //
-                  //   // for super user accounts
-                  //   const overrideId = window.sessionStorage.getItem("overrideId");
-                  //   if (overrideId) headers.set("X-Client-Override", overrideId);
-                  //
-                  //   fetch(url, {
-                  //     method: method,
-                  //     withCredentials: true,
-                  //     headers: headers,
-                  //     body: JSON.stringify(kvp)
-                  //   })
-                  // }
-
-                  // var buildEventList = () => {
-                  //   const agenda = landingPageEl.getElementById(
-                  //     "agenda"
-                  //   );
-                  //   const template = landingPageEl.getElementById("template");
-                  //
-                  //   myAgendaList.forEach(item => {
-                  //     const clone = template.content.cloneNode(true);
-                  //     let time = clone.querySelector(".time");
-                  //     let agendaItem = clone.querySelector(".agenda-item");
-                  //     let bookmarkButton = clone.querySelector(".button-bookmark");
-                  //
-                  //     let title = clone.querySelector(".agenda-title");
-                  //
-                  //     let description = clone.querySelector(".description");
-                  //
-                  //     const id = myAgendaList.indexOf(item);
-                  //
-                  //
-                  //     //set bookmarked event button display
-                  //     if (bookmarks.some(bookmark => bookmark.startTime === item.startTime)) {
-                  //       let tooltip = clone.querySelector(".tooltip-bookmark");
-                  //       tooltip.innerHTML = "Remove from your agenda?"
-                  //       bookmarkButton.innerHTML = "-";
-                  //     }
-                  //
-                  //     time.innerHTML = convertTime(item.startTimeAMPM, item.duration);
-                  //     if (item.title) title.innerHTML = item.title;
-                  //     description.innerHTML = item.description;
-                  //
-                  //     let agendaDetails = clone.querySelector(".agenda-item-details");
-                  //
-                  //     if (item.speakerImage) {
-                  //       let imgElement = document.createElement("img");
-                  //       imgElement.setAttribute("class", "speaker-image");
-                  //       imgElement.src = item.speakerImage;
-                  //       agendaDetails.prepend(imgElement);
-                  //       agendaDetails.style.borderRadius = "100px 50px 50px 100px";
-                  //     }
-                  //
-                  //     agendaItem.setAttribute("id", id);
-                  //     agenda.appendChild(clone);
-                  //
-                  //
-                  //   });
-                  // };
-
-                  //Agenda Bookmarking
-                  // var bookmarkEvent = (button) => {
-                  //   var id = button.parentNode.parentNode.parentNode.id;
-                  //   var savedItem = myAgendaList[id];
-                  //   var tooltip = button.parentNode.querySelector(".tooltip-bookmark");
-                  //
-                  //   if (button.innerHTML === "+") {
-                  //     //add agenda item
-                  //     sendBookmarks(savedItem, "add");
-                  //     button.innerHTML = "-";
-                  //     tooltip.innerHTML = "Remove from your agenda?"
-                  //   } else {
-                  //     //remove agenda item
-                  //     sendBookmarks(savedItem, "remove");
-                  //     button.innerHTML = "+";
-                  //     tooltip.innerHTML = "Add to your agenda?"
-                  //   }
-                  // }
-
-                  // getBookmarks();
+                  getBookmarks();
 
                 </script>
 
