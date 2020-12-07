@@ -165,10 +165,14 @@
 
   </style>
   <script>
-    function buildLocalMenu() {
+  function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        menuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -216,7 +220,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -248,7 +252,7 @@
                   img::after {
                     content: none;
                   }
-                
+
                   .bg-video {
                     position: absolute;
                     top: 50%;
@@ -517,7 +521,7 @@
                     <video class="bg-video" playsinline autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
                       <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                     </video>
-                    <div class="page-contents"> 
+                    <div class="page-contents">
                     </div>
                   </div>
 
@@ -646,7 +650,7 @@
                           modalElement.remove();
                           document.body.style.overflow = 'auto';
                           return;
-                        } 
+                        }
 
                         var template = landingPageEl.getElementById("modal-template");
                         var clone = template.content.cloneNode(true);
@@ -685,7 +689,7 @@
                             summary.setAttribute("class", "modal-summary");
                             summary.innerHTML = speaker.summary;
 
-                            
+
                             leftColumn.appendChild(summary);
                             mainContent.appendChild(leftColumn);
 

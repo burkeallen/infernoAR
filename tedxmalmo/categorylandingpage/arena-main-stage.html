@@ -165,10 +165,14 @@
 
   </style>
   <script>
-    function buildLocalMenu() {
+  function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        menuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -216,7 +220,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->

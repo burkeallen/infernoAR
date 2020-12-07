@@ -165,10 +165,14 @@
 
   </style>
   <script>
-    function buildLocalMenu() {
+  function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        menuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -717,10 +721,10 @@
                         //convert value from string to array
                         var stringValue = json.value;
                         var parsedString = stringValue.substring(2, stringValue.length-2);
-                        
+
                         bookmarks = JSON.parse(json.value);
-                        
-                      } 
+
+                      }
 
                     } catch (e) {
                       throw new Error(e);
@@ -732,7 +736,7 @@
                   getBookmarks();
 
 
-                  
+
 
                   //send bookmarks to API
                   var sendBookmarks = (bookmark, actionType) => {
@@ -770,7 +774,7 @@
                     headers.set('Accept', 'application/json')
                     headers.set('Content-Type', 'application/json')
 
-                    
+
 
                     // for super user accounts
                     const overrideId = window.sessionStorage.getItem("overrideId");
@@ -783,7 +787,7 @@
                       body: JSON.stringify(kvp)
                     })
                   }
-                    
+
 
 
                   var buildEventList = () => {
@@ -833,14 +837,14 @@
                     });
                   };
 
-                
+
 
                   //Agenda Bookmarking
                   var bookmarkEvent = (button) => {
                     var id = button.parentNode.parentNode.parentNode.id;
                     var savedItem = agendaList[id];
                     var tooltip = button.parentNode.querySelector(".tooltip-bookmark");
-                    
+
                     if (button.innerHTML === "+") {
                       //add agenda item
                       sendBookmarks(savedItem, "add");

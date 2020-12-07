@@ -165,10 +165,14 @@
 
   </style>
   <script>
-    function buildLocalMenu() {
+  function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        menuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -216,7 +220,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -248,7 +252,7 @@
                 </script>
                 <style>
                   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-                
+
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
                   img::after {
@@ -286,9 +290,9 @@
                     display: flex;
                     flex-direction: column;
                     justify-content: space-evenly;
-                    
+
                   }
-                
+
                   .page-contents {
                     width: 100%;
                     display: flex;
@@ -297,7 +301,7 @@
                     align-items: center;
                     justify-content: space-evenly;
                   }
-                
+
                   .card {
                     position: relative;
                     display: flex;
@@ -318,7 +322,7 @@
                     height: 100%;
 
                   }
-                
+
                   .card-contents {
                     position: relative;
                     width: 100%;
@@ -329,13 +333,13 @@
                     justify-content: center;
                     font-size: 1.8rem;
                     padding: 4rem 2rem;
-                    
-                    
+
+
                   }
 
                   .has-video:hover .logo {
                     opacity: 0;
-                    
+
                   }
 
                   .video-button {
@@ -353,12 +357,12 @@
 
                   .video-button:hover {
                     background-color: rgba(255,255,255,.1);
-                    
+
                   }
 
                   .has-video:hover .video-button {
                     opacity: 1;
-                    
+
                   }
 
                   .sponsor-main {
@@ -370,7 +374,7 @@
 
                   .logo-box {
                     width: 30%;
-                    
+
                   }
 
                   .logo {
@@ -480,7 +484,7 @@
                     <div id="blocker"></div>
                   </div>
                 </div>
-                
+
                 <template id="card-template">
                   <div class="card">
                     <img class="card-border" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/sponsors/animated-sponsor.gif">
@@ -510,9 +514,9 @@
                     </div>
                   </div>
                 </template>
-          
+
                 <script>
-                   
+
                   var sponsors = [
                       {
                         "name": "Minc",
@@ -571,12 +575,12 @@
 
                       if (sponsor.video){
 
-                        
+
                         var cardContents = clone.querySelector(".card-contents");
 
                         //add class to allow hover effects when video is available
                         card.classList.add("has-video");
-                        
+
                         //add video button
                         var videoButton = document.createElement("img");
                         videoButton.setAttribute("class", "video-button");
@@ -627,8 +631,8 @@
                     document.body.style.overflow = "hidden";
                   }
 
-                  
-                  
+
+
                 </script>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
