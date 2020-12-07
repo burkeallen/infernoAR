@@ -304,6 +304,17 @@
                         z-index: 1;
                     }
 
+                    .bg-video {
+                      position: fixed;
+                      top: 0%;
+                      left: 0%;
+                      width: auto;
+                      min-width: 100%;
+                      height: auto;
+                      min-height: calc(100vh - 59px);
+                      z-index: -1;
+                    }
+
                     .hotspot {
                         position: absolute;
                         top: 0;
@@ -398,15 +409,47 @@
                         border: none;
                     }
 
-                    .bg-video {
-                        position: fixed;
-                        top: 0%;
-                        left: 0%;
-                        width: auto;
-                        min-width: 100%;
-                        height: auto;
-                        min-height: calc(100vh - 59px);
-                        z-index: -1;
+                    #modalSocialWall {
+                      position: absolute;
+                      /*top: 40px;*/
+                      /*left: 20px;*/
+                      top: 0;
+                      left: 0;
+                      width: calc(100% + 5%);
+                      height: calc(100vh);
+                      display: flex;
+                      justify-content: center;
+                      z-index: 999;
+                      background: rgba(0, 0, 0, .8);
+                    }
+
+                    .modal-social-wall-content {
+                      position: relative;
+                      display: flex;
+                      width: 90%;
+                      height: 80%;
+                      margin: 0;
+                      top: 40px;
+                    }
+
+                    #wallsio-iframe {
+                      width: 100%;
+                      border: none;
+                    }
+
+                    .close-modal-social-wall {
+                      position: absolute;
+                      top: -20px;
+                      right: -20px;
+                      width: 20%;
+                      cursor: pointer;
+                      filter: drop-shadow(1px 1px 32px blue);
+                    }
+
+                    .modal-social-wall-main {
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
                     }
 
                 </style>
@@ -461,12 +504,21 @@
 
                   <div class="hotspot dj" alt="DJ Booth" title="DJ Booth" onclick="toggleDJ()"></div>
 
+                  <div class="hotspot social-wall" alt="Social Wall" title="Social Wall" onclick="toggleSocialWall()"></div>
+
                   <div id="modalDJ" class="hidden">
                     <div class="modal-dj-content">
                       <img
                           src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
                           class="close-modal-dj" onclick="toggleDJ()">
                       <iframe class="modal-dj-main" src allowtransparency="true"></iframe>
+                    </div>
+                  </div>
+
+                  <div id="modalSocialWall" class="hidden">
+                    <div class="modal-social-wall-content">
+                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png" class="close-modal-social-wall" onclick="toggleSocialWall()">
+                      <iframe class="modal-social-wall-main" src allowtransparency="true" allowfullscreen id="wallsio-iframe"></iframe>
                     </div>
                   </div>
 
@@ -479,10 +531,23 @@
                     audioPlayer.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/audio-player.html'
                   }
 
+                  var socialWall = landingPageEl.querySelector('iframe.modal-social-wall-main');
+                  if (window.isLocalTemplate) {
+                    // socialWall.src = 'https://my.walls.io/ygca5?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo';
+                    socialWall.src = 'https://my.walls.io/c3pcw?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo';
+                  } else {
+                    // socialWall.src = 'https://my.walls.io/ygca5?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo'
+                    socialWall.src = 'https://my.walls.io/c3pcw?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo'
+                  }
 
                   function toggleDJ() {
                     landingPageEl.querySelector('#modalDJ').classList.toggle('hidden');
                   }
+
+                  function toggleSocialWall() {
+                    landingPageEl.querySelector('#modalSocialWall').classList.toggle('hidden');
+                  }
+
                 </script>
 
                 <chatWee>
