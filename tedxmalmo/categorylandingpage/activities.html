@@ -10,10 +10,12 @@
   <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
@@ -189,10 +191,7 @@
     }
   </script>
   <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-  <script>
-    let landingPageEl = null;
-    window.isLocalTemplate = true;
-  </script>
+
 </head>
 
 <body>
@@ -202,7 +201,7 @@
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
@@ -232,10 +231,10 @@
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
@@ -244,95 +243,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="d46455d8-dca8-4265-bf6f-cc35e8e292ea">
-
-                <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-
-                  h1, h2, h3, h4, h5 {
-                    font-family: "HelveticaNeue-CondensedBold",
-                    "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
-                  }
-
-                  .content {
-                    display: flex;
-                    flex-direction: column;
-                    min-height: calc(100vh - 114px);
-                    width: calc(100% + 40px);
-                    z-index: 1;
-                    font-family: 'Montserrat', sans-serif;
-                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/bg.jpg");
-                    background-position: bottom center;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    margin: -20px;
-                    padding: 20px;
-                  }
-
-                </style>
-
-                <!-- Stage Grid -->
-                <style>
-                  .stage-grid {
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    margin: 0 auto;
-                    padding: 20px;
-                    width: 80%;
-                    height: 100%;
-                  }
-
-                  .col {
-                    width: 80%;
-                    margin: 0 auto;
-                  }
-                </style>
-
-                <!-- Video Player -->
-                <style>
-                  .ntar-video-container {
-                    position: relative;
-                    padding-bottom: 56.5%; /* 16:9 */
-                    height: 0;
-                  }
-
-                  videos-detail {
-                    background-color: black !important;
-                  }
-
-                  #inferno-video-player {
-                    height: auto !important;
-                    max-width: none;
-                  }
-
-                  #inferno-video-player iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
-
-                <div id="content" class="content">
-
-                  <div class="stage-grid">
-                    <div class="col">
-                      <div class="ntar-video-container">
-                        <div class="ntar-video" id="inferno-video-player"></div>
-                      </div>
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </inferno-snippet-content>
+              <inferno-snippet-content id="106abd13-f1c2-4361-b3ba-bedc1d9b6fb5"><h1>Activities</h1></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->

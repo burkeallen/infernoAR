@@ -10,10 +10,12 @@
   <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
@@ -189,10 +191,7 @@
     }
   </script>
   <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-  <script>
-    let landingPageEl = null;
-    window.isLocalTemplate = true;
-  </script>
+
 </head>
 
 <body>
@@ -202,7 +201,7 @@
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
@@ -232,10 +231,10 @@
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
@@ -244,23 +243,14 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="d46455d8-dca8-4265-bf6f-cc35e8e292ea">
+              <inferno-snippet-content id="1a9dc51b-89aa-4239-85b8-83dbee9487ac">
+
 
                 <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-
-                  h1, h2, h3, h4, h5 {
-                    font-family: "HelveticaNeue-CondensedBold",
-                    "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
-                  }
-
                   .content {
-                    display: flex;
+                     display: flex;
                     flex-direction: column;
+                    justify-content: center;
                     min-height: calc(100vh - 114px);
                     width: calc(100% + 40px);
                     z-index: 1;
@@ -269,70 +259,130 @@
                     background-position: bottom center;
                     background-repeat: no-repeat;
                     background-size: cover;
+                    
                     margin: -20px;
-                    padding: 20px;
+                    color: var(--sidebar-text-color);
                   }
 
-                </style>
-
-                <!-- Stage Grid -->
-                <style>
-                  .stage-grid {
-                    position: relative;
+                  .message {
+                    width: 100%;
+                    height: 100vh;
                     display: flex;
                     flex-direction: column;
-                    margin: 0 auto;
-                    padding: 20px;
-                    width: 80%;
-                    height: 100%;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: rgba(0, 0, 0, .5);
                   }
 
-                  .col {
-                    width: 80%;
-                    margin: 0 auto;
+                  .content h1 {
+                    font-size: 3.2rem;
+                    font-weight: bold;
                   }
+
+                  .content a {
+                    font-size: 2.4rem;
+                    text-decoration: none;
+                    color: var(--sidebar-text-color);
+                  }
+
+                  .content a:hover{
+                    color: rgba(255,255,255,.7);
+                  }
+
+                  .redirect-button {
+                    cursor: pointer;
+                    width: fit-content;
+                    background-color: rgba(11, 38, 104, 0.5);
+                    border-radius: 10px;
+                    border: 1px solid rgba(0, 0, 0, 0.5);
+                    box-shadow: 2px 2px 3px rgba(255,255,255,.1); 
+                    padding: 2rem;
+                    
+                  }
+
+                  .redirect-button:hover{
+                    background-color: rgba(0,0,0,.5);    
+                  }
+
+
                 </style>
 
-                <!-- Video Player -->
-                <style>
-                  .ntar-video-container {
-                    position: relative;
-                    padding-bottom: 56.5%; /* 16:9 */
-                    height: 0;
-                  }
+                <div class="content">
 
-                  videos-detail {
-                    background-color: black !important;
-                  }
+                  <div class="message">
+                    <!-- Get current timestamp by casting NOW to seconds since 1970 -->
+                    {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
+                    {% assign currentTime = "now" | date: "%s" | plus: 0 %}
+                    <!--                    <p>Current Date and Time {{ currentDateTime }} - {{ currentTime }}</p>-->
+                    <!-- Sort events by start time -->
+                    {% assign sortedEvents = data.Events | sort: 'StartTime' %}
 
-                  #inferno-video-player {
-                    height: auto !important;
-                    max-width: none;
-                  }
+                    <!-- Set nextEvent so we know if no upcoming event is found -->
+                    {% assign nextEvent = 'No Event' %}
 
-                  #inferno-video-player iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
+                    {% assign currentCategory = data.CurrentlyViewedCategory.Id | downcase %}
 
-                <div id="content" class="content">
+                    <!--                    <h2>Current Category</h2>-->
+                    <!--                    <ul>-->
+                    <!--                      <li>{{ data.CurrentlyViewedCategory.Name }}</li>-->
+                    <!--                      <li>{{ currentCategory }}</li>-->
+                    <!--                    </ul>-->
 
-                  <div class="stage-grid">
-                    <div class="col">
-                      <div class="ntar-video-container">
-                        <div class="ntar-video" id="inferno-video-player"></div>
-                      </div>
-                    </div>
+                    <!-- Iterate the sorted events -->
+                    {% for event in sortedEvents %}
 
+                    <!-- Check the event category ID matches this page category ID -->
+                    {% assign thisCategory = event.FirstCategoryId | downcase %}
+                    {% if thisCategory != currentCategory%}
+                    <!-- ... and if not, skip iteration -->
+                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
+                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; First Category ID {{ event.FirstCategoryId }} not equal {{ data.CurrentlyViewedCategory.Id }}</p>-->
+                    {% continue %}
+                    {% endif %}
+
+                    <!-- The end time is start timestamp added to video duration -->
+                    {% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration %}
+
+                    <!-- Force currentTime & endTime to number by adding 0 and compare...  -->
+                    {% if currentTime > endTime %}
+                    <!--                    <h4>Skipping Event - {{ event.Name }} </h4>-->
+                    <!--                    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Event is in the Past {{event.StartTime}}</p>-->
+                    {% assign nextEvent = event %}
+                    <!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
+                    {% continue %}
+                    <!-- ...otherwise... -->
+                    {% else %}
+                    <!-- ... we set this as our next upcoming event and ... -->
+                    {% assign nextEvent = event %}
+                    {% endif %}
+
+                    <!-- ...break the iteration loop. -->
+                    {% break %}
+
+                    {% endfor %}
+
+                    <!-- If the loop didn't find any upcoming events,... -->
+                    {% if nextEvent == 'No Event' %}
+                    <h1> No Sessions or Events are Currently Available </h1>
+                    <p>Check Back Later</p>
+                    {% else %}
+                    <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
+                    <!-- set display: none when in production -->
+                    <h1>{{nextEvent.Name}}</h1>
+                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
+                      <div class="redirect-button">Go to the Current or Upcoming Session</div>
+                    </a>
+                    {% endif %}
                   </div>
 
-                </div>
-
-              </inferno-snippet-content>
+              
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          
+        </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
