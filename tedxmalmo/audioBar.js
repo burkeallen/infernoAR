@@ -37,7 +37,7 @@ function BarVisualization() {
   this.preferences = {
     bar_color: this.colors[Math.floor(Math.random() * this.colors.length)],
     width: 500,
-    height: 200,
+    height: 160,
     inherit: false,
     spacer_width: 10,
     bar_width: 5,
