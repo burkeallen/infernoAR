@@ -465,23 +465,21 @@
                 <script>
                   var toggleDetails = elem => {
                     const agendaItem = landingPageEl.getElementById(elem.parentNode.parentNode.id);
-                    let details = agendaItem.querySelector(".agenda-item-details");
+                    const details = agendaItem.querySelector(".agenda-item-details");
                     details.style.display !== "flex"
                       ? (details.style.display = "flex")
                       : (details.style.display = "none");
                   };
                   var convertTime = (start, duration) => {
                     if (!start || !duration) return "TBD";
-                    var startDate = new Date(start);
-                    var endDate = new Date(startDate.getTime() + duration * 60000);
-
+                    const startDate = new Date(start);
+                    const endDate = new Date(startDate.getTime() + duration * 60000);
                     return parseDate(startDate) + " - " + parseDate(endDate);
-
                   }
                   var parseDate = (date) => {
-                    let h = date.getHours();
-                    let m = date.getMinutes();
-                    let ampm = "am";
+                    var h = date.getHours();
+                    var m = date.getMinutes();
+                    var ampm = "am";
                     if (h > 12) {
                       h = h - 12;
                       ampm = "pm";
@@ -536,11 +534,11 @@
                     const template = landingPageEl.getElementById("template");
                     const clone = template.content.cloneNode(true);
 
-                    let time = clone.querySelector(".time");
-                    let agendaItem = clone.querySelector(".agenda-item");
-                    let bookmarkButton = clone.querySelector(".button-bookmark");
-                    let title = clone.querySelector(".agenda-title");
-                    let description = clone.querySelector(".description");
+                    const time = clone.querySelector(".time");
+                    const agendaItem = clone.querySelector(".agenda-item");
+                    const bookmarkButton = clone.querySelector(".button-bookmark");
+                    const title = clone.querySelector(".agenda-title");
+                    const description = clone.querySelector(".description");
 
                     agendaItem.setAttribute("id", 'agenda-item-' + id);
                     bookmarkButton.setAttribute("id", id);
@@ -549,10 +547,10 @@
                     if (bookmark.title) title.innerHTML = bookmark.title;
                     description.innerHTML = bookmark.description;
 
-                    let agendaDetails = clone.querySelector(".agenda-item-details");
+                    const agendaDetails = clone.querySelector(".agenda-item-details");
 
                     if (bookmark.speakerImage) {
-                      let imgElement = document.createElement("img");
+                      const imgElement = document.createElement("img");
                       imgElement.setAttribute("class", "speaker-image");
                       imgElement.src = bookmark.speakerImage;
                       agendaDetails.prepend(imgElement);
@@ -563,11 +561,10 @@
                   }
 
                   var removeBookmark = (element) => {
-                    let agendaItem = landingPageEl.getElementById('agenda-item-' + element.id);
+                    const agendaItem = landingPageEl.getElementById('agenda-item-' + element.id);
                     agendaItem.remove();                    // removes the agendaItem from DOM
                     myAgenda.splice(element.id, 1);         // removes the agendaItem from array
                     updateCustomUserDataStoreBookmark();    // removes this users bookmark data
-                         // adds-back updated bookmark data
                   }
 
                   var updateCustomUserDataStoreBookmark = async () => {
@@ -586,7 +583,7 @@
                       }
                     })
                       .then(data => {
-                        console.log('Success:', data);
+                        // console.log('Success:', data);
                       })
                       .catch((error) => {
                         console.error('Error:', error);
@@ -597,8 +594,8 @@
                     if (myAgenda.length < 1) {
                       return;
                     }
-                    let myAgendaString = JSON.stringify(myAgenda);
-                    let myBookmarks = JSON.stringify({
+                    const myAgendaString = JSON.stringify(myAgenda);
+                    const myBookmarks = JSON.stringify({
                       "key" : "bookmarks",
                       "value" : myAgendaString,
                       "public" : true,
@@ -615,10 +612,10 @@
                       body: myBookmarks
                     })
                       .then(function (data) {
-                        console.log('Request succeeded with JSON response', data);
+                        // console.log('Request succeeded:', data);
                       })
                       .catch(function (error) {
-                        console.log('Request failed', error);
+                        console.log('Request failed:', error);
                       });
                   }
 
