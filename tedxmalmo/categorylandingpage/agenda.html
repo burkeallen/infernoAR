@@ -165,10 +165,14 @@
 
   </style>
   <script>
-    function buildLocalMenu() {
+  function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        menuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -284,7 +288,11 @@
 
                   .clock {
                     position: relative;
+<<<<<<< HEAD
                     background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_widget_2.gif');
+=======
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_widget.gif');
+>>>>>>> 19ad53ebe4e12910cbe1e34bb2027ff967366cfa
                     width: 59rem;
                     height: 35rem;
                     font-size: 29px;
@@ -718,6 +726,7 @@
                         //convert value from string to array
                         var stringValue = json.value;
                         var parsedString = stringValue.substring(2, stringValue.length-2);
+<<<<<<< HEAD
                         
                         if (json.value){
                           bookmarks = JSON.parse(json.value);
@@ -725,6 +734,12 @@
                         
                         
                       } 
+=======
+
+                        bookmarks = JSON.parse(json.value);
+
+                      }
+>>>>>>> 19ad53ebe4e12910cbe1e34bb2027ff967366cfa
 
                     } catch (e) {
                       throw new Error(e);
@@ -735,7 +750,7 @@
                   getBookmarks();
 
 
-                  
+
 
                   //send bookmarks to API
                   var sendBookmarks = (bookmark, actionType) => {
@@ -771,7 +786,7 @@
                     headers.set('Accept', 'application/json')
                     headers.set('Content-Type', 'application/json')
 
-                    
+
 
                     // for super user accounts
                     const overrideId = window.sessionStorage.getItem("overrideId");
@@ -784,7 +799,7 @@
                       body: JSON.stringify(kvp)
                     })
                   }
-                    
+
 
 
                   var buildEventList = () => {
@@ -834,14 +849,14 @@
                     });
                   };
 
-                
+
 
                   //Agenda Bookmarking
                   var bookmarkEvent = (button) => {
                     var id = button.parentNode.parentNode.parentNode.id;
                     var savedItem = agendaList[id];
                     var tooltip = button.parentNode.querySelector(".tooltip-bookmark");
-                    
+
                     if (button.innerHTML === "+") {
                       //add agenda item
                       sendBookmarks(savedItem, "add");

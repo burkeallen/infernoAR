@@ -7,742 +7,738 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,400i" rel="stylesheet">
   <style>
-    html {
-      background-color: transparent
-    }
-
-    div#list-screen {
-      background-color: #141920;
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 9999;
-      display: none;
-    }
-
-    div#list-screen div#list-screen-header {
-      background-color: #141920;
-      padding: 15px;
-      text-align: center;
-      height: 25px;
-      position: relative;
-      color: white;
-      font-family: "Lato", sans-serif;
-      cursor: pointer;
-    }
-
-    div#list-screen div#list-screen-header img#up-arrow {
-      position: absolute;
-      top: 23px;
-      left: 15px;
-      cursor: pointer;
-    }
-
-    div#list-screen div#list-screen-header span.list-active-song-name {
-      color: #fff;
-      line-height: 25px;
-      font-size: 16px;
-      font-family: "Lato", sans-serif;
-      letter-spacing: 0.5px;
-    }
-
-    div#list-screen div#list {
-      overflow-y: scroll;
-    }
-
-    div#list-screen div#list div.song {
-      padding: 15px;
-      background-color: #242b33;
-      margin-bottom: 1px;
-      cursor: pointer;
-      line-height: 24px;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      color: #cccccc;
-    }
-
-    div#list-screen div#list div.song img {
-      max-height: 64px;
-      margin-right: 10px;
-    }
-
-
-    div#list-screen div#list div.song.amplitude-active-song-container {
-      background-color: #30363e;
-    }
-
-    div#list-screen div#list div.song div.song-meta-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    div#list-screen div#list div.song div.song-meta-container .song-name {
-      font-family: "Lato", sans-serif;
-      font-size: 14px;
-      line-height: 16px;
-      color: #03a9f4;
-      letter-spacing: 0.47px;
-      display: block;
-    }
-
-    div#list-screen div#list div.song div.song-meta-container .song-artist-album {
-      font-family: "Lato", sans-serif;
-      font-size: 12px;
-      line-height: 14px;
-      color: #fff;
-      letter-spacing: 0.47px;
-      display: block;
-    }
-
-    div#list-screen div#list div.song .song-duration {
-      display: inline-block;
-      opacity: 0.5;
-      font-family: 'Lato', sans-serif;
-      font-size: 14px;
-      color: #fff;
-      letter-spacing: 0.5px;
-      width: 35px;
-      text-align: center;
-    }
-
-    div#list-screen div#list div.song .song-artist-album {
-      color: #5277b0;
-    }
-
-    div#list-screen div#list-screen-footer {
-      height: 80px;
-      padding: 15px;
-    }
-
-    div#list-screen div#list-screen-footer div#list-screen-meta-container {
-      width: calc(100% - 123px);
-      float: left;
-    }
-
-    div#list-screen div#list-screen-footer div#list-screen-meta-container span.song-name {
-      font-family: "Lato", sans-serif;
-      font-size: 16px;
-      color: #fff;
-      letter-spacing: 0.5px;
-      line-height: 24px;
-    }
-
-    div#list-screen div#list-screen-footer div#list-screen-meta-container div.song-artist-album {
-      opacity: 0.5;
-      font-family: "Lato", sans-serif;
-      font-size: 14px;
-      color: #fff;
-      letter-spacing: 0.5px;
-      line-height: 16px;
-    }
-
-    div#list-screen div#list-screen-footer div.list-controls {
-      width: 90px;
-      float: right;
-      margin-top: 8px;
-    }
-
-    div#list-screen div#list-screen-footer div.list-controls div.list-previous {
-      cursor: pointer;
-      width: 15px;
-      height: 17px;
-      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-previous.svg");
-      background-repeat: no-repeat;
-      float: left;
-      margin-right: 15px;
-      margin-top: 4px;
-    }
-
-    div#list-screen div#list-screen-footer div.list-controls div.list-play-pause {
-      cursor: pointer;
-      width: 17px;
-      height: 24px;
-      background-repeat: no-repeat;
-      float: left;
-    }
-
-    div#list-screen div#list-screen-footer div.list-controls div.list-play-pause.amplitude-playing {
-      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-pause.svg");
-    }
-
-    div#list-screen div#list-screen-footer div.list-controls div.list-play-pause.amplitude-paused {
-      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-play.svg");
-    }
-
-    div#list-screen div#list-screen-footer div.list-controls div.list-next {
-      cursor: pointer;
-      width: 15px;
-      height: 17px;
-      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-next.svg");
-      background-repeat: no-repeat;
-      float: left;
-      margin-left: 15px;
-      margin-top: 4px;
-    }
-
-    div.player-header {
-      background-color: #141920;
-      padding: 15px;
-      text-align: center;
-      height: 25px;
-      position: relative;
-      margin-top: 40px;
-      cursor: pointer;
-      color: white;
-      font-family: "Lato", sans-serif;
-    }
-
-    div.player-header img#down {
-      position: absolute;
-      top: 23px;
-      left: 15px;
-      cursor: pointer;
-    }
-
-    div#player-top {
-      position: relative;
-      background-color: #000000;
-      text-align: center;
-    }
-
-    div#player-progress-bar-container {
-      width: 100%;
-      height: 8px;
-      background-color: #000;
-      position: relative;
-      margin-top: -6px;
-    }
-
-    div#player-progress-bar-container progress#song-played-progress {
-      width: 100%;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      height: 8px;
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 9;
-      border: none;
-      cursor: pointer;
-      background: transparent;
-    }
-
-    div#player-progress-bar-container progress#song-played-progress[value]::-webkit-progress-bar {
-      background: none;
-    }
-
-    div#player-progress-bar-container progress#song-played-progress[value]::-webkit-progress-value {
-      background: blue;
-    }
-
-    div#player-progress-bar-container progress#song-played-progress[value]::-moz-progress-bar {
-      background: blue;
-    }
-
-    div#player-progress-bar-container progress#song-buffered-progress {
-      width: 100%;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      height: 8px;
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      z-index: 2;
-      border: none;
-      background: transparent;
-    }
-
-    div#player-progress-bar-container progress#song-buffered-progress[value]::-webkit-progress-bar {
-      background: none;
-    }
-
-    div#player-progress-bar-container progress#song-buffered-progress[value]::-webkit-progress-value {
-      background-color: rgba(255, 255, 255, 0.5);
-      transition: width 0.1s ease;
-    }
-
-    div#player-progress-bar-container progress#song-buffered-progress[value]::-moz-progress-bar {
-      background: rgba(255, 255, 255, 0.5);
-    }
-
-    div#player-middle {
-      background-color: #000;
-      padding-left: 15px;
-      padding-right: 15px;
-      padding-top: 20px;
-      padding-bottom: 20px;
-      text-align: center;
-      position: relative;
-    }
-
-    div#player-middle div#time-container {
-      color: white;
-      width: 100%;
-      background-color: #000;
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    div#player-middle div#time-container span.amplitude-duration-time {
-      position: absolute;
-      top: 0px;
-      right: 5px;
-    }
-
-    div#player-middle div#time-container span.amplitude-current-time {
-      position: absolute;
-      top: 0px;
-      left: 5px;
-    }
-
-    div#player-middle span.song-name {
-      font-family: Lato, sans-serif;
-      font-size: 16px;
-      color: #fff;
-      letter-spacing: 0.5px;
-      line-height: 24px;
-      display: block;
-    }
-
-    div#player-middle div.song-artist-album {
-      opacity: 0.5;
-      font-family: Lato, sans-serif;
-      font-size: 14px;
-      color: #fff;
-      letter-spacing: 0.5px;
-      line-height: 16px;
-    }
-
-    div#player-bottom {
-      background-color: #192029;
-      padding-left: 25px;
-      padding-right: 25px;
-    }
-
-    div#player-bottom div#control-container {
-      height: 60px;
-      padding-top: 40px;
-      padding-bottom: 40px;
-    }
-
-    div#player-bottom div#control-container div#shuffle-container {
-      float: left;
-      width: 20%;
-      height: 60px;
-      padding-top: 21px;
-    }
-
-    div#player-bottom div#control-container div#shuffle-container div#shuffle {
-      width: 16px;
-      height: 17px;
-      cursor: pointer;
-      margin: auto;
-      opacity: 0.7;
-    }
-
-    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-off {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle.svg");
-    }
-
-    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-off:hover {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle-on.svg");
-      opacity: 0.8;
-    }
-
-    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-on {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle-on.svg");
-      opacity: 1;
-    }
-
-    div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-on:hover {
-      opacity: 1;
-    }
-
-    div#player-bottom div#control-container div#prev-container {
-      width: 20%;
-      float: left;
-      height: 60px;
-      padding-top: 18px;
-    }
-
-    div#player-bottom div#control-container div#prev-container div#previous {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/previous.svg");
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      margin: auto;
-    }
-
-    div#player-bottom div#control-container div#prev-container div#previous:hover {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/previous-hover.svg");
-    }
-
-    div#player-bottom div#control-container div#play-pause-container {
-      width: 20%;
-      float: left;
-      height: 60px;
-    }
-
-    div#player-bottom div#control-container div#play-pause-container div#play-pause {
-      width: 60px;
-      height: 60px;
-      cursor: pointer;
-      margin: auto;
-    }
-
-    div#player-bottom div#control-container div#play-pause-container div#play-pause.amplitude-playing {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/pause.svg");
-    }
-
-    div#player-bottom div#control-container div#play-pause-container div#play-pause.amplitude-paused {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/play.svg");
-    }
-
-    div#player-bottom div#control-container div#next-container {
-      width: 20%;
-      float: left;
-      height: 60px;
-      padding-top: 18px;
-    }
-
-    div#player-bottom div#control-container div#next-container div#next {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/next.svg");
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-      margin: auto;
-    }
-
-    div#player-bottom div#control-container div#next-container div#next:hover {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/next-hover.svg");
-    }
-
-    div#player-bottom div#control-container div#repeat-container {
-      float: left;
-      width: 20%;
-      height: 60px;
-      padding-top: 20px;
-    }
-
-    div#player-bottom div#control-container div#repeat-container div#repeat {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat.svg");
-      width: 18px;
-      height: 20px;
-      cursor: pointer;
-      margin: auto;
-      opacity: 0.7;
-    }
-
-    div#player-bottom div#control-container div#repeat-container div#repeat:hover {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat-on.svg");
-      opacity: 0.8;
-    }
-
-    div#player-bottom div#control-container div#repeat-container div#repeat.amplitude-repeat-on {
-      background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat-on.svg");
-      opacity: 1;
-    }
-
-    div#player-bottom div#control-container div#repeat-container div#repeat.amplitude-repeat-on:hover {
-      opacity: 1;
-    }
-
-    div#player-bottom div#control-container::after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    div#player-bottom div#volume-container {
-      padding-bottom: 20px;
-      text-align: center;
-    }
-
-    div#player-bottom div#volume-container img {
-      display: block;
-      float: left;
-      margin-top: -9px;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
-      width: calc(100% - 30px);
-      -webkit-appearance: none;
-      display: block;
-      margin-left: 10px;
-      float: left;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus {
-      outline: none;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-webkit-slider-runnable-track {
-      width: 75%;
-      height: 2px;
-      cursor: pointer;
-      animate: 0.2s;
-      background: #cfd8dc;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-webkit-slider-thumb {
-      height: 18px;
-      width: 18px;
-      background-color: white;
-      cursor: pointer;
-      margin-top: -8px;
-      -webkit-appearance: none;
-      border-radius: 20px;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus::-webkit-slider-runnable-track {
-      background: #cfd8dc;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-moz-range-track {
-      width: 100%;
-      height: 1px;
-      cursor: pointer;
-      animate: 0.2s;
-      background: #cfd8dc;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-moz-range-thumb {
-      height: 18px;
-      width: 18px;
-      background-color: white;
-      cursor: pointer;
-      margin-top: -8px;
-      -webkit-appearance: none;
-      border-radius: 20px;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-track {
-      width: 100%;
-      height: 2px;
-      cursor: pointer;
-      animate: 0.2s;
-      background: #cfd8dc;
-      border-width: 15px 0;
-      color: transparent;
-      border-color: #192029;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-lower {
-      background: transparent;
-      border-radius: 2.6px;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-upper {
-      background: transparent;
-      border-radius: 2.6px;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-thumb {
-      height: 18px;
-      width: 18px;
-      background-color: white;
-      cursor: pointer;
-      margin-top: 0px;
-      border: 20px;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus::-ms-fill-lower {
-      background: #cfd8dc;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-upper {
-      background: #cfd8dc;
-    }
-
-    div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-tooltip {
-      display: none;
-    }
-
-    div#player-bottom div#volume-container:after {
-      content: "";
-      display: table;
-      clear: both;
-    }
-
-    @-moz-document url-prefix() {
+      html {
+          background-color: transparent
+      }
+
+      div#list-screen {
+          background-color: #141920;
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 9999;
+          display: none;
+      }
+
+      div#list-screen div#list-screen-header {
+          background-color: #141920;
+          padding: 15px;
+          text-align: center;
+          height: 25px;
+          position: relative;
+          color: white;
+          font-family: "Lato", sans-serif;
+          cursor: pointer;
+      }
+
+      div#list-screen div#list-screen-header img#up-arrow {
+          position: absolute;
+          top: 23px;
+          left: 15px;
+          cursor: pointer;
+      }
+
+      div#list-screen div#list-screen-header span.list-active-song-name {
+          color: #fff;
+          line-height: 25px;
+          font-size: 16px;
+          font-family: "Lato", sans-serif;
+          letter-spacing: 0.5px;
+      }
+
+      div#list-screen div#list {
+          overflow-y: scroll;
+      }
+
+      div#list-screen div#list div.song {
+          padding: 15px;
+          background-color: #242b33;
+          margin-bottom: 1px;
+          cursor: pointer;
+          line-height: 24px;
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          color: #cccccc;
+      }
+
+      div#list-screen div#list div.song img {
+          max-height: 64px;
+          margin-right: 10px;
+      }
+
+
+      div#list-screen div#list div.song.amplitude-active-song-container {
+          background-color: #30363e;
+      }
+
+      div#list-screen div#list div.song div.song-meta-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          width: 100%;
+      }
+
+      div#list-screen div#list div.song div.song-meta-container .song-name {
+          font-family: "Lato", sans-serif;
+          font-size: 14px;
+          line-height: 16px;
+          color: #03a9f4;
+          letter-spacing: 0.47px;
+          display: block;
+      }
+
+      div#list-screen div#list div.song div.song-meta-container .song-artist-album {
+          font-family: "Lato", sans-serif;
+          font-size: 12px;
+          line-height: 14px;
+          color: #fff;
+          letter-spacing: 0.47px;
+          display: block;
+      }
+
+      div#list-screen div#list div.song .song-duration {
+          display: inline-block;
+          opacity: 0.5;
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          color: #fff;
+          letter-spacing: 0.5px;
+          width: 35px;
+          text-align: center;
+      }
+
+      div#list-screen div#list div.song .song-artist-album {
+          color: #5277b0;
+      }
+
+      div#list-screen div#list-screen-footer {
+          height: 80px;
+          padding: 15px;
+      }
+
+      div#list-screen div#list-screen-footer div#list-screen-meta-container {
+          width: calc(100% - 123px);
+          float: left;
+      }
+
+      div#list-screen div#list-screen-footer div#list-screen-meta-container span.song-name {
+          font-family: "Lato", sans-serif;
+          font-size: 16px;
+          color: #fff;
+          letter-spacing: 0.5px;
+          line-height: 24px;
+      }
+
+      div#list-screen div#list-screen-footer div#list-screen-meta-container div.song-artist-album {
+          opacity: 0.5;
+          font-family: "Lato", sans-serif;
+          font-size: 14px;
+          color: #fff;
+          letter-spacing: 0.5px;
+          line-height: 16px;
+      }
+
+      div#list-screen div#list-screen-footer div.list-controls {
+          width: 90px;
+          float: right;
+          margin-top: 8px;
+      }
+
+      div#list-screen div#list-screen-footer div.list-controls div.list-previous {
+          cursor: pointer;
+          width: 15px;
+          height: 17px;
+          background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-previous.svg");
+          background-repeat: no-repeat;
+          float: left;
+          margin-right: 15px;
+          margin-top: 4px;
+      }
+
+      div#list-screen div#list-screen-footer div.list-controls div.list-play-pause {
+          cursor: pointer;
+          width: 17px;
+          height: 24px;
+          background-repeat: no-repeat;
+          float: left;
+      }
+
+      div#list-screen div#list-screen-footer div.list-controls div.list-play-pause.amplitude-playing {
+          background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-pause.svg");
+      }
+
+      div#list-screen div#list-screen-footer div.list-controls div.list-play-pause.amplitude-paused {
+          background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-play.svg");
+      }
+
+      div#list-screen div#list-screen-footer div.list-controls div.list-next {
+          cursor: pointer;
+          width: 15px;
+          height: 17px;
+          background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/small-next.svg");
+          background-repeat: no-repeat;
+          float: left;
+          margin-left: 15px;
+          margin-top: 4px;
+      }
+
+      div.player-header {
+          background-color: #141920;
+          padding: 15px;
+          text-align: center;
+          height: 25px;
+          position: relative;
+          margin-top: 40px;
+          cursor: pointer;
+          color: white;
+          font-family: "Lato", sans-serif;
+      }
+
+      div.player-header img#down {
+          position: absolute;
+          top: 23px;
+          left: 15px;
+          cursor: pointer;
+      }
+
+      div#player-top {
+          position: relative;
+          background-color: #000000;
+          text-align: center;
+      }
+
+      div#player-progress-bar-container {
+          width: 100%;
+          height: 8px;
+          background-color: #000;
+          position: relative;
+          margin-top: -6px;
+      }
+
+      div#player-progress-bar-container progress#song-played-progress {
+          width: 100%;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: 8px;
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 9;
+          border: none;
+          cursor: pointer;
+          background: transparent;
+      }
+
+      div#player-progress-bar-container progress#song-played-progress[value]::-webkit-progress-bar {
+          background: none;
+      }
+
+      div#player-progress-bar-container progress#song-played-progress[value]::-webkit-progress-value {
+          background: blue;
+      }
+
+      div#player-progress-bar-container progress#song-played-progress[value]::-moz-progress-bar {
+          background: blue;
+      }
+
+      div#player-progress-bar-container progress#song-buffered-progress {
+          width: 100%;
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          appearance: none;
+          height: 8px;
+          display: block;
+          position: absolute;
+          top: 0;
+          right: 0;
+          left: 0;
+          bottom: 0;
+          z-index: 2;
+          border: none;
+          background: transparent;
+      }
+
+      div#player-progress-bar-container progress#song-buffered-progress[value]::-webkit-progress-bar {
+          background: none;
+      }
+
+      div#player-progress-bar-container progress#song-buffered-progress[value]::-webkit-progress-value {
+          background-color: rgba(255, 255, 255, 0.5);
+          transition: width 0.1s ease;
+      }
+
+      div#player-progress-bar-container progress#song-buffered-progress[value]::-moz-progress-bar {
+          background: rgba(255, 255, 255, 0.5);
+      }
+
+      div#player-middle {
+          background-color: #000;
+          padding-left: 15px;
+          padding-right: 15px;
+          padding-top: 20px;
+          padding-bottom: 20px;
+          text-align: center;
+          position: relative;
+      }
+
+      div#player-middle div#time-container {
+          color: white;
+          width: 100%;
+          background-color: #000;
+          font-size: 14px;
+          font-weight: bold;
+      }
+
+      div#player-middle div#time-container span.amplitude-duration-time {
+          position: absolute;
+          top: 0px;
+          right: 5px;
+      }
+
+      div#player-middle div#time-container span.amplitude-current-time {
+          position: absolute;
+          top: 0px;
+          left: 5px;
+      }
+
+      div#player-middle span.song-name {
+          font-family: Lato, sans-serif;
+          font-size: 16px;
+          color: #fff;
+          letter-spacing: 0.5px;
+          line-height: 24px;
+          display: block;
+      }
+
+      div#player-middle div.song-artist-album {
+          opacity: 0.5;
+          font-family: Lato, sans-serif;
+          font-size: 14px;
+          color: #fff;
+          letter-spacing: 0.5px;
+          line-height: 16px;
+      }
+
+      div#player-bottom {
+          background-color: #192029;
+          padding-left: 25px;
+          padding-right: 25px;
+      }
+
+      div#player-bottom div#control-container {
+          height: 60px;
+          padding-top: 40px;
+          padding-bottom: 40px;
+      }
+
+      div#player-bottom div#control-container div#shuffle-container {
+          float: left;
+          width: 20%;
+          height: 60px;
+          padding-top: 21px;
+      }
+
+      div#player-bottom div#control-container div#shuffle-container div#shuffle {
+          width: 16px;
+          height: 17px;
+          cursor: pointer;
+          margin: auto;
+          opacity: 0.7;
+      }
+
+      div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-off {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle.svg");
+      }
+
+      div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-off:hover {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle-on.svg");
+          opacity: 0.8;
+      }
+
+      div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-on {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/shuffle-on.svg");
+          opacity: 1;
+      }
+
+      div#player-bottom div#control-container div#shuffle-container div#shuffle.amplitude-shuffle-on:hover {
+          opacity: 1;
+      }
+
+      div#player-bottom div#control-container div#prev-container {
+          width: 20%;
+          float: left;
+          height: 60px;
+          padding-top: 18px;
+      }
+
+      div#player-bottom div#control-container div#prev-container div#previous {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/previous.svg");
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          margin: auto;
+      }
+
+      div#player-bottom div#control-container div#prev-container div#previous:hover {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/previous-hover.svg");
+      }
+
+      div#player-bottom div#control-container div#play-pause-container {
+          width: 20%;
+          float: left;
+          height: 60px;
+      }
+
+      div#player-bottom div#control-container div#play-pause-container div#play-pause {
+          width: 60px;
+          height: 60px;
+          cursor: pointer;
+          margin: auto;
+      }
+
+      div#player-bottom div#control-container div#play-pause-container div#play-pause.amplitude-playing {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/pause.svg");
+      }
+
+      div#player-bottom div#control-container div#play-pause-container div#play-pause.amplitude-paused {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/play.svg");
+      }
+
+      div#player-bottom div#control-container div#next-container {
+          width: 20%;
+          float: left;
+          height: 60px;
+          padding-top: 18px;
+      }
+
+      div#player-bottom div#control-container div#next-container div#next {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/next.svg");
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          margin: auto;
+      }
+
+      div#player-bottom div#control-container div#next-container div#next:hover {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/next-hover.svg");
+      }
+
+      div#player-bottom div#control-container div#repeat-container {
+          float: left;
+          width: 20%;
+          height: 60px;
+          padding-top: 20px;
+      }
+
+      div#player-bottom div#control-container div#repeat-container div#repeat {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat.svg");
+          width: 18px;
+          height: 20px;
+          cursor: pointer;
+          margin: auto;
+          opacity: 0.7;
+      }
+
+      div#player-bottom div#control-container div#repeat-container div#repeat:hover {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat-on.svg");
+          opacity: 0.8;
+      }
+
+      div#player-bottom div#control-container div#repeat-container div#repeat.amplitude-repeat-on {
+          background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/img/repeat-on.svg");
+          opacity: 1;
+      }
+
+      div#player-bottom div#control-container div#repeat-container div#repeat.amplitude-repeat-on:hover {
+          opacity: 1;
+      }
+
+      div#player-bottom div#control-container::after {
+          content: "";
+          display: table;
+          clear: both;
+      }
+
+      div#player-bottom div#volume-container {
+          padding-bottom: 20px;
+          text-align: center;
+      }
+
+      div#player-bottom div#volume-container img {
+          display: block;
+          float: left;
+          margin-top: -9px;
+      }
+
       div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
-        margin-top: 0px;
+          width: calc(100% - 30px);
+          -webkit-appearance: none;
+          display: block;
+          margin-left: 10px;
+          float: left;
       }
-    }
 
-    @supports (-ms-ime-align: auto) {
-      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
-        margin-top: -4px;
-        height: 30px;
-        background-color: #192029 !important;
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus {
+          outline: none;
       }
-    }
 
-    @media all and (-ms-high-contrast: none) {
-      div#player-bottom div#volume-container *::-ms-backdrop,
-      div#flat-black-player-container div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
-        margin-top: -8px;
-        background-color: #192029 !important;
-        background: #192029 !important;
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-webkit-slider-runnable-track {
+          width: 75%;
+          height: 2px;
+          cursor: pointer;
+          animate: 0.2s;
+          background: #cfd8dc;
       }
-    }
 
-    /*
-      3. Layout
-    */
-    body {
-      margin: 0;
-      padding: 0;
-      background: transparent;
-      -webkit-font-smoothing: antialiased;
-      line-height: 1.5;
-      font-family: "Lato", sans-serif;
-      overflow: hidden;
-    }
-
-    div#flat-black-player-container {
-      position: relative;
-      width: 100%;
-      margin: auto;
-    }
-
-    .slide-in-top {
-      -webkit-animation: slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-      animation: slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-    }
-
-    /* ----------------------------------------------
-     * Generated by Animista on 2019-3-25 18:39:54
-     * w: http://animista.net, t: @cssanimista
-     * ---------------------------------------------- */
-    /**
-     * ----------------------------------------
-     * animation slide-in-top
-     * ----------------------------------------
-     */
-    @-webkit-keyframes slide-in-top {
-      0% {
-        -webkit-transform: translateY(-10px);
-        transform: translateY(-10px);
-        opacity: 0;
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-webkit-slider-thumb {
+          height: 18px;
+          width: 18px;
+          background-color: white;
+          cursor: pointer;
+          margin-top: -8px;
+          -webkit-appearance: none;
+          border-radius: 20px;
       }
-      100% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-        opacity: 1;
+
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus::-webkit-slider-runnable-track {
+          background: #cfd8dc;
       }
-    }
 
-    @keyframes slide-in-top {
-      0% {
-        -webkit-transform: translateY(-10px);
-        transform: translateY(-10px);
-        opacity: 0;
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-moz-range-track {
+          width: 100%;
+          height: 1px;
+          cursor: pointer;
+          animate: 0.2s;
+          background: #cfd8dc;
       }
-      100% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-        opacity: 1;
+
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-moz-range-thumb {
+          height: 18px;
+          width: 18px;
+          background-color: white;
+          cursor: pointer;
+          margin-top: -8px;
+          -webkit-appearance: none;
+          border-radius: 20px;
       }
-    }
 
-    .slide-out-top {
-      -webkit-animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
-      animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
-    }
-
-    /* ----------------------------------------------
-     * Generated by Animista on 2019-3-25 18:45:17
-     * w: http://animista.net, t: @cssanimista
-     * ---------------------------------------------- */
-    /**
-     * ----------------------------------------
-     * animation slide-out-top
-     * ----------------------------------------
-     */
-    @-webkit-keyframes slide-out-top {
-      0% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-        opacity: 1;
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-track {
+          width: 100%;
+          height: 2px;
+          cursor: pointer;
+          animate: 0.2s;
+          background: #cfd8dc;
+          border-width: 15px 0;
+          color: transparent;
+          border-color: #192029;
       }
-      100% {
-        -webkit-transform: translateY(-10px);
-        transform: translateY(-10px);
-        opacity: 0;
+
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-lower {
+          background: transparent;
+          border-radius: 2.6px;
       }
-    }
 
-    @keyframes slide-out-top {
-      0% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-        opacity: 1;
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-upper {
+          background: transparent;
+          border-radius: 2.6px;
       }
-      100% {
-        -webkit-transform: translateY(-10px);
-        transform: translateY(-10px);
-        opacity: 0;
+
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-thumb {
+          height: 18px;
+          width: 18px;
+          background-color: white;
+          cursor: pointer;
+          margin-top: 0px;
+          border: 20px;
       }
-    }
 
-    #player-top {
-      display: inline-block;
-      display: block;
-      color: white;
-      height: 100%;
-    }
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider:focus::-ms-fill-lower {
+          background: #cfd8dc;
+      }
 
-    .thumbnail {
-      width: 30%;
-    }
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-fill-upper {
+          background: #cfd8dc;
+      }
 
-    .thumbnail img {
-      width: 100%;
-      height: auto !important;
-    }
+      div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider::-ms-tooltip {
+          display: none;
+      }
 
-    .song-info {
-      display: inline-block;
-      position: absolute;
-      min-height: 185px;
-      top: 0;
-      left: 30.5%;
-      width: 68.5%;
-      height: 95%;
-      text-align: center;
-    }
+      div#player-bottom div#volume-container:after {
+          content: "";
+          display: table;
+          clear: both;
+      }
 
-    .song-name {
-      font-size: 1.25em;
-      padding-top: 10px;
-    }
+      @-moz-document url-prefix() {
+          div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+              margin-top: 0px;
+          }
+      }
+
+      @supports (-ms-ime-align: auto) {
+          div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+              margin-top: -4px;
+              height: 30px;
+              background-color: #192029 !important;
+          }
+      }
+
+      @media all and (-ms-high-contrast: none) {
+          div#player-bottom div#volume-container *::-ms-backdrop,
+          div#flat-black-player-container div#player-bottom div#volume-container input[type="range"].amplitude-volume-slider {
+              margin-top: -8px;
+              background-color: #192029 !important;
+              background: #192029 !important;
+          }
+      }
+
+      /*
+        3. Layout
+      */
+      body {
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          -webkit-font-smoothing: antialiased;
+          line-height: 1.5;
+          font-family: "Lato", sans-serif;
+          overflow: hidden;
+      }
+
+      div#flat-black-player-container {
+          position: relative;
+          width: 100%;
+          margin: auto;
+      }
+
+      .slide-in-top {
+          -webkit-animation: slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+          animation: slide-in-top 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+      }
+
+      /* ----------------------------------------------
+       * Generated by Animista on 2019-3-25 18:39:54
+       * w: http://animista.net, t: @cssanimista
+       * ---------------------------------------------- */
+      /**
+       * ----------------------------------------
+       * animation slide-in-top
+       * ----------------------------------------
+       */
+      @-webkit-keyframes slide-in-top {
+          0% {
+              -webkit-transform: translateY(-10px);
+              transform: translateY(-10px);
+              opacity: 0;
+          }
+          100% {
+              -webkit-transform: translateY(0);
+              transform: translateY(0);
+              opacity: 1;
+          }
+      }
+
+      @keyframes slide-in-top {
+          0% {
+              -webkit-transform: translateY(-10px);
+              transform: translateY(-10px);
+              opacity: 0;
+          }
+          100% {
+              -webkit-transform: translateY(0);
+              transform: translateY(0);
+              opacity: 1;
+          }
+      }
+
+      .slide-out-top {
+          -webkit-animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+          animation: slide-out-top 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+      }
+
+      /* ----------------------------------------------
+       * Generated by Animista on 2019-3-25 18:45:17
+       * w: http://animista.net, t: @cssanimista
+       * ---------------------------------------------- */
+      /**
+       * ----------------------------------------
+       * animation slide-out-top
+       * ----------------------------------------
+       */
+      @-webkit-keyframes slide-out-top {
+          0% {
+              -webkit-transform: translateY(0);
+              transform: translateY(0);
+              opacity: 1;
+          }
+          100% {
+              -webkit-transform: translateY(-10px);
+              transform: translateY(-10px);
+              opacity: 0;
+          }
+      }
+
+      @keyframes slide-out-top {
+          0% {
+              -webkit-transform: translateY(0);
+              transform: translateY(0);
+              opacity: 1;
+          }
+          100% {
+              -webkit-transform: translateY(-10px);
+              transform: translateY(-10px);
+              opacity: 0;
+          }
+      }
+
+      #player-top {
+          display: inline-block;
+          display: block;
+          color: white;
+          height: 100%;
+      }
+
+      .thumbnail {
+          width: 30%;
+      }
+
+      .thumbnail img {
+          width: 100%;
+          height: auto !important;
+      }
+
+      .song-info {
+          display: inline-block;
+          position: absolute;
+          left: 30.5%;
+          width: 68.5%;
+          height: 100%;
+          text-align: center;
+          bottom: 0;
+      }
+
+      .song-name {
+          font-size: 1.25em;
+      }
 
 
-    .amplitude-visualization {
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      width: 100% !important;
-      height: 100% !important;
-    }
-    .amplitude-visualization canvas {
-      width: 100% !important;
-      height: 80% !important;
-    }
+      .amplitude-visualization {
+          width: 100% !important;
+          height: 100% !important;
+      }
+
+      .amplitude-visualization canvas {
+          width: 100% !important;
+          height: 73% !important;
+      }
 
 
   </style>
@@ -751,7 +747,7 @@
 </head>
 <body>
 
-<div class="content">
+<div id="musicPlayer">
   <div id="flat-black-player-container">
     <div id="list-screen" class="slide-in-top">
       <div id="list-screen-header" class="hide-playlist">
@@ -854,14 +850,14 @@
   </div>
 </div>
 
-<script>
+<script id="initMusicPlayer">
   window.onkeydown = function (e) {
     return !(e.keyCode == 32);
   };
 
   /**
-    Handles a click on the down button to slide down the playlist.
-  **/
+   Handles a click on the down button to slide down the playlist.
+   **/
   document.getElementsByClassName('down-header')[0].addEventListener('click', function () {
     const list = document.getElementById('list');
     list.style.height = (parseInt(document.getElementById('flat-black-player-container').offsetHeight) - 135) + 'px';
@@ -871,8 +867,8 @@
   });
 
   /**
-    Handles a click on the up arrow to hide the list screen.
-  **/
+   Handles a click on the up arrow to hide the list screen.
+   **/
   document.getElementsByClassName('hide-playlist')[0].addEventListener('click', function () {
     document.getElementById('list-screen').classList.remove('slide-in-top');
     document.getElementById('list-screen').classList.add('slide-out-top');
@@ -880,14 +876,13 @@
   });
 
   /**
-    Handles a click on the song played progress bar.
-  **/
+   Handles a click on the song played progress bar.
+   **/
   document.getElementById('song-played-progress').addEventListener('click', function (e) {
     const offset = this.getBoundingClientRect();
     const x = e.pageX - offset.left;
     Amplitude.setSongPlayedPercentage((parseFloat(x) / parseFloat(this.offsetWidth)) * 100);
   });
-
 
 
   function initAudioPlayer(data) {
@@ -917,6 +912,7 @@
       const clone = template.content.cloneNode(true);
       clone.querySelector('.song').setAttribute('data-amplitude-song-index', songIndex.toString());
       clone.querySelector('.song-name').setAttribute('data-amplitude-song-index', songIndex.toString());
+      clone.querySelector('.song-artist').setAttribute('data-amplitude-song-index', songIndex.toString());
       clone.querySelector('.now-playing').src = song.cover_art_url;
       clone.querySelector('.song-duration').innerHTML = song.duration;
       list.appendChild(clone);
@@ -961,74 +957,305 @@
 
   const songData = [
     {
-      "name": "Power of Balance",
-      "artist": "Dissidence",
-      "file": "ES_Power of Balance - Dissidence.mp3",
-      "image": "5284.jpg",
-      "duration": "3:39"
+      "artist": "Dusty Decks",
+      "name": "Move Your Hands",
+      "file": "ES_Move Your Hands - Dusty Decks.mp3",
+      "image": "5613.jpg",
+      "duration": "2:31"
     },
     {
-      "name": "Drinking You off My Mind",
-      "artist": "Thyra",
-      "file": "ES_Drinking You off My Mind - Thyra.mp3",
-      "image": "5410.jpg",
-      "duration": "3:46"
+      "artist": "Ealot",
+      "name": "Melting Sun",
+      "file": "ES_Melting Sun - Ealot.mp3",
+      "image": "2575.jpg",
+      "duration": "4:40"
     },
     {
-      "name": "Angel Dust",
-      "artist": "AGST",
-      "file": "ES_Angel Dust - AGST.mp3",
-      "image": "305.jpg",
-      "duration": "3:38"
+      "artist": "Ealot",
+      "name": "Sultry",
+      "file": "ES_Sultry - Ealot.mp3",
+      "image": "2575.jpg",
+      "duration": "3:58"
     },
     {
-      "name": "Space Age Girl Machine",
-      "artist": "Conditional feat. Bri Oglu",
-      "file": "ES_Space Age Girl Machine - Conditional.mp3",
-      "image": "5289.jpg",
-      "duration": "2:35"
+      "artist": "Ealot",
+      "name": "Lazy Breeze",
+      "file": "ES_Lazy Breeze - Ealot.mp3",
+      "image": "4394.jpg",
+      "duration": "4:39"
     },
     {
-      "name": "State of Dystopia",
-      "artist": "Of Men And Wolves feat. Red Revision",
-      "file": "ES_State of Dystopia - Of Men And Wolves.mp3",
-      "image": "5104.jpg",
+      "artist": "Ealot",
+      "name": "Sweet Distraction",
+      "file": "ES_Sweet Distraction - Ealot.mp3",
+      "image": "4953.jpg",
+      "duration": "5:26"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Paper Stars",
+      "file": "ES_Paper Stars - Ealot.mp3",
+      "image": "4953.jpg",
+      "duration": "4:12"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Close To Water",
+      "file": "ES_Close To Water - Ealot.mp3",
+      "image": "2442.jpg",
+      "duration": "4:44"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Going Places",
+      "file": "ES_Going Places - Ealot.mp3",
+      "image": "2442.jpg",
+      "duration": "3:43"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Curves",
+      "file": "ES_Curves - Ealot.mp3",
+      "image": "2442.jpg",
+      "duration": "4:05"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Metro",
+      "file": "ES_Metro - Ealot.mp3",
+      "image": "2442.jpg",
+      "duration": "4:11"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Unfinished Stories",
+      "file": "ES_Unfinished Stories - Ealot.mp3",
+      "image": "5212.jpg",
+      "duration": "4:11"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Licorice",
+      "file": "ES_Licorice - Ealot.mp3",
+      "image": "5212.jpg",
+      "duration": "3:36"
+    },
+    {
+      "artist": "Barbatula",
+      "name": "Attitudes and Altitudes",
+      "file": "ES_Attitudes and Altitudes - Barbatula.mp3",
+      "image": "5415.jpg",
+      "duration": "4:10"
+    },
+    {
+      "artist": "Russell Vista",
+      "name": "In the Sunset With Me",
+      "file": "ES_In the Sunset With Me (Instrumental Version) - Russell Vista.mp3",
+      "image": "5316.jpg",
       "duration": "4:20"
     },
     {
-      "name": "Under The Stars",
-      "artist": "Squiid",
-      "file": "ES_Under The Stars - Squiid.mp3",
-      "image": "294.jpg",
-      "duration": "3:17"
+      "artist": "Daniel Fridell",
+      "name": "Go slow",
+      "file": "ES_Go slow - Daniel Fridell.mp3",
+      "image": "5560.jpg",
+      "duration": "3:36"
     },
     {
-      "name": "Voluntary Exile",
+      "artist": "Pure Indigo",
+      "name": "This is my Island",
+      "file": "ES_This is my Island - Pure Indigo.mp3",
+      "image": "5094.jpg",
+      "duration": "2:30"
+    },
+    {
+      "artist": "Maiwan",
+      "name": "Mandala",
+      "file": "ES_Mandala - Maiwan.mp3",
+      "image": "5185.jpg",
+      "duration": "2:47"
+    },
+    {
+      "artist": "Fiskayet",
+      "name": "Maria",
+      "file": "ES_Maria (Instrumental Version) - Fiskayet.mp3",
+      "image": "5282.jpg",
+      "duration": "3:25"
+    },
+    {
+      "artist": "Ennio Máno",
+      "name": "Neroli",
+      "file": "ES_Neroli - Ennio Mano.mp3",
+      "image": "5213.jpg",
+      "duration": "4:04"
+    },
+    {
+      "artist": "Magnus Ringblom",
+      "name": "Twist of Fortune",
+      "file": "ES_Twist of Fortune - Magnus Ringblom.mp3",
+      "image": "5251.jpg",
+      "duration": "3:35"
+    },
+    {
+      "artist": "Jones Meadow",
+      "name": "Mukiwa",
+      "file": "ES_Mukiwa - Jones Meadow.mp3",
+      "image": "5236.jpg",
+      "duration": "4:18"
+    },
+    {
+      "artist": "Ran the Man",
+      "name": "Made of Sun",
+      "file": "ES_Made of Sun - Ran the Man.mp3",
+      "image": "5276.jpg",
+      "duration": "3:40"
+    },
+    {
+      "artist": "Thompson Town Flowers",
+      "name": "No Voodoo No Work",
+      "file": "ES_No Voodoo No Work - Thompson Town Flowers.mp3",
+      "image": "5409.jpg",
+      "duration": "3:58"
+    },
+    {
+      "artist": "LaKesha Nugent",
+      "name": "One Hundred Times",
+      "file": "ES_One Hundred Times - LaKesha Nugent.mp3",
+      "image": "5453.jpg",
+      "duration": "3:00"
+    },
+    {
+      "artist": "Barbatula",
+      "name": "Bar Batula",
+      "file": "ES_Bar Batula - Barbatula.mp3",
+      "image": "5415.jpg",
+      "duration": "3:13"
+    },
+    {
+      "artist": "Ealot",
+      "name": "More Coffee",
+      "file": "ES_More Coffee - Ealot.mp3",
+      "image": "5439.jpg",
+      "duration": "3:31"
+    },
+    {
+      "artist": "Ealot",
+      "name": "Never Be Forgotten",
+      "file": "ES_Never Be Forgotten - Ealot.mp3",
+      "image": "5439.jpg",
+      "duration": "3:47"
+    },
+    {
+      "artist": "Duke Herrington",
+      "name": "Pedestrians",
+      "file": "ES_Pedestrians - Duke Herrington.mp3",
+      "image": "5560.jpg",
+      "duration": "3:09"
+    },
+    {
+      "artist": "dreem",
+      "name": "fascination",
+      "file": "ES_fascination - dreem.mp3",
+      "image": "5484.jpg",
+      "duration": "2:41"
+    },
+    {
+      "artist": "Dexter & The Disciples",
+      "name": "Hanalei Bay",
+      "file": "ES_Hanalei Bay - Dexter & The Disciples.mp3",
+      "image": "5595.jpg",
+      "duration": "3:15"
+    },
+    {
       "artist": "Arc De Soleil",
+      "name": "Voluntary Exile",
       "file": "ES_Voluntary Exile - Arc De Soleil.mp3",
       "image": "5596.jpg",
       "duration": "2:59"
     },
     {
-      "name": "I'm Exactly Where I Need to Be (Instrumental Version)",
-      "artist": "Vincent Vega",
-      "file": "ES_I'm Exactly Where I Need to Be (Instrumental Version) - Vincent Vega.mp3",
-      "image": "5535.jpg",
-      "duration": "3:48"
+      "artist": "Cuba Quartet",
+      "name": "Yo Te Traigo",
+      "file": "ES_Yo Te Traigo - Cuba Quartet.mp3",
+      "image": "5550.jpg",
+      "duration": "2:52"
     },
     {
-      "name": "Struts",
-      "artist": "Wildo",
-      "file": "ES_Struts - Wildo.mp3",
-      "image": "5519.jpg",
-      "duration": "2:53"
+      "artist": "Gregory David",
+      "name": "Coffee Break",
+      "file": "ES_Coffee Break - Gregory David.mp3",
+      "image": "5635.jpg",
+      "duration": "3:36"
     },
     {
-      "name": "Mayflower",
-      "artist": "Daniel Fridell",
-      "file": "ES_Mayflower - Daniel Fridell.mp3",
-      "image": "5380.jpg",
-      "duration": "2:58"
+      "artist": "Gregory David",
+      "name": "Say Laa",
+      "file": "ES_Say Laa - Gregory David.mp3",
+      "image": "5635.jpg",
+      "duration": "3:18"
+    },
+    {
+      "artist": "Jones Meadow, They Dream By Day",
+      "name": "Succulent Chinese Meal",
+      "file": "ES_Succulent Chinese Meal - Jones Meadow.mp3",
+      "image": "5561.jpg",
+      "duration": "3:39"
+    },
+    {
+      "artist": "Jobii",
+      "name": "Pomelo",
+      "file": "ES_Pomelo - Jobii.mp3",
+      "image": "4647.jpg",
+      "duration": "2:09"
+    },
+    {
+      "artist": "Ran the Man",
+      "name": "Runnin' on with It",
+      "file": "ES_Runnin' on with It - Ran the Man.mp3",
+      "image": "5049.jpg",
+      "duration": "3:20"
+    },
+    {
+      "artist": "Ooyy, Smartface",
+      "name": "Tiger's Nest",
+      "file": "ES_Tiger's Nest - Ooyy.mp3",
+      "image": "5073.jpg",
+      "duration": "2:20"
+    },
+    {
+      "artist": "Ooyy, Smartface",
+      "name": "Kyoto by Dawn",
+      "file": "ES_Kyoto by Dawn - Ooyy.mp3",
+      "image": "5073.jpg",
+      "duration": "2:19"
+    },
+    {
+      "artist": "Far Orange",
+      "name": "Right Alright",
+      "file": "ES_Right Alright - Far Orange.mp3",
+      "image": "5215.jpg",
+      "duration": "3:55"
+    },
+    {
+      "artist": "West & Zander",
+      "name": "Autumn Haze",
+      "file": "ES_Autumn Haze - West & Zander.mp3",
+      "image": "5339.jpg",
+      "duration": "3:50"
+    },
+    {
+      "artist": "Ran the Man",
+      "name": "Treehouse",
+      "file": "ES_Treehouse - Ran the Man.mp3",
+      "image": "5390.jpg",
+      "duration": "3:27"
+    },
+    {
+      "artist": "Power Druid",
+      "name": "Alley D",
+      "file": "ES_Alley D - Power Druid.mp3",
+      "image": "5499.jpg",
+      "duration": "3:01"
     }
   ]
 

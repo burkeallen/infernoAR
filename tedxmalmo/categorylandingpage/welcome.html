@@ -165,10 +165,14 @@
 
   </style>
   <script>
-    function buildLocalMenu() {
+  function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        menuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -483,6 +487,7 @@
                     };
 
                     if (!window.chatManager) {
+                      console.log('initiializing Chatwee');
                       var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
                       var chatweeSnippet = fetchGlobalSnippet(snippetId);
                       var username = chatweeSnippet.getElementById("inferno-username");
