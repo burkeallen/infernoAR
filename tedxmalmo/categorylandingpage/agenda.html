@@ -288,7 +288,7 @@
 
                   .clock {
                     position: relative;
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_widget_2.gif');
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_widget.gif');
                     width: 59rem;
                     height: 35rem;
                     font-size: 29px;
@@ -301,6 +301,12 @@
                     left: 2%;
                   }
 
+                  .date-label,
+                  .time-label {
+                    font-size: 16px;
+                    margin-bottom: -10px;
+                  }
+
                   .time-box {
                     font-size: 41px;
                     position: absolute;
@@ -310,6 +316,7 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    flex-direction: column;
                   }
 
                   #agenda {
@@ -391,6 +398,37 @@
                     margin-right: 2rem;
                   }
 
+                  .toggle-tabs {
+                    display: flex;
+                    justify-content: space-around;
+                    margin: 0 auto;
+                    text-align: center;
+                    width: 80%;
+
+                  }
+                  
+                  .tab {
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_time_bg.png');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: top;
+                    background-position-x: -50px;
+                    cursor: pointer;
+                    flex: 1;
+                    height: 50px;
+                  }
+
+                  .tab > p {
+                    font-size: 16px;
+                    margin: 0;
+                    padding-top: 20px;
+                  }
+
+                  .tab.active > p {
+                    font-size: 18px;
+                    font-weight: bold;
+                  }
+
                   .agenda-title-box {
                     position: relative;
                     display: flex;
@@ -435,11 +473,25 @@
                   </video>
                   <div class="page-contents">
                     <div class="clock">
-                      <div class="date">December 12, 2020</div>
+                      <div class="date">
+                        <p class="date-label">Event Date:</p>
+                        <p>December 12, 2020</p>
+                      </div>
                       <div class="time-box">
+                        <p class="time-label">Current Time:</p>
                         <div class="current-time">10:00</div>
                       </div>
                     </div>
+
+                    <div class="toggle-tabs">
+                      <div class="event-agenda tab active" id="tab1" onclick="toggleTab('event')">
+                        <p>Event Agenda</p>
+                      </div>
+                      <div class="my-agenda tab" id="tab2" onclick="toggleTab('mine')">
+                        <p>My Agenda</p>
+                      </div>
+                    </div>
+
                     <div id="agenda">
                     </div>
                   </div>
@@ -793,6 +845,7 @@
                       "agenda"
                     );
                     const template = landingPageEl.getElementById("template");
+                    agenda.innerHTML = "";
 
                     agendaList.forEach(item => {
                       const clone = template.content.cloneNode(true);
@@ -854,6 +907,25 @@
                       button.innerHTML = "+";
                       tooltip.innerHTML = "Add to your agenda?"
                     }
+                  }
+
+                  function toggleTab(id) {
+                    var bookmarkCopy = bookmarks;
+                    var agendaListCopy = agendaList;
+
+                    if(id == 'event') {
+                      agendaList = agendaListCopy;
+                    } else {
+                      agendaList = bookmarkCopy;
+                    }
+
+                    buildEventList();
+
+                    landingPageEl.querySelector('#tab1').classList.toggle('active');
+                    landingPageEl.querySelector('#tab2').classList.toggle('active');
+
+                    bookmarks = bookmarkCopy;
+                    agendaList = agendaListCopy;
                   }
                 </script>
 
