@@ -504,7 +504,15 @@
 
                 <!-- build myAgenda from the CustomUserDataStore (bookmarks) -->
                 <script>
-                  var myAgenda = []
+                  var myAgenda = [];
+                  const headers = {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                  };
+                  if (window.sessionStorage.overrideId) {
+                    headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                    headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                  }
 
                   var getBookmarks = async () => {
                     try {
@@ -524,14 +532,10 @@
 
                   var fetchUserBookmarks = () => {
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks";
-                    const bearerToken = window.sessionStorage.getItem("token");
-                    const bearer = 'Bearer ' + bearerToken;
                     return fetch(url, {
                       method: 'GET',
                       withCredentials: true,
-                      headers: {
-                        'Authorization': bearer
-                      }
+                      headers: headers
                     });
                   }
 
@@ -579,14 +583,11 @@
                   }
 
                   var deleteCustomUserDataStoreBookmark = () => {
-                    const bearerToken = window.sessionStorage.getItem("token");
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks";
                     return fetch(url, {
                       method: 'DELETE',
                       withCredentials: true,
-                      headers: {
-                        'Authorization': 'Bearer ' + bearerToken
-                      }
+                      headers: headers
                     })
                       .then(data => {
                         // console.log('Success:', data);
@@ -608,6 +609,7 @@
                     });
 
                     const bearerToken = window.sessionStorage.getItem("token");
+
                     fetch("https://ingress.infernocore.jolokia.com/api/CustomUserDataStore", {
                       method: 'POST',
                       headers: {
