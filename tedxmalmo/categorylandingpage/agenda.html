@@ -165,14 +165,10 @@
 
   </style>
   <script>
-  function buildLocalMenu() {
+    function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
+        window.localTemplateMenuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -220,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -254,41 +250,50 @@
                   }
 
                   .bg-video {
-                    position: fixed;
-                    top: 0%;
+                    position: absolute;
+                    top: 0;
                     left: 0%;
                     width: auto;
                     min-width: 100%;
                     height: auto;
-                    min-height: 100%;
-                    z-index: -1;
+                    min-height: 100vh;
 
                   }
 
                   #content {
-                    min-height: calc(100vh - 114px);
+                    position: relative;
                     margin: -20px;
+                    min-height: calc(100vh - 114px);
                     z-index: 1;
                     font-family: 'Montserrat', sans-serif;
                     color: white;
                     padding: 2rem;
                     display: flex;
                     flex-direction: column;
+                    overflow:hidden
+                    
                   }
 
                   .page-contents {
+                    position: absolute;
+                    top: 0px;
+                    left: 0;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
                     align-items: flex-start;
                     width: 100%;
-                    padding-bottom: 5rem;
+                    height: 100vh;
+                    padding-bottom: 8rem;
+                    overflow-y: scroll;
 
                   }
 
                   .clock {
-                    position: relative;
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_widget_2.gif');
+                    position: absolute;
+                    top: 2rem;
+                    left: 2rem;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_widget.gif');
                     width: 59rem;
                     height: 35rem;
                     font-size: 29px;
@@ -313,6 +318,7 @@
                   }
 
                   #agenda {
+                    margin-top: 40rem;
                     width: 100%;
                     display: flex;
                     flex-direction: column;
@@ -327,6 +333,7 @@
                   }
 
                   .agenda-item-main {
+                    position: relative;
                     cursor: pointer;
                     width: 100%;
                     display: flex;
@@ -377,6 +384,7 @@
                   }
 
                   .time {
+                    position: relative;
                     background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_time_bg.png');
                     background-repeat: no-repeat;
                     background-size: cover;
@@ -389,6 +397,7 @@
                     align-items: center;
                     justify-content: center;
                     margin-right: 2rem;
+                    z-index: 5;
                   }
 
                   .agenda-title-box {
@@ -508,178 +517,178 @@
                   };
 
                   var agendaList = [
-                      {
-                        "startTime": 13,
-                        "startTimeAMPM": "1899-12-30T18:00:00.000Z",
-                        "duration": 15,
-                        "title": "Intro",
-                        "speaker": "Caroline Ravn (host)",
-                        "speakerImage": "",
-                        "description": "Welcome to TEDxMalmö!"
-                      },
-                      {
-                        "startTime": 13.15,
-                        "startTimeAMPM": "1899-12-30T18:15:00.000Z",
-                        "duration": 25,
-                        "title": "",
-                        "speaker": "Per Holknekt",
-                        "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
-                        "description": "TED TALK + Q&A"
-                      },
-                      {
-                        "startTime": 13.4,
-                        "startTimeAMPM": "1899-12-30T18:40:00.000Z",
-                        "duration": 25,
-                        "title": "",
-                        "speaker": "Atrium Ljungberg",
-                        "speakerImage": "",
-                        "description": "TED TALK #cityinnovation #culture #placemaking"
-                      },
-                      {
-                        "startTime": 14.05,
-                        "startTimeAMPM": "1899-12-30T19:05:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Heather Mills",
-                        "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png",
-                        "description": "TED TALK"
-                      },
-                      {
-                        "startTime": 14.25,
-                        "startTimeAMPM": "1899-12-30T19:25:00.000Z",
-                        "duration": 30,
-                        "title": "",
-                        "speaker": "RWE renewables",
-                        "speakerImage": "",
-                        "description": "MASTER CLASS #greenenergy #future"
-                      },
-                      {
-                        "startTime": 14.55,
-                        "startTimeAMPM": "1899-12-30T19:55:00.000Z",
-                        "duration": 10,
-                        "title": "",
-                        "speaker": "Kami Compliance",
-                        "speakerImage": "",
-                        "description": "MASTER CLASS #knowyourrights #data"
-                      },
-                      {
-                        "startTime": 15.05,
-                        "startTimeAMPM": "1899-12-30T20:05:00.000Z",
-                        "duration": 15,
-                        "title": "Break + magic lesson",
-                        "speaker": "Caroline Ravn (host)",
-                        "speakerImage": "",
-                        "description": "Learn magic from Caroline and go see what the platform can do."
-                      },
-                      {
-                        "startTime": 15.2,
-                        "startTimeAMPM": "1899-12-30T20:20:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Wim Hof",
-                        "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png",
-                        "description": "TED TALK + Q&A #selfdevelopment #inflammation"
-                      },
-                      {
-                        "startTime": 15.4,
-                        "startTimeAMPM": "1899-12-30T20:40:00.000Z",
-                        "duration": 30,
-                        "title": "",
-                        "speaker": "King",
-                        "speakerImage": "",
-                        "description": "MASTER CLASS #innovation #creativity #teams"
-                      },
-                      {
-                        "startTime": 16.1,
-                        "startTimeAMPM": "1899-12-30T21:10:00.000Z",
-                        "duration": 25,
-                        "title": "",
-                        "speaker": "Lovette Jallow",
-                        "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette_Jallow.png",
-                        "description": "TED TALK + Q&A"
-                      },
-                      {
-                        "startTime": 16.55,
-                        "startTimeAMPM": "1899-12-30T21:55:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Therese Lindgren",
-                        "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png",
-                        "description": "TED TALK"
-                      },
-                      {
-                        "startTime": 17.15,
-                        "startTimeAMPM": "1899-12-30T22:15:00.000Z",
-                        "duration": 40,
-                        "title": "",
-                        "speaker": "Jävligt Gott",
-                        "speakerImage": "",
-                        "description": "MASTER CLASS"
-                      },
-                      {
-                        "startTime": 17.55,
-                        "startTimeAMPM": "1899-12-30T22:55:00.000Z",
-                        "duration": 25,
-                        "title": "Break",
-                        "speaker": "Caroline Ravn (host)",
-                        "speakerImage": "",
-                        "description": "Go and test of our acitivies on the platform!"
-                      },
-                      {
-                        "startTime": 18.2,
-                        "startTimeAMPM": "1899-12-30T23:20:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "???????",
-                        "speakerImage": "",
-                        "description": "MASTER CLASS"
-                      },
-                      {
-                        "startTime": 18.4,
-                        "startTimeAMPM": "1899-12-30T23:40:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Robert Swan",
-                        "speakerImage": "",
-                        "description": "TED TALK"
-                      },
-                      {
-                        "startTime": 19,
-                        "startTimeAMPM": "1899-12-31T00:00:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Vimentis",
-                        "speakerImage": "",
-                        "description": "MASTER CLASS"
-                      },
-                      {
-                        "startTime": 19.2,
-                        "startTimeAMPM": "1899-12-31T00:20:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Amy Purdy",
-                        "speakerImage": "",
-                        "description": "TED TALK + Q&A"
-                      },
-                      {
-                        "startTime": 19.4,
-                        "startTimeAMPM": "1899-12-31T00:40:00.000Z",
-                        "duration": 20,
-                        "title": "",
-                        "speaker": "Bruce Dickinson",
-                        "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png",
-                        "description": "TED TALK + Q&A"
-                      },
-                      {
-                        "startTime": 20,
-                        "startTimeAMPM": "1899-12-31T01:00:00.000Z",
-                        "duration": 10,
-                        "title": "Outro",
-                        "speaker": "Caroline Ravn (host)",
-                        "speakerImage": "",
-                        "description": "Goodbye!"
-                      }
-                    ];
+                    {
+                      "startTime": 13,
+                      "startTimeAMPM": "1899-12-30T18:00:00.000Z",
+                      "duration": 15,
+                      "title": "Intro",
+                      "speaker": "Caroline Ravn (host)",
+                      "speakerImage": "",
+                      "description": "Welcome to TEDxMalmö!"
+                    },
+                    {
+                      "startTime": 13.15,
+                      "startTimeAMPM": "1899-12-30T18:15:00.000Z",
+                      "duration": 25,
+                      "title": "",
+                      "speaker": "Per Holknekt",
+                      "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
+                      "description": "TED TALK + Q&A"
+                    },
+                    {
+                      "startTime": 13.4,
+                      "startTimeAMPM": "1899-12-30T18:40:00.000Z",
+                      "duration": 25,
+                      "title": "",
+                      "speaker": "Atrium Ljungberg",
+                      "speakerImage": "",
+                      "description": "TED TALK #cityinnovation #culture #placemaking"
+                    },
+                    {
+                      "startTime": 14.05,
+                      "startTimeAMPM": "1899-12-30T19:05:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "Heather Mills",
+                      "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png",
+                      "description": "TED TALK"
+                    },
+                    {
+                      "startTime": 14.25,
+                      "startTimeAMPM": "1899-12-30T19:25:00.000Z",
+                      "duration": 30,
+                      "title": "",
+                      "speaker": "RWE renewables",
+                      "speakerImage": "",
+                      "description": "MASTER CLASS #greenenergy #future"
+                    },
+                    {
+                      "startTime": 14.55,
+                      "startTimeAMPM": "1899-12-30T19:55:00.000Z",
+                      "duration": 10,
+                      "title": "",
+                      "speaker": "Kami Compliance",
+                      "speakerImage": "",
+                      "description": "MASTER CLASS #knowyourrights #data"
+                    },
+                    {
+                      "startTime": 15.05,
+                      "startTimeAMPM": "1899-12-30T20:05:00.000Z",
+                      "duration": 15,
+                      "title": "Break + magic lesson",
+                      "speaker": "Caroline Ravn (host)",
+                      "speakerImage": "",
+                      "description": "Learn magic from Caroline and go see what the platform can do."
+                    },
+                    {
+                      "startTime": 15.2,
+                      "startTimeAMPM": "1899-12-30T20:20:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "Wim Hof",
+                      "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png",
+                      "description": "TED TALK + Q&A #selfdevelopment #inflammation"
+                    },
+                    {
+                      "startTime": 15.4,
+                      "startTimeAMPM": "1899-12-30T20:40:00.000Z",
+                      "duration": 30,
+                      "title": "",
+                      "speaker": "King",
+                      "speakerImage": "",
+                      "description": "MASTER CLASS #innovation #creativity #teams"
+                    },
+                    {
+                      "startTime": 16.1,
+                      "startTimeAMPM": "1899-12-30T21:10:00.000Z",
+                      "duration": 25,
+                      "title": "",
+                      "speaker": "Lovette Jallow",
+                      "speakerImage": "",
+                      "description": "TED TALK + Q&A"
+                    },
+                    {
+                      "startTime": 16.55,
+                      "startTimeAMPM": "1899-12-30T21:55:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "Therese Lindgren",
+                      "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png",
+                      "description": "TED TALK"
+                    },
+                    {
+                      "startTime": 17.15,
+                      "startTimeAMPM": "1899-12-30T22:15:00.000Z",
+                      "duration": 40,
+                      "title": "",
+                      "speaker": "Jävligt Gott",
+                      "speakerImage": "",
+                      "description": "MASTER CLASS"
+                    },
+                    {
+                      "startTime": 17.55,
+                      "startTimeAMPM": "1899-12-30T22:55:00.000Z",
+                      "duration": 25,
+                      "title": "Break",
+                      "speaker": "Caroline Ravn (host)",
+                      "speakerImage": "",
+                      "description": "Go and test of our acitivies on the platform!"
+                    },
+                    {
+                      "startTime": 18.2,
+                      "startTimeAMPM": "1899-12-30T23:20:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "???????",
+                      "speakerImage": "",
+                      "description": "MASTER CLASS"
+                    },
+                    {
+                      "startTime": 18.4,
+                      "startTimeAMPM": "1899-12-30T23:40:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "We do not know yet (trying to get 1 more speaker)",
+                      "speakerImage": "",
+                      "description": "TED TALK"
+                    },
+                    {
+                      "startTime": 19,
+                      "startTimeAMPM": "1899-12-31T00:00:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "Vimentis",
+                      "speakerImage": "",
+                      "description": "MASTER CLASS"
+                    },
+                    {
+                      "startTime": 19.2,
+                      "startTimeAMPM": "1899-12-31T00:20:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "Amy Purdy",
+                      "speakerImage": "",
+                      "description": "TED TALK + Q&A"
+                    },
+                    {
+                      "startTime": 19.4,
+                      "startTimeAMPM": "1899-12-31T00:40:00.000Z",
+                      "duration": 20,
+                      "title": "",
+                      "speaker": "Bruce Dickinson",
+                      "speakerImage": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png",
+                      "description": "TED TALK + Q&A"
+                    },
+                    {
+                      "startTime": 20,
+                      "startTimeAMPM": "1899-12-31T01:00:00.000Z",
+                      "duration": 10,
+                      "title": "Outro",
+                      "speaker": "Caroline Ravn (host)",
+                      "speakerImage": "",
+                      "description": "Goodbye!"
+                    }
+                  ];
 
                   var convertTime = (start, duration) => {
                     if (!start || !duration) return "TBD";
@@ -730,6 +739,7 @@
                     } catch (e) {
                       throw new Error(e);
                     }
+
                     buildEventList();
                   }
 
@@ -742,7 +752,8 @@
                   var sendBookmarks = (bookmark, actionType) => {
                     let url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
                     let method = 'POST';
-
+                    let value;
+                   
                     //if bookmark kvp exists, set method to 'PUT'
                     if (bookmarks.length > 0) method = 'PUT';
 
@@ -806,7 +817,7 @@
 
                       const id = agendaList.indexOf(item);
 
-                      
+
                       //set bookmarked event button display
                       if (bookmarks.some(bookmark => bookmark.startTime === item.startTime)) {
                         let tooltip = clone.querySelector(".tooltip-bookmark");
@@ -858,7 +869,7 @@
                 </script>
 
                 <!-- Chatwee -->
-                <chatWee>
+                <chatwee>
                   <script>
                     var fetchGlobalSnippet = (snippetId) => {
 
@@ -908,7 +919,7 @@
                       eval(script.innerHTML);
                     }
                   </script>
-                </chatWee>
+                </chatwee>
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
@@ -927,6 +938,8 @@
     </div>
   </videos-layout>
 </app-root>
+
+
 
 
 <script>
@@ -1042,6 +1055,7 @@
   }
 
 </script>
+
 
 
 </body><!-- Menu Collapse Script -->
