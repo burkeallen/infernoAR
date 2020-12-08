@@ -248,19 +248,68 @@
 
                 <style>
                   .content {
-                    background-color: var(--sidebar-bg-color);
+                     display: flex;
+                    flex-direction: column;
+                    justify-content: center;
                     min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
+                    width: calc(100% + 40px);
                     z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/bg.jpg");
+                    background-position: bottom center;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    
+                    margin: -20px;
                     color: var(--sidebar-text-color);
                   }
+
+                  .message {
+                    width: 100%;
+                    height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: rgba(0, 0, 0, .5);
+                  }
+
+                  .content h1 {
+                    font-size: 3.2rem;
+                    font-weight: bold;
+                  }
+
+                  .content a {
+                    font-size: 2.4rem;
+                    text-decoration: none;
+                    color: var(--sidebar-text-color);
+                  }
+
+                  .content a:hover{
+                    color: rgba(255,255,255,.7);
+                  }
+
+                  .redirect-button {
+                    cursor: pointer;
+                    width: fit-content;
+                    background-color: rgba(11, 38, 104, 0.5);
+                    border-radius: 10px;
+                    border: 1px solid rgba(0, 0, 0, 0.5);
+                    box-shadow: 2px 2px 3px rgba(255,255,255,.1); 
+                    padding: 2rem;
+                    
+                  }
+
+                  .redirect-button:hover{
+                    background-color: rgba(0,0,0,.5);    
+                  }
+
 
                 </style>
 
                 <div class="content">
 
-                  <div>
+                  <div class="message">
                     <!-- Get current timestamp by casting NOW to seconds since 1970 -->
                     {% assign currentDateTime = "now" | date: "%Y-%m-%dT%H:%M:%S%z" %}
                     {% assign currentTime = "now" | date: "%s" | plus: 0 %}
@@ -314,31 +363,17 @@
 
                     <!-- If the loop didn't find any upcoming events,... -->
                     {% if nextEvent == 'No Event' %}
-                    <!--                    <h1> No Sessions or Events are Currently Available </h1>-->
-                    <!--                    <p>Check Back Later</p>-->
+                    <h1> No Sessions or Events are Currently Available </h1>
+                    <p>Check Back Later</p>
                     {% else %}
                     <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
                     <!-- set display: none when in production -->
-                    <h1> Enter the Current or Upcoming Session </h1>
-                    <p>{{nextEvent.Name}}</p>
-                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
-                      /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+                    <h1>{{nextEvent.Name}}</h1>
+                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}" >
+                      <div class="redirect-button">Go to the Current or Upcoming Session</div>
                     </a>
                     {% endif %}
-
-                    <script type="text/javascript">
-                      if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
-                        landingPageEl.querySelector('#redirect-link').dispatchEvent(new Event('click'));
-                      }
-                    </script>
                   </div>
-
-                  <div style="text-align:center; padding:20%">
-                    <h1>Checking to see where to take you.</h1>
-                    <p>If you are not automatically redirected, there are no events currently scheduled - check back later.</p>
-                  </div>
-
-                </div>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
