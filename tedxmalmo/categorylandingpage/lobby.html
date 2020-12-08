@@ -1,703 +1,948 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-          src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			data = JSON.parse(response)[0];
+			if (data) {
+			}
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      data = JSON.parse(response)[0];
-      if (data) {
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-      }
-    })
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  </script>
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-  <style>
-      #localTemplateMenu {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          padding: 1em;
-      }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-      #localTemplateMenu a {
-          display: block;
-          margin: .25em;
-          background-color: var(--sidebar-bg-color);
-          border: none;
-          border-bottom: solid 1px var(--sidebar-highlight-text-color);
-          color: var(--sidebar-text-color);
-          cursor: pointer;
-          width: 80%;
-          padding: .25em 0;
-      }
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+					return a.name > b.name ? 1 : -1;
+				});
 
-      #localTemplateMenu a:hover {
-          filter: brightness(80%);
-          text-decoration: none;
-          transform: translateX(-.3em);
-      }
-
-      #localTemplateMenu a.activeMenu {
-          background-color: var(--sidebar-highlight-bg-color);
-          color: var(--sidebar-text-color);
-      }
-
-      .aside-collapsed * #localTemplateMenu {
-          margin: 0;
-          padding: 1em 0;
-      }
-
-      .aside-collapsed * #localTemplateMenu a {
-          word-wrap: break-word;
-          min-width: 100%;
-          border-radius: 0;
-          border-bottom: 1px solid var(--sidebar-text-color);
-      }
-
-      .aside-collapsed * #localTemplateMenu a:hover {
-          transform: none;
-      }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()"
-          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-          src="../menu.js"></script>
-
+				menuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
-                    onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                  @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="151c7fbe-5964-400a-98d7-5a305d7c41cb">
-                <airship-push-notifications>
-                  <iframe id="airship"
-                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/airship/airship.html?userId={{data.CurrentViewingUser.Email}}"
-                          style="height: 1px; width: 1px; position: fixed; top: -20px; left: 20px;"></iframe>
-                </airship-push-notifications>
-
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
-
-                </script>
-
-                <style>
-                    .content {
-                        position: relative;
-                        min-height: calc(100vh - 114px);
-                        margin: -20px;
-                        width: 100%;
-                        font-family: 'Montserrat', sans-serif;
-                    }
-
-                    .background {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        min-height: calc(100vh - 114px);
-                        z-index: 1;
-                    }
-
-                    .bg-video {
-                      position: fixed;
-                      top: 0%;
-                      left: 0%;
-                      width: auto;
-                      min-width: 100%;
-                      height: auto;
-                      min-height: calc(100vh - 59px);
-                      z-index: -1;
-                    }
-
-                    .hotspot {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        z-index: 2;
-                        cursor: pointer;
-                    }
-
-                    .hotspot:hover {
-                        background-color: rgba(0, 0, 0, .3);
-                    }
-
-                    .photo-booth {
-                        clip-path: polygon(71% 32%, 78% 26.5%, 87% 38%, 77% 46%, 79% 53%, 76% 56%, 68% 43%, 71% 40%);
-
-                    }
-
-                    .social-wall {
-                        clip-path: polygon(40.5% 2%, 43.5% 0%, 53% 0%, 53.5% 4%, 59% 11.5%, 47% 20.4%, 40.6% 11%)
-                    }
-
-                    .arena {
-                        clip-path: polygon(25% 48%, 28% 46%, 29% 35%, 44% 24%, 44% 30%, 46% 29%, 56% 49%, 53% 53%, 53% 56%, 43% 64%, 41% 64%, 26% 55%);
-                    }
-
-                    .dj {
-                        clip-path: polygon(57% 86%, 65% 79%, 66.5% 66%, 68% 65%, 82% 68%, 82% 78%, 84% 80%, 64% 99%);
-                    }
-
-                    .partners {
-                        clip-path: polygon(0% 50%, 0% 34%, 17.5% 22%, 26% 41%, 10% 60%, 6% 64%);
-                    }
-
-                    .little-malmo {
-                        clip-path: polygon(6% 69%, 18% 60%, 32% 89%, 20.5% 98%);
-                    }
-
-                    .speakers {
-                        clip-path: circle(11% at 60% 61%);
-                    }
-
-                    .library {
-                        clip-path: polygon(36% 100%, 40% 83%, 40% 80%, 40% 80%, 42% 78%, 43% 79%, 44% 85%, 48% 86%, 48% 82%, 49% 80%, 51% 81%, 51.5% 87%, 49.5% 100%);
-                    }
-
-                    .attendees {
-                        clip-path: polygon(55.5% 15%, 65% 8.5%, 76.5% 24%, 76% 28%, 71% 32%, 71% 37%, 66% 41%, 55.5% 25%);
-                    }
-
-                    .mural {
-                        clip-path: polygon(0% 19.5%, 29% 0%, 43.5% 0%, 40% 2.5%, 40% 3%, 36% 6%, 34% 4%, 34% 4%, 19% 14%, 19% 18%, 18% 19%, 0 30.5%);
-                    }
-
-                    #modalDJ {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        z-index: 999;
-                        background: rgba(0, 0, 0, .8);
-                    }
-
-                    .modal-dj-content {
-                        position: relative;
-                        background: transparent;
-                        border: none;
-                        width: 60%;
-                        height: 70%;
-                        margin-left: 15%;
-                        margin-top: 15rem;
-                        padding: 1rem;
-                    }
-
-                    .close-modal-dj {
-                        position: absolute;
-                        top: -20px;
-                        right: -10%;
-                        width: 20%;
-                        cursor: pointer;
-                        filter: drop-shadow(1px 1px 32px blue);
-                    }
-
-                    .modal-dj-main {
-                        width: 100%;
-                        height: 100%;
-                        border: none;
-                    }
-
-                    #modalSocialWall {
-                      position: absolute;
-                      /*top: 40px;*/
-                      /*left: 20px;*/
-                      top: 0;
-                      left: 0;
-                      width: calc(100% + 5%);
-                      height: calc(100vh);
-                      display: flex;
-                      justify-content: center;
-                      z-index: 999;
-                      background: rgba(0, 0, 0, .8);
-                    }
-
-                    .modal-social-wall-content {
-                      position: relative;
-                      display: flex;
-                      width: 90%;
-                      height: 80%;
-                      margin: 0;
-                      top: 40px;
-                    }
-
-                    #wallsio-iframe {
-                      width: 100%;
-                      border: none;
-                    }
-
-                    .close-modal-social-wall {
-                      position: absolute;
-                      top: -20px;
-                      right: -20px;
-                      width: 20%;
-                      cursor: pointer;
-                      filter: drop-shadow(1px 1px 32px blue);
-                    }
-
-                    .modal-social-wall-main {
-                      display: flex;
-                      flex-direction: column;
-                      align-items: center;
-                    }
-
-                </style>
-
-                <div id="content" class="content">
-                  <video class="bg-video" autoplay loop
-                         poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-                    <source
-                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
-                        type="video/mp4">
-                  </video>
-
-                  <img class="background"
-                       src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/lobby/bg.png">
-
-                  <a class="hotspot mural" alt="Mural" title="Mural"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-                  <a class="hotspot photo-booth" alt="Photo Booth" title="Photo Booth"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-                  <a class="hotspot social-wall" alt="Get Social" title="Get Social"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-                  <a class="hotspot attendees" alt="Little Malmo" title="Little Malmo"
-                     href="Javascript:alert('Under Construction');void(0)">
-                  </a>
-
-                  <a class="hotspot arena" alt="Arena" title="Arena (Main Stage)"
-                     href="videos/93817ba4-a9c3-4053-36b5-08d89144b732/landing/1a9dc51b-89aa-4239-85b8-83dbee9487ac">
-                  </a>
-
-                  <a class="hotspot partners" alt="Partners" title="Partners"
-                     href="videos/1ef90a20-ff9c-4c82-e5c8-08d895ffdee5/landing/da76af09-36d8-473f-8dad-040abf2617dd">
-                  </a>
-
-                  <a class="hotspot speakers" alt="Speakers" title="Speakers"
-                     href="videos/e841093a-11d9-427c-cf3a-08d8914ddffa/landing/62c198fc-a4d2-4847-be45-6c57ade36de5">
-                  </a>
-
-                  <a class="hotspot little-malmo" alt="Attendees" title="Attendees"
-                     href="videos/3b8d6447-5353-42ae-3912-08d895e594fd/landing/60418a2c-c67d-49a0-ba18-5407beb9caf2">
-                  </a>
-
-                  <a class="hotspot library" alt="Library" title="Library"
-                     href="videos/8df02962-dc94-455f-36b6-08d89144b732/landing/8137087e-2e1e-4998-8eaf-5f88ee23700b">
-                  </a>
-
-                  <div class="hotspot dj" alt="DJ Booth" title="DJ Booth" onclick="toggleDJ()"></div>
-
-                  <div class="hotspot social-wall" alt="Social Wall" title="Social Wall" onclick="toggleSocialWall()"></div>
-
-                  <div id="modalDJ" class="hidden">
-                    <div class="modal-dj-content">
-                      <img
-                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
-                          class="close-modal-dj" onclick="toggleDJ()">
-                      <iframe class="modal-dj-main" src allowtransparency="true"></iframe>
-                    </div>
-                  </div>
-
-                  <div id="modalSocialWall" class="hidden">
-                    <div class="modal-social-wall-content">
-                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png" class="close-modal-social-wall" onclick="toggleSocialWall()">
-                      <iframe class="modal-social-wall-main" src allowtransparency="true" allowfullscreen id="wallsio-iframe"></iframe>
-                    </div>
-                  </div>
-
-                </div>
-                <script>
-                  var audioPlayer = landingPageEl.querySelector('iframe.modal-dj-main');
-                  if (window.isLocalTemplate) {
-                    audioPlayer.src = '../audio-player.html';
-                  } else {
-                    audioPlayer.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/audio-player.html'
-                  }
-
-                  var socialWall = landingPageEl.querySelector('iframe.modal-social-wall-main');
-                  if (window.isLocalTemplate) {
-                    socialWall.src = 'https://my.walls.io/c3pcw?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo';
-                  } else {
-                    socialWall.src = 'https://my.walls.io/ygca5?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo'
-                  }
-
-                  function toggleDJ() {
-                    landingPageEl.querySelector('#modalDJ').classList.toggle('hidden');
-                  }
-
-                  function toggleSocialWall() {
-                    landingPageEl.querySelector('#modalSocialWall').classList.toggle('hidden');
-                  }
-
-                </script>
-
-                <chatWee>
-                  <script>
-                    var fetchGlobalSnippet = (snippetId) => {
-
-                      // Set header
-                      const headers = {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                      };
-
-                      // add a header property for users accessing with SA credentials
-                      if (window.sessionStorage.overrideId) {
-                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                      }
-
-                      let globalSnippet = null;
-
-                      $.ajax({
-                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
-                        type: 'GET',
-                        async: false,
-                        accept: 'application/json',
-                        contentType: 'application/json',
-                        headers: headers,
-                        success: function (res, status, xhr) {
-                          const parser = new DOMParser();
-                          globalSnippet = parser.parseFromString(res, "text/html");
-                        },
-                        error: function (err) {
-                          console.error('Error Fetching Global Snippet', err);
-                        }
-                      });
-
-                      return globalSnippet;
-                    };
-
-                    if (!window.chatManager) {
-                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
-                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
-                      var username = chatweeSnippet.getElementById("inferno-username");
-                      var script = chatweeSnippet.getElementById("chatweeLogic");
-                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                      if (!landingPageEl.getElementById("inferno-username")) {
-                        landingPageEl.appendChild(username);
-                      }
-                      // eval the script so it will be executed here
-                      eval(script.innerHTML);
-                    }
-                  </script>
-                </chatWee>
-
-              </inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
-
-
-<script>
-
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
-
-  }
-
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
-
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
-
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
-
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
-
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+	<div
+		style="display: none"
+		id="novoProject"
+		name="tedxmalmo"
+		onload="login()"
+	></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="151c7fbe-5964-400a-98d7-5a305d7c41cb"
+								>
+									<airship-push-notifications>
+										<iframe
+											id="airship"
+											src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/airship/airship.html?userId={{data.CurrentViewingUser.Email}}"
+											style="
+												height: 1px;
+												width: 1px;
+												position: fixed;
+												top: -20px;
+												left: 20px;
+											"
+										></iframe>
+									</airship-push-notifications>
+
+									<!--  Load custom fonts -->
+									<script type="text/javascript">
+										function loadFont(name, url) {
+											if (document.fonts.check("1em " + name)) {
+												return;
+											}
+											const fontFace = new FontFace(name, "url(" + url + ")");
+
+											fontFace
+												.load()
+												.then(function (loadedFont) {
+													document.fonts.add(loadedFont);
+													console.log("Loaded custom font ", name);
+												})
+												.catch(function (error) {
+													// error occurred
+													console.log("Error loading ", name);
+												});
+										}
+
+										loadFont(
+											"Montserrat",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf"
+										);
+										loadFont(
+											"MontserratBold",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf"
+										);
+									</script>
+
+									<style>
+										.content {
+											position: relative;
+											height: 100vh;
+											margin: -20px;
+											width: 100%;
+											font-family: "Montserrat", sans-serif;
+										}
+
+										.background {
+											position: absolute;
+											top: -40px;
+											left: 0;
+											width: 100%;
+											height: 100%;
+											z-index: 1;
+										}
+
+										.bg-video {
+											position: absolute;
+											top: 50%;
+											left: 50%;
+											width: auto;
+											min-width: 100%;
+											height: auto;
+											min-height: 100%;
+											transform: translateX(-50%) translateY(-50%);
+											z-index: -1;
+										}
+
+										path {
+											pointer-events: all;
+											fill: none;
+										}
+
+										path:hover {
+											fill: rgba(0, 0, 0, 0.3);
+											cursor: pointer;
+										}
+
+										.description {
+											pointer-events: none;
+											position: absolute;
+											font-size: 18px;
+											text-align: center;
+											background: white;
+											padding: 10px 15px;
+											z-index: 5;
+											height: 30px;
+											line-height: 30px;
+											margin: 0 auto;
+											color: #21669e;
+											border-radius: 5px;
+											box-shadow: 0 0 0 1px #eee;
+											transform: translateX(-50%);
+											display: none;
+										}
+										.description .active {
+											display: block;
+										}
+										.description:after {
+											content: "";
+											position: absolute;
+											left: 50%;
+											top: 100%;
+											width: 0;
+											height: 0;
+											margin-left: -10px;
+											border-left: 10px solid transparent;
+											border-right: 10px solid transparent;
+											border-top: 10px solid white;
+										}
+
+										#modalDJ {
+											position: fixed;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+											display: flex;
+											align-items: center;
+											justify-content: center;
+											z-index: 999;
+											background: rgba(0, 0, 0, 0.8);
+										}
+
+										.modal-dj-content {
+											position: relative;
+											background: transparent;
+											border: none;
+											width: 60%;
+											height: 70%;
+											margin-left: 15%;
+											margin-top: 15rem;
+											padding: 1rem;
+										}
+
+										.close-modal-dj {
+											position: absolute;
+											top: -20px;
+											right: -10%;
+											width: 20%;
+											cursor: pointer;
+											filter: drop-shadow(1px 1px 32px blue);
+										}
+
+										.modal-dj-main {
+											width: 100%;
+											height: 100%;
+											border: none;
+										}
+
+										#modalSocialWall {
+											position: absolute;
+											/*top: 40px;*/
+											/*left: 20px;*/
+											top: 0;
+											left: 0;
+											width: calc(100% + 5%);
+											height: calc(100vh);
+											display: flex;
+											justify-content: center;
+											z-index: 999;
+											background: rgba(0, 0, 0, 0.8);
+										}
+
+										.modal-social-wall-content {
+											position: relative;
+											display: flex;
+											width: 90%;
+											height: 80%;
+											margin: 0;
+											top: 40px;
+										}
+
+										#wallsio-iframe {
+											width: 100%;
+											border: none;
+										}
+
+										.close-modal-social-wall {
+											position: absolute;
+											top: -20px;
+											right: -20px;
+											width: 20%;
+											cursor: pointer;
+											filter: drop-shadow(1px 1px 32px blue);
+										}
+
+										.modal-social-wall-main {
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+										}
+									</style>
+
+									<div id="content" class="content">
+										<video
+											class="bg-video"
+											autoplay
+											loop
+											poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
+										>
+											<source
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
+												type="video/mp4"
+											/>
+										</video>
+
+										<svg
+											class="background"
+											xmlns:dc="http://purl.org/dc/elements/1.1/"
+											xmlns:cc="http://creativecommons.org/ns#"
+											xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+											xmlns:svg="http://www.w3.org/2000/svg"
+											xmlns="http://www.w3.org/2000/svg"
+											xmlns:xlink="http://www.w3.org/1999/xlink"
+											xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+											xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+											sodipodi:docname="lobby.svg"
+											inkscape:version="1.0 (4035a4f, 2020-05-01)"
+											id="svg8"
+											version="1.1"
+											viewBox="0 0 1058.3334 566.91394"
+											height="566.91394mm"
+											width="1058.3334mm"
+										>
+											<g
+												sodipodi:insensitive="true"
+												transform="translate(9.8274012,-124.75732)"
+												id="layer1"
+												inkscape:groupmode="layer"
+												inkscape:label="Lobby Background"
+											>
+												<image
+													sodipodi:absref="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/lobby/bg.png"
+													xlink:href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/lobby/bg.png"
+													y="124.75732"
+													x="-9.8274012"
+													width="1058.3334"
+													height="566.91394"
+													preserveAspectRatio="none"
+													id="image174"
+												/>
+											</g>
+
+											<g
+												inkscape:groupmode="layer"
+												id="layer2"
+												inkscape:label="Hotspots"
+												style="opacity: 1"
+											>
+												<a alt="Get Social" data-title="Get Social">
+													<path
+														d="m 431.64881,9.0714284 1.51191,54.4285706 63.5,50.648811 L 620.6369,64.255951 557.1369,14.363095 556.38093,0 455.83927,0.75595238 Z"
+														onclick="toggleSocialWall()"
+														id="social-wall"
+													>
+														<title>Social Wall</title>
+													</path>
+												</a>
+
+												<a class="lounge" data-title="Lounge">
+													<path
+														d="m 678.08927,556.38093 207.13096,-103.56545 -16.63097,-14.36309 -0.75594,-18.89882 -16.81993,-10.58333 18.52083,-9.8274 0.56695,-10.77232 -3.21278,-2.45684 -139.47322,-19.08778 h -5.66965 l -4.7247,0.37795 -4.72469,1.51191 -4.53572,2.26788 -2.64584,3.02379 -2.83482,6.80357 -9.78442,63.39094 -79.37905,37.95228 -3.20723,1.60362 -2.40543,3.47451 -0.26726,4.00904 6.41446,6.1472 z"
+														id="lounge"
+														inkscape:label="#lounge"
+														onclick="toggleDJ()"
+													>
+														<title>Lounge</title>
+													</path>
+												</a>
+												<a
+													alt="Partners"
+													data-title="Partners"
+													href="videos/6a1b5641-5547-4439-36b7-08d89144b732/landing/43821448-ec06-4fe1-994e-74b4720c3819"
+												>
+													<path
+														d="m 181.42857,122.46428 -171.6011892,64.25596 0.7559522,72.57142 4.535714,34.01785 11.339286,21.92264 36.285715,42.33333 156.482142,-67.27976 25.70238,-49.13691 -40.06548,-95.25 z"
+														id="partners"
+														inkscape:label="#partners"
+													>
+														<title>Partners</title>
+													</path>
+												</a>
+												<a
+													alt="Little Malmo"
+													data-title="Little Malmo"
+													href="Javascript:alert('Under Construction');void(0)"
+												>
+													<path
+														d="M 216.20238,556.38093 333.375,501.95239 185.96428,340.17857 73.327381,391.58333 Z"
+														id="little-malmo"
+														inkscape:label="#little-malmo"
+													></path>
+													<title>Little Malmo</title>
+												</a>
+												<a
+													alt="Arena"
+													data-title="Arena (Main Stage)"
+													href="videos/93817ba4-a9c3-4053-36b5-08d89144b732/landing/1a9dc51b-89aa-4239-85b8-83dbee9487ac"
+												>
+													<path
+														d="m 277.43451,313.72024 164.79763,51.40476 146.65476,-64.25594 -2.26785,-28.72621 -99.78572,-108.10119 -21.16667,8.31548 -3.02382,-36.28571 -162.52975,63.49999 2.26785,34.77382 -32.50594,12.85118 0.75594,27.2143 z"
+														id="arena"
+														inkscape:label="#arena"
+													>
+														<title>Arena (Main Stage)</title>
+													</path>
+												</a>
+												<a
+													alt="Speakers"
+													data-title="Speakers"
+													href="videos/e841093a-11d9-427c-cf3a-08d8914ddffa/landing/62c198fc-a4d2-4847-be45-6c57ade36de5"
+												>
+													<path
+														d="m 567.34225,326.57142 -12.4732,15.11906 -4.15774,21.54462 10.20535,23.05656 22.67857,15.11906 29.10417,9.44938 37.79761,0.75597 31.37204,-9.44941 14.36309,-15.49701 17.38691,-29.86014 -3.77978,-13.60712 -17.38689,-17.76489 11.71726,-10.58334 1.51191,-13.9851 -7.18156,-12.09525 -13.60715,-6.80357 -19.27677,-3.02382 -24.94643,4.15774 -21.16666,3.02382 -22.3006,-3.02382 -5.29166,0.37799 3.77976,23.43451 z"
+														id="speakers"
+														inkscape:label="#speakers"
+													>
+														<title>Speakers</title>
+													</path>
+												</a>
+												<a
+													alt="Library"
+													data-title="Library"
+													href="videos/8df02962-dc94-455f-36b6-08d89144b732/landing/8137087e-2e1e-4998-8eaf-5f88ee23700b"
+												>
+													<path
+														d="m 382.13392,565.0744 40.82142,-93.73809 5.29167,1.51191 3.4018,-26.08038 12.85118,-7.9375 12.47323,9.07143 6.04761,30.23812 41.95535,8.69344 3.77975,-23.8125 7.55955,-10.20535 16.25295,4.91368 6.42562,34.77382 7.55952,1.51191 0.37798,4.91368 -24.94645,66.90177 z"
+														id="library"
+														inkscape:label="#library"
+													>
+														<title>Library</title>
+													</path>
+												</a>
+												<a
+													alt="Attendees"
+													data-title="Attendees"
+													href="videos/3b8d6447-5353-42ae-3912-08d895e594fd/landing/60418a2c-c67d-49a0-ba18-5407beb9caf2"
+												>
+													<path
+														d="m 587.75298,137.20536 2.64583,-49.892861 96.76191,-38.553572 119.0625,88.068453 -1.8899,18.52083 -58.58631,24.56845 -1.51191,34.39584 -40.82143,18.14285 z"
+														id="attendees"
+														inkscape:label="#attendees"
+													>
+														<title>Attendees</title>
+													</path>
+												</a>
+												<a
+													href="Javascript:alert('Under Construction');void(0)"
+												>
+													<path
+														inkscape:label="#top-center"
+														id="top-center"
+														d="m 201.25395,138.44561 67.88646,64.41196 5.3454,0.80181 5.87992,-0.53454 157.15448,-61.47199 1.60361,-4.54358 -2.13815,-4.54359 -32.60688,-26.99422 14.16529,-5.612658 5.34538,-3.207235 1.60364,-3.207234 -0.64786,-19.838976 -62.36608,-51.782738 -167.44345,60.098213 z"
+													>
+														<title>TBD</title>
+													</path>
+												</a>
+												<a
+													href="Javascript:alert('Under Construction');void(0)"
+												>
+													<path
+														inkscape:label="#digital-mural"
+														id="digital-mural"
+														d="M 0.37797618,109.99107 1.1339286,171.60119 193.90178,100.91964 191.63393,80.31994 364.55564,18.307962 379.79,33.542324 428.436,15.497024 428.24701,7.5595238 449.79166,0.09449405 313.90923,0 Z"
+													>
+														<title>Digital Mural</title>
+													</path>
+												</a>
+												<a
+													alt="Photo Booth"
+													data-title="Photo Booth"
+													href="Javascript:alert('Under Construction');void(0)"
+												>
+													<path
+														inkscape:label="#photo-booth"
+														id="photo-booth"
+														d="m 719.66666,243.03869 217.71427,175.00297 107.72327,-54.05059 6.4255,-53.67263 -226.40769,-160.26189 -71.81546,30.23809 -1.88989,46.1131 z"
+													>
+														<title>Photo Booth</title>
+													</path>
+												</a>
+											</g>
+										</svg>
+										<div class="description"></div>
+										<div id="modalDJ" class="hidden">
+											<div class="modal-dj-content">
+												<img
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
+													class="close-modal-dj"
+													onclick="toggleDJ()"
+												/>
+												<iframe
+													class="modal-dj-main"
+													src
+													allowtransparency="true"
+												></iframe>
+											</div>
+										</div>
+
+										<div id="modalSocialWall" class="hidden">
+											<div class="modal-social-wall-content">
+												<img
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
+													class="close-modal-social-wall"
+													onclick="toggleSocialWall()"
+												/>
+												<iframe
+													class="modal-social-wall-main"
+													src
+													allowtransparency="true"
+													allowfullscreen
+													id="wallsio-iframe"
+												></iframe>
+											</div>
+										</div>
+									</div>
+									<script>
+										var audioPlayer = landingPageEl.querySelector(
+											"iframe.modal-dj-main"
+										);
+										if (window.isLocalTemplate) {
+											audioPlayer.src = "../audio-player.html";
+										} else {
+											audioPlayer.src =
+												"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/playlist/audio-player.html";
+										}
+
+										var socialWall = landingPageEl.querySelector(
+											"iframe.modal-social-wall-main"
+										);
+										if (window.isLocalTemplate) {
+											socialWall.src =
+												'https://my.walls.io/c3pcw?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo';
+										} else {
+											socialWall.src =
+												'https://my.walls.io/ygca5?nobackground=1&amp;colorscheme=neonblue&amp;show_header=0&amp;autoscroll=1" style="border:solid 1px #cccccc;height:100%;width:100%" loading="lazy" title="TEDxMalmo';
+										}
+
+										function toggleDJ() {
+											landingPageEl
+												.querySelector("#modalDJ")
+												.classList.toggle("hidden");
+										}
+
+										function toggleSocialWall() {
+											landingPageEl
+												.querySelector("#modalSocialWall")
+												.classList.toggle("hidden");
+										}
+
+										//tooltips
+										// var toggleTooltip = element => {
+										// 	console.log(element);
+										// 	var description = landingPageEl.querySelector(
+										// 		".description"
+										// 	);
+										// 	console.log(description);
+										// 	description.classList.add("active");
+										// 	description.style.top = element.pageY;
+										// 	description.style.left = element.pageX;
+										// 	description.innerHTML = element.id;
+										// };
+									</script>
+
+									<chatWee>
+										<script>
+											var fetchGlobalSnippet = snippetId => {
+												// Set header
+												const headers = {
+													Authorization:
+														"Bearer " + sessionStorage.getItem("token"),
+													"X-InfernoCore-Domain":
+														sessionStorage.getItem("domain") ??
+														window.location.hostname
+												};
+
+												// add a header property for users accessing with SA credentials
+												if (window.sessionStorage.overrideId) {
+													headers["X-InfernoCore-Domain"] =
+														"jolokia.inferno.jolokia.com";
+													headers["X-Client-Override"] = sessionStorage.getItem(
+														"overrideId"
+													);
+												}
+
+												let globalSnippet = null;
+
+												$.ajax({
+													url:
+														"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+														snippetId,
+													type: "GET",
+													async: false,
+													accept: "application/json",
+													contentType: "application/json",
+													headers: headers,
+													success: function (res, status, xhr) {
+														const parser = new DOMParser();
+														globalSnippet = parser.parseFromString(
+															res,
+															"text/html"
+														);
+													},
+													error: function (err) {
+														console.error("Error Fetching Global Snippet", err);
+													}
+												});
+
+												return globalSnippet;
+											};
+
+											if (!window.chatManager) {
+												var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+												var chatweeSnippet = fetchGlobalSnippet(snippetId);
+												var username = chatweeSnippet.getElementById(
+													"inferno-username"
+												);
+												var script = chatweeSnippet.getElementById(
+													"chatweeLogic"
+												);
+												//checks if the elements have already been inserted into the DOM to avoid duplicate elements
+												if (!landingPageEl.getElementById("inferno-username")) {
+													landingPageEl.appendChild(username);
+												}
+												// eval the script so it will be executed here
+												eval(script.innerHTML);
+											}
+										</script>
+									</chatWee>
+								</inferno-snippet-content>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
+
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
+
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
+
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
+
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
+
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
+
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
+
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
+
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -709,29 +954,27 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->
