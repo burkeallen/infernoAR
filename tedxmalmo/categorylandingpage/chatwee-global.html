@@ -358,16 +358,10 @@
                   var getKVPsByKey = key => {
 
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
-
-                    const bearerToken = window.sessionStorage.getItem("token");
-                    const bearer = 'Bearer ' + bearerToken;
-
                     return fetch(url, {
                       method: 'GET',
                       withCredentials: true,
-                      headers: {
-                        'Authorization': bearer
-                      }
+                      headers: getInfernoHeaders()
                     });
 
                   }
@@ -382,22 +376,10 @@
                       public: true
                     }
 
-                    const bearerToken = window.sessionStorage.getItem("token");
-                    const bearer = 'Bearer ' + bearerToken;
-
-                    let headers = new Headers();
-                    headers.set('Authorization', bearer)
-                    headers.set('Accept', 'application/json')
-                    headers.set('Content-Type', 'application/json')
-
-                    // for super user accounts
-                    const overrideId = window.sessionStorage.getItem("overrideId");
-                    if (overrideId) headers.set("X-Client-Override", overrideId);
-
                     fetch(url, {
                       method: 'POST',
                       withCredentials: true,
-                      headers: headers,
+                      headers: getInfernoHeaders(),
                       body: JSON.stringify(kvp)
                     })
 
@@ -584,6 +566,22 @@
                     }).then(res => console.log("delete KVP is ", res))
                       .catch(e => console.log("delete KVP error is ", e));
 
+                  }
+
+                  var getInfernoHeaders = () => {
+                    // Set header
+                    const headers = {
+                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                    }
+
+                    return headers;
                   }
 
                 </script>
