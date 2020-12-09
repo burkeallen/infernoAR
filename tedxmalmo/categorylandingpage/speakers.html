@@ -1,889 +1,1009 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			const x = JSON.parse(response);
+			data = x[0];
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-  </script>
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    #localTemplateMenu a {
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
-
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				window.localTemplateMenuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-          
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="62c198fc-a4d2-4847-be45-6c57ade36de5">
-                <style>
-                  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
-                
-                  .bg-video {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    width: auto;
-                    min-width: 100%;
-                    height: auto;
-                    min-height: 100%;
-                    transform: translateX(-50%) translateY(-50%);
-                    z-index: -1;
-
-                  }
-                   .content {
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    z-index: 1;
-                    font-family: 'Montserrat', sans-serif;
-                    color: white;
-                    padding: 2rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                  }
-
-                  .page-contents{
-                    width: 100%;
-                    display: flex;
-                    flex-wrap: wrap;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: space-evenly;
-                  }
-
-                  .card {
-                    position: relative;
-                    width: 65rem;
-                    height: 30rem;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 50px;
-                  }
-
-                  .card-border {
-                    position: absolute;
-                    top:0;
-                    left:0;
-                    width: 100%;
-                    height: 100%;
-
-                  }
-
-                  .card-contents {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 3rem 2rem 2rem 5rem;
-                  }
-
-                  .photo-box {
-                    cursor: pointer;
-                    position: relative;
-                    width: 30%;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                  }
-
-                  .speaker-photo {
-                    width: 100%;
-                    height: auto;
-                    opacity: 1;
-                  }
-
-                  .card:hover {
-                    background-color: rgba(0, 0, 0, 0.5);
-                  }
-
-                  .speaker-details {
-                    position: relative;
-                    cursor: pointer;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    margin-left: 3rem;
-                    font-weight: bold;
-                    height: 100%;
-                    width: 70%;
-                    opacity: 1;
-                  }
-
-                  .card:hover .open-bio {
-                    opacity: 1;
-                    animation: fadeIn ease .5s;
-                    -webkit-animation: fadeIn ease .5s;
-                  }
-
-                  .name {
-
-                    font-size: 2.8rem;
-                  }
-
-                  .summary {
-                    font-size: 1.4rem;
-                  }
-
-                  .open-bio {
-                    position: absolute;
-                    bottom: 20%;
-                    left: 40%;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    outline: none;
-                    padding: .2rem 1rem;
-                    width: fit-content;
-                    border: 2px solid white;
-                    border-radius: 10px;
-                    opacity: 0;
-                    font-size: 2.0rem;
-                    font-weight: normal;
-                    box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
-                  }
-
-                  .open-bio:hover{
-                    background-color: rgba(255, 255, 255, 0.1);
-                  }
-
-                  /* Modal Styling */
-
-                  #modal {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background-color: rgba(0, 0, 0, 0.5);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  }
-
-                  .modal-content {
-                    position: relative;
-                    background: linear-gradient(#052A9A, #101010);
-                    border-radius: 50px;
-                    width: 60%;
-                    height: 70%;
-                    margin-left: 15%;
-                    margin-top: 15rem;
-                    padding: 3rem;
-                  }
-
-                  .modal-image {
-                    width: 80%;
-                    height: auto;
-                  }
-
-                  .modal-main {
-                    display: flex;
-                    justify-content: space-evenly;
-                    width: 100%;
-                    height: 100%;
-                  }
-
-                  .left-column {
-                    margin-top: 2rem;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    width: 25%;
-                    height: 100%;
-                  }
-
-                  .modal-summary {
-                    margin-top: 2rem;
-                    background-color: #002540;
-                    width: 100%;
-                    padding: 2rem;
-                    border-radius: 10px;
-                    font-size: 1.6rem;
-                    font-weight: bold;
-                  }
-
-                  .right-column {
-                    width: 60%;
-                    height: 100%;
-
-                  }
-
-                  .modal-name {
-                    font-size: 3.1rem;
-                    font-weight: bold;
-                  }
-
-                  .bio {
-                    font-size: 2rem;
-                    overflow-y: scroll;
-                    margin-top: 2rem;
-                    padding-right: 2rem;
-                    scrollbar-width: thin;
-                    scrollbar-color: #8B8787;
-                    height: 80%;
-                    font-weight: light;
-                  }
-
-                  .bio::-webkit-scrollbar {
-                    width: 12px;
-                  }
-                  .bio::-webkit-scrollbar-thumb {
-                    background-color: #8B8787;
-                    border-radius: 20px;
-                  }
-
-                  .modal-name {
-                    font-size: 2.8rem;
-                  }
-
-                  .close-modal {
-                    position: absolute;
-                    top: -10rem;
-                    right: -10rem;
-                    width: 20rem;
-                    cursor: pointer;
-                  }
-
-                  @media screen and (max-width:1780px) {
-                     .speaker-details {
-                       width: 70%;
-                     }
-                     .name {
-                       font-size: 2.2rem;
-                     }
-
-                     .summary {
-                       font-size: 1.3rem;
-                     }
-                   }
-
-                   /* Animations */
-                  @-webkit-keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                  }
-                  @keyframes fadeIn {
-                    from { opacity: 0; }
-                    to { opacity: 1; }
-                  }
-
-                  @-webkit-keyframes fadeOut {
-                    from { opacity: 1; }
-                    to { opacity: .4; }
-                  }
-                  @keyframes fadeOut {
-                    from { opacity: 1; }
-                    to { opacity: .4; }
-                  }
-
-                  </style>
-
-                  <div class="content">
-                    <video class="bg-video" playsinline autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-                      <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
-                    </video>
-                    <div class="page-contents"> 
-                    </div>
-                  </div>
-
-                  <template id="card-template">
-                    <div class="card">
-                      <img class="card-border" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/speakers.gif">
-                      <div class="card-contents">
-                        <div class="photo-box">
-                          <img class="speaker-photo">
-                        </div>
-                        <div class="speaker-details">
-                            <div class="name"></div>
-                            <div class="summary"></div>
-                        </div>
-                        <button class="open-bio" onclick="toggleModal(this)">Read More</button>
-                      </div>
-                    </div>
-                  </template>
-
-                  <template id="modal-template">
-                    <div id="modal">
-                      <div class="modal-content">
-                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png" class="close-modal" onclick="toggleModal(this)">
-                        <div class="modal-main">
-                        </div>
-                      </div>
-                    </div>
-                  </template>
-
-                  <script>
-                    var speakers = [
-                         {
-                        "name": "Heather Mills",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png",
-                        "video": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Heather.mp4",
-                        "bio": "Heather Mills is an entrepreneur, philanthropist, activist, world recording holding sports star and TV personality. <br/> Heather has won many awards and much acclaim in particular for her charitable work clearing landmines across the world, leading the scientific development of prosthetics and leading the food tech development and expansion of the global plant- based food sector, through her multi award - winning company, Vbites. <br/><br/> Highlights of her extensive career to date include: <br/><br/> <ul><li> Starting and initially funding the largest landmine charity in the world - ‘Adopt A Minefield’ - helping raise funds to clear over 21 million sq.meters of mine-filled land and assistIng over 400, 000 amputees </li><br/> <li> Campaigning extensively for animal rights and effecting key law changes e.g.the law on banning the dog and cat fur trade in the European Union</li></ul>"
-                      },
-                      {
-                        "name": "Bruce Dickinson",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png",
-                        "video": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/bruce.mp4",
-                        "bio": ""
-                      },
-                      {
-                        "name": "Per Holknekt",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
-                        "video": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per.mp4",
-                        "bio": ""
-                      },
-                      {
-                        "name": "Therese Lindgren",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png",
-                        "video": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Terese.mp4",
-                        "bio": ""
-                      },
-                      {
-                        "name": "Wim Hof",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png",
-                        "video": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim.mp4",
-                        "bio": ""
-                      },
-                      {
-                        "name": "Lovette Jallow",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette_Jallow.png",
-                        "video": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette jallow.mp4",
-                        "bio": "This woman is a rewarded author, activist and lecturer. Through her social media channels she is spreading knowledge about human rights and equality, using social media as a platform for her activism. Through her entrepreneurship and activism Lovette Jallow is in the front line of challenging racism in Sweden. Lovette Jallow receives the Raoul Wallenberg prize 2019."
-                      },
-                      {
-                        "name": "Robert Swan",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Robert Swan.png",
-                        "video": "",
-                        "bio": "Robert Swan is the first person in history to have walked to both the North and South Poles. He is an explorer, a leader in energy innovation, and founder of the 2041 Foundation, a non-profit dedicated to preserve Antarctica as a natural reserve, land for science and peace. During these two historic expeditions, Robert experienced firsthand the effects of climate change and environmental degradation. These two hard-hitting and unexpected incidents galvanized him to launch the mission, ‘2041’. Robert received the Polar Medal and the title of the Officer of the British Empire (O.B.E) from Her Majesty, Queen Elizabeth II. His contribution to education, energy innovation and environmental action have been recognized by the United Nations through his appointment as UNEP Goodwill Ambassador for Youth, Special Envoy to the Director General of UNESCO and as a recipient of the UN Humanitarian Innovation Award. He is the co-author of four books and was a keynote speaker at all of the UN World Summits for Sustainable Development, the World Economic Forum and the Corporate Eco Forum."
-                      },
-                      {
-                        "name": "Amelia Michelle \"Amy\" Purdy",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Amy Purdy.png",
-                        "video": "",
-                        "bio": "Amelia Michelle \"Amy\" Purdy is an American actress, model, para-snowboarder, motivational speaker, clothing designer and author. Purdy is a 2014 Paralympic bronze medalist, 2018 Paralympics silver medalist, and co-founder of Adaptive Action Sports. At age 19, she contracted Neisseria meningitidis, a form of bacterial meningitis. The disease affected her circulatory system when the infection led to septic shock. Both of her legs had to be amputated below the knee. Purdy began snowboarding seven months after she received her prosthetic legs. About a year after her legs were amputated, she finished third in a snowboarding competition at Mammoth Mountain. Subsequently, she received a grant from the Challenged Athletes Foundation (CAF), a non-profit organization. Through this grant, she was able to compete in several snowboarding competitions in the U.S."
-                      },
-                      {
-                        "name": "Andreas Ljungberg",
-                        "image": "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Andreas.png",
-                        "video": "",
-                        "bio": ""
-                      }
-                      ];
-
-                    var getLastName = (string) => {
-                      const array = string.split(' ');
-                      return array[1];
-                    }
-
-                    var buildSpeakerList = () => {
-                        const contentElement = landingPageEl.querySelector(
-                          ".page-contents"
-                        );
-                        const template = landingPageEl.getElementById("card-template");
-
-                        const sortedSpeakers = speakers.sort(function(a, b) {
-
-                          aLastName = getLastName(a.name);
-                          bLastName = getLastName(b.name)
-                        if (aLastName < bLastName) {
-                          return -1;
-                        }
-                        if (aLastName > bLastName) {
-                          return 1;
-                        }
-                        return 0;
-                      });
-
-                        sortedSpeakers.forEach((speaker, index) => {
-                          const clone = template.content.cloneNode(true);
-                          var card = clone.querySelector(".card");
-                          var photoBox = clone.querySelector(".photo-box");
-
-                          var imageElement = clone.querySelector(".speaker-photo");
-                          var nameElement = clone.querySelector(".name");
-                          
-
-                          if (speaker.summary) {
-                            var summaryElement = clone.querySelector(".summary");
-                            summaryElement.innerHTML = speaker.summary;
-                          }
-
-                          card.setAttribute("id", index);
-                          imageElement.src = speaker.image;
-                          nameElement.innerHTML = speaker.name;
-                          
-                          contentElement.appendChild(clone);
-
-                        });
-                      };
-
-                      buildSpeakerList();
-
-                      var toggleModal = (element) => {
-
-                        var modalElement = landingPageEl.getElementById("modal");
-                        var content = landingPageEl.querySelector(".content");
-
-                        if (modalElement) {
-                          modalElement.remove();
-                          document.body.style.overflow = 'auto';
-                          return;
-                        } 
-
-                        var template = landingPageEl.getElementById("modal-template");
-                        var clone = template.content.cloneNode(true);
-                        var mainContent = clone.querySelector(".modal-main");
-
-                        var id = element.parentNode.parentNode.id;
-                        var speaker = speakers[id];
-
-                            //Create Left Column
-                            var leftColumn = document.createElement("div");
-                            leftColumn.setAttribute("class", "left-column");
-
-                            if (speaker.video){
-                              var video = document.createElement("video");
-                              video.setAttribute("class", "speaker-video");
-                              video.width = "300";
-                              video.height = "300";
-                              video.controls = true;
-                              video.autoplay = true;
-
-                              var source = document.createElement("source");
-                              source.src = speaker.video;
-                              source.type = "video/mp4";
-
-                              video.appendChild(source);
-                              leftColumn.appendChild(video);
-                            } else {
-                              var photo = document.createElement("img");
-                              photo.setAttribute("class", "modal-image");
-                              photo.src = speaker.image;
-                              leftColumn.appendChild(photo);
-                            }
-
-
-                            
-                            if (speaker.summary) {
-                              var summary = document.createElement("div");
-                              summary.setAttribute("class", "modal-summary");
-                              summary.innerHTML = speaker.summary;
-                              leftColumn.appendChild(summary);
-                            }
-                            
-                            
-                            mainContent.appendChild(leftColumn);
-
-                            //Create Right Column
-                            var rightColumn = document.createElement("div");
-                            rightColumn.setAttribute("class", "right-column");
-
-                            var name = document.createElement("div");
-                            name.setAttribute("class", "modal-name");
-                            name.innerHTML = speaker.name;
-                            rightColumn.appendChild(name);
-
-                            if (speaker.bio) {
-                              var bio = document.createElement("div");
-                              bio.setAttribute("class", "bio");
-                              bio.innerHTML = speaker.bio;
-                              rightColumn.appendChild(bio);
-                            }
-
-                            mainContent.appendChild(rightColumn);
-
-                          content.appendChild(clone);
-                          document.body.style.overflow = "hidden";
-                        }
-
-                  </script>
-                <!-- Chatwee -->
-                <chatwee>
-                  <script>
-                    var fetchGlobalSnippet = (snippetId) => {
-
-                      // Set header
-                      const headers = {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                      };
-
-                      // add a header property for users accessing with SA credentials
-                      if (window.sessionStorage.overrideId) {
-                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                      }
-
-                      let globalSnippet = null;
-
-                      $.ajax({
-                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
-                        type: 'GET',
-                        async: false,
-                        accept: 'application/json',
-                        contentType: 'application/json',
-                        headers: headers,
-                        success: function (res, status, xhr) {
-                          const parser = new DOMParser();
-                          globalSnippet = parser.parseFromString(res, "text/html");
-                        },
-                        error: function (err) {
-                          console.error('Error Fetching Global Snippet', err);
-                        }
-                      });
-
-                      return globalSnippet;
-                    };
-
-                    if (!window.chatManager) {
-                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
-                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
-                      var username = chatweeSnippet.getElementById("inferno-username");
-                      var script = chatweeSnippet.getElementById("chatweeLogic");
-                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                      if (!landingPageEl.getElementById("inferno-username")) {
-                        landingPageEl.appendChild(username);
-                      }
-                      // eval the script so it will be executed here
-                      eval(script.innerHTML);
-                    }
-                  </script>
-                </chatwee>
-              </inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
-
-
-
-
-<script>
-
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
-
-  }
-
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
-
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
-
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
-
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
-
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+	<div
+		style="display: none"
+		id="novoProject"
+		name="tedxmalmo"
+		onload="login()"
+	></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="62c198fc-a4d2-4847-be45-6c57ade36de5"
+								>
+									<style>
+										@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+										/* prevent entire screen from going black if you try to reference an image that does not exist*/
+										/* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+										img::after {
+											content: none;
+										}
+
+										.bg-video {
+											position: absolute;
+											top: 50%;
+											left: 50%;
+											width: auto;
+											min-width: 100%;
+											height: auto;
+											min-height: 100%;
+											transform: translateX(-50%) translateY(-50%);
+											z-index: -1;
+										}
+										.content {
+											min-height: calc(100vh - 114px);
+											margin: -20px;
+											z-index: 1;
+											font-family: "Montserrat", sans-serif;
+											color: white;
+											padding: 2rem;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+										}
+
+										.page-contents {
+											width: 100%;
+											display: flex;
+											flex-wrap: wrap;
+											flex-direction: row;
+											align-items: center;
+											justify-content: space-evenly;
+										}
+
+										.card {
+											position: relative;
+											width: 65rem;
+											height: 30rem;
+											display: flex;
+											align-items: center;
+											justify-content: center;
+											border-radius: 50px;
+										}
+
+										.card-border {
+											position: absolute;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+										}
+
+										.card-contents {
+											position: relative;
+											width: 100%;
+											height: 100%;
+											display: flex;
+											flex-direction: row;
+											align-items: center;
+											justify-content: center;
+											padding: 3rem 2rem 2rem 5rem;
+										}
+
+										.photo-box {
+											cursor: pointer;
+											position: relative;
+											width: 30%;
+											height: 100%;
+											display: flex;
+											justify-content: center;
+											align-items: center;
+										}
+
+										.speaker-photo {
+											width: 100%;
+											height: auto;
+											opacity: 1;
+										}
+
+										.card:hover {
+											background-color: rgba(0, 0, 0, 0.5);
+										}
+
+										.speaker-details {
+											position: relative;
+											cursor: pointer;
+											display: flex;
+											flex-direction: column;
+											justify-content: center;
+											margin-left: 3rem;
+											font-weight: bold;
+											height: 100%;
+											width: 70%;
+											opacity: 1;
+										}
+
+										.card:hover .open-bio {
+											opacity: 1;
+											animation: fadeIn ease 0.5s;
+											-webkit-animation: fadeIn ease 0.5s;
+										}
+
+										.name {
+											font-size: 2.8rem;
+										}
+
+										.summary {
+											font-size: 1.4rem;
+										}
+
+										.open-bio {
+											position: absolute;
+											bottom: 20%;
+											left: 40%;
+											background-color: rgba(0, 0, 0, 0.5);
+											outline: none;
+											padding: 0.2rem 1rem;
+											width: fit-content;
+											border: 2px solid white;
+											border-radius: 10px;
+											opacity: 0;
+											font-size: 2rem;
+											font-weight: normal;
+											box-shadow: 2px 2px 5px rgba(255, 255, 255, 0.5);
+										}
+
+										.open-bio:hover {
+											background-color: rgba(255, 255, 255, 0.1);
+										}
+
+										/* Modal Styling */
+
+										#modal {
+											position: fixed;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+											background-color: rgba(0, 0, 0, 0.5);
+											display: flex;
+											align-items: center;
+											justify-content: center;
+										}
+
+										.modal-content {
+											position: relative;
+											background: linear-gradient(#052a9a, #101010);
+											border-radius: 50px;
+											width: 60%;
+											height: 70%;
+											margin-left: 15%;
+											margin-top: 15rem;
+											padding: 3rem;
+										}
+
+										.modal-image {
+											width: 80%;
+											height: auto;
+										}
+
+										.modal-main {
+											display: flex;
+											justify-content: space-evenly;
+											width: 100%;
+											height: 100%;
+										}
+
+										.left-column {
+											margin-top: 2rem;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											width: 25%;
+											height: 100%;
+										}
+
+										.modal-summary {
+											margin-top: 2rem;
+											background-color: #002540;
+											width: 100%;
+											padding: 2rem;
+											border-radius: 10px;
+											font-size: 1.6rem;
+											font-weight: bold;
+										}
+
+										.right-column {
+											width: 60%;
+											height: 100%;
+										}
+
+										.modal-name {
+											font-size: 3.1rem;
+											font-weight: bold;
+										}
+
+										.bio {
+											font-size: 2rem;
+											overflow-y: scroll;
+											margin-top: 2rem;
+											padding-right: 2rem;
+											scrollbar-width: thin;
+											scrollbar-color: #8b8787;
+											height: 80%;
+											font-weight: light;
+										}
+
+										.bio::-webkit-scrollbar {
+											width: 12px;
+										}
+										.bio::-webkit-scrollbar-thumb {
+											background-color: #8b8787;
+											border-radius: 20px;
+										}
+
+										.modal-name {
+											font-size: 2.8rem;
+										}
+
+										.close-modal {
+											position: absolute;
+											top: -10rem;
+											right: -10rem;
+											width: 20rem;
+											cursor: pointer;
+										}
+
+										@media screen and (max-width: 1780px) {
+											.speaker-details {
+												width: 70%;
+											}
+											.name {
+												font-size: 2.2rem;
+											}
+
+											.summary {
+												font-size: 1.3rem;
+											}
+										}
+
+										/* Animations */
+										@-webkit-keyframes fadeIn {
+											from {
+												opacity: 0;
+											}
+											to {
+												opacity: 1;
+											}
+										}
+										@keyframes fadeIn {
+											from {
+												opacity: 0;
+											}
+											to {
+												opacity: 1;
+											}
+										}
+
+										@-webkit-keyframes fadeOut {
+											from {
+												opacity: 1;
+											}
+											to {
+												opacity: 0.4;
+											}
+										}
+										@keyframes fadeOut {
+											from {
+												opacity: 1;
+											}
+											to {
+												opacity: 0.4;
+											}
+										}
+									</style>
+
+									<div class="content">
+										<video
+											class="bg-video"
+											playsinline
+											autoplay
+											loop
+											poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
+										>
+											<source
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
+												type="video/mp4"
+											/>
+										</video>
+										<div class="page-contents"></div>
+									</div>
+
+									<template id="card-template">
+										<div class="card">
+											<img
+												class="card-border"
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/speakers.gif"
+											/>
+											<div class="card-contents">
+												<div class="photo-box">
+													<img class="speaker-photo" />
+												</div>
+												<div class="speaker-details">
+													<div class="name"></div>
+													<div class="summary"></div>
+												</div>
+												<button class="open-bio" onclick="toggleModal(this)">
+													Read More
+												</button>
+											</div>
+										</div>
+									</template>
+
+									<template id="modal-template">
+										<div id="modal">
+											<div class="modal-content">
+												<img
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
+													class="close-modal"
+													onclick="toggleModal(this)"
+												/>
+												<div class="modal-main"></div>
+											</div>
+										</div>
+									</template>
+
+									<script>
+										var speakers = [
+											{
+												name: "Heather Mills",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png",
+												video:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Heather.mp4",
+												bio:
+													"Heather Mills is an entrepreneur, philanthropist, activist, world recording holding sports star and TV personality. <br/> Heather has won many awards and much acclaim in particular for her charitable work clearing landmines across the world, leading the scientific development of prosthetics and leading the food tech development and expansion of the global plant- based food sector, through her multi award - winning company, Vbites. <br/><br/> Highlights of her extensive career to date include: <br/><br/> <ul><li> Starting and initially funding the largest landmine charity in the world - ‘Adopt A Minefield’ - helping raise funds to clear over 21 million sq.meters of mine-filled land and assistIng over 400, 000 amputees </li><br/> <li> Campaigning extensively for animal rights and effecting key law changes e.g.the law on banning the dog and cat fur trade in the European Union</li></ul>"
+											},
+											{
+												name: "Bruce Dickinson",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png",
+												video:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/bruce.mp4",
+												bio: ""
+											},
+											{
+												name: "Per Holknekt",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
+												video:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per.mp4",
+												bio: ""
+											},
+											{
+												name: "Therese Lindgren",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png",
+												video:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Terese.mp4",
+												bio: ""
+											},
+											{
+												name: "Wim Hof",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png",
+												video:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim.mp4",
+												bio: ""
+											},
+											{
+												name: "Lovette Jallow",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette_Jallow.png",
+												video:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette jallow.mp4",
+												bio:
+													"This woman is a rewarded author, activist and lecturer. Through her social media channels she is spreading knowledge about human rights and equality, using social media as a platform for her activism. Through her entrepreneurship and activism Lovette Jallow is in the front line of challenging racism in Sweden. Lovette Jallow receives the Raoul Wallenberg prize 2019."
+											},
+											{
+												name: "Robert Swan",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Robert Swan.png",
+												video: "",
+												bio:
+													"Robert Swan is the first person in history to have walked to both the North and South Poles. He is an explorer, a leader in energy innovation, and founder of the 2041 Foundation, a non-profit dedicated to preserve Antarctica as a natural reserve, land for science and peace. During these two historic expeditions, Robert experienced firsthand the effects of climate change and environmental degradation. These two hard-hitting and unexpected incidents galvanized him to launch the mission, ‘2041’. Robert received the Polar Medal and the title of the Officer of the British Empire (O.B.E) from Her Majesty, Queen Elizabeth II. His contribution to education, energy innovation and environmental action have been recognized by the United Nations through his appointment as UNEP Goodwill Ambassador for Youth, Special Envoy to the Director General of UNESCO and as a recipient of the UN Humanitarian Innovation Award. He is the co-author of four books and was a keynote speaker at all of the UN World Summits for Sustainable Development, the World Economic Forum and the Corporate Eco Forum."
+											},
+											{
+												name: 'Amelia Michelle "Amy" Purdy',
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Amy Purdy.png",
+												video: "",
+												bio:
+													'Amelia Michelle "Amy" Purdy is an American actress, model, para-snowboarder, motivational speaker, clothing designer and author. Purdy is a 2014 Paralympic bronze medalist, 2018 Paralympics silver medalist, and co-founder of Adaptive Action Sports. At age 19, she contracted Neisseria meningitidis, a form of bacterial meningitis. The disease affected her circulatory system when the infection led to septic shock. Both of her legs had to be amputated below the knee. Purdy began snowboarding seven months after she received her prosthetic legs. About a year after her legs were amputated, she finished third in a snowboarding competition at Mammoth Mountain. Subsequently, she received a grant from the Challenged Athletes Foundation (CAF), a non-profit organization. Through this grant, she was able to compete in several snowboarding competitions in the U.S.'
+											},
+											{
+												name: "Andreas Ljungberg",
+												image:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Andreas.png",
+												video: "",
+												bio:
+													"Headline for the speech: Building for moments you never forget.                                                                                                                                                                                                                                          With a career in commercial real estate and city development Andreas explores the role of cities and communities in the time after the pandemic. How can commercial property development achieve moments in life that also defines a city."
+											}
+										];
+
+										var getLastName = string => {
+											const array = string.split(" ");
+											return array[1];
+										};
+
+										var buildSpeakerList = () => {
+											const contentElement = landingPageEl.querySelector(
+												".page-contents"
+											);
+											const template = landingPageEl.getElementById(
+												"card-template"
+											);
+
+											const sortedSpeakers = speakers.sort(function (a, b) {
+												aLastName = getLastName(a.name);
+												bLastName = getLastName(b.name);
+												if (aLastName < bLastName) {
+													return -1;
+												}
+												if (aLastName > bLastName) {
+													return 1;
+												}
+												return 0;
+											});
+
+											sortedSpeakers.forEach((speaker, index) => {
+												const clone = template.content.cloneNode(true);
+												var card = clone.querySelector(".card");
+												var photoBox = clone.querySelector(".photo-box");
+
+												var imageElement = clone.querySelector(
+													".speaker-photo"
+												);
+												var nameElement = clone.querySelector(".name");
+
+												if (speaker.summary) {
+													var summaryElement = clone.querySelector(".summary");
+													summaryElement.innerHTML = speaker.summary;
+												}
+
+												card.setAttribute("id", index);
+												imageElement.src = speaker.image;
+												nameElement.innerHTML = speaker.name;
+
+												contentElement.appendChild(clone);
+											});
+										};
+
+										buildSpeakerList();
+
+										var toggleModal = element => {
+											var modalElement = landingPageEl.getElementById("modal");
+											var content = landingPageEl.querySelector(".content");
+
+											if (modalElement) {
+												modalElement.remove();
+												document.body.style.overflow = "auto";
+												return;
+											}
+
+											var template = landingPageEl.getElementById(
+												"modal-template"
+											);
+											var clone = template.content.cloneNode(true);
+											var mainContent = clone.querySelector(".modal-main");
+
+											var id = element.parentNode.parentNode.id;
+											var speaker = speakers[id];
+
+											//Create Left Column
+											var leftColumn = document.createElement("div");
+											leftColumn.setAttribute("class", "left-column");
+
+											if (speaker.video) {
+												var video = document.createElement("video");
+												video.setAttribute("class", "speaker-video");
+												video.width = "300";
+												video.height = "300";
+												video.controls = true;
+												video.autoplay = true;
+
+												var source = document.createElement("source");
+												source.src = speaker.video;
+												source.type = "video/mp4";
+
+												video.appendChild(source);
+												leftColumn.appendChild(video);
+											} else {
+												var photo = document.createElement("img");
+												photo.setAttribute("class", "modal-image");
+												photo.src = speaker.image;
+												leftColumn.appendChild(photo);
+											}
+
+											if (speaker.summary) {
+												var summary = document.createElement("div");
+												summary.setAttribute("class", "modal-summary");
+												summary.innerHTML = speaker.summary;
+												leftColumn.appendChild(summary);
+											}
+
+											mainContent.appendChild(leftColumn);
+
+											//Create Right Column
+											var rightColumn = document.createElement("div");
+											rightColumn.setAttribute("class", "right-column");
+
+											var name = document.createElement("div");
+											name.setAttribute("class", "modal-name");
+											name.innerHTML = speaker.name;
+											rightColumn.appendChild(name);
+
+											if (speaker.bio) {
+												var bio = document.createElement("div");
+												bio.setAttribute("class", "bio");
+												bio.innerHTML = speaker.bio;
+												rightColumn.appendChild(bio);
+											}
+
+											mainContent.appendChild(rightColumn);
+
+											content.appendChild(clone);
+											document.body.style.overflow = "hidden";
+										};
+									</script>
+									<!-- Chatwee -->
+									<chatwee>
+										<script>
+											var fetchGlobalSnippet = snippetId => {
+												// Set header
+												const headers = {
+													Authorization:
+														"Bearer " + sessionStorage.getItem("token"),
+													"X-InfernoCore-Domain":
+														sessionStorage.getItem("domain") ??
+														window.location.hostname
+												};
+
+												// add a header property for users accessing with SA credentials
+												if (window.sessionStorage.overrideId) {
+													headers["X-InfernoCore-Domain"] =
+														"jolokia.inferno.jolokia.com";
+													headers["X-Client-Override"] = sessionStorage.getItem(
+														"overrideId"
+													);
+												}
+
+												let globalSnippet = null;
+
+												$.ajax({
+													url:
+														"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+														snippetId,
+													type: "GET",
+													async: false,
+													accept: "application/json",
+													contentType: "application/json",
+													headers: headers,
+													success: function (res, status, xhr) {
+														const parser = new DOMParser();
+														globalSnippet = parser.parseFromString(
+															res,
+															"text/html"
+														);
+													},
+													error: function (err) {
+														console.error("Error Fetching Global Snippet", err);
+													}
+												});
+
+												return globalSnippet;
+											};
+
+											if (!window.chatManager) {
+												var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+												var chatweeSnippet = fetchGlobalSnippet(snippetId);
+												var username = chatweeSnippet.getElementById(
+													"inferno-username"
+												);
+												var script = chatweeSnippet.getElementById(
+													"chatweeLogic"
+												);
+												//checks if the elements have already been inserted into the DOM to avoid duplicate elements
+												if (!landingPageEl.getElementById("inferno-username")) {
+													landingPageEl.appendChild(username);
+												}
+												// eval the script so it will be executed here
+												eval(script.innerHTML);
+											}
+										</script>
+									</chatwee>
+								</inferno-snippet-content>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
+
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
+
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
+
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
+
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
+
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
+
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
+
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
+
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -895,30 +1015,27 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->
