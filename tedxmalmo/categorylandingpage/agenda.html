@@ -531,6 +531,8 @@
                 </template>
 
                 <script>
+                  var tabType = 'event';
+
                   var parseDate = (date) => {
                     var h = date.getHours();
                     var m = date.getMinutes();
@@ -857,6 +859,8 @@
                     const template = landingPageEl.getElementById("template");
                     agenda.innerHTML = "";
 
+                    agendaList.sort((a, b) => (a.startTime > b.startTime) ? 1 : -1);
+
                     agendaList.forEach(item => {
                       const clone = template.content.cloneNode(true);
                       let time = clone.querySelector(".time");
@@ -903,8 +907,14 @@
                   //Agenda Bookmarking
                   var bookmarkEvent = (button) => {
                     var id = button.parentNode.parentNode.parentNode.id;
-                    var savedItem = agendaList[id];
                     var tooltip = button.parentNode.querySelector(".tooltip-bookmark");
+                    
+                    if(tabType == 'event') {
+                      var savedItem = agendaList[id];
+                    } else {
+                      var savedItem = bookmarks[id];
+                    }
+
 
                     if (button.innerHTML === "+") {
                       //add agenda item
@@ -916,12 +926,18 @@
                       sendBookmarks(savedItem, "remove");
                       button.innerHTML = "+";
                       tooltip.innerHTML = "Add to your agenda?"
+
+                      if(tabType == 'mine') {
+                        var event = landingPageEl.getElementById(id);
+                        event.remove();
+                      }
                     }
                   }
 
                   function toggleTab(id) {
                     var bookmarkCopy = bookmarks;
                     var agendaListCopy = agendaList;
+                    tabType = id;
 
                     if(id == 'event') {
                       agendaList = agendaListCopy;
