@@ -240,9 +240,30 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="0b3d41aa-142a-4b3c-bee7-29cbc91dfc42">
-                <style>
-                  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+
+                </script>
+
+                <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
                   /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
                   img::after {
@@ -265,7 +286,6 @@
                     margin: -20px;
                     min-height: calc(100vh - 114px);
                     z-index: 1;
-                    font-family: 'Montserrat', sans-serif;
                     color: white;
                     padding: 2rem;
                     display: flex;
@@ -335,7 +355,6 @@
 
                   .agenda-item {
                     width: 100%;
-
                   }
 
                   .agenda-item-main {
@@ -348,7 +367,6 @@
                     justify-content: center;
                     height: 15rem;
                     margin-bottom: 2rem;
-
                   }
 
                   .bookmark {
@@ -420,7 +438,6 @@
                     margin: 40rem auto 0;
                     text-align: center;
                     width: 80%;
-
                   }
                   
                   .tab {
@@ -435,14 +452,8 @@
                   }
 
                   .tab > p {
-                    font-size: 16px;
-                    margin: 0;
-                    padding-top: 20px;
-                  }
-
-                  .tab.active > p {
                     font-size: 18px;
-                    font-weight: bold;
+                    padding-top: 20px;
                   }
 
                   .agenda-title-box {
@@ -541,6 +552,7 @@
                 </template>
 
                 <script>
+                  var bookmarks;
                   var tabType = 'event';
 
                   var parseDate = (date) => {
@@ -555,6 +567,7 @@
 
                     return h + ":" + m + ampm;
                   }
+
                   var setTime = () => {
                     var d = new Date();
 
@@ -762,16 +775,10 @@
 
                   }
 
-                  //get user data store
-
-
                   var fetchUserData = () => {
-
                     const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks";
-
                     const bearerToken = window.sessionStorage.getItem("token");
                     const bearer = 'Bearer ' + bearerToken;
-
                     return fetch(url, {
                       method: 'GET',
                       withCredentials: true,
@@ -781,35 +788,23 @@
                     });
                   }
 
-                  var bookmarks;
-
                   var getBookmarks = async () => {
                     bookmarks = [];
                     try {
                       const res = await fetchUserData();
-
                       if (res.status === 200) {
                         const json = await res.json();
-
-                        //convert value from string to array
                         var stringValue = json.value;
                         var parsedString = stringValue.substring(2, stringValue.length-2);
-
                         bookmarks = JSON.parse(json.value);
-
                       }
-
+                      bookmarks.length > 0 ? toggleTab('mine') : toggleTab('event');
                     } catch (e) {
                       throw new Error(e);
                     }
 
                     buildEventList();
                   }
-
-                  getBookmarks();
-
-
-
 
                   //send bookmarks to API
                   var sendBookmarks = (bookmark, actionType) => {
@@ -825,7 +820,6 @@
                     } else {
                       bookmarks = bookmarks.filter(item => item.startTime !== bookmark.startTime);
 
-                      //if there are no values, delete kvp
                       if (bookmarks.length < 1) {
                         method = 'DELETE';
                         url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/bookmarks"
@@ -846,9 +840,6 @@
                     headers.set('Accept', 'application/json')
                     headers.set('Content-Type', 'application/json')
 
-
-
-                    // for super user accounts
                     const overrideId = window.sessionStorage.getItem("overrideId");
                     if (overrideId) headers.set("X-Client-Override", overrideId);
 
@@ -859,8 +850,6 @@
                       body: JSON.stringify(kvp)
                     })
                   }
-
-
 
                   var buildEventList = () => {
                     const agenda = landingPageEl.getElementById(
@@ -882,7 +871,6 @@
                       let description = clone.querySelector(".description");
 
                       const id = agendaList.indexOf(item);
-
 
                       //set bookmarked event button display
                       if (bookmarks.some(bookmark => bookmark.startTime === item.startTime)) {
@@ -907,14 +895,9 @@
 
                       agendaItem.setAttribute("id", id);
                       agenda.appendChild(clone);
-
-
                     });
                   };
 
-
-
-                  //Agenda Bookmarking
                   var bookmarkEvent = (button) => {
                     var id = button.parentNode.parentNode.parentNode.id;
                     var tooltip = button.parentNode.querySelector(".tooltip-bookmark");
@@ -948,9 +931,20 @@
                     var agendaListCopy = agendaList;
                     tabType = id;
 
+                    const tab1 = landingPageEl.querySelector('#tab1')
+                    const tab2 = landingPageEl.querySelector('#tab2')
+
                     if(id == 'event') {
+                      tab1.style.color = "#ffffff";
+                      tab1.style.filter = "drop-shadow(10px 10px 10px rgba(255, 255, 255, 0.7))";
+                      tab2.style.color = "#808080";
+                      tab2.style.filter = "";
                       agendaList = agendaListCopy;
                     } else {
+                      tab2.style.color = "#ffffff";
+                      tab2.style.filter = "drop-shadow(10px 10px 10px rgba(255, 255, 255, 0.7))";
+                      tab1.style.color = "#808080";
+                      tab1.style.filter = "";
                       agendaList = bookmarkCopy;
                     }
 
@@ -962,6 +956,9 @@
                     bookmarks = bookmarkCopy;
                     agendaList = agendaListCopy;
                   }
+
+                  getBookmarks();
+
                 </script>
 
                 <!-- Chatwee -->
@@ -1016,6 +1013,7 @@
                     }
                   </script>
                 </chatwee>
+
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
