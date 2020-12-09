@@ -280,7 +280,7 @@
                     left: 0;
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
+                    justify-content: flex-start;
                     align-items: flex-start;
                     width: 100%;
                     height: 100vh;
@@ -370,6 +370,14 @@
                     border-radius: 5px;
                     font-weight: bold;
                     font-size: 4rem;
+                    position: relative;
+                  }
+
+                  .button-bookmark > svg {
+                    width: 50px;
+                    height: 50px;
+                    right: 10px;
+                    position: absolute;
                   }
 
                   .tooltip-bookmark {
@@ -510,7 +518,9 @@
                   <div class="agenda-item">
                     <div class="agenda-item-main">
                       <div class="bookmark">
-                        <div class="button-bookmark" onclick="bookmarkEvent(this)">+</div>
+                        <div class="button-bookmark" onclick="bookmarkEvent(this)">
+                          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" fill="#ffffff" viewBox="0 0 100 100" xml:space="preserve"><path d="M24,58h32v6H24V58z M82,58h-8v-8h-6v8h-8v6h8v8h6v-8h8V58z M64,46H24v6h40V46z M64,34H24v6h40V34z"/></svg>
+                        </div>
                         <div class="tooltip-bookmark">Save to your Agenda?</div>
                       </div>
                       <div class="time" onclick="toggleDetails(this)">
@@ -878,7 +888,7 @@
                       if (bookmarks.some(bookmark => bookmark.startTime === item.startTime)) {
                         let tooltip = clone.querySelector(".tooltip-bookmark");
                         tooltip.innerHTML = "Remove from your agenda?"
-                        bookmarkButton.innerHTML = "-";
+                        bookmarkButton.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" fill="#ffffff" viewBox="0 0 100 100" xml:space="preserve"><path d="M24,58h32v6H24V58z M62,58v6h18v-6H62z M64,46H24v6h40V46z M64,34H24v6h40V34z"/></svg>';
                       }
 
                       time.innerHTML = convertTime(item.startTimeAMPM, item.duration);
@@ -915,21 +925,24 @@
                       var savedItem = bookmarks[id];
                     }
 
-
-                    if (button.innerHTML === "+") {
+                    if (button.innerHTML.trim() == '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" fill="#ffffff" viewBox="0 0 100 100" xml:space="preserve"><path d="M24,58h32v6H24V58z M82,58h-8v-8h-6v8h-8v6h8v8h6v-8h8V58z M64,46H24v6h40V46z M64,34H24v6h40V34z"></path></svg>') {
                       //add agenda item
                       sendBookmarks(savedItem, "add");
-                      button.innerHTML = "-";
+                      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" fill="#ffffff" viewBox="0 0 100 100" xml:space="preserve"><path d="M24,58h32v6H24V58z M62,58v6h18v-6H62z M64,46H24v6h40V46z M64,34H24v6h40V34z"/></svg>';
                       tooltip.innerHTML = "Remove from your agenda?"
                     } else {
                       //remove agenda item
                       sendBookmarks(savedItem, "remove");
-                      button.innerHTML = "+";
+                      button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" fill="#ffffff" viewBox="0 0 100 100" xml:space="preserve"><path d="M24,58h32v6H24V58z M82,58h-8v-8h-6v8h-8v6h8v8h6v-8h8V58z M64,46H24v6h40V46z M64,34H24v6h40V34z"/></svg>';
                       tooltip.innerHTML = "Add to your agenda?"
 
                       if(tabType == 'mine') {
                         var event = landingPageEl.getElementById(id);
                         event.remove();
+                        var agendaListCopy = agendaList;
+                        agendaList = bookmarks;
+                        buildEventList();
+                        agendaList = agendaListCopy;
                       }
                     }
                   }
