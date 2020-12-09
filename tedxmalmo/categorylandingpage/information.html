@@ -258,67 +258,147 @@
                 <style>
                     .content {
                         position: relative;
-                        display: block;
                         margin: -20px;
-                        padding: 20px;
                         min-height: calc(100vh - 114px);
-                        min-width: 100%;
+                        z-index: 1;
+                        font-family: 'Montserrat', sans-serif;
+                        color: white;
+                        padding: 2rem;
+                        overflow: hidden
                     }
 
-                    .content iframe {
+                    .page-contents {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: flex-start;
                         width: 100%;
-                        height: calc(100vh - 190px);
+                        min-height: calc(100vh - 114px);
+                        padding: 20px;
+                        overflow-y: scroll;
+                    }
+
+                    .page-contents iframe {
                         border: 4px solid royalblue;
                         background: transparent;
                         border-radius: 1em;
+                        margin: 2em;
+                        scrollbar-width: thin;
+                        scrollbar-color: #8B8787;
+                    }
+
+                    #infoPage {
+                        width: 80%;
+                        height: 400px;
+                        align-self: center;
+                    }
+
+                    iframe::-webkit-scrollbar {
+                        width: 12px;
+                    }
+
+                    iframe::-webkit-scrollbar-thumb {
+                        background-color: #8B8787;
+                        border-radius: 20px;
                     }
 
                     .bg-video {
-                        position: fixed;
+                        position: absolute;
                         top: 0;
-                        left: 0;
+                        left: 0%;
                         width: auto;
                         min-width: 100%;
                         height: auto;
-                        min-height: calc(100vh - 59px);
-                        z-index: -1;
+                        min-height: calc(100vh - 114px);
                     }
 
-                    .message {
+                    .header {
+                        position: relative;
+                        background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_time_bg.png);
+                        background-repeat: no-repeat;
+                        width: 400px;
+                        height: 68px;
+                        background-size: contain;
+                        color: white;
+                        background-position: top left;
+                        font-size: 2em;
+                    }
+
+                    .header span {
+                        position: absolute;
+                        left: 100px;
+                        top: 14px;
+                    }
+
+                    #surveyAndFAQ {
                         display: flex;
-                        flex-direction: column;
-                        justify-content: center;
-                        align-items: center;
-                        margin: auto auto;
-                        width: 90%;
-                        font: normal normal bold 55px/67px 'Montserrat';
-                        letter-spacing: 0px;
-                        color: #FFFFFF;
+                        flex-direction: row;
+                        width: 100%;
+                    }
+
+                    #faq {
+                        width: 100%;
                         text-align: center;
-                        z-index: 99;
+                        margin: 96px auto;
+                    }
+
+                    #faq img:hover {
+                        -webkit-filter: drop-shadow(0px 2px 12px #fff);
+                        filter:         drop-shadow(0px 2px 12px #fff);
+                        cursor: pointer;
+                    }
+
+                    #slido {
+                        margin-bottom: 40px;
                     }
                 </style>
 
-                <script>
-                  function toggleMessage() {
-                    landingPageEl.querySelector('.message').classList.toggle('hidden');
-                  }
-                </script>
 
                 <div id="content" class="content">
+
                   <video class="bg-video" autoplay loop
                          poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
                     <source
                         src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
                         type="video/mp4">
                   </video>
-                  <div class="message">
-                    <div> Activating Visitor Feedback</div>
+
+                  <div class="page-contents">
+
+                    <div class="header"><span>About</span></div>
+                    <iframe id="infoPage"
+                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/AboutTEDxMalm.html"
+                            width="500"
+                            height="250">
+                    </iframe>
+
+                    <div id="surveyAndFAQ">
+                      <div id="survey">
+                        <div class="header"><span>Survey/Feedback</span></div>
+                        <iframe id="slido"
+                                src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2"
+                                width="450"
+                                height="500"></iframe>
+                      </div>
+                      <div id="faq">
+                          <img id="FAQ-Clicked"
+                               onclick="toggleFAQ()"
+                              src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/faq.png">
+                      </div>
+                    </div>
+
                   </div>
-                  <iframe onload="toggleMessage()"
-                          src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2"
-                          width="500" height="500"></iframe>
                 </div>
+
+                <script>
+                  function toggleFAQ() {
+                    alert('pdf goes here');
+                  }
+                </script>
+
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
