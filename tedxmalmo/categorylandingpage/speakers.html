@@ -293,7 +293,28 @@
 								<!-- SNIPPET CONTENT START -->
 								<inferno-snippet-content
 									id="62c198fc-a4d2-4847-be45-6c57ade36de5"
-								>
+                >
+                
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                </script>
 									<style>
 										@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 
@@ -652,14 +673,6 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per.mp4",
-												bio: ""
-											},
-											{
-												name: "Therese Lindgren",
-												image:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Therese-Lindgren.png",
-												video:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Terese.mp4",
 												bio: ""
 											},
 											{
