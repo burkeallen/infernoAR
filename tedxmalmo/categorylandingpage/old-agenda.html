@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -271,7 +271,7 @@
                     display: flex;
                     flex-direction: column;
                     overflow:hidden
-                    
+
                   }
 
                   .page-contents {
@@ -306,12 +306,6 @@
                     left: 2%;
                   }
 
-                  .date-label,
-                  .time-label {
-                    font-size: 16px;
-                    margin-bottom: -10px;
-                  }
-
                   .time-box {
                     font-size: 41px;
                     position: absolute;
@@ -321,10 +315,10 @@
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    flex-direction: column;
                   }
 
                   #agenda {
+                    margin-top: 40rem;
                     width: 100%;
                     display: flex;
                     flex-direction: column;
@@ -406,37 +400,6 @@
                     z-index: 5;
                   }
 
-                  .toggle-tabs {
-                    display: flex;
-                    justify-content: space-around;
-                    margin: 40rem auto 0;
-                    text-align: center;
-                    width: 80%;
-
-                  }
-                  
-                  .tab {
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_time_bg.png');
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: top;
-                    background-position-x: -50px;
-                    cursor: pointer;
-                    flex: 1;
-                    height: 50px;
-                  }
-
-                  .tab > p {
-                    font-size: 16px;
-                    margin: 0;
-                    padding-top: 20px;
-                  }
-
-                  .tab.active > p {
-                    font-size: 18px;
-                    font-weight: bold;
-                  }
-
                   .agenda-title-box {
                     position: relative;
                     display: flex;
@@ -481,25 +444,11 @@
                   </video>
                   <div class="page-contents">
                     <div class="clock">
-                      <div class="date">
-                        <p class="date-label">Event Date:</p>
-                        <p>December 12, 2020</p>
-                      </div>
+                      <div class="date">December 12, 2020</div>
                       <div class="time-box">
-                        <p class="time-label">Current Time:</p>
                         <div class="current-time">10:00</div>
                       </div>
                     </div>
-
-                    <div class="toggle-tabs">
-                      <div class="event-agenda tab active" id="tab1" onclick="toggleTab('event')">
-                        <p>Event Agenda</p>
-                      </div>
-                      <div class="my-agenda tab" id="tab2" onclick="toggleTab('mine')">
-                        <p>My Agenda</p>
-                      </div>
-                    </div>
-
                     <div id="agenda">
                     </div>
                   </div>
@@ -531,8 +480,6 @@
                 </template>
 
                 <script>
-                  var tabType = 'event';
-
                   var parseDate = (date) => {
                     var h = date.getHours();
                     var m = date.getMinutes();
@@ -806,7 +753,7 @@
                     let url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
                     let method = 'POST';
                     let value;
-                   
+
                     //if bookmark kvp exists, set method to 'PUT'
                     if (bookmarks.length > 0) method = 'PUT';
 
@@ -857,9 +804,6 @@
                       "agenda"
                     );
                     const template = landingPageEl.getElementById("template");
-                    agenda.innerHTML = "";
-
-                    agendaList.sort((a, b) => (a.startTime > b.startTime) ? 1 : -1);
 
                     agendaList.forEach(item => {
                       const clone = template.content.cloneNode(true);
@@ -907,14 +851,8 @@
                   //Agenda Bookmarking
                   var bookmarkEvent = (button) => {
                     var id = button.parentNode.parentNode.parentNode.id;
+                    var savedItem = agendaList[id];
                     var tooltip = button.parentNode.querySelector(".tooltip-bookmark");
-                    
-                    if(tabType == 'event') {
-                      var savedItem = agendaList[id];
-                    } else {
-                      var savedItem = bookmarks[id];
-                    }
-
 
                     if (button.innerHTML === "+") {
                       //add agenda item
@@ -926,32 +864,7 @@
                       sendBookmarks(savedItem, "remove");
                       button.innerHTML = "+";
                       tooltip.innerHTML = "Add to your agenda?"
-
-                      if(tabType == 'mine') {
-                        var event = landingPageEl.getElementById(id);
-                        event.remove();
-                      }
                     }
-                  }
-
-                  function toggleTab(id) {
-                    var bookmarkCopy = bookmarks;
-                    var agendaListCopy = agendaList;
-                    tabType = id;
-
-                    if(id == 'event') {
-                      agendaList = agendaListCopy;
-                    } else {
-                      agendaList = bookmarkCopy;
-                    }
-
-                    buildEventList();
-
-                    landingPageEl.querySelector('#tab1').classList.toggle('active');
-                    landingPageEl.querySelector('#tab2').classList.toggle('active');
-
-                    bookmarks = bookmarkCopy;
-                    agendaList = agendaListCopy;
                   }
                 </script>
 
