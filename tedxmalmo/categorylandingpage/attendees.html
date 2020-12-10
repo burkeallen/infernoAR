@@ -296,37 +296,29 @@
 								<!-- ********************* -->
 								<!-- SNIPPET CONTENT START -->
 								<inferno-snippet-content
-									id="60418a2c-c67d-49a0-ba18-5407beb9caf2"
-								>
-									<!--  Load custom fonts -->
-									<script type="text/javascript">
-										function loadFont(name, url) {
-											if (document.fonts.check("1em " + name)) {
-												return;
-											}
-											const fontFace = new FontFace(name, "url(" + url + ")");
+									id="60418a2c-c67d-49a0-ba18-5407beb9caf2">
 
-											fontFace
-												.load()
-												.then(function (loadedFont) {
-													document.fonts.add(loadedFont);
-													console.log("Loaded custom font ", name);
-												})
-												.catch(function (error) {
-													// error occurred
-													console.log("Error loading ", name);
-												});
-										}
+                  <!--  Load custom fonts -->
+                  <script type="text/javascript">
+                    function loadFont(name, url) {
+                      if (document.fonts.check('1em ' + name)) {
+                        return;
+                      }
+                      const fontFace = new FontFace(name, 'url(' + url + ')');
 
-										loadFont(
-											"Montserrat",
-											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf"
-										);
-										loadFont(
-											"MontserratBold",
-											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf"
-										);
-									</script>
+                      fontFace.load().then(function (loadedFont) {
+                        document.fonts.add(loadedFont);
+                        console.log('Loaded custom font ', name);
+                      }).catch(function (error) {
+                        // error occurred
+                        console.log('Error loading ', name);
+                      });
+
+                    }
+
+                    loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                    loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                  </script>
 
 									<style>
 										:host-context(landing-page) {
@@ -513,7 +505,7 @@
 
 										.exhibitors-divider {
 											background-color: rgba(255, 255, 255, 0.75);
-											width: 100;
+											width: 100px;
 											padding: 3.8rem;
 											padding: 4.4rem;
 										}
@@ -903,16 +895,6 @@
 															src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/search-icon.png"
 														/>
 													</div>
-
-													<!-- <div class="select-wrapper">
-            <select id="select-attendees-industry" onchange="filterAttendeesByIndustry(event)">
-              <option class="option" value="">By Industry</option>
-              <option value="commerce">Commerce</option>
-              <option value="education">Education</option>
-              <option value="robotics">Robotics</option>
-              <option value="technology">Technology</option>
-            </select>
-          </div> -->
 
 													<button id="all-grouping" onclick="allAttendees()">
 														All

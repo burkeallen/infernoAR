@@ -245,24 +245,59 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="106abd13-f1c2-4361-b3ba-bedc1d9b6fb5">
 
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                </script>
+
                 <style>
+                  .content {
+                    position: relative;
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    color: white;
+                    padding: 2rem;
+                    overflow: hidden
+                  }
+
+                  .page-contents {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    min-height: calc(100vh - 114px);
+                    padding: 20px;
+                    overflow-y: scroll;
+                  }
+
                   .bg-video {
-                    position: fixed;
-                    top: 0%;
-                    left: 0%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                     width: auto;
                     min-width: 100%;
                     height: auto;
-                    min-height: 100%;
-                    z-index: -1;
-                  }
-
-                  .content {
-                    background-size: cover;
                     min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    z-index: 1;
-                    font-family: "Helvetica Neue", Arial Narrow, Arial, sans-serif;
                   }
 
                   .activity-grid {
@@ -270,7 +305,7 @@
                     flex-wrap: wrap;
                     align-self: center;
                     justify-content: center;
-                    margin-top: 40px;
+                    margin-top: 20px;
                   }
 
                   @media (max-width: 767px) {
@@ -291,31 +326,50 @@
                     border: none;
                   }
 
+                  .quiz-instructions {
+                    color: #f8f8ff;
+                    margin: 40px 60px;
+                    font-size: 2rem;
+                  }
+
                 </style>
 
-                <div class="content">
+                <div id="content" class="content">
                   <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
                     <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                   </video>
-                  <div class="activity-grid">
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/c7aac925-6fa2-4838-aad1-1db7c4a823ca" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/1caa8609-2f10-4266-8286-190841317fc1" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/87dd95b4-ab20-4cab-ba30-39b9a0194363" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/9099dd3d-70f3-4341-853e-2626cf59c009" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5094222f-fe78-47dd-aaa8-4202019d8b9e" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/287ac4b9-2809-4211-a0ba-7e713bf8d2cb" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5734ead2-3ba2-47bb-a6c7-0a3615616b19" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/73674598-c1d0-4d82-8c55-aa015394b86b" width="300" height="400"></iframe></div>
+                  <div class="page-contents">
+                    <div class="quiz-instructions">
+                      <p>QUIZ INSTRUCTIONS</p>
+                      <p>Welcome to the TEDxMalmö Quiz! They are designed to test you about TED, TEDxMalmö and the Future, and consist of multiple-choice questions with ONE correct answer. Yes, there will be prizes, and the winners will be announced via email and social media on the 17th of December 2020.</p>
+                    </div>
+                    <div class="activity-grid">
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/c7aac925-6fa2-4838-aad1-1db7c4a823ca" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/1caa8609-2f10-4266-8286-190841317fc1" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/87dd95b4-ab20-4cab-ba30-39b9a0194363" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/9099dd3d-70f3-4341-853e-2626cf59c009" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5094222f-fe78-47dd-aaa8-4202019d8b9e" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/287ac4b9-2809-4211-a0ba-7e713bf8d2cb" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5734ead2-3ba2-47bb-a6c7-0a3615616b19" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/73674598-c1d0-4d82-8c55-aa015394b86b" width="300" height="400"></iframe>
+                      </div>
 
-
+                    </div>
                   </div>
                 </div>
 
