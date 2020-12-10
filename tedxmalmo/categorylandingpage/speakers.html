@@ -1,245 +1,299 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			const x = JSON.parse(response);
+			data = x[0];
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-  </script>
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    #localTemplateMenu a {
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
-
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				window.localTemplateMenuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-          
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="62c198fc-a4d2-4847-be45-6c57ade36de5">
+	<div
+		style="display: none"
+		id="novoProject"
+		name="tedxmalmo"
+		onload="login()"
+	></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="62c198fc-a4d2-4847-be45-6c57ade36de5"
+								>
 									<!--  Load custom fonts -->
 									<script type="text/javascript">
 										function loadFont(name, url) {
@@ -311,12 +365,24 @@
 
 										.card {
 											position: relative;
-											width: 65rem;
-											height: 30rem;
+											width: 70rem;
+											height: 35rem;
 											display: flex;
 											align-items: center;
 											justify-content: center;
 											border-radius: 50px;
+										}
+
+										.card a {
+											color: white;
+										}
+
+										.card a:hover {
+											color: rgba(255, 255, 255, 0.5);
+										}
+
+										.card a:link {
+											text-decoration: none;
 										}
 
 										.card-border {
@@ -333,7 +399,7 @@
 											height: 100%;
 											display: flex;
 											flex-direction: row;
-											align-items: center;
+											align-items: flex-start;
 											justify-content: center;
 											padding: 3rem 2rem 2rem 5rem;
 										}
@@ -360,13 +426,11 @@
 
 										.speaker-details {
 											position: relative;
-											cursor: pointer;
 											display: flex;
 											flex-direction: column;
-											justify-content: center;
-											margin-left: 3rem;
+											justify-content: flex-start;
+											margin: 5rem 0 0 2rem;
 											font-weight: bold;
-											height: 100%;
 											width: 70%;
 											opacity: 1;
 										}
@@ -383,6 +447,8 @@
 
 										.summary {
 											font-size: 1.4rem;
+											display: flex;
+											flex-direction: column;
 										}
 
 										.open-bio {
@@ -421,59 +487,48 @@
 
 										.modal-content {
 											position: relative;
-											background: linear-gradient(#052a9a, #101010);
-											border-radius: 50px;
-											width: 55%;
-											height: 70%;
-											min-width: 50rem;
-											margin-left: 20%;
 											display: flex;
-											flex-wrap: wrap;
-											align-items: center;
+											align-content: center;
 											justify-content: center;
+											margin-left: 20rem;
+											background: linear-gradient(#052a9a, #101010);
+											height: fit-content;
+											width: 60%;
+											min-width: 45rem;
 											padding: 3rem;
+											border-radius: 50px;
 										}
 
 										.modal-image {
-											width: auto;
-											height: 100%;
-										}
-
-										.modal-main {
-											display: grid;
-											grid-template-columns: repeat(
-												auto-fit,
-												minmax(15rem, 1fr)
-											);
-											grid-auto-flow: row dense;
-											width: 100%;
-											height: 100%;
-											justify-items: center;
-											align-content: center;
-										}
-
-										.left-column {
-											display: flex;
-											flex-direction: column;
-											align-items: center;
-											justify-content: center;
-											width: 25%;
-											height: 30rem;
-											min-width: 30rem;
-											padding: 1rem;
-											grid-column: span 2;
-											overflow-y: auto;
-										}
-
-										.speaker-video {
-											width: 100%;
+											width: 20rem;
 											height: auto;
 										}
 
-										.right-column {
-											padding: 1rem;
-											grid-column: span 4;
+										.modal-main {
+											display: flex;
+											flex-direction: row;
+											flex-wrap: wrap;
+											align-items: center;
+											justify-content: center;
+											width: 100%;
 											height: 100%;
+										}
+
+										.left-column {
+											width: 420px;
+											height: 300px;
+											display: flex;
+											justify-content: center;
+											align-items: center;
+										}
+
+										.speaker-video {
+											width: 400px;
+											height: 300px;
+										}
+
+										.right-column {
+											width: 600px;
 										}
 
 										.modal-name {
@@ -568,18 +623,30 @@
 									</style>
 
 									<div class="content">
-										<video class="bg-video" playsinline autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-											<source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
+										<video
+											class="bg-video"
+											playsinline
+											autoplay
+											loop
+											poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
+										>
+											<source
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
+												type="video/mp4"
+											/>
 										</video>
 										<div class="page-contents"></div>
 									</div>
 
 									<template id="card-template">
 										<div class="card">
-											<img class="card-border" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/speakers.gif">
+											<img
+												class="card-border"
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/speakers.gif"
+											/>
 											<div class="card-contents">
 												<div class="photo-box">
-													<img class="speaker-photo">
+													<img class="speaker-photo" />
 												</div>
 												<div class="speaker-details">
 													<div class="name"></div>
@@ -595,7 +662,11 @@
 									<template id="modal-template">
 										<div id="modal">
 											<div class="modal-content">
-												<img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png" class="close-modal" onclick="toggleModal(this)">
+												<img
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
+													class="close-modal"
+													onclick="toggleModal(this)"
+												/>
 												<div class="modal-main"></div>
 											</div>
 										</div>
@@ -610,7 +681,9 @@
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Heather.mp4",
 												bio:
-													"Heather Mills is an entrepreneur, philanthropist, activist, world recording holding sports star and TV personality. <br/> Heather has won many awards and much acclaim in particular for her charitable work clearing landmines across the world, leading the scientific development of prosthetics and leading the food tech development and expansion of the global plant- based food sector, through her multi award - winning company, Vbites. <br/><br/> Highlights of her extensive career to date include: <br/><br/> <ul><li> Starting and initially funding the largest landmine charity in the world - ‘Adopt A Minefield’ - helping raise funds to clear over 21 million sq.meters of mine-filled land and assistIng over 400, 000 amputees </li><br/> <li> Campaigning extensively for animal rights and effecting key law changes e.g.the law on banning the dog and cat fur trade in the European Union</li></ul>"
+													"Heather Mills is an entrepreneur, philanthropist, activist, world recording holding sports star and TV personality. <br/> Heather has won many awards and much acclaim in particular for her charitable work clearing landmines across the world, leading the scientific development of prosthetics and leading the food tech development and expansion of the global plant- based food sector, through her multi award - winning company, Vbites. <br/><br/> Highlights of her extensive career to date include: <br/><br/> <ul><li> Starting and initially funding the largest landmine charity in the world - ‘Adopt A Minefield’ - helping raise funds to clear over 21 million sq.meters of mine-filled land and assistIng over 400, 000 amputees </li><br/> <li> Campaigning extensively for animal rights and effecting key law changes e.g.the law on banning the dog and cat fur trade in the European Union</li></ul>",
+												socialMedia:
+													"https://www.facebook.com/heather.mills.official, https://www.instagram.com/heathermillsofficial/, https://www.heathermills.org/"
 											},
 											{
 												name: "Bruce Dickinson",
@@ -619,7 +692,9 @@
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/bruce.mp4",
 												bio:
-													"Bruce Dickinson is the lead singer of Iron Maiden, a commercial pilot, brewmaster, entrepreneur and creative business thinker. Bruce was a pilot and Marketing Director for Astraeus Airlines, a company which leased aircraft to other carriers. Bruce is also the man behind the company Caerdav which specialises in heavy maintenance of Airbus and Boeing commercial aircraft."
+													"Bruce Dickinson is the lead singer of Iron Maiden, a commercial pilot, brewmaster, entrepreneur and creative business thinker. Bruce was a pilot and Marketing Director for Astraeus Airlines, a company which leased aircraft to other carriers. Bruce is also the man behind the company Caerdav which specialises in heavy maintenance of Airbus and Boeing commercial aircraft.",
+												socialMedia:
+													"https://www.facebook.com/ironmaiden, https://www.instagram.com/brucedickinsonofficial/, https://www.instagram.com/ironmaiden/, https://screamforme.com/"
 											},
 											{
 												name: "Per Holknekt",
@@ -628,7 +703,9 @@
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per.mp4",
 												bio:
-													"This person will offer a life story you never heard before. His emotional and valuable stories from his rare and, to say the least, turbulent life journey makes even the toughest people shed some tears. He has gone from being homeless to being crazy rich and his words leave traces and motivate. It will be difficult not to throw yourself out of the chair and try what you have never tried before after hearing his TEDx talk. The keywords for the speech are: If I can do it, so can you, and therefore so can anyone."
+													"This person will offer a life story you never heard before. His emotional and valuable stories from his rare and, to say the least, turbulent life journey makes even the toughest people shed some tears. He has gone from being homeless to being crazy rich and his words leave traces and motivate. It will be difficult not to throw yourself out of the chair and try what you have never tried before after hearing his TEDx talk. The keywords for the speech are: If I can do it, so can you, and therefore so can anyone.",
+												socialMedia:
+													"https://www.facebook.com/per.holknekt,https://www.instagram.com/extraknekt//,  https://sv.wikipedia.org/wiki/Per_Holknekt"
 											},
 											{
 												name: "Wim Hof",
@@ -637,7 +714,9 @@
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim.mp4",
 												bio:
-													"Dutch extreme athlete Wim Hof got his nickname “The Iceman” by breaking a number of rec-ords related to cold exposure including: climbing Mount Kilimanjaro in shorts, running a half marathon above the Arctic Circle barefoot, and standing in a container while covered with ice cubes for more than 112 minutes. Over the years he has claimed 27 world records. Using “cold, hard nature” as his teacher, his extensive training has enabled him to learn to control his breathing, heart rate, and blood circulation and to withstand extreme temperatures. Armed with his motto “what I am capable of, everybody can learn”, Wim Hof is convinced that everyone can tap into their inner potential without having to invest the same decades worth of study, travel and daring. Wim has made it his mission to share what he’s learned with the rest of the world."
+													"Dutch extreme athlete Wim Hof got his nickname “The Iceman” by breaking a number of rec-ords related to cold exposure including: climbing Mount Kilimanjaro in shorts, running a half marathon above the Arctic Circle barefoot, and standing in a container while covered with ice cubes for more than 112 minutes. Over the years he has claimed 27 world records. Using “cold, hard nature” as his teacher, his extensive training has enabled him to learn to control his breathing, heart rate, and blood circulation and to withstand extreme temperatures. Armed with his motto “what I am capable of, everybody can learn”, Wim Hof is convinced that everyone can tap into their inner potential without having to invest the same decades worth of study, travel and daring. Wim has made it his mission to share what he’s learned with the rest of the world.",
+												socialMedia:
+													"https://www.facebook.com/icemanwimhof, https://www.instagram.com/iceman_hof/, https://www.wimhofmethod.com/"
 											},
 											{
 												name: "Lovette Jallow",
@@ -646,7 +725,9 @@
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette jallow.mp4",
 												bio:
-													"This woman is a rewarded author, activist and lecturer. Through her social media channels she is spreading knowledge about human rights and equality, using social media as a platform for her activism. Through her entrepreneurship and activism Lovette Jallow is in the front line of challenging racism in Sweden. Lovette Jallow receives the Raoul Wallenberg prize 2019."
+													"This woman is a rewarded author, activist and lecturer. Through her social media channels she is spreading knowledge about human rights and equality, using social media as a platform for her activism. Through her entrepreneurship and activism Lovette Jallow is in the front line of challenging racism in Sweden. Lovette Jallow receives the Raoul Wallenberg prize 2019.",
+												socialMedia:
+													"https://www.facebook.com/lovettejallow, https://www.instagram.com/lovettejallow/, https://lovettejallow.com/"
 											},
 											{
 												name: "Robert Swan",
@@ -654,7 +735,9 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Robert Swan.png",
 												video: "",
 												bio:
-													"Robert Swan is the first person in history to have walked to both the North and South Poles. He is an explorer, a leader in energy innovation, and founder of the 2041 Foundation, a non-profit dedicated to preserve Antarctica as a natural reserve, land for science and peace. During these two historic expeditions, Robert experienced firsthand the effects of climate change and environmental degradation. These two hard-hitting and unexpected incidents galvanized him to launch the mission, ‘2041’. Robert received the Polar Medal and the title of the Officer of the British Empire (O.B.E) from Her Majesty, Queen Elizabeth II. His contribution to education, energy innovation and environmental action have been recognized by the United Nations through his appointment as UNEP Goodwill Ambassador for Youth, Special Envoy to the Director General of UNESCO and as a recipient of the UN Humanitarian Innovation Award. He is the co-author of four books and was a keynote speaker at all of the UN World Summits for Sustainable Development, the World Economic Forum and the Corporate Eco Forum."
+													"Robert Swan is the first person in history to have walked to both the North and South Poles. He is an explorer, a leader in energy innovation, and founder of the 2041 Foundation, a non-profit dedicated to preserve Antarctica as a natural reserve, land for science and peace. During these two historic expeditions, Robert experienced firsthand the effects of climate change and environmental degradation. These two hard-hitting and unexpected incidents galvanized him to launch the mission, ‘2041’. Robert received the Polar Medal and the title of the Officer of the British Empire (O.B.E) from Her Majesty, Queen Elizabeth II. His contribution to education, energy innovation and environmental action have been recognized by the United Nations through his appointment as UNEP Goodwill Ambassador for Youth, Special Envoy to the Director General of UNESCO and as a recipient of the UN Humanitarian Innovation Award. He is the co-author of four books and was a keynote speaker at all of the UN World Summits for Sustainable Development, the World Economic Forum and the Corporate Eco Forum.",
+												socialMedia:
+													"https://www.facebook.com/Robert-Swan-133022763402930, https://www.facebook.com/2041Foundation,  https://www.instagram.com/robertcswan/, https://www.instagram.com/2041foundation/,https://2041foundation.org/robert-swan/"
 											},
 											{
 												name: 'Amelia Michelle "Amy" Purdy',
@@ -662,7 +745,9 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Amy Purdy.png",
 												video: "",
 												bio:
-													'Amelia Michelle "Amy" Purdy is an American actress, model, para-snowboarder, motivational speaker, clothing designer and author. Purdy is a 2014 Paralympic bronze medalist, 2018 Paralympics silver medalist, and co-founder of Adaptive Action Sports. At age 19, she contracted Neisseria meningitidis, a form of bacterial meningitis. The disease affected her circulatory system when the infection led to septic shock. Both of her legs had to be amputated below the knee. Purdy began snowboarding seven months after she received her prosthetic legs. About a year after her legs were amputated, she finished third in a snowboarding competition at Mammoth Mountain. Subsequently, she received a grant from the Challenged Athletes Foundation (CAF), a non-profit organization. Through this grant, she was able to compete in several snowboarding competitions in the U.S.'
+													'Amelia Michelle "Amy" Purdy is an American actress, model, para-snowboarder, motivational speaker, clothing designer and author. Purdy is a 2014 Paralympic bronze medalist, 2018 Paralympics silver medalist, and co-founder of Adaptive Action Sports. At age 19, she contracted Neisseria meningitidis, a form of bacterial meningitis. The disease affected her circulatory system when the infection led to septic shock. Both of her legs had to be amputated below the knee. Purdy began snowboarding seven months after she received her prosthetic legs. About a year after her legs were amputated, she finished third in a snowboarding competition at Mammoth Mountain. Subsequently, she received a grant from the Challenged Athletes Foundation (CAF), a non-profit organization. Through this grant, she was able to compete in several snowboarding competitions in the U.S.',
+												socialMedia:
+													"https://www.facebook.com/AmyPurdyGurl, https://www.instagram.com/amypurdygurl/, https://amypurdy.com/about/"
 											},
 											{
 												name: "Andreas Ljungberg",
@@ -670,7 +755,9 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Andreas.png",
 												video: "",
 												bio:
-													"Headline for the speech: Building for moments you never forget.                                                                                                                                                                                                                                          With a career in commercial real estate and city development Andreas explores the role of cities and communities in the time after the pandemic. How can commercial property development achieve moments in life that also defines a city."
+													"Headline for the speech: Building for moments you never forget.                                                                                                                                                                                                                                          With a career in commercial real estate and city development Andreas explores the role of cities and communities in the time after the pandemic. How can commercial property development achieve moments in life that also defines a city  .",
+												socialMedia:
+													"https://www.instagram.com/atriumljungberg/"
 											}
 										];
 
@@ -709,9 +796,20 @@
 												);
 												var nameElement = clone.querySelector(".name");
 
-												if (speaker.summary) {
+												if (speaker.socialMedia) {
+													var parsedUrls = speaker.socialMedia.replace(
+														/\s/g,
+														""
+													);
+													var urlArray = parsedUrls.split(",");
+													console.log(urlArray);
 													var summaryElement = clone.querySelector(".summary");
-													summaryElement.innerHTML = speaker.summary;
+													urlArray.forEach(url => {
+														var link = document.createElement("a");
+														link.href = url;
+														link.innerHTML = url;
+														summaryElement.appendChild(link);
+													});
 												}
 
 												card.setAttribute("id", index);
@@ -768,12 +866,12 @@
 												leftColumn.appendChild(photo);
 											}
 
-											if (speaker.summary) {
-												var summary = document.createElement("div");
-												summary.setAttribute("class", "modal-summary");
-												summary.innerHTML = speaker.summary;
-												leftColumn.appendChild(summary);
-											}
+											// if (speaker.summary) {
+											// 	var summary = document.createElement("div");
+											// 	summary.setAttribute("class", "modal-summary");
+											// 	summary.innerHTML = speaker.summary;
+											// 	leftColumn.appendChild(summary);
+											// }
 
 											mainContent.appendChild(leftColumn);
 
@@ -802,170 +900,177 @@
 									<!-- Chatwee -->
 									<chatwee>
 										<script>
-											var fetchGlobalSnippet = snippetId => {
-												// Set header
-												const headers = {
-													Authorization:
-														"Bearer " + sessionStorage.getItem("token"),
-													"X-InfernoCore-Domain":
-														sessionStorage.getItem("domain") ??
-														window.location.hostname
-												};
+											// var fetchGlobalSnippet = snippetId => {
+											// 	// Set header
+											// 	const headers = {
+											// 		Authorization:
+											// 			"Bearer " + sessionStorage.getItem("token"),
+											// 		"X-InfernoCore-Domain":
+											// 			sessionStorage.getItem("domain") ??
+											// 			window.location.hostname
+											// 	};
 
-												// add a header property for users accessing with SA credentials
-												if (window.sessionStorage.overrideId) {
-													headers["X-InfernoCore-Domain"] =
-														"jolokia.inferno.jolokia.com";
-													headers["X-Client-Override"] = sessionStorage.getItem(
-														"overrideId"
-													);
-												}
+											// 	// add a header property for users accessing with SA credentials
+											// 	if (window.sessionStorage.overrideId) {
+											// 		headers["X-InfernoCore-Domain"] =
+											// 			"jolokia.inferno.jolokia.com";
+											// 		headers["X-Client-Override"] = sessionStorage.getItem(
+											// 			"overrideId"
+											// 		);
+											// 	}
 
-												let globalSnippet = null;
+											// 	let globalSnippet = null;
 
-												$.ajax({
-													url:
-														"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
-														snippetId,
-													type: "GET",
-													async: false,
-													accept: "application/json",
-													contentType: "application/json",
-													headers: headers,
-													success: function (res, status, xhr) {
-														const parser = new DOMParser();
-														globalSnippet = parser.parseFromString(
-															res,
-															"text/html"
-														);
-													},
-													error: function (err) {
-														console.error("Error Fetching Global Snippet", err);
-													}
-												});
+											// 	$.ajax({
+											// 		url:
+											// 			"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+											// 			snippetId,
+											// 		type: "GET",
+											// 		async: false,
+											// 		accept: "application/json",
+											// 		contentType: "application/json",
+											// 		headers: headers,
+											// 		success: function (res, status, xhr) {
+											// 			const parser = new DOMParser();
+											// 			globalSnippet = parser.parseFromString(
+											// 				res,
+											// 				"text/html"
+											// 			);
+											// 		},
+											// 		error: function (err) {
+											// 			console.error("Error Fetching Global Snippet", err);
+											// 		}
+											// 	});
 
-												return globalSnippet;
-											};
+											// 	return globalSnippet;
+											// };
 
-											if (!window.chatManager) {
-												var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
-												var chatweeSnippet = fetchGlobalSnippet(snippetId);
-												var username = chatweeSnippet.getElementById(
-													"inferno-username"
-												);
-												var script = chatweeSnippet.getElementById(
-													"chatweeLogic"
-												);
-												//checks if the elements have already been inserted into the DOM to avoid duplicate elements
-												if (!landingPageEl.getElementById("inferno-username")) {
-													landingPageEl.appendChild(username);
-												}
-												// eval the script so it will be executed here
-												eval(script.innerHTML);
-											}
+											// if (!window.chatManager) {
+											// 	var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+											// 	var chatweeSnippet = fetchGlobalSnippet(snippetId);
+											// 	var username = chatweeSnippet.getElementById(
+											// 		"inferno-username"
+											// 	);
+											// 	var script = chatweeSnippet.getElementById(
+											// 		"chatweeLogic"
+											// 	);
+											// 	//checks if the elements have already been inserted into the DOM to avoid duplicate elements
+											// 	if (!landingPageEl.getElementById("inferno-username")) {
+											// 		landingPageEl.appendChild(username);
+											// 	}
+											// 	// eval the script so it will be executed here
+											// 	eval(script.innerHTML);
+											// }
 										</script>
 									</chatwee>
 								</inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
 
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
 
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
 
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
 
-<script>
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
 
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
 
-  }
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
 
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
 
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
-
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
-
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
-
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
-
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -977,30 +1082,27 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->
