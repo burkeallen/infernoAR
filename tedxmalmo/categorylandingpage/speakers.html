@@ -293,28 +293,35 @@
 								<!-- SNIPPET CONTENT START -->
 								<inferno-snippet-content
 									id="62c198fc-a4d2-4847-be45-6c57ade36de5"
-                >
-                
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+								>
+									<!--  Load custom fonts -->
+									<script type="text/javascript">
+										function loadFont(name, url) {
+											if (document.fonts.check("1em " + name)) {
+												return;
+											}
+											const fontFace = new FontFace(name, "url(" + url + ")");
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
-                </script>
+											fontFace
+												.load()
+												.then(function (loadedFont) {
+													document.fonts.add(loadedFont);
+													console.log("Loaded custom font ", name);
+												})
+												.catch(function (error) {
+													// error occurred
+													console.log("Error loading ", name);
+												});
+										}
+										loadFont(
+											"Montserrat",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf"
+										);
+										loadFont(
+											"MontserratBold",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf"
+										);
+									</script>
 									<style>
 										@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
 
@@ -470,46 +477,56 @@
 											position: relative;
 											background: linear-gradient(#052a9a, #101010);
 											border-radius: 50px;
-											width: 60%;
+											width: 55%;
 											height: 70%;
-											margin-left: 15%;
-											margin-top: 15rem;
+											min-width: 50rem;
+											margin-left: 20%;
+											display: flex;
+											flex-wrap: wrap;
+											align-items: center;
+											justify-content: center;
 											padding: 3rem;
 										}
 
 										.modal-image {
-											width: 80%;
-											height: auto;
+											width: auto;
+											height: 100%;
 										}
 
 										.modal-main {
-											display: flex;
-											justify-content: space-evenly;
+											display: grid;
+											grid-template-columns: repeat(
+												auto-fit,
+												minmax(15rem, 1fr)
+											);
+											grid-auto-flow: row dense;
 											width: 100%;
 											height: 100%;
+											justify-items: center;
+											align-content: center;
 										}
 
 										.left-column {
-											margin-top: 2rem;
 											display: flex;
 											flex-direction: column;
 											align-items: center;
+											justify-content: center;
 											width: 25%;
-											height: 100%;
+											height: 30rem;
+											min-width: 30rem;
+											padding: 1rem;
+											grid-column: span 2;
+											overflow-y: auto;
 										}
 
-										.modal-summary {
-											margin-top: 2rem;
-											background-color: #002540;
+										.speaker-video {
 											width: 100%;
-											padding: 2rem;
-											border-radius: 10px;
-											font-size: 1.6rem;
-											font-weight: bold;
+											height: auto;
 										}
 
 										.right-column {
-											width: 60%;
+											padding: 1rem;
+											grid-column: span 4;
 											height: 100%;
 										}
 
@@ -520,12 +537,12 @@
 
 										.bio {
 											font-size: 2rem;
-											overflow-y: scroll;
+											overflow-y: auto;
 											margin-top: 2rem;
 											padding-right: 2rem;
+											height: 80%;
 											scrollbar-width: thin;
 											scrollbar-color: #8b8787;
-											height: 80%;
 											font-weight: light;
 										}
 
@@ -550,15 +567,21 @@
 										}
 
 										@media screen and (max-width: 1780px) {
-											.speaker-details {
-												width: 70%;
-											}
 											.name {
 												font-size: 2.2rem;
 											}
 
 											.summary {
 												font-size: 1.3rem;
+											}
+											.bio {
+												max-height: 20rem;
+											}
+										}
+
+										@media screen and (max-width: 760px) {
+											.modal-content {
+												margin-left: 0;
 											}
 										}
 
@@ -665,7 +688,8 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png",
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/bruce.mp4",
-												bio: ""
+												bio:
+													"Bruce Dickinson is the lead singer of Iron Maiden, a commercial pilot, brewmaster, entrepreneur and creative business thinker. Bruce was a pilot and Marketing Director for Astraeus Airlines, a company which leased aircraft to other carriers. Bruce is also the man behind the company Caerdav which specialises in heavy maintenance of Airbus and Boeing commercial aircraft."
 											},
 											{
 												name: "Per Holknekt",
@@ -673,7 +697,8 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per.mp4",
-												bio: ""
+												bio:
+													"This person will offer a life story you never heard before. His emotional and valuable stories from his rare and, to say the least, turbulent life journey makes even the toughest people shed some tears. He has gone from being homeless to being crazy rich and his words leave traces and motivate. It will be difficult not to throw yourself out of the chair and try what you have never tried before after hearing his TEDx talk. The keywords for the speech are: If I can do it, so can you, and therefore so can anyone."
 											},
 											{
 												name: "Wim Hof",
@@ -681,7 +706,8 @@
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png",
 												video:
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim.mp4",
-												bio: ""
+												bio:
+													"Dutch extreme athlete Wim Hof got his nickname “The Iceman” by breaking a number of rec-ords related to cold exposure including: climbing Mount Kilimanjaro in shorts, running a half marathon above the Arctic Circle barefoot, and standing in a container while covered with ice cubes for more than 112 minutes. Over the years he has claimed 27 world records. Using “cold, hard nature” as his teacher, his extensive training has enabled him to learn to control his breathing, heart rate, and blood circulation and to withstand extreme temperatures. Armed with his motto “what I am capable of, everybody can learn”, Wim Hof is convinced that everyone can tap into their inner potential without having to invest the same decades worth of study, travel and daring. Wim has made it his mission to share what he’s learned with the rest of the world."
 											},
 											{
 												name: "Lovette Jallow",
