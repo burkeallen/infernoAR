@@ -255,149 +255,231 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="d573ae99-565b-42c6-afa7-ac5612b3cacc">
+
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+
+                </script>
+
                 <style>
-                    .content {
-                        position: relative;
-                        margin: -20px;
-                        min-height: calc(100vh - 114px);
-                        z-index: 1;
-                        font-family: 'Montserrat', sans-serif;
-                        color: white;
-                        padding: 2rem;
-                        overflow: hidden
-                    }
+                  .content {
+                    position: relative;
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    color: white;
+                    padding: 2rem;
+                    overflow: hidden
+                  }
 
-                    .page-contents {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        width: 100%;
-                        min-height: calc(100vh - 114px);
-                        padding: 20px;
-                        overflow-y: scroll;
-                    }
+                  .page-contents {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    min-height: calc(100vh - 114px);
+                    padding: 20px;
+                    overflow-y: scroll;
+                  }
 
-                    .page-contents iframe {
-                        border: 4px solid royalblue;
-                        background: transparent;
-                        border-radius: 1em;
-                        margin: 2em;
-                        scrollbar-width: thin;
-                        scrollbar-color: #8B8787;
-                    }
+                  .page-contents iframe {
+                    border: 4px solid #A0A0A0;
+                    background: transparent;
+                    border-radius: 1em;
+                    margin: 2em;
+                    width: 96%;
+                    height: calc(100vh - 260px);
+                    min-height: 600px;
+                  }
 
-                    #infoPage {
-                        width: 80%;
-                        height: 400px;
-                        align-self: center;
-                    }
+                  .bg-video {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: auto;
+                    min-width: 100%;
+                    height: auto;
+                    min-height: calc(100vh - 114px);
+                  }
 
-                    iframe::-webkit-scrollbar {
-                        width: 12px;
-                    }
+                  .tabs {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                  }
 
-                    iframe::-webkit-scrollbar-thumb {
-                        background-color: #8B8787;
-                        border-radius: 20px;
-                    }
+                  .tab {
+                    position: relative;
+                    width: 357px;
+                    height: 70px;
+                    margin: 0 20px;
+                  }
 
-                    .bg-video {
-                        position: absolute;
-                        top: 0;
-                        left: 0%;
-                        width: auto;
-                        min-width: 100%;
-                        height: auto;
-                        min-height: calc(100vh - 114px);
-                    }
+                  .tab.active {
+                    filter: drop-shadow(15px 15px 12px #025dfd);
+                  }
 
-                    .header {
-                        position: relative;
-                        background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/agenda/agenda_time_bg.png);
-                        background-repeat: no-repeat;
-                        width: 400px;
-                        height: 68px;
-                        background-size: contain;
-                        color: white;
-                        background-position: top left;
-                        font-size: 2em;
-                    }
+                  .tab:hover {
+                    transform: scale(1.1) translate(5px, 5px);
+                    filter: drop-shadow(5px 5px 8px #fff);
+                    cursor: pointer;
+                  }
 
-                    .header span {
-                        position: absolute;
-                        left: 100px;
-                        top: 14px;
-                    }
+                  .tab-image {
+                    position: relative;
+                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/tab.png);
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: top left;
+                    width: 357px;
+                    height: 70px;
+                  }
 
-                    #surveyAndFAQ {
-                        display: flex;
-                        flex-direction: row;
-                        width: 100%;
-                    }
-
-                    #faq {
-                        width: 100%;
-                        text-align: center;
-                        margin: 96px auto;
-                    }
-
-                    #faq img:hover {
-                        -webkit-filter: drop-shadow(0px 2px 12px #fff);
-                        filter:         drop-shadow(0px 2px 12px #fff);
-                        cursor: pointer;
-                    }
-
-                    #slido {
-                        margin-bottom: 40px;
-                    }
+                  .tab-text {
+                    text-align: center;
+                    width: 100%;
+                    color: white;
+                    font-size: 2em;
+                    line-height: 2.5em;
+                  }
                 </style>
 
+                <script>
+                  function toggleTab(tab) {
+                    const tabs = landingPageEl.querySelectorAll('.tab');
+                    const panels = landingPageEl.querySelectorAll('.content-panel');
+                    const panelID = 'panel-' + tab.id;
+                    const activePanel = landingPageEl.querySelector('#' + panelID);
+                    [...tabs].forEach(item => {
+                      item.classList.remove('active');
+                    });
+                    [...panels].forEach(item => {
+                      item.classList.add('hidden');
+                    });
+                    tab.classList.toggle('active');
+                    activePanel.classList.toggle('hidden');
+                  }
+                </script>
 
                 <div id="content" class="content">
 
-                  <video class="bg-video" autoplay loop
-                         poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-                    <source
-                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
-                        type="video/mp4">
+                  <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
+                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                   </video>
 
                   <div class="page-contents">
 
-                    <div class="header"><span>About</span></div>
-                    <iframe id="infoPage"
-                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/AboutTEDxMalm.html"
-                            width="500"
-                            height="250">
-                    </iframe>
+                    <div class="tabs">
+                      <div id="about" class="tab active" onclick="toggleTab(this)">
+                        <div class="tab-image">
+                          <div class="tab-text">About</div>
+                        </div>
+                      </div>
+                      <div id="questions" class="tab" onclick="toggleTab(this)">
+                        <div class="tab-image">
+                          <div class="tab-text">FAQ</div>
+                        </div>
+                      </div>
+                      <div id="feedback" class="tab" onclick="toggleTab(this)">
+                        <div class="tab-image">
+                          <div class="tab-text">Visitor Feedback</div>
+                        </div>
+                      </div>
+                    </div>
 
-                    <div id="surveyAndFAQ">
-                      <div id="survey">
-                        <div class="header"><span>Survey/Feedback</span></div>
-                        <iframe id="slido"
-                                src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2"
-                                width="450"
-                                height="500"></iframe>
+                    <div class="tab-content">
+                      <div id="panel-about" class="content-panel">
+                        <iframe id="infoPage" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/AboutTEDxMalm.html" width="500" height="600">
+                        </iframe>
                       </div>
-                      <div id="faq">
-                          <img id="FAQ-Clicked"
-                               onclick="toggleFAQ()"
-                              src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/faq.png">
+
+                      <div id="panel-questions" class="content-panel hidden">
+                        <iframe id="faq" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/faq.pdf" width="500" height="600">
+                        </iframe>
                       </div>
+
+                      <div id="panel-feedback" class="content-panel hidden">
+                        <iframe id="slido" src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2" width="500" height="600">
+                        </iframe>
+                      </div>
+
                     </div>
 
                   </div>
                 </div>
 
-                <script>
-                  function toggleFAQ() {
-                    alert('pdf goes here');
-                  }
-                </script>
+                <chatwee>
+                  <script>
+                    var fetchGlobalSnippet = (snippetId) => {
+
+                      // Set header
+                      const headers = {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                      };
+
+                      // add a header property for users accessing with SA credentials
+                      if (window.sessionStorage.overrideId) {
+                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                      }
+
+                      let globalSnippet = null;
+
+                      $.ajax({
+                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
+                        type: 'GET',
+                        async: false,
+                        accept: 'application/json',
+                        contentType: 'application/json',
+                        headers: headers,
+                        success: function (res, status, xhr) {
+                          const parser = new DOMParser();
+                          globalSnippet = parser.parseFromString(res, "text/html");
+                        },
+                        error: function (err) {
+                          console.error('Error Fetching Global Snippet', err);
+                        }
+                      });
+
+                      return globalSnippet;
+                    };
+
+                    if (!window.chatManager) {
+                      console.log('initiializing Chatwee');
+                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
+                      var username = chatweeSnippet.getElementById("inferno-username");
+                      var script = chatweeSnippet.getElementById("chatweeLogic");
+                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                      if (!landingPageEl.getElementById("inferno-username")) {
+                        landingPageEl.appendChild(username);
+                      }
+                      // eval the script so it will be executed here
+                      eval(script.innerHTML);
+                    }
+                  </script>
+                </chatwee>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -245,6 +245,27 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="c346a1a0-57cc-44ec-90f4-6550059c36cb">
 
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                </script>
 
                 <style>
                   .content {
