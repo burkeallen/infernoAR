@@ -168,11 +168,7 @@
     function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
+        window.localTemplateMenuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -295,13 +291,6 @@
                     background-color: rgba(0, 0, 0, .5);
                   }
 
-                  .disclaimer {
-											font-size: 1.6rem;
-											max-width: 70rem;
-											padding: 1rem 5rem;
-											margin-bottom: 2rem;
-										}
-
                   .content h1 {
                     font-size: 3.2rem;
                     font-weight: bold;
@@ -397,18 +386,18 @@
                     <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
                     <!-- set display: none when in production -->
                     <h1>{{nextEvent.Name}}</h1>
-                    <div class="disclaimer">
-												WARNING Dear guests, Please be aware that recording any
-												of the TED talks is strictly impermissible. However you
-												are welcome to screenshot, record, post and interact
-												with the other elements of the event. Thank you and
-												enjoy!
-											</div>
-                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}" >
+                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
                       <div class="redirect-button">Access the VIP Session</div>
                     </a>
                     {% endif %}
                   </div>
+        
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          
         </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->

@@ -88,6 +88,7 @@
   <!--  Load Liquid JSON From Local file -->
   <script>
     function loadJSON(file, callback) {
+
       const xobj = new XMLHttpRequest()
       xobj.overrideMimeType('application/json')
       xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
@@ -164,14 +165,10 @@
 
   </style>
   <script>
-  function buildLocalMenu() {
+    function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
+        window.localTemplateMenuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -219,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -699,7 +696,7 @@
                       </div>
                       <div class="video-card-name">{{video_name}}</div>
                     </div>
-                  </template>
+                  
                     {% endif %} {% endif %} {% endfor %}
                   </div>
 
@@ -964,7 +961,7 @@
 
                 </script>
 
-                <chatWee>
+                <chatwee>
                   <script>
                     var fetchGlobalSnippet = (snippetId) => {
 
@@ -1014,7 +1011,7 @@
                       eval(script.innerHTML);
                     }
                   </script>
-                </chatWee>
+                </chatwee>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

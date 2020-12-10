@@ -239,234 +239,148 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="d573ae99-565b-42c6-afa7-ac5612b3cacc">
+              <inferno-snippet-content id="254d76fa-d27d-4ce3-b650-8bf2b8124fcd"><style>img:after {
+    content: none;
+}
+* {
+    box-sizing: border-box;
+}
+.directory-hide {
+    display: none;
+}
+.inferno-generated-booth-company-directory {
+    width: calc(100% + 40px);
+    margin: -20px;
+    display: block;
+    background: #f3f1f0;
+    padding: 0;
+    height: 100%;
+}
+.inferno-generated-booth-company-directory .inferno-generated-booth-company-directory-main {
+    padding: 5vmin;
+    min-height: calc(100vh - 10vmin);
+}
+.inferno-generated-booth-company-directory h1 {
+    font-size: 3vmin;
+    line-height: 3.5vmin;
+    color: #111;
+    margin: 0 0 4vmin;
+    padding: 0;
+    font-weight: 700;
+}
+.inferno-generated-booth-company-directory h5 {
+    font-size: 2.2vmin;
+    line-height: 2.5vmin;
+    color: #999;
+    text-align: center;
+    margin: 0 0 4vmin;
+    padding: 0;
+}
+.inferno-generated-booth-company-directory input {
+    margin: 0;
+    padding: 1vmin;
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.8vmin;
+    line-height: 2vmin;
+    color: #333;
+}
+.inferno-generated-booth-company-directory ul {
+    overflow: hidden;
+    margin: 4vmin auto 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.inferno-generated-booth-company-directory ul li {
+    width: 24%;
+    list-style: none;
+    margin: 0 1% 3vmin 0;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 2px 4px 7px rgba(1, 1, 1, 0.1);
+    padding: 0;
+    text-align: center;
+    transition: all 0.6s ease;
+}
+.inferno-generated-booth-company-directory ul li:hover {
+    cursor: pointer;
+    opacity: 0.8;
+    -ms-transform: translateY(0.5vmin);
+    -webkit-transform: translateY(0.5vmin);
+    transform: translateY(0.5vmin);
+}
+.inferno-generated-booth-company-directory ul li a {
+    text-decoration: none;
+    display: block;
+    padding: 1vmin;
+}
+.inferno-generated-booth-company-directory ul li h2 {
+    color: #000;
+    font-size: 2vmin;
+    line-height: 2.5vmin;
+    margin: 0;
+    padding: 0;
+}
+.inferno-generated-booth-company-directory ul li img {
+    display: block;
+    margin: 0 auto 0.5vmin;
+    height: 10vmin;
+    max-width: 100%;
+    object-fit: contain;
+}
+@media (max-width: 1200px) {
+    .inferno-generated-booth-company-directory ul li {
+        width: 48%;
+    }
+}
+</style><script type="text/javascript">var landingPageEl = landingPageEl || document;
+var _timer;
 
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+function searchCompanies(el) {
+    if (_timer) {
+        clearTimeout(_timer);
+        _timer = null;
+    }
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
+    if ($(el).val().length === 0) {
+        $(landingPageEl).find(".directory-hide").removeClass("directory-hide");
+        $(landingPageEl).find(".inferno-generated-booth-company-directory").find(".no-results").addClass("hide");
+    } 
+    else {
+        var search = $(el).val().toLowerCase();
+        _timer = setTimeout(function () {
+            doSearch(search);
+        }, 250);
+    }
+}
 
-                  }
-
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
-
-                </script>
-
-                <style>
-                  .content {
-                    position: relative;
-                    margin: -20px;
-                    min-height: calc(100vh - 114px);
-                    z-index: 1;
-                    font-family: 'Montserrat', sans-serif;
-                    color: white;
-                    padding: 2rem;
-                    overflow: hidden
-                  }
-
-                  .page-contents {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    min-height: calc(100vh - 114px);
-                    padding: 20px;
-                    overflow-y: scroll;
-                  }
-
-                  .page-contents iframe {
-                    border: 4px solid #A0A0A0;
-                    background: transparent;
-                    border-radius: 1em;
-                    margin: 2em;
-                    width: 96%;
-                    height: calc(100vh - 260px);
-                    min-height: 600px;
-                  }
-
-                  .bg-video {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: auto;
-                    min-width: 100%;
-                    height: auto;
-                    min-height: calc(100vh - 114px);
-                  }
-
-                  .tabs {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: space-around;
-                  }
-
-                  .tab {
-                    position: relative;
-                    width: 357px;
-                    height: 70px;
-                    margin: 0 20px;
-                  }
-
-                  .tab.active {
-                    filter: drop-shadow(15px 15px 12px #025dfd);
-                  }
-
-                  .tab:hover {
-                    transform: scale(1.1) translate(5px, 5px);
-                    filter: drop-shadow(5px 5px 8px #fff);
-                    cursor: pointer;
-                  }
-
-                  .tab-image {
-                    position: relative;
-                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/tab.png);
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: top left;
-                    width: 357px;
-                    height: 70px;
-                  }
-
-                  .tab-text {
-                    text-align: center;
-                    width: 100%;
-                    color: white;
-                    font-size: 2em;
-                    line-height: 2.5em;
-                  }
-                </style>
-
-                <script>
-                  function toggleTab(tab) {
-                    const tabs = landingPageEl.querySelectorAll('.tab');
-                    const panels = landingPageEl.querySelectorAll('.content-panel');
-                    const panelID = 'panel-' + tab.id;
-                    const activePanel = landingPageEl.querySelector('#' + panelID);
-                    [...tabs].forEach(item => {
-                      item.classList.remove('active');
-                    });
-                    [...panels].forEach(item => {
-                      item.classList.add('hidden');
-                    });
-                    tab.classList.toggle('active');
-                    activePanel.classList.toggle('hidden');
-                  }
-                </script>
-
-                <div id="content" class="content">
-
-                  <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
-                  </video>
-
-                  <div class="page-contents">
-
-                    <div class="tabs">
-                      <div id="about" class="tab active" onclick="toggleTab(this)">
-                        <div class="tab-image">
-                          <div class="tab-text">About</div>
-                        </div>
-                      </div>
-                      <div id="questions" class="tab" onclick="toggleTab(this)">
-                        <div class="tab-image">
-                          <div class="tab-text">FAQ</div>
-                        </div>
-                      </div>
-                      <div id="feedback" class="tab" onclick="toggleTab(this)">
-                        <div class="tab-image">
-                          <div class="tab-text">Visitor Feedback</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="tab-content">
-                      <div id="panel-about" class="content-panel">
-                        <iframe id="infoPage" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/AboutTEDxMalm.html" width="500" height="600">
-                        </iframe>
-                      </div>
-
-                      <div id="panel-questions" class="content-panel hidden">
-                        <iframe id="faq" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/faq.pdf" width="500" height="600">
-                        </iframe>
-                      </div>
-
-                      <div id="panel-feedback" class="content-panel hidden">
-                        <iframe id="slido" src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2" width="500" height="600">
-                        </iframe>
-                      </div>
-
-                    </div>
-
-                  </div>
-                </div>
-
-                <chatwee>
-                  <script>
-                    var fetchGlobalSnippet = (snippetId) => {
-
-                      // Set header
-                      const headers = {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                      };
-
-                      // add a header property for users accessing with SA credentials
-                      if (window.sessionStorage.overrideId) {
-                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                      }
-
-                      let globalSnippet = null;
-
-                      $.ajax({
-                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
-                        type: 'GET',
-                        async: false,
-                        accept: 'application/json',
-                        contentType: 'application/json',
-                        headers: headers,
-                        success: function (res, status, xhr) {
-                          const parser = new DOMParser();
-                          globalSnippet = parser.parseFromString(res, "text/html");
-                        },
-                        error: function (err) {
-                          console.error('Error Fetching Global Snippet', err);
-                        }
-                      });
-
-                      return globalSnippet;
-                    };
-
-                    if (!window.chatManager) {
-                      console.log('initiializing Chatwee');
-                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
-                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
-                      var username = chatweeSnippet.getElementById("inferno-username");
-                      var script = chatweeSnippet.getElementById("chatweeLogic");
-                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                      if (!landingPageEl.getElementById("inferno-username")) {
-                        landingPageEl.appendChild(username);
-                      }
-                      // eval the script so it will be executed here
-                      eval(script.innerHTML);
-                    }
-                  </script>
-                </chatwee>
-
-              </inferno-snippet-content>
+function doSearch(search) {
+    var els = $(landingPageEl).find(".inferno-generated-booth-company-directory").find("ul li");
+    $.each(els, function (key, gridEl) {
+        var data = $(gridEl).data("companyName");
+        if (data.indexOf(search) < 0) {
+            $(gridEl).addClass("directory-hide");
+        } else {
+            $(gridEl).removeClass("directory-hide");
+        }
+    });
+    var noResults = els.length === $(landingPageEl).find(".inferno-generated-booth-company-directory").find("ul li.directory-hide").length;
+    if (noResults) {
+        $(landingPageEl).find(".inferno-generated-booth-company-directory").find(".no-results").removeClass("hide");
+    } else {
+        $(landingPageEl).find(".inferno-generated-booth-company-directory").find(".no-results").addClass("hide");
+    }
+}</script><div class="inferno-generated-booth-company-directory">
+  <div class="inferno-generated-booth-company-directory-main">
+      <h1>Company Directory</h1>
+      <input type="text" onkeyup="searchCompanies(this)" placeholder="Search...">
+      <ul><li id="companyDirectoryClick_ARILDLINKS" data-company-name="arild links"><a href="/videos/4b2edffd-9700-4b4e-780d-08d89aebbecc/landing/880e0c8c-7e28-49be-a998-750cb53198a1"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ARILDLINKS_1607371607202/inferno-booth-udf-company-logo.jpg" alt="ARILDLINKS"><h2>ARILD LINKS</h2></a></li><li id="companyDirectoryClick_King" data-company-name="king"><a href="/videos/426703f1-c84f-4923-4259-08d89b8e3e7e/landing/590466cc-e029-4199-9009-705cac183bac"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/King_1607475420859/inferno-booth-udf-company-logo.png" alt="King"><h2>King</h2></a></li><li id="companyDirectoryClick_AtriumLjungberg" data-company-name="atrium ljungberg"><a href="/videos/12b5445b-97d8-4ef9-7bb5-08d89b8fb16b/landing/b9fd3d6c-9b53-4b0b-905c-67ae7ff6af68"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/AtriumLjungberg_1607472502113/inferno-booth-udf-company-logo.jpg" alt="AtriumLjungberg"><h2>Atrium Ljungberg</h2></a></li><li id="companyDirectoryClick_RWERenewables" data-company-name="rwe renewables"><a href="/videos/0ad52496-464b-40a4-693c-08d89b909d5f/landing/ad307767-7ac9-4324-a8bc-a7a3d32e8a97"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/RWERenewables_1607465019200/inferno-booth-udf-company-logo.jpg" alt="RWERenewables"><h2>RWE Renewables</h2></a></li><li id="companyDirectoryClick_Sproud" data-company-name="sproud"><a href="/videos/882dc87d-c6a5-4e63-693d-08d89b909d5f/landing/ac8f8715-03b6-41c4-aa5d-70e381505eba"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Sproud_1607469887236/inferno-booth-udf-company-logo.png" alt="Sproud"><h2>Sproud</h2></a></li></ul>
+      <h5 class="no-results hide">Sorry, we could not find any companies that matched your search.</h5>
+  </div>
+</div></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
