@@ -88,6 +88,7 @@
   <!--  Load Liquid JSON From Local file -->
   <script>
     function loadJSON(file, callback) {
+
       const xobj = new XMLHttpRequest()
       xobj.overrideMimeType('application/json')
       xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
@@ -164,14 +165,10 @@
 
   </style>
   <script>
-  function buildLocalMenu() {
+    function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
+        window.localTemplateMenuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -219,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -261,9 +258,45 @@
                     });
 
                   }
+
                   loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
                   loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
                 </script>
+
+                <style>
+                  .content {
+                    position: relative;
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    color: white;
+                    padding: 2rem;
+                    overflow: hidden
+                  }
+
+                  .page-contents {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    min-height: calc(100vh - 114px);
+                    padding: 20px;
+                    overflow-y: scroll;
+                  }
+
+                  .bg-video {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: auto;
+                    min-width: 100%;
+                    height: auto;
+                    min-height: calc(100vh - 114px);
+                  }
+
+                </style>
 
                 <style>
                   /* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -272,23 +305,23 @@
                     content: none;
                   }
 
-                  .content {
-                    background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg") no-repeat;
-                    background-size: cover;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    z-index: 1;
-                    font-family: "Helvetica Neue", Arial Narrow, Arial, sans-serif;
-                  }
+                  /*.content {*/
+                  /*  background: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg") no-repeat;*/
+                  /*  background-size: cover;*/
+                  /*  min-height: calc(100vh - 114px);*/
+                  /*  margin: -20px;*/
+                  /*  z-index: 1;*/
+                  /*  font-family: "Montserrat", sans-serif;*/
+                  /*}*/
 
-                  #backgroundVideo {
-                    position: fixed;
-                    right: 0;
-                    bottom: 0;
-                    min-width: 100%;
-                    min-height: 100%;
-                    z-index:0;
-                  }
+                  /*#backgroundVideo {*/
+                  /*  position: fixed;*/
+                  /*  right: 0;*/
+                  /*  bottom: 0;*/
+                  /*  min-width: 100%;*/
+                  /*  min-height: 100%;*/
+                  /*  z-index:0;*/
+                  /*}*/
                 </style>
 
                 <!-- Top Navigation -->
@@ -614,12 +647,11 @@
                 </div>
 
                 <!-- Content -->
-                <div class="content">
-
-                  <video autoplay muted loop id="backgroundVideo">
+                <div id="content" class="content">
+                  <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
                     <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
-                    Your browser does not support HTML5 video.
                   </video>
+                  <div class="page-contents">
 
                   <div class="top-navigation">
                       <div class="nav-pdf nav-item" onclick="toggleResource('pdf')">
@@ -664,12 +696,13 @@
                       </div>
                       <div class="video-card-name">{{video_name}}</div>
                     </div>
-                  </template>
+                  
                     {% endif %} {% endif %} {% endfor %}
                   </div>
 
                   <div class="check-back-message">Check Back after the event for On-Demand Videos and other Resources</div>
 
+                </div>
                 </div>
 
                 <!-- Navigation -->
@@ -928,7 +961,7 @@
 
                 </script>
 
-                <chatWee>
+                <chatwee>
                   <script>
                     var fetchGlobalSnippet = (snippetId) => {
 
@@ -978,7 +1011,7 @@
                       eval(script.innerHTML);
                     }
                   </script>
-                </chatWee>
+                </chatwee>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

@@ -168,11 +168,7 @@
     function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
+        window.localTemplateMenuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -245,24 +241,59 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="106abd13-f1c2-4361-b3ba-bedc1d9b6fb5">
 
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                </script>
+
                 <style>
+                  .content {
+                    position: relative;
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    color: white;
+                    padding: 2rem;
+                    overflow: hidden
+                  }
+
+                  .page-contents {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    min-height: calc(100vh - 114px);
+                    padding: 20px;
+                    overflow-y: scroll;
+                  }
+
                   .bg-video {
-                    position: fixed;
-                    top: 0%;
-                    left: 0%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
                     width: auto;
                     min-width: 100%;
                     height: auto;
-                    min-height: 100%;
-                    z-index: -1;
-                  }
-
-                  .content {
-                    background-size: cover;
                     min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    z-index: 1;
-                    font-family: "Helvetica Neue", Arial Narrow, Arial, sans-serif;
                   }
 
                   .activity-grid {
@@ -270,7 +301,7 @@
                     flex-wrap: wrap;
                     align-self: center;
                     justify-content: center;
-                    margin-top: 40px;
+                    margin-top: 20px;
                   }
 
                   @media (max-width: 767px) {
@@ -291,33 +322,118 @@
                     border: none;
                   }
 
+
+                  .top-banner {
+                    margin: 20px 10% 0;
+                    position: relative;
+                  }
+
+                  .center-aligned {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  }
+
+                  .top-banner img {
+                    max-width: 600px;
+                    width: 100%;
+                    height: auto;
+                  }
+
                 </style>
 
-                <div class="content">
+                <div id="content" class="content">
                   <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
                     <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                   </video>
-                  <div class="activity-grid">
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/c7aac925-6fa2-4838-aad1-1db7c4a823ca" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/1caa8609-2f10-4266-8286-190841317fc1" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/87dd95b4-ab20-4cab-ba30-39b9a0194363" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/9099dd3d-70f3-4341-853e-2626cf59c009" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5094222f-fe78-47dd-aaa8-4202019d8b9e" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/287ac4b9-2809-4211-a0ba-7e713bf8d2cb" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5734ead2-3ba2-47bb-a6c7-0a3615616b19" width="300" height="400"></iframe></div>
-                    <div class="activity">
-                      <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/73674598-c1d0-4d82-8c55-aa015394b86b" width="300" height="400"></iframe></div>
 
+                  <div class="page-contents">
+                    <section class="top-banner center-aligned">
+                      <img class="background-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/activities/blue-chip.png?r=4" />
+                    </section>
 
+                    <div class="activity-grid">
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/c7aac925-6fa2-4838-aad1-1db7c4a823ca" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/1caa8609-2f10-4266-8286-190841317fc1" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/87dd95b4-ab20-4cab-ba30-39b9a0194363" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/9099dd3d-70f3-4341-853e-2626cf59c009" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5094222f-fe78-47dd-aaa8-4202019d8b9e" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/287ac4b9-2809-4211-a0ba-7e713bf8d2cb" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/5734ead2-3ba2-47bb-a6c7-0a3615616b19" width="300" height="400"></iframe>
+                      </div>
+                      <div class="activity">
+                        <iframe src="https://app.sli.do/event/nj13b9fi/embed/polls/73674598-c1d0-4d82-8c55-aa015394b86b" width="300" height="400"></iframe>
+                      </div>
+
+                    </div>
                   </div>
                 </div>
+
+                <chatwee>
+                  <script>
+                    var fetchGlobalSnippet = (snippetId) => {
+
+                      // Set header
+                      const headers = {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                      };
+
+                      // add a header property for users accessing with SA credentials
+                      if (window.sessionStorage.overrideId) {
+                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                      }
+
+                      let globalSnippet = null;
+
+                      $.ajax({
+                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
+                        type: 'GET',
+                        async: false,
+                        accept: 'application/json',
+                        contentType: 'application/json',
+                        headers: headers,
+                        success: function (res, status, xhr) {
+                          const parser = new DOMParser();
+                          globalSnippet = parser.parseFromString(res, "text/html");
+                        },
+                        error: function (err) {
+                          console.error('Error Fetching Global Snippet', err);
+                        }
+                      });
+
+                      return globalSnippet;
+                    };
+
+                    if (!window.chatManager) {
+                      console.log('initiializing Chatwee');
+                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
+                      var username = chatweeSnippet.getElementById("inferno-username");
+                      var script = chatweeSnippet.getElementById("chatweeLogic");
+                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                      if (!landingPageEl.getElementById("inferno-username")) {
+                        landingPageEl.appendChild(username);
+                      }
+                      // eval the script so it will be executed here
+                      eval(script.innerHTML);
+                    }
+                  </script>
+                </chatwee>
 
 
               </inferno-snippet-content>
@@ -419,7 +535,7 @@
     const videoDiv = landingPageEl.querySelector('#inferno-video-player')
     if (qaDiv) {
       $(qaDiv).append(`
-      <questions _nghost-qch-c20=">
+      <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
             <span class="inferno-input-group-addon">Ask A Question</span>

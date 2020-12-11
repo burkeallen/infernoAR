@@ -168,11 +168,7 @@
     function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) =>  {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
+        window.localTemplateMenuItems.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -245,6 +241,27 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="c346a1a0-57cc-44ec-90f4-6550059c36cb">
 
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
+                    }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
+
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
+                    });
+
+                  }
+
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+                </script>
 
                 <style>
                   .content {
@@ -369,11 +386,18 @@
                     <!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
                     <!-- set display: none when in production -->
                     <h1>{{nextEvent.Name}}</h1>
-                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}" >
+                    <a id="redirect-link" href="/videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}">
                       <div class="redirect-button">Access the VIP Session</div>
                     </a>
                     {% endif %}
                   </div>
+        
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          
         </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->

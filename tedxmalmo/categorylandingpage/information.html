@@ -1,597 +1,770 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-          src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			const x = JSON.parse(response);
+			data = x[0];
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-  </script>
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    #localTemplateMenu a {
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+					return a.name > b.name ? 1 : -1;
+				});
 
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        menuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()"
-          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-          src="../menu.js"></script>
-
+				menuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
-                    onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
+	<div
+		style="display: none"
+		id="novoProject"
+		name="tedxmalmo"
+		onload="login()"
+	></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="d573ae99-565b-42c6-afa7-ac5612b3cacc"
+								>
+									<script type="text/javascript">
+										function loadFont(name, url) {
+											if (document.fonts.check("1em " + name)) {
+												return;
+											}
+											const fontFace = new FontFace(name, "url(" + url + ")");
 
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="d573ae99-565b-42c6-afa7-ac5612b3cacc">
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+											fontFace
+												.load()
+												.then(function (loadedFont) {
+													document.fonts.add(loadedFont);
+													console.log("Loaded custom font ", name);
+												})
+												.catch(function (error) {
+													// error occurred
+													console.log("Error loading ", name);
+												});
+										}
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
+										loadFont(
+											"Montserrat",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf"
+										);
+										loadFont(
+											"MontserratBold",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf"
+										);
+									</script>
 
-                  }
+									<style>
+										.content {
+											position: relative;
+											margin: -20px;
+											min-height: calc(100vh - 114px);
+											z-index: 1;
+											font-family: "Montserrat", sans-serif;
+											color: white;
+											padding: 2rem;
+											overflow: hidden;
+										}
 
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
+										.page-contents {
+											position: absolute;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+											min-height: calc(100vh - 114px);
+											padding: 20px;
+											overflow-y: scroll;
+										}
 
-                </script>
+										.page-contents iframe {
+											border: 4px solid #a0a0a0;
+											background: transparent;
+											border-radius: 1em;
+											margin: 2em;
+											width: 96%;
+											height: calc(100vh - 260px);
+											min-height: 600px;
+										}
 
-                <style>
-                  .content {
-                    position: relative;
-                    margin: -20px;
-                    min-height: calc(100vh - 114px);
-                    z-index: 1;
-                    font-family: 'Montserrat', sans-serif;
-                    color: white;
-                    padding: 2rem;
-                    overflow: hidden
-                  }
+										.bg-video {
+											position: absolute;
+											top: 0;
+											left: 0;
+											width: auto;
+											min-width: 100%;
+											height: auto;
+											min-height: calc(100vh - 114px);
+										}
 
-                  .page-contents {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    min-height: calc(100vh - 114px);
-                    padding: 20px;
-                    overflow-y: scroll;
-                  }
+										.tabs {
+											display: flex;
+											flex-direction: row;
+											flex-wrap: wrap;
+											justify-content: space-around;
+										}
 
-                  .page-contents iframe {
-                    border: 4px solid #A0A0A0;
-                    background: transparent;
-                    border-radius: 1em;
-                    margin: 2em;
-                    width: 96%;
-                    height: calc(100vh - 260px);
-                    min-height: 600px;
-                  }
+										.tab {
+											position: relative;
+											width: 357px;
+											height: 70px;
+											margin: 0 20px;
+										}
 
-                  .bg-video {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: auto;
-                    min-width: 100%;
-                    height: auto;
-                    min-height: calc(100vh - 114px);
-                  }
+										.tab.active {
+											filter: drop-shadow(15px 15px 12px #025dfd);
+										}
 
-                  .tabs {
-                    display: flex;
-                    flex-direction: row;
-                    flex-wrap: wrap;
-                    justify-content: space-around;
-                  }
+										.tab:hover {
+											transform: scale(1.1) translate(5px, 5px);
+											filter: drop-shadow(5px 5px 8px #fff);
+											cursor: pointer;
+										}
 
-                  .tab {
-                    position: relative;
-                    width: 357px;
-                    height: 70px;
-                    margin: 0 20px;
-                  }
+										.tab-image {
+											position: relative;
+											background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/tab.png);
+											background-repeat: no-repeat;
+											background-size: cover;
+											background-position: top left;
+											width: 357px;
+											height: 70px;
+										}
 
-                  .tab.active {
-                    filter: drop-shadow(15px 15px 12px #025dfd);
-                  }
+										.tab-text {
+											text-align: center;
+											width: 100%;
+											color: white;
+											font-size: 2em;
+											line-height: 2.5em;
+										}
 
-                  .tab:hover {
-                    transform: scale(1.1) translate(5px, 5px);
-                    filter: drop-shadow(5px 5px 8px #fff);
-                    cursor: pointer;
-                  }
+										/* Modal Styling */
 
-                  .tab-image {
-                    position: relative;
-                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/tab.png);
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: top left;
-                    width: 357px;
-                    height: 70px;
-                  }
+										#modal {
+											position: absolute;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+											background-color: rgba(0, 0, 0, 0.5);
+											display: none;
+											align-items: center;
+											justify-content: center;
+										}
 
-                  .tab-text {
-                    text-align: center;
-                    width: 100%;
-                    color: white;
-                    font-size: 2em;
-                    line-height: 2.5em;
-                  }
-                </style>
+										.modal-content {
+											position: relative;
+											background: linear-gradient(#052a9a, #101010);
+											border-radius: 50px;
+											width: 30%;
+											min-width: 50rem;
+											display: flex;
+											align-items: center;
+											justify-content: center;
+											padding: 3rem;
+											line-height: 2rem;
+										}
 
-                <script>
-                  function toggleTab(tab) {
-                    const tabs = landingPageEl.querySelectorAll('.tab');
-                    const panels = landingPageEl.querySelectorAll('.content-panel');
-                    const panelID = 'panel-' + tab.id;
-                    const activePanel = landingPageEl.querySelector('#' + panelID);
-                    [...tabs].forEach(item => {
-                      item.classList.remove('active');
-                    });
-                    [...panels].forEach(item => {
-                      item.classList.add('hidden');
-                    });
-                    tab.classList.toggle('active');
-                    activePanel.classList.toggle('hidden');
-                  }
-                </script>
+										.close-modal {
+											position: absolute;
+											top: -10rem;
+											right: -10rem;
+											width: 20rem;
+											cursor: pointer;
+										}
+									</style>
 
-                <div id="content" class="content">
+									<script>
+										function toggleTab(tab) {
+											const tabs = landingPageEl.querySelectorAll(".tab");
+											const panels = landingPageEl.querySelectorAll(
+												".content-panel"
+											);
+											const panelID = "panel-" + tab.id;
+											const activePanel = landingPageEl.querySelector(
+												"#" + panelID
+											);
+											[...tabs].forEach(item => {
+												item.classList.remove("active");
+											});
+											[...panels].forEach(item => {
+												item.classList.add("hidden");
+											});
+											tab.classList.toggle("active");
+											activePanel.classList.toggle("hidden");
+										}
+									</script>
 
-                  <video class="bg-video" autoplay loop
-                         poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
-                    <source
-                        src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
-                        type="video/mp4">
-                  </video>
+									<div id="content" class="content">
+										<video
+											class="bg-video"
+											autoplay
+											loop
+											poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
+										>
+											<source
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
+												type="video/mp4"
+											/>
+										</video>
 
-                  <div class="page-contents">
+										<div class="page-contents">
+											<div class="tabs">
+												<div
+													id="about"
+													class="tab active"
+													onclick="toggleTab(this)"
+												>
+													<div class="tab-image">
+														<div class="tab-text">About</div>
+													</div>
+												</div>
+												<div
+													id="questions"
+													class="tab"
+													onclick="toggleTab(this)"
+												>
+													<div class="tab-image">
+														<div class="tab-text">FAQ</div>
+													</div>
+												</div>
+												<div
+													id="feedback"
+													class="tab"
+													onclick="toggleTab(this)"
+												>
+													<div class="tab-image">
+														<div class="tab-text">Visitor Feedback</div>
+													</div>
+												</div>
+											</div>
 
-                    <div class="tabs">
-                      <div id="about" class="tab active" onclick="toggleTab(this)">
-                        <div class="tab-image">
-                          <div class="tab-text">About</div>
-                        </div>
-                      </div>
-                      <div id="questions" class="tab" onclick="toggleTab(this)">
-                        <div class="tab-image">
-                          <div class="tab-text">FAQ</div>
-                        </div>
-                      </div>
-                      <div id="feedback" class="tab" onclick="toggleTab(this)">
-                        <div class="tab-image">
-                          <div class="tab-text">Visitor Feedback</div>
-                        </div>
-                      </div>
-                    </div>
+											<div class="tab-content">
+												<div id="panel-about" class="content-panel">
+													<iframe
+														id="infoPage"
+														src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/AboutTEDxMalm.html"
+														width="500"
+														height="600"
+													>
+													</iframe>
+												</div>
 
-                    <div class="tab-content">
-                      <div id="panel-about" class="content-panel">
-                        <iframe id="infoPage"
-                                src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/AboutTEDxMalm.html"
-                                width="500"
-                                height="600">
-                        </iframe>
-                      </div>
+												<div id="panel-questions" class="content-panel hidden">
+													<iframe
+														id="faq"
+														src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/faq.pdf"
+														width="500"
+														height="600"
+													>
+													</iframe>
+												</div>
 
-                      <div id="panel-questions" class="content-panel hidden">
-                        <iframe id="faq"
-                                src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/faq.pdf"
-                                width="500"
-                                height="600">
-                        </iframe>
-                      </div>
+												<div id="panel-feedback" class="content-panel hidden">
+													<iframe
+														id="slido"
+														src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2"
+														width="500"
+														height="600"
+													>
+													</iframe>
+												</div>
+											</div>
+										</div>
+										<div id="modal">
+											<div class="modal-content">
+												<img
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/close_icon.png"
+													class="close-modal"
+													onclick="closeModal()"
+												/>
+												<div class="message">
+													"Welcome to our virtual Information Center! Here you
+													will find FAQs, a Feedback Box and learn more about
+													TEDxMalmö. For more information, please visit our
+													Customer Service in the Chat Rooms, located in the
+													chat button on the bottom right side of the screen.
+													Our Customer Service is 100% human and available
+													throughout the entire event."
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- Modal Script -->
+									<script>
+										function closeModal() {
+											var modal = landingPageEl.getElementById("modal");
+											document.body.style.overflow = "auto";
+											modal.style.display = "none";
+										}
 
-                      <div id="panel-feedback" class="content-panel hidden">
-                        <iframe id="slido"
-                                src="https://app.sli.do/event/nj13b9fi/embed/polls/bdc86b47-39fb-4ea0-9d43-7447ad83e1f2"
-                                width="500"
-                                height="600">
-                        </iframe>
-                      </div>
+										//Check if the user has viewed the popup before, store viewed in local storage
+										function checkModalViewed() {
+											var modalViewed = window.localStorage.getItem(
+												"informationModalViewed"
+											);
+											if (!modalViewed) {
+												var modal = landingPageEl.getElementById("modal");
+												console.log(modal);
+												modal.style.display = "flex";
+												document.body.style.overflow = "hidden";
+												window.localStorage.setItem(
+													"informationModalViewed",
+													true
+												);
+											}
+										}
 
-                    </div>
+										checkModalViewed();
+									</script>
+									<chatwee>
+										<script>
+											var fetchGlobalSnippet = snippetId => {
+												// Set header
+												const headers = {
+													Authorization:
+														"Bearer " + sessionStorage.getItem("token"),
+													"X-InfernoCore-Domain":
+														sessionStorage.getItem("domain") ??
+														window.location.hostname
+												};
 
-                  </div>
-                </div>
+												// add a header property for users accessing with SA credentials
+												if (window.sessionStorage.overrideId) {
+													headers["X-InfernoCore-Domain"] =
+														"jolokia.inferno.jolokia.com";
+													headers["X-Client-Override"] = sessionStorage.getItem(
+														"overrideId"
+													);
+												}
 
+												let globalSnippet = null;
 
-                <chatWee>
-                  <script>
-                    var fetchGlobalSnippet = (snippetId) => {
+												$.ajax({
+													url:
+														"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+														snippetId,
+													type: "GET",
+													async: false,
+													accept: "application/json",
+													contentType: "application/json",
+													headers: headers,
+													success: function (res, status, xhr) {
+														const parser = new DOMParser();
+														globalSnippet = parser.parseFromString(
+															res,
+															"text/html"
+														);
+													},
+													error: function (err) {
+														console.error("Error Fetching Global Snippet", err);
+													}
+												});
 
-                      // Set header
-                      const headers = {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                      };
+												return globalSnippet;
+											};
 
-                      // add a header property for users accessing with SA credentials
-                      if (window.sessionStorage.overrideId) {
-                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                      }
+											if (!window.chatManager) {
+												console.log("initiializing Chatwee");
+												var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+												var chatweeSnippet = fetchGlobalSnippet(snippetId);
+												var username = chatweeSnippet.getElementById(
+													"inferno-username"
+												);
+												var script = chatweeSnippet.getElementById(
+													"chatweeLogic"
+												);
+												//checks if the elements have already been inserted into the DOM to avoid duplicate elements
+												if (!landingPageEl.getElementById("inferno-username")) {
+													landingPageEl.appendChild(username);
+												}
+												// eval the script so it will be executed here
+												eval(script.innerHTML);
+											}
+										</script>
+									</chatwee>
+								</inferno-snippet-content>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
 
-                      let globalSnippet = null;
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
 
-                      $.ajax({
-                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
-                        type: 'GET',
-                        async: false,
-                        accept: 'application/json',
-                        contentType: 'application/json',
-                        headers: headers,
-                        success: function (res, status, xhr) {
-                          const parser = new DOMParser();
-                          globalSnippet = parser.parseFromString(res, "text/html");
-                        },
-                        error: function (err) {
-                          console.error('Error Fetching Global Snippet', err);
-                        }
-                      });
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
 
-                      return globalSnippet;
-                    };
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
 
-                    if (!window.chatManager) {
-                      console.log('initiializing Chatwee');
-                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
-                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
-                      var username = chatweeSnippet.getElementById("inferno-username");
-                      var script = chatweeSnippet.getElementById("chatweeLogic");
-                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                      if (!landingPageEl.getElementById("inferno-username")) {
-                        landingPageEl.appendChild(username);
-                      }
-                      // eval the script so it will be executed here
-                      eval(script.innerHTML);
-                    }
-                  </script>
-                </chatWee>
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
 
-              </inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
 
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
 
-<script>
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
 
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
-
-  }
-
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
-
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
-
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
-
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
-
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -603,29 +776,27 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->

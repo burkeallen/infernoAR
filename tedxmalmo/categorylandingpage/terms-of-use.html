@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -239,342 +239,146 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="bfc4e244-d9ac-4da5-ac9c-8a7c1039e540">
+              <inferno-snippet-content id="d0ccb93b-73be-4328-98aa-4bf22fc7f673">
 
-                <div id="inferno-username" style="display:none;">
-                  {{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}
-                </div>
-
-                <script id="chatweeLogic">
-                  var userInfernoId = window.sessionStorage.getItem("userId");
-                  var hasProfileImage = false;
-
-                  // global chat manager
-                  var chatweeClientAPIKey = '509054c7d5183ff3d690bda7';
-                  var chatweeChatId = '5f7ef3ae1e09cc38f15f19d2';
-
-                  var chatweeValues = {
-                    userIdKey: "chatwee-user-id",
-                    chatId: chatweeChatId,
-                    sessionCookieKey: "chatwee-SID-" + chatweeChatId,
-                    clientApiKey: chatweeClientAPIKey,
-                    isAdmin: 0,
-                    ssoBaseUrl: "https://chatwee-api.com/v2/sso-user/"
-                  }
-
-                  var checkAdmin = () => {
-
-                    const moderatorWhitelist = ["c8240590-94c1-4043-b5ef-961e5be0edcc"];
-
-                    if (moderatorWhitelist.includes(userInfernoId)) {
-                      chatweeValues.isAdmin = 1;
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return;
                     }
+                    const fontFace = new FontFace(name, 'url(' + url + ')');
 
-                  }
-
-                  var loadChatScript = () => {
-                    // don't load script if already on page
-                    let chatScript = document.getElementById("chat-script");
-                    if (chatScript) return;
-
-                    (function () {
-                      var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                      s1.id = "chat-script";
-                      s1.async = true;
-                      s1.src = 'https://static.chatwee-api.com/v2/script.js';
-                      s1.charset = 'UTF-8';
-                      s0.parentNode.insertBefore(s1, s0);
-                    })();
-
-                    return;
-                  }
-
-                  var startChat = async () => {
-                    if (!window.chatManager) {
-                      window.chatManager = new ChatweeLib.ChatweeManager(chatweeValues.chatId);
-                      window.chatManager.Run();
-                    }
-                    return;
-                  }
-
-                  var openChat = () => {
-                    // close bubble
-                    let bubbleChild = document.getElementsByClassName('chch-fixedChatweeWindowSwitch')[0];
-                    let bubble = bubbleChild.parentNode;
-                    bubble.style.display = "none";
-
-                    // open chat
-                    let chatChild = document.getElementsByClassName('chch-resizablePane')[0];
-                    let chat = chatChild.parentNode;
-                    chat.style.display = "block";
-
-                    return;
-                  }
-
-                  // Chatwee UserId must be set as the Id for the button
-                  var triggerConversation = e => {
-                    // let userId = e.currentTarget.id; // use this if stored in id attribute
-                    let userId = e.currentTarget.getAttribute('chatwee-user-id'); // use this if stored in chatwee-user-id attribute
-                    openChat();
-                    window.chatManager.TriggerConversation(userId);
-                  }
-
-                  // helper functions
-                  var getCookie = key => {
-                    let cookieValue = "";
-
-                    const cookieList = document.cookie;
-                    if (cookieList) {
-                      const cookie = cookieList
-                        .split("; ")
-                        .find(row => row.startsWith(key));
-
-                      if (cookie) {
-                        cookieValue = cookie.split("=")[1];
-                      }
-
-                    }
-                    return cookieValue;
-                  }
-
-                  var setCookie = (key, value, age) => {
-                    document.cookie = key + "=" + value + "; path=/";
-                  }
-
-                  var getKVPsByKey = key => {
-
-                    const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
-                    return fetch(url, {
-                      method: 'GET',
-                      withCredentials: true,
-                      headers: getInfernoHeaders()
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont);
+                      console.log('Loaded custom font ', name);
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name);
                     });
 
                   }
 
-                  var postKVP = (key, value) => {
-
-                    const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore";
-
-                    const kvp = {
-                      key: key,
-                      value: value,
-                      public: true
-                    }
-
-                    fetch(url, {
-                      method: 'POST',
-                      withCredentials: true,
-                      headers: getInfernoHeaders(),
-                      body: JSON.stringify(kvp)
-                    })
-
-                  }
-
-                  var validateChatSessionId = sessionId => {
-                    const url = chatweeValues.ssoBaseUrl
-                      + "validate-session?"
-                      + "chatId="
-                      + chatweeValues.chatId
-                      + "&clientKey="
-                      + chatweeValues.clientApiKey
-                      + "&sessionId="
-                      + sessionId;
-
-                    return fetch(url).then(res => res.json());
-                  }
-
-                  var loginChat = userId => {
-                    const url = chatweeValues.ssoBaseUrl
-                      + "login?"
-                      + "chatId="
-                      + chatweeValues.chatId
-                      + "&clientKey="
-                      + chatweeValues.clientApiKey
-                      + "&userId="
-                      + userId;
-
-                    return fetch(url).then(res => res.json());
-                  }
-
-                  var registerChat = () => {
-
-                    const avatarUrl = "https://ingress.infernocore.jolokia.com/api/ProfileImage/" + userInfernoId + "/70" + "/70";
-                    const username = landingPageEl.getElementById("inferno-username").innerHTML;
-                    const url = chatweeValues.ssoBaseUrl
-                      + "register?"
-                      + "chatId="
-                      + chatweeValues.chatId
-                      + "&clientKey="
-                      + chatweeValues.clientApiKey
-                      + "&login="
-                      + username
-                      + "&isAdmin="
-                      + chatweeValues.isAdmin
-                      + "&avatar="
-                      + avatarUrl;
-
-                    return fetch(url).then(res => res.json());
-                  }
-
-                  var editChatweeAvatar = (chatweeUserId, newAvatarUrl) => {
-
-                    const url = chatweeValues.ssoBaseUrl
-                      + "edit?"
-                      + "chatId="
-                      + chatweeValues.chatId
-                      + "&clientKey="
-                      + chatweeValues.clientApiKey
-                      + "&userId="
-                      + chatweeUserId
-                      + "&login="
-                      + "NewLogin"
-                      + "&avatar="
-                      + newAvatarUrl;
-
-                    return fetch(url);
-
-                  }
-
-                  // connect to Chatwee
-                  var connectChat = async () => {
-
-                    // see if session id locally
-                    let sessionId = getCookie(chatweeValues.sessionCookieKey);
-
-                    if (sessionId && sessionId !== "[object Object]") {
-                      // validate session id with chatwee
-                      let valid
-                      try {
-                        valid = await validateChatSessionId(sessionId);
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-
-                      // if true, do nothing
-                      if (valid) return;
-
-                    }
-
-                    // if false, check if user id is present in api
-                    let userId = ""
-                    try {
-                      const res = await getKVPsByKey(chatweeValues.userIdKey);
-
-                      if (res.status === 200) {
-                        const json = await res.json();
-                        userId = json.value;
-                      } else {
-                        console.log("no chatwee user id from api")
-                      }
-
-                    } catch (e) {
-                      throw new Error(e);
-                    }
-
-                    // if true, login and set session id locally
-                    if (userId) {
-                      let sessionId = ""
-
-                      try {
-                        sessionId = await loginChat(userId);
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-                      setCookie(chatweeValues.sessionCookieKey, sessionId);
-                    }
-                    // if false, register and set user id and log in user
-                    else {
-                      let userId = ""
-                      try {
-                        userId = await registerChat();
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-
-                      try {
-                        await postKVP(chatweeValues.userIdKey, userId);
-                      } catch (e) {
-                        throw new Error(e)
-                      }
-
-                      let sessionId = ""
-                      try {
-                        sessionId = await loginChat(userId);
-                      } catch (e) {
-                        throw new Error(e);
-                      }
-
-                      setCookie(chatweeValues.sessionCookieKey, sessionId);
-
-                    }
-                    return;
-                  }
-
-                  var waitForGlobal = async (key, callback1, callback2) => {
-                    if (window[key]) {
-                      await callback1();
-                      await callback2();
-                    } else {
-                      setTimeout(function () {
-                        waitForGlobal(key, callback1, callback2);
-                      }, 100);
-                    }
-                  };
-
-                  var setUpChat = async () => {
-                    checkAdmin()
-                    loadChatScript();
-                    waitForGlobal("ChatweeLib", connectChat, startChat);
-                  }
-
-                  if (window.isLocalTemplate) {
-                    window.addEventListener('load', function () {
-                      setUpChat();
-                    })
-                  } else {
-                    setUpChat();
-                  }
-
-                  // delete link between Chatwee account and Inferno account if needed
-                  var deleteChatweeUserIdByKey = key => {
-
-                    const url = "https://ingress.infernocore.jolokia.com/api/CustomUserDataStore/ByKey/" + key;
-                    const bearerToken = window.sessionStorage.getItem("token");
-                    const bearer = 'Bearer ' + bearerToken;
-
-                    fetch(url, {
-                      method: 'DELETE',
-                      withCredentials: true,
-                      headers: {
-                        'Authorization': bearer
-                      }
-                    }).then(res => console.log("delete KVP is ", res))
-                      .catch(e => console.log("delete KVP error is ", e));
-
-                  }
-
-                  var getInfernoHeaders = () => {
-                    // Set header
-                    const headers = {
-                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                      'Accept': 'application/json',
-                      'Content-Type': 'application/json',
-                    };
-
-                    // add a header property for users accessing with SA credentials
-                    if (window.sessionStorage.overrideId) {
-                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                    }
-
-                    return headers;
-                  }
+                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
+                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
 
                 </script>
 
+                <style>
+                  .content {
+                    position: relative;
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    z-index: 1;
+                    font-family: 'Montserrat', sans-serif;
+                    color: white;
+                    padding: 2rem;
+                    overflow: hidden
+                  }
+
+                  .page-contents {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    min-height: calc(100vh - 114px);
+                    padding: 20px;
+                    overflow-y: scroll;
+                  }
+
+                  .page-contents iframe {
+                    border: 4px solid #A0A0A0;
+                    background: transparent;
+                    border-radius: 1em;
+                    margin: 2em;
+                    width: 96%;
+                    height: calc(100vh - 260px);
+                    min-height: 600px;
+                  }
+
+                  .bg-video {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: auto;
+                    min-width: 100%;
+                    height: auto;
+                    min-height: calc(100vh - 114px);
+                  }
+                </style>
+
+                <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
+                  <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
+                </video>
+
+                <div id="content" class="content">
+
+                  <video class="bg-video" autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
+                    <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
+                  </video>
+
+                  <div class="page-contents">
+                    <div id="terms-of-use" class="content-panel">
+                      <iframe id="terms" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/Terms of Use.pdf" width="500" height="600"></iframe>
+                    </div>
+                  </div>
+                </div>
+
+                <chatwee>
+                  <script>
+                    var fetchGlobalSnippet = (snippetId) => {
+
+                      // Set header
+                      const headers = {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
+                      };
+
+                      // add a header property for users accessing with SA credentials
+                      if (window.sessionStorage.overrideId) {
+                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
+                      }
+
+                      let globalSnippet = null;
+
+                      $.ajax({
+                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
+                        type: 'GET',
+                        async: false,
+                        accept: 'application/json',
+                        contentType: 'application/json',
+                        headers: headers,
+                        success: function (res, status, xhr) {
+                          const parser = new DOMParser();
+                          globalSnippet = parser.parseFromString(res, "text/html");
+                        },
+                        error: function (err) {
+                          console.error('Error Fetching Global Snippet', err);
+                        }
+                      });
+
+                      return globalSnippet;
+                    };
+
+                    if (!window.chatManager) {
+                      console.log('initiializing Chatwee');
+                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
+                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
+                      var username = chatweeSnippet.getElementById("inferno-username");
+                      var script = chatweeSnippet.getElementById("chatweeLogic");
+                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                      if (!landingPageEl.getElementById("inferno-username")) {
+                        landingPageEl.appendChild(username);
+                      }
+                      // eval the script so it will be executed here
+                      eval(script.innerHTML);
+                    }
+                  </script>
+                </chatwee>
+
               </inferno-snippet-content>
+
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -592,8 +396,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -709,7 +511,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
