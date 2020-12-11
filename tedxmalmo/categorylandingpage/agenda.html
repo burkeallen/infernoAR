@@ -609,9 +609,9 @@
 											class="bg-video"
 											autoplay
 											loop
-                      muted
-                      playsinline
-                      poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
+											muted
+											playsinline
+											poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
 										>
 											<source
 												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
@@ -681,14 +681,14 @@
 										var parseDate = date => {
 											var h = date.getHours();
 											var m = date.getMinutes();
-											var ampm = "am";
-											if (h > 12) {
-												h = h - 12;
-												ampm = "pm";
-											}
+											// var ampm = "am";
+											// if (h > 12) {
+											// 	h = h - 12;
+											// 	ampm = "pm";
+											// }
 											if (m.toString().length < 2) m = "0" + m;
 
-											return h + ":" + m + ampm;
+											return h + ":" + m;
 										};
 
 										var setTime = () => {
@@ -698,10 +698,7 @@
 												".current-time"
 											);
 											var currentTime = parseDate(d);
-											currentTimeElement.innerHTML = currentTime.substring(
-												0,
-												currentTime.length - 2
-											);
+											currentTimeElement.innerHTML = currentTime;
 
 											var t = setTimeout(setTime, 1000);
 										};
