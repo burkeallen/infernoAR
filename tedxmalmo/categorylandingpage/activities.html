@@ -241,28 +241,6 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="106abd13-f1c2-4361-b3ba-bedc1d9b6fb5">
 
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
-
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
-                  }
-
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
-                </script>
-
                 <style>
                   .content {
                     position: relative;
@@ -295,92 +273,19 @@
                     height: auto;
                     min-height: calc(100vh - 114px);
                   }
-
-                  .quiz-instructions {
-                    margin: 20px 40px;
-                    color: white;
-                    font-size: 1.75rem;
-                    text-shadow: 2px 2px 4px #000000;
-                  }
-
-                  .center {
-                    text-align: center;
-                  }
-
-
                 </style>
 
                 <div id="content" class="content">
                   <video class="bg-video" muted playsinline autoplay loop poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
                     <source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
                   </video>
-
                   <div class="page-contents">
-
-                    <div class="quiz-instructions">
-                      <p class="center">QUIZ INSTRUCTIONS</p>
-                      <p>Welcome to the TEDxMalmö Quiz! They are designed to test you about TED, TEDxMalmö and the Future, and consist of multiple-choice questions with ONE correct answer. Yes, there will be prizes, and the winners will be announced via email and social media on the 17th of December 2020.</p>
-                    </div>
-
                       <div class="activity">
-                        <iframe src="https://app.sli.do/event/nj13b9fi" height="100%" width="100%" frameBorder="0" style="min-height: 760px;"></iframe>
+                        <iframe src="https://pigeonhole.at/AZJ4UV" height="100%" width="100%" frameBorder="0" style="min-height: 760px;"></iframe>
                       </div>
-
                   </div>
                 </div>
 
-                <chatwee>
-                  <script>
-                    var fetchGlobalSnippet = (snippetId) => {
-
-                      // Set header
-                      const headers = {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                        'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                      };
-
-                      // add a header property for users accessing with SA credentials
-                      if (window.sessionStorage.overrideId) {
-                        headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                        headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                      }
-
-                      let globalSnippet = null;
-
-                      $.ajax({
-                        url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + snippetId,
-                        type: 'GET',
-                        async: false,
-                        accept: 'application/json',
-                        contentType: 'application/json',
-                        headers: headers,
-                        success: function (res, status, xhr) {
-                          const parser = new DOMParser();
-                          globalSnippet = parser.parseFromString(res, "text/html");
-                        },
-                        error: function (err) {
-                          console.error('Error Fetching Global Snippet', err);
-                        }
-                      });
-
-                      return globalSnippet;
-                    };
-
-                    if (!window.chatManager) {
-                      console.log('initiializing Chatwee');
-                      var snippetId = "bfc4e244-d9ac-4da5-ac9c-8a7c1039e540";
-                      var chatweeSnippet = fetchGlobalSnippet(snippetId);
-                      var username = chatweeSnippet.getElementById("inferno-username");
-                      var script = chatweeSnippet.getElementById("chatweeLogic");
-                      //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                      if (!landingPageEl.getElementById("inferno-username")) {
-                        landingPageEl.appendChild(username);
-                      }
-                      // eval the script so it will be executed here
-                      eval(script.innerHTML);
-                    }
-                  </script>
-                </chatwee>
 
 
               </inferno-snippet-content>
