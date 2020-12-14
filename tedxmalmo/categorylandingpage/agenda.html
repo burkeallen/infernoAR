@@ -1,299 +1,245 @@
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta
-		name="viewport"
-		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-	/>
-	<title>Inferno Snippet Mockup Template</title>
-	<!-- Import Roboto -->
-	<link
-		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-		rel="stylesheet"
-	/>
-	<!-- Import Inferno's Styles -->
-	<link
-		rel="stylesheet"
-		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
-	/>
-	<link
-		rel="stylesheet"
-		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
-	/>
-	<!--  Local/Client Color Overrides if they file exists -->
-	<link rel="stylesheet" href="../inferno-client.css" />
-	<script>
-		let landingPageEl = null;
-		window.isLocalTemplate = true;
-	</script>
-	<!-- Import JQuery -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-	<script>
-		function authenticate(project) {
-			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
-			// Auth w/ Inferno API
-			const params = {
-				email: project.username,
-				password: project.password,
-				grantType: "password"
-			};
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
 
-			// Set header
-			const headers = { "X-InfernoCore-Domain": project.domain };
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
 
-			// perform synchronous ajax call so rest of code waits until you are authenticated
-			$.ajax({
-				url: _baseUrl + "token",
-				type: "POST",
-				async: false,
-				accept: "application/json",
-				contentType: "application/json",
-				headers: headers,
-				data: JSON.stringify(params),
-				success: function (res) {
-					sessionStorage.setItem("domain", project.domain);
-					storeUser(JSON.parse(res));
-				},
-				error: function (err) {
-					alert(JSON.stringify(err));
-				},
-				complete: function () {
-					console.log("user was authenticated into ", project.domain);
-				}
-			});
-		}
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
 
-		function storeUser(data) {
-			// console.log(data);
-			sessionStorage.setItem("clientId", data.ClientId);
-			sessionStorage.setItem("token", data.AccessToken);
-			sessionStorage.setItem("refreshToken", data.RefreshToken);
-		}
+    }
 
-		function login() {
-			window.addEventListener("load", event => {
-				const projectEl = document.querySelector("#novoProject");
-				const projectName = projectEl ? projectEl.getAttribute("name") : null;
-				const currentProject = projects.filter(project => {
-					return project.name === projectName;
-				})[0];
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
 
-				if (!currentProject) {
-					alert(
-						"could not log into Inferno \n\r Check the project name in the login() function"
-					);
-					return;
-				}
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
 
-				authenticate(currentProject);
-			});
-		}
-	</script>
-	<!-- store your credentials in a local file -->
-	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-	<script
-		onload="login()"
-		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-		src="/inferno.config.js"
-	></script>
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
 
-	<!-- Liquid Templating -->
-	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-	<!--  Load Liquid JSON From Local file -->
-	<script>
-		function loadJSON(file, callback) {
-			const xobj = new XMLHttpRequest();
-			xobj.overrideMimeType("application/json");
-			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
-			xobj.onreadystatechange = function () {
-				if (xobj.readyState == 4 && xobj.status == "200") {
-					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-					callback(xobj.responseText);
-				}
-			};
-			xobj.send(null);
-		}
+        authenticate(currentProject);
+      });
+    }
 
-		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-		// processing can potentially interfere with scripts that run on page load.
-		var data = {};
-		loadJSON("../liquid.json", function (response) {
-			// Parse JSON string into object
-			const x = JSON.parse(response);
-			data = x[0];
-		});
-	</script>
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
 
-	<!-- Build out Local Menu on Left Navigation -->
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
 
-	<style>
-		#localTemplateMenu {
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			align-items: center;
-			padding: 1em;
-		}
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
 
-		#localTemplateMenu a {
-			display: block;
-			margin: 0.25em;
-			background-color: var(--sidebar-bg-color);
-			border: none;
-			border-bottom: solid 1px var(--sidebar-highlight-text-color);
-			color: var(--sidebar-text-color);
-			cursor: pointer;
-			width: 80%;
-			padding: 0.25em 0;
-		}
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
 
-		#localTemplateMenu a:hover {
-			filter: brightness(80%);
-			text-decoration: none;
-			transform: translateX(-0.3em);
-		}
+  </script>
 
-		#localTemplateMenu a.activeMenu {
-			background-color: var(--sidebar-highlight-bg-color);
-			color: var(--sidebar-text-color);
-		}
+  <!-- Build out Local Menu on Left Navigation -->
 
-		.aside-collapsed * #localTemplateMenu {
-			margin: 0;
-			padding: 1em 0;
-		}
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
 
-		.aside-collapsed * #localTemplateMenu a {
-			word-wrap: break-word;
-			min-width: 100%;
-			border-radius: 0;
-			border-bottom: 1px solid var(--sidebar-text-color);
-		}
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
 
-		.aside-collapsed * #localTemplateMenu a:hover {
-			transform: none;
-		}
-	</style>
-	<script>
-		function buildLocalMenu() {
-			window.addEventListener("load", event => {
-				const menu = document.getElementById("localTemplateMenu");
-				window.localTemplateMenuItems.forEach(item => {
-					const menuItem = document.createElement("a");
-					menuItem.href = "../" + item.file;
-					menuItem.innerHTML = item.name;
-					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
-					try {
-						const currentSnippet = landingPageEl.querySelector(
-							"#" + item.snippetID.toString()
-						);
-						if (currentSnippet) {
-							menuItem.classList.toggle("activeMenu");
-						}
-					} catch (e) {
-						// do nothing;
-					}
-					menu.appendChild(menuItem);
-				});
-			});
-		}
-	</script>
-	<script
-		onload="buildLocalMenu()"
-		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-		src="../menu.js"
-	></script>
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
 </head>
 
 <body>
-	<div
-		style="display: none"
-		id="novoProject"
-		name="tedxmalmo"
-		onload="login()"
-	></div>
-	<app-root class="layout-fixed has-menu">
-		<videos-layout>
-			<div class="wrapper" layout="column">
-				<app-header class="topnavbar-wrapper">
-					<mat-toolbar
-						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-						color="primary"
-					>
-						<div class="navbar-header"><a href="/">LOCAL</a></div>
-						<div
-							class="ellipsis ng-star-inserted"
-							flex
-							layout="row"
-							layout-align="start center"
-						>
-							<button
-								class="menu-btn mat-icon-button ng-star-inserted"
-								hide
-								mat-icon-button
-								show-gt-sm
-								trigger-resize
-								onclick="mtTriggerMenu()"
-							>
-								<span class="mat-button-wrapper">
-									<mat-icon
-										class="mat-icon material-icons mat-icon-no-color"
-										role="img"
-										aria-hidden="true"
-									>
-										menu
-									</mat-icon>
-								</span>
-							</button>
-							<div
-								_ngcontent-inv-c7
-								class="mat-title ellipsis m0"
-								flex
-								title="Page Title"
-							>
-								Sample Page Title
-							</div>
-						</div>
-					</mat-toolbar>
-				</app-header>
-				<!-- SIDEBAR -->
-				<videos-sidebar class="aside">
-					<div class="aside-inner">
-						<nav class="sidebar" sidebar-anyclick-close>
-							<div class="nav" id="localTemplateMenu"></div>
-						</nav>
-					</div>
-				</videos-sidebar>
-				<!-- ./ SIDEBAR -->
-				<!-- LANDING -->
-				<section class="IE-FlexAuto" flex>
-					<div class="content-wrapper">
-						<landing-page class="ng-star-inserted">
-							<div id="landing">
-								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-								<script>
-									landingPageEl = document
-										.querySelector("landing-page")
-										.attachShadow({ mode: "open" });
-									const landing = landingPageEl.appendChild(
-										document.getElementById("landing")
-									);
-									landingPageEl.appendChild(landing);
-									const loginPageEl = landingPageEl;
-								</script>
-								<style type="text/css">
-									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-								</style>
-								<!-- ********************* -->
-								<!-- ********************* -->
-								<!-- ********************* -->
-								<!-- SNIPPET CONTENT START -->
-								<inferno-snippet-content
-									id="0b3d41aa-142a-4b3c-bee7-29cbc91dfc42"
-								>
+<div style="display:none" id="novoProject" name="tedxmalmo" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="0b3d41aa-142a-4b3c-bee7-29cbc91dfc42">
 									<script type="text/javascript">
 										function loadFont(name, url) {
 											if (document.fonts.check("1em " + name)) {
@@ -605,16 +551,8 @@
 									</style>
 
 									<div id="content">
-										<video
-											class="bg-video"
-											autoplay
-											loop
-											poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg"
-										>
-											<source
-												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4"
-												type="video/mp4"
-											/>
+										<video class="bg-video" autoplay loop muted playsinline poster="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-tiny.jpg">
+											<source src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/bg-circuit-board-small.mp4" type="video/mp4">
 										</video>
 										<div class="page-contents">
 											<div class="clock">
@@ -629,18 +567,10 @@
 											</div>
 
 											<div class="toggle-tabs">
-												<div
-													class="event-agenda tab active"
-													id="tab1"
-													onclick="toggleTab(this)"
-												>
+												<div class="event-agenda tab active" id="tab1" onclick="toggleTab(this)">
 													<p>Event Agenda</p>
 												</div>
-												<div
-													class="my-agenda tab"
-													id="tab2"
-													onclick="toggleTab(this)"
-												>
+												<div class="my-agenda tab" id="tab2" onclick="toggleTab(this)">
 													<p>My Agenda</p>
 												</div>
 											</div>
@@ -653,10 +583,7 @@
 										<div class="agenda-item">
 											<div class="agenda-item-main">
 												<div class="bookmark">
-													<div
-														class="button-bookmark"
-														onclick="bookmarkEvent(this)"
-													></div>
+													<div class="button-bookmark" onclick="bookmarkEvent(this)"></div>
 													<div class="tooltip-bookmark">
 														Save to your Agenda?
 													</div>
@@ -679,14 +606,14 @@
 										var parseDate = date => {
 											var h = date.getHours();
 											var m = date.getMinutes();
-											var ampm = "am";
-											if (h > 12) {
-												h = h - 12;
-												ampm = "pm";
-											}
+											// var ampm = "am";
+											// if (h > 12) {
+											// 	h = h - 12;
+											// 	ampm = "pm";
+											// }
 											if (m.toString().length < 2) m = "0" + m;
 
-											return h + ":" + m + ampm;
+											return h + ":" + m;
 										};
 
 										var setTime = () => {
@@ -696,10 +623,7 @@
 												".current-time"
 											);
 											var currentTime = parseDate(d);
-											currentTimeElement.innerHTML = currentTime.substring(
-												0,
-												currentTime.length - 2
-											);
+											currentTimeElement.innerHTML = currentTime;
 
 											var t = setTimeout(setTime, 1000);
 										};
@@ -734,178 +658,184 @@
 												id: 13,
 												time: "1899-12-30T18:00:00.000Z",
 												duration: 15,
-												title: "Welcome to TEDxMalmö! - Carloline Ravn",
-												dropdown: ""
+												title: "Welcome to TEDxMalmö! - Caroline Ravn",
+												dropdown: null,
+												speakerImage: null
 											},
 											{
 												id: 13.15,
 												time: "1899-12-30T18:15:00.000Z",
 												duration: 25,
 												title: "TED Talk + Q&A with Per Holknekt",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png",
 												dropdown:
-													"Per shares emotional and valuable stories from his turbulent life that would makes even the toughest people shed tears. He has gone from being homeless to creating a fortune and a reputation as one of the most loved people in Sweden <br/> <span><a href='www.facebook.com/per.holknekt'>www.facebook.com/per.holknekt</a></span>&nbsp;&nbsp;  <span><a href='https://www.instagram.com/extraknekt/' target='__blank'>https://www.instagram.com/extraknekt/</a></span>"
+													"Per shares emotional and valuable stories from his turbulent life that would makes even the toughest people shed tears. He has gone from being homeless to creating a fortune and a reputation as one of the most loved people in Sweden <br/> <span> <a href='www.facebook.com/per.holknekt' target='__blank'>www.facebook.com/per.holknekt'</a></span>, <span> <a href='https://www.instagram.com/extraknekt/' target='__blank'>https://www.instagram.com/extraknekt</a></span>",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Per Holknekt 3.png"
 											},
 											{
 												id: 13.4,
 												time: "1899-12-30T18:40:00.000Z",
 												duration: 25,
 												title: "TED Talk with Atrium Ljungberg",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Andreas.png",
 												dropdown:
-													"“Building for moments you never forget.” With a career in commercial real estate and city development, Andreas explores the role of cities and communities in the time after the pandemic. How can commercial property development achieve moments in life that also defines a city. <br/> <span><a href='https://www.al.se/' target='__blank'>https://www.al.se/</a></span> #cityinnovation #culture #placemaking"
+													"“Building for moments you never forget.” With a career in commercial real estate and city development, Andreas explores the role of cities and communities in the time after the pandemic. How can commercial property development achieve moments in life that also defines a city. <br/> <span> <a href='https://www.al.se/' target='__blank'>https://www.al.se</a></span> #cityinnovation #culture #placemaking",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Andreas.png"
 											},
 											{
 												id: 14.05,
 												time: "1899-12-30T19:05:00.000Z",
 												duration: 20,
-												title: "TED Talk with Heather Mills",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png",
+												title: "RWE renewables  MASTER CLASS",
 												dropdown:
-													"This strong woman has went through it all. For example, a leg amputation plus a modelling career with a prosthetic limb. Her message is as simple as it is clear: never give up <br/> <a href='https://www.heathermills.org/' target='__blank'>https://www.heathermills.org</a>"
+													"Shaping the future of energy together. <span><a href='https://www.group.rwe/' target='__blank'>https://www.group.rwe</a></span>  #greenenergy #future",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/RWE.png"
 											},
 											{
 												id: 14.25,
 												time: "1899-12-30T19:25:00.000Z",
-												duration: 20,
-												title: "RWE renewables  MASTER CLASS",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/RWE.png",
-												dropdown:
-													"RWE Renewables is RWE´s renewables powerhouse of the future. <span><a href='https://www.group.rwe/' target='__blank'>https://www.group.rwe</a></span> #greenenergy #future"
-											},
-											{
-												id: 14.45,
-												time: "1899-12-30T19:45:00.000Z",
 												duration: 15,
 												title: "Kami Compliance MASTER CLASS",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Kami.png",
 												dropdown:
-													"Kami Compliance is a data privacy consultancy firm specialising in the General Data Protection Regulation (GDPR) <span><a href='http://www.consultkami.com/' target='__blank'>http://www.consultkami.com</a></span> #knowyourrights #data"
+													"Kami Compliance is a data privacy consultancy firm specialising in the General Data Protection Regulation (GDPR) <span> <a href='http://www.consultkami.com/' target='__blank'>http://www.consultkami.com</a></span> #knowyourrights #data",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Kami.png"
 											},
 											{
-												id: 15,
-												time: "1899-12-30T20:00:00.000Z",
+												id: 14.4,
+												time: "1899-12-30T19:40:00.000Z",
 												duration: 15,
 												title:
 													"Learn magic from Caroline and go see what the platform can do.",
-												dropdown: ""
+												dropdown: null,
+												speakerImage: null
+											},
+											{
+												id: 14.55,
+												time: "1899-12-30T19:55:00.000Z",
+												duration: 20,
+												title: "TED Talk with Wim Hof",
+												dropdown:
+													"Famously known as the Ice man because can handle extreme cold, and we mean EXTREME! Wim Hof has claimed 27 world records such as running the world’s fastest halfmarathon while barefoot on ice or snow. <span> <a href='https://www.wimhofmethod.com/' target='__blank'>https://www.wimhofmethod.com</a></span> #selfdevelopment #inflammation",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png"
 											},
 											{
 												id: 15.15,
 												time: "1899-12-30T20:15:00.000Z",
 												duration: 20,
-												title: "TED Talk + Q&A with Wim Hof",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Wim-Hof.png",
+												title: "King MASTER CLASS",
 												dropdown:
-													"Famously known as the Ice man because can handle extreme cold, and we mean EXTREME! Wim Hof has claimed 27 world records such as running the world’s fastest halfmarathon while barefoot on ice or snow. <span><a href='https://www.wimhofmethod.com/' target='__blank'>https://www.wimhofmethod.com</a></span> #selfdevelopment #inflammation"
+													"King is a leading interactive entertainment company for the mobile world, with people all around the world playing one or more of our games. We have developed more than 200 fun titles, offering games that are enjoyed all around the world. <span> <a href='https://www.king.com/' target='__blank'>https://www.king.com<a/></span> #innovation #creativity #teams",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/King.png"
 											},
 											{
 												id: 15.35,
 												time: "1899-12-30T20:35:00.000Z",
 												duration: 20,
-												title: "King MASTER CLASS",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/King.png",
+												title: "Q&A with Saga Gardevärn (Founder of TEDxMalmö)",
 												dropdown:
-													"King is a leading interactive entertainment company for the mobile world, with people all around the world playing one or more of our games. We have developed more than 200 fun titles, offering games that are enjoyed all around the world. <span><a href='https://www.king.com/' target='__blank'>https://www.king.com</a></span> #innovation #creativity #teams"
+													'"Is this the end for TEDxMalmö? ABSOLUTELY NOT!!!”\nCovid-19, lockdowns or money shortage… Nothing faces the Founder of TEDxMalmö, who transformed from creating the largest physical event in TEDx history, to a totally immersive and virtual experience with all the bells and whistles. Saga Gardevärn will answer all your questions about how to adapt in a highly unstable environment, allowing yourself to learn as you go, and most importantly never, ever give up!"',
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Saga.png"
 											},
+
 											{
 												id: 15.55,
 												time: "1899-12-30T20:55:00.000Z",
-												duration: 25,
-												title: "TED Talk + Q&A with Lovette Jallow",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Lovette_Jallow.png",
+												duration: 20,
+												title: "Jävligt Gott MASTER CLASS",
 												dropdown:
-													"If there is anybody who has constructive solutions for the future to be better for everyone, its Lovette Jallow.  During her lectures, Lovette Jallow talks about xenophobia, whiteness norms and privileges. <span><a href='https://lovettejallow.com/' target='__blank'>https://lovettejallow.com</a></span>"
+													"Jävligt Gott is Sweden's largest vegan food blog. Here, Gustav Johansson writes about what he considers to be damn good food, and his attempts to cook it.  <span> <a href='https://www.javligtgott.se/' target='__blank'>https://www.javligtgott.se</a></span>  #cookalong #futurefood",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/JavGott.png"
 											},
+
 											{
 												id: 16.2,
-												time: "1899-12-30T21:20:00.000Z",
-												duration: 20,
-												title: "Q&A with Saga Gardevärn (Founder of TEDxMalmö)",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Saga.png",
-												dropdown: ""
-											},
-											{
-												id: 16.4,
-												time: "1899-12-30T21:40:00.000Z",
-												duration: 40,
-												title: "Jävligt Gott MASTER CLASS",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/JavGott.png",
-												dropdown:
-													"Jävligt Gott is Sweden's largest vegan food blog. Here, Gustav Johansson writes about what I consider to be damn good food, and my attempts to cook it.  <span><a href='https://www.javligtgott.se/' target='__blank'>https://www.javligtgott.se</a></span>  #cookalong #futurefood"
-											},
-											{
-												id: 17.2,
-												time: "1899-12-30T22:20:00.000Z",
-												duration: 25,
-												title:
-													"It's break time, go and test of our acitivies on the platform!",
-												dropdown: ""
-											},
-											{
-												id: 17.45,
-												time: "1899-12-30T22:45:00.000Z",
-												duration: 20,
-												title: "MASTER CLASS",
-												dropdown: ""
-											},
-											{
-												id: 18.05,
-												time: "1899-12-30T23:05:00.000Z",
+												time: "1899-12-30T21:15:00.000Z",
 												duration: 20,
 												title: "TED Talk with Robert Swan",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Robert Swan.png",
 												dropdown:
-													"Robert is the first person in history to have walked to both the North and South Poles. He is an explorer, a leader in energy innovation, and the founder of the 2041 Foundation, a non-profit dedicated to preserving Antarctica as a natural reserve, land for science and peace. <span><a href='https://2041foundation.org/robert-swan/' target='__blank'>https://2041foundation.org/robert-swan</a></span>"
-											},
-											{
-												id: 18.25,
-												time: "1899-12-30T23:25:00.000Z",
-												duration: 10,
-												title: "Vimentis MASTER CLASS",
+													"Robert is the first person in history to have walked to both the North and South Poles. He is an explorer, a leader in energy innovation, and the founder of the 2041 Foundation, a non-profit dedicated to preserving Antarctica as a natural reserve, land for science and peace. <span> <a href='https://2041foundation.org/robert-swan/' target='__blank'>https://2041foundation.org/robert-swan</a></span>",
 												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/vimentis.png",
-												dropdown:
-													"Vimentis Group AB is a complete sales company <span><a href='https://www.vimentis.se/' target='__blank'>https://www.vimentis.se</a></span> #sales"
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Robert Swan.png"
 											},
+
+                      {
+                        id: 16.35,
+                        time: "1899-12-30T21:35:00.000Z",
+                        duration: 10,
+                        title: "Break",
+                        dropdown: null,
+                        speakerImage: null,
+                      },
+
 											{
-												id: 18.35,
-												time: "1899-12-30T23:35:00.000Z",
+												id: 16.45,
+												time: "1899-12-30T21:45:00.000Z",
 												duration: 20,
-												title: "TED Talk + Q&A with Amy Purdy",
-												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/Amy Purdy.png",
+												title: "TED Talk + Q&A with Heather Mills",
 												dropdown:
-													"Amy’s creativity, positive outlook and her never-give-up attitude have opened doors to many other opportunities, something that she will talk about.  <span><a href='https://amypurdy.com/about/' target='__blank'>https://amypurdy.com/about</a></span>"
-											},
-											{
-												id: 18.55,
-												time: "1899-12-30T23:55:00.000Z",
-												duration: 20,
-												title: "TED Talk + Q&A with Bruce Dickinson",
+													"This strong woman has went through it all. For example, a leg amputation plus a modelling career with a prosthetic limb. Her message is as simple as it is clear: never give up <br/> <span> <a href='https://www.heathermills.org/' target='__blank'>https://www.heathermills.org</a></span>",
 												speakerImage:
-													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png",
-												dropdown:
-													"Band leader fronting one of the world's largest metal bands, and entrepreneur, author and business man. <span><a href='https://screamforme.com/' target='__blank'>https://screamforme.com</a></span>"
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/HEATHER MILLS 2.png"
 											},
+
 											{
-												id: 19.15,
-												time: "1899-12-31T00:15:00.000Z",
+												id: 17.1,
+												time: "1899-12-30T22:10:00.000Z",
 												duration: 10,
-												title: "Goodbye from your host Caroline Ravn!",
-												dropdown: ""
-											}
+												title: "Vimentis (Michel Laporte Godorn)  MASTER CLASS",
+												dropdown:
+													"Vimentis Group AB is a complete sales company <span> <a href='https://www.vimentis.se/' target='__blank'>https://vimentis.se<a/></span> #sales",
+												speakerImage:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/vimentis.png"
+											},
+
+                      {
+                        id: 17.2,
+                        time: "1899-12-30T22:20:00.000Z",
+                        duration: 10,
+                        title: "TED Talk with Janne Bjorge",
+                        dropdown:
+                          null,
+                        speakerImage:
+                          null,
+                      },
+
+                      {
+                      id: 17.3,
+                      time: "1899-12-30T22:30:00.000Z",
+                      duration: 10,
+                      title: "Break",
+                      dropdown:
+                    null,
+                      speakerImage:
+                    null,
+                    },
+
+											{
+												id: 17.4,
+												time: "1899-12-30T22:40:00.000Z",
+												duration: 20,
+                        title: "TED Talk with Bruce Dickinson",
+												dropdown:
+                          "Band leader fronting one of the world's largest metal bands, and entrepreneur, author and business man. <span> <a href='https://screamforme.com/' target='__blank'>https://screamforme.com</a></span>",
+												speakerImage:
+                          "https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/speakers/BRUCE DICKINSON.png"
+											},
+
+											{
+												id: 18,
+												time: "1899-12-30T23:00:00.000Z",
+                        duration: 10,
+                        title: "Goodbye from your host Caroline Ravn!",
+                        dropdown: null,
+                        speakerImage: null
+											},
 										];
 
 										var convertTime = (start, duration) => {
@@ -1063,7 +993,7 @@
 												time.innerHTML = convertTime(item.time, item.duration);
 												title.innerHTML = item.title;
 												//if dropdown text exists, add onclick functionality and show chevron
-												if (item.dropdown.length > 0) {
+												if (item.dropdown) {
 													description.innerHTML = item.dropdown;
 													time.style.cursor = "pointer";
 													time.setAttribute("onclick", "toggleDetails(this)");
@@ -1225,113 +1155,106 @@
 										</script>
 									</chatwee>
 								</inferno-snippet-content>
-								<!--  SNIPPET CONTENT END  -->
-								<!-- ********************* -->
-								<!-- ********************* -->
-								<!-- ********************* -->
-							</div>
-						</landing-page>
-					</div>
-				</section>
-				<!-- LANDING -->
-				<!-- FOOTER -->
-				<footer app-footer layout="row" layout-align="start center">
-					Inferno Footer
-				</footer>
-				<!-- ./ FOOTER -->
-			</div>
-		</videos-layout>
-	</app-root>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
 
-	<script>
-		// LIQUID PROCESSING (Set the data variable above)
-		function processLiquid() {
-			return new Promise((resolve, reject) => {
-				console.log("PROCESSING LIQUID");
-				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-				// This breaks comparison operators, so we need to convert them back before Liquid processing.
-				const template = landingPageEl
-					.querySelector("inferno-snippet-content")
-					.innerHTML.replace(/&lt;/g, "<")
-					.replace(/&gt;/g, ">")
-					.replace(/&amp;/g, "&");
-				// Select the element itself to replace the content
-				const result = landingPageEl.querySelector("inferno-snippet-content");
-				// Initialize the parsing engine
-				const engine = new liquidjs.Liquid();
-				// Parse and render
-				engine
-					.parseAndRender(template, { data })
-					.then(html => (result.innerHTML = html));
-				resolve();
-			});
-		}
 
-		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-		function mtCollapseMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			window.sessionStorage.setItem("menuState", "collapsed");
-			appRoot.classList.add("aside-collapsed");
-			appRoot.classList.remove("aside-hidden");
-			sideBar.classList.remove("hidden");
-		}
 
-		function mtHideMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			window.sessionStorage.setItem("menuState", "hidden");
-			appRoot.classList.remove("aside-collapsed");
-			appRoot.classList.add("aside-hidden");
-			sideBar.classList.add("hidden");
-		}
 
-		function mtExpandMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			window.sessionStorage.setItem("menuState", "expanded");
-			appRoot.classList.remove("aside-hidden");
-			appRoot.classList.remove("aside-collapsed");
-			sideBar.classList.remove("hidden");
-		}
+<script>
 
-		function mtTriggerMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			if (
-				!appRoot.classList.contains("aside-collapsed") &&
-				!appRoot.classList.contains("aside-hidden")
-			) {
-				mtCollapseMenu();
-			} else if (
-				appRoot.classList.contains("aside-collapsed") &&
-				!appRoot.classList.contains("aside-hidden")
-			) {
-				mtHideMenu();
-			} else if (appRoot.classList.contains("aside-hidden")) {
-				mtExpandMenu();
-			}
-		}
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
 
-		function mtInitMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			const state = sessionStorage.getItem("menuState");
+  }
 
-			if (state === "collapsed") {
-				mtCollapseMenu();
-			} else if (state === "hidden") {
-				mtHideMenu();
-			} else if (state === "expanded") {
-				mtExpandMenu();
-			}
-		}
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
 
-		function populateInfernoElements() {
-			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
-			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
-			if (qaDiv) {
-				$(qaDiv).append(`
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -1343,27 +1266,30 @@
           </div>
         </div>
       </questions>
-      `);
-			}
-			if (videoDiv) {
-				$(videoDiv).append(`
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `);
-			}
-		}
+        `)
+    }
+  }
 
-		// Wait for liquid processing before handling the rest
-		if (data) {
-			processLiquid().then(mtInitMenu).then(populateInfernoElements);
-		} else {
-			mtInitMenu();
-			populateInfernoElements();
-		}
-	</script>
-</body>
-<!-- Menu Collapse Script -->
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

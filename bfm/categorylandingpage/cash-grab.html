@@ -1,683 +1,803 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			const x = JSON.parse(response);
+			data = x[0];
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-  </script>
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    #localTemplateMenu a {
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
-
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				window.localTemplateMenuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="bfm" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-          
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="e4548550-cd02-4e5d-a6dc-2598691b4eb3">
+	<div style="display: none" id="novoProject" name="bfm" onload="login()"></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="e4548550-cd02-4e5d-a6dc-2598691b4eb3"
+								>
+									<!-- Script to insert header with marquee and botton nav-->
+									<script>
+										function goPage(id) {
+											const pages = landingPageEl.querySelector(
+												"#category-page-links"
+											);
+											const link = pages.querySelector("#link_" + id);
+											if (link) {
+												link.dispatchEvent(new MouseEvent("click"));
+											} else {
+												alert("link you selected does not exists");
+											}
+										}
+										var fetchLayout = () => {
+											var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
 
-                                <!-- Script to insert header with marquee and botton nav-->
-                                <script>
-                                  function goPage(id) {
-                                    const pages = landingPageEl.querySelector('#category-page-links');
-                                    const link = pages.querySelector('#link_' +id);
-                                    if (link) {
-                                      link.dispatchEvent(new MouseEvent('click'));
-                                    } else {
-                                      alert('link you selected does not exists');
-                                    }
-                                  }
-                                  var fetchLayout = () => {
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
 
-                                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
-                                    // Set header
-                                    const headers = {
-                                      'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                                      'X-InfernoCore-Domain': sessionStorage.getItem('domain') ?? window.location.hostname,
-                                    };
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+													elementId,
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													var parser = new DOMParser();
+													var doc = parser.parseFromString(res, "text/html");
 
-                                    // add a header property for users accessing with SA credentials
-                                    if (window.sessionStorage.overrideId) {
-                                      headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
-                                      headers["X-Client-Override"] = sessionStorage.getItem('overrideId');
-                                    }
+													var header = doc.getElementById("bfm-header");
+													var menu = doc.getElementById("bottom-nav");
+													//script element for menu navigation
+													var script = doc.getElementById("layout-script");
 
-                                    $.ajax({
-                                      url: 'https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/' + elementId,
-                                      type: 'GET',
-                                      async: true,
-                                      accept: 'application/json',
-                                      contentType: 'application/json',
-                                      headers: headers,
-                                      success: function (res, status, xhr) {
-                                        var parser = new DOMParser();
-                                        var doc = parser.parseFromString(res, "text/html");
+													//parent element where menu navigation will be inserted into on the page
+													const contentElement = landingPageEl.getElementById(
+														"content"
+													);
 
-                                        var header = doc.getElementById("bfm-header");
-                                        var menu = doc.getElementById("bottom-nav");
-                                        //script element for menu navigation
-                                        var script = doc.getElementById("layout-script");
+													//checks if the elements have already been inserted into the DOM to avoid duplicate elements
+													if (!landingPageEl.getElementById("bfm-header"))
+														contentElement.insertBefore(
+															header,
+															contentElement.childNodes[0]
+														);
+													if (!landingPageEl.getElementById("bottom-nav"))
+														contentElement.appendChild(menu);
+													eval(script.innerHTML);
+												},
+												error: function (err) {
+													console.error("Error Fetching HTML", err);
+												}
+											});
+										};
 
-                                        //parent element where menu navigation will be inserted into on the page
-                                        const contentElement = landingPageEl.getElementById("content");
+										fetchLayout();
+									</script>
 
-                                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
-                                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
-                                        eval(script.innerHTML);
-                                      },
-                                      error: function (err) {
-                                        console.error('Error Fetching HTML', err);
-                                      }
-                                    });
-                                  };
+									<!-- Fetch Cash Winnings -->
+									<script>
+										// Get Cash Winnings
+										var fetchCash = () => {
+											fetch("https://api.npoint.io/a882eb40505e926a52f4")
+												.then(response => response.json())
+												.then(data => {
+													const cashBox = landingPageEl.querySelector(
+														"#winnings"
+													);
+													cashBox.innerHTML =
+														"TOTAL CASH WON: $" + data.cash_grab;
+												});
+										};
 
-                                  fetchLayout();
-                                </script>
+										fetchCash();
+									</script>
+									<style>
+										/* prevent entire screen from going black if you try to reference an image that does not exist*/
+										/* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+										img::after {
+											content: none;
+										}
 
-                                <!-- Fetch Cash Winnings -->
-                                <script>
-                                  // Get Cash Winnings
-                                  var fetchCash = () => {
-                                    fetch('https://api.npoint.io/a882eb40505e926a52f4')
-                                      .then(response => response.json())
-                                      .then(data => {
-                                        const cashBox = landingPageEl.querySelector(".custom-banner");
-                                        cashBox.innerHTML = "TOTAL CASH WON: $" + data.cash_grab;
-                                      });
-                                  };
+										h1,
+										h2,
+										h3,
+										h4,
+										h5 {
+											font-family: "HelveticaNeue-CondensedBold",
+												"Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+										}
 
-                                  fetchCash();
-                                </script>
-                                <style>
-                                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                                  img::after {
-                                    content: none;
-                                  }
+										#content {
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png");
+											background-repeat: no-repeat;
+											background-size: cover;
+											background-position: center;
+											min-height: calc(100vh - 114px);
+											margin: -20px;
+											padding: 20px 24px;
+											z-index: 1;
+											font-family: "Helvetica Neue", Arial Narrow, Arial,
+												sans-serif !important;
+										}
 
-                                  h1,
-                                  h2,
-                                  h3,
-                                  h4,
-                                  h5 {
-                                    font-family: "HelveticaNeue-CondensedBold",
-                                      "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
-                                  }
+										.page-contents {
+											display: flex;
+											flex-direction: row;
+											justify-content: space-between;
+											width: 100%;
+										}
 
-                                  #content {
-                                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png');
-                                    background-repeat: no-repeat;
-                                    background-size: cover;
-                                    background-position: center;
-                                    min-height: calc(100vh - 114px);
-                                    margin: -20px;
-                                    padding: 20px 24px;
-                                    z-index: 1;
-                                    font-family: "Helvetica Neue", Arial Narrow, Arial,
-                                      sans-serif !important;
-                                  }
+										.column {
+											display: flex;
+											flex-direction: column;
+											justify-content: flex-start;
+											align-items: center;
+											height: 100%;
+										}
 
-                                  .page-contents {
-                                     display: flex;
-                                    flex-direction: row;
-                                    justify-content: space-between;
-                                    width: 100%;
+										.col2 img {
+											height: auto;
+										}
 
-                                  }
+										.bowling {
+											width: 70%;
+										}
 
-                                  .column {
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-start;
-                                    align-items: center;
-                                    height: 100%;
-                                  }
+										.custom-banner {
+											margin-top: 2rem;
+											border: 3px solid #c4b21c;
+											border-radius: 10px;
+											background-color: black;
+											font-weight: 100;
+											font-size: 3.2rem;
+											min-width: 30rem;
+											color: #cbc165;
+											text-shadow: 0px 0px 10px #c4b21c, 0px 0px 10px #c4b21c,
+												0px 0px 10px #c4b21c;
+											padding: 3rem 2rem;
+											text-align: center;
+										}
 
-                                  .col2 img {
-                                    height: auto;
-                                  }
+										#winnings {
+											font-size: 4.2rem;
+										}
 
-                                  .bowling {
-                                    width: 70%;
-                                  }
+										.videos {
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: flex-start;
+										}
 
-                                  .custom-banner {
-                                    margin-top: 2rem;
-                                    border: 3px solid #c4b21c;
-                                    border-radius: 10px;
-                                    background-color: black;
-                                    font-weight: 100;
-                                    font-size: 4.2rem;
-                                    color: #cbc165;
-                                    text-shadow: 0px 0px 10px #c4b21c,0px 0px 10px #c4b21c,0px 0px 10px #c4b21c;
-                                    padding: 3rem 2rem;
-                                  }
+										.video {
+											cursor: pointer;
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/bowling-for-bucks/video-bg.png");
+											height: 15.4rem;
+											width: 25.2rem;
+											margin: 1rem;
+											display: flex;
+											flex-direction: column;
+											justify-content: flex-end;
+											align-items: center;
+										}
 
-                                  .videos {
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: center;
-                                    justify-content: flex-start;
+										.video-box-label {
+											width: 100%;
+											background-color: #707070;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											color: white;
+											font-size: 2rem;
+											text-transform: uppercase;
+										}
 
-                                  }
+										.drawing {
+											font-weight: bold;
+										}
 
-                                  .video {
-                                    cursor: pointer;
-                                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/bowling-for-bucks/video-bg.png');
-                                    height: 15.4rem;
-                                    width: 25.2rem;
-                                    margin: 1rem;
-                                    display: flex;
-                                    flex-direction: column;
-                                    justify-content: flex-end;
-                                    align-items: center;
-                                  }
+										#video-popup {
+											display: none;
+											position: absolute;
+											top: 50%;
+											left: 50%;
+											transform: translate(-50%, -50%);
+											width: 100%;
+											height: 100%;
+											background-color: rgba(0, 0, 0, 0.386);
+											z-index: 99;
+										}
 
-                                  .video-box-label {
-                                    width: 100%;
-                                    background-color: #707070;
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: center;
-                                    color: white;
-                                    font-size: 2.0rem;
-                                    text-transform: uppercase;
-                                  }
+										.video-container {
+											padding: 2rem;
+											color: white;
+											font-size: 2.4rem;
+											position: absolute;
+											top: 50%;
+											left: 50%;
+											transform: translate(-50%, -50%);
+											height: 50%;
+											width: 50%;
+											background-color: rgba(0, 0, 0, 1);
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: flex-start;
+										}
 
-                                  .drawing {
-                                    font-weight: bold;
-                                  }
-
-                                  #video-popup {
-                                    display: none;
-                                    position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%);
-                                    width: 100%;
-                                    height: 100%;
-                                    background-color: rgba(0, 0, 0, 0.386);
-                                    z-index: 99;
-                                  }
-
-                                  .video-container {
-                                    padding: 2rem;
-                                    color: white;
-                                    font-size: 2.4rem;
-                                    position: absolute;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%);
-                                    height: 50%;
-                                    width: 50%;
-                                    background-color: rgba(0, 0, 0, 1);
-                                    display: flex;
-                                    flex-direction: column;
-                                    align-items: center;
-                                    justify-content: flex-start;
-                                  }
-
-                                  .close-popup {
-                                    cursor: pointer;
-                                    font-weight: bold;
-                                    text-align: right;
-                                    width: 100%;
-                                    height: 4rem;
-                                  }
-                                </style>
-                                <category-page-links id="category-page-links" style="display:none">
-                                  <!--
+										.close-popup {
+											cursor: pointer;
+											font-weight: bold;
+											text-align: right;
+											width: 100%;
+											height: 4rem;
+										}
+									</style>
+									<category-page-links
+										id="category-page-links"
+										style="display: none"
+									>
+										<!--
                                     these links will allow navigating ot booth pages without page refreshing
                                     this will print all categories not just the booths, no way around that at the time of this writing
                                     links generated using liquid get picked up by the Angular Routing mechanism
                                     links generated by by JS do not and cause a page/app reload
                                     even when navigating within the app using relative URLS
                                     -->
-                                  {% for category in data.Categories %}
-                                  {% assign page = category.Id | downcase %}
-                                  {% assign snippet = category.LandingPageSnippetId | downcase %}
-                                  <a href="/videos/{{ page }}/landing/{{ snippet }}" id="link_{{ page }}" pageid="{{ page }}">{{ category.Name }}</a>
-                                  {% endfor %}
-                                </category-page-links>
-                                <div id="content">
-                                  <div class="page-contents">
-                                      <div class="column col1">
-                                        <div class="videos">
-                                          <div class="video" id="video-1" onclick="toggleVideo(this)"></div>
-                                          <div class="video" id="video-2" onclick="toggleVideo(this)"></div>
-                                          <div class="video" id="video-3" onclick="toggleVideo(this)"></div>
-                                        </div>
-                                      </div>
-                                      <div class="column col2">
-                                        <img class="bowling" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/cash-grab.png">
-                                        <div class="custom-banner">TOTAL CASH WON: $12,500</div>
-                                      </div>
-                                      <div class="column col3">
-                                        <div class="videos">
-                                          <div class="video" id="video-4" onclick="toggleVideo(this)"></div>
-                                          <div class="video" id="video-5" onclick="toggleVideo(this)"></div>
-                                          <div class="video" id="video-6" onclick="toggleVideo(this)"></div>
-                                        </div>
-                                      </div>
-                                  </div>
-                                  <div id="video-popup">
-                                    <div class="video-container">
-                                      <div class="close-popup" onclick="toggleVideo()">X</div>
-                                    </div>
-                                  </div>
-                                </div>
+										{% for category in data.Categories %} {% assign page =
+										category.Id | downcase %} {% assign snippet =
+										category.LandingPageSnippetId | downcase %}
+										<a
+											href="/videos/{{ page }}/landing/{{ snippet }}"
+											id="link_{{ page }}"
+											pageid="{{ page }}"
+											>{{ category.Name }}</a
+										>
+										{% endfor %}
+									</category-page-links>
+									<div id="content">
+										<div class="page-contents">
+											<div class="column col1">
+												<div class="videos">
+													<div class="custom-banner">Tuesday Drawings</div>
+													<div
+														class="video"
+														id="video-1"
+														onclick="toggleVideo(this)"
+													></div>
+													<div
+														class="video"
+														id="video-2"
+														onclick="toggleVideo(this)"
+													></div>
+													<div
+														class="video"
+														id="video-3"
+														onclick="toggleVideo(this)"
+													></div>
+												</div>
+											</div>
+											<div class="column col2">
+												<img
+													class="bowling"
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/cash-grab.png"
+												/>
+												<div class="custom-banner" id="winnings">
+													TOTAL CASH WON: $12,500
+												</div>
+											</div>
+											<div class="column col3">
+												<div class="videos">
+													<div class="custom-banner">Wednesday Drawings</div>
+													<div
+														class="video"
+														id="video-4"
+														onclick="toggleVideo(this)"
+													></div>
+													<div
+														class="video"
+														id="video-5"
+														onclick="toggleVideo(this)"
+													></div>
+													<div
+														class="video"
+														id="video-6"
+														onclick="toggleVideo(this)"
+													></div>
+												</div>
+											</div>
+										</div>
+										<div id="video-popup">
+											<div class="video-container">
+												<div class="close-popup" onclick="toggleVideo()">X</div>
+											</div>
+										</div>
+									</div>
 
-                                <!-- Video Popup-->
-                                <script>
-                                  //for local testing only
-                                  //  var data = {}
-                                  //   loadJSON('../liquid.json', function (response) {
-                                  //     // Parse JSON string into object
-                                  //     const x = JSON.parse(response)
-                                  //     data = x[0]
-                                  //     console.log(data.Events);
-                                  //   })
+									<!-- Video Popup-->
+									<script>
+										//for local testing only
+										//  var data = {}
+										//   loadJSON('../liquid.json', function (response) {
+										//     // Parse JSON string into object
+										//     const x = JSON.parse(response)
+										//     data = x[0]
+										//     console.log(data.Events);
+										//   })
 
-                                    // var lq = data;
+										  // var lq = data;
 
-                                    //for production
-                                  var lq = {{ data | json }};
+										  //for production
+										var lq = {{ data | json }};
 
-                                  var videos = lq.Events.filter(event => (
-                                    event.Categories[0].Name.toLowerCase().includes("cash")
-                                  ));
+										var videos = lq.Events.filter(event => (
+										  event.Categories[0].Name.toLowerCase().includes("cash")
+										));
 
-                                  //sort by start time
-                                  var sortedVideos = videos.sort((a, b) =>  {
-                                     var dateA = new Date(a.StartTime);
-                                    var dateB = new Date(b.StartTime);
-                                    return dateA > dateB ? 1 : -1;
-                                  });
-
-
-                                  var formatTime = (value) => {
-                                    var d = new Date(value);
-                                    var hr = d.getHours();
-                                    var min = d.getMinutes();
-                                    var ampm = "am";
-                                    if (hr > 12) {
-                                      hr -= 12;
-                                      ampm = "pm";
-                                    }
-
-                                    return (hr + ":" + min + ampm);
-                                  }
-                                  //Add video box labels
-                                  var addLabels = () => {
-                                    var videoBoxes = landingPageEl.querySelectorAll(".video");
-                                    videoBoxes.forEach((videoBox, index) => {
-                                      videoBox.setAttribute("id", sortedVideos[index].Id);
-                                      var drawing = sortedVideos[index].Description.substring(sortedVideos[index].Description.length - 9);
-                                      var label = document.createElement("div");
-                                      label.setAttribute("class", "video-box-label");
-                                      videoBox.appendChild(label);
-                                      createElement("drawing", drawing + ":", label);
-                                      createElement("time", formatTime(sortedVideos[index].StartTime), label);
-                                    });
-                                  }
-
-                                  var createElement = (type, value, parent) => {
-                                    var element = document.createElement("div");
-                                    element.setAttribute("class", type);
-                                    element.innerHTML = value;
-                                    parent.appendChild(element);
-
-                                  }
-
-                                  addLabels();
-
-                                  //open popup and get embeded tiktok video
-                                  var toggleVideo = (element) => {
-                                    var popupElement = landingPageEl.getElementById("video-popup");
-                                    var iframe;
-                                    if (element) {
-                                      var videoId = element.id;
-                                      popupElement.style.display = "block";
-                                      var videoContainer = landingPageEl.querySelector(".video-container");
-                                      iframe = document.createElement("iframe");
-                                      iframe.setAttribute("class", "video-iframe");
-                                      iframe.src = "/embed/" + videoId;
-                                      videoContainer.appendChild(iframe);
-                                    } else {
-                                      popupElement.style.display = "none";
-                                      iframe = landingPageEl.querySelector(".video-iframe")
-                                      iframe.remove();
-                                    }
-
-                                  }
-                                </script>
-              </inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
+										//sort by start time
+										var sortedVideos = videos.sort((a, b) =>  {
+										   var dateA = new Date(a.StartTime);
+										  var dateB = new Date(b.StartTime);
+										  return dateA > dateB ? 1 : -1;
+										});
 
 
+										var formatTime = (value) => {
+										  var d = new Date(value);
+										  var hr = d.getHours();
+										  var min = d.getMinutes();
+										  var ampm = "am";
+										  if (hr > 12) {
+										    hr -= 12;
+										    ampm = "pm";
+										  }
 
+										  if (min.toString().length  < 2) min = "0" + min;
 
-<script>
+										  return (hr + ":" + min + ampm);
+										}
+										//Add video box labels
+										var addLabels = () => {
+										  var videoBoxes = landingPageEl.querySelectorAll(".video");
+										  videoBoxes.forEach((videoBox, index) => {
+										    videoBox.setAttribute("id", sortedVideos[index].Id);
+										    var drawing = sortedVideos[index].Description.substring(sortedVideos[index].Description.length - 9);
+										    var label = document.createElement("div");
+										    label.setAttribute("class", "video-box-label");
+										    videoBox.appendChild(label);
+										    createElement("drawing", drawing + ":", label);
+										    createElement("time", formatTime(sortedVideos[index].StartTime), label);
+										  });
+										}
 
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
+										var createElement = (type, value, parent) => {
+										  var element = document.createElement("div");
+										  element.setAttribute("class", type);
+										  element.innerHTML = value;
+										  parent.appendChild(element);
 
-  }
+										}
 
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
+										addLabels();
 
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
+										//open popup and get embeded tiktok video
+										var toggleVideo = (element) => {
+										  var popupElement = landingPageEl.getElementById("video-popup");
+										  var iframe;
+										  if (element) {
+										    var videoId = element.id;
+										    popupElement.style.display = "block";
+										    var videoContainer = landingPageEl.querySelector(".video-container");
+										    iframe = document.createElement("iframe");
+										    iframe.setAttribute("class", "video-iframe");
+										    iframe.src = "/embed/" + videoId;
+										    videoContainer.appendChild(iframe);
+										  } else {
+										    popupElement.style.display = "none";
+										    iframe = landingPageEl.querySelector(".video-iframe")
+										    iframe.remove();
+										  }
 
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
+										}
+									</script>
+								</inferno-snippet-content>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
 
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
 
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
 
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
 
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
+
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
+
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
+
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
+
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -689,30 +809,27 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->

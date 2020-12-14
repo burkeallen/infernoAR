@@ -241,116 +241,192 @@
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="d46455d8-dca8-4265-bf6f-cc35e8e292ea">
+									<!--  Load custom fonts -->
+									<script type="text/javascript">
+										function loadFont(name, url) {
+											if (document.fonts.check("1em " + name)) {
+												return;
+											}
+											const fontFace = new FontFace(name, "url(" + url + ")");
 
-                <!--  Load custom fonts -->
-                <script type="text/javascript">
-                  function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
-                      return;
-                    }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+											fontFace
+												.load()
+												.then(function (loadedFont) {
+													document.fonts.add(loadedFont);
+													console.log("Loaded custom font ", name);
+												})
+												.catch(function (error) {
+													// error occurred
+													console.log("Error loading ", name);
+												});
+										}
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
+										loadFont(
+											"Montserrat",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf"
+										);
+										loadFont(
+											"MontserratBold",
+											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf"
+										);
+									</script>
 
-                  }
+									<style>
+										/* prevent entire screen from going black if you try to reference an image that does not exist*/
+										/* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+										img::after {
+											content: none;
+										}
 
-                  loadFont('Montserrat', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Regular.ttf');
-                  loadFont('MontserratBold', 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/Montserrat-Bold.ttf');
-                </script>
+										h1,
+										h2,
+										h3,
+										h4,
+										h5 {
+											font-family: "HelveticaNeue-CondensedBold",
+												"Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+										}
 
-                <style>
-                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                  img::after {
-                    content: none;
-                  }
+										.content {
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: space-evenly;
+											min-height: calc(100vh - 114px);
+											width: calc(100% + 40px);
+											z-index: 1;
+											font-family: "Montserrat", sans-serif;
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/bg.jpg");
+											background-position: bottom center;
+											background-repeat: no-repeat;
+											background-size: cover;
+											margin: -20px;
+											padding: 20px;
+										}
 
-                  h1, h2, h3, h4, h5 {
-                    font-family: "HelveticaNeue-CondensedBold",
-                    "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
-                  }
+										.merch {
+											position: relative;
+											cursor: pointer;
+											width: 28rem;
+											font-size: 1.2rem;
+											color: white;
+											-webkit-clip-path: polygon(
+												7% 0%,
+												100% 0%,
+												100% 76%,
+												93% 100%,
+												0% 100%,
+												0% 103%,
+												0% 80%,
+												0% 27%
+											);
+											clip-path: polygon(
+												7% 0%,
+												100% 0%,
+												100% 76%,
+												93% 100%,
+												0% 100%,
+												0% 103%,
+												0% 80%,
+												0% 27%
+											);
+										}
 
-                  .content {
-                    display: flex;
-                    flex-direction: column;
-                    min-height: calc(100vh - 114px);
-                    width: calc(100% + 40px);
-                    z-index: 1;
-                    font-family: 'Montserrat', sans-serif;
-                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/player/bg.jpg");
-                    background-position: bottom center;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    margin: -20px;
-                    padding: 20px;
-                  }
+										.merch img {
+											width: 100%;
+											height: auto;
+										}
 
-                </style>
+										.merch-text {
+											position: absolute;
+											top: 50%;
+											left: 50%;
+											transform: translate(-50%, -50%);
+											width: 85%;
+											text-align: center;
+										}
 
-                <!-- Stage Grid -->
-                <style>
-                  .stage-grid {
-                    position: relative;
-                    display: flex;
-                    flex-direction: column;
-                    margin: 0 auto;
-                    padding: 20px;
-                    width: 80%;
-                    height: 100%;
-                  }
+										.content a {
+											text-decoration: none;
+										}
 
-                  .col {
-                    width: 80%;
-                    margin: 0 auto;
-                  }
-                </style>
+										.merch:hover {
+											color: rgba(255, 255, 255, 0.5);
+											background-color: rgba(0, 0, 0, 0.3);
+										}
+									</style>
 
-                <!-- Video Player -->
-                <style>
-                  .ntar-video-container {
-                    position: relative;
-                    padding-bottom: 56.5%; /* 16:9 */
-                    height: 0;
-                  }
+									<!-- Stage Grid -->
+									<style>
+										.stage-grid {
+											position: relative;
+											display: flex;
+											flex-direction: column;
+											margin: 0 auto;
+											padding: 20px;
+											width: 80%;
+											height: 100%;
+										}
 
-                  videos-detail {
-                    background-color: black !important;
-                  }
+										.col {
+											width: 80%;
+											margin: 0 auto;
+										}
+									</style>
 
-                  #inferno-video-player {
-                    height: auto !important;
-                    max-width: none;
-                  }
+									<!-- Video Player -->
+									<style>
+										.ntar-video-container {
+											position: relative;
+											padding-bottom: 56.5%; /* 16:9 */
+											height: 0;
+										}
 
-                  #inferno-video-player iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
-                </style>
+										videos-detail {
+											background-color: black !important;
+										}
 
-                <div id="content" class="content">
+										#inferno-video-player {
+											height: auto !important;
+											max-width: none;
+										}
 
-                  <div class="stage-grid">
-                    <div class="col">
-                      <div class="ntar-video-container">
-                        <div class="ntar-video" id="inferno-video-player"></div>
-                      </div>
-                    </div>
+										#inferno-video-player iframe {
+											position: absolute;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+										}
+									</style>
 
-                  </div>
+									<div id="content" class="content">
+										<div class="stage-grid">
+											<div class="col">
+												<div class="ntar-video-container">
+													<div class="ntar-video" id="inferno-video-player"></div>
+												</div>
+											</div>
+										</div>
+										<a class="merch-link" href="https://contribute.tedxmalmo.se/" target="__blank"><div class="merch">
+												<img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/tedxmalmo/information/tab.png">
+												<div class="merch-text">
+													Become a certified TEDx donor, get surpises
+												</div>
+											</div></a>
+									</div>
 
-                </div>
+									<!-- hide button if no link -->
+									<script>
+										var hideEmptyLink = () => {
+											var link = landingPageEl.querySelector(".merch-link");
+											var href = link.getAttribute("href");
+											if (href.length < 1) link.remove();
+										};
 
-              </inferno-snippet-content>
+										hideEmptyLink();
+									</script>
+								</inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
