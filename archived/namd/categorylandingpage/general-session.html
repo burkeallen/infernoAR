@@ -1,0 +1,921 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="73b49da7-866b-41f2-aead-ac977b67de78">
+
+<!-- MAINSTAGE REDIRECT CATEGORY PAGE -->
+<!-- Get current timestamp by casting NOW to seconds since 1970 -->
+{% assign currentTime = "now" | date: "%s" %}
+<!-- Sort events by start time -->
+{% assign sortedEvents = data.Events | sort: 'StartTime' %}
+<!-- Set nextEvent so we know if no upcoming event is found -->
+{% assign nextEvent = 'No Event' %}
+
+<!-- Iterate the sorted events -->
+{% for event in sortedEvents %}
+<!-- The end time is start timestamp added to video duration -->
+{% assign endTime = event.StartTime | date: "%s" | plus: event.VideoDuration | plus: 3600 %}
+<!-- Force currentTime & endTime to number by adding 0 and compare...  -->
+{% if currentTime | plus: 0 > endTime | plus: 0 %}
+<!-- ...if current time is after the end time, the event has passed, and we skip to the next iteration,... -->
+{% continue %}
+<!-- ...otherwise... -->
+{% else %}
+<!-- ... we set this as our next upcoming event and ... -->
+{% assign nextEvent = event %} {% endif %}
+<!-- ...break the iteration loop. -->
+{% break %} {% endfor %}
+<!-- If the loop didn't find any upcoming events,... -->
+{% if nextEvent == 'No Event' %}
+<!-- ...we'll write 'none' into a hidden div, ... -->
+<div style="display: none" id="redirect-link">none</div>
+{% else %}
+<!-- ...otherwise we'll write our event link by combining category and event GUIDs. -->
+<div style="display: none" id="redirect-link">
+  /videos/{{ data.CurrentlyViewedCategory.Id }}/detail/{{ nextEvent.Id }}
+</div>
+{% endif %}
+
+<script type="text/javascript">
+  // Redirect to the link we grab out of the hidden div
+  if (landingPageEl.querySelector('#redirect-link').textContent !== 'none') {
+    window.location.href = landingPageEl.querySelector('#redirect-link').textContent;
+  }
+</script>
+
+<!-- CSS -->
+<style>
+  /* Resets */
+  * {
+    box-sizing: border-box;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    width: 100%;
+    height: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+  }
+
+  button {
+    outline: none;
+    border: none;
+    background: transparent;
+    font-family: 'europaBold', sans-serif;
+  }
+
+  button:hover {
+    opacity: 0.9;
+    cursor: pointer;
+  }
+
+  /* End Resets */
+
+  .eurafrican-mainstage {
+    background: #fff;
+    background: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/mainstage.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0% 50%;
+    width: calc(100% + 40px);
+    min-height: 100vh;
+    margin: -20px;
+    padding: 5vh 0;
+    color: #333;
+    font-family: 'europa', sans-serif;
+    z-index: 2;
+  }
+
+  .eurafrican-mainstage:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+  .ea-mobile-cover {
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    width: 100%;
+    height: 61px;
+    background: #494383;
+    opacity: 0.7;
+  }
+
+  .ea-logo {
+    position: absolute;
+    top: 1vh;
+    left: 1%;
+    width: 18%;
+    margin: 0;
+  }
+
+  .ea-logo:before {
+    content: '';
+    display: block;
+    background: #fff;
+    width: 140%;
+    height: 150%;
+    position: absolute;
+    top: -40%;
+    left: -30%;
+    border-radius: 100%;
+    -ms-transform: skew(-35deg) scale(1.25);
+    -webkit-transform: skew(-35deg) scale(1.25);
+    transform: skew(-35deg) scale(1.25);
+  }
+
+  .ea-logo img {
+    display: block;
+    width: 97%;
+    position: relative;
+    z-index: 2;
+    max-height: 18vh;
+    object-fit: contain;
+  }
+
+  .eurafrican-lobby-header {
+    height: 9vh;
+    position: absolute;
+    top: 4vh;
+    z-index: 2;
+    right: 2vw;
+  }
+
+  .eurafrican-lobby-header ul {
+    white-space: nowrap;
+  }
+
+  .eurafrican-lobby-header ul li {
+    display: inline-block;
+    margin: 0 1vw 0 0;
+    color: #fff;
+    font-size: 3vh;
+  }
+
+  .eurafrican-lobby-header ul li a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .eurafrican-lobby-header ul li:hover {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .ea-caption {
+    margin: 0 auto 2vmin;
+    width: 35vmin;
+    color: #fff;
+    text-transform: uppercase;
+    text-shadow: 2px 4px 5px rgba(1, 1, 1, 0.3);
+  }
+
+  .ea-caption h2 {
+    font-family: 'europaBold', sans-serif;
+    font-size: 4vmin;
+    line-height: 4vmin;
+    margin: 0;
+  }
+
+  .ea-caption h3 {
+    font-family: 'europaBold', sans-serif;
+    font-size: 8vmin;
+    line-height: 8vmin;
+    margin: 0;
+  }
+
+  .ea-caption h4 {
+    font-family: 'europa', sans-serif;
+    font-size: 2.5vmin;
+    line-height: 2.5vmin;
+    margin: 0;
+  }
+
+  .ea-flex {
+    display: flex;
+    width: 90%;
+    margin: 14vmax auto;
+  }
+
+  .ea-mainstage-video {
+    flex: 2;
+    margin: 0 5% 0 0;
+  }
+
+  .ea-flex-sponsor {
+    flex: 1;
+  }
+
+  .ea-flex-sponsor video {
+    width: 100%;
+    height: 30vmin;
+    object-fit: contain;
+    border-radius: 5px;
+    box-shadow: 5px 8px 12px rgba(0, 0, 0, 0.4);
+    background: #fff;
+    overflow: hidden;
+  }
+
+  #inferno-video-player {
+    height: 24.1vw;
+    width: 100%;
+    background: #000;
+    max-width: none;
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 5px 8px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  .ea-mainstage-questions {
+    position: relative;
+    z-index: 2;
+    margin: 3vmin auto 0;
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  #inferno-questions-basic {
+    background: #111;
+    padding: 1vmin;
+    color: #fff;
+    font-size: 2.2vmin;
+    overflow: hidden;
+  }
+
+  .inferno-input-group {
+    display: flex;
+    align-items: center;
+  }
+
+  .inferno-input-group-addon {
+    flex: 1;
+  }
+
+  .inferno-form-control {
+    flex: 3;
+    background: #222;
+    border: none;
+    border-radius: 15px;
+    padding: 1.2vmin;
+    font-size: 2.2vmin;
+    color: #fff;
+  }
+
+  .inferno-input-group-btn {
+    flex: initial;
+    margin: 0 0 0 2vmin;
+  }
+
+  .inferno-input-group-btn button {
+    border-radius: 4px;
+    padding: 1.5vh;
+    font-size: 3vh;
+    color: #fff;
+    background: transparent;
+    border: 2px solid #3ea2e0;
+  }
+
+  .inferno-input-group-btn button:hover {
+    background: #3ea2e0;
+  }
+
+  @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+    .ea-logo img {
+      max-height: 10vh;
+    }
+
+    .ea-flex {
+      margin: 9vmax auto;
+    }
+
+    .ea-flex-sponsor video {
+      height: 26vh;
+      margin: 2vmin 0 0;
+    }
+
+    .ea-caption {
+      width: 24vmin;
+    }
+
+    .ea-caption h2 {
+      font-size: 2.9vmin;
+      line-height: 2.9vmin;
+    }
+
+    .ea-caption h3 {
+      font-size: 5.5vmin;
+      line-height: 5.5vmin;
+    }
+
+    .ea-caption h4 {
+      font-size: 2vmin;
+      line-height: 2vmin;
+    }
+
+    #inferno-video-player {
+      height: 44.5vh;
+      max-height: none;
+    }
+  }
+
+  @media only screen and (max-width: 1200px) {
+    .ea-flex {
+      flex-direction: column;
+      width: 80%;
+      margin: 14vmax auto 3vmax;
+    }
+
+    .inferno-input-group {
+      flex-direction: column;
+    }
+
+    .inferno-input-group-addon {
+      padding: 0 0 1vmin;
+    }
+
+    .inferno-form-control {
+      width: 90%;
+      margin: 0 auto;
+      padding: 1.5vmin;
+      font-size: 2.2vmin;
+    }
+
+    #inferno-questions-basic {
+      font-size: 2.2vmin;
+      padding: 1vmin;
+    }
+
+    .inferno-input-group-btn button {
+      font-size: 3vmin;
+      padding: 1vmin;
+    }
+
+    .inferno-input-group-btn {
+      margin: 1vmax 0;
+    }
+
+    #inferno-video-player {
+      height: 42vmin;
+      margin: 0 auto;
+      max-width: 80%;
+      width: 75vmin;
+    }
+
+    .ea-mainstage-video {
+      margin: 0 0 4vmin;
+    }
+
+    .ea-mainstage-questions {
+      width: 75vmin;
+      margin: 3vmin auto 0;
+      max-width: 80%;
+    }
+
+    .eurafrican-lobby-header {
+      top: 2%;
+      right: 2%;
+    }
+
+    .eurafrican-lobby-header ul li {
+      font-size: 4vmin;
+      margin: 0 1vmin;
+      padding: 1vmin 0;
+    }
+
+    .ea-logo {
+      top: 1vh;
+      left: 2%;
+      width: 45vmin;
+      max-width: 25%;
+    }
+
+    .ea-caption {
+      width: 25vmin;
+    }
+
+    .ea-caption h2 {
+      font-size: 3vmin;
+      line-height: 3vmin;
+    }
+
+    .ea-caption h3 {
+      font-size: 6vmin;
+      line-height: 6vmin;
+    }
+
+    .ea-caption h4 {
+      font-size: 2vmin;
+      line-height: 2vmin;
+    }
+
+    .ea-logo img {
+      width: 90%;
+      max-height: 14vh;
+    }
+
+    .ea-flex-sponsor video {
+      height: 18vmax;
+      margin: 4vmin auto 0;
+      width: 75vmin;
+      max-width: 80%;
+      display: block;
+    }
+  }
+</style>
+
+<!-- Load icons -->
+<link rel="stylesheet" type="text/css" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/icons.css">
+
+<!-- JS -->
+<script type="text/javascript">
+  // Load custom fonts
+  var europaFont = new FontFace(
+    'europa',
+    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/eurafrica/assets/fonts/europa-regular-webfont.ttf)'
+  );
+  europaFont
+    .load()
+    .then(function (loadedFont) {
+      document.fonts.add(loadedFont);
+    })
+    .catch(function (error) {
+      // error occurred
+      console.log('Error loading europa');
+    });
+
+  var europaBoldFont = new FontFace(
+    'europaBold',
+    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/eurafrica/assets/fonts/europa-bold-webfont.ttf)'
+  );
+  europaBoldFont
+    .load()
+    .then(function (loadedFont) {
+      document.fonts.add(loadedFont);
+    })
+    .catch(function (error) {
+      // error occurred
+      console.log('Error loading europaBold');
+    });
+
+  var iconFont = new FontFace(
+    'icomoon',
+    'url(https://studio304nextechar.freetls.fastly.net/infernoAR/_vault/fonts/icomoon.woff)'
+  );
+  iconFont
+    .load()
+    .then(function (loadedFont) {
+      document.fonts.add(loadedFont);
+    })
+    .catch(function (error) {
+      // error occurred
+      console.log('Error loading icon font set');
+    });
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- HTML -->
+<div class="eurafrican-mainstage">
+  <div class="ea-logo">
+    <a href="https://www.eurafricanforum.org/" target="_blank"><img src="https://studio304nextechar.freetls.fastly.net/infernoAR/eurafrica/assets/logo-color.png" alt="logo"></a>
+  </div>
+
+  <div class="eurafrican-lobby-header">
+    <ul>
+      <li>
+        <a href="https://twitter.com/EurafricanF" target="_blank"><span class="icon-twitter"></span></a>
+      </li>
+      <li>
+        <a href="https://www.instagram.com/eurafrican_forum/" target="_blank"><span class="icon-instagram"></span></a>
+      </li>
+      <li>
+        <a href="https://www.youtube.com/channel/UCg1UXV-Z_bSY7Vw_ATRAPpQ/videos" target="_blank"><span class="icon-youtube"></span></a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="ea-flex">
+    <div class="ea-mainstage-video ea-caption" style="width: 100%">
+      <div id="post-event-message" style="display: none; text-align: center">
+        <h3>Thank you</h3>
+        <h2>for joining us.</h2>
+      </div>
+    </div>
+    <div class="ea-flex-sponsor">
+      <div class="ea-caption">
+        <h2>In search<br>for a common</h2>
+        <h3>ground</h3>
+        <h4>in a post covid world</h4>
+      </div>
+      <video autoplay muted loop>
+        <source src="https://studio304nextechar.freetls.fastly.net/infernoAR/eurafrica/assets/EAF_SPONSORS_Small Window.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</div>
+<div class="ea-mobile-cover"></div>
+
+<script type="text/javascript">
+  // Redirect to the link we grab out of the hidden div
+  if (landingPageEl.querySelector('#redirect-link').textContent === 'none') {
+    landingPageEl.querySelector('#post-event-message').style.display = 'block';
+  }
+</script>
+
+
+</inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

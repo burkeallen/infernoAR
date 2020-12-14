@@ -1,0 +1,632 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+  <script>
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
+  </script>
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="novo" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header">LOCAL</div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="dee1b9fb-d0fa-4920-bb9f-4bf3aefedafa">
+<style>
+    /* Background Styles */
+    .ntar-landing-bg {
+        /* Image */
+        background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/029-usf/assets/bkg-mainstage.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+
+        /* Cover height minus 55px header */
+        min-height: calc(100vh - 55px);
+
+        /* Stick to Jolokia content frame */
+        position: fixed;
+        top: -20px;
+        left: 280px;
+        right: 0;
+        bottom: 0;
+
+        /* Modifying style to fix hamburger menu issue */
+        position: absolute;
+        left: 0px;
+        margin-bottom: -64px;
+    }
+    #inferno-video-player {
+        max-width: 100% !important;
+    }
+    @media only screen and (max-width: 768px) {
+        .ntar-landing-bg {
+            /* Cover height minus 55px header */
+            min-height: calc(100vh - 55px);
+
+            /* Stick to Jolokia content frame */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
+
+    /* ./ Background Styles */
+
+    /* Page Content Container Styles */
+    .ntar-landing-content {
+        /* Scale to full width and height + footer space */
+        width: 100%;
+        height: calc(100% + 50px);
+
+        /* Stick to Jolokia content frame and scroll y */
+        position: absolute;
+        top: 0;
+        left: 0;
+        overflow: hidden scroll;
+
+        /* Pad Content */
+        padding: 0px;
+
+        /* Display Type */
+        display: flex;
+        flex-direction: column;
+    }
+    /* ./ Page Content Container Styles */
+    
+    /* Video Poll QA Styles */
+    .ntar-vpqa-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0 64px;
+        margin-top: 16px;
+    }
+    .ntar-vqa-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        flex: 1 1 65%;
+    }
+
+    .ntar-qa-container {
+        display: flex;
+        flex-direction: row;
+        background-color: white;
+        min-height: 64px;
+        width: 100%;
+        margin: 16px 0;
+        flex: 4 4 64px;
+        max-height: 95px
+    }
+
+    .ntar-title-container {
+        min-height: 80px;
+    }
+
+    .chat-main {
+        background-color: transparent;
+        flex: 1 1 35%;
+        object-fit: contain;
+    }
+    
+    .chat-main iframe {
+        border: none;
+        height: 70vh;
+        max-height: 70vh;
+        margin: 0;
+        overflow: hidden;
+        display: block;
+    }
+    
+    .ntar-poll-container img {
+        width: 100%;
+    }
+    
+    @media only screen and (max-width: 1000px) {
+        .ntar-vpqa-container {
+            flex-direction: column;
+        }
+        .ntar-vqa-container {
+            display: block;
+        }
+    }
+    @media only screen and (max-width: 500px) {
+        .ntar-vpqa-container {
+            padding: 0 24px;
+        }
+    }
+    /* ./ Video Poll QA Styles */
+
+    /* Question Box */
+    .question-box {
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        font-size: 2em;
+        text-align: left;
+        width: 100%;
+        height: 100%;
+    }
+
+    .question-prompt {
+        padding: 8px 16px;
+        background-color: #d9d9d9;
+        color: #808080;
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
+
+        flex: 1 1 25%;
+    }
+
+    .question-input {
+        background-color: #ffffff;
+        padding: 0;
+
+        flex: 2 1 50%;
+    }
+
+    .question-submit {
+        text-align: center;
+        vertical-align: bottom;
+        flex: 1 1 25%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+    }
+
+    #question-input-control {
+        border: none;
+        outline: none;
+        background-color: white;
+        margin: 0;
+        padding: 0.5em;
+        height: 100%;
+        width: 100%;
+        color: black;
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    #question-submit-button {
+        font-family: Roboto, 'Helvetica Neue', sans-serif;
+        margin: 0.5em 1em;
+        height: 32px;
+        border: none;
+        outline: none;
+        border-radius: 20px;
+        background-color: #27608e;
+        color: #ffffff;
+        padding: 4px 1em;
+        font-size: 16px;
+        line-height: 16px;
+        cursor: pointer;
+    }
+
+    #question-submit-button:hover {
+        background-color: #3375ac;
+    }
+    
+    #question-submit-button:active {
+        background-color: #193d5a;
+    }
+    
+    @media only screen and (max-width: 500px) {
+        .question-box {
+            flex-direction: column;
+        }
+    }
+    /* ./Question Box */
+    
+</style>
+
+<!-- Background Frame (No Content) -->
+<div class="ntar-landing-bg"></div>
+<!-- ./ Background Frame -->
+
+<!-- Page Content Container -->
+<div class="ntar-landing-content">
+  <div class="ntar-title-container"></div>
+
+  <!-- Video Poll QA Container -->
+  <div class="ntar-vpqa-container">
+
+    <div class="ntar-vqa-container">
+      <div class="ntar-video-container">
+        <div class="embed-responsive embed-responsive-16by9">
+          <div id="inferno-video-player"></div>
+        </div>
+      </div>
+      <div class="ntar-qa-container">
+        <div class="question-box">
+          <span class="question-prompt">Ask a question:</span>
+          <span class="question-input">
+                  <textarea id="question-input-control"></textarea>
+                </span>
+          <span class="question-submit"><button id="question-submit-button" onclick="landingPageEl.querySelector('#question-input-control').value=''">
+                    Submit
+                  </button>
+                </span>
+        </div>
+      </div>
+    </div>
+    <div class="chat-main">
+      <iframe width="100%" src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=trivia&chatroomname=Trivia"></iframe>
+    </div>
+  </div>
+  <!-- ./Video Poll QA Container -->
+
+</div>
+<!-- ./ Page Content Container -->
+</inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

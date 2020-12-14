@@ -1,0 +1,1073 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="ae628be0-53d2-445a-9fd4-b83f5738aad8">
+
+      <!-- Import Fonts -->
+      <script type="text/javascript">
+        // Load custom fonts
+        var gothamFont = new FontFace(
+          'GothamLight',
+          'url(https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff)'
+        );
+        gothamFont
+          .load()
+          .then(function (loadedFont) {
+            document.fonts.add(loadedFont);
+          })
+          .catch(function (error) {
+            // error occurred
+            console.log('Error loading Gotham');
+          });
+        var gothamBookFont = new FontFace(
+          'Gotham',
+          'url(https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff)'
+        );
+        gothamBookFont
+          .load()
+          .then(function (loadedFont) {
+            document.fonts.add(loadedFont);
+          })
+          .catch(function (error) {
+            // error occurred
+            console.log('Error loading Gotham');
+          });
+        var gothamBoldFont = new FontFace(
+          'GothamBold',
+          'url(https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Bold.woff)'
+        );
+        gothamBoldFont
+          .load()
+          .then(function (loadedFont) {
+            document.fonts.add(loadedFont);
+          })
+          .catch(function (error) {
+            // error occurred
+            console.log('Error loading Gotham');
+          });
+      </script>
+      <!-- ./ Import Fonts -->
+
+      <style>
+        /* Background Styles */
+        .ntar-landing-bg {
+          /* Image */
+          background-color: #00467f;
+          background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/namd-monument-bg.jpg');
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center center;
+
+          /* Cover height minus 55px header + footer */
+          min-height: calc(100vh - 86px);
+
+          /* Stick to Jolokia content frame */
+          position: absolute;
+          top: -20px;
+          left: 48%;
+          right: 0;
+          bottom: 0;
+          /* margin-bottom: -64px; */
+        }
+
+        @media only screen and (max-width: 768px) {
+          .ntar-landing-bg {
+            /* Cover height minus 55px header */
+            min-height: calc(100vh - 55px);
+
+            /* Stick to Jolokia content frame */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+          }
+        }
+
+        .ntar-body-right-container {
+          /* background-image: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/namd-monument-bg.jpg'); */
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-position: center;
+        }
+
+        .ntar-body-left-container {
+          background-color: #5378a7;
+        }
+
+        /* ./ Background Styles */
+
+        /* Page Content Container Styles */
+        .ntar-landing-content {
+          /* background-color: chartreuse; */
+
+          /* Scale to full width and height + footer space */
+          width: 100%;
+          height: calc(100% + 0px);
+
+          /* Stick to Jolokia content frame and scroll y */
+          position: absolute;
+          top: 0;
+          left: 0;
+          overflow: hidden scroll;
+
+          /* Pad Content */
+          padding: 0px;
+
+          /* Display Type */
+          display: flex;
+          flex-direction: column;
+        }
+        @media only screen and (max-width: 768px) {
+          .ntar-landing-content {
+            height: calc(100% + 51px);
+          }
+        }
+        /* ./ Page Content Container Styles */
+
+        /* Layout Styles */
+        .ntar-body-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: flex-start;
+          min-width: 100%;
+          min-height: 100%;
+        }
+        .ntar-body-right-container {
+          display: flex;
+          width: 50%;
+          height: 100%;
+          /* background-color: aliceblue; */
+        }
+        .ntar-body-left-container {
+          font-family: Gotham, Helvetica, Arial, sans-serif;
+          display: flex;
+          flex-direction: column;
+          width: 50%;
+          padding: max(2vw, 24px);
+          padding-top: calc(2vw + 64px);
+        }
+        /* Float Page Title Above Content */
+        .ntar-page-title {
+          position: absolute;
+          top: 0;
+          left: 0;
+
+          min-width: calc(100% - 18px);
+          height: calc(2vw + 72px);
+
+          z-index: 50;
+        }
+        .ntar-title-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: flex-start;
+          width: 100%;
+        }
+        .ntar-title-right-container {
+          display: flex;
+          width: 50%;
+          height: 100%;
+        }
+        .ntar-title-left-container {
+          display: flex;
+          width: 50%;
+          padding: max(2vw, 24px);
+          background: rgb(83, 120, 167);
+          background: linear-gradient(
+            180deg,
+            rgba(83, 120, 167, 1) 0%,
+            rgba(83, 120, 167, 1) 30%,
+            rgba(83, 120, 167, 0.9) 70%,
+            rgba(83, 120, 167, 0) 100%
+          );
+
+        }
+
+        @media only screen and (max-width: 1100px) {
+          .ntar-landing-bg {
+            left: 57%;
+          }
+          .ntar-body-left-container
+          {
+            width: 60%;
+          }
+          .ntar-title-left-container {
+            width: 60%;
+          }
+
+        }
+        @media only screen and (max-width: 1000px) {
+          .ntar-landing-bg {
+            left: 65%;
+          }
+          .ntar-body-left-container {
+            width: 70%;
+          }
+          .ntar-title-left-container {
+            width: 70%;
+          }
+        }
+        @media only screen and (max-width: 900px) {
+          .ntar-landing-bg {
+            left: 0%;
+          }
+          .ntar-body-left-container {
+            width: 100%;
+          }
+          .ntar-title-left-container {
+            width: 100%;
+          }
+        }
+        @media only screen and (max-width: 767px) {
+          .ntar-landing-bg {
+            left: 56%;
+          }
+          .ntar-body-left-container {
+            width: 60%;
+          }
+          .ntar-title-left-container {
+            width: 60%;
+          }
+        }
+        @media only screen and (max-width: 600px) {
+          .ntar-landing-bg {
+            left: 64%;
+          }
+          .ntar-body-left-container {
+            width: 70%;
+          }
+          .ntar-title-left-container {
+            width: 70%;
+          }
+        }
+        @media only screen and (max-width: 500px) {
+          .ntar-landing-bg {
+            left: 0%;
+          }
+          .ntar-body-left-container {
+            width: 100%;
+          }
+          .ntar-title-left-container {
+            width: 100%;
+          }
+        }
+
+        /* ./ Layout Styles */
+
+        /* Typo Styles */
+        .ntar-page-title {
+          font-family: Gotham, Helvetica, Arial, sans-serif;
+          font-weight: 600;
+          font-size: 2.5em;
+          color: white;
+          text-transform: uppercase;
+        }
+
+        .ntar-agenda-day {
+          font-family: GothamLight, Helvetica, Arial, sans-serif;
+          font-weight: 200;
+          color: black;
+          font-size: 2.8em;
+          line-height: 1;
+          text-transform: uppercase;
+          margin-left: -4px;
+        }
+
+        .ntar-agenda-date {
+          font-family: Gotham, Helvetica, Arial, sans-serif;
+          font-weight: 600;
+          color: white;
+          font-size: 2.5em;
+          line-height: 1;
+          margin-left: -2px;
+          margin-bottom: 24px;
+        }
+        .ntar-agenda-event-time {
+          font-family: GothamLight, Helvetica, Arial, sans-serif;
+          font-weight: 400;
+          font-size: 1.2em;
+          line-height: 1.5;
+          color: rgba(255, 255, 255, 0.5);
+          /* padding-right: 32px; */
+        }
+        .ntar-agenda-event-time.t1 {
+          font-family: GothamBold, Helvetica, Arial, sans-serif;
+          font-weight: 800;
+          font-size: 1.2em;
+          line-height: 1;
+          color: black;
+        }
+        .ntar-agenda-event-title {
+          font-family: 'GothamBold', Helvetica, Arial, sans-serif;
+          font-weight: 600;
+          color: white;
+          font-size: 1.2em;
+          line-height: 1.5;
+          margin-bottom: 16px;
+        }
+        .ntar-agenda-event-body {
+          font-family: 'GothamLight', Helvetica, Arial, sans-serif;
+          font-weight: 400;
+          color: white;
+          font-size: 1em;
+          line-height: 1.8;
+          margin-bottom: 16px;
+        }
+        .ntar-agenda-bold {
+          font-family: 'Gotham', Helvetica, Arial, sans-serif;
+          font-weight: 600;
+        }
+        .ntar-agenda-event-duration {
+          font-family: Gotham, Helvetica, Arial, sans-serif;
+          font-weight: 500;
+          font-size: 0.8em;
+          line-height: 1.5;
+          color: rgba(0, 0, 0, 0.5);
+        }
+        /* ./ Typo Styles */
+
+        /* Day Container */
+        .ntar-agenda-day-container {
+          width: 100%;
+          border-top: 1px solid white;
+          margin: 8px 0;
+          padding: 12px 0;
+        }
+        .ntar-agenda-event-container {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: flex-start;
+          overflow-x: visible;
+        }
+
+        .ntar-agenda-event-left {
+          width: 98px;
+          min-width: 98px;
+          margin-right: 48px;
+          text-align: right;
+          overflow: visible;
+          white-space: nowrap;
+        }
+
+        /* ./ Day Container */
+
+        /* Time Zone Styles */
+        .ntar-agenda-event-time.t2,
+        .ntar-agenda-event-time.t3,
+        .ntar-agenda-event-time.t4,
+        .ntar-agenda-event-time.t5 {
+          text-align: right;
+        }
+        .ntar-agenda-event-timezones {
+          font-size: 0.8em;
+          margin-bottom: 16px;
+          color: rgba(0,0,0,0.6);
+          display: none;
+          width: 100%;
+          white-space: normal;
+        }
+        /* Pre-position */
+
+        .ntar-agenda-event-duration {
+          transform: translateY(-100px);
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+          color: rgba(0, 0, 0, 0.3);
+        }
+        .ntar-agenda-event-time.t1 {
+          z-index: 1;
+          line-height: 1.5;
+        }
+        .ntar-agenda-event-time.t2 {
+          transform: translateY(-24px);
+          opacity: 0;
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+        }
+        .ntar-agenda-event-time.t3 {
+          transform: translateY(-48px);
+          opacity: 0;
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+        }
+        .ntar-agenda-event-time.t4 {
+          transform: translateY(-72px);
+          opacity: 0;
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+        }
+        .ntar-agenda-event-time.t5 {
+          transform: translateY(-96px);
+          opacity: 0;
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+
+        }
+        .ntar-agenda-event-container:hover .ntar-agenda-event-time.t2,
+        .ntar-agenda-event-container:hover .ntar-agenda-event-time.t3,
+        .ntar-agenda-event-container:hover .ntar-agenda-event-time.t4,
+        .ntar-agenda-event-container:hover .ntar-agenda-event-time.t5,
+        .ntar-agenda-event-container:hover .ntar-agenda-event-duration,
+        .ntar-agenda-event-container.is-active .ntar-agenda-event-time.t2,
+        .ntar-agenda-event-container.is-active .ntar-agenda-event-time.t3,
+        .ntar-agenda-event-container.is-active .ntar-agenda-event-time.t4,
+        .ntar-agenda-event-container.is-active .ntar-agenda-event-time.t5,
+        .ntar-agenda-event-container.is-active .ntar-agenda-event-duration {
+          transform: translateY(0);
+          opacity: 1;
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        }
+        .ntar-agenda-event-container:hover .ntar-agenda-event-duration,
+        .ntar-agenda-event-container.is-active .ntar-agenda-event-duration {
+          color: rgba(0, 0, 0, 0.7);
+          transition: all 0.5s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+        }
+        @media screen and (max-width: 500px) {
+          .ntar-agenda-event-container {
+            flex-direction: column;
+          }
+          .ntar-agenda-event-left {
+            align-self: flex-start;
+            text-align: left;
+            margin-right: 0;
+            width: 100%;
+          }
+          .ntar-agenda-event-time.t2,
+          .ntar-agenda-event-time.t3,
+          .ntar-agenda-event-time.t4,
+          .ntar-agenda-event-time.t5,
+          .ntar-agenda-event-duration {
+            display: none;
+          }
+          .ntar-agenda-event-timezones {
+            display: block;
+          }
+        }
+        /* ./ Time Zone Styles */
+      </style>
+
+      <!-- Background Frame (No Content) -->
+      <div class="ntar-landing-bg"></div>
+      <!-- ./ Background Frame -->
+
+      <div class="ntar-page-title">
+        <div class="ntar-title-container">
+          <div class="ntar-title-left-container">
+            AGENDA
+          </div>
+          <!-- <div class="ntar-title-right-container"></div> -->
+        </div>
+      </div>
+
+      <!-- Page Content Container -->
+      <div class="ntar-landing-content">
+        <div class="ntar-body-container">
+          <div class="ntar-body-left-container">
+            <!-- Agenda DAY Container -->
+            <div class="ntar-agenda-day-container">
+              <div class="ntar-agenda-day">DAY ONE</div>
+              <div class="ntar-agenda-date">Monday, August 10, 2020</div>
+              <!-- Agenda EVENT Container -->
+              <div class="ntar-agenda-event-container is-active" id="first-agenda-event">
+                <div class="ntar-agenda-event-left">
+                  <div class="ntar-agenda-event-time t1">4:00PM ET</div>
+                  <div class="ntar-agenda-event-time t2">3:00PM CT</div>
+                  <div class="ntar-agenda-event-time t3">2:00PM MT</div>
+                  <div class="ntar-agenda-event-time t4">1:00PM PT</div>
+                  <div class="ntar-agenda-event-time t5">10:00AM HT</div>
+                  <div class="ntar-agenda-event-duration">75 minutes</div>
+                  <div class="ntar-agenda-event-timezones">3:00PM CT / 2:00PM MT / 1:00PM PT / 10:00AM HT (75 Minutes)</div>
+                </div>
+                <div class="ntar-agenda-event-right">
+                  <div class="ntar-agenda-event-title">
+                    Welcome and Level Setting
+                  </div>
+                  <div class="ntar-agenda-event-body">
+                    <p>
+                      Beth Kidder, NAMD Board President, will welcome Medicaid Directors and their
+                      teams to the Member Connection Series Summer Event. She will reflect on the
+                      goals of the series. Her remarks will be immediately followed by the first
+                      session.
+                    </p>
+
+                    <p>
+                      <span class="ntar-agenda-bold">Speaker:</span> Beth Kidder, Florida Medicaid
+                      Director and NAMD Board President
+                    </p>
+                  </div>
+                  <div class="ntar-agenda-event-title">
+                    Leading the Agency Through Times of Tumult
+                  </div>
+                  <div class="ntar-agenda-event-body">
+                    <p>
+                      This session will examine how Medicaid Directors have been leading their
+                      agencies through the pandemic, recession and racial justice events. The group
+                      will describe how they are finding a path forward amidst so many unknowns.
+                      They’ll discuss how they are communicating difficult messages to staff and
+                      motivating staff during a time of remote work and periods of social isolation.
+                      Lastly, they’ll talk about how they are leading up to the Governor or
+                      legislature when communicating the strategic priorities of the agency.
+                    </p>
+
+                    <p>
+                      <span class="ntar-agenda-bold">Moderator:</span> Tom Betlach, former Arizona
+                      Medicaid Director currently at Spier Consulting
+                    </p>
+                    <p>
+                      <span class="ntar-agenda-bold">Panelists</span>
+                    </p>
+
+                    <ul>
+                      <li>Ruth Johnson, Louisiana Medicaid Director</li>
+                      <li>Jenn Jacobs, New Jersey Medicaid Director</li>
+                      <li>Caprice Knapp, North Dakota Medicaid Director</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- ./ Agenda EVENT Container -->
+            </div>
+            <!-- ./ Agenda DAY Container -->
+            <!-- Agenda DAY Container -->
+            <div class="ntar-agenda-day-container">
+              <div class="ntar-agenda-day">Day Two</div>
+              <div class="ntar-agenda-date">Tuesday, August 11, 2020</div>
+              <!-- Agenda EVENT Container -->
+              <div class="ntar-agenda-event-container">
+                <div class="ntar-agenda-event-left">
+                  <div class="ntar-agenda-event-time t1">4:15PM ET</div>
+                  <div class="ntar-agenda-event-time t2">3:15PM CT</div>
+                  <div class="ntar-agenda-event-time t3">2:15PM MT</div>
+                  <div class="ntar-agenda-event-time t4">1:15PM PT</div>
+                  <div class="ntar-agenda-event-time t5">10:15AM HT</div>
+                  <div class="ntar-agenda-event-duration">60 minutes</div>
+                  <div class="ntar-agenda-event-timezones">3:15PM CT / 2:15PM MT / 1:15PM PT / 10:150AM HT (60 Minutes)</div>
+                </div>
+                <div class="ntar-agenda-event-right">
+                  <div class="ntar-agenda-event-title">
+                    Putting Together the Pieces of the CMS Organizational Puzzle
+                  </div>
+                  <div class="ntar-agenda-event-body">
+                    <p>
+                      CMS group directors will describe their roles within CMS and the members of
+                      their teams. This session is a great opportunity for both new and experienced
+                      Directors to learn about the ways CMS is structured and the groups interact.
+                    </p>
+                    <p>
+                      <span class="ntar-agenda-bold">Welcoming Remarks:</span> Kate McEvoy,
+                      Connecticut Medicaid Director and NAMD Board Past-President
+                    </p>
+                    <p><span class="ntar-agenda-bold">Moderator:</span> Jackie Glaze, CMCS</p>
+                    <p><span class="ntar-agenda-bold">Panelists:</span> CMCS Group Heads</p>
+                  </div>
+                </div>
+              </div>
+              <!-- ./ Agenda EVENT Container -->
+            </div>
+            <!-- ./ Agenda DAY Container -->
+            <!-- Agenda DAY Container -->
+            <div class="ntar-agenda-day-container">
+              <div class="ntar-agenda-day">Day Three</div>
+              <div class="ntar-agenda-date">Wednesday, August 12, 2020</div>
+              <!-- Agenda EVENT Container -->
+              <div class="ntar-agenda-event-container">
+                <div class="ntar-agenda-event-left">
+                  <div class="ntar-agenda-event-time t1">4:00PM ET</div>
+                  <div class="ntar-agenda-event-time t2">3:00PM CT</div>
+                  <div class="ntar-agenda-event-time t3">2:00PM MT</div>
+                  <div class="ntar-agenda-event-time t4">1:00PM PT</div>
+                  <div class="ntar-agenda-event-time t5">10:00AM HT</div>
+                  <div class="ntar-agenda-event-duration">60 minutes</div>
+                  <div class="ntar-agenda-event-timezones">3:00PM CT / 2:00PM MT / 1:00PM PT / 10:00AM HT (60 Minutes)</div>
+                </div>
+                <div class="ntar-agenda-event-right">
+                  <div class="ntar-agenda-event-title">
+                    What Does Access to Care Look Like When We Return to a New Normal?
+                  </div>
+                  <div class="ntar-agenda-event-body">
+                    <p>
+                      The pandemic and related recession have left parts of the delivery system in
+                      tatters. This discuss will focus on questions around access to care, and
+                      strategies that Directors are reviewing and implementing to shore-up or
+                      rebuild the delivery system.
+                    </p>
+                    <p>
+                      <span class="ntar-agenda-bold">Moderator:</span> Jack Rollins, Director of
+                      Federal Policy, NAMD
+                    </p>
+                    <p><span class="ntar-agenda-bold">Panelists</span></p>
+                    <ul>
+                      <li>Tracy Johnson, Colorado Medicaid Director</li>
+                      <li>Ben Shaffer, Rhode Island Medicaid Director</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- ./ Agenda EVENT Container -->
+            <!-- Agenda DAY Container -->
+            <div class="ntar-agenda-day-container">
+              <div class="ntar-agenda-day">Day Four</div>
+              <div class="ntar-agenda-date">Thursday, August 13, 2020</div>
+              <!-- Agenda EVENT Container -->
+              <div class="ntar-agenda-event-container">
+                <div class="ntar-agenda-event-left">
+                  <div class="ntar-agenda-event-time t1">4:00PM ET</div>
+                  <div class="ntar-agenda-event-time t2">3:00PM CT</div>
+                  <div class="ntar-agenda-event-time t3">2:00PM MT</div>
+                  <div class="ntar-agenda-event-time t4">1:00PM PT</div>
+                  <div class="ntar-agenda-event-time t5">10:00AM HT</div>
+                  <div class="ntar-agenda-event-duration">60 minutes</div>
+                  <div class="ntar-agenda-event-timezones">3:00PM CT / 2:00PM MT / 1:00PM PT / 10:00AM HT (60 Minutes)</div>
+                </div>
+                <div class="ntar-agenda-event-right">
+                  <div class="ntar-agenda-event-title">
+                    Opportunities to Infuse Equity into Agency Operations
+                  </div>
+                  <div class="ntar-agenda-event-body">
+                    <p>
+                      COVID has underscored and exacerbated existing health and health care inequities for communities of color. Medicaid Directors will share what they have been learning and doing to address the reality, including how they are incorporating an equity lens into agency operations.
+                    </p>
+                    <p>
+                      <span class="ntar-agenda-bold">Moderator:</span> Gretchen Hammer, NAMD Senior Strategic Advisor and former Colorado Medicaid Director
+                    </p>
+                    <p><span class="ntar-agenda-bold">Panelists</span></p>
+                    <ul>
+                      <li>Raquel Hatter, Ed. D., former Commissioner of the Tennessee Dept. of Human Service and current Managing Director of the Human Services Program at The Kresge Foundation</li>
+                      <li>Gena Lewis, former Deputy Commissioner and General Council at the Tennessee Department of Human Services and current Executive Consultant at Ikaso Consulting.  </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <!-- ./ Agenda EVENT Container -->
+            </div>
+            <!-- ./ Agenda DAY Container -->
+            <!-- Agenda DAY Container -->
+            <div class="ntar-agenda-day-container">
+              <div class="ntar-agenda-day">Day Five</div>
+              <div class="ntar-agenda-date">Friday, August 14, 2020</div>
+              <!-- Agenda EVENT Container -->
+              <div class="ntar-agenda-event-container">
+                <div class="ntar-agenda-event-left">
+                  <div class="ntar-agenda-event-time t1">6:30PM ET</div>
+                  <div class="ntar-agenda-event-time t2">5:30PM CT</div>
+                  <div class="ntar-agenda-event-time t3">4:30PM MT</div>
+                  <div class="ntar-agenda-event-time t4">3:30PM PT</div>
+                  <div class="ntar-agenda-event-time t5">12:30PM HT</div>
+                  <div class="ntar-agenda-event-duration">60 minutes</div>
+                  <div class="ntar-agenda-event-timezones">5:30PM CT / 4:30PM MT / 3:30PM PT / 12:30PM HT (60 Minutes)</div>
+                </div>
+                <div class="ntar-agenda-event-right">
+                  <div class="ntar-agenda-event-title">
+                    Connecting with Your Peers: How Are You REALLY Doing? (Open to Medicaid Directors Only)
+                  </div>
+                  <div class="ntar-agenda-event-body">
+                    <p>
+                      This session will begin with opening remarks reflecting on the week’s sessions. The lightly facilitated conversation will be designed to foster connections between Directors and to hear from each other how you are doing during these unprecedented and challenging times.
+                    </p>
+                    <p>
+                      <span class="ntar-agenda-bold">Moderator:</span> Jami Snyder, Arizona Medicaid Director and NAMD Board President-Elect
+                    </p>
+
+                  </div>
+                </div>
+              </div>
+              <!-- ./ Agenda EVENT Container -->
+            </div>
+            <!-- ./ Agenda DAY Container -->
+          </div>
+          <!-- <div class="ntar-body-right-container"></div> -->
+        </div>
+      </div>
+      <!-- ./ Page Content Container -->
+
+      <!-- Peek Time Zones on Page Load, then hide -->
+      <script>
+        function hideTimezones() {
+          var eventDiv = landingPageEl.querySelector('#first-agenda-event');
+          setTimeout(function () {
+            eventDiv.classList.remove('is-active');
+          }, 2000);
+        }
+        hideTimezones();
+      </script>
+
+
+</div></inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->

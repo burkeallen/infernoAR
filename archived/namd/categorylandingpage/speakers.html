@@ -1,0 +1,1049 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="namd" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="4e3cf9df-08c9-41ac-95c7-7e89d274812d">
+
+<!-- CSS -->
+<style>
+
+/* Resets */
+* {
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+h1,h2,h3,h4 {
+  margin: 0;
+  padding: 0;
+  font-weight: 400;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  outline: none;
+  border: none;
+  background: transparent;
+  font-family: 'gotham', sans-serif;
+}
+
+button:hover {
+  opacity: .9;
+  cursor: pointer;
+}
+
+/* End Resets */
+
+.namd-speakers {
+  background: #184A87;
+  width: calc(100% + 40px);
+  min-height: 100vh;
+  margin: -20px;
+  padding: 0;
+  color: #333;
+  font-family: 'gotham', sans-serif;
+  position: relative;
+}
+
+.namd-speakers-imagery {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  right: 0;
+  width: 50vw;
+  background: url('https://studio304nextechar.freetls.fastly.net/infernoAR/namd/namd-monument-bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center top;
+}
+
+.namd-speakers h1 {
+  color: #fff;
+  font-family: 'gothamBook', sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 6vh;
+  position: absolute;
+  top: 6vh;
+  left: 6.5vw;
+  z-index: 2;
+}
+
+.namd-speakers h1:after {
+  content: '';
+  height: 1px;
+  background: #fff;
+  width: 150%;
+  display: block;
+  position: absolute;
+  bottom: -5px;
+}
+
+.namd-speakers ul {
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 20vh 0 0;
+  width: 90vw;
+}
+
+.namd-speakers ul li {
+  background: rgba(82, 120, 168, .8);
+  width: 20%;
+  height: max(20vw, 35vh);
+  float: left;
+  margin: 0 2vw 2vw 0;
+  padding: 0 2vw;
+  color: #fff;
+  position: relative;
+  box-shadow: 5px 5px 15px rgba(1,1,1,.1);
+  transition: all .55s ease;
+  opacity: 0;
+  -ms-transform: scale(.95) translateY(10vh);
+  -webkit-transform: scale(.95) translateY(10vh);
+  transform: scale(.95) translateY(10vh);
+}
+
+.namd-speakers ul li.animate-show {
+  -ms-transform: none;
+  -webkit-transform: none;
+  transform: none;
+  opacity: 1;
+}
+
+.namd-speakers ul li.animate-show:hover {
+  cursor: pointer;
+  opacity: .9;
+  -ms-transform: translateY(-.5vh);
+  -webkit-transform: translateY(-.5vh);
+  transform: translateY(-.5vh);
+}
+
+.namd-speakers ul li img {
+  height: 7vw;
+  width: 7vw;
+  object-fit: cover;
+  border-radius: 100%;
+  display: block;
+  margin: 2vw auto 1vh;
+  overflow: hidden;
+  object-position: 50% 10%;
+}
+
+.namd-speakers ul li h2 {
+  color: #fff;
+  font-family: 'gothamBook', sans-serif;
+  font-size: 2.8vmin;
+  text-align: center;
+}
+
+.namd-speakers ul li h3 {
+  color: rgba(255,255,255,.6);
+  font-family: 'gotham', sans-serif;
+  font-size: 2.2vmin;
+  line-height: 2.4vmin;
+  text-align: center;
+}
+
+.namd-speakers ul li:nth-child(4n) {
+  clear: right;
+  margin: 0 0 2vw;
+}
+
+.namd-selected-speaker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,100,200,.8);
+  z-index: 9999;
+  display: none;
+}
+
+.namd-selected-speaker.selected-show {
+  display: block;
+}
+
+.namd-selected-speaker-content {
+  background: #00467F;
+  position: absolute;
+  top: 10vh;
+  left: 10%;
+  width: 80%;
+  border-radius: 5px;
+  box-shadow: 5px 8px 15px rgba(1,1,1,.2);
+  display: flex;
+  align-items: center;
+  transition: all .4s ease;
+  -ms-transform: scale(.98) translateY(5vh);
+  -webkit-transform: scale(.98) translateY(5vh);
+  transform: scale(.98) translateY(5vh);
+  opacity: 0;
+}
+
+.namd-selected-speaker-content.selected-show {
+  -ms-transform: none;
+  -webkit-transform: none;
+  transform: none;
+  opacity: 1;
+}
+
+.namd-selected-speaker-content-meta {
+  flex: 1;
+  padding: 5vh 2vw;
+  text-align: center;
+}
+
+.namd-selected-speaker-content-meta img {
+  width: 20vh;
+  height: 20vh;
+  border-radius: 100%;
+  margin: 0 auto;
+  object-fit: cover;
+  object-position: 50% 10%;
+  display: block;
+}
+
+.namd-selected-speaker-content-meta h2 {
+  color: #fff;
+  font-family: 'gotham', sans-serif;
+  font-weight: bold;
+  font-size: 3.5vh;
+  line-height: 4vh;
+  margin: 1vh 0;
+}
+
+.namd-selected-speaker-content-meta h3 {
+  color: #eee;
+  font-family: 'gothamBook', sans-serif;
+  font-size: 2.5vh;
+  font-weight: bold;
+  line-height: 3vh;
+  margin: 1vh 0;
+}
+
+.namd-selected-speaker-content-meta h4 {
+  color: #ccc;
+  font-family: 'gotham', sans-serif;
+  font-size: 2.5vh;
+  line-height: 3vh;
+}
+
+.namd-selected-speaker-content-bio {
+  flex: 3;
+  padding: 5vh 2vw 5vh 0;
+  color: #fff;
+  font-family: 'gotham', sans-serif;
+  font-size: 2.4vh;
+  line-height: 3.4vh;
+}
+
+.namd-close-btn {
+  position: absolute;
+  top: 5vh;
+  right: 10%;
+  font-size: 3vh;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  font-family: 'gotham', sans-serif;
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 1000px) {
+  .namd-speakers h1 {
+    font-size: 7vmin;
+    padding: 2vh 0 0;
+  }
+
+  .namd-speakers ul {
+    padding: 22vh 0 0;
+  }
+
+  .namd-speakers ul li {
+    width: 38%;
+    height: 45vmin;
+    float: left;
+    margin: 0 4% 4vh 0;
+    padding: 0 2vw;
+  }
+
+  .namd-speakers ul li:nth-child(2n) {
+    margin: 0 0 4vh;
+    clear: right;
+  }
+
+  .namd-speakers ul li:nth-child(4n) {
+    margin: 0 0 4vh;
+  }
+
+  .namd-speakers ul li img {
+    height: 12vmin;
+    width: 12vmin;
+  }
+
+  .namd-speakers ul li h2 {
+    font-size: 2.2vmax;
+    line-height: 2.4vmax;
+  }
+
+  .namd-speakers ul li h3 {
+    font-size: 2vmax;
+    line-height: 2.2vmax;
+  }
+
+  .namd-selected-speaker-content {
+    top: 10vmax;
+    left: 5%;
+    width: 90%;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .namd-selected-speaker-content-meta {
+    flex: 1;
+    padding: 2vh 2vw;
+    text-align: center;
+  }
+
+  .namd-selected-speaker-content-meta img {
+    width: 20vmin;
+    height: 20vmin;
+  }
+
+  .namd-selected-speaker-content-meta h2 {
+    font-size: 3vmax;
+    line-height: 3.2vmax;
+    margin: 1vh 0;
+  }
+
+  .namd-selected-speaker-content-meta h3 {
+    font-size: 2.5vmax;
+    line-height: 3vmax;
+    margin: 1vh 0;
+  }
+
+  .namd-selected-speaker-content-meta h4 {
+    font-size: 2.5vmax;
+    line-height: 3vmax;
+  }
+
+  .namd-selected-speaker-content-bio {
+    flex: 3;
+    padding: 2vh 2vw;
+    font-size: 2.3vmax;
+    line-height: 3vmax;
+  }
+
+  .namd-close-btn {
+    top: 3vmax;
+    right: 5%;
+    font-size: 3vmax;
+  }
+}
+
+
+@media only screen and (min-width: 1001px) and (max-width: 1200px) {
+  .namd-speakers h1 {
+    font-size: 7vmin;
+    padding: 2vh 0 0;
+  }
+
+  .namd-speakers ul {
+    padding: 22vh 0 0;
+  }
+
+  .namd-speakers ul li {
+    width: 24%;
+    height: 28vmax;
+    float: left;
+    margin: 0 4% 4vh 0;
+    padding: 0 2vw;
+  }
+
+  .namd-speakers ul li:nth-child(3n) {
+    margin: 0 0 4vh;
+    clear: right;
+  }
+
+  .namd-speakers ul li:nth-child(4n) {
+    margin: 0 4% 4vh 0;
+    clear: none;
+  }
+
+  .namd-speakers ul li img {
+    height: 12vmin;
+    width: 12vmin;
+  }
+
+  .namd-speakers ul li h2 {
+    font-size: 2.2vmax;
+    line-height: 2.4vmax;
+  }
+
+  .namd-speakers ul li h3 {
+    font-size: 2vmax;
+    line-height: 2.2vmax;
+  }
+
+  .namd-selected-speaker-content {
+    top: 8vh;
+    left: 5%;
+    width: 90%;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .namd-selected-speaker-content-meta {
+    flex: 1;
+    padding: 2vh 2vw;
+    text-align: center;
+  }
+
+  .namd-selected-speaker-content-meta img {
+    width: 15vmin;
+    height: 15vmin;
+  }
+
+  .namd-selected-speaker-content-meta h2 {
+    font-size: 2vmax;
+    line-height: 2.2vmax;
+    margin: 1vh 0;
+  }
+
+  .namd-selected-speaker-content-meta h3 {
+    font-size: 1.8vmax;
+    line-height: 2vmax;
+    margin: 1vh 0;
+  }
+
+  .namd-selected-speaker-content-meta h4 {
+    font-size: 1.8vmax;
+    line-height: 2vmax;
+  }
+
+  .namd-selected-speaker-content-bio {
+    flex: 3;
+    padding: 2vh 2vw;
+    font-size: 1.4vmax;
+    line-height: 2vmax;
+  }
+
+  .namd-close-btn {
+    top: 3vh;
+    right: 5%;
+    font-size: 2vmax;
+  }
+}
+
+</style>
+
+<!-- JS -->
+<script type="text/javascript">
+  // Load custom fonts
+  var gothamFont = new FontFace('gotham', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Light.woff)');
+  gothamFont.load().then(function(loadedFont) {
+    document.fonts.add(loadedFont);
+  }).catch(function(error) {
+    // error occurred
+    console.log('Error loading gotham');
+  });
+
+  var gothamBookFont = new FontFace('gothamBook', 'url(https://studio304nextechar.freetls.fastly.net/infernoAR/namd/Gotham-Book.woff)');
+  gothamBookFont.load().then(function(loadedFont) {
+    document.fonts.add(loadedFont);
+  }).catch(function(error) {
+    // error occurred
+    console.log('Error loading gothamBook');
+  });
+
+  // Create speakers
+  var speakers = [{
+    name: 'Raquel Hatter, Ed. D.',
+    org: 'The Kresge Foundation',
+    title: 'Managing Director, Human Services',
+    bio: "Dr. Raquel Hatter is managing director of the Human Services Program at The Kresge " +
+      "Foundation, which focuses on social and economic mobility for people with low income. She has " +
+      "dedicated 30 years to supporting children, families, and communities as a practitioner, VP/COO, " +
+      "and CEO in the nonprofit sector. " +
+      "Raquel previously served as commissioner of the Tennessee Department of Human Services. Her " +
+      "team identified ways to improve the outcomes for individuals and families across systems. The " +
+      "department adopted a two-generational, whole family approach. " +
+      "Raquel brings expertise in public policy, transformational organizational change and leadership, " +
+      "and has taught psychology, social work and human services courses at universities and colleges " +
+      "in Michigan and Tennessee. " +
+      "Raquel earned a BS in clinical community psychology at the University of Michigan, an MSW at " +
+      "Eastern Michigan University, and an EdD in children, youth and family studies from Nova " +
+      "Southeastern University.",
+    thumb: 'rth.jpg'
+  }, {
+    name: 'Jennifer Langer Jacobs',
+    org: 'New Jersey Department of Human Services',
+    title: 'Division of Medical Assistance and Health Services',
+    bio: "As Assistant Commissioner for the Division of Medical Assistance and Health Services in New Jersey’s Department of Human Services, Jennifer Langer Jacobs leads New " + "Jersey’s Medicaid program and the Children’s Health Insurance Program, which together are known as NJ FamilyCare." +
+      "Jenn is passionate about making government programs work the best way possible for the people they serve. Before leading the largest long-term care plan in Florida, " + "she spent eleven years in leadership at Amerigroup New Jersey, most recently as Chief Operating Officer. Earlier in her career, Jenn worked in the New Jersey " + "Senate Majority Office on a range of legislative initiatives and taught fifth grade in Jersey City.  She graduated summa cum laude from the honors college at Penn" + "State and holds a master’s degree in urban policy and planning from the Massachusetts Institute of Technology." +
+      "New Jersey’s Medicaid team is working aggressively under Governor Murphy to expand access to care and address critical health care challenges, including:" +
+      "Expanding access to opioid addiction treatment by removing Medicaid prior authorization requirements for medication-assisted opioid treatment, investing in training " +"more health care providers to offer opioid addiction treatment, creating new Medicaid payments incentives to encourage primary care providers to provide medication-" + "assisted treatment, funding two Medicaid Centers of Excellence for opioid treatment and requiring residential treatment facilities that receive Medicaid to provide " + "access to medication-assisted treatment;" +
+      "Creating new autism benefits under the New Jersey Medicaid program to expand access to these important services;" +
+      "Establishing doula services in Medicaid to provide additional supports to pregnant women and to respond to evidence showing the impact of doula care on improving " + "health outcomes for women of color;" +
+      "Implementing new ways to support mental health care providers in designing services and offering care to individuals with co-occurring developmental disabilities and " + "behavioral health conditions;" +
+      "Expanding Hepatitis C treatments for Medicaid enrollees;" +
+      "Creating a new family planning benefit program for women and men with incomes that are higher than traditional Medicaid eligibility; and," +
+      "Removing barriers to tobacco cessation benefits in Medicaid to make it easier to tackle this leading preventable cause of death." +
+      "The Medicaid and Children's Health Insurance Programs, together known as NJ FamilyCare, are jointly funded by state and federal resources totaling more than $14" + "billion and provide health coverage for approximately 1.7 million New Jerseyans with low-to-moderate incomes.",
+    thumb: 'jlj.jpg'
+  }, {
+    name: 'Caprice Knapp',
+    org: 'Molina Healthcare',
+    title: 'Federal Policy Manager',
+    bio: "In August 2019, Caprice Knapp became the North Dakota Medicaid Director.  She brings to the position more than 17 years’ experience working on Medicaid and CHIP in the private sector, state and federal policymaking, and academics.  In the private sector she as was the federal policy director for Molina Healthcare, Inc..  In academics, she was an Associate Professor in the Department of Health Outcomes and Policy at the University of Florida (UF) conducting external quality review activities for Texas and Florida Medicaid and CHIP programs and maternal and child health research.  In the policymaking arena, she worked in the Governor's Office of State Planning and Budgeting in Colorado as well as the U.S. House of Representatives Energy and Commerce Committee as a Robert Wood Johnson Health Policy Fellow.Knapp’s career has been focused on vulnerable populations, delivery system reform, and global health. Examples of her funded research topics include an assessment of Florida’s Children’s Health Insurance Program Reauthorization Grant; an evaluation of fertility-preservation decision making for adolescent girls with cancer; outcomes of concurrent models of pediatric palliative care; and an assessment of the quality, patient experiences, and costs of health and dental plans for children in Florida. Her global health projects also focus on maternal and child health and have been conducted in Africa, Asia, Europe, and South America. At the University of Florida, Knapp earned a PhD in economics and completed postdoctoral training in health services research. She has authored more than 80 peer-reviewed publications, 60 government reports, and two books.",
+    thumb: 'ck.jpg'
+  }, {
+    name: 'Gretchen Hammer',
+    org: 'Public Leadership Group',
+    title: 'Founder',
+    bio: "Over the last two decades, Gretchen has served as a public leadership consultant, non-profit executive and senior government official focused on improving the health and well-being of Colorado communities. Most recently, she served for nearly four years as the Medicaid Director at the Colorado Department of Health Care Policy and Financing. Prior to joining the state, Gretchen was the Executive Director of the Colorado Coalition for the Medically Underserved. In October 2018, she returned to private industry launching the Public Leadership Group where she works to support public and philanthropic leaders to increase their impact. One of her main projects is serving as the Senior Strategic Advisor at the National Association of Medicaid Directors. In addition to working on Medicaid at the national level, Gretchen focuses the rest of her portfolio on maternal and child health and efforts to align public investments and programs to better meet the needs of children and families. Gretchen is a graduate of Colorado College and the University of Washington School of Public Health. She lives in Denver with her husband and two teenage sons.",
+    thumb: 'gh.jpg'
+  }, {
+    name: 'Ruth Johnson',
+    org: 'Louisiana Department of Health',
+    title: 'Medicaid Executive Director',
+    bio: "Ruth Johnson began her role as Medicaid executive director on April 6. She brings more than 30 years of experience in public service. Johnson has served in several roles in state government including secretary of the Louisiana Department of Children and Family services; deputy director of finance and administration for the South Carolina Department of Health and Human Services; chief information officer for the Louisiana Division of Administration (DOA); and deputy commissioner for the DOA. Most recently, Johnson was the chief operation officer for Texas Health and Human Services. Johnson holds a bachelor's and master's degree in accounting from Louisiana State University.",
+    thumb: 'rj.jpg'
+  }, {
+    name: 'Ben Shaffer',
+    org: 'Executive Office of Health and Human Services at State of Rhode Island',
+    title: 'Medicaid Program Director',
+    bio: "Benjamin Shaffer has served as Rhode Island’s Medicaid Program Director since February 2020, first as acting Director and then permanent Director in April 2020. Prior to serving as Medicaid Director, Ben served as Deputy Secretary, Deputy Medicaid Director and Chief Operating Officer at the Rhode Island Executive Office of Health and Human Services (EOHHS). In these roles he oversaw Medicaid operations and technology, including integrated eligibility, MMIS, LTSS program administration and enrollment. In addition to these Medicaid responsibilities, as Deputy Secretary and COO he worked as the business lead for the United Health Infrastructure Project, a ~$500M IT integrated eligibility project that supporting all Medicaid, QHP, SNAP, TANF, Medicare Premium Payments and child care, oversaw interagency operational coordination, oversaw the Rhode Island state integrated data ecosystem, developed EOHHS’ performance management process and led the development of a turnaround and budget plan for Rhode Island’s child welfare agency. Ben originally joined the State of Rhode Island as Director of Performance Management in the Office of Management and Budget in March of 2016, managing a team of 5 to build a “State Stat” performance management system across 14 state agencies and 4 cross agency groups. Before joining state government in Rhode Island, Ben was a consultant at the Boston Consulting Group, working for non-profit and for-profit clients doing strategy, organizational and operational improvement work. He has an MBA from the Wharton School, an MPA from the Harvard Kennedy School of Government, and a BA from Yale University.",
+    thumb: 'bs.jpg'
+  }, {
+    name: 'Tom Betlach',
+    org: 'Speire Healthcare Strategies',
+    title: 'Partner',
+    bio: "Tom joined Speire Healthcare Strategies in 2019 as a partner to advise government and private sector clients on complex health policy and strategic initiatives. He " + "is a nationally recognized thought leader on Medicaid and healthcare policy, known for his expertise in serving complex populations, delivery system transformation," + "value based purchasing, managed care and cost containment. Prior to joining Speire, Tom completed 27 years of state service in Arizona, working for five different " + "Governors in three different cabinet positions." +
+      "For the last nine years Tom served as Director of the Arizona Health Care Cost Containment System (AHCCCS), Arizona’s single state Medicaid agency, where he reported " + "directly to the Governor. AHCCCS provided health care coverage to 1.9 million Arizonans at an annual cost of $13 billion." +
+      "During his tenure, Arizona was an early innovator in leveraging competitive managed care, contracting strategies to transform the delivery system. Under Tom’s " + "leadership, Arizona successfully pursued a multi-year strategy to integrate behavioral health services, expanded the delivery of services to address social " +"determinants of health and pursued value-based purchasing strategies. Arizona remains one of the lowest cost long-term care programs nationally and has maintained " +"high levels of home and community-based placement for persons with long term care needs." +
+      "As a national leader, Tom served as both Vice President and President of the National Association of Medicaid Directors. He currently serves on the Board for the " +"National Committee for Quality Assurance (NCQA) and is a member of the Congressional Budget Office Panel of Health Advisers." +
+      "Tom holds a Master’s in Public Administration from the University of Arizona and a Bachelor of Arts in Political Science from the University of Wisconsin.",
+    thumb: 'tb.jpg'
+  }, {
+    name: "Gena B. Lewis",
+    org: "Ikaso Consulting, LLC",
+    title: "Executive Consultant-Government Relations",
+    bio: "Gena has served in the human services sector for nearly 20 years, initially as an attorney, and then as legal advisor and executive leader.  Gena is driven by a desire to be of service and to provide solutions to improve the lives of others. She has vast subject matter expertise relative to state human service delivery, including child support, child care, adult protective services, administrative appeals, rule-making, legislation, and policy development relative to federal needs based programs. Additionally, she has experience in administration and organization development, talent management, employee relations, organizational learning, professional development, employee engagement and strategic planning. As Executive Consultant, Gena is currently responsible for the development and execution of project strategies and providing subject-matter expertise relative to the Ikaso portfolio of work, including strategic planning and procurement consulting in partnership with public and non-profit agencies throughout the country. Prior to joining the Ikaso team, she served as General Counsel and Deputy Commissioner for the State of Tennessee, Department of Human Services and was responsible for providing executive leadership and agency wide direction in alignment with the mission and goals of the Department and the priorities of the State. Gena is a graduate of the University of Michigan and earned her Juris Doctor degree from Wayne State University School of Law.  She has been admitted to the State Bar of Michigan and Tennessee.  She is certified as a Professional in Human Resources (PHR-HRCI) and International Public Management Association (IPMA-SCP). Gena lives in Franklin Tennessee and enjoys spending time (LOTS of time these days!) with her husband and two teen-aged sons.",
+    thumb: "gbl.jpg"
+  }, {
+    name: "Beth Kidder",
+    org: "State of Florida",
+    title: "Medicaid Director",
+    bio: "Ms. Kidder has served in state Medicaid programs for over 20 years and has been the Florida Medicaid Director since January 2017.  Prior to that she was the Assistant Deputy Secretary for Medicaid Policy and Quality for five years, leading the program’s move to statewide Medicaid managed care, realigning the functions of the Medicaid offices to effectively oversee the new health plans, and working intensively on improving health access. As Medicaid Director, Ms. Kidder has focused on driving improved quality and accountability by setting aggressive goals for improved health outcomes and strengthening controls in the managed care program. Ms. Kidder holds a Bachelor’s Degree from the University of Florida and a Master’s Degree in Public Policy from Duke University.",
+    thumb: "bk.jpg"
+  }, {
+    name: "Jami Snyder",
+    org: "State of Arizona",
+    title: "President-Elect",
+    bio: "Jami Snyder serves as the director of AHCCCS, overseeing Arizona’s Medicaid and CHIP program, including the provision of acute, behavioral health and long-term care services and supports to more than 1.8 million Arizona residents at an annual cost of $14 billion. She was appointed by Governor Doug Ducey on January 5, 2019 after having served as the agency’s deputy director since December 2017.With more than 20 years of public and private sector experience in the health and human services industries. Ms. Snyder’s areas of expertise include regulatory oversight, policymaking and leadership development. Prior to joining AHCCCS, Ms. Snyder served as Medicaid Director for the state of Texas, managing a program covering 4.7 million enrollees at a cost of $29 billion. She held posts as Chief Operating Officer of the University of Arizona Health Plans, an Operations Administrator at AHCCCS, and a Bureau Chief at the Arizona Department of Health Services. She is a 2013 Flinn-Brown Civic Leadership Academy Fellow and holds master’s degree in political science from Arizona State University as well as a bachelor’s degree in political science from Gustavus Adolphus College in St. Peter, Minnesota.",
+    thumb: "js.jpg"
+  }, {
+    name: "Kate McEvoy",
+    org: "State of Connecticut",
+    title: "Immediate Past President",
+    bio: "Kate McEvoy is the Director of the Division of Health Services at the Connecticut Department of Social Services.  She has served in her role for seven years.  Prior to her service at DSS, Kate was appointed to serve as Assistant Comptroller/Policy Director for the Office of the State Comptroller, where she focused on implementing value-based initiatives in the state employee health plan.  She is also the author of a legal treatise that is republished every year. Kate has had the privilege of overseeing major transformation in Connecticut HUSKY Health, migrating from capitated managed care arrangements to a self-insured, managed fee-for-service approach. This has streamlined and simplified the program for both members and providers, freed up resources for an extensive array of care delivery and value-based payment interventions, and enabled the program to reduce both per member, per month costs and overall spend.  During Kate’s tenure, Connecticut also expanded Medicaid and utilized a broad range of tools under the Affordable Care Act, including extensive systems change work on long-term services and supports. Kate is a graduate of Oberlin College with a B.A. in Economics and English, received her law degree from the University of Connecticut, and graduated from the CHCS/NGA Medicaid Leadership Institute.=",
+    thumb: "km.jpg"
+  }, {
+    name: "Tracy Johnson",
+    org: "State of Colorado Health Care Policy and Financing",
+    title: "Medicaid Director",
+    bio: "Tracy Johnson is the current Medicaid Director for the State of Colorado Health Care Policy and Financing. She has more than 20 years of experience in health policy and program development, research and evaluation. Johnson was with Denver Health and Hospital Authority (DHHA) where she served as DHHA’s Director of Health Care Reform Initiatives. She led Denver Health’s implementation of federal health care reform, specifically in the areas of delivery system and payment reform. Prior to that, she served as principal of her own health policy consulting firm and in state government. Throughout these roles, she has directed numerous research and consulting projects across the population health spectrum – health insurance coverage, population segmentation/data analytics, delivery system design, health system financing and payment models, safety net provider issues and health equity. Johnson holds a Ph.D. in Health Policy and Management from the Johns Hopkins Bloomberg School of Public Health and an M.A. in Biomedical Ethics from the University of Virginia.",
+    thumb: "tj.jpg"
+  }];
+
+  function init() {
+    console.log('init');
+    // Sort speakers
+    speakers.sort(function(a, b) {
+      if (a.name.toLowerCase() > b.name.toLowerCase()) {
+        return 1;
+      }
+      if (a.name.toLowerCase() < b.name.toLowerCase()) {
+        return -1;
+      }
+      return 0;
+    });
+
+    // Create speaker elements
+    var grid = $(landingPageEl).find('.namd-speakers-grid');
+    // // var grid = $('.namd-speakers-grid');
+
+    $.each(speakers, function(key, speaker) {
+      var content = "<li onclick='toggleSpeaker(true, " + key + ")'><img src='https://studio304nextechar.freetls.fastly.net/infernoAR/namd/speakers/" + speaker.thumb + "' alt='" + speaker.name + "' />";
+      content += "<h2>" + speaker.name + "</h2><h3>" + speaker.org + "</h3></li>";
+      grid.append(content);
+    });
+
+    // Show
+    var els = $(landingPageEl).find('.namd-speakers-grid li');
+    // var els = $('.namd-speakers-grid li');
+    $.each(els, function(i, el) {
+      setTimeout(function() {
+        $(el).addClass('animate-show');
+      }, 170*(i+1));
+    });
+  }
+
+  function toggleSpeaker(show, index) {
+    var el = $(landingPageEl).find(".namd-selected-speaker");
+    // var el = $(".namd-selected-speaker");
+    if (!show || !speakers[index]) {
+      el.removeClass('selected-show');
+      el.find('.namd-selected-speaker-content').removeClass('selected-show');
+      return;
+    }
+
+    // Scroll top
+    var bodyEl = $('html,body');
+    var layoutEl = $('.layout-fixed');
+
+    if (bodyEl.scrollTop() > 0) {
+      bodyEl.scrollTop(0);
+    }
+    else {
+      layoutEl.scrollTop(0);
+    }
+
+    // Get speaker
+    var speaker = speakers[index];
+
+    // Populate info
+    el.find('img').attr('src', "https://studio304nextechar.freetls.fastly.net/infernoAR/namd/speakers/" + speaker.thumb);
+    el.find('h2').html(speaker.name);
+    el.find('h3').html(speaker.title);
+    el.find('h4').html(speaker.org);
+    el.find('.namd-selected-speaker-content-bio').html(speaker.bio);
+
+    // Show
+    el.addClass('selected-show');
+
+    // Show content
+    setTimeout(function() {
+      el.find('.namd-selected-speaker-content').addClass('selected-show');
+    }, 100);
+  }
+
+  $(document).ready(init);
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- HTML -->
+<div class="namd-speakers">
+  <h1>Speakers</h1>
+  <div class="namd-speakers-imagery"></div>
+  <ul class="namd-speakers-grid">
+  </ul>
+
+  <!-- Selected -->
+  <div class="namd-selected-speaker" onclick="toggleSpeaker()">
+    <button class="namd-close-btn" onclick="toggleSpeaker()">Close</button>
+    <div class="namd-selected-speaker-content" onclick="event.stopPropagation()">
+      <div class="namd-selected-speaker-content-meta">
+        <img src>
+        <h2></h2>
+        <h3></h3>
+        <h4></h4>
+      </div>
+      <div class="namd-selected-speaker-content-bio">
+      </div>
+    </div>
+  </div>
+</div>
+
+</inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
