@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en"
+      class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+      style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+      rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+  <script>
+    let landingPageEl = null
+  </script>
+</head>
+
+<body>
+
+<app-root class='layout-fixed has-menu'>
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar
+            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+            color="primary">
+          <div class="navbar-header">LOCAL</div>
+          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
+                    trigger-resize="" onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close="">
+            <ul class="nav">
+              <li><a href="..">Menu</a></li>
+            </ul>
+          </nav>
+          </nav>
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex="">
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="a7f4b31e-c8e7-4760-af59-25d8c3e596de">
+
+                <!-- Container -->
+                <style>
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
+                  img::after {
+                    content: none;
+                  }
+
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
+                  }
+                </style>
+
+                <!-- Banner -->
+                <style>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
+                    background-size: cover;
+                    background-position: center center;
+                    background-blend-mode: multiply;
+                    background-image: linear-gradient(to right, #505050 0%, transparent 80%), url('https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/library-header.jpg?r=4');
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .banner-info {
+                    position: absolute;
+                    top: 120px;
+                    left: 40px;
+                    color: #fff;
+                    max-width: 70%;
+                    text-shadow: #000 0 0 .5rem;
+                  }
+
+                  .banner-text {
+                    font-weight: bold;
+                    font-size: clamp(2rem, 2.5vw, 3rem);
+                  }
+
+                  .banner-sub-text {
+                    font-weight: lighter;
+                    font-size: clamp(1.25rem, 1.25vw, 2.25rem);
+                  }
+                </style>
+
+                <!-- Library Card Grid -->
+                <style>
+                  .library-section {
+                    padding: 20px 20px;
+                    background-color: #ffffff;
+                  }
+
+                  .library-section-title {
+                    font-weight: bold;
+                    color: var(--branding-primary);
+                    font-size: clamp(1.5rem, 1.75vw, 2rem);
+                  }
+
+                  .library-section-description {
+                    color: #000000;
+                    padding: 20px;
+                    background-color: lightgray;
+                    font-size: clamp(1rem, 1.25vw, 1.5rem);
+                  }
+
+                  .library-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    max-width: 100%;
+                    padding: 10px;
+                  }
+
+                  .library-card {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 1em;
+                    margin: 10px;
+                    background-color: #ffffff;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .library-card-thumb {
+                    width: 160px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .library-card-title {
+                    display: flex;
+                    position: absolute;
+                    top: 20px;
+                    height: 40px;
+                    font-size: 1rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .library-card :hover {
+                    cursor: pointer;
+                    transform: scale(1.05);
+                    transition: .5s ease;
+                  }
+
+                </style>
+
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: var(--sidebar-text-color);
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(80%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+
+                <!-- on-demand grid-->
+                <style>
+                  .on-demand-grid {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    max-width: 80%;
+                    padding: 10px;
+                  }
+
+                  .on-demand {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    background-color: rgba(255, 255, 255, .4);
+                    border-radius: 1em;
+                    margin: 10px;
+                    padding: 2px;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .on-demand-thumb {
+                    width: 240px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .on-demand-title {
+                    display: flex;
+                    position: absolute;
+                    top: 15px;
+                    height: 40px;
+                    font-size: 1.25rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .on-demand img:hover {
+                    cursor: pointer;
+                    transform: scale(1.06);
+                    transition: 1s ease;
+                  }
+
+                </style>
+
+                <!-- PDF  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+                </style>
+
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                </div>
+
+                <div class="content">
+
+                  <div id="container">
+                    <div class="banner">
+                      <div class="banner-info">
+                        <div class="banner-text">Resource Library</div>
+                        <div class="banner-sub-text">Our resource library contains helpful documents, videos, and other
+                                                     content for your on-demand consumption. Filter the content by
+                                                     category for easy access to Research and Sponsor Info.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Industry Research Section-->
+                    <div class="library-section">
+                      <div class="library-section-title">Industry Research</div>
+                    </div>
+
+                    <div id="industry-research-grid" class="library-grid">
+                      <template id="industry-research-template">
+                        <div id="industry-research-card" class="library-card">
+                          <img id="industry-research-thumb" class="library-card-thumb"/>
+                          <div id="industry-research-title" class="library-card-title"/>
+                        </div>
+                      </template>
+                    </div>
+
+                    <!-- Sponsor Info Section-->
+                    <div class="library-section">
+                      <div class="library-section-title">Sponsor Info</div>
+                    </div>
+
+                    <div id="sponsor-info-grid" class="library-grid">
+                      <template id="sponsor-info-template">
+                        <div id="sponsor-info-card" class="library-card">
+                          <img id="sponsor-info-thumb" class="library-card-thumb"/>
+                          <div id="sponsor-info-title" class="library-card-title"/>
+                        </div>
+                      </template>
+                    </div>
+
+                    <!--On Demand Video Section -->
+                    <div class="library-section">
+                      <div class="library-section-title">Event Recordings</div>
+                    </div>
+
+
+                    <div class="on-demand-grid">
+                      {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                      {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                      {% for event in sortedEvents %}
+                      {% for category in event.Categories %}
+                      {% assign cat = category.Id | downcase %}
+                      {% if cat == currentCat %}
+                      <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">
+                        <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
+                        <div class="on-demand-title">{{event.Name}}</div>
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                      {% endfor %}
+                    </div>
+
+                  </div>
+                </div>
+
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <template id="template-video-player">
+                  <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true"
+                          mozallowfullscreen="true">
+                  </iframe>
+                </template>
+
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      scrollTop();
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('#template-video-player');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                    scrollTop();
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+                <!-- library build  -->
+                <script>
+                  var sponsorInfoCardData = [
+                    {
+                      "Title": "Aprio: Federal and State R&D Tax Credit Studies",
+                      "FileName": "federala-state-r-d-tax-credit-studies"
+                    },
+                    {
+                      "Title": "Aprio: Healthcare IT Services",
+                      "FileName": "healthcare-it-services"
+                    },
+                    {
+                      "Title": "Aprio: Information Assurance Capabilities",
+                      "FileName": "information-assurance-capabilities"
+                    },
+                    {
+                      "Title": "Grant Thornton: HITRUST Services at Grant Thornton",
+                      "FileName": "hitrust-services-at-grant-thornton"
+                    },
+                    {
+                      "Title": "Grant Thornton: Navigating the impact of COVID-19 on healthcare",
+                      "FileName": "navigating-the-impact-of-covid-19-on-healthcare"
+                    },
+                    {
+                      "Title": "Grant Thornton: SOC Reporting Services at Grant Thornton",
+                      "FileName": "soc-reporting-services-at-grant-thornton"
+                    },
+                    {
+                      "Title": "Grant Thornton: Telehealth is here. Are you ready",
+                      "FileName": "telehealth-is-here-are-you-ready"
+                    },
+                    {
+                      "Title": "Juno: EHR Comprehensive Brochure",
+                      "FileName": "ehr-comprehensive-brochure"
+                    },
+                    {
+                      "Title": "Juno: The Reimagined EHR",
+                      "FileName": "the-reimagined-ehr"
+                    },
+                    {
+                      "Title": "Juno: Next Generation EHRs",
+                      "FileName": "next-generation-ehrs"
+                    },
+                    {
+                      "Title": "Juno: RX Tracker Brochure",
+                      "FileName": "rx-tracker-brochure"
+                    },
+                    {
+                      "Title": "Northside Hospital: Healers. Helpers. Heroes Poster",
+                      "FileName": "healers-helpers-heroes-poster"
+                    },
+                    {
+                      "Title": "Northside Hospital: Medical Moments Podcast",
+                      "FileName": "northside-hospital-medical-moments-podcast"
+                    },
+                    {
+                      "Title": "Northside Hospital: Top Docs",
+                      "FileName": "northside-top-docs"
+                    },
+                    {
+                      "Title": "Northside Hospital: Welcome to Your Northside Infographic",
+                      "FileName": "welcome-to-your-northside-infographic"
+                    },
+                    {
+                      "Title": "Nutanix: Accelerate Healthcare Innovation",
+                      "FileName": "accelerate-healthcare-innovation"
+                    },
+                    {
+                      "Title": "Nutanix: Enterprise Cloud Index",
+                      "FileName": "nutanix-enterprise-cloud-index"
+                    },
+                    {
+                      "Title": "Nutanix: Improve Performance and Scalability",
+                      "FileName": "improve-performance-and-scalability"
+                    },
+                    {
+                      "Title": "Nutanix: Transforming Healthcare IT with Enterprise Cloud",
+                      "FileName": "transforming-healthcare-it-with-enterprise-cloud"
+                    },
+                    {
+                      "Title": "Telliant: Application Maintenance and Support",
+                      "FileName": "application-maintenance-and-support"
+                    },
+                    {
+                      "Title": "Telliant: End-to-End Revenue Cycle Solution",
+                      "FileName": "end-to-end-revenue-cycle-solution"
+                    },
+                    {
+                      "Title": "Telliant: Digital Health",
+                      "FileName": "healthcare"
+                    },
+                    {
+                      "Title": "Telliant: Digital Health Telemedicine",
+                      "FileName": "healthcare-it-telemedicine"
+                    },
+                    {
+                      "Title": "Telliant: Telemedicine and Mobile Health for Radiology and EHRs",
+                      "FileName": "telemedicine-and-mobile-health-for-radiology-and-ehrs"
+                    },
+                    {
+                      "Title": "ToolBox9: Websites and Applications Built for Healthcare",
+                      "FileName": "websites-and-applications-built-for-healthcare-v2"
+                    },
+                    {
+                      "Title": "Wipfli: Business Services",
+                      "FileName": "business-services"
+                    },
+                    {
+                      "Title": "Wipfli: HITRUST CSF assessments and services",
+                      "FileName": "hitrust-csf-assessments-and-services"
+                    },
+                    {
+                      "Title": "Wipfli: Success Story: Centauri Health Solutions",
+                      "FileName": "success-story-centauri-health-solutions"
+                    },
+                    {
+                      "Title": "Wipfli: Technology Companies",
+                      "FileName": "technology-companies"
+                    }
+                  ]
+
+                  var industryResearchCardData = [
+                    {
+                      "Title": "Blockchain Ecosystem Report",
+                      "FileName": "blockchain-ecosystem-report"
+                    },
+                    {
+                      "Title": "IHIT Georgia Digital Health Report 2019",
+                      "FileName": "ihit-georgia-digital-health-report-2019"
+                    },
+                    {
+                      "Title": "IHIT Georgia Healthcare Technology Report",
+                      "FileName": "ihit-georgia-healthcare-technology-report"
+                    },
+                    {
+                      "Title": "TAG Digital Health Ecosystem Report 2020",
+                      "FileName": "tag-digital-health-ecosystem-report-2020"
+                    },
+                    {
+                      "Title": "TAG FinTech Ecosystem Report 2020",
+                      "FileName": "tag-fintech-ecosystem-report-2020"
+                    },
+                    {
+                      "Title": "TAG Info Security Ecosystem Report 2020",
+                      "FileName": "tag-info-security-ecosystem-report-2020"
+                    },
+                    {
+                      "Title": "TAG Supply Chain Ecosystem Report 2020",
+                      "FileName": "tag-supply-chain-ecosystem-report-2020"
+                    }
+                  ]
+
+                  function buildLibrary() {
+                    buildIndustryResearchGrid();
+                    buildSponsorInfoGrid();
+                  }
+
+                  function buildIndustryResearchGrid() {
+                    const myLanding = landingPageEl ?? document;
+                    const industryResearchGrid = myLanding.getElementById("industry-research-grid");
+                    const industryResearchTemplate = myLanding.getElementById("industry-research-template");
+
+                    for (let cardData of industryResearchCardData) {
+                      const card = industryResearchTemplate.content.cloneNode(true);
+
+                      const industryResearchThumb = card.getElementById("industry-research-thumb");
+                      industryResearchThumb.onerror = function () {
+                        industryResearchThumb.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/default.jpeg';
+                      }
+                      industryResearchThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg';
+
+                      const industryResearchTitle = card.getElementById("industry-research-title");
+                      industryResearchTitle.innerHTML = cardData.Title;
+
+                      const industryResearchCard = card.getElementById("industry-research-card");
+                      industryResearchCard.onclick = function () {
+                        loadPDF(cardData.FileName);
+                      }
+
+                      industryResearchGrid.appendChild(card);
+                    }
+                  }
+
+                  function buildSponsorInfoGrid() {
+                    const myLanding = landingPageEl ?? document;
+                    const sponsorInfoGrid = myLanding.getElementById("sponsor-info-grid");
+                    const sponsorInfoTemplate = myLanding.getElementById("sponsor-info-template");
+
+                    for (let cardData of sponsorInfoCardData) {
+                      const card = sponsorInfoTemplate.content.cloneNode(true);
+
+                      const sponsorInfoThumb = card.getElementById("sponsor-info-thumb");
+                      sponsorInfoThumb.onerror = function () {
+                        sponsorInfoThumb.onerror = null;
+                        this.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/default.jpeg';
+                      }
+                      sponsorInfoThumb.src = 'https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/thumb/' + cardData.FileName + '-thumb.jpeg?r=1112';
+
+                      const sponsorInfoTitle = card.getElementById("sponsor-info-title");
+                      sponsorInfoTitle.innerHTML = cardData.Title;
+
+                      const sponsorInfoCardData = card.getElementById("sponsor-info-card");
+                      sponsorInfoCardData.onclick = function () {
+                        loadPDF(cardData.FileName);
+                      }
+
+                      sponsorInfoGrid.appendChild(card);
+                    }
+                  }
+
+                  if (window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('localhost')) {
+                    window.addEventListener('load', (event) => {
+                      buildLibrary();
+                      console.log('The page has fully loaded');
+                    });
+                  } else {
+                    buildLibrary();
+                  }
+                </script>
+
+                <!-- PDF -->
+                <script>
+                  function loadPDF(id) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://studio304nextechar.freetls.fastly.net/infernoAR/tag/library/pdf/" + id + ".pdf?r=1112";
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+                <!-- Inferno Hacks -->
+                <script>
+                  if (!window.whiteHack) {
+                    const css = `jolo-search-box .search-box-container {display: none !important}`;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+
+
+                </script>
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer="" layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+</body>
+
+<!-- Menu Collapse Script -->
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+</html>
