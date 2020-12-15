@@ -421,7 +421,7 @@
 											border-radius: 10px;
 											background-color: black;
 											font-weight: 100;
-											font-size: 3.2rem;
+											font-size: 2.8rem;
 											min-width: 30rem;
 											color: #cbc165;
 											text-shadow: 0px 0px 10px #c4b21c, 0px 0px 10px #c4b21c,
@@ -470,10 +470,12 @@
 
 										#video-popup {
 											display: none;
-											position: absolute;
-											top: 50%;
-											left: 50%;
-											transform: translate(-50%, -50%);
+											flex-direction: column;
+											align-items: center;
+											justify-content: center;
+											position: fixed;
+											top: 0;
+											left: 0;
 											width: 100%;
 											height: 100%;
 											background-color: rgba(0, 0, 0, 0.386);
@@ -481,20 +483,33 @@
 										}
 
 										.video-container {
+											position: relative;
 											padding: 2rem;
 											color: white;
 											font-size: 2.4rem;
-											position: absolute;
-											top: 50%;
-											left: 50%;
-											transform: translate(-50%, -50%);
-											height: 50%;
-											width: 50%;
+											height: fit-content;
+											width: 60%;
 											background-color: rgba(0, 0, 0, 1);
 											display: flex;
 											flex-direction: column;
 											align-items: center;
 											justify-content: flex-start;
+											margin-left: 30rem;
+										}
+
+										.aspect-ratio {
+											position: relative;
+											width: 100%;
+											height: 0;
+											padding-bottom: 51%;
+										}
+
+										.video-iframe {
+											position: absolute;
+											width: 100%;
+											height: 100%;
+											left: 0;
+											top: 0;
 										}
 
 										.close-popup {
@@ -503,6 +518,10 @@
 											text-align: right;
 											width: 100%;
 											height: 4rem;
+										}
+
+										.modal-message {
+											padding: 2rem 0;
 										}
 									</style>
 									<category-page-links
@@ -531,7 +550,7 @@
 										<div class="page-contents">
 											<div class="column col1">
 												<div class="videos">
-													<div class="custom-banner">Tuesday Drawings</div>
+													<div class="custom-banner">Wednesday Drawings</div>
 													<div
 														class="video"
 														id="video-1"
@@ -560,7 +579,7 @@
 											</div>
 											<div class="column col3">
 												<div class="videos">
-													<div class="custom-banner">Wednesday Drawings</div>
+													<div class="custom-banner">Thursday Drawings</div>
 													<div
 														class="video"
 														id="video-4"
@@ -582,6 +601,7 @@
 										<div id="video-popup">
 											<div class="video-container">
 												<div class="close-popup" onclick="toggleVideo()">X</div>
+												<div class="aspect-ratio"></div>
 											</div>
 										</div>
 									</div>
@@ -604,89 +624,170 @@
 										fetchCash();
 									</script>
 
-									<!-- Video Popup-->
+									<!-- Drawing Scripts -->
 									<script>
 										//for local testing only
-										//  var data = {}
-										//   loadJSON('../liquid.json', function (response) {
-										//     // Parse JSON string into object
-										//     const x = JSON.parse(response)
-										//     data = x[0]
-										//     console.log(data.Events);
-										//   })
-
-										  // var lq = data;
-
-										  //for production
-										var lq = {{ data | json }};
-
-										var videos = lq.Events.filter(event => (
-										  event.Categories[0].Name.toLowerCase().includes("bowling")
-										));
-
-										//sort by start time
-										var sortedVideos = videos.sort((a, b) =>  {
-										   var dateA = new Date(a.StartTime);
-										  var dateB = new Date(b.StartTime);
-										  return dateA > dateB ? 1 : -1;
+										var data = {};
+										loadJSON("../liquid.json", function (response) {
+											// Parse JSON string into object
+											const x = JSON.parse(response);
+											data = x[0];
+											console.log(data.Events);
 										});
 
+										var lq = data;
 
-										var formatTime = (value) => {
-										  var d = new Date(value);
-										  var hr = d.getHours();
-										  var min = d.getMinutes();
-										  var ampm = "am";
-										  if (hr > 12) {
-										    hr -= 12;
-										    ampm = "pm";
-										  }
+										//for production
+										// var lq = {{ data | json }};
 
-										  return (hr + ":" + min + ampm);
-										}
+										var videos = lq.Events.filter(event =>
+											event.Categories[0].Name.toLowerCase().includes("bowling")
+										);
+
+										//sort by start time
+										var sortedVideos = videos.sort((a, b) => {
+											var dateA = new Date(a.StartTime);
+											var dateB = new Date(b.StartTime);
+											return Date.parse(dateA) > Date.parse(dateB) ? 1 : -1;
+										});
+
+										var currentTime = Date.parse(new Date());
+
+										var formatTime = (value, withDay) => {
+											var weekday = new Array(7);
+											weekday[0] = "Sunday";
+											weekday[1] = "Monday";
+											weekday[2] = "Tuesday";
+											weekday[3] = "Wednesday";
+											weekday[4] = "Thursday";
+											weekday[5] = "Friday";
+											weekday[6] = "Saturday";
+
+											var d = new Date(value);
+
+											var dayIndex = d.getDay();
+											var month = "January";
+
+											var day = d.getDate().toString();
+											day = day.length > 1 ? day : "0" + day;
+
+											var hr = d.getHours();
+											var min = d.getMinutes();
+											var ampm = "am";
+
+											if (hr > 12) {
+												hr -= 12;
+												ampm = "pm";
+											}
+
+											var time = hr + ":" + min + ampm;
+
+											if (withDay) {
+												time =
+													weekday[dayIndex] +
+													", " +
+													month +
+													" " +
+													day +
+													" at " +
+													time;
+											}
+											return time;
+										};
+
 										//Add video box labels
 										var addLabels = () => {
-										  var videoBoxes = landingPageEl.querySelectorAll(".video");
-										  videoBoxes.forEach((videoBox, index) => {
-										    videoBox.setAttribute("id", sortedVideos[index].Id);
-										    var drawing = sortedVideos[index].Description.substring(sortedVideos[index].Description.length - 9);
-										    var label = document.createElement("div");
-										    label.setAttribute("class", "video-box-label");
-										    videoBox.appendChild(label);
-										    createElement("drawing", drawing + ":", label);
-										    createElement("time", formatTime(sortedVideos[index].StartTime), label);
-										  });
-										}
+											var videoBoxes = landingPageEl.querySelectorAll(".video");
+
+											videoBoxes.forEach((videoBox, index) => {
+												var drawingTime = new Date(
+													sortedVideos[index].StartTime
+												);
+
+												videoBox.setAttribute("id", sortedVideos[index].Id);
+												videoBox.setAttribute("data-starttime", drawingTime);
+
+												var parsedName = sortedVideos[index].Name.split(" - ");
+												var drawing = parsedName[1];
+												var label = document.createElement("div");
+												label.setAttribute("class", "video-box-label");
+												videoBox.appendChild(label);
+												createElement("drawing", drawing + ":", label);
+												createElement(
+													"time",
+													formatTime(sortedVideos[index].StartTime),
+													label
+												);
+
+												//Checks if the current time is greater than the drawing time plus 1 minute
+												//If so, the winner is displayed
+
+												if (currentTime > Date.parse(drawingTime) + 60000) {
+													var winner = parsedName[2];
+													createElement("winner", winner, label);
+												}
+											});
+										};
 
 										var createElement = (type, value, parent) => {
-										  var element = document.createElement("div");
-										  element.setAttribute("class", type);
-										  element.innerHTML = value;
-										  parent.appendChild(element);
-
-										}
+											var element = document.createElement("div");
+											element.setAttribute("class", type);
+											element.innerHTML = value;
+											parent.appendChild(element);
+										};
 
 										addLabels();
 
-										//open popup and get embeded tiktok video
-										var toggleVideo = (element) => {
-										  var popupElement = landingPageEl.getElementById("video-popup");
-										  var iframe;
-										  if (element) {
-										    var videoId = element.id;
-										    popupElement.style.display = "block";
-										    var videoContainer = landingPageEl.querySelector(".video-container");
-										    iframe = document.createElement("iframe");
-										    iframe.setAttribute("class", "video-iframe");
-										    iframe.src = "/embed/" + videoId;
-										    videoContainer.appendChild(iframe);
-										  } else {
-										    popupElement.style.display = "none";
-										    iframe = landingPageEl.querySelector(".video-iframe")
-										    iframe.remove();
-										  }
+										//open popup and get embeded video
+										var toggleVideo = element => {
+											var popupElement = landingPageEl.getElementById(
+												"video-popup"
+											);
+											var iframe;
+											if (element) {
+												document.body.style.overflow = "hidden";
+												var videoId = element.id;
+												var drawingTime = element.getAttribute(
+													"data-starttime"
+												);
+												var currentTime = new Date();
+												console.log(drawingTime);
+												console.log(currentTime);
+												var videoContainer = landingPageEl.querySelector(
+													".aspect-ratio"
+												);
 
-										}
+												var modalContainer = landingPageEl.querySelector(
+													".video-container"
+												);
+
+												popupElement.style.display = "flex";
+
+												iframe = document.createElement("iframe");
+												iframe.setAttribute("class", "video-iframe");
+												iframe.src = "/embed/" + videoId;
+												videoContainer.appendChild(iframe);
+
+												if (currentTime < Date.parse(drawingTime)) {
+													var message = document.createElement("div");
+													message.setAttribute("class", "modal-message");
+													message.innerHTML =
+														"Come back " +
+														formatTime(drawingTime, true) +
+														" to see who the winner is.";
+													modalContainer.appendChild(message);
+												}
+											} else {
+												document.body.style.overflow = "auto";
+												popupElement.style.display = "none";
+												iframe = landingPageEl.querySelector(".video-iframe");
+												var message = landingPageEl.querySelector(
+													".modal-message"
+												);
+												iframe.remove();
+												message.remove();
+											}
+										};
 									</script>
 								</inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
