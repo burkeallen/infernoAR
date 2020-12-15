@@ -397,7 +397,7 @@
 											display: flex;
 											flex-direction: row;
 											justify-content: space-between;
-											align-items: center;
+											align-items: flex-start;
 											width: 100%;
 										}
 
@@ -410,6 +410,7 @@
 										}
 
 										.col2 img {
+											margin-top: 4rem;
 											height: auto;
 										}
 
@@ -418,7 +419,7 @@
 											border: 3px solid #c4b21c;
 											border-radius: 10px;
 											background-color: black;
-											font-weight: 100;
+											font-weight: 200;
 											font-size: 3.2rem;
 											min-width: 30rem;
 											color: #cbc165;
@@ -433,7 +434,7 @@
 										}
 
 										.plinko {
-											width: 90%;
+											width: 75%;
 										}
 
 										.videos {
@@ -472,10 +473,12 @@
 
 										#video-popup {
 											display: none;
-											position: absolute;
-											top: 50%;
-											left: 50%;
-											transform: translate(-50%, -50%);
+											flex-direction: column;
+											align-items: center;
+											justify-content: center;
+											position: fixed;
+											top: 0;
+											left: 0;
 											width: 100%;
 											height: 100%;
 											background-color: rgba(0, 0, 0, 0.386);
@@ -483,20 +486,33 @@
 										}
 
 										.video-container {
+											position: relative;
 											padding: 2rem;
 											color: white;
 											font-size: 2.4rem;
-											position: absolute;
-											top: 50%;
-											left: 50%;
-											transform: translate(-50%, -50%);
-											height: 50%;
-											width: 50%;
+											height: fit-content;
+											width: 60%;
 											background-color: rgba(0, 0, 0, 1);
 											display: flex;
 											flex-direction: column;
 											align-items: center;
 											justify-content: flex-start;
+											margin-left: 30rem;
+										}
+
+										.aspect-ratio {
+											position: relative;
+											width: 100%;
+											height: 0;
+											padding-bottom: 56.5%;
+										}
+
+										.video-iframe {
+											position: absolute;
+											width: 100%;
+											height: 100%;
+											left: 0;
+											top: 0;
 										}
 
 										.close-popup {
@@ -505,6 +521,14 @@
 											text-align: right;
 											width: 100%;
 											height: 4rem;
+										}
+
+										.close-popup:hover {
+											color: rgba(255, 255, 255, 0.7);
+										}
+
+										.modal-message {
+											padding: 2rem 0;
 										}
 									</style>
 									<category-page-links
@@ -533,7 +557,7 @@
 										<div class="page-contents">
 											<div class="column col1">
 												<div class="videos">
-													<div class="custom-banner">Tuesday Drawings</div>
+													<div class="custom-banner">Wednesday Drawings</div>
 													<div
 														class="video"
 														id="video-1"
@@ -552,17 +576,17 @@
 												</div>
 											</div>
 											<div class="column col2">
-												<div class="custom-banner" id="winnings">
-													DRAWING 1: ABC TIRE
-												</div>
 												<img
 													class="plinko"
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/plink-bg.png"
 												/>
+												<div class="custom-banner" id="winnings">
+													TOTAL CASH WON: $12,500
+												</div>
 											</div>
 											<div class="column col3">
 												<div class="videos">
-													<div class="custom-banner">Wednesday Drawings</div>
+													<div class="custom-banner">Thursday Drawings</div>
 													<div
 														class="video"
 														id="video-4"
@@ -584,9 +608,29 @@
 										<div id="video-popup">
 											<div class="video-container">
 												<div class="close-popup" onclick="toggleVideo()">X</div>
+												<div class="aspect-ratio"></div>
 											</div>
 										</div>
 									</div>
+
+									<!-- Fetch Cash Winnings -->
+									<script>
+										// Get Cash Winnings
+										var fetchCash = () => {
+											fetch("https://api.npoint.io/a882eb40505e926a52f4")
+												.then(response => response.json())
+												.then(data => {
+													const cashBox = landingPageEl.querySelector(
+														"#winnings"
+													);
+													cashBox.innerHTML =
+														"TOTAL CASH WON: $" +
+														(data.plinko ? data.plinko : "0");
+												});
+										};
+
+										fetchCash();
+									</script>
 
 									<!-- Video Popup-->
 									<script>
