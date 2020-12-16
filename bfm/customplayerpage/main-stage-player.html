@@ -14,6 +14,9 @@
         href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
   <!-- Liquid Templating -->
@@ -178,7 +181,7 @@
           menuItem.innerHTML = item.name;
           menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
           try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            const currentSnippet = document.querySelector('#' + item.snippetID.toString());
             if (currentSnippet) {
               menuItem.classList.toggle('activeMenu');
             }
@@ -194,7 +197,6 @@
           onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
           src="../menu.js"></script>
   <script>
-    let landingPageEl = null;
     window.isLocalTemplate = true;
   </script>
 </head>
@@ -237,13 +239,7 @@
         <div class="content-wrapper">
           <landing-page class="ng-star-inserted">
             <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
-              </script>
+
               <style type="text/css">
                   @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
               </style>
@@ -254,15 +250,6 @@
               <inferno-snippet-content id="01b0cc4b-d98f-4e1a-a862-0c3d60e7d904">
                 <!-- Script to insert header with marquee and botton nav-->
                 <script>
-                  function goPage(id) {
-                    const pages = landingPageEl.querySelector('#category-page-links');
-                    const link = pages.querySelector('#link_' + id);
-                    if (link) {
-                      link.dispatchEvent(new MouseEvent('click'));
-                    } else {
-                      alert('link you selected does not exists');
-                    }
-                  }
 
                   var fetchLayout = () => {
 
@@ -291,16 +278,22 @@
                         var doc = parser.parseFromString(res, "text/html");
 
                         var header = doc.getElementById("bfm-header");
+                        console.log('header', header);
+
                         var menu = doc.getElementById("bottom-nav");
+                        console.log('menu', menu);
+
                         //script element for menu navigation
                         var script = doc.getElementById("layout-script");
+                        console.log('script', script);
 
                         //parent element where menu navigation will be inserted into on the page
-                        const contentElement = landingPageEl.getElementById("content");
+                        const contentElement = document.getElementById("content");
+                        console.log('contentElement', contentElement);
 
                         //checks if the elements have already been inserted into the DOM to avoid duplicate elements
-                        if (!landingPageEl.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
-                        if (!landingPageEl.getElementById("bottom-nav")) contentElement.appendChild(menu);
+                        if (!document.getElementById("bfm-header")) contentElement.insertBefore(header, contentElement.childNodes[0]);
+                        if (!document.getElementById("bottom-nav")) contentElement.appendChild(menu);
                         eval(script.innerHTML);
                       },
                       error: function (err) {
@@ -312,20 +305,6 @@
                   };
 
                   fetchLayout();
-                </script>
-
-                <script>
-                  //Add input placeholder text
-                  var addPlaceholder = (text) => {
-                    var inputElement = landingPageEl.getElementById("inferno-questions-basic").querySelector("input");
-                    inputElement.placeholder = text;
-                  }
-
-                  document.addEventListener("DOMContentLoaded", function () {
-                    // Handler when the DOM is fully loaded
-                    addPlaceholder("Type a Question Here");
-                  });
-
                 </script>
 
                 <style>
@@ -368,7 +347,7 @@
                     }
 
 
-                    @media only screen and (max-width: 1020px) {
+                    @media only screen and (max-width: 1340px) {
                         .stage-grid {
                             display: flex;
                             flex-direction: column;
@@ -427,7 +406,7 @@
                         background-color: rgba(0, 0, 0, .6);
                         border-radius: 1em;
                         color: white;
-                        min-height: 100%;
+                        height: 100%;
                         padding: .5em;
                         text-align: center;
                     }
@@ -435,11 +414,20 @@
                         background-color: rgba(0, 0, 0, .6);
                         border-radius: 1em;
                         color: white;
-                        min-height: 100%;
+                        height: 100%;
                         text-align: center;
                         margin: auto 0;
                     }
 
+
+                    .chat-iframe {
+                        height: 100%;
+                        width: 100%;
+                        outline: none;
+                        border: none;
+                        padding:0;
+                        margin:0;
+                    }
 
                     .takeaway img {
                         width: 80%;
@@ -464,27 +452,6 @@
                         color: white;
                         font-weight: bold;
                     }
-                </style>
-
-                <!-- bottom Menu-->
-                <style>
-                    .menu {
-                        display: flex;
-                        flex-direction: row;
-                        flex-wrap: wrap;
-                        justify-content: space-around;
-                        align-items: center;
-                    }
-
-                    .menu div {
-                        min-width: 250px;
-                        max-height: 100px;
-                        height: 150px;
-                        border: solid 2px #ff5200;
-                        background-color: #cccccc;
-                        text-align: center;
-                    }
-
                     .tabs {
 
                     }
@@ -524,23 +491,15 @@
                         border-radius: 20px;
                     }
 
-                    .ntar-chat-iframe {
-                        height: 100%;
-                        width: 100%;
-                        outline: none;
-                        border: none;
-                        padding:0;
-                        margin:0;
-                    }
-
                 </style>
+
 
                 <script>
                   function toggleTab(tab) {
-                    const tabs = landingPageEl.querySelectorAll(".tab");
-                    const panels = landingPageEl.querySelectorAll(".content-panel");
+                    const tabs = document.querySelectorAll(".tab");
+                    const panels = document.querySelectorAll(".content-panel");
                     const panelID = "panel-" + tab.id;
-                    const activePanel = landingPageEl.querySelector("#" + panelID);
+                    const activePanel = document.querySelector("#" + panelID);
                     [...tabs].forEach(item => {
                       item.classList.remove("active");
                     });
@@ -557,7 +516,7 @@
                   <div class="stage-grid">
                     <div class="col1">
                       <div class="schedule">
-                        <h1>Seminar Schedule</h1>
+                        <h1>Schedule</h1>
                         <div class="tabs">
                           <button class="tab active" id="tab1" onclick="toggleTab(this)">Wednesday</button>
                           <button class="tab" id="tab2" onclick="toggleTab(this)">Thursday</button>
@@ -583,7 +542,7 @@
                         </div>
 
                         <div class="takeaway">
-                          <a href="https://www.kmtire.com/" target="_blank"><img
+                          <a href="https://kmtire.com/event/" target="_blank"><img
                               src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/takeaway-small.png"></a>
                         </div>
                       </div>
@@ -598,8 +557,10 @@
 
                     <div class="col3">
                       <div class="chat">
-                        <iframe class="ntar-chat-iframe"
-                                src="https://jolokia.com/chatiframe.html?fullname={{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}&chatroomid=keepemrollin-main-player"></iframe>
+                        <iframe class="chat-iframe"
+                                width="100"
+                                height="600"
+                                src="https://jolokia.com/chatiframe.html?fullname={{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}&chatroomid=keepemrollin-main-player&chatroomname=main-stage"></iframe>
                       </div>
                     </div>
 
@@ -637,9 +598,9 @@
       console.log('PROCESSING LIQUID')
       // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
       // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      const template = document.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
       // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
+      const result = document.querySelector('inferno-snippet-content')
       // Initialize the parsing engine
       const engine = new liquidjs.Liquid()
       // Parse and render
@@ -704,8 +665,8 @@
   }
 
   function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    const qaDiv = document.querySelector('#inferno-questions-basic')
+    const videoDiv = document.querySelector('#inferno-video-player')
     if (qaDiv) {
       $(qaDiv).append(`
       <questions _nghost-qch-c20="">
