@@ -487,6 +487,10 @@
 											text-transform: uppercase;
 										}
 
+										.winner {
+											font-size: 1.4rem;
+										}
+
 										.drawing {
 											font-weight: bold;
 										}
@@ -633,7 +637,25 @@
 										</div>
 									</div>
 
-									<!-- Video Popup-->
+									<!-- Fetch Cash Winnings -->
+									<script>
+										// Get Cash Winnings
+										var fetchCash = () => {
+											fetch("https://api.npoint.io/a882eb40505e926a52f4")
+												.then(response => response.json())
+												.then(data => {
+													const cashBox = landingPageEl.querySelector(
+														"#winnings"
+													);
+													cashBox.innerHTML =
+														"TOTAL CASH WON: $" + (data.cash ? data.cash : "0");
+												});
+										};
+
+										fetchCash();
+									</script>
+
+									<!-- Drawing Scripts -->
 									<script>
 										//for local testing only
 										// var data = {};
@@ -657,10 +679,10 @@
 										var sortedVideos = videos.sort((a, b) => {
 											var dateA = new Date(a.StartTime);
 											var dateB = new Date(b.StartTime);
-											return Date.parse(dateA) > Date.parse(dateB) ? 1 : -1;
+											return dateA.getTime() > dateB.getTime() ? 1 : -1;
 										});
 
-										var currentTime = Date.parse(new Date());
+										var currentTime = new Date();
 
 										var formatTime = (value, withDay) => {
 											var weekday = new Array(7);
@@ -733,9 +755,12 @@
 												//Checks if the current time is greater than the drawing time plus 1 minute
 												//If so, the winner is displayed
 
-												if (currentTime > Date.parse(drawingTime) + 60000) {
+												if (
+													currentTime.getTime() >
+													drawingTime.getTime() + 60000
+												) {
 													var winner = parsedName[2];
-													createElement("winner", winner, label);
+													createElement("winner", "Winner: " + winner, label);
 												}
 											});
 										};
@@ -758,10 +783,9 @@
 											if (element) {
 												document.body.style.overflow = "hidden";
 												var videoId = element.id;
-												var drawingTime = element.getAttribute(
-													"data-starttime"
+												var drawingTime = new Date(
+													element.getAttribute("data-starttime")
 												);
-												var currentTime = new Date();
 
 												var videoContainer = landingPageEl.querySelector(
 													".aspect-ratio"
@@ -778,7 +802,7 @@
 												iframe.src = "/embed/" + videoId;
 												videoContainer.appendChild(iframe);
 
-												if (currentTime < Date.parse(drawingTime)) {
+												if (currentTime.getTime() < drawingTime.getTime()) {
 													var message = document.createElement("div");
 													message.setAttribute("class", "modal-message");
 													message.innerHTML =
