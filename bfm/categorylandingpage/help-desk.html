@@ -405,6 +405,7 @@
 											justify-content: space-between;
 										}
 										.side-display {
+											cursor: pointer;
 											width: 14%;
 										}
 
@@ -414,6 +415,7 @@
 										}
 
 										.main-display {
+											position: relative;
 											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_content_bg.png");
 											background-repeat: no-repeat;
 											background-size: cover;
@@ -459,6 +461,32 @@
 											height: 40rem;
 										}
 
+										.help-popup-wrapper {
+											overflow: hidden;
+										}
+
+										.help-popup {
+											position: absolute;
+											bottom: 2rem;
+											right: -100rem;
+											border: 1px solid #071628;
+											border-radius: 5px;
+											padding: 10px 15px;
+										}
+
+										.help-popup::before {
+											content: "";
+											position: absolute;
+											display: block;
+											width: 0px;
+											left: 0;
+											top: 50%;
+											border: 10px solid transparent;
+											border-left: 0;
+											border-right: 10px solid #071628;
+											transform: translate(calc(-100%), -50%);
+										}
+
 										.help-desk {
 											width: 40%;
 										}
@@ -472,6 +500,7 @@
 									<!-- group chat -->
 									<style>
 										.group_chat {
+											position: relative;
 											width: 24rem;
 											height: 37rem;
 										}
@@ -567,7 +596,7 @@
 											</div>
 											<div class="main-display">
 												<div class="main-buttons">
-													<div class="link help" onclick="togglePDF('help')">
+													<div class="link help" onclick="openHelp()">
 														<img
 															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_help.png"
 														/>
@@ -598,6 +627,11 @@
 															src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=keepemrollin-help-desk"
 														></iframe>
 													</div>
+													<div class="help-popup-wrapper">
+														<div class="help-popup">
+															Looking for help? Ask a question here.
+														</div>
+													</div>
 												</div>
 											</div>
 											<div class="side-display" onclick="togglePDF('games')">
@@ -621,22 +655,49 @@
 									<script>
 										var togglePDF = name => {
 											var modal = landingPageEl.getElementById("pdfModal");
+
 											var object = modal.querySelector("object");
 											var iframe = modal.querySelector("iframe");
 											if (modal.style.display === "flex") {
 												modal.style.display = "none";
-												object.setAttribute("data", "");
-												iframe.setAttribute("src", "");
+												object.setAttribute("data", null);
+												iframe.setAttribute("src", null);
 											} else {
 												var pdfURL =
 													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/" +
 													name +
 													".pdf";
 
+												console.log(pdfURL);
+
 												object.setAttribute("data", pdfURL);
 												iframe.setAttribute("src", pdfURL);
 												modal.style.display = "flex";
 											}
+										};
+									</script>
+
+									<!-- Help Popup-->
+									<script>
+										var openHelp = () => {
+											var helpPopup = landingPageEl.querySelector(
+												".help-popup"
+											);
+											$(helpPopup).animate({ right: "-28rem" }, "slow");
+											// helpPopup.classList.toggle("hidden");
+
+											closeHelp();
+										};
+
+										var closeHelp = () => {
+											var helpPopup = landingPageEl.querySelector(
+												".help-popup"
+											);
+
+											setTimeout(function () {
+												// helpPopup.classList.toggle("hidden");
+												$(helpPopup).animate({ right: "-200rem" }, "slow");
+											}, 5000);
 										};
 									</script>
 								</inferno-snippet-content>
