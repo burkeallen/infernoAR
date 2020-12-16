@@ -468,6 +468,10 @@
 											font-weight: bold;
 										}
 
+										.winner {
+											font-size: 1.4rem;
+										}
+
 										#video-popup {
 											display: none;
 											flex-direction: column;
@@ -479,7 +483,7 @@
 											width: 100%;
 											height: 100%;
 											background-color: rgba(0, 0, 0, 0.386);
-											z-index: 99;
+											z-index: 300;
 										}
 
 										.video-container {
@@ -631,18 +635,18 @@
 									<!-- Drawing Scripts -->
 									<script>
 										//for local testing only
-										            // var data = {};
-										            // loadJSON("../liquid.json", function (response) {
-										            // 	// Parse JSON string into object
-										            // 	const x = JSON.parse(response);
-										            // 	data = x[0];
-										            // 	console.log(data.Events);
-										            // });
+										// var data = {};
+										// loadJSON("../liquid.json", function (response) {
+										// 	// Parse JSON string into object
+										// 	const x = JSON.parse(response);
+										// 	data = x[0];
+										// 	console.log(data.Events);
+										// });
 
-										            // var lq = data;
+										// var lq = data;
 
 										//for production
-										  var lq = {{ data | json }};
+										var lq = {{ data | json }};
 
 										var videos = lq.Events.filter(event =>
 											event.Categories[0].Name.toLowerCase().includes("bowling")
@@ -652,10 +656,10 @@
 										var sortedVideos = videos.sort((a, b) => {
 											var dateA = new Date(a.StartTime);
 											var dateB = new Date(b.StartTime);
-											return Date.parse(dateA) > Date.parse(dateB) ? 1 : -1;
+											return dateA.getTime() > dateB.getTime() ? 1 : -1;
 										});
 
-										var currentTime = Date.parse(new Date());
+										var currentTime = new Date();
 
 										var formatTime = (value, withDay) => {
 											var weekday = new Array(7);
@@ -682,9 +686,9 @@
 											if (hr > 12) {
 												hr -= 12;
 												ampm = "pm";
-										  }
+											}
 
-										  if (min.toString().length  < 2) min = "0" + min;
+											if (min.toString().length < 2) min = "0" + min;
 
 											var time = hr + ":" + min + ampm;
 
@@ -728,9 +732,12 @@
 												//Checks if the current time is greater than the drawing time plus 1 minute
 												//If so, the winner is displayed
 
-												if (currentTime > Date.parse(drawingTime) + 60000) {
+												if (
+													currentTime.getTime() >
+													drawingTime.getTime() + 60000
+												) {
 													var winner = parsedName[2];
-													createElement("winner", winner, label);
+													createElement("winner", "Winner: " + winner, label);
 												}
 											});
 										};
@@ -753,10 +760,9 @@
 											if (element) {
 												document.body.style.overflow = "hidden";
 												var videoId = element.id;
-												var drawingTime = element.getAttribute(
-													"data-starttime"
+												var drawingTime = new Date(
+													element.getAttribute("data-starttime")
 												);
-												var currentTime = new Date();
 
 												var videoContainer = landingPageEl.querySelector(
 													".aspect-ratio"
@@ -773,7 +779,7 @@
 												iframe.src = "/embed/" + videoId;
 												videoContainer.appendChild(iframe);
 
-												if (currentTime < Date.parse(drawingTime)) {
+												if (currentTime.getTime() < drawingTime.getTime()) {
 													var message = document.createElement("div");
 													message.setAttribute("class", "modal-message");
 													message.innerHTML =
