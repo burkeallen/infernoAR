@@ -629,11 +629,25 @@
                     })
                   }
 
-                  function activeEvent(events) {
+                  function fetchActiveEvent() {
+                    // alternative method of getting the actual current event
+                    // will not work on local as url path would not contain the eventid
+                    const pathParts = window.location.pathname.split('/');
+                    const eventId = pathParts[pathParts.length -1];
+                    const options = {
+                      method: "GET",
+                      headers: setAuthHeader(),
+                      redirect: "follow",
+                    }
 
-                    // note to self easier method would have been to grab the event id from the URL
-                    // and use the /api/Events/{id} endpoint to get the current event
-                    // the player page is actually displaying
+                    fetch('https://ingress.infernocore.jolokia.com/api/Events/' + eventId, options)
+                      .then(response => response.json())
+                      .then(data => {
+                        console.log('Event', data);
+                      });
+                  }
+
+                  function activeEvent(events) {
 
                     // get the current or next active event
                     // keys off of end date / time of each event
