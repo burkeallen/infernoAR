@@ -239,7 +239,240 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="84c5e3c9-693b-4ac9-9cc7-839daa94a652"><h1>Grand Prize Giveaway</h1></inferno-snippet-content>
+
+              <inferno-snippet-content id="84c5e3c9-693b-4ac9-9cc7-839daa94a652">
+                <!-- Script to insert header with marquee and botton nav-->
+                <script>
+                  function goPage(id) {
+                    const pages = landingPageEl.querySelector(
+                      "#category-page-links"
+                    );
+                    const link = pages.querySelector("#link_" + id);
+                    if (link) {
+                      link.dispatchEvent(new MouseEvent("click"));
+                    } else {
+                      alert("link you selected does not exists");
+                    }
+                  }
+                  var fetchLayout = () => {
+                    var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+                    // Set header
+                    const headers = {
+                      Authorization:
+                        "Bearer " + sessionStorage.getItem("token"),
+                      "X-InfernoCore-Domain":
+                        sessionStorage.getItem("domain") ??
+                        window.location.hostname
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers["X-InfernoCore-Domain"] =
+                        "jolokia.inferno.jolokia.com";
+                      headers["X-Client-Override"] = sessionStorage.getItem(
+                        "overrideId"
+                      );
+                    }
+
+                    $.ajax({
+                      url:
+                        "https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+                        elementId,
+                      type: "GET",
+                      async: true,
+                      accept: "application/json",
+                      contentType: "application/json",
+                      headers: headers,
+                      success: function (res, status, xhr) {
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(res, "text/html");
+
+                        var header = doc.getElementById("bfm-header");
+                        var menu = doc.getElementById("bottom-nav");
+                        //script element for menu navigation
+                        var script = doc.getElementById("layout-script");
+
+                        //parent element where menu navigation will be inserted into on the page
+                        const contentElement = landingPageEl.getElementById(
+                          "content"
+                        );
+
+                        //checks if the elements have already been inserted into the DOM to avoid duplicate elements
+                        if (!landingPageEl.getElementById("bfm-header"))
+                          contentElement.insertBefore(
+                            header,
+                            contentElement.childNodes[0]
+                          );
+                        if (!landingPageEl.getElementById("bottom-nav"))
+                          contentElement.appendChild(menu);
+                        eval(script.innerHTML);
+                      },
+                      error: function (err) {
+                        console.error("Error Fetching HTML", err);
+                      }
+                    });
+                  };
+
+                  fetchLayout();
+                </script>
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
+
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5 {
+                    font-family: "HelveticaNeue-CondensedBold",
+                    "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+                  }
+
+                  #content {
+                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/bg.png");
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    padding: 20px 24px;
+                    z-index: 1;
+                    font-family: "Helvetica Neue", Arial Narrow, Arial,
+                    sans-serif !important;
+                  }
+
+                  .page-contents {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: flex-start;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  .column {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+                    height: 100%;
+                  }
+
+                  .custom-banner {
+                    margin: 5% 10% 5% 10%;
+                    border: 3px solid #c4b21c;
+                    border-radius: 10px;
+                    background-color: black;
+                    font-weight: 200;
+                    font-size: 4.2rem;
+                    min-width: 30rem;
+                    color: #cbc165;
+                    text-shadow: 0px 0px 10px #c4b21c, 0px 0px 10px #c4b21c,
+                    0px 0px 10px #c4b21c;
+                    padding: 3rem 2rem;
+                    text-align: center;
+                  }
+
+                  .prizes {
+                    width: 100%;
+                  }
+
+                  .prize-container {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    align-items: center;
+                    padding-bottom: 60px;
+                  }
+
+                  .prize {
+                    text-align: center;
+                    padding: 20px 10px;
+                    width: 240px;
+                    height: auto;
+                  }
+
+                  .prize-image {
+                    padding: 0 25px;
+                    width: 240px;
+                    height: auto;
+                  }
+
+                  .prizeButton {
+                    box-shadow:inset 0px 1px 0px 0px #9acc85;
+                    background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
+                    background-color:#74ad5a;
+                    border:1px solid #3b6e22;
+                    display:inline-block;
+                    cursor:pointer;
+                    color:#ffffff;
+                    font-family:Arial;
+                    font-size:16px;
+                    font-weight:bold;
+                    padding:6px 12px;
+                    text-decoration:none;
+                    margin-top: 10px;
+                  }
+                  .prizeButton:hover {
+                    background: #68a54b linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
+                  }
+                  .prizeButton:active {
+                    position:relative;
+                    top:1px;
+                  }
+
+
+                </style>
+
+
+
+                <div id="content">
+
+                  <div class="custom-banner">Grand Prize Giveaway</div>
+
+                  <div class="page-contents">
+
+                    <div class="column prizes">
+                      <div class="prize-container">
+
+                        <div class="prize">
+                          <img class="prize-image" title="John Deer XUV835 HVAC"
+                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/john-deer-xuv-835.png"
+                          />
+                          <a href="#" class="prizeButton">Bridgestone/Firestone Consumer Drawing</a>
+                        </div>
+
+                        <div class="prize">
+                        <img title="Dodge Charger"
+                          class="prize-image"
+                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/dodge-charger-png"
+                        />
+                        <a href="#" class="prizeButton">Cooper Mastercraft Dodge Charger Drawing</a>
+                        </div>
+
+                        <div class="prize">
+                        <img title="Jeep Gladiador"
+                          class="prize-image"
+                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/jeep-gladiator.png"
+                        />
+                          <a href="#" class="prizeButton">Falkin Jeep Gladiator Drawing</a>
+                      </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+
+
+                </div>
+
+              </inferno-snippet-content>
+
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
