@@ -1,123 +1,130 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+  />
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
   <link
       href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet">
+      rel="stylesheet"
+  />
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet"
-        href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link
+      rel="stylesheet"
+      href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+  />
+  <link
+      rel="stylesheet"
+      href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+  />
   <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
+  <link rel="stylesheet" href="../inferno-client.css"/>
   <script>
-    window.isLocalTemplate = true
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
   </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
       // Auth w/ Inferno API
       const params = {
         email: project.username,
         password: project.password,
-        grantType: 'password',
-      }
+        grantType: "password"
+      };
 
       // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+      const headers = {"X-InfernoCore-Domain": project.domain};
 
       // perform synchronous ajax call so rest of code waits until you are authenticated
       $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
+        url: _baseUrl + "token",
+        type: "POST",
         async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
+        accept: "application/json",
+        contentType: "application/json",
         headers: headers,
         data: JSON.stringify(params),
         success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
+          sessionStorage.setItem("domain", project.domain);
+          storeUser(JSON.parse(res));
         },
         error: function (err) {
-          alert(JSON.stringify(err))
+          alert(JSON.stringify(err));
         },
         complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
-
+          console.log("user was authenticated into ", project.domain);
+        }
+      });
     }
 
     function storeUser(data) {
       // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
+      sessionStorage.setItem("clientId", data.ClientId);
+      sessionStorage.setItem("token", data.AccessToken);
+      sessionStorage.setItem("refreshToken", data.RefreshToken);
     }
 
     function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+      window.addEventListener("load", event => {
+        const projectEl = document.querySelector("#novoProject");
+        const projectName = projectEl ? projectEl.getAttribute("name") : null;
         const currentProject = projects.filter(project => {
           return project.name === projectName;
         })[0];
 
         if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          alert(
+            "could not log into Inferno \n\r Check the project name in the login() function"
+          );
           return;
         }
 
         authenticate(currentProject);
       });
     }
-
   </script>
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-          src="/inferno.config.js"></script>
+  <script
+      onload="login()"
+      onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+      src="/inferno.config.js"
+  ></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
   <script>
     function loadJSON(file, callback) {
-
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      const xobj = new XMLHttpRequest();
+      xobj.overrideMimeType("application/json");
+      xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
+        if (xobj.readyState == 4 && xobj.status == "200") {
           // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
+          callback(xobj.responseText);
         }
-      }
-      xobj.send(null)
+      };
+      xobj.send(null);
     }
 
     // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
     // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
     // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
+    var data = {};
+    loadJSON("../liquid.json", function (response) {
       // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
-
+      const x = JSON.parse(response);
+      data = x[0];
+    });
   </script>
 
   <!-- Build out Local Menu on Left Navigation -->
@@ -133,20 +140,20 @@
 
       #localTemplateMenu a {
           display: block;
-          margin: .25em;
+          margin: 0.25em;
           background-color: var(--sidebar-bg-color);
           border: none;
           border-bottom: solid 1px var(--sidebar-highlight-text-color);
           color: var(--sidebar-text-color);
           cursor: pointer;
           width: 80%;
-          padding: .25em 0;
+          padding: 0.25em 0;
       }
 
       #localTemplateMenu a:hover {
           filter: brightness(80%);
           text-decoration: none;
-          transform: translateX(-.3em);
+          transform: translateX(-0.3em);
       }
 
       #localTemplateMenu a.activeMenu {
@@ -169,58 +176,81 @@
       .aside-collapsed * #localTemplateMenu a:hover {
           transform: none;
       }
-
   </style>
   <script>
     function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
+      window.addEventListener("load", event => {
+        const menu = document.getElementById("localTemplateMenu");
         window.localTemplateMenuItems.forEach(item => {
-          const menuItem = document.createElement('a');
+          const menuItem = document.createElement("a");
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
           try {
-            const currentSnippet = document.querySelector('#' + item.snippetID.toString());
+            const currentSnippet = landingPageEl.querySelector(
+              "#" + item.snippetID.toString()
+            );
             if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
+              menuItem.classList.toggle("activeMenu");
             }
           } catch (e) {
             // do nothing;
           }
           menu.appendChild(menuItem);
-        })
-      })
+        });
+      });
     }
   </script>
-  <script onload="buildLocalMenu()"
-          onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-          src="../menu.js"></script>
-  <script>
-    window.isLocalTemplate = true;
-  </script>
+  <script
+      onload="buildLocalMenu()"
+      onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+      src="../menu.js"
+  ></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="bfm" onload="login()"></div>
+<div style="display: none" id="novoProject" name="bfm" onload="login()"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar
             class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary">
-          <div class="navbar-header">LOCAL</div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize
-                    onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
+            color="primary"
+        >
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div
+              class="ellipsis ng-star-inserted"
+              flex
+              layout="row"
+              layout-align="start center"
+          >
+            <button
+                class="menu-btn mat-icon-button ng-star-inserted"
+                hide
+                mat-icon-button
+                show-gt-sm
+                trigger-resize
+                onclick="mtTriggerMenu()"
+            >
+								<span class="mat-button-wrapper">
+									<mat-icon
+                      class="mat-icon material-icons mat-icon-no-color"
+                      role="img"
+                      aria-hidden="true"
+                  >
+										menu
+									</mat-icon>
+								</span>
             </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+            <div
+                _ngcontent-inv-c7
+                class="mat-title ellipsis m0"
+                flex
+                title="Page Title"
+            >
+              Sample Page Title
+            </div>
           </div>
         </mat-toolbar>
       </app-header>
@@ -230,19 +260,15 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
       <section class="IE-FlexAuto" flex>
         <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-
-              <style type="text/css">
-                  @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
+          <lvideos-detail-page class="ng-star-inserted">
+            <div mutationobserver>
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -310,8 +336,7 @@
                     }
 
                     h1, h2, h3, h4, h5 {
-                        font-family: "HelveticaNeue-CondensedBold",
-                        "Helvetica Neue", Arial Narrow, Arial, sans-serif !important;
+                       font-family: Verdna, Helvetica, Arial, sans-serif;;
                     }
 
                     .content {
@@ -324,8 +349,11 @@
                         margin: -20px;
                         padding: 20px 24px;
                         z-index: 1;
-                        font-family: "Helvetica Neue", Arial Narrow, Arial,
-                        sans-serif !important;
+                        font-family: Verdna, Helvetica, Arial, sans-serif;
+                    }
+
+                    div#bottom-nav {
+                        font-family: "Helvetica Neue", Arial Narrow, Arial,    sans-serif !important;
                     }
 
                 </style>
@@ -341,8 +369,51 @@
                         padding: 20px;
                     }
 
+                    @media only screen and (max-width: 1440px) {
+                        .stage-grid {
+                            display: flex;
+                            flex-direction: row;
+                            flex-wrap: wrap;
+                        }
 
-                    @media only screen and (max-width: 1340px) {
+                        .col1, .col2, .col3 {
+
+                        }
+
+                        .col2 {
+                            order: 1;
+                            width: 65%;
+                        }
+
+                        .col3 {
+                            order: 2;
+                            width: 30%;
+                        }
+
+                        .col1 {
+                            order: 3;
+                            width: 97%;
+                        }
+
+
+                        .takeaway img {
+                            max-width: 250px;
+                        }
+
+                        .tabs {
+                            margin-bottom: 20px;
+                        }
+                        .tab {
+                            min-height: 40px;
+                        }
+
+                        .content-panel {
+                            font-size: 1.25em;
+                        }
+                    }
+
+
+                    @media only screen and (max-width: 1024px) {
                         .stage-grid {
                             display: flex;
                             flex-direction: column;
@@ -354,14 +425,19 @@
 
                         .col2 {
                             order: 1;
+                            width: 97%
                         }
 
                         .col3 {
                             order: 2;
+                            width: 97%;
+                            height: 350px;
                         }
 
                         .col1 {
                             order: 3;
+                            width: 97%;
+                            min-height: 450px;
                         }
 
                     }
@@ -404,8 +480,20 @@
                         text-align: center;
                     }
 
+                    .schedule ul {
+                        list-style-type: none;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    .schedule li {
+                        margin-bottom: 1em;
+                        color: #cccccc;
+                    }
+
                     .schedule li.active {
-                        font-weight: bold;
+                        color: white;
+                        text-shadow: 0 0 5px var(--branding-primary);
                     }
 
                     .chat {
@@ -436,28 +524,17 @@
                         font-size: 1.1em;
                     }
 
+                    .takeaway {
+                        position: relative;
+                        height: 35%;
+                    }
                     .takeaway img {
-                        width: 80%;
+                        height: 65%;
+                        margin-top: .5em;
                     }
 
                     .takeaway img:hover {
                         filter: brightness(110%) drop-shadow(0 0.5rem 1rem rgba(255, 82, 0, 0.4))
-                    }
-
-                    .schedule ul {
-                        list-style-type: none;
-                        padding: 0;
-                        margin: 0;
-                    }
-
-                    .schedule li {
-                        margin-bottom: 1em;
-                        color: #cccccc;
-                    }
-
-                    .schedule li.active {
-                        color: white;
-                        font-weight: bold;
                     }
 
                     .tabs {
@@ -520,6 +597,10 @@
                   }
                 </script>
 
+                <div style="display: none" id="infernoUserFullName">
+                  {{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}
+                </div>
+
                 <div id="content" class="content">
 
                   <div class="stage-grid">
@@ -552,10 +633,6 @@
                       <div class="ntar-video-container">
                         <div class="ntar-video" id="inferno-video-player"></div>
                       </div>
-                    </div>
-
-                    <div style="display: none" id="infernoUserFullName">
-                      {{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}
                     </div>
 
                     <div class="col3">
@@ -633,7 +710,7 @@
                     // alternative method of getting the actual current event
                     // will not work on local as url path would not contain the eventid
                     const pathParts = window.location.pathname.split('/');
-                    const eventId = pathParts[pathParts.length -1];
+                    const eventId = pathParts[pathParts.length - 1];
                     const options = {
                       method: "GET",
                       headers: setAuthHeader(),
@@ -680,7 +757,7 @@
                       + '&chatroomname=' + sanitizeString(event.name);
 
                     document.getElementById('playerChat').src = url;
-                    document.getElementById('chatroomName').innerHTML = 'Join in the Conversation for <br>' + event.name;
+                    document.getElementById('chatroomName').innerHTML = 'Join in the Conversation for <br>' + getShortTitle(event.name);
                   }
 
                   function buildAgenda(events, active) {
@@ -695,7 +772,7 @@
                       const thu = 4;
                       const item = document.createElement('li');
                       const time = new Date(event.startTime);
-                      item.innerHTML = formatAMPM(time) + ' - ' + event.name;
+                      item.innerHTML = formatAMPM(time) + ' - ' + getShortTitle(event.name);
                       if (event.id === active.id) {
                         item.classList.toggle('active');
                       }
@@ -708,6 +785,11 @@
                     })
                   }
 
+                  function getShortTitle(fullTitle) {
+                    const titleParts = fullTitle.split('-');
+                    return titleParts[titleParts.length - 1].trim();
+                  }
+
 
                   function formatAMPM(date) {
                     var hours = date.getHours();
@@ -715,7 +797,7 @@
                     var ampm = hours >= 12 ? 'PM' : 'AM';
                     hours = hours % 12;
                     hours = hours ? hours : 12; // the hour '0' should be '12'
-                    minutes = minutes < 10 ? '0'+minutes : minutes;
+                    minutes = minutes < 10 ? '0' + minutes : minutes;
                     var strTime = hours + ':' + minutes + ' ' + ampm;
                     return strTime;
                   }
@@ -735,7 +817,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
             </div>
-          </landing-page>
+          </lvideos-detail-page>
         </div>
       </section>
       <!-- LANDING -->
