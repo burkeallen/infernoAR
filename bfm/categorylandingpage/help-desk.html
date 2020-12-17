@@ -423,7 +423,7 @@
 											background-position: center;
 											background-color: white;
 											width: 75rem;
-											height: 50rem;
+											height: auto;
 											display: flex;
 											flex-direction: column;
 											justify-content: space-between;
@@ -461,6 +461,16 @@
 											width: 100%;
 											height: 100%;
 										}
+
+										.help-desk {
+											width: 40%;
+											min-width: 20rem;
+										}
+
+										.help-desk img {
+											width: 100%;
+											height: auto;
+										}
 									</style>
 
 									<!-- help tooltip -->
@@ -493,16 +503,6 @@
 											border-right: 10px solid #ef3f23;
 											transform: translate(calc(-100%), -50%);
 										}
-
-										.help-desk {
-											width: 40%;
-											min-width: 20rem;
-										}
-
-										.help-desk img {
-											width: 100%;
-											height: auto;
-										}
 									</style>
 									<!-- group chat -->
 									<style>
@@ -516,6 +516,56 @@
 											width: 100%;
 											height: 100%;
 											z-index: 100;
+										}
+
+										@media screen and (max-width: 1350px) {
+											.container {
+												flex-flow: row;
+												flex-wrap: wrap;
+												justify-content: space-evenly;
+											}
+
+											.main-display {
+												width: 100%;
+												overflow: hidden;
+												order: 1;
+											}
+
+											.main-help {
+												justify-content: space-evenly;
+											}
+
+											.group_chat {
+												width: 50%;
+											}
+
+											.itinerary {
+												order: 2;
+											}
+
+											.games {
+												order: 3;
+											}
+
+											.help-popup {
+												right: 0;
+												bottom: -30rem;
+											}
+										}
+
+										@media screen and (max-width: 680px) {
+											.help-desk {
+												display: none;
+											}
+
+											.group_chat {
+												width: 100%;
+												height: 100%;
+											}
+
+											.main-help {
+												height: 48rem;
+											}
 										}
 									</style>
 
@@ -594,7 +644,7 @@
 									<div id="content">
 										<div class="container">
 											<div
-												class="side-display"
+												class="side-display itinerary"
 												onclick="togglePDF('itinerary')"
 											>
 												<img
@@ -641,7 +691,10 @@
 													</div>
 												</div>
 											</div>
-											<div class="side-display" onclick="togglePDF('games')">
+											<div
+												class="side-display games"
+												onclick="togglePDF('games')"
+											>
 												<img
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_games.png"
 												/>
@@ -699,21 +752,32 @@
 											var helpPopup = landingPageEl.querySelector(
 												".help-popup"
 											);
-											$(helpPopup).animate({ right: "-18rem" }, "slow");
-											// helpPopup.classList.toggle("hidden");
 
-											closeHelp();
+											if ($(window).width() > 1350) {
+												$(helpPopup).animate({ right: "-18rem" }, "slow");
+												setTimeout(() => {
+													closeHelp("right", "-200rem");
+												}, 5000);
+											} else {
+												$(helpPopup).animate({ bottom: "3rem" }, "slow");
+												setTimeout(() => {
+													closeHelp("bottom", "-30rem");
+												}, 5000);
+											}
+
+											// helpPopup.classList.toggle("hidden");
 										};
 
-										var closeHelp = () => {
+										var closeHelp = (direction, amount) => {
 											var helpPopup = landingPageEl.querySelector(
 												".help-popup"
 											);
-
-											setTimeout(function () {
-												// helpPopup.classList.toggle("hidden");
-												$(helpPopup).animate({ right: "-200rem" }, "slow");
-											}, 5000);
+											// helpPopup.classList.toggle("hidden");
+											if (direction == "right") {
+												$(helpPopup).animate({ right: amount }, "slow");
+											} else {
+												$(helpPopup).animate({ bottom: amount }, "slow");
+											}
 										};
 									</script>
 								</inferno-snippet-content>
