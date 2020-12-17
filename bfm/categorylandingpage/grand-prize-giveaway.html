@@ -367,17 +367,13 @@
                     border-radius: 10px;
                     background-color: black;
                     font-weight: 200;
-                    font-size: 4.2rem;
+                    font-size: 4.5rem;
                     min-width: 30rem;
                     color: #cbc165;
                     text-shadow: 0px 0px 10px #c4b21c, 0px 0px 10px #c4b21c,
                     0px 0px 10px #c4b21c;
                     padding: 3rem 2rem;
                     text-align: center;
-                  }
-
-                  .prizes {
-                    width: 100%;
                   }
 
                   .prize-container {
@@ -391,22 +387,21 @@
 
                   .prize {
                     text-align: center;
-                    padding: 20px 10px;
-                    width: 240px;
+                    padding: 20px;
+                    width:300px;
                     height: auto;
                   }
 
                   .prize-image {
-                    padding: 0 25px;
-                    width: 240px;
+                    width: 300px;
                     height: auto;
                   }
 
                   .prizeButton {
+                    display: flex;
                     box-shadow:inset 0px 1px 0px 0px #9acc85;
-                    background:linear-gradient(to bottom, #74ad5a 5%, #68a54b 100%);
-                    background-color:#74ad5a;
-                    border:1px solid #3b6e22;
+                    background: #ff5200 linear-gradient(to bottom, #ff5200 5%, #ff8b41 100%);
+                    border:3px solid var(--sidebar-bg-color);
                     display:inline-block;
                     cursor:pointer;
                     color:#ffffff;
@@ -416,16 +411,17 @@
                     padding:6px 12px;
                     text-decoration:none;
                     margin-top: 10px;
+                    height: 65px;
                   }
                   .prizeButton:hover {
-                    background: #68a54b linear-gradient(to bottom, #68a54b 5%, #74ad5a 100%);
+                    color:#ffffff;
+                    text-decoration: none;
+                    background: #ff8b41 linear-gradient(to bottom, #ff8b41 5%, #ff5200 100%);
                   }
                   .prizeButton:active {
                     position:relative;
                     top:1px;
                   }
-
-
                 </style>
 
 
@@ -436,7 +432,7 @@
 
                   <div class="page-contents">
 
-                    <div class="column prizes">
+                    <div class="column">
                       <div class="prize-container">
 
                         <div class="prize">
@@ -459,17 +455,186 @@
                           class="prize-image"
                           src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/jeep-gladiator.png"
                         />
-                          <a href="#" class="prizeButton">Falkin Jeep Gladiator Drawing</a>
+                          <a style="padding-top: 18px" href="#" class="prizeButton">Falkin Jeep Gladiator Drawing</a>
                       </div>
                       </div>
-
 
                     </div>
                   </div>
 
-
-
                 </div>
+
+                <!-- Drawing Scripts -->
+                <script>
+                  //for local testing only
+                  var data = {};
+                  loadJSON("../liquid.json", function (response) {
+                  	// Parse JSON string into object
+                  	const x = JSON.parse(response);
+                  	data = x[0];
+                  	// console.log(data.Events);
+                  });
+                  var lq = data;
+
+                  //for production
+                  // var lq = {{ data | json }};
+
+                  var videos = lq.Events.filter(event =>
+                    event.Categories[0].Name.toLowerCase().includes("grand")
+                  );
+
+                  //sort by start time
+                  var sortedVideos = videos.sort((a, b) => {
+                    var dateA = new Date(a.StartTime);
+                    var dateB = new Date(b.StartTime);
+                    return dateA.getTime() > dateB.getTime() ? 1 : -1;
+                  });
+
+                  console.log(videos);
+                  console.log(sortedVideos);
+
+                  var currentTime = new Date();
+
+                  var formatTime = (value, withDay) => {
+                    var weekday = new Array(7);
+                    weekday[0] = "Sunday";
+                    weekday[1] = "Monday";
+                    weekday[2] = "Tuesday";
+                    weekday[3] = "Wednesday";
+                    weekday[4] = "Thursday";
+                    weekday[5] = "Friday";
+                    weekday[6] = "Saturday";
+
+                    var d = new Date(value);
+
+                    var dayIndex = d.getDay();
+                    var month = "January";
+
+                    var day = d.getDate().toString();
+                    day = day.length > 1 ? day : "0" + day;
+
+                    var hr = d.getHours();
+                    var min = d.getMinutes();
+                    var ampm = "am";
+
+                    if (hr > 12) {
+                      hr -= 12;
+                      ampm = "pm";
+                    }
+
+                    if (min.toString().length < 2) min = "0" + min;
+
+                    var time = hr + ":" + min + ampm;
+
+                    if (withDay) {
+                      time =
+                        weekday[dayIndex] +
+                        ", " +
+                        month +
+                        " " +
+                        day +
+                        " at " +
+                        time;
+                    }
+                    return time;
+                  };
+
+                  //Add video box labels
+                  var addLabels = () => {
+                    var videoBoxes = landingPageEl.querySelectorAll(".video");
+
+                    videoBoxes.forEach((videoBox, index) => {
+                      var drawingTime = new Date(
+                        sortedVideos[index].StartTime
+                      );
+
+                      videoBox.setAttribute("id", sortedVideos[index].Id);
+                      videoBox.setAttribute("data-starttime", drawingTime);
+
+                      var parsedName = sortedVideos[index].Name.split(" - ");
+                      var drawing = parsedName[1];
+                      var label = document.createElement("div");
+                      label.setAttribute("class", "video-box-label");
+                      videoBox.appendChild(label);
+                      createElement("drawing", drawing + ":", label);
+                      createElement(
+                        "time",
+                        formatTime(sortedVideos[index].StartTime),
+                        label
+                      );
+
+                      //Checks if the current time is greater than the drawing time plus 1 minute
+                      //If so, the winner is displayed
+
+                      if (
+                        currentTime.getTime() >
+                        drawingTime.getTime() + 60000
+                      ) {
+                        var winner = parsedName[2];
+                        createElement("winner", "Winner: " + winner, label);
+                      }
+                    });
+                  };
+
+                  var createElement = (type, value, parent) => {
+                    var element = document.createElement("div");
+                    element.setAttribute("class", type);
+                    element.innerHTML = value;
+                    parent.appendChild(element);
+                  };
+
+                  addLabels();
+
+                  //open popup and get embeded video
+                  var toggleVideo = element => {
+                    var popupElement = landingPageEl.getElementById(
+                      "video-popup"
+                    );
+                    var iframe;
+                    if (element) {
+                      document.body.style.overflow = "hidden";
+                      var videoId = element.id;
+                      var drawingTime = new Date(
+                        element.getAttribute("data-starttime")
+                      );
+
+                      var videoContainer = landingPageEl.querySelector(
+                        ".aspect-ratio"
+                      );
+
+                      var modalContainer = landingPageEl.querySelector(
+                        ".video-container"
+                      );
+
+                      popupElement.style.display = "flex";
+
+                      iframe = document.createElement("iframe");
+                      iframe.setAttribute("class", "video-iframe");
+                      iframe.src = "/embed/" + videoId;
+                      videoContainer.appendChild(iframe);
+
+                      if (currentTime.getTime() < drawingTime.getTime()) {
+                        var message = document.createElement("div");
+                        message.setAttribute("class", "modal-message");
+                        message.innerHTML =
+                          "Come back " +
+                          formatTime(drawingTime, true) +
+                          " to see who the winner is.";
+                        modalContainer.appendChild(message);
+                      }
+                    } else {
+                      document.body.style.overflow = "auto";
+                      popupElement.style.display = "none";
+                      iframe = landingPageEl.querySelector(".video-iframe");
+                      var message = landingPageEl.querySelector(
+                        ".modal-message"
+                      );
+                      iframe.remove();
+                      message.remove();
+                    }
+                  };
+
+                </script>
 
               </inferno-snippet-content>
 
