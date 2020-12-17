@@ -377,7 +377,6 @@
 
                     videos-detail {
                         background-color: black !important;
-                        padding: 28%;
                     }
 
                     #inferno-video-player {
@@ -391,7 +390,6 @@
                         left: 0;
                         width: 100%;
                         height: 100%;
-                        border-radius: .5em .5em 0 0;
                     }
                 </style>
 
@@ -405,7 +403,13 @@
                         padding: .5em;
                         text-align: center;
                     }
+
+                    .schedule li.active {
+                        font-weight: bold;
+                    }
+
                     .chat {
+                        position: relative;
                         background-color: rgba(0, 0, 0, .6);
                         border-radius: 1em;
                         color: white;
@@ -414,14 +418,22 @@
                         margin: auto 0;
                     }
 
-
                     .chat-iframe {
-                        height: 100%;
+                        height: 95%;
                         width: 100%;
                         outline: none;
                         border: none;
-                        padding:0;
-                        margin:0;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    .chatroom-name {
+                        color: white;
+                        text-align: center;
+                        position: absolute;
+                        bottom: 1em;
+                        width: 100%;
+                        font-size: 1.1em;
                     }
 
                     .takeaway img {
@@ -447,6 +459,7 @@
                         color: white;
                         font-weight: bold;
                     }
+
                     .tabs {
 
                     }
@@ -486,6 +499,7 @@
                         border-radius: 20px;
                     }
 
+
                 </style>
 
 
@@ -518,21 +532,11 @@
                         </div>
                         <div id="panel-tab1" class="panel-1 content-panel">
                           <ul>
-                            <li>7:45am - 9:00am - Wed</li>
-                            <li>7:45am - 9:00am - Wed</li>
-                            <li>7:45am - 9:00am - Wed</li>
-                            <li>7:45am - 9:00am - Wed</li>
-                            <li>7:45am - 9:00am - Wed</li>
                           </ul>
                         </div>
 
                         <div id="panel-tab2" class="panel-2 content-panel hidden">
                           <ul>
-                            <li>7:45am - 9:00am - Thur</li>
-                            <li>7:45am - 9:00am - Thur</li>
-                            <li>7:45am - 9:00am - Thur</li>
-                            <li>7:45am - 9:00am - Thur</li>
-                            <li>7:45am - 9:00am - Thur</li>
                           </ul>
                         </div>
 
@@ -550,12 +554,17 @@
                       </div>
                     </div>
 
+                    <div style="display: none" id="infernoUserFullName">
+                      {{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}
+                    </div>
+
                     <div class="col3">
                       <div class="chat">
-                        <iframe class="chat-iframe"
+                        <iframe id="playerChat" class="chat-iframe"
                                 width="100"
                                 height="600"
-                                src="https://jolokia.com/chatiframe.html?fullname={{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}&chatroomid=keepemrollin-main-player&chatroomname=main-stage"></iframe>
+                                src=""></iframe>
+                        <div id="chatroomName" class="chatroom-name"></div>
                       </div>
                     </div>
 
@@ -564,6 +573,161 @@
 
                 </div>
 
+                <script>
+                  function setAuthHeader() {
+                    const headers = {
+                      Authorization: "Bearer " + sessionStorage.getItem("token"),
+                      "X-InfernoCore-Domain": sessionStorage.getItem("domain") ?? window.location.hostname
+                    };
+
+                    // add a header property for users accessing with SA credentials
+                    if (window.sessionStorage.overrideId) {
+                      headers["X-InfernoCore-Domain"] = "jolokia.inferno.jolokia.com";
+                      headers["X-Client-Override"] = sessionStorage.getItem("overrideId");
+                    }
+
+                    return headers;
+
+                  }
+
+                  function fetchEvents() {
+                    const options = {
+                      method: "GET",
+                      headers: setAuthHeader(),
+                      redirect: "follow",
+                    }
+
+                    fetch('https://ingress.infernocore.jolokia.com/api/Events', options)
+                      .then(response => response.json())
+                      .then(data => {
+                        const events = sortEventsByDateTime(filterEvents(data));
+                        const active = activeEvent(events);
+                        buildAgenda(events, active);
+                        buildChat(active);
+                      });
+
+                  }
+
+                  function sortEventsByDateTime(events) {
+                    return events.sort((a, b) => {
+                      const dateA = new Date(a.startTime);
+                      const dateB = new Date(b.startTime);
+                      return dateA.getTime() > dateB.getTime() ? 1 : -1;
+                    });
+
+                  }
+
+                  function filterEvents(data) {
+                    // get all events where event is associated with at least the designated category name
+                    // could test on category id if desired
+                    const categoryName = 'Main Stage';
+                    return data.filter(event => {
+                      return event.categories.some(category => {
+                          return category.name.toLocaleLowerCase() === categoryName.toLocaleLowerCase();
+                        }
+                      );
+                    })
+                  }
+
+                  function fetchActiveEvent() {
+                    // alternative method of getting the actual current event
+                    // will not work on local as url path would not contain the eventid
+                    const pathParts = window.location.pathname.split('/');
+                    const eventId = pathParts[pathParts.length -1];
+                    const options = {
+                      method: "GET",
+                      headers: setAuthHeader(),
+                      redirect: "follow",
+                    }
+
+                    fetch('https://ingress.infernocore.jolokia.com/api/Events/' + eventId, options)
+                      .then(response => response.json())
+                      .then(data => {
+                        console.log('Event', data);
+                      });
+                  }
+
+                  function activeEvent(events) {
+
+                    // get the current or next active event
+                    // keys off of end date / time of each event
+                    const currentTime = new Date();
+                    let nextEvent = events[events.length - 1];
+
+                    events.some(event => {
+                      const duration = event.video ? event.video.duration : 0;
+                      const startTime = new Date(event.startTime);
+                      const endTime = new Date(startTime.setSeconds(duration));
+                      if (currentTime < endTime) {
+                        nextEvent = event;
+                        return true;
+                      }
+                    });
+
+                    return nextEvent;
+                  }
+
+                  function sanitizeString(text) {
+                    return text.trim().replace(/[^A-Z0-9]+/ig, "-");
+                  }
+
+                  function buildChat(event) {
+                    const infernoUserFullName = document.getElementById('infernoUserFullName').innerHTML;
+                    const baseURL = 'https://jolokia.com/chatiframe.html';
+                    const url = baseURL
+                      + '?fullname=' + infernoUserFullName.trim()
+                      + '&chatroomid=' + sanitizeString(event.id)
+                      + '&chatroomname=' + sanitizeString(event.name);
+
+                    document.getElementById('playerChat').src = url;
+                    document.getElementById('chatroomName').innerHTML = 'Join in the Conversation for <br>' + event.name;
+                  }
+
+                  function buildAgenda(events, active) {
+                    const panel1 = document.getElementById('panel-tab1');
+                    const panel2 = document.getElementById('panel-tab2');
+                    const pu1 = panel1.querySelector('ul');
+                    const pu2 = panel2.querySelector('ul');
+                    events.forEach(event => {
+                      const eventDate = new Date(event.startTime);
+                      const day = eventDate.getDay();
+                      const wed = 3;
+                      const thu = 4;
+                      const item = document.createElement('li');
+                      const time = new Date(event.startTime);
+                      item.innerHTML = formatAMPM(time) + ' - ' + event.name;
+                      if (event.id === active.id) {
+                        item.classList.toggle('active');
+                      }
+                      if (day === wed) {
+                        pu1.appendChild(item);
+                      }
+                      if (day === thu) {
+                        pu2.appendChild(item);
+                      }
+                    })
+                  }
+
+
+                  function formatAMPM(date) {
+                    var hours = date.getHours();
+                    var minutes = date.getMinutes();
+                    var ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12; // the hour '0' should be '12'
+                    minutes = minutes < 10 ? '0'+minutes : minutes;
+                    var strTime = hours + ':' + minutes + ' ' + ampm;
+                    return strTime;
+                  }
+
+                  if (window.isLocalTemplate) {
+                    window.addEventListener('load', function () {
+                      fetchEvents();
+                    });
+                  } else {
+                    fetchEvents();
+                  }
+                </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
