@@ -411,27 +411,34 @@
 										}
 
 										.page-contents {
-											display: flex;
-											justify-content: center;
-											align-items: center;
 											width: 100%;
 										}
 
 										.grid-container {
-											display: grid;
-											grid-template-columns: 1fr 2fr 0.75fr;
+											display: flex;
+											flex-direction: row;
+											justify-content: space-evenly;
 											height: 100%;
+											width: 100%;
 										}
 										.column {
 											display: flex;
 											flex-direction: column;
 											justify-content: flex-start;
 											align-items: center;
-											height: 100%;
+											height: 60rem;
+										}
+
+										.col1 {
+											min-width: 35rem;
+										}
+
+										.col2 {
+											width: 40%;
 										}
 
 										.col1 img {
-											width: 50%;
+											width: 20rem;
 											height: auto;
 										}
 
@@ -459,7 +466,7 @@
 											border-radius: 10px;
 											background-color: black;
 											font-weight: 200;
-											font-size: 4.2rem;
+											font-size: 3.8rem;
 											color: #cbc165;
 											text-shadow: 0px 0px 12px #c4b31cbb,
 												0px 0px 12px #c4b31cbb, 0px 0px 12px#c4b31cbb;
@@ -471,36 +478,86 @@
 										}
 
 										.poll-survey {
-											height: 100%;
+											height: 90%;
 											width: 100%;
 										}
 
-										#tiktok-popup {
+										@media screen and (max-width: 1350px) {
+											.grid-container {
+												flex-flow: column;
+												justify-content: flex-start;
+												align-items: center;
+											}
+
+											.col1 {
+												order: 1;
+											}
+
+											.video {
+												margin: 0.5rem;
+											}
+											.col2 {
+												width: 100%;
+												order: 3;
+												display: flex;
+												flex-direction: row;
+												flex-wrap: wrap;
+												justify-content: center;
+												align-items: center;
+											}
+
+											.custom-banner {
+												font-size: 2.8rem;
+											}
+
+											.col3 {
+												order: 2;
+												width: 100%;
+											}
+										}
+
+										#video-popup {
 											display: none;
-											position: absolute;
-											top: 50%;
-											left: 50%;
-											transform: translate(-50%, -50%);
+											flex-direction: column;
+											align-items: center;
+											justify-content: center;
+											position: fixed;
+											top: 0;
+											left: 0;
 											width: 100%;
 											height: 100%;
 											background-color: rgba(0, 0, 0, 0.386);
-											z-index: 99;
+											z-index: 300;
 										}
-										.tiktok-video {
+
+										.video-container {
+											position: relative;
 											padding: 2rem;
 											color: white;
 											font-size: 2.4rem;
-											position: absolute;
-											top: 50%;
-											left: 50%;
-											transform: translate(-50%, -50%);
-											height: 50%;
-											width: 50%;
+											height: fit-content;
+											width: 60%;
 											background-color: rgba(0, 0, 0, 1);
 											display: flex;
 											flex-direction: column;
 											align-items: center;
 											justify-content: flex-start;
+											margin-left: 30rem;
+										}
+
+										.aspect-ratio {
+											position: relative;
+											width: 100%;
+											height: 0;
+											padding-bottom: 56.5%;
+										}
+
+										.video-iframe {
+											position: absolute;
+											width: 100%;
+											height: 100%;
+											left: 0;
+											top: 0;
 										}
 
 										.close-popup {
@@ -509,6 +566,14 @@
 											text-align: right;
 											width: 100%;
 											height: 4rem;
+										}
+
+										.close-popup:hover {
+											color: rgba(255, 255, 255, 0.7);
+										}
+
+										.modal-message {
+											padding: 2rem 0;
 										}
 									</style>
 									<category-page-links
@@ -580,9 +645,10 @@
 												</div>
 											</div>
 										</div>
-										<div id="tiktok-popup">
-											<div class="tiktok-video">
+										<div id="video-popup">
+											<div class="video-container">
 												<div class="close-popup" onclick="toggleVideo()">X</div>
+												<div class="aspect-ratio"></div>
 											</div>
 										</div>
 									</div>
@@ -632,25 +698,53 @@
 											videoElements[index].setAttribute("id", id);
 										});
 
-										//open popup and get embeded tiktok video
+										//open popup and get embeded video
+										var currentTime = new Date();
 										var toggleVideo = element => {
 											var popupElement = landingPageEl.getElementById(
-												"tiktok-popup"
+												"video-popup"
 											);
 											var iframe;
 											if (element) {
+												document.body.style.overflow = "hidden";
 												var videoId = element.id;
-												popupElement.style.display = "block";
-												var tiktokContainer = landingPageEl.querySelector(
-													".tiktok-video"
+												var drawingTime = new Date(
+													element.getAttribute("data-starttime")
 												);
+
+												var videoContainer = landingPageEl.querySelector(
+													".aspect-ratio"
+												);
+
+												var modalContainer = landingPageEl.querySelector(
+													".video-container"
+												);
+
+												popupElement.style.display = "flex";
+
 												iframe = document.createElement("iframe");
-												iframe.setAttribute("class", "tiktok-iframe");
-												tiktokContainer.appendChild(iframe);
+												iframe.setAttribute("class", "video-iframe");
+												iframe.src = "/embed/" + videoId;
+												videoContainer.appendChild(iframe);
+
+												if (currentTime.getTime() < drawingTime.getTime()) {
+													var message = document.createElement("div");
+													message.setAttribute("class", "modal-message");
+													message.innerHTML =
+														"Come back " +
+														formatTime(drawingTime, true) +
+														" to see who the winner is.";
+													modalContainer.appendChild(message);
+												}
 											} else {
+												document.body.style.overflow = "auto";
 												popupElement.style.display = "none";
-												iframe = landingPageEl.querySelector(".tiktok-iframe");
+												iframe = landingPageEl.querySelector(".video-iframe");
+												var message = landingPageEl.querySelector(
+													".modal-message"
+												);
 												iframe.remove();
+												message.remove();
 											}
 										};
 									</script>

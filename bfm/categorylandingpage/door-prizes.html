@@ -395,8 +395,9 @@
 										.page-contents {
 											display: flex;
 											flex-direction: row;
-											justify-content: space-between;
-											align-items: flex-start;
+											flex-wrap: wrap;
+											justify-content: center;
+											align-items: center;
 											width: 100%;
 											height: 100%;
 										}
@@ -407,6 +408,7 @@
 											justify-content: space-between;
 											align-items: center;
 											height: 100%;
+											min-width: 35rem;
 										}
 
 										.custom-banner {
@@ -415,7 +417,7 @@
 											border-radius: 10px;
 											background-color: black;
 											font-weight: 200;
-											font-size: 3.2rem;
+											font-size: 2.2vw;
 											min-width: 25rem;
 											color: #cbc165;
 											text-shadow: 0px 0px 12px #c4b31cbb,
@@ -425,24 +427,37 @@
 											display: flex;
 											flex-direction: column;
 											justify-content: space-between;
-											height: 60rem;
-											width: 25%;
+											height: 100%;
+											width: 100%;
 											text-transform: uppercase;
 										}
 
+										.day {
+											width: 25%;
+											height: 100%;
+										}
+
 										.day-header {
-											font-size: 6.2rem;
+											font-size: 2.8vw;
 											height: 50%;
+											width: 100%;
 										}
 
 										.day-details {
+											margin-top: 2rem;
 											height: 50%;
 											display: flex;
 											align-items: flex-end;
+											width: 100%;
 										}
 
 										.prizes {
 											width: 50%;
+										}
+
+										.banner {
+											width: 100%;
+											height: auto;
 										}
 
 										.prize-container {
@@ -494,6 +509,25 @@
 											width: 100%;
 											height: 4rem;
 										}
+
+										@media screen and (max-width: 1350px) {
+											.page-contents {
+												flex-flow: row;
+												flex-wrap: wrap;
+												justify-content: space-evenly;
+											}
+
+											.day1 {
+												order: 2;
+											}
+											.prizes {
+												width: 100%;
+												order: 1;
+											}
+											.day2 {
+												order: 2;
+											}
+										}
 									</style>
 									<category-page-links
 										id="category-page-links"
@@ -520,7 +554,7 @@
 									<div id="content">
 										<div class="page-contents">
 											<div
-												class="column day custom-banner"
+												class="column day day1 custom-banner"
 												id="pdf-1"
 												onclick="togglePdf(this)"
 											>
@@ -562,7 +596,7 @@
 												</div>
 											</div>
 											<div
-												class="column day custom-banner"
+												class="column day day2 custom-banner"
 												id="pdf-2"
 												onclick="togglePdf(this)"
 											>
