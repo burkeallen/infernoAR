@@ -401,18 +401,28 @@
 
 										.container {
 											width: 100%;
+											height: 100%;
 											display: flex;
 											justify-content: space-between;
 										}
 										.side-display {
-											cursor: pointer;
 											width: 25rem;
-											height: 100%;
+											height: 55rem;
+											display: flex;
+											flex-direction: column;
+											justify-content: space-between;
+											align-items: center;
 										}
 
 										.side-display img {
-											width: 100%;
+											cursor: pointer;
+											width: 80%;
 											height: auto;
+											opacity: 1;
+										}
+
+										.side-display img:hover {
+											opacity: 0.8;
 										}
 
 										.main-display {
@@ -446,6 +456,11 @@
 											background-color: white;
 											border-radius: 5px;
 											box-shadow: 2px 2px 10px black;
+											opacity: 1;
+										}
+
+										.link:hover {
+											opacity: 0.8;
 										}
 
 										.link img {
@@ -586,7 +601,7 @@
 
 										.modal-content {
 											width: 60%;
-											height: 75%;
+											height: 70%;
 											padding: 2rem;
 											margin-top: 5rem;
 											display: flex;
@@ -618,6 +633,28 @@
 										.close-modal:hover {
 											color: rgba(0, 0, 0, 0.3);
 										}
+
+										.grand-prize-link {
+											display: flex;
+											align-items: center;
+											box-shadow: 1px 1px 5px var(--sidebar-bg-color);
+											background: #ef3f23
+												linear-gradient(to bottom, #ef3f23 5%, #ff6d41 100%);
+											cursor: pointer;
+											color: #ffffff;
+											font-size: 16px;
+											font-weight: bold;
+											padding: 6px 12px;
+											border-radius: 10px;
+											margin-top: 10px;
+											height: 85px;
+										}
+
+										.grand-prize-link:hover {
+											background: #ff6d41
+												linear-gradient(to bottom, #ff6d41 5%, #ef3f23 100%);
+											box-shadow: none;
+										}
 									</style>
 									<category-page-links
 										id="category-page-links"
@@ -643,12 +680,14 @@
 									</category-page-links>
 									<div id="content">
 										<div class="container">
-											<div
-												class="side-display itinerary"
-												onclick="togglePDF('itinerary')"
-											>
+											<div class="side-display itinerary">
 												<img
+													onclick="togglePDF('itinerary')"
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_itenerary.png"
+												/>
+												<img
+													onclick="goPage('2b3ef9a9-a9f2-425a-2018-08d88b69e2b2')"
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/door_prizes.png"
 												/>
 											</div>
 											<div class="main-display">
@@ -691,12 +730,14 @@
 													</div>
 												</div>
 											</div>
-											<div
-												class="side-display games"
-												onclick="togglePDF('games')"
-											>
+											<div class="side-display games">
 												<img
+													onclick="goPage('d935faf3-6bdf-48bb-2017-08d88b69e2b2')"
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_games.png"
+												/>
+												<img
+													onclick="togglePDF('games')"
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/grand_prize.png"
 												/>
 											</div>
 										</div>
@@ -717,7 +758,6 @@
 												"pdfModal"
 											);
 											var content = landingPageEl.querySelector("#content");
-											console.log(modalElement);
 											if (modalElement) {
 												modalElement.remove();
 												document.body.style.overflow = "auto";
@@ -742,6 +782,19 @@
 											iframe.setAttribute("src", pdfURL);
 											object.appendChild(iframe);
 											mainContent.appendChild(object);
+
+											//Add link to Grand Prize page in Games PDF Overlay
+											if (name === "games") {
+												var gameLink = document.createElement("div");
+												gameLink.setAttribute("class", "grand-prize-link");
+												gameLink.setAttribute(
+													"onclick",
+													"goPage('d88bda29-f6aa-48d8-b9f4-08d8a0e1ef1e')"
+												);
+												gameLink.innerHTML = "View Grand Prize Drawings";
+
+												mainContent.appendChild(gameLink);
+											}
 											content.appendChild(clone);
 										};
 									</script>
@@ -759,7 +812,7 @@
 													closeHelp("right", "-200rem");
 												}, 5000);
 											} else {
-												$(helpPopup).animate({ bottom: "3rem" }, "slow");
+												$(helpPopup).animate({ bottom: "15%" }, "slow");
 												setTimeout(() => {
 													closeHelp("bottom", "-30rem");
 												}, 5000);
