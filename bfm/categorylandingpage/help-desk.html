@@ -401,18 +401,28 @@
 
 										.container {
 											width: 100%;
+											height: 100%;
 											display: flex;
 											justify-content: space-between;
 										}
 										.side-display {
-											cursor: pointer;
 											width: 25rem;
-											height: 100%;
+											height: 55rem;
+											display: flex;
+											flex-direction: column;
+											justify-content: space-between;
+											align-items: center;
 										}
 
 										.side-display img {
-											width: 100%;
+											cursor: pointer;
+											width: 80%;
 											height: auto;
+											opacity: 1;
+										}
+
+										.side-display img:hover {
+											opacity: 0.8;
 										}
 
 										.main-display {
@@ -423,7 +433,7 @@
 											background-position: center;
 											background-color: white;
 											width: 75rem;
-											height: 50rem;
+											height: auto;
 											display: flex;
 											flex-direction: column;
 											justify-content: space-between;
@@ -446,6 +456,11 @@
 											background-color: white;
 											border-radius: 5px;
 											box-shadow: 2px 2px 10px black;
+											opacity: 1;
+										}
+
+										.link:hover {
+											opacity: 0.8;
 										}
 
 										.link img {
@@ -460,6 +475,16 @@
 											align-items: flex-end;
 											width: 100%;
 											height: 100%;
+										}
+
+										.help-desk {
+											width: 40%;
+											min-width: 20rem;
+										}
+
+										.help-desk img {
+											width: 100%;
+											height: auto;
 										}
 									</style>
 
@@ -493,16 +518,6 @@
 											border-right: 10px solid #ef3f23;
 											transform: translate(calc(-100%), -50%);
 										}
-
-										.help-desk {
-											width: 40%;
-											min-width: 20rem;
-										}
-
-										.help-desk img {
-											width: 100%;
-											height: auto;
-										}
 									</style>
 									<!-- group chat -->
 									<style>
@@ -517,12 +532,66 @@
 											height: 100%;
 											z-index: 100;
 										}
+
+										@media screen and (max-width: 1350px) {
+											.container {
+												flex-flow: row;
+												flex-wrap: wrap;
+												justify-content: space-evenly;
+											}
+
+											.main-display {
+												width: 100%;
+												overflow: hidden;
+												order: 1;
+											}
+
+											.main-help {
+												justify-content: space-evenly;
+											}
+
+											.group_chat {
+												width: 50%;
+											}
+
+											.itinerary {
+												width: 45%;
+												height: 40rem;
+												order: 2;
+											}
+
+											.games {
+												width: 45%;
+												height: 40rem;
+												order: 3;
+											}
+
+											.help-popup {
+												right: 0;
+												bottom: -30rem;
+											}
+										}
+
+										@media screen and (max-width: 680px) {
+											.help-desk {
+												display: none;
+											}
+
+											.group_chat {
+												width: 100%;
+												height: 100%;
+											}
+
+											.main-help {
+												height: 48rem;
+											}
+										}
 									</style>
 
 									<!-- PDF Modal -->
 									<style>
 										#pdfModal {
-											position: absolute;
+											position: fixed;
 											top: 0;
 											left: 0;
 											width: 100%;
@@ -536,17 +605,17 @@
 
 										.modal-content {
 											width: 60%;
-											height: 75%;
 											padding: 2rem;
-											margin-top: 5rem;
+											margin-top: 6rem;
 											display: flex;
 											flex-direction: column;
 											align-items: center;
+											margin-left: 20rem;
 										}
 
 										.modal-content object {
 											width: 90%;
-											height: 90%;
+											height: 50rem;
 											display: flex;
 											flex-direction: column;
 											align-items: center;
@@ -567,6 +636,35 @@
 
 										.close-modal:hover {
 											color: rgba(0, 0, 0, 0.3);
+										}
+
+										.grand-prize-link {
+											display: flex;
+											align-items: center;
+											box-shadow: 1px 1px 5px var(--sidebar-bg-color);
+											background: #ef3f23
+												linear-gradient(to bottom, #ef3f23 5%, #ff6d41 100%);
+											cursor: pointer;
+											color: #ffffff;
+											font-size: 16px;
+											font-weight: bold;
+											padding: 6px 12px;
+											border-radius: 10px;
+											margin-top: 10px;
+											height: 85px;
+										}
+
+										.grand-prize-link:hover {
+											background: #ff6d41
+												linear-gradient(to bottom, #ff6d41 5%, #ef3f23 100%);
+											box-shadow: none;
+										}
+
+										@media screen and (max-width: 780px) {
+											.modal-content {
+												width: 90%;
+												margin-left: 0;
+											}
 										}
 									</style>
 									<category-page-links
@@ -593,12 +691,14 @@
 									</category-page-links>
 									<div id="content">
 										<div class="container">
-											<div
-												class="side-display"
-												onclick="togglePDF('itinerary')"
-											>
+											<div class="side-display itinerary">
 												<img
+													onclick="togglePDF('itinerary')"
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_itenerary.png"
+												/>
+												<img
+													onclick="goPage('2b3ef9a9-a9f2-425a-2018-08d88b69e2b2')"
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/door_prizes.png"
 												/>
 											</div>
 											<div class="main-display">
@@ -641,9 +741,14 @@
 													</div>
 												</div>
 											</div>
-											<div class="side-display" onclick="togglePDF('games')">
+											<div class="side-display games">
 												<img
+													onclick="goPage('d935faf3-6bdf-48bb-2017-08d88b69e2b2')"
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/help_desk_games.png"
+												/>
+												<img
+													onclick="togglePDF('games')"
+													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/help-desk/grand_prize.png"
 												/>
 											</div>
 										</div>
@@ -664,7 +769,6 @@
 												"pdfModal"
 											);
 											var content = landingPageEl.querySelector("#content");
-											console.log(modalElement);
 											if (modalElement) {
 												modalElement.remove();
 												document.body.style.overflow = "auto";
@@ -689,6 +793,19 @@
 											iframe.setAttribute("src", pdfURL);
 											object.appendChild(iframe);
 											mainContent.appendChild(object);
+
+											//Add link to Grand Prize page in Games PDF Overlay
+											if (name === "games") {
+												var gameLink = document.createElement("div");
+												gameLink.setAttribute("class", "grand-prize-link");
+												gameLink.setAttribute(
+													"onclick",
+													"goPage('d88bda29-f6aa-48d8-b9f4-08d8a0e1ef1e')"
+												);
+												gameLink.innerHTML = "View Grand Prize Drawings";
+
+												mainContent.appendChild(gameLink);
+											}
 											content.appendChild(clone);
 										};
 									</script>
@@ -699,21 +816,32 @@
 											var helpPopup = landingPageEl.querySelector(
 												".help-popup"
 											);
-											$(helpPopup).animate({ right: "-18rem" }, "slow");
-											// helpPopup.classList.toggle("hidden");
 
-											closeHelp();
+											if ($(window).width() > 1350) {
+												$(helpPopup).animate({ right: "-18rem" }, "slow");
+												setTimeout(() => {
+													closeHelp("right", "-200rem");
+												}, 5000);
+											} else {
+												$(helpPopup).animate({ bottom: "15%" }, "slow");
+												setTimeout(() => {
+													closeHelp("bottom", "-30rem");
+												}, 5000);
+											}
+
+											// helpPopup.classList.toggle("hidden");
 										};
 
-										var closeHelp = () => {
+										var closeHelp = (direction, amount) => {
 											var helpPopup = landingPageEl.querySelector(
 												".help-popup"
 											);
-
-											setTimeout(function () {
-												// helpPopup.classList.toggle("hidden");
-												$(helpPopup).animate({ right: "-200rem" }, "slow");
-											}, 5000);
+											// helpPopup.classList.toggle("hidden");
+											if (direction == "right") {
+												$(helpPopup).animate({ right: amount }, "slow");
+											} else {
+												$(helpPopup).animate({ bottom: amount }, "slow");
+											}
 										};
 									</script>
 								</inferno-snippet-content>
