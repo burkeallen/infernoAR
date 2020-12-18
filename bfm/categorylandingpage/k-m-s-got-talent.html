@@ -371,7 +371,7 @@
 												.then(response => response.json())
 												.then(data => {
 													const cashBox = landingPageEl.querySelector(
-														".custom-banner"
+														"#winnings"
 													);
 													cashBox.innerHTML =
 														"CASH PRIZE: $" +
@@ -380,6 +380,55 @@
 										};
 
 										fetchCash();
+
+										//open popup and get embeded video
+										var toggleVideo = element => {
+											var popupElement = landingPageEl.getElementById(
+												"video-popup"
+											);
+											var iframe;
+											if (element) {
+												document.body.style.overflow = "hidden";
+												var videoId = element.id;
+												var drawingTime = new Date(
+													element.getAttribute("data-starttime")
+												);
+
+												var videoContainer = landingPageEl.querySelector(
+													".aspect-ratio"
+												);
+
+												var modalContainer = landingPageEl.querySelector(
+													".video-container"
+												);
+
+												popupElement.style.display = "flex";
+
+												iframe = document.createElement("iframe");
+												iframe.setAttribute("class", "video-iframe");
+												iframe.src = "/embed/" + videoId;
+												videoContainer.appendChild(iframe);
+
+												if (currentTime.getTime() < drawingTime.getTime()) {
+													var message = document.createElement("div");
+													message.setAttribute("class", "modal-message");
+													message.innerHTML =
+														"Come back " +
+														formatTime(drawingTime, true) +
+														" to see who the winner is.";
+													modalContainer.appendChild(message);
+												}
+											} else {
+												document.body.style.overflow = "auto";
+												popupElement.style.display = "none";
+												iframe = landingPageEl.querySelector(".video-iframe");
+												var message = landingPageEl.querySelector(
+													".modal-message"
+												);
+												iframe.remove();
+												message.remove();
+											}
+										};
 									</script>
 
 									<style>
@@ -413,11 +462,15 @@
 
 										.page-contents {
 											width: 100%;
+											display: flex;
+											justify-content: center;
+											align-items: center;
 										}
 
 										.grid-container {
 											display: flex;
 											flex-direction: row;
+											align-items: center;
 											justify-content: space-evenly;
 											height: 100%;
 											width: 100%;
@@ -425,13 +478,15 @@
 										.column {
 											display: flex;
 											flex-direction: column;
-											justify-content: flex-start;
+											justify-content: center;
 											align-items: center;
 											height: 60rem;
 										}
 
 										.col1 {
 											min-width: 35rem;
+											width: 25%;
+											height: 100%;
 										}
 
 										.col2 {
@@ -444,21 +499,50 @@
 										}
 
 										.videos {
-											display: grid;
-											grid-template-columns: repeat(2, 1fr);
+											display: flex;
+											justify-content: space-evenly;
+											align-items: center;
+											width: 100%;
+										}
+
+										.video-col {
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: flex-start;
 										}
 
 										.video {
 											cursor: pointer;
-											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/kms-got-talent/tiktok.png");
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/bowling-for-bucks/video-bg.png");
+											background-size: cover;
+											background-repeat: no-repeat;
 											height: 11rem;
 											width: 18rem;
-											margin: 1rem;
+											margin-bottom: 1rem;
+											display: flex;
+											flex-direction: column;
+											justify-content: flex-end;
+											align-items: center;
 										}
 
-										.poll-display {
-											width: 60%;
-											height: 60%;
+										.video-box-label {
+											width: 100%;
+											background-color: #707070;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											color: white;
+											font-size: 2rem;
+											text-transform: uppercase;
+										}
+
+										.drawing {
+											font-weight: bold;
+										}
+
+										.winner {
+											font-size: 1.2rem;
 										}
 
 										.custom-banner {
@@ -466,14 +550,34 @@
 											border: 3px solid #c4b21c;
 											border-radius: 10px;
 											background-color: black;
-											font-weight: 200;
-											font-size: 3.8rem;
+											display: flex;
+											align-items: center;
+											justify-content: center;
 											color: #cbc165;
+										}
+
+										#winnings {
 											padding: 3rem 2rem;
+											font-size: 3.8rem;
+										}
+
+										.day {
+											padding: 2rem 0.5rem;
+											width: 18.5rem;
+											font-size: 1.6rem;
+										}
+
+										.poll-display {
+											background-color: rgba(0, 0, 0, 0.3);
 										}
 
 										.col3 {
 											min-width: 30rem;
+											height: 60rem;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: flex-end;
 										}
 
 										.poll-survey {
@@ -505,7 +609,7 @@
 												align-items: center;
 											}
 
-											.custom-banner {
+											#winnings {
 												font-size: 2.8rem;
 											}
 
@@ -615,35 +719,62 @@
 														src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/got-talent.png"
 													/>
 													<div class="videos">
-														<div
-															class="video"
-															onclick="toggleVideo(this)"
-														></div>
-														<div
-															class="video"
-															onclick="toggleVideo(this)"
-														></div>
-														<div
-															class="video"
-															onclick="toggleVideo(this)"
-														></div>
-														<div
-															class="video"
-															onclick="toggleVideo(this)"
-														></div>
-														<div
-															class="video"
-															onclick="toggleVideo(this)"
-														></div>
-														<div
-															class="video"
-															onclick="toggleVideo(this)"
-														></div>
+														<div class="video-col">
+															<div class="custom-banner day">
+																Wednesday Drawings
+															</div>
+															<div
+																class="video"
+																id="video-1"
+																onclick="toggleVideo(this)"
+															></div>
+															<div
+																class="video"
+																id="video-2"
+																onclick="toggleVideo(this)"
+															></div>
+															<div
+																class="video"
+																id="video-3"
+																onclick="toggleVideo(this)"
+															></div>
+														</div>
+														<div class="video-col">
+															<div class="custom-banner day">
+																Thursday Drawings
+															</div>
+															<div
+																class="video"
+																id="video-4"
+																onclick="toggleVideo(this)"
+															></div>
+															<div
+																class="video"
+																id="video-5"
+																onclick="toggleVideo(this)"
+															></div>
+															<div
+																class="video"
+																id="video-6"
+																onclick="toggleVideo(this)"
+															></div>
+														</div>
 													</div>
 												</div>
 												<div class="column col2">
-													<div class="custom-banner">CASH PRIZE: $0</div>
-													<canvas id="capture"></canvas>
+													<div id="winnings" class="custom-banner">
+														CASH PRIZE: $0
+													</div>
+													<iframe
+														class="poll-display"
+														width="640"
+														height="360"
+														src="/embed/03e01e53-bde2-4e16-9615-8701beb807f6"
+														frameborder="0"
+														allowfullscreen="true"
+														webkitallowfullscreen="true"
+														mozallowfullscreen="true"
+													></iframe>
 												</div>
 												<div class="column col3">
 													<iframe
@@ -662,100 +793,126 @@
 										</div>
 									</div>
 
-									<!-- TikTok Popup-->
-									<script id="got-talent-scripts">
-										var videoIds = [
-											"video-1",
-											"video-2",
-											"video-3",
-											"video-4",
-											"video-5",
-											"video-6"
-										];
-										var videos = [
-											{
-												id: videoIds[0],
-												embedCode: ""
-											},
-											{
-												id: videoIds[1],
-												embedCode: ""
-											},
-											{
-												id: videoIds[2],
-												embedCode: ""
-											},
-											{
-												id: videoIds[3],
-												embedCode: ""
-											},
-											{
-												id: videoIds[4],
-												embedCode: ""
-											},
-											{
-												id: videoIds[5],
-												embedCode: ""
-											}
-										];
+									<!-- Drawing Scripts -->
+									<script>
+										//for local testing only
+										// var data = {};
+										// loadJSON("../liquid.json", function (response) {
+										// 	// Parse JSON string into object
+										// 	const x = JSON.parse(response);
+										// 	data = x[0];
+										// 	console.log(data.Events);
+										// });
 
-										//set video ID on video boxes
-										var videoElements = landingPageEl.querySelectorAll(
-											".video"
+										// var lq = data;
+
+										//for production
+										var lq = {{ data | json }};
+
+										var videos = lq.Events.filter(event =>
+											event.Categories[0].Name.toLowerCase().includes("talent")
 										);
-										videoIds.forEach((id, index) => {
-											videoElements[index].setAttribute("id", id);
+
+										//sort by start time
+										var sortedVideos = videos.sort((a, b) => {
+											var dateA = new Date(a.StartTime);
+											var dateB = new Date(b.StartTime);
+											return dateA.getTime() > dateB.getTime() ? 1 : -1;
 										});
 
-										//open popup and get embeded video
 										var currentTime = new Date();
-										var toggleVideo = element => {
-											var popupElement = landingPageEl.getElementById(
-												"video-popup"
-											);
-											var iframe;
-											if (element) {
-												document.body.style.overflow = "hidden";
-												var videoId = element.id;
-												var drawingTime = new Date(
-													element.getAttribute("data-starttime")
-												);
 
-												var videoContainer = landingPageEl.querySelector(
-													".aspect-ratio"
-												);
+										var formatTime = (value, withDay) => {
+											var weekday = new Array(7);
+											weekday[0] = "Sunday";
+											weekday[1] = "Monday";
+											weekday[2] = "Tuesday";
+											weekday[3] = "Wednesday";
+											weekday[4] = "Thursday";
+											weekday[5] = "Friday";
+											weekday[6] = "Saturday";
 
-												var modalContainer = landingPageEl.querySelector(
-													".video-container"
-												);
+											var d = new Date(value);
 
-												popupElement.style.display = "flex";
+											var dayIndex = d.getDay();
+											var month = "January";
 
-												iframe = document.createElement("iframe");
-												iframe.setAttribute("class", "video-iframe");
-												iframe.src = "/embed/" + videoId;
-												videoContainer.appendChild(iframe);
+											var day = d.getDate().toString();
+											day = day.length > 1 ? day : "0" + day;
 
-												if (currentTime.getTime() < drawingTime.getTime()) {
-													var message = document.createElement("div");
-													message.setAttribute("class", "modal-message");
-													message.innerHTML =
-														"Come back " +
-														formatTime(drawingTime, true) +
-														" to see who the winner is.";
-													modalContainer.appendChild(message);
-												}
-											} else {
-												document.body.style.overflow = "auto";
-												popupElement.style.display = "none";
-												iframe = landingPageEl.querySelector(".video-iframe");
-												var message = landingPageEl.querySelector(
-													".modal-message"
-												);
-												iframe.remove();
-												message.remove();
+											var hr = d.getHours();
+											var min = d.getMinutes();
+											var ampm = "am";
+
+											if (hr > 12) {
+												hr -= 12;
+												ampm = "pm";
 											}
+
+											if (min.toString().length < 2) min = "0" + min;
+
+											var time = hr + ":" + min + ampm;
+
+											if (withDay) {
+												time =
+													weekday[dayIndex] +
+													", " +
+													month +
+													" " +
+													day +
+													" at " +
+													time;
+											}
+											return time;
 										};
+
+										console.log(sortedVideos);
+
+										//Add video box labels
+										var addLabels = () => {
+											var videoBoxes = landingPageEl.querySelectorAll(".video");
+
+											videoBoxes.forEach((videoBox, index) => {
+												var drawingTime = new Date(
+													sortedVideos[index].StartTime
+												);
+
+												videoBox.setAttribute("id", sortedVideos[index].Id);
+												videoBox.setAttribute("data-starttime", drawingTime);
+
+												var parsedName = sortedVideos[index].Name.split(" - ");
+												var drawing = parsedName[1];
+												var label = document.createElement("div");
+												label.setAttribute("class", "video-box-label");
+												videoBox.appendChild(label);
+												createElement("drawing", drawing + ":", label);
+												createElement(
+													"time",
+													formatTime(sortedVideos[index].StartTime),
+													label
+												);
+
+												//Checks if the current time is greater than the drawing time plus 1 minute
+												//If so, the winner is displayed
+
+												if (
+													currentTime.getTime() >
+													drawingTime.getTime() + 60000
+												) {
+													var winner = parsedName[2];
+													createElement("winner", winner, label);
+												}
+											});
+										};
+
+										var createElement = (type, value, parent) => {
+											var element = document.createElement("div");
+											element.setAttribute("class", type);
+											element.innerHTML = value;
+											parent.appendChild(element);
+										};
+
+										addLabels();
 									</script>
 								</inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
