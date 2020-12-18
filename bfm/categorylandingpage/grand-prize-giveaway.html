@@ -216,7 +216,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -254,6 +254,7 @@
                       alert("link you selected does not exists");
                     }
                   }
+
                   var fetchLayout = () => {
                     var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
                     // Set header
@@ -376,7 +377,7 @@
                     text-align: center;
                   }
 
-                  .prize-container {
+                  .drawing-container {
                     display: flex;
                     flex-direction: row;
                     flex-wrap: wrap;
@@ -388,7 +389,7 @@
                   .prize {
                     text-align: center;
                     padding: 20px;
-                    width:300px;
+                    width: 300px;
                     height: auto;
                   }
 
@@ -397,68 +398,120 @@
                     height: auto;
                   }
 
-                  .prizeButton {
+                  .drawingButton {
                     display: flex;
-                    box-shadow:inset 0px 1px 0px 0px #9acc85;
+                    box-shadow: inset 0px 1px 0px 0px #9acc85;
                     background: #ff5200 linear-gradient(to bottom, #ff5200 5%, #ff8b41 100%);
-                    border:3px solid var(--sidebar-bg-color);
-                    display:inline-block;
-                    cursor:pointer;
-                    color:#ffffff;
-                    font-family:Arial;
-                    font-size:16px;
-                    font-weight:bold;
-                    padding:6px 12px;
-                    text-decoration:none;
+                    border: 3px solid var(--sidebar-bg-color);
+                    display: inline-block;
+                    cursor: pointer;
+                    color: #ffffff;
+                    font-family: Arial;
+                    font-size: 16px;
+                    font-weight: bold;
+                    padding: 6px 12px;
+                    text-decoration: none;
                     margin-top: 10px;
-                    height: 65px;
+                    height: 85px;
                   }
-                  .prizeButton:hover {
-                    color:#ffffff;
+
+                  .drawingButton:hover {
+                    color: #ffffff;
                     text-decoration: none;
                     background: #ff8b41 linear-gradient(to bottom, #ff8b41 5%, #ff5200 100%);
                   }
-                  .prizeButton:active {
-                    position:relative;
-                    top:1px;
+
+                  .drawingButton:active {
+                    position: relative;
+                    top: 1px;
                   }
                 </style>
 
+                <!-- video Overlay -->
+                <style>
+                  #video-popup {
+                    display: none;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.386);
+                    z-index: 99;
+                  }
+
+                  .video-container {
+                    position: relative;
+                    padding: 2rem;
+                    color: white;
+                    font-size: 2.4rem;
+                    height: fit-content;
+                    width: 60%;
+                    background-color: rgba(0, 0, 0, 1);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: flex-start;
+                    margin-left: 30rem;
+                  }
+
+                  .aspect-ratio {
+                    position: relative;
+                    width: 100%;
+                    height: 0;
+                    padding-bottom: 56.5%;
+                  }
+
+                  .video-iframe {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    left: 0;
+                    top: 0;
+                  }
+
+                  .close-popup {
+                    cursor: pointer;
+                    font-weight: bold;
+                    text-align: right;
+                    width: 100%;
+                    height: 4rem;
+                  }
+
+                  .close-popup:hover {
+                    color: rgba(255, 255, 255, 0.7);
+                  }
+
+                  .modal-message {
+                    padding: 2rem 0;
+                  }
+                </style>
 
 
                 <div id="content">
 
                   <div class="custom-banner">Grand Prize Giveaway</div>
-
                   <div class="page-contents">
-
                     <div class="column">
-                      <div class="prize-container">
 
-                        <div class="prize">
-                          <img class="prize-image" title="John Deer XUV835 HVAC"
-                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/john-deer-xuv-835.png"
-                          />
-                          <a href="#" class="prizeButton">Bridgestone/Firestone Consumer Drawing</a>
-                        </div>
-
-                        <div class="prize">
-                        <img title="Dodge Charger"
-                          class="prize-image"
-                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/dodge-charger-png"
-                        />
-                        <a href="#" class="prizeButton">Cooper Mastercraft Dodge Charger Drawing</a>
-                        </div>
-
-                        <div class="prize">
-                        <img title="Jeep Gladiador"
-                          class="prize-image"
-                          src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/jeep-gladiator.png"
-                        />
-                          <a style="padding-top: 18px" href="#" class="prizeButton">Falkin Jeep Gladiator Drawing</a>
+                      <div id="drawing-container" class="drawing-container">
+                        <template id="drawing-template">
+                          <div id="prize-item" class="prize">
+                            <img id="prize-image" class="prize-image"/>
+                               <a id="drawing-button" href="#" class="drawingButton"></a>
+                          </div>
+                        </template>
                       </div>
-                      </div>
+                    </div>
+                  </div>
 
+                  <div id="video-popup">
+                    <div class="video-container">
+                      <div class="close-popup" onclick="toggleVideo()">X</div>
+                      <div class="aspect-ratio"></div>
                     </div>
                   </div>
 
@@ -467,48 +520,42 @@
                 <!-- Drawing Scripts -->
                 <script>
                   //for local testing only
-                  var data = {};
-                  loadJSON("../liquid.json", function (response) {
-                  	// Parse JSON string into object
-                  	const x = JSON.parse(response);
-                  	data = x[0];
-                  	// console.log(data.Events);
-                  });
-                  var lq = data;
+                  // var data = {};
+                  // loadJSON("../liquid.json", function (response) {
+                  //   // Parse JSON string into object
+                  //   const x = JSON.parse(response);
+                  //   data = x[0];
+                  //   // console.log(data.Events);
+                  // });
+                  // var lq = data;
 
                   //for production
-                  // var lq = {{ data | json }};
+                  var lq = {{ data | json }};
 
                   var videos = lq.Events.filter(event =>
                     event.Categories[0].Name.toLowerCase().includes("grand")
                   );
 
-                  //sort by start time
                   var sortedVideos = videos.sort((a, b) => {
                     var dateA = new Date(a.StartTime);
                     var dateB = new Date(b.StartTime);
                     return dateA.getTime() > dateB.getTime() ? 1 : -1;
                   });
 
-                  console.log(videos);
-                  console.log(sortedVideos);
-
-                  var currentTime = new Date();
-
-                  var formatTime = (value, withDay) => {
+                  var formatTime = (value, withDay,) => {
                     var weekday = new Array(7);
-                    weekday[0] = "Sunday";
-                    weekday[1] = "Monday";
-                    weekday[2] = "Tuesday";
-                    weekday[3] = "Wednesday";
-                    weekday[4] = "Thursday";
-                    weekday[5] = "Friday";
-                    weekday[6] = "Saturday";
+                    weekday[0] = "Sun";
+                    weekday[1] = "Mon";
+                    weekday[2] = "Tue";
+                    weekday[3] = "Wed";
+                    weekday[4] = "Thur";
+                    weekday[5] = "Fri";
+                    weekday[6] = "Sat";
 
                     var d = new Date(value);
 
                     var dayIndex = d.getDay();
-                    var month = "January";
+                    var month = "Jan";
 
                     var day = d.getDate().toString();
                     day = day.length > 1 ? day : "0" + day;
@@ -539,43 +586,6 @@
                     return time;
                   };
 
-                  //Add video box labels
-                  var addLabels = () => {
-                    var videoBoxes = landingPageEl.querySelectorAll(".video");
-
-                    videoBoxes.forEach((videoBox, index) => {
-                      var drawingTime = new Date(
-                        sortedVideos[index].StartTime
-                      );
-
-                      videoBox.setAttribute("id", sortedVideos[index].Id);
-                      videoBox.setAttribute("data-starttime", drawingTime);
-
-                      var parsedName = sortedVideos[index].Name.split(" - ");
-                      var drawing = parsedName[1];
-                      var label = document.createElement("div");
-                      label.setAttribute("class", "video-box-label");
-                      videoBox.appendChild(label);
-                      createElement("drawing", drawing + ":", label);
-                      createElement(
-                        "time",
-                        formatTime(sortedVideos[index].StartTime),
-                        label
-                      );
-
-                      //Checks if the current time is greater than the drawing time plus 1 minute
-                      //If so, the winner is displayed
-
-                      if (
-                        currentTime.getTime() >
-                        drawingTime.getTime() + 60000
-                      ) {
-                        var winner = parsedName[2];
-                        createElement("winner", "Winner: " + winner, label);
-                      }
-                    });
-                  };
-
                   var createElement = (type, value, parent) => {
                     var element = document.createElement("div");
                     element.setAttribute("class", type);
@@ -583,9 +593,46 @@
                     parent.appendChild(element);
                   };
 
-                  addLabels();
+                  function buildDrawingContainer() {
+                    const myLanding = landingPageEl ?? document;
+                    const drawingsContainer = myLanding.getElementById("drawing-container");
+                    const drawingTemplate = myLanding.getElementById("drawing-template");
+                    for (let drawingData of sortedVideos) {
 
-                  //open popup and get embeded video
+                      const clone = drawingTemplate.content.cloneNode(true);
+                      const prizeImage = clone.getElementById("prize-image");
+                      prizeImage.setAttribute("id", drawingData.Id);
+                      prizeImage.setAttribute("data-starttime", drawingData.StartTime);
+
+                      if (drawingData.Name.toLowerCase().includes("bridgestone")) {
+                        prizeImage.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/john-deer-xuv-835.png';
+                      } else if (drawingData.Name.toLowerCase().includes("cooper")) {
+                        prizeImage.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/dodge-charger-png';
+                      } else if (drawingData.Name.toLowerCase().includes("falken")) {
+                        prizeImage.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/grand-prizes/jeep-gladiator.png';
+                      } else {
+                        console.log('unrecognized drawing sponsor');
+                      }
+
+                      var currentTime = new Date();
+                      currentTime = currentTime.getTime();
+                      const showWinnersNameTime = currentTime + (60000)
+                      const parsedName = drawingData.Name.split(" - ");
+                      var WinnersName = parsedName.length > 2 && currentTime > showWinnersNameTime
+                        ? "Winner: " + parsedName[2]
+                        : formatTime(drawingData.StartTime, true);
+
+                      const drawingButton = clone.getElementById("drawing-button");
+                      drawingButton.innerHTML = parsedName[0] + "<br>" + parsedName[1] + "<br>" + WinnersName;
+                      drawingButton.onclick = function () {
+                        toggleVideo(drawingData);
+                      }
+
+                      drawingsContainer.appendChild(clone);
+                    }
+
+                  }
+
                   var toggleVideo = element => {
                     var popupElement = landingPageEl.getElementById(
                       "video-popup"
@@ -593,9 +640,9 @@
                     var iframe;
                     if (element) {
                       document.body.style.overflow = "hidden";
-                      var videoId = element.id;
+                      var videoId = element.Id;
                       var drawingTime = new Date(
-                        element.getAttribute("data-starttime")
+                        element.StartTime
                       );
 
                       var videoContainer = landingPageEl.querySelector(
@@ -613,7 +660,11 @@
                       iframe.src = "/embed/" + videoId;
                       videoContainer.appendChild(iframe);
 
-                      if (currentTime.getTime() < drawingTime.getTime()) {
+                      var currentTime = new Date();
+                      currentTime = currentTime.getTime();
+                      const showWinnersNameTime = currentTime + (60000)
+
+                      if (currentTime < showWinnersNameTime) {
                         var message = document.createElement("div");
                         message.setAttribute("class", "modal-message");
                         message.innerHTML =
@@ -633,6 +684,15 @@
                       message.remove();
                     }
                   };
+
+                  if (window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('localhost')) {
+                    window.addEventListener('load', (event) => {
+                      buildDrawingContainer();
+                      console.log('The page has fully loaded');
+                    });
+                  } else {
+                    buildDrawingContainer();
+                  }
 
                 </script>
 
@@ -655,8 +715,6 @@
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -772,7 +830,6 @@
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
