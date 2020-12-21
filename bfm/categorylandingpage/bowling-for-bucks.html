@@ -652,120 +652,24 @@
 
 									<!-- Fetch Cash Winnings -->
 									<script>
-										//test data
-										var testData = [
-											{
-												ticker:
-													"Check Out the trade show special on the show floor - Mr Tire Seminar Will......&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is message 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is another message <b><span style='color:red'>that has some basic </span></b> HTML <i>tags</i> in it &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
-
-												games: [
-													{
-														name: "plinko",
-														time: "2020-12-07T08:00",
-														amount: "8,250"
-													},
-
-													{
-														name: "plinko",
-														time: "2020-12-07T08:10",
-														amount: "12,250"
-													},
-
-													{
-														name: "plinko",
-														time: "2020-12-07T08:20",
-														amount: "16,250"
-													},
-
-													{
-														name: "bowling",
-														time: "2020-12-07T08:15",
-														amount: "1,250"
-													},
-
-													{
-														name: "bowling",
-														time: "2020-12-07T08:25",
-														amount: "10,250"
-													},
-
-													{
-														name: "bowling",
-														time: "2020-12-07T08:35",
-														amount: "18,250"
-													},
-
-													{
-														name: "cash",
-														time: "2021-1-20T17:15",
-														amount: "6,200"
-													},
-
-													{
-														name: "cash",
-														time: "2021-1-20T18:00",
-														amount: "10,400"
-													},
-
-													{
-														name: "cash",
-														time: "2021-1-20T18:45",
-														amount: "14,400"
-													},
-
-													{
-														name: "cash",
-														time: "2021-1-21T014:45",
-														amount: "18,400"
-													},
-
-													{
-														name: "cash",
-														time: "2021-1-21T15:30",
-														amount: "23,000"
-													},
-
-													{
-														name: "cash",
-														time: "2021-1-21T16:15",
-														amount: "30,900"
-													},
-
-													{
-														name: "talent",
-														time: "2020-12-07T09:05",
-														amount: "5,250"
-													},
-
-													{
-														name: "talent",
-														time: "2020-12-07T08:10",
-														amount: "7,250"
-													},
-
-													{
-														name: "talent",
-														time: "2020-12-07T08:20",
-														amount: "20,250"
-													}
-												]
-											}
-										];
 										// Get Cash Winnings
-										var fetchCash = () => {
-											fetch("https://bfmgroupinc.com/k&m-tradeshow-data.json", {
-												headers: {
-													"Content-Type": "application/json"
-												},
-												mode: "no-cors"
-											})
-												.then(response => response)
-												.then(data => {
-													setCashValue(data);
-												})
-												.catch(error => {
-													setCashValue(testData[0]);
-												});
+										var fetchCash = async () => {
+											try {
+												const results = await fetch(
+													"https://km-tradeshow.bfmgroupinc.com/data.json",
+													{ header: "application/json" }
+												);
+												var data = await results.text();
+
+												//cleanup response for JSON parsing
+												data =
+													data.trim().replace(/\s/g, "").slice(1, -4) + "]}";
+												data = JSON.parse(JSON.parse(JSON.stringify(data)));
+
+												setCashValue(data);
+											} catch (err) {
+												console.error("err", err);
+											}
 										};
 
 										var setCashValue = data => {
@@ -801,18 +705,18 @@
 									<!-- Drawing Scripts -->
 									<script>
 										//for local testing only
-										// var data = {};
-										// loadJSON("../liquid.json", function (response) {
-										// 	// Parse JSON string into object
-										// 	const x = JSON.parse(response);
-										// 	data = x[0];
-										// 	console.log(data.Events);
-										// });
+										var data = {};
+										loadJSON("../liquid.json", function (response) {
+											// Parse JSON string into object
+											const x = JSON.parse(response);
+											data = x[0];
+											console.log(data.Events);
+										});
 
-										// var lq = data;
+										var lq = data;
 
 										//for production
-										var lq = {{ data | json }};
+										// var lq = {{ data | json }};
 
 										var videos = lq.Events.filter(event =>
 											event.Categories[0].Name.toLowerCase().includes("bowling")
