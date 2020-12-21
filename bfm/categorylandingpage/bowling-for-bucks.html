@@ -753,8 +753,13 @@
 										];
 										// Get Cash Winnings
 										var fetchCash = () => {
-											fetch("https://bfmgroupinc.com/k&m-tradeshow-data.json")
-												.then(response => response.json())
+											fetch("https://bfmgroupinc.com/k&m-tradeshow-data.json", {
+												headers: {
+													"Content-Type": "application/json"
+												},
+												mode: "no-cors"
+											})
+												.then(response => response)
 												.then(data => {
 													setCashValue(data);
 												})

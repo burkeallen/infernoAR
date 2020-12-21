@@ -366,18 +366,146 @@
 
 									<!-- Fetch Cash Winnings -->
 									<script>
+										//test data
+										var testData = [
+											{
+												ticker:
+													"Check Out the trade show special on the show floor - Mr Tire Seminar Will......&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is message 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This is another message <b><span style='color:red'>that has some basic </span></b> HTML <i>tags</i> in it &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+
+												games: [
+													{
+														name: "plinko",
+														time: "2020-12-07T08:00",
+														amount: "8,250"
+													},
+
+													{
+														name: "plinko",
+														time: "2020-12-07T08:10",
+														amount: "12,250"
+													},
+
+													{
+														name: "plinko",
+														time: "2020-12-07T08:20",
+														amount: "16,250"
+													},
+
+													{
+														name: "bowling",
+														time: "2020-12-07T08:15",
+														amount: "1,250"
+													},
+
+													{
+														name: "bowling",
+														time: "2020-12-07T08:25",
+														amount: "10,250"
+													},
+
+													{
+														name: "bowling",
+														time: "2020-12-07T08:35",
+														amount: "18,250"
+													},
+
+													{
+														name: "cash",
+														time: "2021-1-20T17:15",
+														amount: "6,200"
+													},
+
+													{
+														name: "cash",
+														time: "2021-1-20T18:00",
+														amount: "10,400"
+													},
+
+													{
+														name: "cash",
+														time: "2021-1-20T18:45",
+														amount: "14,400"
+													},
+
+													{
+														name: "cash",
+														time: "2021-1-21T014:45",
+														amount: "18,400"
+													},
+
+													{
+														name: "cash",
+														time: "2021-1-21T15:30",
+														amount: "23,000"
+													},
+
+													{
+														name: "cash",
+														time: "2021-1-21T16:15",
+														amount: "30,900"
+													},
+
+													{
+														name: "talent",
+														time: "2020-12-07T09:05",
+														amount: "5,250"
+													},
+
+													{
+														name: "talent",
+														time: "2020-12-07T08:10",
+														amount: "7,250"
+													},
+
+													{
+														name: "talent",
+														time: "2020-12-07T08:20",
+														amount: "20,250"
+													}
+												]
+											}
+										];
 										// Get Cash Winnings
 										var fetchCash = () => {
-											fetch("https://api.npoint.io/a882eb40505e926a52f4")
-												.then(response => response.json())
+											fetch("https://bfmgroupinc.com/k&m-tradeshow-data.json", {
+												headers: {
+													"Content-Type": "application/json"
+												}
+											})
+												.then(response => response)
 												.then(data => {
-													const cashBox = landingPageEl.querySelector(
-														"#winnings"
-													);
-													cashBox.innerHTML =
-														"TOTAL CASH WON: $" +
-														(data.cash_grab ? data.cash_grab : "0");
+													setCashValue(data);
+												})
+												.catch(error => {
+													setCashValue(testData[0]);
 												});
+										};
+
+										var setCashValue = data => {
+											var cashValues = data.games.filter(
+												game => game.name === "cash"
+											);
+											var winningsElement = landingPageEl.getElementById(
+												"winnings"
+											);
+											//sorted winnings descending from latest time to earliest time
+											var sortedWinnings = cashValues.sort((a, b) => {
+												var dateA = new Date(a.StartTime);
+												var dateB = new Date(b.StartTime);
+												return dateB.getTime() > dateA.getTime() ? 1 : -1;
+											});
+
+											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
+											var currentTime = new Date();
+											for (let i = 0; i < sortedWinnings.length; i++) {
+												var winningsTime = new Date(sortedWinnings[i].time);
+
+												if (currentTime.getTime() > winningsTime.getTime()) {
+													winningsElement.innerHTML =
+														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
+													return;
+												}
+											}
 										};
 
 										fetchCash();
