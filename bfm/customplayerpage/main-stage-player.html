@@ -676,9 +676,7 @@
                   }
                 </script>
 
-                <div style="display: none" id="infernoUserFullName">
-                  {{data.CurrentViewingUser.FirstName}} {{data.CurrentViewingUser.LastName}}
-                </div>
+                <div style="display: none" id="currentUser">${firstName} ${lastName}</div>
 
                 <div id="content" class="content">
 
@@ -836,10 +834,11 @@
                   }
 
                   function buildChat(event) {
-                    const infernoUserFullName = document.getElementById('infernoUserFullName').innerHTML;
+                    const currentUser = document.getElementById('currentUser').innerHTML;
+
                     const baseURL = 'https://jolokia.com/chatiframe.html';
                     const url = baseURL
-                      + '?fullname=' + infernoUserFullName.trim()
+                      + '?fullname=' + currentUser.trim()
                       + '&chatroomid=' + sanitizeString(event.id)
                       + '&chatroomname=' + sanitizeString(event.name);
 
