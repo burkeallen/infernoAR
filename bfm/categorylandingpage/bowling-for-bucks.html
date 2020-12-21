@@ -653,24 +653,15 @@
 									<!-- Fetch Cash Winnings -->
 									<script>
 										// Get Cash Winnings
-										var fetchCash = async () => {
-											try {
-												const results = await fetch(
-													"https://km-tradeshow.bfmgroupinc.com/data.json",
-													{ header: "application/json" }
-												);
-												var data = await results.text();
-
-												//cleanup response for JSON parsing
-												data =
-													data.trim().replace(/\s/g, "").slice(1, -4) + "]}";
-												data = JSON.parse(JSON.parse(JSON.stringify(data)));
-
-												setCashValue(data);
-											} catch (err) {
-												console.error("err", err);
-											}
-										};
+										function fetchCash() {
+											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
+												.then(response => {
+													return response.json();
+												})
+												.then(data => {
+													setCashValue(data[0]);
+												});
+										}
 
 										var setCashValue = data => {
 											var cashValues = data.games.filter(
