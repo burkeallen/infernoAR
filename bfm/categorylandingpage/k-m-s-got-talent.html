@@ -386,8 +386,8 @@
 											);
 											//sorted winnings descending from latest time to earliest time
 											var sortedWinnings = cashValues.sort((a, b) => {
-												var dateA = new Date(a.StartTime);
-												var dateB = new Date(b.StartTime);
+												var dateA = new Date(a.time);
+												var dateB = new Date(b.time);
 												return dateB.getTime() > dateA.getTime() ? 1 : -1;
 											});
 
@@ -395,7 +395,6 @@
 											var currentTime = new Date();
 											for (let i = 0; i < sortedWinnings.length; i++) {
 												var winningsTime = new Date(sortedWinnings[i].time);
-
 												if (currentTime.getTime() > winningsTime.getTime()) {
 													winningsElement.innerHTML =
 														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
