@@ -483,6 +483,11 @@
                         height: auto;
                     }
 
+                    .prize-image:hover {
+                        animation: shake 0.5s;
+                        animation-iteration-count: infinite;
+                    }
+
                     .drawingButton {
                         display: inline-block;
                         box-shadow: inset 0 1px 0 0 #9acc85;
@@ -512,7 +517,24 @@
                     .drawingButton h2 {
                         margin: 0;
                         font-weight: bold;
+                        font-size: 1.3em;
                     }
+
+
+                    @keyframes shake {
+                        0% { transform: translate(1px, 1px) rotate(0deg); }
+                        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+                        20% { transform: translate(-3px, 0px) rotate(1deg); }
+                        30% { transform: translate(3px, 2px) rotate(0deg); }
+                        40% { transform: translate(1px, -1px) rotate(1deg); }
+                        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+                        60% { transform: translate(-3px, 1px) rotate(0deg); }
+                        70% { transform: translate(3px, 1px) rotate(-1deg); }
+                        80% { transform: translate(-1px, -1px) rotate(1deg); }
+                        90% { transform: translate(1px, 2px) rotate(0deg); }
+                        100% { transform: translate(1px, -2px) rotate(-1deg); }
+                    }
+
                 </style>
 
                 <!-- video Overlay -->
@@ -604,30 +626,30 @@
                 <!-- Drawing Scripts -->
                 <script>
                   //for local testing only
-                  var data = {};
-                  loadJSON("../liquid.json", function (response) {
-                    // Parse JSON string into object
-                    const x = JSON.parse(response);
-                    data = x[0];
-                    // console.log(data.Events);
-                  });
-                  var lq = data;
+                  // var data = {};
+                  // loadJSON("../liquid.json", function (response) {
+                  //   // Parse JSON string into object
+                  //   const x = JSON.parse(response);
+                  //   data = x[0];
+                  //   // console.log(data.Events);
+                  // });
+                  // var lq = data;
 
                   //for production
-                  // var lq = {{ data | json }};
+                  var lq = {{ data | json }};
 
                   var videos = lq.Events.filter(event =>
                     event.Categories[0].Name.toLowerCase().includes("grand")
                   );
 
                   var sortedVideos = videos.sort((a, b) => {
-                    var dateA = new Date(a.StartTime);
-                    var dateB = new Date(b.StartTime);
+                    const dateA = new Date(a.StartTime);
+                    const dateB = new Date(b.StartTime);
                     return dateA.getTime() > dateB.getTime() ? 1 : -1;
                   });
 
                   var formatTime = (value, withDay,) => {
-                    var weekday = new Array(7);
+                    const weekday = new Array(7);
                     weekday[0] = "Sun";
                     weekday[1] = "Mon";
                     weekday[2] = "Tue";
@@ -636,42 +658,44 @@
                     weekday[5] = "Fri";
                     weekday[6] = "Sat";
 
-                    var d = new Date(value);
+                    const d = new Date(value);
 
-                    var dayIndex = d.getDay();
-                    var month = "Jan";
+                    const dayIndex = d.getDay();
+                    const month = "Jan";
 
-                    var day = d.getDate().toString();
+                    let day = d.getDate().toString();
                     day = day.length > 1 ? day : "0" + day;
 
-                    var hr = d.getHours();
-                    var min = d.getMinutes();
-                    var ampm = "am";
+                    let hr = d.getHours();
+                    let min = d.getMinutes();
+                    let ampm = "am";
 
                     if (hr > 12) {
                       hr -= 12;
                       ampm = "pm";
                     }
 
-                    if (min.toString().length < 2) min = "0" + min;
+                    if (min.toString().length < 2) {
+                      min = "0" + min;
+                    }
 
-                    var time = hr + ":" + min + ampm;
+                    let time = hr + ":" + min + ampm;
 
                     if (withDay) {
                       time =
                         weekday[dayIndex] +
-                        ", " +
-                        month +
-                        " " +
-                        day +
-                        " at " +
-                        time;
+                        + ", "
+                        + month
+                        + " "
+                        + day
+                        + " at "
+                        + time;
                     }
                     return time;
                   };
 
                   var createElement = (type, value, parent) => {
-                    var element = document.createElement("div");
+                    const element = document.createElement("div");
                     element.setAttribute("class", type);
                     element.innerHTML = value;
                     parent.appendChild(element);
@@ -699,11 +723,11 @@
                         console.log('unrecognized drawing sponsor');
                       }
 
-                      var currentTime = new Date();
+                      let currentTime = new Date();
                       currentTime = currentTime.getTime();
                       const showWinnersNameTime = currentTime + (60000)
                       const parsedName = drawingData.Name.split(" - ");
-                      var WinnersName = parsedName.length > 2 && currentTime > showWinnersNameTime
+                      const WinnersName = parsedName.length > 2 && currentTime > showWinnersNameTime
                         ? "Winner: " + parsedName[2]
                         : formatTime(drawingData.StartTime, true);
 
@@ -720,38 +744,27 @@
                   }
 
                   var toggleVideo = element => {
-                    var popupElement = landingPageEl.getElementById(
-                      "video-popup"
-                    );
-                    var iframe;
+                    const popupElement = landingPageEl.getElementById("video-popup");
+
                     if (element) {
                       document.body.style.overflow = "hidden";
-                      var videoId = element.Id;
-                      var drawingTime = new Date(
-                        element.StartTime
-                      );
-
-                      var videoContainer = landingPageEl.querySelector(
-                        ".aspect-ratio"
-                      );
-
-                      var modalContainer = landingPageEl.querySelector(
-                        ".video-container"
-                      );
+                      const videoId = element.Id;
+                      const drawingTime = new Date(element.StartTime);
+                      const videoContainer = landingPageEl.querySelector(".aspect-ratio");
+                      const modalContainer = landingPageEl.querySelector(".video-container");
 
                       popupElement.style.display = "flex";
-
-                      iframe = document.createElement("iframe");
+                      const iframe = document.createElement("iframe");
                       iframe.setAttribute("class", "video-iframe");
                       iframe.src = "/embed/" + videoId;
                       videoContainer.appendChild(iframe);
 
-                      var currentTime = new Date();
+                      let currentTime = new Date();
                       currentTime = currentTime.getTime();
-                      const showWinnersNameTime = currentTime + (60000)
+                      const showWinnersNameTime = currentTime + (60000);
 
                       if (currentTime < showWinnersNameTime) {
-                        var message = document.createElement("div");
+                        const message = document.createElement("div");
                         message.setAttribute("class", "modal-message");
                         message.innerHTML =
                           "Come back " +
@@ -762,10 +775,8 @@
                     } else {
                       document.body.style.overflow = "auto";
                       popupElement.style.display = "none";
-                      iframe = landingPageEl.querySelector(".video-iframe");
-                      var message = landingPageEl.querySelector(
-                        ".modal-message"
-                      );
+                      const iframe = landingPageEl.querySelector(".video-iframe");
+                      const message = landingPageEl.querySelector(".modal-message");
                       iframe.remove();
                       message.remove();
                     }
