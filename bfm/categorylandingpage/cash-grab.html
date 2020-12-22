@@ -365,47 +365,7 @@
 									</script>
 
 									<!-- Fetch Cash Winnings -->
-									<script>
-										// Get Cash Winnings
-										function fetchCash() {
-											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
-												.then(response => {
-													return response.json();
-												})
-												.then(data => {
-													setCashValue(data[0]);
-												});
-										}
-
-										var setCashValue = data => {
-											var cashValues = data.games.filter(
-												game => game.name === "cash"
-											);
-											var winningsElement = landingPageEl.getElementById(
-												"winnings"
-											);
-											//sorted winnings descending from latest time to earliest time
-											var sortedWinnings = cashValues.sort((a, b) => {
-												var dateA = new Date(a.time);
-												var dateB = new Date(b.time);
-												return dateB.getTime() > dateA.getTime() ? 1 : -1;
-											});
-
-											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
-											var currentTime = new Date();
-											for (let i = 0; i < sortedWinnings.length; i++) {
-												var winningsTime = new Date(sortedWinnings[i].time);
-
-												if (currentTime.getTime() > winningsTime.getTime()) {
-													winningsElement.innerHTML =
-														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
-													return;
-												}
-											}
-										};
-
-										fetchCash();
-									</script>
+									<script></script>
 									<style>
 										/* prevent entire screen from going black if you try to reference an image that does not exist*/
 										/* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
@@ -667,7 +627,7 @@
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/cash-grab.png"
 												/>
 												<div class="custom-banner" id="winnings">
-													TOTAL CASH WON: $12,500
+													TOTAL CASH WON: $0
 												</div>
 											</div>
 											<div class="column col3">
@@ -699,9 +659,55 @@
 										</div>
 									</div>
 
-									<!-- Drawing Scripts -->
+									<!-- Drawing and Winning Scripts -->
 									<script>
 										var currentTime = new Date();
+
+										// Get Cash Winnings
+										function fetchCash() {
+											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
+												.then(response => {
+													return response.json();
+												})
+												.then(data => {
+													setCashValue(data[0]);
+												});
+										}
+
+										var setCashValue = data => {
+											var cashValues = data.games.filter(
+												game => game.name === "cash"
+											);
+											var winningsElement = landingPageEl.getElementById(
+												"winnings"
+											);
+											//sorted winnings descending from latest time to earliest time
+											var sortedWinnings = cashValues.sort((a, b) => {
+												var dateA = new Date(a.time);
+												var dateB = new Date(b.time);
+												return dateB.getTime() > dateA.getTime() ? 1 : -1;
+											});
+											console.log(sortedWinnings);
+
+											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
+											var currentTime = new Date();
+											for (let i = 0; i < sortedWinnings.length; i++) {
+												var winningsTime = new Date(
+													sortedWinnings[i].time.slice(0, 5) +
+														"0" +
+														sortedWinnings[i].time.slice(5)
+												);
+												console.log(winningsTime);
+												if (currentTime.getTime() > winningsTime.getTime()) {
+													winningsElement.innerHTML =
+														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
+													return;
+												}
+											}
+										};
+
+										fetchCash();
+
 										var fetchVideos = () => {
 											// Set header
 											const headers = {
