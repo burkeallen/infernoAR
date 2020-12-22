@@ -622,7 +622,7 @@
 													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/plink-bg.png"
 												/>
 												<div class="custom-banner" id="winnings">
-													TOTAL CASH WON: $12,500
+													TOTAL CASH WON: $0
 												</div>
 											</div>
 											<div class="column col3">
@@ -668,12 +668,8 @@
 										}
 
 										var setCashValue = data => {
-											var cashValues = data.games.filter(
-												game => game.name === "plinko"
-											);
-											var winningsElement = landingPageEl.getElementById(
-												"winnings"
-											);
+											var cashValues = data.games.filter(game => game.name === "plinko");
+											var winningsElement = landingPageEl.getElementById("winnings");
 											//sorted winnings descending from latest time to earliest time
 											var sortedWinnings = cashValues.sort((a, b) => {
 												var dateA = new Date(a.time);
