@@ -822,124 +822,192 @@
 
 									<!-- Drawing Scripts -->
 									<script>
-										// for local testing only
-										// var data = {};
-										// loadJSON("../liquid.json", function (response) {
-										//   // Parse JSON string into object
-										//   const x = JSON.parse(response);
-										//   data = x[0];
-										//   console.log(data.Events);
-										// });
-
-										// var lq = data;
-
-										//for production
-										var lq = {{ data | json }};
-
-										var videos = lq.Events.filter(event =>
-										  event.Name.toLowerCase().includes("k&m got talent - video")
-										);
-
-										//sort by start time
-										var sortedVideos = videos.sort((a, b) => {
-										  var dateA = new Date(a.StartTime);
-										  var dateB = new Date(b.StartTime);
-										  return dateA.getTime() > dateB.getTime() ? 1 : -1;
-										});
-
 										var currentTime = new Date();
+										var fetchVideos = () => {
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
 
-										var formatTime = (value, withDay) => {
-										  var weekday = new Array(7);
-										  weekday[0] = "Sunday";
-										  weekday[1] = "Monday";
-										  weekday[2] = "Tuesday";
-										  weekday[3] = "Wednesday";
-										  weekday[4] = "Thursday";
-										  weekday[5] = "Friday";
-										  weekday[6] = "Saturday";
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
 
-										  var d = new Date(value);
-
-										  var dayIndex = d.getDay();
-										  var month = "January";
-
-										  var day = d.getDate().toString();
-										  day = day.length > 1 ? day : "0" + day;
-
-										  var hr = d.getHours();
-										  var min = d.getMinutes();
-										  var ampm = "am";
-
-										  if (hr > 12) {
-										    hr -= 12;
-										    ampm = "pm";
-										  }
-
-										  if (min.toString().length < 2) min = "0" + min;
-
-										  var time = hr + ":" + min + ampm;
-
-										  if (withDay) {
-										    time =
-										      weekday[dayIndex] +
-										      ", " +
-										      month +
-										      " " +
-										      day +
-										      " at " +
-										      time;
-										  }
-										  return time;
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Events",
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													createVideoElements(res);
+												}
+											});
 										};
 
-										console.log(sortedVideos);
+										fetchVideos();
+
+										var createVideoElements = data => {
+											var videos = data.filter(event =>
+												event.name
+													.toLowerCase()
+													.includes("k&m got talent - video")
+											);
+
+											//sort by start time
+											var sortedVideos = videos.sort((a, b) => {
+												var dateA = new Date(a.startTime);
+												var dateB = new Date(b.startTime);
+												return dateA.getTime() > dateB.getTime() ? 1 : -1;
+											});
+
+											addLabels(sortedVideos);
+										};
+
+										var formatTime = (value, withDay) => {
+											var weekday = new Array(7);
+											weekday[0] = "Sunday";
+											weekday[1] = "Monday";
+											weekday[2] = "Tuesday";
+											weekday[3] = "Wednesday";
+											weekday[4] = "Thursday";
+											weekday[5] = "Friday";
+											weekday[6] = "Saturday";
+
+											var d = new Date(value);
+
+											var dayIndex = d.getDay();
+											var month = "January";
+
+											var day = d.getDate().toString();
+											day = day.length > 1 ? day : "0" + day;
+
+											var hr = d.getHours();
+											var min = d.getMinutes();
+											var ampm = "am";
+
+											if (hr > 12) {
+												hr -= 12;
+												ampm = "pm";
+											}
+
+											if (min.toString().length < 2) min = "0" + min;
+
+											var time = hr + ":" + min + ampm;
+
+											if (withDay) {
+												time =
+													weekday[dayIndex] +
+													", " +
+													month +
+													" " +
+													day +
+													" at " +
+													time;
+											}
+											return time;
+										};
 
 										//Add video box labels
-										var addLabels = () => {
-										  var videoBoxes = landingPageEl.querySelectorAll(".video");
+										var addLabels = videos => {
+											var videoBoxes = landingPageEl.querySelectorAll(".video");
+											videoBoxes.forEach((videoBox, index) => {
+												var drawingTime = new Date(videos[index].startTime);
 
-										  videoBoxes.forEach((videoBox, index) => {
-										    var drawingTime = new Date(
-										      sortedVideos[index].StartTime
-										    );
+												videoBox.setAttribute("id", videos[index].Id);
+												videoBox.setAttribute("data-starttime", drawingTime);
 
-										    videoBox.setAttribute("id", sortedVideos[index].Id);
-										    videoBox.setAttribute("data-starttime", drawingTime);
+												var parsedName = videos[index].name.split(" - ");
+												var drawing = parsedName[1];
+												var label = document.createElement("div");
+												label.setAttribute("class", "video-box-label");
+												videoBox.appendChild(label);
+												createElement("drawing", drawing + ":", label);
+												createElement(
+													"time",
+													formatTime(videos[index].startTime),
+													label
+												);
 
-										    var parsedName = sortedVideos[index].Name.split(" - ");
-										    var drawing = parsedName[1];
-										    var label = document.createElement("div");
-										    label.setAttribute("class", "video-box-label");
-										    videoBox.appendChild(label);
-										    createElement("drawing", drawing + ":", label);
-										    createElement(
-										      "time",
-										      formatTime(sortedVideos[index].StartTime),
-										      label
-										    );
+												//Checks if the current time is greater than the drawing time plus 1 minute
+												//If so, the winner is displayed
 
-										    //Checks if the current time is greater than the drawing time plus 1 minute
-										    //If so, the winner is displayed
-
-										    if (
-										      currentTime.getTime() >
-										      drawingTime.getTime() + 60000
-										    ) {
-										      var winner = parsedName[2];
-										      if (winner) createElement("winner", winner, label);
-										    }
-										  });
+												if (
+													currentTime.getTime() >
+													drawingTime.getTime() + 60000
+												) {
+													var winner = parsedName[2];
+													createElement("winner", winner, label);
+												}
+											});
 										};
 
 										var createElement = (type, value, parent) => {
-										  var element = document.createElement("div");
-										  element.setAttribute("class", type);
-										  element.innerHTML = value;
-										  parent.appendChild(element);
+											var element = document.createElement("div");
+											element.setAttribute("class", type);
+											element.innerHTML = value;
+											parent.appendChild(element);
 										};
 
-										addLabels();
+										//open popup and get embeded video
+										var toggleVideo = element => {
+											var popupElement = landingPageEl.getElementById(
+												"video-popup"
+											);
+											var iframe;
+											if (element) {
+												document.body.style.overflow = "hidden";
+												var videoId = element.id;
+												var drawingTime = new Date(
+													element.getAttribute("data-starttime")
+												);
+
+												var videoContainer = landingPageEl.querySelector(
+													".aspect-ratio"
+												);
+
+												var modalContainer = landingPageEl.querySelector(
+													".video-container"
+												);
+
+												popupElement.style.display = "flex";
+
+												iframe = document.createElement("iframe");
+												iframe.setAttribute("class", "video-iframe");
+												iframe.src = "/embed/" + videoId;
+												videoContainer.appendChild(iframe);
+
+												if (currentTime.getTime() < drawingTime.getTime()) {
+													var message = document.createElement("div");
+													message.setAttribute("class", "modal-message");
+													message.innerHTML =
+														"Come back " +
+														formatTime(drawingTime, true) +
+														" to see who the winner is.";
+													modalContainer.appendChild(message);
+												}
+											} else {
+												document.body.style.overflow = "auto";
+												popupElement.style.display = "none";
+												iframe = landingPageEl.querySelector(".video-iframe");
+												var message = landingPageEl.querySelector(
+													".modal-message"
+												);
+												iframe.remove();
+												message.remove();
+											}
+										};
 									</script>
 								</inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
