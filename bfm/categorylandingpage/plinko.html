@@ -699,32 +699,56 @@
 
 									<!-- Drawing Scripts -->
 									<script>
-										//for local testing only
-										// var data = {};
-										// loadJSON("../liquid.json", function (response) {
-										// 	// Parse JSON string into object
-										// 	const x = JSON.parse(response);
-										// 	data = x[0];
-										// 	console.log(data.Events);
-										// });
-
-										// var lq = data;
-
-										//for production
-										var lq = {{ data | json }};
-
-										var videos = lq.Events.filter(event =>
-											event.Categories[0].Name.toLowerCase().includes("plinko")
-										);
-
-										//sort by start time
-										var sortedVideos = videos.sort((a, b) => {
-											var dateA = new Date(a.StartTime);
-											var dateB = new Date(b.StartTime);
-											return dateA.getTime() > dateB.getTime() ? 1 : -1;
-										});
-
 										var currentTime = new Date();
+										var fetchVideos = () => {
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
+
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
+
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Events",
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													createVideoElements(res);
+												}
+											});
+										};
+
+										fetchVideos();
+
+										var createVideoElements = data => {
+											var videos = data.filter(event =>
+												event.categories[0].name.toLowerCase().includes("cash")
+											);
+
+											//sort by start time
+											var sortedVideos = videos.sort((a, b) => {
+												var dateA = new Date(a.startTime);
+												var dateB = new Date(b.startTime);
+												return dateA.getTime() > dateB.getTime() ? 1 : -1;
+											});
+
+											addLabels(sortedVideos);
+										};
 
 										var formatTime = (value, withDay) => {
 											var weekday = new Array(7);
@@ -771,18 +795,15 @@
 										};
 
 										//Add video box labels
-										var addLabels = () => {
+										var addLabels = videos => {
 											var videoBoxes = landingPageEl.querySelectorAll(".video");
-
 											videoBoxes.forEach((videoBox, index) => {
-												var drawingTime = new Date(
-													sortedVideos[index].StartTime
-												);
+												var drawingTime = new Date(videos[index].startTime);
 
-												videoBox.setAttribute("id", sortedVideos[index].Id);
+												videoBox.setAttribute("id", videos[index].id);
 												videoBox.setAttribute("data-starttime", drawingTime);
 
-												var parsedName = sortedVideos[index].Name.split(" - ");
+												var parsedName = videos[index].name.split(" - ");
 												var drawing = parsedName[1];
 												var label = document.createElement("div");
 												label.setAttribute("class", "video-box-label");
@@ -790,7 +811,7 @@
 												createElement("drawing", drawing + ":", label);
 												createElement(
 													"time",
-													formatTime(sortedVideos[index].StartTime),
+													formatTime(videos[index].startTime),
 													label
 												);
 
@@ -813,8 +834,6 @@
 											element.innerHTML = value;
 											parent.appendChild(element);
 										};
-
-										addLabels();
 
 										//open popup and get embeded video
 										var toggleVideo = element => {

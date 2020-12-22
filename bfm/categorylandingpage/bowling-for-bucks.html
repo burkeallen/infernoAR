@@ -650,8 +650,9 @@
 										</div>
 									</div>
 
-									<!-- Fetch Cash Winnings -->
+									<!-- Winnings and Drawings -->
 									<script>
+										var currentTime = new Date();
 										// Get Cash Winnings
 										function fetchCash() {
 											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
@@ -678,7 +679,6 @@
 											});
 
 											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
-											var currentTime = new Date();
 											for (let i = 0; i < sortedWinnings.length; i++) {
 												var winningsTime = new Date(sortedWinnings[i].time);
 
@@ -691,36 +691,59 @@
 										};
 
 										fetchCash();
-									</script>
 
-									<!-- Drawing Scripts -->
-									<script>
-										//for local testing only
-										// var data = {};
-										// loadJSON("../liquid.json", function (response) {
-										// 	// Parse JSON string into object
-										// 	const x = JSON.parse(response);
-										// 	data = x[0];
-										// 	console.log(data.Events);
-										// });
+										//Drawing Scripts
+										var fetchVideos = () => {
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
 
-										// var lq = data;
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
 
-										//for production
-										var lq = {{ data | json }};
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Events",
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													createVideoElements(res);
+												}
+											});
+										};
 
-										var videos = lq.Events.filter(event =>
-											event.Categories[0].Name.toLowerCase().includes("bowling")
-										);
+										fetchVideos();
 
-										//sort by start time
-										var sortedVideos = videos.sort((a, b) => {
-											var dateA = new Date(a.StartTime);
-											var dateB = new Date(b.StartTime);
-											return dateA.getTime() > dateB.getTime() ? 1 : -1;
-										});
+										var createVideoElements = data => {
+											var videos = data.filter(event =>
+												event.categories[0].name
+													.toLowerCase()
+													.includes("bowling")
+											);
 
-										var currentTime = new Date();
+											//sort by start time
+											var sortedVideos = videos.sort((a, b) => {
+												var dateA = new Date(a.startTime);
+												var dateB = new Date(b.startTime);
+												return dateA.getTime() > dateB.getTime() ? 1 : -1;
+											});
+
+											addLabels(sortedVideos);
+										};
 
 										var formatTime = (value, withDay) => {
 											var weekday = new Array(7);
@@ -767,18 +790,15 @@
 										};
 
 										//Add video box labels
-										var addLabels = () => {
+										var addLabels = videos => {
 											var videoBoxes = landingPageEl.querySelectorAll(".video");
-
 											videoBoxes.forEach((videoBox, index) => {
-												var drawingTime = new Date(
-													sortedVideos[index].StartTime
-												);
+												var drawingTime = new Date(videos[index].startTime);
 
-												videoBox.setAttribute("id", sortedVideos[index].Id);
+												videoBox.setAttribute("id", videos[index].id);
 												videoBox.setAttribute("data-starttime", drawingTime);
 
-												var parsedName = sortedVideos[index].Name.split(" - ");
+												var parsedName = videos[index].name.split(" - ");
 												var drawing = parsedName[1];
 												var label = document.createElement("div");
 												label.setAttribute("class", "video-box-label");
@@ -786,7 +806,7 @@
 												createElement("drawing", drawing + ":", label);
 												createElement(
 													"time",
-													formatTime(sortedVideos[index].StartTime),
+													formatTime(videos[index].startTime),
 													label
 												);
 
@@ -809,8 +829,6 @@
 											element.innerHTML = value;
 											parent.appendChild(element);
 										};
-
-										addLabels();
 
 										//open popup and get embeded video
 										var toggleVideo = element => {
