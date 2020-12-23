@@ -287,7 +287,7 @@
 								<!-- ********************* -->
 								<!-- SNIPPET CONTENT START -->
 								<inferno-snippet-content
-									id="a88b02a7-143c-4296-aa0a-83d5f21faa9c"
+									id="5160751e-295f-4a38-a2f4-e3e3ba0ed34e"
 								>
 									<!-- Script to insert header with marquee and botton nav-->
 									<script>
@@ -302,6 +302,7 @@
 												alert("link you selected does not exists");
 											}
 										}
+
 										var fetchLayout = () => {
 											var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
 											// Set header
@@ -363,6 +364,97 @@
 
 										fetchLayout();
 									</script>
+									<!-- Fetch Cash Winnings -->
+									<script>
+										// Get Cash Winnings
+										function fetchCash() {
+											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
+												.then(response => {
+													return response.json();
+												})
+												.then(data => {
+													setCashValue(data[0]);
+												});
+										}
+
+										var setCashValue = data => {
+											var cashValues = data.games.filter(
+												game => game.name === "talent"
+											);
+											var winningsElement = landingPageEl.getElementById(
+												"winnings"
+											);
+											//sorted winnings descending from latest time to earliest time
+											var sortedWinnings = cashValues.sort((a, b) => {
+												var dateA = new Date(a.time);
+												var dateB = new Date(b.time);
+												return dateB.getTime() > dateA.getTime() ? 1 : -1;
+											});
+
+											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
+											var currentTime = new Date();
+											for (let i = 0; i < sortedWinnings.length; i++) {
+												var winningsTime = new Date(sortedWinnings[i].time);
+												if (currentTime.getTime() > winningsTime.getTime()) {
+													winningsElement.innerHTML =
+														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
+													return;
+												}
+											}
+										};
+
+										fetchCash();
+									</script>
+									<script>
+										//open popup and get embeded video
+										var toggleVideo = element => {
+											var popupElement = landingPageEl.getElementById(
+												"video-popup"
+											);
+											var iframe;
+											if (element) {
+												document.body.style.overflow = "hidden";
+												var videoId = element.id;
+												var drawingTime = new Date(
+													element.getAttribute("data-starttime")
+												);
+
+												var videoContainer = landingPageEl.querySelector(
+													".aspect-ratio"
+												);
+
+												var modalContainer = landingPageEl.querySelector(
+													".video-container"
+												);
+
+												popupElement.style.display = "flex";
+
+												iframe = document.createElement("iframe");
+												iframe.setAttribute("class", "video-iframe");
+												iframe.src = "/embed/" + videoId;
+												videoContainer.appendChild(iframe);
+
+												if (currentTime.getTime() < drawingTime.getTime()) {
+													var message = document.createElement("div");
+													message.setAttribute("class", "modal-message");
+													message.innerHTML =
+														"Come back " +
+														formatTime(drawingTime, true) +
+														" to see who the winner is.";
+													modalContainer.appendChild(message);
+												}
+											} else {
+												document.body.style.overflow = "auto";
+												popupElement.style.display = "none";
+												iframe = landingPageEl.querySelector(".video-iframe");
+												var message = landingPageEl.querySelector(
+													".modal-message"
+												);
+												iframe.remove();
+												message.remove();
+											}
+										};
+									</script>
 
 									<style>
 										/* prevent entire screen from going black if you try to reference an image that does not exist*/
@@ -395,22 +487,29 @@
 
 										.page-contents {
 											display: flex;
-											flex-direction: row;
+											flex-direction: column;
+											align-items: center;
+											width: 100%;
+										}
+
+										.container {
+											display: flex;
+											flex-flow: row wrap;
 											justify-content: space-between;
-											align-items: flex-start;
+											align-items: center;
+											max-width: 100%;
 											width: 100%;
 										}
 
 										.column {
 											display: flex;
 											flex-direction: column;
-											justify-content: space-between;
+											justify-content: flex-start;
 											align-items: center;
 											height: 100%;
 										}
 
 										.col2 img {
-											margin-top: 4rem;
 											height: auto;
 										}
 
@@ -420,26 +519,22 @@
 											border-radius: 10px;
 											background-color: black;
 											font-weight: 200;
-											font-size: 3.2rem;
-											min-width: 35rem;
+											font-size: 2.8rem;
+											min-width: 32rem;
 											color: #cbc165;
 											padding: 3rem 2rem;
 											text-align: center;
 										}
 
 										#winnings {
-											font-size: 2.8vw;
-										}
-
-										.plinko {
-											width: 75%;
+											font-size: 2.8rem;
 										}
 
 										.videos {
 											display: flex;
 											flex-direction: column;
 											align-items: center;
-											width: 100%;
+											justify-content: flex-start;
 										}
 
 										.video {
@@ -473,37 +568,34 @@
 											font-size: 1.4rem;
 										}
 
-										@media screen and (max-width: 1350px) {
-											.page-contents {
-												flex-flow: row;
-												flex-wrap: wrap;
-												justify-content: space-evenly;
-											}
+										.day {
+											padding: 2rem 0.5rem;
+											width: 18.5rem;
+											font-size: 1.6rem;
+										}
 
-											.col1 {
-												order: 2;
-											}
-											.col2 {
-												width: 100%;
-												order: 1;
-												display: flex;
-												flex-direction: row;
-												flex-wrap: wrap;
-												justify-content: center;
-												align-items: center;
-											}
+										.pigeonhole {
+											margin-top: 2rem;
+											display: flex;
+											flex-flow: row wrap-reverse;
+											justify-content: space-evenly;
+											max-width: 100%;
+											width: 100%;
+										}
 
-											.plinko {
-												min-width: 35rem;
-												width: 50%;
-											}
-											.col3 {
-												order: 2;
-											}
+										.poll-display {
+											background-color: rgba(0, 0, 0, 0.3);
+											width: 50%;
+											min-width: 60rem;
+											height: fit-content;
+											margin: 2rem;
+										}
 
-											.video-container {
-												font-size: 1.4rem;
-											}
+										.poll-survey {
+											height: 50rem;
+											width: 30%;
+											max-width: 40rem;
+											min-width: 35rem;
 										}
 
 										#video-popup {
@@ -565,10 +657,43 @@
 											padding: 2rem 0;
 										}
 
+										@media screen and (max-width: 1350px) {
+											.container {
+												flex-flow: row;
+												flex-wrap: wrap;
+												justify-content: space-evenly;
+											}
+
+											.col1 {
+												order: 2;
+											}
+											.col2 {
+												width: 100%;
+												order: 1;
+												display: flex;
+												flex-direction: row;
+												flex-wrap: wrap;
+												justify-content: center;
+												align-items: center;
+											}
+
+											.col3 {
+												order: 2;
+											}
+
+											.video-container {
+												font-size: 1.4rem;
+											}
+										}
+
 										@media screen and (max-width: 780px) {
 											.video-container {
 												margin-left: 0;
 												width: 90%;
+											}
+
+											.poll-display {
+												min-width: 35rem;
 											}
 										}
 									</style>
@@ -577,12 +702,12 @@
 										style="display: none"
 									>
 										<!--
-                    these links will allow navigating ot booth pages without page refreshing
-                    this will print all categories not just the booths, no way around that at the time of this writing
-                    links generated using liquid get picked up by the Angular Routing mechanism
-                    links generated by by JS do not and cause a page/app reload
-                    even when navigating within the app using relative URLS
-                    -->
+                  these links will allow navigating ot booth pages without page refreshing
+                  this will print all categories not just the booths, no way around that at the time of this writing
+                  links generated using liquid get picked up by the Angular Routing mechanism
+                  links generated by by JS do not and cause a page/app reload
+                  even when navigating within the app using relative URLS
+                  -->
 										{% for category in data.Categories %} {% assign page =
 										category.Id | downcase %} {% assign snippet =
 										category.LandingPageSnippetId | downcase %}
@@ -596,56 +721,75 @@
 									</category-page-links>
 									<div id="content">
 										<div class="page-contents">
-											<div class="column col1">
-												<div class="videos">
-													<div class="custom-banner">Wednesday Drawings</div>
-													<div
-														class="video"
-														id="video-1"
-														onclick="toggleVideo(this)"
-													></div>
-													<div
-														class="video"
-														id="video-2"
-														onclick="toggleVideo(this)"
-													></div>
-													<div
-														class="video"
-														id="video-3"
-														onclick="toggleVideo(this)"
-													></div>
+											<div class="container">
+												<div class="column col1">
+													<div class="videos">
+														<div
+															class="video"
+															id="video-1"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-2"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-3"
+															onclick="toggleVideo(this)"
+														></div>
+													</div>
+												</div>
+												<div class="column col2">
+													<img
+														src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/got-talent.png"
+													/>
+													<div id="winnings" class="custom-banner">
+														CASH PRIZE: $0
+													</div>
+												</div>
+												<div class="column col3">
+													<div class="videos">
+														<div
+															class="video"
+															id="video-4"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-5"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-6"
+															onclick="toggleVideo(this)"
+														></div>
+													</div>
 												</div>
 											</div>
-											<div class="column col2">
-												<img
-													class="plinko"
-													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/plinko/plink-bg.png"
-												/>
-												<div class="custom-banner" id="winnings">
-													TOTAL CASH WON: $0
+											<div class="pigeonhole">
+												<div class="poll-display">
+													<div class="aspect-ratio">
+														<iframe
+															class="video-iframe"
+															src="/embed/03e01e53-bde2-4e16-9615-8701beb807f6"
+															frameborder="0"
+															allowfullscreen="true"
+															webkitallowfullscreen="true"
+															mozallowfullscreen="true"
+														></iframe>
+													</div>
 												</div>
-											</div>
-											<div class="column col3">
-												<div class="videos">
-													<div class="custom-banner">Thursday Drawings</div>
-													<div
-														class="video"
-														id="video-4"
-														onclick="toggleVideo(this)"
-													></div>
-													<div
-														class="video"
-														id="video-5"
-														onclick="toggleVideo(this)"
-													></div>
-													<div
-														class="video"
-														id="video-6"
-														onclick="toggleVideo(this)"
-													></div>
-												</div>
+												<iframe
+													class="poll-survey"
+													src="https://pigeonhole.at/PQR38N?phName=${firstName}%20${lastName}&phEmail=${email}"
+												>
+												</iframe>
 											</div>
 										</div>
+
 										<div id="video-popup">
 											<div class="video-container">
 												<div class="close-popup" onclick="toggleVideo()">X</div>
@@ -653,49 +797,6 @@
 											</div>
 										</div>
 									</div>
-
-									<!-- Fetch Cash Winnings -->
-									<script>
-										// Get Cash Winnings
-										function fetchCash() {
-											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
-												.then(response => {
-													return response.json();
-												})
-												.then(data => {
-													setCashValue(data[0]);
-												});
-										}
-
-										var setCashValue = data => {
-											var cashValues = data.games.filter(
-												game => game.name === "plinko"
-											);
-											var winningsElement = landingPageEl.getElementById(
-												"winnings"
-											);
-											//sorted winnings descending from latest time to earliest time
-											var sortedWinnings = cashValues.sort((a, b) => {
-												var dateA = new Date(a.time);
-												var dateB = new Date(b.time);
-												return dateB.getTime() > dateA.getTime() ? 1 : -1;
-											});
-
-											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
-											var currentTime = new Date();
-											for (let i = 0; i < sortedWinnings.length; i++) {
-												var winningsTime = new Date(sortedWinnings[i].time);
-
-												if (currentTime.getTime() > winningsTime.getTime()) {
-													winningsElement.innerHTML =
-														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
-													return;
-												}
-											}
-										};
-
-										fetchCash();
-									</script>
 
 									<!-- Drawing Scripts -->
 									<script>
@@ -737,9 +838,9 @@
 
 										var createVideoElements = data => {
 											var videos = data.filter(event =>
-												event.categories[0].name
+												event.name
 													.toLowerCase()
-													.includes("plinko")
+													.includes("k&m got talent - video")
 											);
 
 											//sort by start time
