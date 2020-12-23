@@ -1,0 +1,2379 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+      });
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        })
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="efi" onload="login()"></div>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="7eca15b2-3029-498a-babe-63ff0ccdf2f2">
+
+                <!-- Click Track Landing v1.0 -->
+                <div id="xtrackx|1|non_booth|Leaderboard_&_Rules|page_load" class="page_load"></div>
+                <script>
+                  setTimeout(() => {
+                    var event = document.createEvent("MouseEvents");
+                    event.initEvent("mouseup", true, true);
+                    landingPageEl.querySelector('.page_load').dispatchEvent(event);
+                  }, 250);
+                </script>
+                <!-- ./ Click Track Landing v1.0 -->
+
+                <!-- https://studio304nextechar.freetls.fastly.net/infernoAR/gallery2/
+                    left pane 280
+                    top pane 55
+                    main pane has 15-20 padding forced on it. -->
+
+                <!-- Import Fonts -->
+                <script type="text/javascript">
+                  // Load custom fonts
+
+                  // NOTE: Hlvetica Neue Regular is actually the thinnest of the fonts
+                  // instead thin is used for "light" in the mockups, and light for "regular" in the mockups
+                  var hvFontThin = new FontFace(
+                    "Helvetica Neue",
+                    "url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueThin.woff)",
+                    {
+                      style: "normal",
+                      weight: "300",
+                    }
+                  );
+                  hvFontThin
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log("Error loading Helvetica Neue thin: ", error);
+                    });
+
+                  var hvFontLight = new FontFace(
+                    "Helvetica Neue",
+                    "url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueLight.woff)",
+                    {
+                      style: "normal",
+                      weight: "normal",
+                    }
+                  );
+                  hvFontLight
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log("Error loading Helvetica Neue Light: ", error);
+                    });
+
+                  var hvFontMedium = new FontFace(
+                    "Helvetica Neue",
+                    "url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueMedium.woff)",
+                    {
+                      style: "normal",
+                      weight: "500",
+                    }
+                  );
+                  hvFontMedium
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log("Error loading Helvetica Neue Medium: ", error);
+                    });
+
+                  var hvFontBold = new FontFace(
+                    "Helvetica Neue",
+                    "url(https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/fonts/helveticaneue/HelveticaNeueBold.woff)",
+                    {
+                      style: "normal",
+                      weight: "bold",
+                    }
+                  );
+                  hvFontBold
+                    .load()
+                    .then(loadedFont => {
+                      document.fonts.add(loadedFont);
+                    })
+                    .catch(error => {
+                      // error occurred
+                      console.log("Error loading Helvetica Neue Bold: ", error);
+                    });
+                </script>
+                <!-- ./ Import Fonts -->
+
+                <style>
+                  .h1,
+                  .h2,
+                  .h3,
+                  .h4,
+                  .h5,
+                  .h6,
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5,
+                  h6 {
+                    font-family: "Helvetica Neue", sans-serif;
+                  }
+
+                  #ntar-bg {
+                    font-family: "Helvetica Neue", sans-serif;
+                    font-weight: normal;
+                    font-style: normal;
+
+                    position: absolute;
+                    width: 100%;
+                    height: calc(100vh - 56px);
+                    margin: -20px;
+                    background-image: url("https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/background-1.png");
+                    background-repeat: no-repeat;
+                    background-position: top center;
+                    background-attachment: fixed;
+                    background-size: cover;
+                    background-color: #f6f6f6;
+                    overflow-y: auto;
+                  }
+
+                  .main {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                  }
+
+                  .banner {
+                    min-height: 63.6rem;
+                    display: flex;
+                    justify-content: space-between;
+                    min-height: 63.6rem;
+                    padding: 1rem 0 4rem;
+                  }
+
+                  .banner-info {
+                    padding: 0 0 0 3rem;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-self: center;
+                    width: 50%;
+                  }
+
+                  #inferno-logo {
+                    height: 5rem;
+                    width: auto;
+                  }
+
+                  .banner-info h1 {
+                    font-size: 5rem;
+                    color: #01245b;
+                    font-weight: bold;
+                    margin: 0.5rem 0;
+                  }
+
+                  .banner-info p {
+                    font-size: 1.8rem;
+                    font-weight: 500;
+                    line-height: 3rem;
+                  }
+
+                  .download-links {
+                    display: flex;
+                  }
+
+                  .banner-container {
+                    display: flex;
+                    align-items: flex-end;
+                    justify-content: center;
+                    width: 50%;
+                    height: auto;
+                  }
+
+                  .banner-images {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                  }
+
+                  .banner-primary {
+                    width: 75%;
+                    height: auto;
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    transform: translate(-30px, -30px);
+                    min-width: 45rem;
+                  }
+
+                  .banner-secondary {
+                    width: 35%;
+                    height: auto;
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    transform: translate(25%, -25%);
+                    min-width: 20rem;
+                  }
+                </style>
+
+                <div id="ntar-bg">
+                  <div class="main">
+                    <div class="banner">
+                      <div class="banner-info">
+                        <h1>Leaderboard & Game Rules</h1>
+                        <p>
+                          View your game progress and see where you place, check out challenges, rules and prizes.
+                        </p>
+                      </div>
+                      <div class="banner-container">
+                        <div class="banner-images">
+                          <img
+                            id="banner-image"
+                            class="banner-primary"
+                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/leaderboard/hero-stats.png"
+                          />
+                          <img
+                            id="banner-image"
+                            class="banner-secondary"
+                            src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/leaderboard/hero-chess.png"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- #### schedule divider widget #### -->
+                    <style>
+                      .schedule-divider {
+                        width: 100%;
+                        background-color: rgb(1, 36, 91, 0.9);
+                        color: white;
+                        padding: 3rem 0;
+
+                        display: flex;
+                        justify-content: space-between;
+                        flex-wrap: wrap;
+
+                        z-index: 5;
+                      }
+
+                      .schedule-dates {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        margin: 1rem 4rem;
+                      }
+
+                      .schedule-dates h2 {
+                        font-size: 2.2rem;
+                        font-weight: bold;
+                        margin: 0.25rem;
+                        max-width: 40rem;
+                      }
+
+                      .schedule-dates h3 {
+                        font-size: 1.98rem;
+                        font-weight: 300;
+                        margin: 0.25rem;
+                      }
+
+                      .date-selectors {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: space-between;
+                        margin: 1rem 3rem;
+                      }
+
+                      .date {
+                        margin: 1rem;
+                        padding: 1.5rem;
+                        width: 18rem;
+
+                        border: none;
+                        border-radius: 4px;
+                        background-color: #E0E9EF;
+                        box-shadow: 0 17px 25px 0 rgba(49, 49, 49, 0.5);
+                        color: #313131;
+
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                      }
+
+                      .date:hover {
+                        cursor: pointer;
+                      }
+
+                      .date:focus {
+                        outline: none;
+                      }
+
+                      .date h1 {
+                        font-size: 2rem;
+                        font-weight: bold;
+                        margin: 0;
+                        padding: 0.5rem 0;
+                        border-bottom: 2px solid transparent;
+                      }
+
+                      .chevron {
+                        width: 2.1rem;
+                        height: 1.2rem;
+                      }
+
+                      .schedule-wrapper {
+                        width: 40rem;
+                        position: absolute;
+                        margin-top: 0.7rem;
+                        transform: translateX(-52.5%);
+                        z-index: 2;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-end;
+                      }
+
+                      .schedule-box-arrow {
+                        background-color: white;
+                        height: 20px;
+                        width: 20px;
+                        border-radius: 2px;
+                        margin: 0 1.5rem -1.2rem;
+                        transform: rotate(45deg);
+                      }
+
+                      .schedule-box {
+                        width: 100%;
+                        height: 100%;
+                        background-color: white;
+                        border: none;
+                        box-shadow: 0 17px 25px 0 rgba(49, 49, 49, 0.5);
+                        clip-path: inset(0px -50px -50px -50px);
+                        border-radius: 4px;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: center;
+                        z-index: 10;
+                      }
+
+                      .schedule-box h1 {
+                        color: black;
+                        font-weight: bold;
+                        text-align: center;
+                        padding: 2rem 0;
+                        margin: 0;
+                        border-bottom: 1px solid #D8D8D7;
+                        width: 100%;
+                        font-size: 2rem;
+                      }
+
+                      .detailed-schedule {
+                        color: #002D72;
+                        align-self: center;
+                        text-align: center;
+                        text-decoration: none;
+                        font-size: 2rem;
+                        font-weight: bold;
+                        padding: 2rem;
+                        margin: 0;
+                      }
+
+                      .detailed-schedule:hover {
+                        color: #002D72;
+                        text-decoration: none;
+                      }
+
+                      .event {
+                        color: black;
+                        width: 100%;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        border-bottom: 1px solid #D8D8D7;
+                        padding: 1.3rem 0;
+                      }
+
+                      .past-event {
+                        background-color: #ebebeb;
+                      }
+
+                      .past-event-text {
+                        color: #6D7278;
+                      }
+
+                      .live-event {
+                        background-color: #e0f3ff;
+                      }
+
+                      .event-details {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                      }
+
+                      .event-time {
+                        min-width: 8rem;
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        margin: 0 1rem;
+                      }
+
+                      .event-details h3 {
+                        font-size: 2rem;
+                        font-weight: bold;
+                        margin: 0;
+                      }
+
+                      .event-details>* {
+                        font-size: 1.8rem;
+                      }
+
+                      .event-details p {
+                        margin: 0.05rem;
+                        color: #002D72;
+                        font-weight: bold;
+                        overflow-wrap: break-word;
+                      }
+
+                      .event-details p.presenter {
+                        color: #313131;
+                        font-weight: normal;
+                      }
+
+                      .event-details p.past-event-text {
+                        color: #6D7278;
+                      }
+
+                      .dot {
+                        height: 0.9rem;
+                        width: 0.9rem;
+                        background-color: #bbb;
+                        border-radius: 50%;
+                        background-color: #AC0C0C;
+                        margin: 0.7rem;
+                      }
+
+                      .live {
+                        color: #AC0C0C;
+                      }
+
+                      .past-event-dot {
+                        visibility: hidden;
+                      }
+
+                      .future-event-dot {
+                        visibility: hidden;
+                      }
+
+                      .event-text {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-items: center;
+                        flex-wrap: wrap;
+                      }
+
+                      .event-action {
+                        color: #002D72;
+                        text-decoration: none;
+                        margin: 1.5rem;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        min-width: 6.1rem;
+                      }
+
+                      .event-action:hover {
+                        color: #002D72;
+                        text-decoration: none;
+                        border: none;
+                        outline: none;
+                        cursor: pointer;
+                      }
+
+                      .event-action img {
+                        margin: 0.5rem;
+                      }
+
+                      .join-event {
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                      }
+
+                      .join-event img {
+                        /* use filter to change color of chevron png */
+                        filter: brightness(0) saturate(100%) invert(15%) sepia(27%) saturate(6108%) hue-rotate(205deg) brightness(91%) contrast(106%);
+                        height: 1.1rem;
+                        width: 1.8rem;
+                        transform: rotate(-90deg);
+                      }
+
+                      .add-event {
+                        font-size: 1.6rem;
+                        font-weight: 500;
+                        background-color: transparent;
+                        border: none;
+                      }
+
+                      .add-event:disabled {
+                        opacity: 0.7;
+                      }
+
+                      .add-event:focus {
+                        outline: none;
+                      }
+
+
+                      .add-event img {
+                        height: 1.4rem;
+                        width: 1.4rem;
+                      }
+
+                      .remove-event {
+                        font-size: 1.6rem;
+                        font-weight: 500;
+                        background-color: transparent;
+                        border: none;
+                        color: #AC0C0C;
+                      }
+
+                      .remove-event:hover {
+                        color: #AC0C0C;
+                      }
+
+                      .remove-event:disabled {
+                        opacity: 0.7;
+                      }
+
+                      .remove-event:focus {
+                        outline: none;
+                      }
+
+
+                      #add-event-modal {
+                        position: absolute;
+                        top: 0px;
+                        left: 0px;
+                        z-index: 20;
+                        width: 100%;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        flex-direction: column;
+                        justify-content: flex-start;
+                        align-items: center;
+                      }
+
+                      #add-event-modal-box {
+                        max-width: 87.8rem;
+                        padding: 3.4rem;
+                        margin: 2rem;
+                        border-radius: 12px;
+                        background-color: #F8F8F8;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                      }
+
+                      #add-event-modal-box h1 {
+                        margin: 1rem 3.4rem 2rem;
+                        color: #313131;
+                        font-weight: normal;
+                        font-size: 2.4rem;
+                        letter-spacing: 0;
+                        line-height: 2.9rem;
+                        text-align: center;
+                      }
+
+                      #add-event-modal-box #modal-box-event-name {
+                        font-weight: bold;
+                      }
+
+                      #add-event-modal-box a {
+                        text-decoration: none;
+                        font-weight: bold;
+                        color: #0B2668;
+                      }
+
+                      #add-event-modal-box button:hover {
+                        cursor: pointer;
+                        outline: none;
+                      }
+
+                      #add-event-modal-box button:focus {
+                        outline: none;
+                      }
+
+                      #close-event-modal {
+                        align-self: flex-end;
+                        border: none;
+                        background: none;
+                      }
+
+                      #event-modal-box-actions {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        align-items: center;
+                      }
+
+                      #event-modal-box-actions button {
+                        height: 4.5rem;
+                        width: 18.6rem;
+                        border-radius: 5px;
+                        font-size: 1.8rem;
+                        font-weight: bold;
+                        letter-spacing: 0.09rem;
+                        line-height: 2.3rem;
+                        text-align: center;
+                        margin: 1rem 1.2rem;
+                      }
+
+                      #undo-event-modal {
+                        border: 1.5px solid #AC0C0C;
+                        background-color: #FFFFFF;
+                        color: #AC0C0C;
+                      }
+
+                      #done-event-modal {
+                        background-color: #0B2668;
+                        border: 1.5px solid #0B2668;
+                        color: #FFFFFF;
+                      }
+                    </style>
+
+                    {%- assign dates = '' -%}
+
+                    {%- assign eventsByDate = data.Events | sort: "StartTime" -%}
+
+                    {%- for event in eventsByDate -%}
+                    {%- assign homeLobby = event.Categories | where: "Name", "Home" -%}
+                    {%- if homeLobby.size > 0 -%} {% comment %} Checking for events with Home category {% endcomment %}
+                    {%- assign date = event.StartTime | date: '%Y-%m-%d' -%}
+                    {%- unless dates contains date -%}
+                    {%- assign dates = dates | append:date | append:"," -%}
+                    {%- endunless -%}
+                    {%- endif -%}
+                    {%- endfor -%}
+
+                    <!-- split on dates -->
+                    {%- assign days = dates | split:',' -%}
+
+                    <div id="schedule-divider" class="schedule-divider">
+<!--                      <div class="schedule-dates">-->
+
+<!--                        {%- assign startMonth = days.first | date:'%B'-%}-->
+<!--                        {%- assign endMonth = days.last | date:'%B'-%}-->
+
+<!--                        <h2>-->
+<!--                          {%- if startMonth == endMonth -%}-->
+<!--                          &lt;!&ndash; for one day events, only print a single date &ndash;&gt;-->
+<!--                          {%- if days.first == days.last -%}-->
+<!--                          {%- assign start = days.first | date: '%B %e, %Y' -%}-->
+<!--                          {{ start }}-->
+<!--                          {%- else -%}-->
+<!--                          {%- assign start = days.first | date:'%B %e' -%}-->
+<!--                          {%- assign end = days.last | date:'%e, %Y' -%}-->
+
+<!--                          {{ start }}-{{ end }}-->
+<!--                          {%- endif -%}-->
+<!--                          {%- else -%}-->
+<!--                          &lt;!&ndash; include second month name &ndash;&gt;-->
+<!--                          {%- assign start = days.first | date:'%B %e' -%}-->
+<!--                          {%- assign end = days.last | date:'%B %e, %Y' -%}-->
+<!--                          {{ start }} – {{ end }}-->
+<!--                          {%- endif -%}-->
+<!--                        </h2>-->
+
+<!--&lt;!&ndash;                        <h3>Exhibition Schedule</h3>&ndash;&gt;-->
+<!--                      </div>-->
+<!--                      <div class="date-selectors">-->
+
+<!--                        &lt;!&ndash; loop through days &ndash;&gt;-->
+<!--                        {%- for day in days -%}-->
+
+<!--                        &lt;!&ndash; start date &ndash;&gt;-->
+<!--                        {%- assign dayStartInEpoch = day | append: ' 00:00:00' | date : '%s' | plus: 0 -%}-->
+<!--                        &lt;!&ndash; end date &ndash;&gt;-->
+<!--                        {%- assign dayEndInEpoch = day | append: ' 23:59:59' | date : '%s' | plus: 0 -%}-->
+<!--                        &lt;!&ndash; day string &ndash;&gt;-->
+<!--                        {%- assign dayString = day | date:"%A" -%}-->
+<!--                        &lt;!&ndash; date string &ndash;&gt;-->
+<!--                        {%- assign dateString = day | date:"%A, %B %e" -%}-->
+
+<!--                        &lt;!&ndash; assign day id to match date string added to dates above &ndash;&gt;-->
+<!--                        {%- assign dayId = day | date:"%Y-%m-%d" -%}-->
+
+<!--                        &lt;!&ndash; build schedule dropdowns &ndash;&gt;-->
+
+<!--                        <div>-->
+<!--                          <button class="date" id="{{dayId}}-schedule" onclick="toggleSchedule(event)">-->
+<!--                            <h1 id="{{dayId}}-schedule-text">{{ dayString }}</h1>-->
+<!--                            <img id="{{dayId}}-schedule-chevron" class="chevron"-->
+<!--                              src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png" />-->
+<!--                          </button>-->
+<!--                          <div id="{{dayId}}-schedule-wrapper" class="schedule-wrapper" style="display: none;">-->
+<!--                            <div id="{{dayId}}-schedule-arrow" class="schedule-box-arrow"></div>-->
+<!--                            <div class="schedule-box">-->
+<!--                              <h1>{{ dateString }}</h1>-->
+
+<!--                              {%- for event in eventsByDate -%}-->
+<!--                              {%- assign homeLobby = event.Categories | where: "Name", "Home" -%}-->
+
+<!--                              {%- if homeLobby.size > 0 -%}{% comment %} Added conditions for events to have Home category{% endcomment %}-->
+<!--                              {%- assign eventTimeInEpoch = event.StartTime | date : '%s' | plus: 0 -%}-->
+<!--                              {%- assign eventEndTimeInEpoch = eventTimeInEpoch | plus: event.VideoDuration -%}-->
+
+<!--                              {%- if eventTimeInEpoch >= dayStartInEpoch and eventTimeInEpoch <= dayEndInEpoch -%}-->
+<!--                              {%- assign name = event.Name | split: ": " -%}-->
+
+<!--                              {%- assign startTime = event.StartTime | date: "%H:%M" -%}-->
+<!--                              {%- assign nowInEpoch = "now" | date : '%s' | plus: 0 -%}-->
+
+<!--                              {%- assign status = ''-%}-->
+<!--                              &lt;!&ndash; past event &ndash;&gt;-->
+<!--                              {%- if eventEndTimeInEpoch <= nowInEpoch -%}-->
+<!--                              {%- assign status = 'past-event'-%}-->
+<!--                              &lt;!&ndash; live event &ndash;&gt;-->
+<!--                              {%- elsif eventTimeInEpoch <= nowInEpoch and nowInEpoch <= eventEndTimeInEpoch  -%}-->
+<!--                              {%- assign status = 'live-event' -%}-->
+<!--                              &lt;!&ndash; future event &ndash;&gt;-->
+<!--                              {%- else -%}-->
+<!--                              {%- assign status = 'future-event'-%}-->
+<!--                              {%- endif -%}-->
+
+<!--                              <div class="event {{status}}">-->
+<!--                                <div class="event-details {{status}}-text">-->
+<!--                                  <div class="event-time">-->
+<!--                                    <span class="dot {{status}}-dot"></span>-->
+<!--                                    <h3>{{ startTime }}</h3>-->
+<!--                                  </div>-->
+<!--                                  <div class="event-text" id="{{event.Id}}-name">-->
+
+<!--                                    {%- for part in name -%}-->
+
+<!--                                    {%- if part == name.first -%}-->
+
+<!--                                    <p class="presenter {{status}}-text">{{ name.first }}: </p>-->
+
+<!--                                    {%- elsif part == name.last -%}-->
+
+<!--                                    <p>{{ part }}</p>-->
+
+<!--                                    {%- else -%}-->
+
+<!--                                    <p>{{ part }}: </p>-->
+
+<!--                                    {%- endif -%}-->
+<!--                                    {%- endfor -%}-->
+
+<!--                                  </div>-->
+<!--                                </div>-->
+<!--                                {%- if status == "live-event" -%}-->
+<!--                                <a href="" class="event-action join-event">Join <img-->
+<!--                                  src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron.png" /></a>-->
+<!--                                {%- elsif status == "future-event" -%}-->
+<!--                                <button id="{{event.Id}}-add-button" class="event-action add-event" onclick="openModal(event)">Add-->
+<!--                                  <img src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/add-icon.png" /></button>-->
+<!--                                <button id="{{event.Id}}-remove-button" class="event-action remove-event" style="display:none;"-->
+<!--                                  onclick="handleRemoveFromAgenda(event)">Remove-->
+<!--                                </button>-->
+<!--                                {%- else -%}-->
+<!--                                <a href="" class="event-action"></a>-->
+<!--                                {%- endif -%}-->
+<!--                              </div>-->
+
+<!--                              {%- endif -%}-->
+
+<!--                              {%- endif -%} {% comment %}End of "if" statement for Home snippet {% endcomment %}-->
+
+<!--                              {%- endfor -%}-->
+
+<!--                              <a href="#" class="detailed-schedule">View Detailed Schedule</a>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+
+<!--                        &lt;!&ndash; end of looping through days &ndash;&gt;-->
+<!--                        {%- endfor -%}-->
+
+<!--                      </div>-->
+
+                    </div>
+
+                    <div id="add-event-modal" style="display:none;" onclick=handleAddEventModalClick(event);>
+
+                      <div id="add-event-modal-box">
+
+                        <button id="close-event-modal"><img id="close-event-modal-img"
+                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/close-icon.png" /></button>
+
+                        <h1>The live event <span id="modal-box-event-name"></span> has been added. Access all of your added events in
+                          the <a href="/videos/bookmarks">My Agenda</a> section.</h1>
+
+                        <div id="event-modal-box-actions">
+                          <button id="undo-event-modal">Undo</button>
+                          <button id="done-event-modal">Done</button>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                    <script>
+
+                      // handle schedule selectors
+                      var dates = "{{ dates }}"
+                      var days = dates.split(",");
+
+                      // remove final element if empty, the result of liquid adding commas behind all elements in for loop
+                      if (!days[days.length - 1]) days.pop();
+
+                      var toggleSchedule = e => {
+                        let target = e.currentTarget;
+
+                        if (target.style.backgroundColor !== "white") {
+                          target.style.backgroundColor = "white";
+                        } else {
+                          target.style.backgroundColor = "#E0E9EF";
+                        }
+
+                        let id = target.id.replace("-schedule", "");
+
+                        let text = landingPageEl.getElementById(id + "-schedule-text");
+                        let chevron = landingPageEl.getElementById(id + "-schedule-chevron");
+                        let schedule = landingPageEl.getElementById(id + "-schedule-wrapper");
+
+                        if (text.style.borderBottom !== "2px solid black") {
+                          text.style.borderBottom = "2px solid black";
+                        } else {
+                          text.style.borderBottom = "";
+                        }
+
+                        if (chevron.style.transform !== "rotate(180deg)") {
+                          chevron.style.transform = "rotate(180deg)";
+                        } else {
+                          chevron.style.transform = "";
+                        }
+
+                        if (schedule.style.display === "none") {
+                          schedule.style.display = "";
+                        } else {
+                          schedule.style.display = "none";
+                        }
+
+                        for (let day of days) {
+                          if (day !== id) {
+                            hideSchedule(day);
+                          }
+                        }
+
+                      }
+
+                      var hideSchedule = day => {
+
+                        let buttonId = day + "-schedule";
+                        let textId = day + "-schedule-text";
+                        let chevronId = day + "-schedule-chevron";
+                        let boxId = day + "-schedule-wrapper";
+
+                        let button = landingPageEl.getElementById(buttonId);
+                        if (button) button.style.backgroundColor = "#E0E9EF";
+
+                        let text = landingPageEl.getElementById(textId)
+                        if (text) text.style.borderBottom = "";
+
+                        let chevron = landingPageEl.getElementById(chevronId)
+                        if (chevron) chevron.style.transform = "";
+
+                        let box = landingPageEl.getElementById(boxId)
+                        if (box) box.style.display = "none";
+
+                      }
+
+                      // handle responsiveness
+                      var contentSection = landingPageEl.getElementById("ntar-bg")
+
+                      var scheduleResizeObserver = new ResizeObserver(entries => {
+                        for (const entry of entries) {
+                          let contentWidth = contentSection.offsetWidth;
+
+                          for (let day of days) {
+
+                            // position checks
+                            let dayBox = landingPageEl.getElementById(day + "-schedule");
+                            let dayBoxOffset = dayBox.offsetLeft;
+                            let dayBoxWidth = dayBox.offsetWidth;
+                            let centerPosition = dayBoxOffset + (dayBoxWidth / 2);
+
+                            let midwayPoint = contentWidth / 2;
+
+                            // transformations
+                            let dayWrapper = landingPageEl.getElementById(day + "-schedule-wrapper");
+                            let dayPointer = landingPageEl.getElementById(day + "-schedule-arrow");
+
+                            if (dayWrapper && dayPointer) {
+
+                              if (centerPosition < midwayPoint) {
+                                dayWrapper.style.transform = "translateX(2.5%)";
+                                dayPointer.style.alignSelf = "flex-start";
+                              } else {
+                                dayWrapper.style.transform = "";
+                                dayPointer.style.alignSelf = "";
+                              }
+                            }
+
+                          }
+                        }
+                      });
+
+                      scheduleResizeObserver.observe(contentSection);
+
+                      // handle agenda actions
+
+                      var agenda = [];
+
+                      var addingId = "";
+
+                      var openModal = e => {
+
+                        let target = e.currentTarget;
+
+                        let fullId = target.id;
+
+                        let id = fullId.replace("-add-button", "");
+
+                        addingId = id;
+
+
+                        addToAgenda(id);
+
+                        let eventName = landingPageEl.getElementById(id + "-name").innerHTML;
+                        eventName = eventName.replace(/<p>/g, "");
+                        eventName = eventName.replace(/<\/p>/g, "");
+                        eventName = eventName.replace(/<p class="presenter future-event-text">/g, "")
+                        let eventNameSpan = landingPageEl.getElementById("modal-box-event-name");
+                        eventNameSpan.innerHTML = eventName;
+
+                        // set modal overlay
+                        let contentSection = landingPageEl.getElementById("ntar-bg");
+                        let contentHeight = contentSection.scrollHeight;
+                        let modal = landingPageEl.getElementById("add-event-modal");
+                        modal.style.display = "flex";
+                        modal.style.height = contentHeight.toString() + "px";
+
+                        // set modal box position
+                        let scheduleDivider = landingPageEl.getElementById("schedule-divider");
+                        let scheduleTop = scheduleDivider.offsetTop;
+                        let eventTop = target.offsetTop;
+                        let totalTop = scheduleTop + eventTop;
+                        let modalBox = landingPageEl.getElementById("add-event-modal-box");
+                        modalBox.style.transform = "translateY(" + totalTop.toString() + "px" + ")"
+                      }
+
+                      var handleAddEventModalClick = e => {
+
+                        let target = e.target;
+
+                        if (target.id === "add-event-modal" ||
+                          target.id === "close-event-modal" ||
+                          target.id === "close-event-modal-img" ||
+                          target.id === "done-event-modal") {
+
+                          closeModal();
+
+                        }
+                        else if (target.id === "undo-event-modal") {
+
+                          removeFromAgenda(addingId);
+                          closeModal();
+
+                        }
+                      }
+
+                      var closeModal = () => {
+                        let modal = landingPageEl.getElementById("add-event-modal");
+                        modal.style.display = "none";
+                      }
+
+                      var addToAgenda = id => {
+                        const urlBase = "https://ingress.infernocore.jolokia.com/api/Bookmarks/";
+                        const url = urlBase + id;
+
+                        const bearerToken = window.sessionStorage.getItem("token");
+                        const bearer = 'Bearer ' + bearerToken;
+
+                        disableAddButton(id);
+
+                        fetch(url, {
+                          method: 'POST',
+                          withCredentials: true,
+                          headers: { 'Authorization': bearer }
+                        })
+                          .then(() => {
+                            hideAddButton(id);
+                            setRemoveButton(id);
+
+                            // handle page too
+                            if (typeof pageHideAddButton !== 'undefined') {
+                              pageHideAddButton(id);
+                            }
+                            if (typeof pageSetRemoveButton !== 'undefined') {
+                              pageSetRemoveButton(id);
+                            }
+                          })
+                          .catch(err => console.log(err))
+                          .finally(() => enableAddButton(id));
+                      }
+
+                      var handleRemoveFromAgenda = e => {
+
+                        let target = e.currentTarget;
+
+                        let fullId = target.id;
+
+                        let id = fullId.replace("-remove-button", "");
+
+                        removeFromAgenda(id);
+
+                      }
+
+                      var removeFromAgenda = id => {
+                        const urlBase = "https://ingress.infernocore.jolokia.com/api/Bookmarks/";
+                        const url = urlBase + id;
+
+                        const bearerToken = window.sessionStorage.getItem("token");
+                        const bearer = 'Bearer ' + bearerToken;
+
+                        disableRemoveButton(id);
+
+                        fetch(url, {
+                          method: 'DELETE',
+                          withCredentials: true,
+                          headers: { 'Authorization': bearer }
+                        })
+                          .then(() => {
+                            hideRemoveButton(id);
+                            setAddButton(id);
+
+                            // handle page too
+                            if (typeof pageHideRemoveButton !== 'undefined') {
+                              pageHideRemoveButton(id);
+                            }
+                            if (typeof pageSetAddButton !== 'undefined') {
+                              pageSetAddButton(id);
+                            }
+                          })
+                          .catch(err => console.log(err))
+                          .finally(() => enableRemoveButton(id));
+                      }
+
+                      var setAddButton = id => {
+                        let target = landingPageEl.getElementById(id + "-add-button");
+                        if (target) target.style.display = "";
+                      }
+
+                      var hideAddButton = id => {
+                        let target = landingPageEl.getElementById(id + "-add-button");
+                        if (target) target.style.display = "none";
+                      }
+
+                      var setRemoveButton = id => {
+                        let target = landingPageEl.getElementById(id + "-remove-button");
+                        if (target) target.style.display = "";
+                      }
+
+                      var hideRemoveButton = id => {
+                        let target = landingPageEl.getElementById(id + "-remove-button");
+                        if (target) target.style.display = "none";
+                      }
+
+                      var enableAddButton = id => {
+                        let target = landingPageEl.getElementById(id + "-add-button");
+                        if (target) target.disabled = false;
+                      }
+
+                      var disableAddButton = id => {
+                        let target = landingPageEl.getElementById(id + "-add-button");
+                        if (target) target.disabled = true;
+                      }
+
+                      var enableRemoveButton = id => {
+                        let target = landingPageEl.getElementById(id + "-remove-button");
+                        if (target) target.disabled = false;
+                      }
+
+                      var disableRemoveButton = id => {
+                        let target = landingPageEl.getElementById(id + "-remove-button");
+                        if (target) target.disabled = true;
+                      }
+
+                      var setBookmarks = bookmarks => {
+                        if (bookmarks && bookmarks.length) {
+                          for (let bookmark of bookmarks) {
+                            let id = bookmark.eventId;
+                            hideAddButton(id);
+                            setRemoveButton(id);
+                          }
+                        }
+                      }
+
+                      var getBookmarks = () => {
+                        const url = "https://ingress.infernocore.jolokia.com/api/Bookmarks/Basic";
+
+                        const bearerToken = window.sessionStorage.getItem("token");
+                        const bearer = 'Bearer ' + bearerToken;
+
+                        fetch(url, {
+                          method: 'GET',
+                          withCredentials: true,
+                          headers: {
+                            'Authorization': bearer
+                          }
+                        })
+                          .then(res => res.json())
+                          .then(json => setBookmarks(json))
+                          .catch(err => console.log(err));
+                      }
+
+
+                      getBookmarks();
+                    </script>
+                    <!-- #### end of schedule divider widget #### -->
+
+                    <!-- rules section CSS -->
+                    <style>
+                      .overview-divider {
+                        background-color: rgba(255, 255, 255, 0.75);
+                        width: 100;
+                        padding: 3.8rem;
+                      }
+
+                      .overview-divider h1 {
+                        color: #06026D;
+                        font-size: 4.6rem;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 5.3rem;
+                      }
+
+                      .collapsible-div {
+                        background: white;
+                        border-radius: 7px;
+                        margin: 5rem auto;
+                        padding: 3.5rem 4rem;
+                        width: 95%;
+                      }
+
+                      .collapsible-div h2 {
+                        color: #0B2668;
+                        font-size: 40px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 53px;
+                        margin: 0 0 2rem 0;
+                      }
+
+                      .collapsible-div p {
+                        color: #1D1D1D;
+                        font-size: 20px;
+                        font-weight: 500;
+                        letter-spacing: 0;
+                        line-height: 30px;
+                      }
+
+                      .collapsible-div hr {
+                        box-sizing: border-box;
+                        height: 1px;
+                        width: 100%;
+                        border: 1px solid rgba(7,24,67,0.38)
+                      }
+
+                      .collapsible-div-header {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                        margin: 0;
+                      }
+
+                      .main-header {
+                        margin: 0 !important;
+                      }
+
+                      .dropdown-button {
+                        border: none;
+                        border-radius: 4px;
+                        background-color: #E0E9EF;
+                        height: 64px;
+                        width: 180px;
+                        cursor: pointer;
+                        padding: 0 2rem;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      .dropdown-button span {
+                        color: #313131;
+                        font-size: 20px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 25px;
+                        margin: 0;
+                      }
+
+                      .dropdown-button img {
+                        height: 20px;
+                        width: 20px;
+                        object-fit: contain;
+                      }
+
+                      .prize {
+                        width: 100%;
+                        height: 262px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        border: 1px solid #0B2668;
+                        border-radius: 7px;
+                        background-color: #FFFFFF;
+                        padding-left: 3rem;
+                        margin-bottom: 3rem;
+                      }
+
+                      .prize img {
+                        margin-left: 2rem;
+                        width: 422px;
+                        height: 260px;
+                        object-fit: cover;
+                      }
+
+                      #content-rules, #content-leaderboard, #content-challenges {
+                        display: none;
+                      }
+                    </style>
+                    <!-- END of rules section CSS -->
+
+                    <!-- Rules section -->
+                    <div class="overview-divider">
+                      <h1>Rules & Instructions</h1>
+                    </div>
+                    <div class="collapsible-div">
+                      <div id="collapsible-div-header-rules" class="collapsible-div-header">
+                        <h2 class="main-header">How to Play</h2>
+                        <button id="dropdown-button-rules" class="dropdown-button" onclick="toggleExpand(event)">
+                          <span id="dropdown-button-text-rules">Expand</span>
+                          <img id="dropdown-button-img-rules" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png" />
+                        </button>
+                      </div>
+                      <div id="content-rules">
+                        <p>
+                          First, fill out your profile and be sure to include your contact information, this way we can contact you if you win.
+                          You are scored in several different categories: the number of pages you navigate to, interacting with buttons, 3D models,
+                          or other things on a page, and the number of minutes you have watched the video content in ARC 2021. The player with the
+                          most points at the end of the event wins.
+                        </p>
+                        <hr />
+                        <h2>Prizes</h2>
+                        <div class="prize">
+                          <div>
+                            <h2>1st Prize:</h2>
+                            <p>
+                              Apple Prize Pack: includes a Macbook Air, Apple mouse, and one set of Air Pods.
+                            </p>
+                          </div>
+                          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/leaderboard/leaderboard-prize-1.png"/>
+                        </div>
+                        <div class="prize">
+                          <div>
+                            <h2>2nd Prize:</h2>
+                            <p>
+                              The Google Prize Pack: includes a Google Home, Chromebook, Pixel Buds, a year
+                              subscription to Stadia Pro, 2 controllers, and a Chromecast Ultra.
+                            </p>
+                          </div>
+                          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/leaderboard/leaderboard-prize-2.png"/>
+                        </div>
+                        <div class="prize">
+                          <div>
+                            <h2>3rd Prize:</h2>
+                            <p>
+                              Dinner for you and a friend at the Olive Garden.
+                            </p>
+                          </div>
+                          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/arc/leaderboard/leaderboard-prize-3.png"/>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Leaderboard section CSS -->
+                    <style>
+                      .leaderboard-headers {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 95%;
+                        margin: 0 0 0 2.2rem;
+                      }
+
+                      .leaderboard-headers h3, .player h3, .player span, .player-rank {
+                        color: #313131;
+                        font-size: 22px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 27px;
+                        margin: 0;
+                      }
+
+                      .leaderboard-headers-name-points {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 85%;
+                      }
+
+                      .leaderboard-rankings-list {
+                        overflow-y: scroll;
+                        scroll-behavior: smooth;
+                      }
+
+                      .leaderboard-rankings-list hr {
+                        margin: 0 !important;
+                      }
+
+                      .player {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                        padding: 2rem 4rem;
+                        margin: 0 auto;
+                      }
+
+                      .player-info {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 85.2%;
+                      }
+
+                      .player-pic-name-company {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      .player-img {
+                        height: 100px;
+                        width: 100px;
+                        margin-right: 2rem;
+                        border: none;
+                        border-radius: 50%;
+                        object-fit: contain;
+                      }
+
+                      .player-name, .player-company {
+                        display: inline;
+                      }
+
+                      .player-name, .player-points {
+                        color: #0B2668 !important;
+                      }
+
+                      .leaderboard-header {
+                        display: flex;
+                        align-items: center;
+                      }
+
+                      .my-rank-button {
+                        margin-left: 2rem;
+                        border: none;
+                        border-radius: 4px;
+                        height: 64px;
+                        width: 180px;
+                        cursor: pointer;
+                        padding: 0 2rem;
+                        color: #313131;
+                        font-size: 20px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 25px;
+                      }
+
+                      .rank-btn-enabled {
+                        background-color: #E0E9EF;
+                      }
+
+                      .rank-btn-disabled {
+                        background-color: #C1C1C1;
+                        opacity: 0.75;
+                      }
+                    </style>
+                    <!-- END of Leaderboard section CSS -->
+
+                    <!-- Leaderboard section -->
+                    <div class="overview-divider">
+                      <h1>Leaderboard</h1>
+                    </div>
+
+                    <div class="collapsible-div">
+                      <div id="collapsible-div-header-leaderboard" class="collapsible-div-header">
+                        <div class="leaderboard-header">
+                          <h2 class="main-header">Top Players</h2>
+                          <button
+                            id="xtrackx|1|non_booth|Leaderboard_&_Rules|button_click|Player_List|My_Rank_Button"
+                            class="my-rank-button rank-btn-disabled"
+                            onclick="scrollToOwnRank(event)"
+                            disabled="true"
+                          >
+                            My Rank
+                          </button>
+                        </div>
+                        <button id="dropdown-button-leaderboard" class="dropdown-button" onclick="toggleExpand(event)">
+                          <span id="dropdown-button-text-leaderboard">Expand</span>
+                          <img id="dropdown-button-img-leaderboard" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png" />
+                        </button>
+                      </div>
+                      <div id="content-leaderboard">
+                        <hr />
+                        <div class="leaderboard-headers">
+                          <h3>PLACE</h3>
+                          <div class="leaderboard-headers-name-points">
+                            <h3>PLAYER NAME</h3>
+                            <h3>POINTS</h3>
+                          </div>
+                        </div>
+                        <hr />
+                        <!-- START of leaderboard user list -->
+                        <div id="leaderboard-rankings-list" class="leaderboard-rankings-list">
+                          <h2 id="leaderboard-loading" class="leaderboard-loading">Calculating Scores...</h2>
+                        </div>
+                        <template id="player-template">
+                          <div class="player" id="player">
+                            <h3 id="player-rank"></h3>
+                            <div class="player-info">
+                              <div class="player-pic-name-company">
+                                <img id="player-img" class="player-img" src=""/>
+                                <span>
+                          <h3 id="player-name" class="player-name"></h3>
+                          <h3 id="player-company" class="player-company"></h3>
+                        </span>
+                              </div>
+                              <h3 id="player-points" class="player-points"></h3>
+                            </div>
+                          </div>
+                          <hr />
+                        </template>
+                        <!-- END of leaderboard user list -->
+                      </div>
+                    </div>
+
+                    <style>
+                      .my-rank {
+                        display: none;
+                        background: white;
+                        border-radius: 7px;
+                        margin: 5rem auto;
+                        padding: 3.5rem 4rem;
+                        width: 95%;
+                      }
+
+                      .my-rank hr {
+                        box-sizing: border-box;
+                        height: 1px;
+                        width: 100%;
+                        border: 1px solid rgba(7,24,67,0.38);
+                      }
+
+                      .my-rank-header, .leaderboard-loading {
+                        color: #0B2668;
+                        font-size: 40px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 53px;
+                        margin: 0 0 2rem 0;
+                      }
+                    </style>
+
+                    <div id="my-rank" class="my-rank">
+                      <h2 class="my-rank-header">My Rank</h2>
+                      <hr />
+                      <h2 id="my-rank-loading" class="leaderboard-loading">Calculating Scores...</h2>
+                      <div class="player">
+                        <h3 id="player-rank"></h3>
+                        <div class="player-info">
+                          <div class="player-pic-name-company">
+                            <img id="player-img" class="player-img" src=""/>
+                            <span>
+                    <h3 id="player-name" class="player-name"></h3>
+                    <h3 id="player-company" class="player-company"></h3>
+                  </span>
+                          </div>
+                          <h3 id="player-points" class="player-points"></h3>
+                        </div>
+                      </div>
+                      <hr />
+                    </div>
+
+                    <!-- Challenges to Complete section -->
+                    <style>
+                      .challenge-container {
+                        width: 100%;
+                      }
+
+                      .challenge-container hr {
+                        margin: 4rem 0;
+                      }
+
+                      .challenge-text {
+                        width: 95%;
+                        margin: 0 auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                      }
+
+                      .challenge-text span {
+                        margin-right: 6rem;
+                      }
+
+                      .challenge-text p {
+                        font-weight: 400;
+                        font-size: 1.75rem;
+                        margin: 0;
+                      }
+
+                      .challenge-text h3 {
+                        font-weight: bold;
+                        color: #0B2668;
+                        font-size: 2rem;
+                        margin: 0;
+                      }
+
+                      .challenge-text strong {
+                        color: #313131;
+                      }
+                    </style>
+
+                    <div class="overview-divider">
+                      <h1>Challenges to Complete</h1>
+                    </div>
+                    <div class="collapsible-div">
+                      <div id="collapsible-div-header-challenges" class="collapsible-div-header">
+                        <h2 class="main-header">Challenges</h2>
+                        <button id="dropdown-button-challenges" class="dropdown-button" onclick="toggleExpand(event)">
+                          <span id="dropdown-button-text-challenges">Expand</span>
+                          <img id="dropdown-button-img-challenges" src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png" />
+                        </button>
+                      </div>
+                      <div id="content-challenges">
+                        <div class="challenge-container">
+                          <hr />
+                          <div class="challenge-text">
+                  <span>
+                    <p>
+                      <strong>Watch videos throughout ARC2021.</strong> You will gain 100 points for each minute of content watched.
+                    </p>
+                  </span>
+                            <h3>100</h3>
+                          </div>
+                        </div>
+                        <div class="challenge-container">
+                          <hr />
+                          <div class="challenge-text">
+                  <span>
+                    <p>
+                      <strong>Explore pages throughout ARC2021.</strong> You will gain 50 points for each page visited.
+                    </p>
+                  </span>
+                            <h3>50</h3>
+                          </div>
+                        </div>
+                        <div class="challenge-container">
+                          <hr />
+                          <div class="challenge-text">
+                  <span>
+                    <p>
+                      <strong>Engage and interact with clickable content through ARC2021.</strong> Gain 25 points by clicking on buttons, QR codes, videos, and more.
+                    </p>
+                  </span>
+                            <h3>25</h3>
+                          </div>
+                        </div>
+                        <div class="challenge-container">
+                          <hr />
+                          <div class="challenge-text">
+                  <span>
+                    <p>
+                      <strong>Take part in quizzes and surveys in ARC2021.</strong> These can be found on auditorium and booth pages.
+                      Gain 200 points for each quiz completed.
+                    </p>
+                  </span>
+                            <h3>200</h3>
+                          </div>
+                          <hr />
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Completed Challenges section
+                    <div class="overview-divider">
+                      <h1>Completed Challenges</h1>
+                   </div>
+                -->
+
+
+                    <!-- start of footer -->
+                    <style>
+                      footer {
+                        color: white;
+                        font-size: 1.6rem;
+                        background-color: #01193D;
+                        padding: 4rem;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: flex-start;
+                      }
+
+                      footer p {
+                        margin: 0;
+                      }
+
+                      footer a {
+                        margin: 0;
+                      }
+
+                      footer .info {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+
+                      }
+
+                      footer .info {
+                        font-weight: 500;
+                      }
+
+                      footer .info a {
+                        color: white;
+                        text-decoration: none;
+                      }
+
+                      footer .info p {
+                        font-size: 1.4rem;
+                        font-weight: 300;
+                      }
+
+                      footer .info-links {
+                        margin-bottom: 4rem;
+                      }
+
+                      footer .social .social-links-title {
+                        margin-bottom: 2rem;
+                      }
+
+                      footer .social .social-links .social-link {
+                        width: 4rem;
+                        height: 4rem;
+                        margin-right: 1rem;
+                      }
+                    </style>
+
+                    <footer>
+                      <div class="info">
+                        <div class="info-links">
+                          <a href="#">Privacy Policy</a> | <a href="#">Terms & Conditions</a>
+                        </div>
+                        <p>Copyright © 2020 NexTech AR Solutions Inc.</p>
+                      </div>
+                      <div class="social">
+                        <p class="social-links-title">Follow us on social:</p>
+                        <div class="social-links">
+                          <a href="#"><img class="social-link"
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/linkedin.png" /></a>
+                          <a href-"#"><img class="social-link"
+                          src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/facebook.png" /></a>
+                          <a href="#"><img class="social-link"
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/youtube.png" /></a>
+                          <a href="#"><img class="social-link"
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/footer/ig.png" /></a>
+                        </div>
+                      </div>
+
+                    </footer>
+                    <!-- end of footer -->
+
+                    <script>
+                      var setLocalStorage = (key, data, ttl) => {
+                        const now = new Date();
+                        const item = {
+                          data: data,
+                          expiry: now.getTime() + ttl
+                        }
+                        window.localStorage.setItem(key, JSON.stringify(item))
+                      }
+
+                      var getLocalStorageItem = (key) => {
+                        const itemStr = window.localStorage.getItem(key);
+                        if (!itemStr) return [];
+                        const item = JSON.parse(itemStr);
+                        const now = new Date();
+
+                        if (now.getTime > item.expiry) {
+                          window.localStorage.removeItem(key);
+                          return [];
+                        }
+                        return item.data;
+                      }
+
+                      var playerStats = [];
+                      var getLeaderboardData = async () => {
+                        try {
+                          const BASE_URL = 'https://ingress.infernocore.jolokia.com/api/';
+                          const bearerToken = window.sessionStorage.getItem("token");
+                          const bearer = 'Bearer ' + bearerToken;
+                          const headers = {
+                            'Authorization': bearer,
+                            'X-InfernoCore-Domain': window.sessionStorage.getItem('domain') ?? window.location.hostname,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                          }
+                          // Add client override if Super Admin
+                          const overrideId = window.sessionStorage.getItem("overrideId");
+                          if (overrideId) {
+                            headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                            headers['X-Client-Override'] = overrideId;
+                          }
+
+                          const response = await fetch(BASE_URL + 'Leaderboard', {
+                            method: 'GET',
+                            withCredentials: true,
+                            headers: headers,
+                          })
+
+                          if (!response.ok) throw new Error();
+
+                          const data = await response.json();
+                          return data;
+                        } catch (err) {
+                          console.log(err)
+                        }
+                      }
+
+                      var users = [];
+                      var pageNumber = 1;
+                      var pageSize = 1000;
+                      var nextAttendeeIdx = 0;
+
+                      var getAllProfiles = async () => {
+                        try {
+                          const BASE_URL = 'https://ingress.infernocore.jolokia.com/api/';
+                          const bearerToken = window.sessionStorage.getItem("token");
+                          const bearer = 'Bearer ' + bearerToken;
+                          const headers = {
+                            'Authorization': bearer,
+                            'X-InfernoCore-Domain': window.sessionStorage.getItem('domain') ?? window.location.hostname,
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json',
+                          }
+                          // Add client override if Super Admin
+                          const overrideId = window.sessionStorage.getItem("overrideId");
+                          if (overrideId) {
+                            headers['X-InfernoCore-Domain'] = 'jolokia.inferno.jolokia.com';
+                            headers['X-Client-Override'] = overrideId;
+                          }
+                          const req = {
+                            pageNumber: pageNumber,
+                            pageSize: pageSize,
+                          }
+
+                          const response = await fetch(BASE_URL + 'UserProfileExport', {
+                            method: 'POST',
+                            withCredentials: true,
+                            headers: headers,
+                            body: JSON.stringify(req),
+                          })
+
+                          if (!response.ok) throw new Error();
+
+                          const data = await response.json();
+                          return data;
+                        } catch (err) {
+                          console.log(err)
+                        }
+                      }
+
+                      var currentUser = window.sessionStorage.getItem("userId");
+                      var myRankButtonId = "xtrackx|1|non_booth|Leaderboard_&_Rules|button_click|Player_List|My_Rank_Button";
+
+                      var buildLeaderboard = () => {
+                        var usersObject = {};
+                        for (let user of users) {
+                          usersObject[user.userId] = user;
+                        }
+
+                        var orderedUserList = [];
+                        for (let player of playerStats) {
+                          if (usersObject[player.userId] || player.userId === currentUser.userId) {
+                            if (usersObject[player.userId].hideProfilePrivacyOptOut === false) {
+                              let user = {
+                                userId: player.userId,
+                                points: 0
+                              }
+                              user.points = calculatePoints(player.minutesWatched, player.landingPageVisits, player.landingPageClicks, player.quizzesTaken);
+                              orderedUserList.push(user);
+                              if (orderedUserList.length === Object.keys(usersObject).length) break;
+                            }
+                          }
+                        }
+                        orderedUserList.sort((a, b) => b.points - a.points);
+
+                        const rankingsList = landingPageEl.getElementById("leaderboard-rankings-list");
+                        const playerTemplate = landingPageEl.getElementById("player-template");
+
+                        for (let [i, player] of orderedUserList.entries()) {
+                          let clone = playerTemplate.content.cloneNode(true);
+
+                          let rank = clone.getElementById("player-rank");
+                          let rankText = "";
+                          if (i === 0) {
+                            rankText = "1st";
+                          } else if (i === 1) {
+                            rankText = "2nd";
+                          } else if (i === 2) {
+                            rankText = "3rd";
+                          } else if (i > 49) { // only display the top 50
+                            break;
+                          } else {
+                            rankText = i + 1 + "th";
+                          }
+                          rank.innerHTML = rankText;
+
+                          let avatar = clone.getElementById("player-img");
+                          avatar.src = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + player.userId + '/100/100';
+
+                          if (player.userId === currentUser) {
+                            if (i < 49) { // highlight in the scoreboard only if in the top 50
+                              let container = clone.getElementById("player");
+                              container.id = "player-" + player.userId
+                              container.style.background = "#C8E9FD";
+                            }
+                            let container = landingPageEl.getElementById('my-rank');
+                            let rank = container.querySelector('#player-rank');
+                            let name = container.querySelector('#player-name');
+                            let score = container.querySelector("#player-points");
+                            let avatar = container.querySelector('#player-img');
+
+                            rank.innerHTML = rankText;
+                            name.innerHTML = usersObject[player.userId].firstName + " " + usersObject[player.userId].lastname;
+                            score.innerHTML = player.points;
+                            avatar.src = 'https://ingress.infernocore.jolokia.com/api/ProfileImage/' + player.userId + '/100/100';
+                          }
+
+                          let name = clone.getElementById("player-name");
+                          name.innerHTML = usersObject[player.userId].firstName + " " + usersObject[player.userId].lastname;
+
+                          if (usersObject[player.userId].contactInfoCompany) {
+                            let company = clone.getElementById("player-company");
+                            company.innerHTML = "- " + usersObject[player.userId].contactInfoCompany
+                          }
+
+                          let score = clone.getElementById("player-points");
+                          score.innerHTML = player.points;
+
+                          rankingsList.appendChild(clone);
+                        }
+                      }
+
+                      var calculatePoints = (minutes, visits, clicks, quizzes) => {
+                        // arbitrary multiplication of different stats
+                        return (minutes * 100) + (visits * 50) + (clicks * 25) + (quizzes * 200);
+                      }
+
+                      var renderLeaderboard = async () => {
+                        if (
+                          (!window.localStorage.getItem('leaderboardPlayers') && !window.localStorage.getItem('leaderboardStats')) ||
+                          (getLocalStorageItem('leaderboardStats') === [] && getLocalStorageItem('leaderboardPlayers') === [])
+                        ) {
+                          console.log("Getting leaderboard stats");
+                          const stats = await getLeaderboardData();
+                          setLocalStorage("leaderboardStats", stats, 600000);
+                          const players = await getAllProfiles();
+                          setLocalStorage("leaderboardPlayers", players, 600000);
+                        }
+
+                        playerStats = getLocalStorageItem('leaderboardStats');
+                        users = getLocalStorageItem('leaderboardPlayers');
+
+                        let leaderboard = landingPageEl.getElementById("leaderboard-rankings-list");
+                        leaderboard.style.height = "550px";
+                        let loadingDiv = landingPageEl.getElementById("leaderboard-loading");
+                        loadingDiv.style.display = "none";
+                        let myRankLoadingDiv = landingPageEl.getElementById("my-rank-loading");
+                        myRankLoadingDiv.style.display = "none";
+
+                        buildLeaderboard();
+                      }
+                      renderLeaderboard();
+
+                      <!-- Handle dropdown buttons -->
+                      var toggleExpand = e => {
+                        var target = e.currentTarget;
+                        let id = target.id.replace("dropdown-button-", "");
+                        let text = landingPageEl.getElementById("dropdown-button-text-" + id);
+                        if (text.innerHTML === "Expand") {
+                          expandContainer(id);
+                        } else if (text.innerHTML === "Collapse") {
+                          collapseContainer(id);
+                        }
+                      }
+
+                      var expandContainer = id => {
+                        let text = landingPageEl.getElementById("dropdown-button-text-" + id);
+                        if (text) text.innerHTML = "Collapse"
+                        let img = landingPageEl.getElementById("dropdown-button-img-" + id);
+                        if (img) img.style.transform = "rotate(180deg)";
+                        let content = landingPageEl.getElementById("content-" + id);
+                        content.style.display = "block";
+                        let header = landingPageEl.getElementById("collapsible-div-header-" + id);
+                        header.style.margin = "0 0 2rem 0";
+
+                        if (id === "leaderboard") {
+                          let rankBtn = landingPageEl.getElementById(myRankButtonId);
+                          rankBtn.removeAttribute("disabled");
+                          rankBtn.classList.remove("rank-btn-disabled");
+                          rankBtn.classList.add("rank-btn-enabled");
+
+                          let myRankContainer = landingPageEl.getElementById("my-rank");
+                          myRankContainer.style.display = "block";
+                        }
+                      }
+
+                      var collapseContainer = id => {
+                        let text = landingPageEl.getElementById("dropdown-button-text-" + id);
+                        if (text) text.innerHTML = "Expand"
+                        let img = landingPageEl.getElementById("dropdown-button-img-" + id);
+                        if (img) img.style.transform = "";
+                        let content = landingPageEl.getElementById("content-" + id);
+                        content.style.display = "none";
+                        let header = landingPageEl.getElementById("collapsible-div-header-" + id);
+                        header.style.margin = "0";
+
+                        if (id === "leaderboard") {
+                          let rankBtn = landingPageEl.getElementById(myRankButtonId);
+                          rankBtn.setAttribute("disabled", true);
+                          rankBtn.classList.remove("rank-btn-enabled");
+                          rankBtn.classList.add("rank-btn-disabled");
+
+                          let myRankContainer = landingPageEl.getElementById("my-rank");
+                          myRankContainer.style.display = "none";
+                        }
+                      }
+
+                      var scrollToOwnRank = e => {
+                        e.preventDefault();
+                        let user = landingPageEl.getElementById("player-" + currentUser);
+                        if (user) {
+                          user.parentNode.scrollTop = user.offsetTop - user.parentNode.offsetTop - 20;
+                        } else {
+                          let myRankContainer = landingPageEl.getElementById("my-rank");
+                          myRankContainer.scrollIntoView();
+                        }
+                      }
+                    </script>
+
+                    <!-- Handle Responsive Design -->
+                    <style>
+                      @media screen and (max-width: 1300px) {
+                        .banner-container {
+                          display: none;
+                        }
+
+                        .banner-info {
+                          width: 100%;
+                          padding: 0 3rem;
+                        }
+                      }
+
+                      @media screen and (max-width: 1600px) {
+                        .banner-secondary {
+                          display: none;
+                        }
+                      }
+                    </style>
+
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
