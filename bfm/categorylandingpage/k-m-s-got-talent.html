@@ -364,47 +364,7 @@
 
 										fetchLayout();
 									</script>
-									<!-- Fetch Cash Winnings -->
-									<script>
-										// Get Cash Winnings
-										function fetchCash() {
-											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
-												.then(response => {
-													return response.json();
-												})
-												.then(data => {
-													setCashValue(data[0]);
-												});
-										}
 
-										var setCashValue = data => {
-											var cashValues = data.games.filter(
-												game => game.name === "talent"
-											);
-											var winningsElement = landingPageEl.getElementById(
-												"winnings"
-											);
-											//sorted winnings descending from latest time to earliest time
-											var sortedWinnings = cashValues.sort((a, b) => {
-												var dateA = new Date(a.time);
-												var dateB = new Date(b.time);
-												return dateB.getTime() > dateA.getTime() ? 1 : -1;
-											});
-
-											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
-											var currentTime = new Date();
-											for (let i = 0; i < sortedWinnings.length; i++) {
-												var winningsTime = new Date(sortedWinnings[i].time);
-												if (currentTime.getTime() > winningsTime.getTime()) {
-													winningsElement.innerHTML =
-														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
-													return;
-												}
-											}
-										};
-
-										fetchCash();
-									</script>
 									<script>
 										//open popup and get embeded video
 										var toggleVideo = element => {
@@ -415,9 +375,6 @@
 											if (element) {
 												document.body.style.overflow = "hidden";
 												var videoId = element.id;
-												var drawingTime = new Date(
-													element.getAttribute("data-starttime")
-												);
 
 												var videoContainer = landingPageEl.querySelector(
 													".aspect-ratio"
@@ -433,25 +390,11 @@
 												iframe.setAttribute("class", "video-iframe");
 												iframe.src = "/embed/" + videoId;
 												videoContainer.appendChild(iframe);
-
-												if (currentTime.getTime() < drawingTime.getTime()) {
-													var message = document.createElement("div");
-													message.setAttribute("class", "modal-message");
-													message.innerHTML =
-														"Come back " +
-														formatTime(drawingTime, true) +
-														" to see who the winner is.";
-													modalContainer.appendChild(message);
-												}
 											} else {
 												document.body.style.overflow = "auto";
 												popupElement.style.display = "none";
 												iframe = landingPageEl.querySelector(".video-iframe");
-												var message = landingPageEl.querySelector(
-													".modal-message"
-												);
 												iframe.remove();
-												message.remove();
 											}
 										};
 									</script>
@@ -488,99 +431,60 @@
 										.page-contents {
 											display: flex;
 											flex-direction: column;
-											width: 100%;
-										}
-
-										.header {
-											width: 100%;
-											display: flex;
-											flex-wrap: wrap;
-											justify-content: center;
-
-											padding: 2rem 0;
-										}
-
-										.header img {
-											width: 20rem;
-											height: auto;
-										}
-
-										.custom-banner {
-											margin-bottom: 2rem;
-											border: 3px solid #c4b21c;
-											border-radius: 10px;
-											background-color: black;
-											display: flex;
 											align-items: center;
-											justify-content: center;
-											color: #cbc165;
-										}
-
-										#winnings {
-											padding: 3rem 2rem;
-											font-size: 3.8rem;
-											min-width: 35rem;
+											width: 100%;
 										}
 
 										.container {
 											display: flex;
 											flex-flow: row wrap;
-											justify-content: center;
+											justify-content: space-between;
 											align-items: center;
-											flex-wrap: wrap;
 											max-width: 100%;
 											width: 100%;
 										}
 
 										.column {
 											display: flex;
-											justify-content: center;
+											flex-direction: column;
+											justify-content: flex-start;
 											align-items: center;
+											height: 100%;
 										}
 
-										.col1 {
-											width: 25%;
-											min-width: 30rem;
-											flex-grow: 1;
+										.col2 img {
+											height: auto;
 										}
 
-										.col2 {
-											width: 40%;
-											min-width: 40rem;
-											flex-grow: 1;
+										.custom-banner {
+											margin-top: 2rem;
+											border: 3px solid #c4b21c;
+											border-radius: 10px;
+											background-color: black;
+											font-weight: 200;
+											min-width: 32rem;
+											color: #cbc165;
+											padding: 3rem 2rem;
+											text-align: center;
 										}
 
-										.col3 {
-											width: 35rem;
+										#winnings {
+											font-size: 5rem;
 										}
 
 										.videos {
 											display: flex;
-											justify-content: center;
-											align-items: center;
-											width: 100%;
-										}
-
-										.video-col {
-											display: flex;
 											flex-direction: column;
 											align-items: center;
-											justify-content: center;
-											width: 50%;
-											margin: 1rem;
+											justify-content: flex-start;
 										}
 
 										.video {
 											cursor: pointer;
 											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/bowling-for-bucks/video-bg.png");
-											background-size: contain;
-											background-repeat: no-repeat;
-											min-height: 9rem;
-											min-width: 15rem;
-											width: 100%;
-											height: 0;
-											padding-top: 66.64%;
-											margin-bottom: 1rem;
+											height: 15.4rem;
+											width: 25.2rem;
+											margin: 1rem;
 											display: flex;
 											flex-direction: column;
 											justify-content: flex-end;
@@ -598,30 +502,33 @@
 											text-transform: uppercase;
 										}
 
-										.drawing {
+										.videoName {
 											font-weight: bold;
+											padding: 2rem 1rem;
 										}
 
-										.winner {
-											font-size: 1.2rem;
-										}
-
-										.day {
-											padding: 2rem 0.5rem;
-											width: 18.5rem;
-											font-size: 1.6rem;
+										.pigeonhole {
+											margin-top: 2rem;
+											display: flex;
+											flex-flow: row wrap-reverse;
+											justify-content: space-evenly;
+											max-width: 100%;
+											width: 100%;
 										}
 
 										.poll-display {
 											background-color: rgba(0, 0, 0, 0.3);
-											width: 100%;
+											width: 50%;
+											min-width: 60rem;
 											height: fit-content;
 											margin: 2rem;
 										}
 
 										.poll-survey {
 											height: 50rem;
-											width: 90%;
+											width: 30%;
+											max-width: 40rem;
+											min-width: 35rem;
 										}
 
 										#video-popup {
@@ -683,18 +590,24 @@
 											padding: 2rem 0;
 										}
 
-										/* @media screen and (max-width: 1350px) {
+										@media screen and (max-width: 1350px) {
+											.container {
+												flex-flow: row;
+												flex-wrap: wrap;
+												justify-content: space-evenly;
+											}
+
 											.col1 {
-												order: 1;
+												order: 2;
 											}
-
 											.col2 {
-												order: 3;
-												margin-top: 2rem;
-											}
-
-											#winnings {
-												font-size: 2.6rem;
+												width: 100%;
+												order: 1;
+												display: flex;
+												flex-direction: row;
+												flex-wrap: wrap;
+												justify-content: center;
+												align-items: center;
 											}
 
 											.col3 {
@@ -704,19 +617,20 @@
 											.video-container {
 												font-size: 1.4rem;
 											}
-										} */
+
+											#winnings {
+												font-size: 2.8rem;
+											}
+										}
 
 										@media screen and (max-width: 780px) {
-											.col2 {
-												min-width: 35rem;
-											}
-
-											.column {
-												width: 80%;
-											}
 											.video-container {
 												margin-left: 0;
 												width: 90%;
+											}
+
+											.poll-display {
+												min-width: 35rem;
 											}
 										}
 									</style>
@@ -744,82 +658,75 @@
 									</category-page-links>
 									<div id="content">
 										<div class="page-contents">
-											<div class="header">
-												<img
-													src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/got-talent.png"
-												/>
-												<div id="winnings" class="custom-banner">
-													CASH PRIZE: $0
-												</div>
-											</div>
 											<div class="container">
 												<div class="column col1">
 													<div class="videos">
-														<div class="video-col">
-															<!-- <div class="custom-banner day">
-                              Wednesday Drawings
-                            </div> -->
-															<div
-																class="video"
-																id="video-1"
-																onclick="toggleVideo(this)"
-															></div>
-															<div
-																class="video"
-																id="video-2"
-																onclick="toggleVideo(this)"
-															></div>
-															<div
-																class="video"
-																id="video-3"
-																onclick="toggleVideo(this)"
-															></div>
-														</div>
-														<div class="video-col">
-															<!-- <div class="custom-banner day">
-                              Thursday Drawings
-                            </div> -->
-															<div
-																class="video"
-																id="video-4"
-																onclick="toggleVideo(this)"
-															></div>
-															<div
-																class="video"
-																id="video-5"
-																onclick="toggleVideo(this)"
-															></div>
-															<div
-																class="video"
-																id="video-6"
-																onclick="toggleVideo(this)"
-															></div>
-														</div>
+														<div
+															class="video"
+															id="video-1"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-2"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-3"
+															onclick="toggleVideo(this)"
+														></div>
 													</div>
 												</div>
 												<div class="column col2">
-													<div class="poll-display">
-														<div class="aspect-ratio">
-															<iframe
-																class="video-iframe"
-																src="/embed/03e01e53-bde2-4e16-9615-8701beb807f6"
-																frameborder="0"
-																allowfullscreen="true"
-																webkitallowfullscreen="true"
-																mozallowfullscreen="true"
-															></iframe>
-														</div>
+													<img
+														src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/game-room/got-talent.png"
+													/>
+													<div id="winnings" class="custom-banner">
+														CASH PRIZE: $5000
 													</div>
 												</div>
 												<div class="column col3">
-													<iframe
-														class="poll-survey"
-														src="https://pigeonhole.at/PQR38N?phName=${firstName}%20${lastName}&phEmail=${email}"
-													>
-													</iframe>
+													<div class="videos">
+														<div
+															class="video"
+															id="video-4"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-5"
+															onclick="toggleVideo(this)"
+														></div>
+														<div
+															class="video"
+															id="video-6"
+															onclick="toggleVideo(this)"
+														></div>
+													</div>
 												</div>
 											</div>
+											<div class="pigeonhole">
+												<div class="poll-display">
+													<div class="aspect-ratio">
+														<iframe
+															class="video-iframe"
+															src="/embed/03e01e53-bde2-4e16-9615-8701beb807f6"
+															frameborder="0"
+															allowfullscreen="true"
+															webkitallowfullscreen="true"
+															mozallowfullscreen="true"
+														></iframe>
+													</div>
+												</div>
+												<iframe
+													class="poll-survey"
+													src="https://pigeonhole.at/PQR38N?phName=${firstName}%20${lastName}&phEmail=${email}"
+												>
+												</iframe>
+											</div>
 										</div>
+
 										<div id="video-popup">
 											<div class="video-container">
 												<div class="close-popup" onclick="toggleVideo()">X</div>
@@ -830,7 +737,6 @@
 
 									<!-- Drawing Scripts -->
 									<script>
-										var currentTime = new Date();
 										var fetchVideos = () => {
 											// Set header
 											const headers = {
@@ -883,81 +789,18 @@
 											addLabels(sortedVideos);
 										};
 
-										var formatTime = (value, withDay) => {
-											var weekday = new Array(7);
-											weekday[0] = "Sunday";
-											weekday[1] = "Monday";
-											weekday[2] = "Tuesday";
-											weekday[3] = "Wednesday";
-											weekday[4] = "Thursday";
-											weekday[5] = "Friday";
-											weekday[6] = "Saturday";
-
-											var d = new Date(value);
-
-											var dayIndex = d.getDay();
-											var month = "January";
-
-											var day = d.getDate().toString();
-											day = day.length > 1 ? day : "0" + day;
-
-											var hr = d.getHours();
-											var min = d.getMinutes();
-											var ampm = "am";
-
-											if (hr > 12) {
-												hr -= 12;
-												ampm = "pm";
-											}
-
-											if (min.toString().length < 2) min = "0" + min;
-
-											var time = hr + ":" + min + ampm;
-
-											if (withDay) {
-												time =
-													weekday[dayIndex] +
-													", " +
-													month +
-													" " +
-													day +
-													" at " +
-													time;
-											}
-											return time;
-										};
-
 										//Add video box labels
 										var addLabels = videos => {
 											var videoBoxes = landingPageEl.querySelectorAll(".video");
 											videoBoxes.forEach((videoBox, index) => {
-												var drawingTime = new Date(videos[index].startTime);
-
 												videoBox.setAttribute("id", videos[index].id);
-												videoBox.setAttribute("data-starttime", drawingTime);
 
 												var parsedName = videos[index].name.split(" - ");
-												var drawing = parsedName[1];
+												var videoName = parsedName[1];
 												var label = document.createElement("div");
 												label.setAttribute("class", "video-box-label");
 												videoBox.appendChild(label);
-												createElement("drawing", drawing + ":", label);
-												createElement(
-													"time",
-													formatTime(videos[index].startTime),
-													label
-												);
-
-												//Checks if the current time is greater than the drawing time plus 1 minute
-												//If so, the winner is displayed
-
-												if (
-													currentTime.getTime() >
-													drawingTime.getTime() + 60000
-												) {
-													var winner = parsedName[2];
-													createElement("winner", winner, label);
-												}
+												createElement("videoName", videoName, label);
 											});
 										};
 
@@ -977,9 +820,6 @@
 											if (element) {
 												document.body.style.overflow = "hidden";
 												var videoId = element.id;
-												var drawingTime = new Date(
-													element.getAttribute("data-starttime")
-												);
 
 												var videoContainer = landingPageEl.querySelector(
 													".aspect-ratio"
@@ -995,16 +835,6 @@
 												iframe.setAttribute("class", "video-iframe");
 												iframe.src = "/embed/" + videoId;
 												videoContainer.appendChild(iframe);
-
-												if (currentTime.getTime() < drawingTime.getTime()) {
-													var message = document.createElement("div");
-													message.setAttribute("class", "modal-message");
-													message.innerHTML =
-														"Come back " +
-														formatTime(drawingTime, true) +
-														" to see who the winner is.";
-													modalContainer.appendChild(message);
-												}
 											} else {
 												document.body.style.overflow = "auto";
 												popupElement.style.display = "none";
