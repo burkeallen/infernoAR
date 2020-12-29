@@ -405,11 +405,31 @@
 										.video-box {
 											width: 50%;
 											min-width: 35rem;
+											border-radius: 35px;
+											background-color: white;
+											background-repeat: no-repeat;
+											background-size: 60% auto;
+											background-position: 52% 48%;
+											cursor: pointer;
+										}
+
+										.video-box:hover .video-container img {
+											background-color: rgba(0, 0, 0, 0.1);
 										}
 										.video-container {
 											position: relative;
 											padding-bottom: 56.5%; /* 16:9 */
 											height: 0;
+										}
+
+										.video-container img {
+											position: absolute;
+											top: 50%;
+											left: 50%;
+											transform: translate(-50%, -50%);
+											width: 50%;
+											height: auto;
+											border-radius: 50%;
 										}
 
 										.video-box iframe {
@@ -447,14 +467,64 @@
 									<div id="content">
 										<div class="page-contents">
 											<div class="video-box">
-												<div class="video-container">
-													<iframe
-														src="/embed/18cb0781-7ac8-4728-af7e-c946cda8c04e"
-													></iframe>
-												</div>
+												<div class="video-container"></div>
 											</div>
 										</div>
 									</div>
+									<script>
+										//On Video Click replace thumbnail with video
+
+										var addOnClick = element => {
+											element.setAttribute("onClick", "embedVideo(this)");
+										};
+
+										var embedVideo = element => {
+											console.log(element);
+											var thumbnail = element.querySelector("img");
+											if (thumbnail) thumbnail.remove();
+											var video = document.createElement("iframe");
+											video.setAttribute(
+												"src",
+												"embed/18cb0781-7ac8-4728-af7e-c946cda8c04e"
+											);
+											var videoContainer = element.querySelector(
+												".video-container"
+											);
+											videoContainer.appendChild(video);
+											element.setAttribute("onClick", "");
+										};
+										//Check whether to play video automatically if first time logging in
+										var checkVisited = () => {
+											var container = landingPageEl.querySelector(
+												".video-container"
+											);
+											var childElement;
+											var visited = window.localStorage.getItem("visited");
+											var videoBox = landingPageEl.querySelector(".video-box");
+
+											if (visited) {
+												//display thumbnail
+												var thumbnail = document.createElement("img");
+
+												videoBox.style.backgroundImage =
+													"url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/lobby/thumbnail.png')";
+												thumbnail.setAttribute(
+													"src",
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/lobby/white-play-icon-png-8.jpg"
+												);
+												container.appendChild(thumbnail);
+
+												//add onclick event
+												addOnClick(videoBox);
+											} else {
+												//display video
+												embedVideo(videoBox);
+												window.localStorage.setItem("visited", true);
+											}
+										};
+
+										checkVisited();
+									</script>
 								</inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
 								<!-- ********************* -->
