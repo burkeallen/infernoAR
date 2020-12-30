@@ -486,7 +486,6 @@
 											cursor: pointer;
 										}
 
-
 										.prize-image {
 											/*make image as large a the parent container is wide*/
 											width: 100%;
@@ -806,11 +805,9 @@
 												currentTime = currentTime.getTime();
 												const showWinnersNameTime = currentTime + 60000;
 												const parsedName = drawingData.name.split(" - ");
-												const WinnersName =
+												const drawingTime =
 													parsedName.length > 2 &&
-													currentTime > showWinnersNameTime
-														? "Winner: " + parsedName[2]
-														: formatTime(drawingData.startTime, true);
+													formatTime(drawingData.startTime, true);
 
 												const drawingButton = clone.getElementById(
 													"drawing-button"
@@ -821,7 +818,7 @@
 													"</h2>" +
 													parsedName[1] +
 													"<br>" +
-													WinnersName;
+													drawingTime;
 
 												prizeItem.onclick = function () {
 													toggleVideo(drawingData);
@@ -872,9 +869,7 @@
 												const iframe = landingPageEl.querySelector(
 													".video-iframe"
 												);
-												const message = landingPageEl.querySelector(
-													".modal-message"
-												);
+
 												iframe.remove();
 												message.remove();
 											}
