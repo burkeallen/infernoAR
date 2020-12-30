@@ -128,7 +128,6 @@
   </script>
 
   <!-- Build out Local Menu on Left Navigation -->
-
   <style>
       #localTemplateMenu {
           display: flex;
@@ -138,7 +137,8 @@
           padding: 1em;
       }
 
-      #localTemplateMenu a {
+      #localTemplateMenu a,
+      #localTemplateMenu details {
           display: block;
           margin: 0.25em;
           background-color: var(--sidebar-bg-color);
@@ -148,6 +148,10 @@
           cursor: pointer;
           width: 80%;
           padding: 0.25em 0;
+      }
+
+      #localTemplateMenu details a {
+          margin-left: 1em;
       }
 
       #localTemplateMenu a:hover {
@@ -181,7 +185,18 @@
     function buildLocalMenu() {
       window.addEventListener("load", event => {
         const menu = document.getElementById("localTemplateMenu");
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        const pages = menuItems.filter(
+          item => !item.name.toLowerCase().includes("booth")
+        );
+        const booths = menuItems.filter(item =>
+          item.name.toLowerCase().includes("booth")
+        );
+
+        pages.forEach(item => {
           const menuItem = document.createElement("a");
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -198,6 +213,33 @@
           }
           menu.appendChild(menuItem);
         });
+
+        const boothMenu = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.innerHTML = "BOOTHS";
+        boothMenu.appendChild(summary);
+
+        booths.forEach(item => {
+          const menuItem = document.createElement("a");
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector(
+              "#" + item.snippetID.toString()
+            );
+            if (currentSnippet) {
+              menuItem.classList.toggle("activeMenu");
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          boothMenu.appendChild(menuItem);
+        });
+
+        if (booths.length) {
+          menu.appendChild(boothMenu);
+        }
       });
     }
   </script>
@@ -574,6 +616,25 @@
                         border-radius: 20px;
                     }
 
+                    .chat-link {
+                        color: white;
+                        width: 100%;
+                        background-color: rgba(0, 0, 0, .4);
+                        text-align: center;
+                        font-size: 1.5em;
+                        cursor: pointer;
+                        padding: 1em;
+                    }
+
+                    .chat-link a {
+                        color: white;
+                    }
+
+                    .chat-link a:hover {
+                        text-decoration: none;
+                        text-shadow: 2px 2px 4px var(--branding-primary);
+                        transform: scale(1.1);
+                    }
 
                 </style>
 
@@ -710,15 +771,13 @@
                       <div class="ntar-video-container">
                         <div class="ntar-video" id="inferno-video-player"></div>
                       </div>
-                    </div>
-
-                    <div class="col3">
-                      <div class="chat">
-                        <iframe id="playerChat" class="chat-iframe"
-                                width="100"
-                                height="600"
-                                src=""></iframe>
-                        <div id="chatroomName" class="chatroom-name"></div>
+                      <div class="chat-link">
+                        <a id="click_chat_with_seminar_speakers"
+                           href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
+                           ng-href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
+                        >
+                          Visit the lounge to chat with seminar speaker
+                        </a>
                       </div>
                     </div>
 
@@ -757,7 +816,7 @@
                         const events = sortEventsByDateTime(filterEvents(data));
                         const active = activeEvent(events);
                         buildAgenda(events, active);
-                        buildChat(active);
+                        // buildChat(active);
                         buildTakeawayLink(active);
                       });
 
@@ -828,7 +887,7 @@
 
                   function buildTakeawayLink(event) {
                     const link = event.description.trim();
-                    if(link && link.includes('http')) {
+                    if (link && link.includes('http')) {
                       document.getElementById('takeawayLink').setAttribute('href', link);
                     }
                   }

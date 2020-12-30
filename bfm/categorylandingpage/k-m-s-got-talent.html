@@ -127,85 +127,127 @@
 		});
 	</script>
 
-	<!-- Build out Local Menu on Left Navigation -->
+  <!-- Build out Local Menu on Left Navigation -->
+  <style>
+      #localTemplateMenu {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          padding: 1em;
+      }
 
-	<style>
-		#localTemplateMenu {
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			align-items: center;
-			padding: 1em;
-		}
+      #localTemplateMenu a,
+      #localTemplateMenu details {
+          display: block;
+          margin: 0.25em;
+          background-color: var(--sidebar-bg-color);
+          border: none;
+          border-bottom: solid 1px var(--sidebar-highlight-text-color);
+          color: var(--sidebar-text-color);
+          cursor: pointer;
+          width: 80%;
+          padding: 0.25em 0;
+      }
 
-		#localTemplateMenu a {
-			display: block;
-			margin: 0.25em;
-			background-color: var(--sidebar-bg-color);
-			border: none;
-			border-bottom: solid 1px var(--sidebar-highlight-text-color);
-			color: var(--sidebar-text-color);
-			cursor: pointer;
-			width: 80%;
-			padding: 0.25em 0;
-		}
+      #localTemplateMenu details a {
+          margin-left: 1em;
+      }
 
-		#localTemplateMenu a:hover {
-			filter: brightness(80%);
-			text-decoration: none;
-			transform: translateX(-0.3em);
-		}
+      #localTemplateMenu a:hover {
+          filter: brightness(80%);
+          text-decoration: none;
+          transform: translateX(-0.3em);
+      }
 
-		#localTemplateMenu a.activeMenu {
-			background-color: var(--sidebar-highlight-bg-color);
-			color: var(--sidebar-text-color);
-		}
+      #localTemplateMenu a.activeMenu {
+          background-color: var(--sidebar-highlight-bg-color);
+          color: var(--sidebar-text-color);
+      }
 
-		.aside-collapsed * #localTemplateMenu {
-			margin: 0;
-			padding: 1em 0;
-		}
+      .aside-collapsed * #localTemplateMenu {
+          margin: 0;
+          padding: 1em 0;
+      }
 
-		.aside-collapsed * #localTemplateMenu a {
-			word-wrap: break-word;
-			min-width: 100%;
-			border-radius: 0;
-			border-bottom: 1px solid var(--sidebar-text-color);
-		}
+      .aside-collapsed * #localTemplateMenu a {
+          word-wrap: break-word;
+          min-width: 100%;
+          border-radius: 0;
+          border-bottom: 1px solid var(--sidebar-text-color);
+      }
 
-		.aside-collapsed * #localTemplateMenu a:hover {
-			transform: none;
-		}
-	</style>
-	<script>
-		function buildLocalMenu() {
-			window.addEventListener("load", event => {
-				const menu = document.getElementById("localTemplateMenu");
-				window.localTemplateMenuItems.forEach(item => {
-					const menuItem = document.createElement("a");
-					menuItem.href = "../" + item.file;
-					menuItem.innerHTML = item.name;
-					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
-					try {
-						const currentSnippet = landingPageEl.querySelector(
-							"#" + item.snippetID.toString()
-						);
-						if (currentSnippet) {
-							menuItem.classList.toggle("activeMenu");
-						}
-					} catch (e) {
-						// do nothing;
-					}
-					menu.appendChild(menuItem);
-				});
-			});
-		}
-	</script>
-	<script
-		onload="buildLocalMenu()"
-		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-		src="../menu.js"
-	></script>
+      .aside-collapsed * #localTemplateMenu a:hover {
+          transform: none;
+      }
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener("load", event => {
+        const menu = document.getElementById("localTemplateMenu");
+        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        const pages = menuItems.filter(
+          item => !item.name.toLowerCase().includes("booth")
+        );
+        const booths = menuItems.filter(item =>
+          item.name.toLowerCase().includes("booth")
+        );
+
+        pages.forEach(item => {
+          const menuItem = document.createElement("a");
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector(
+              "#" + item.snippetID.toString()
+            );
+            if (currentSnippet) {
+              menuItem.classList.toggle("activeMenu");
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        });
+
+        const boothMenu = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.innerHTML = "BOOTHS";
+        boothMenu.appendChild(summary);
+
+        booths.forEach(item => {
+          const menuItem = document.createElement("a");
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector(
+              "#" + item.snippetID.toString()
+            );
+            if (currentSnippet) {
+              menuItem.classList.toggle("activeMenu");
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          boothMenu.appendChild(menuItem);
+        });
+
+        if (booths.length) {
+          menu.appendChild(boothMenu);
+        }
+      });
+    }
+  </script>
+  <script
+      onload="buildLocalMenu()"
+      onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+      src="../menu.js"
+  ></script>
 </head>
 
 <body>
