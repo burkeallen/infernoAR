@@ -1,298 +1,213 @@
 <head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-  />
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link
-      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-      rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link
-      rel="stylesheet"
-      href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
-  />
-  <link
-      rel="stylesheet"
-      href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
-  />
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css"/>
-  <script>
-    let landingPageEl = null;
-    window.isLocalTemplate = true;
-  </script>
+  <link rel="stylesheet" href="../inferno-client.css">
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
-      const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
       // Auth w/ Inferno API
       const params = {
         email: project.username,
         password: project.password,
-        grantType: "password"
-      };
+        grantType: 'password',
+      }
 
       // Set header
-      const headers = {"X-InfernoCore-Domain": project.domain};
+      const headers = {'X-InfernoCore-Domain': project.domain}
 
       // perform synchronous ajax call so rest of code waits until you are authenticated
       $.ajax({
-        url: _baseUrl + "token",
-        type: "POST",
+        url: _baseUrl + 'token',
+        type: 'POST',
         async: false,
-        accept: "application/json",
-        contentType: "application/json",
+        accept: 'application/json',
+        contentType: 'application/json',
         headers: headers,
         data: JSON.stringify(params),
         success: function (res) {
-          sessionStorage.setItem("domain", project.domain);
-          storeUser(JSON.parse(res));
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
         },
         error: function (err) {
-          alert(JSON.stringify(err));
+          alert(JSON.stringify(err))
         },
         complete: function () {
-          console.log("user was authenticated into ", project.domain);
-        }
-      });
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
     }
 
     function storeUser(data) {
       // console.log(data);
-      sessionStorage.setItem("clientId", data.ClientId);
-      sessionStorage.setItem("token", data.AccessToken);
-      sessionStorage.setItem("refreshToken", data.RefreshToken);
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
     }
 
     function login() {
-      window.addEventListener("load", event => {
-        const projectEl = document.querySelector("#novoProject");
-        const projectName = projectEl ? projectEl.getAttribute("name") : null;
+      window.addEventListener('load', (event) => {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
         const currentProject = projects.filter(project => {
           return project.name === projectName;
         })[0];
 
         if (!currentProject) {
-          alert(
-            "could not log into Inferno \n\r Check the project name in the login() function"
-          );
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
           return;
         }
 
         authenticate(currentProject);
       });
     }
+
   </script>
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script
-      onload="login()"
-      onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-      src="/inferno.config.js"
-  ></script>
+  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
   <script>
     function loadJSON(file, callback) {
-      const xobj = new XMLHttpRequest();
-      xobj.overrideMimeType("application/json");
-      xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
       xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == "200") {
+        if (xobj.readyState == 4 && xobj.status == '200') {
           // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText);
+          callback(xobj.responseText)
         }
-      };
-      xobj.send(null);
+      }
+      xobj.send(null)
     }
 
     // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
     // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
     // processing can potentially interfere with scripts that run on page load.
-    var data = {};
-    loadJSON("../liquid.json", function (response) {
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
       // Parse JSON string into object
-      const x = JSON.parse(response);
-      data = x[0];
-    });
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
   </script>
 
   <!-- Build out Local Menu on Left Navigation -->
+
   <style>
-      #localTemplateMenu {
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: center;
-          padding: 1em;
-      }
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
 
-      #localTemplateMenu a,
-      #localTemplateMenu details {
-          display: block;
-          margin: 0.25em;
-          background-color: var(--sidebar-bg-color);
-          border: none;
-          border-bottom: solid 1px var(--sidebar-highlight-text-color);
-          color: var(--sidebar-text-color);
-          cursor: pointer;
-          width: 80%;
-          padding: 0.25em 0;
-      }
+    #localTemplateMenu a {
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
 
-      #localTemplateMenu details a {
-          margin-left: 1em;
-      }
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
 
-      #localTemplateMenu a:hover {
-          filter: brightness(80%);
-          text-decoration: none;
-          transform: translateX(-0.3em);
-      }
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
 
-      #localTemplateMenu a.activeMenu {
-          background-color: var(--sidebar-highlight-bg-color);
-          color: var(--sidebar-text-color);
-      }
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
 
-      .aside-collapsed * #localTemplateMenu {
-          margin: 0;
-          padding: 1em 0;
-      }
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
 
-      .aside-collapsed * #localTemplateMenu a {
-          word-wrap: break-word;
-          min-width: 100%;
-          border-radius: 0;
-          border-bottom: 1px solid var(--sidebar-text-color);
-      }
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
 
-      .aside-collapsed * #localTemplateMenu a:hover {
-          transform: none;
-      }
   </style>
   <script>
     function buildLocalMenu() {
-      window.addEventListener("load", event => {
-        const menu = document.getElementById("localTemplateMenu");
-        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        const pages = menuItems.filter(
-          item => !item.name.toLowerCase().includes("booth")
-        );
-        const booths = menuItems.filter(item =>
-          item.name.toLowerCase().includes("booth")
-        );
-
-        pages.forEach(item => {
-          const menuItem = document.createElement("a");
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        window.localTemplateMenuItems.forEach(item => {
+          const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
-          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
           try {
-            const currentSnippet = landingPageEl.querySelector(
-              "#" + item.snippetID.toString()
-            );
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
             if (currentSnippet) {
-              menuItem.classList.toggle("activeMenu");
+              menuItem.classList.toggle('activeMenu');
             }
           } catch (e) {
             // do nothing;
           }
           menu.appendChild(menuItem);
-        });
-
-        const boothMenu = document.createElement("details");
-        const summary = document.createElement("summary");
-        summary.innerHTML = "BOOTHS";
-        boothMenu.appendChild(summary);
-
-        booths.forEach(item => {
-          const menuItem = document.createElement("a");
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector(
-              "#" + item.snippetID.toString()
-            );
-            if (currentSnippet) {
-              menuItem.classList.toggle("activeMenu");
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          boothMenu.appendChild(menuItem);
-        });
-
-        if (booths.length) {
-          menu.appendChild(boothMenu);
-        }
-      });
+        })
+      })
     }
   </script>
-  <script
-      onload="buildLocalMenu()"
-      onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-      src="../menu.js"
-  ></script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+  <script>
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
+  </script>
 </head>
 
 <body>
-<div style="display: none" id="novoProject" name="bfm" onload="login()"></div>
+<div style="display:none" id="novoProject" name="bfm" onload="login()"></div>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar
-            class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-            color="primary"
-        >
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div
-              class="ellipsis ng-star-inserted"
-              flex
-              layout="row"
-              layout-align="start center"
-          >
-            <button
-                class="menu-btn mat-icon-button ng-star-inserted"
-                hide
-                mat-icon-button
-                show-gt-sm
-                trigger-resize
-                onclick="mtTriggerMenu()"
-            >
-								<span class="mat-button-wrapper">
-									<mat-icon
-                      class="mat-icon material-icons mat-icon-no-color"
-                      role="img"
-                      aria-hidden="true"
-                  >
-										menu
-									</mat-icon>
-								</span>
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header">LOCAL</div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
             </button>
-            <div
-                _ngcontent-inv-c7
-                class="mat-title ellipsis m0"
-                flex
-                title="Page Title"
-            >
-              Sample Page Title
-            </div>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
           </div>
         </mat-toolbar>
       </app-header>
@@ -302,15 +217,25 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
       <section class="IE-FlexAuto" flex>
         <div class="content-wrapper">
-          <videos-detail-page class="ng-star-inserted">
-            <div mutationobserver>
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -325,36 +250,19 @@
                   links generated by by JS do not and cause a page/app reload
                   even when navigating within the app using relative URLS
                   -->
-                  <a
-                      href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc"
-                      ng-href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc"
-                      id="link_358079a2-2675-4f09-c090-08d88b301cce"
-                      pageid="358079a2-2675-4f09-c090-08d88b301cce">
+                  <a href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc" ng-href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc" id="link_358079a2-2675-4f09-c090-08d88b301cce" pageid="358079a2-2675-4f09-c090-08d88b301cce">
                     Lobby
                   </a>
-                  <a
-                      href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599"
-                      ng-href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599"
-                      id="link_984354b4-1e39-4e68-9e87-08d88aff31f5" pageid="984354b4-1e39-4e68-9e87-08d88aff31f5">
+                  <a href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599" ng-href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599" id="link_984354b4-1e39-4e68-9e87-08d88aff31f5" pageid="984354b4-1e39-4e68-9e87-08d88aff31f5">
                     Help Desk
                   </a>
-                  <a
-                      href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
-                      ng-href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
-                      id="link_6361459f-1225-4193-7f1e-08d88af68aca"
-                      pageid="6361459f-1225-4193-7f1e-08d88af68aca">
+                  <a href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805" ng-href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805" id="link_6361459f-1225-4193-7f1e-08d88af68aca" pageid="6361459f-1225-4193-7f1e-08d88af68aca">
                     Lounge
                   </a>
-                  <a
-                      href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4"
-                      ng-href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4"
-                      id="link_73bdb75e-8582-4ceb-2da1-08d88b2f297e" pageid="73bdb75e-8582-4ceb-2da1-08d88b2f297e">
+                  <a href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4" ng-href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4" id="link_73bdb75e-8582-4ceb-2da1-08d88b2f297e" pageid="73bdb75e-8582-4ceb-2da1-08d88b2f297e">
                     Trade Show
                   </a>
-                  <a
-                      href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598"
-                      ng-href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598"
-                      id="link_1664ff67-69c8-49fb-c091-08d88b301cce" pageid="1664ff67-69c8-49fb-c091-08d88b301cce">
+                  <a href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598" ng-href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598" id="link_1664ff67-69c8-49fb-c091-08d88b301cce" pageid="1664ff67-69c8-49fb-c091-08d88b301cce">
                     Main Stage
                   </a>
                 </category-page-links>
@@ -760,8 +668,7 @@
                         </div>
 
                         <div class="takeaway">
-                          <a id="takeawayLink" href="https://kmtire.com/takeaways" target="_blank"><img
-                              src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/takeaway-small.png"></a>
+                          <a id="takeawayLink" href="https://kmtire.com/takeaways" target="_blank"><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/takeaway-small.png"></a>
                         </div>
                       </div>
 
@@ -772,10 +679,7 @@
                         <div class="ntar-video" id="inferno-video-player"></div>
                       </div>
                       <div class="chat-link">
-                        <a id="click_chat_with_seminar_speakers"
-                           href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
-                           ng-href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
-                        >
+                        <a id="click_chat_with_seminar_speakers" href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805" ng-href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805">
                           Visit the lounge to chat with seminar speaker
                         </a>
                       </div>
@@ -962,7 +866,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
             </div>
-          </videos-detail-page>
+          </landing-page>
         </div>
       </section>
       <!-- LANDING -->
@@ -976,6 +880,8 @@
 </app-root>
 
 
+
+
 <script>
 
   // LIQUID PROCESSING (Set the data variable above)
@@ -984,9 +890,9 @@
       console.log('PROCESSING LIQUID')
       // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
       // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = document.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
       // Select the element itself to replace the content
-      const result = document.querySelector('inferno-snippet-content')
+      const result = landingPageEl.querySelector('inferno-snippet-content')
       // Initialize the parsing engine
       const engine = new liquidjs.Liquid()
       // Parse and render
@@ -1051,8 +957,8 @@
   }
 
   function populateInfernoElements() {
-    const qaDiv = document.querySelector('#inferno-questions-basic')
-    const videoDiv = document.querySelector('#inferno-video-player')
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
     if (qaDiv) {
       $(qaDiv).append(`
       <questions _nghost-qch-c20="">
@@ -1091,5 +997,5 @@
 </script>
 
 
-</body><!-- Menu Collapse Script -->
 
+</body><!-- Menu Collapse Script -->
