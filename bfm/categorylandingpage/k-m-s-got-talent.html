@@ -451,11 +451,11 @@
 											color: white;
 											font-size: 2rem;
 											text-transform: uppercase;
+											padding: 1rem;
 										}
 
-										.videoName {
+										.dealer {
 											font-weight: bold;
-											padding: 2rem 1rem;
 										}
 
 										.pigeonhole {
@@ -626,7 +626,7 @@
 											<div class="pigeonhole">
 												<div class="poll-display">
 													<div class="aspect-ratio">
-														<iframe class="video-iframe" src="/embed/03e01e53-bde2-4e16-9615-8701beb807f6" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+														<iframe id="pigeonhole-chart" class="video-iframe" src="/embed/03e01e53-bde2-4e16-9615-8701beb807f6" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
 													</div>
 												</div>
 												<iframe class="poll-survey" src="https://pigeonhole.at/PQR38N?phName=${firstName}%20${lastName}&phEmail=${email}">
@@ -680,10 +680,10 @@
 										fetchVideos();
 
 										var createVideoElements = data => {
-											var videos = data.filter(event =>
-												event.name
-													.toLowerCase()
-													.includes("k&m got talent - video")
+											var videos = data.filter(
+												event =>
+													event.name.toLowerCase().includes("k&m got talent") &&
+													!event.name.toLowerCase().includes("live update")
 											);
 
 											//sort by start time
@@ -703,11 +703,13 @@
 												videoBox.setAttribute("id", videos[index].id);
 
 												var parsedName = videos[index].name.split(" - ");
-												var videoName = parsedName[1];
+												var dealer = parsedName[1];
+												var location = parsedName[2];
 												var label = document.createElement("div");
 												label.setAttribute("class", "video-box-label");
 												videoBox.appendChild(label);
-												createElement("videoName", videoName, label);
+												createElement("dealer", dealer, label);
+												createElement("location", location, label);
 											});
 										};
 
@@ -725,10 +727,11 @@
 											);
 											var iframe;
 											if (element) {
+												console.log(element);
 												document.body.style.overflow = "hidden";
 												var videoId = element.id;
 
-												var videoContainer = landingPageEl.querySelector(
+												var videoContainer = popupElement.querySelector(
 													".aspect-ratio"
 												);
 
@@ -740,17 +743,14 @@
 
 												iframe = document.createElement("iframe");
 												iframe.setAttribute("class", "video-iframe");
+												iframe.setAttribute("id", "talent-video");
 												iframe.src = "/embed/" + videoId;
 												videoContainer.appendChild(iframe);
 											} else {
 												document.body.style.overflow = "auto";
 												popupElement.style.display = "none";
-												iframe = landingPageEl.querySelector(".video-iframe");
-												var message = landingPageEl.querySelector(
-													".modal-message"
-												);
+												iframe = landingPageEl.getElementById("talent-video");
 												iframe.remove();
-												message.remove();
 											}
 										};
 									</script>

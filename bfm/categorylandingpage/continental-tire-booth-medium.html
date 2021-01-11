@@ -287,7 +287,7 @@
 								<!-- ********************* -->
 								<!-- SNIPPET CONTENT START -->
 								<inferno-snippet-content
-									id="ab067cfe-1b56-40f5-ba8b-5a6a9b6706b8"
+									id="3daa14c4-7463-4519-b951-e8055a07eeaa"
 								>
 									<!-- Script to insert header with marquee and botton nav-->
 									<category-page-links
@@ -470,6 +470,13 @@
 											display: block;
 											height: 50vmin;
 											margin: 5vh auto 0;
+										}
+										.inferno-generated-booth-external-overlay img {
+											max-width: 80vmin;
+											max-height: 50vmin;
+											display: block;
+											margin: 5vh auto 0;
+											object-fit: contain;
 										}
 										.inferno-generated-booth-show {
 											display: block !important;
@@ -1230,9 +1237,25 @@
 											$(landingPageEl)
 												.find(".inferno-generated-booth-show")
 												.removeClass("inferno-generated-booth-show");
+
+											// Activate click track landing
+											setTimeout(function () {
+												var e = document.createEvent("MouseEvents");
+												e.initEvent("mouseup", true, true);
+												if (landingPageEl.querySelector(".page_load")) {
+													landingPageEl
+														.querySelector(".page_load")
+														.dispatchEvent(e);
+												}
+											}, 250);
 										}
 
-										function toggleOverlay(show, typeClass, src) {
+										function toggleOverlay(
+											show,
+											typeClass,
+											src,
+											isInternalImage
+										) {
 											$(landingPageEl)
 												.find(".inferno-generated-booth-info-overlay")
 												.removeClass("inferno-generated-booth-show");
@@ -1275,6 +1298,7 @@
 											} else {
 												var bodyEl = $("html,body");
 												var layoutEl = $(".layout-fixed");
+												var previewEl = $(".booth-final-review-content");
 												var docEl = $(document);
 
 												if (bodyEl.scrollTop() > 0) {
@@ -1285,6 +1309,10 @@
 													_lastScrollPos = docEl.scrollTop();
 													_lastScrollEl = docEl;
 													docEl.scrollTop(0);
+												} else if (previewEl && previewEl.scrollTop() > 0) {
+													_lastScrollPos = previewEl.scrollTop();
+													_lastScrollEl = previewEl;
+													previewEl.scrollTop(0);
 												} else {
 													_lastScrollPos = layoutEl.scrollTop();
 													_lastScrollEl = layoutEl;
@@ -1297,8 +1325,6 @@
 												if (
 													typeClass === "inferno-generated-booth-video-overlay"
 												) {
-													console.log("append iframe");
-													console.log(src);
 													$(elTwo).append(
 														"<iframe src='/embed/" +
 															src +
@@ -1310,13 +1336,17 @@
 													typeClass ===
 													"inferno-generated-booth-external-overlay"
 												) {
-													console.log("append external iframe");
-													console.log(src);
-													$(elTwo).append(
-														"<iframe src='" +
-															src +
-															"' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"
-													);
+													if (isInternalImage) {
+														$(elTwo).append(
+															"<img src='" + src + "' alt='external image'/>"
+														);
+													} else {
+														$(elTwo).append(
+															"<iframe src='" +
+																src +
+																"' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"
+														);
+													}
 												}
 											}
 										}
@@ -1344,17 +1374,17 @@
 												/>
 												<div class="inferno-generated-booth-top-banner">
 													<img
-														id="booth_ContinentalTire_ClickImage_inferno-booth-udf-top-banner"
+														id="xtrackx|2|booth|booth_continentaltire|image_click|booth|infernoboothudftopbanner"
 														class="inferno-booth-udf-top-banner"
-														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-top-banner.jpg"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-top-banner.png"
 														alt="inferno-booth-udf-top-banner"
 													/>
 												</div>
 												<div class="inferno-generated-booth-backdrop">
 													<img
-														id="booth_ContinentalTire_ClickImage_inferno-booth-udf-backdrop"
+														id="xtrackx|2|booth|booth_continentaltire|image_click|booth|infernoboothudfbackdrop"
 														class="inferno-booth-udf-backdrop"
-														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-backdrop.jpg"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-backdrop.png"
 														alt="inferno-booth-udf-backdrop"
 													/>
 												</div>
@@ -1369,19 +1399,19 @@
 													>
 														<ul class="inferno-booth-udf-resources">
 															<li
-																id="booth_ContinentalTire_ViewResourcesOverlay"
+																id="xtrackx|2|booth|booth_continentaltire|view_resources_overlay|booth"
 															>
 																<img
-																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-resource-thumb-1.jpg"
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-resource-thumb-1.jpg"
 																	alt=" resource thumbnail"
 																/>
 																<h4>Booth Take A Ways</h4>
 															</li>
 															<li
-																id="booth_ContinentalTire_ViewResourcesOverlay"
+																id="xtrackx|2|booth|booth_continentaltire|view_resources_overlay|booth"
 															>
 																<img
-																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-resource-thumb-2.jpg"
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-resource-thumb-2.jpg"
 																	alt=" resource thumbnail"
 																/>
 																<h4>Show Specials 2021</h4>
@@ -1389,20 +1419,7 @@
 														</ul>
 													</a>
 												</div>
-												<div class="inferno-generated-booth-video-one">
-													<img
-														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png"
-														alt="Video Holder"
-													/><video
-														id="booth_ContinentalTire_ViewVideoOverlayvideo-0"
-														onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', 'b0ec14eb-4c92-4ded-8ed9-687005930c39')"
-														muted
-														autoplay
-														loop
-														class="video-video-0"
-														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/video-0.mp4"
-													></video>
-												</div>
+
 												<img
 													class="inferno-generated-booth-plant"
 													src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png"
@@ -1418,9 +1435,9 @@
 														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png"
 														alt="Podium "
 													/><img
-														id="booth_ContinentalTire_ClickImage_inferno-booth-udf-podium"
+														id="xtrackx|2|booth|booth_continentaltire|image_click|booth|infernoboothudfpodium"
 														class="inferno-booth-udf-podium"
-														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-podium.jpg"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-podium.jpg"
 														alt="inferno-booth-udf-podium"
 													/>
 												</div>
@@ -1429,10 +1446,9 @@
 														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png"
 														alt="Banner One "
 													/><img
-														id="booth_ContinentalTire_ClickImage_inferno-booth-udf-banner-one"
-														onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-banner-one_clickResource_3.jpg')"
-														class="inferno-booth-udf-banner-one actionable"
-														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-banner-one.jpg"
+														id="xtrackx|2|booth|booth_continentaltire|image_click|booth|infernoboothudfbannerone"
+														class="inferno-booth-udf-banner-one"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-banner-one.png"
 														alt="inferno-booth-udf-banner-one"
 													/>
 												</div>
@@ -1441,10 +1457,9 @@
 														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png"
 														alt="Banner Two"
 													/><img
-														id="booth_ContinentalTire_ClickImage_inferno-booth-udf-banner-two"
-														onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-banner-two_clickResource_5.jpg')"
-														class="inferno-booth-udf-banner-two actionable"
-														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-banner-two.jpg"
+														id="xtrackx|2|booth|booth_continentaltire|image_click|booth|infernoboothudfbannertwo"
+														class="inferno-booth-udf-banner-two"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-banner-two.png"
 														alt="inferno-booth-udf-banner-two"
 													/>
 												</div>
@@ -1466,10 +1481,10 @@
 										</div>
 										<ul
 											class="inferno-generated-booth-menu with-chat booth-medium"
-											style="background-color: #fea500"
+											style="background-color: #000000"
 										>
 											<li
-												id="booth_ContinentalTire_ViewInfoOverlay"
+												id="xtrackx|2|booth|booth_continentaltire|view_info_overlay|menu"
 												onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"
 											>
 												<img
@@ -1480,8 +1495,8 @@
 											</li>
 											<li>
 												<a
-													id="booth_ContinentalTire_DownloadContactInfo"
-													href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-contact-info.pdf"
+													id="xtrackx|2|booth|booth_continentaltire|download_contact_info|menu"
+													href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-contact-info.vcf"
 													target="_blank"
 													><img
 														src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png"
@@ -1490,9 +1505,9 @@
 													Contact</a
 												>
 											</li>
-											<!-- UNCOMMENT FOR MEETING LINK <li><a id='booth_ContinentalTire_DownloadMeetingInfo' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png' alt='meeting' /> LiveMeeting</a></li> --><!-- UNCOMMENT FOR CALENDAR LINK <li><a id='booth_ContinentalTire_ViewCalendar' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> -->
+											<!-- UNCOMMENT FOR MEETING LINK <li><a id='xtrackx|2|booth|booth_continentaltire|open_meeting_link|menu|sanitizedmeetinglink' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png' alt='meeting' /> LiveMeeting</a></li> --><!-- UNCOMMENT FOR CALENDAR LINK <li><a id='xtrackx|2|booth|booth_continentaltire|open_calendar_link|menu|sanitizedcalendarlink' href='CALENDAR LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> -->
 											<li
-												id="booth_ContinentalTire_ViewResourcesOverlay"
+												id="xtrackx|2|booth|booth_continentaltire|view_resources_overlay|menu"
 												onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"
 											>
 												<img
@@ -1502,6 +1517,7 @@
 												Resources
 											</li>
 											<li
+												id="xtrackx|2|booth|booth_continentaltire|view_fishbowl_prompt|menu"
 												onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"
 											>
 												<img
@@ -1536,10 +1552,10 @@
 														<li>
 															<a
 																target="_blank"
-																id="booth_ContinentalTire_DownloadResource_1"
-																href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/BoothTakeAWays1616601jpg.jpg"
+																id="xtrackx|2|booth|booth_continentaltire|view_resource|resource_overlay|boothtakeaways"
+																href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/BoothTakeAWays1616601jpg.jpg"
 																><img
-																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-resource-thumb-1.jpg"
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-resource-thumb-1.jpg"
 																	alt=" resource thumbnail"
 																/>
 																<h4>Booth Take A Ways</h4></a
@@ -1548,10 +1564,10 @@
 														<li>
 															<a
 																target="_blank"
-																id="booth_ContinentalTire_DownloadResource_2"
-																href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/ShowSpecials1616701jpg.jpg"
+																id="xtrackx|2|booth|booth_continentaltire|view_resource|resource_overlay|showspecials2021"
+																href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/ShowSpecials1616701jpg.jpg"
 																><img
-																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-resource-thumb-2.jpg"
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-resource-thumb-2.jpg"
 																	alt=" resource thumbnail"
 																/>
 																<h4>Show Specials 2021</h4></a
@@ -1570,11 +1586,12 @@
 													<h3>Submit your V-card to enter a drawing ticket.</h3>
 													<button
 														class="inferno-confirm-btn"
-														id="booth_ContinentalTire_FishBowlClick"
+														id="xtrackx|2|booth|booth_continentaltire|fishbowl_confirm_click|fishbowl_prompt"
 														onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')"
 													>
 														Yes, share my contact information.</button
 													><button
+														id="xtrackx|2|booth|booth_continentaltire|fishbowl_cancel_click|fishbowl_prompt"
 														class="inferno-cancel-btn"
 														onclick="toggleOverlay()"
 													>
@@ -1591,38 +1608,13 @@
 										</div>
 										<div
 											style="display: none"
-											data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1609793644169/inferno-booth-udf-company-logo.jpg"
+											data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/ContinentalTire_1610392920635/inferno-booth-udf-company-logo.jpg"
 										></div>
-									</div>
-									<!-- Game Link HTML -->
-
-									<script>
-										function loadPage(href) {
-											var xmlhttp = new XMLHttpRequest();
-											xmlhttp.open("GET", href, false);
-											xmlhttp.send();
-											return xmlhttp.responseText;
-										}
-
-										var gameLinks = document.createElement("div");
-
-										gameLinks.innerHTML = loadPage(
-											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/trade-show/game-links.html"
-										);
-
-										var games = gameLinks.querySelectorAll(".game");
-										games.forEach(game => {
-											if (game.id !== "cash") game.remove();
-										});
-										var script = gameLinks.querySelector("script");
-										eval(script.innerHTML);
-
-										landingPageEl
-											.querySelector(".inferno-generated-booth")
-											.appendChild(gameLinks);
-									</script>
-									<!-- End of Game Link Script -->
-								</inferno-snippet-content>
+										<div
+											id="xtrackx|2|booth|booth_continentaltire|page_load|"
+											class="page_load"
+										></div></div
+								></inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
 								<!-- ********************* -->
 								<!-- ********************* -->
