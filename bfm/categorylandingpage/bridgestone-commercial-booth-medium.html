@@ -1,247 +1,299 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			const x = JSON.parse(response);
+			data = x[0];
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-  </script>
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    #localTemplateMenu a {
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
-
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				window.localTemplateMenuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="bfm" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-          
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="b44c8fc2-1b63-4978-a619-f4c755f437fb">
+	<div style="display: none" id="novoProject" name="bfm" onload="login()"></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="a36f4f57-6600-4cc0-9ba1-cf51ac1ac9b5"
+								>
 									<!-- Script to insert header with marquee and botton nav-->
-									<category-page-links id="category-page-links" style="display: none">
+									<category-page-links
+										id="category-page-links"
+										style="display: none"
+									>
 										<!--
                                     these links will allow navigating ot booth pages without page refreshing
                                     this will print all categories not just the booths, no way around that at the time of this writing
@@ -252,7 +304,12 @@
 										{% for category in data.Categories %} {% assign page =
 										category.Id | downcase %} {% assign snippet =
 										category.LandingPageSnippetId | downcase %}
-										<a href="/videos/{{ page }}/landing/{{ snippet }}" id="link_{{ page }}" pageid="{{ page }}">{{ category.Name }}</a>
+										<a
+											href="/videos/{{ page }}/landing/{{ snippet }}"
+											id="link_{{ page }}"
+											pageid="{{ page }}"
+											>{{ category.Name }}</a
+										>
 										{% endfor %}
 									</category-page-links>
 									<script>
@@ -413,6 +470,13 @@
 											display: block;
 											height: 50vmin;
 											margin: 5vh auto 0;
+										}
+										.inferno-generated-booth-external-overlay img {
+											max-width: 80vmin;
+											max-height: 50vmin;
+											display: block;
+											margin: 5vh auto 0;
+											object-fit: contain;
 										}
 										.inferno-generated-booth-show {
 											display: block !important;
@@ -1173,9 +1237,25 @@
 											$(landingPageEl)
 												.find(".inferno-generated-booth-show")
 												.removeClass("inferno-generated-booth-show");
+
+											// Activate click track landing
+											setTimeout(function () {
+												var e = document.createEvent("MouseEvents");
+												e.initEvent("mouseup", true, true);
+												if (landingPageEl.querySelector(".page_load")) {
+													landingPageEl
+														.querySelector(".page_load")
+														.dispatchEvent(e);
+												}
+											}, 250);
 										}
 
-										function toggleOverlay(show, typeClass, src) {
+										function toggleOverlay(
+											show,
+											typeClass,
+											src,
+											isInternalImage
+										) {
 											$(landingPageEl)
 												.find(".inferno-generated-booth-info-overlay")
 												.removeClass("inferno-generated-booth-show");
@@ -1218,6 +1298,7 @@
 											} else {
 												var bodyEl = $("html,body");
 												var layoutEl = $(".layout-fixed");
+												var previewEl = $(".booth-final-review-content");
 												var docEl = $(document);
 
 												if (bodyEl.scrollTop() > 0) {
@@ -1228,6 +1309,10 @@
 													_lastScrollPos = docEl.scrollTop();
 													_lastScrollEl = docEl;
 													docEl.scrollTop(0);
+												} else if (previewEl && previewEl.scrollTop() > 0) {
+													_lastScrollPos = previewEl.scrollTop();
+													_lastScrollEl = previewEl;
+													previewEl.scrollTop(0);
 												} else {
 													_lastScrollPos = layoutEl.scrollTop();
 													_lastScrollEl = layoutEl;
@@ -1240,8 +1325,6 @@
 												if (
 													typeClass === "inferno-generated-booth-video-overlay"
 												) {
-													console.log("append iframe");
-													console.log(src);
 													$(elTwo).append(
 														"<iframe src='/embed/" +
 															src +
@@ -1253,13 +1336,17 @@
 													typeClass ===
 													"inferno-generated-booth-external-overlay"
 												) {
-													console.log("append external iframe");
-													console.log(src);
-													$(elTwo).append(
-														"<iframe src='" +
-															src +
-															"' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"
-													);
+													if (isInternalImage) {
+														$(elTwo).append(
+															"<img src='" + src + "' alt='external image'/>"
+														);
+													} else {
+														$(elTwo).append(
+															"<iframe src='" +
+																src +
+																"' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"
+														);
+													}
 												}
 											}
 										}
@@ -1268,239 +1355,392 @@
 									</script>
 									<div id="content">
 										<div class="inferno-generated-booth-container">
-											<div class="inferno-generated-booth-bg-blur-img" style="
+											<div
+												class="inferno-generated-booth-bg-blur-img"
+												style="
 													background-image: url('https://boothgenerator.nextechar.com/_assets/future-lobby.jpg');
-												"></div>
-											<div class="inferno-generated-booth" data-booth-id="medium" style="
+												"
+											></div>
+											<div
+												class="inferno-generated-booth"
+												data-booth-id="medium"
+												style="
 													background-image: url('https://boothgenerator.nextechar.com/_assets/future-lobby.jpg');
-												">
-												<img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Booth_background.png">
+												"
+											>
+												<img
+													class="inferno-generated-booth-bg"
+													src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Booth_background.png"
+												/>
 												<div class="inferno-generated-booth-top-banner">
-													<img id="booth_TheGroupFederatedandPronto_ClickImage_inferno-booth-udf-top-banner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-top-banner.jpg" alt="inferno-booth-udf-top-banner">
+													<img
+														id="booth_BridgestoneCommercial_ClickImage_inferno-booth-udf-top-banner"
+														class="inferno-booth-udf-top-banner"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-top-banner.jpg"
+														alt="inferno-booth-udf-top-banner"
+													/>
 												</div>
 												<div class="inferno-generated-booth-backdrop">
-													<img id="booth_TheGroupFederatedandPronto_ClickImage_inferno-booth-udf-backdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-backdrop.jpg" alt="inferno-booth-udf-backdrop">
+													<img
+														id="booth_BridgestoneCommercial_ClickImage_inferno-booth-udf-backdrop"
+														class="inferno-booth-udf-backdrop"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-backdrop.jpg"
+														alt="inferno-booth-udf-backdrop"
+													/>
 												</div>
 												<div class="inferno-generated-booth-resources">
-													<img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png" alt="Resource Image">
-													
-														<ul class="inferno-booth-udf-resources">
-															<li id="booth_TheGroupFederatedandPronto_ViewResourcesOverlay">
-                                <a href="https://www.dropbox.com/sh/kmrp16cf7q67b5y/AACjwiF2qpHP3vZWzqilhCIxa?dl=0" target="__blank">
-																<img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail">
-                                <h4>Booth Take A Ways</h4>
-                                </a>
-															</li>
-															<li id="booth_TheGroupFederatedandPronto_ViewResourcesOverlay">
-                                <a href="https://www.dropbox.com/s/t9gap4mny41hkie/2021%20Tradeshow%20Specials.pdf?dl=0" target="__blank">
-																<img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail">
-                                <h4>Show Specials 2021</h4>
-                                </a>
-															</li>
-														</ul>
-													</a>
+													<img
+														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png"
+														alt="Resource Image"
+													/>
+													<ul class="inferno-booth-udf-resources">
+														<li
+															id="booth_BridgestoneCommercial_ViewResourcesOverlay"
+														>
+															<a
+																href="https://www.dropbox.com/sh/6cd2z49u4xk5d9a/AACwn-hiCANTA5wk3KQkSeCza?dl=0"
+																target="__blank"
+															>
+																<img
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-resource-thumb-1.jpg"
+																	alt=" resource thumbnail"
+																/>
+																<h4>Booth Take A Ways</h4>
+															</a>
+														</li>
+														<li
+															id="booth_BridgestoneCommercial_ViewResourcesOverlay"
+														>
+															<a
+																href="https://www.dropbox.com/s/t9gap4mny41hkie/2021%20Tradeshow%20Specials.pdf?dl=0"
+																target="__blank"
+															>
+																<img
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-resource-thumb-2.jpg"
+																	alt=" resource thumbnail"
+																/>
+																<h4>Show Specials 2021</h4>
+															</a>
+														</li>
+													</ul>
 												</div>
 												<div class="inferno-generated-booth-video-one">
-													<img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png" alt="Video Holder"><video id="booth_TheGroupFederatedandPronto_ViewVideoOverlayvideo-0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', 'd195dbe9-f677-4845-8979-51042861c1b8')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/video-0.mp4"></video>
+													<img
+														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png"
+														alt="Video Holder"
+													/><video
+														id="booth_BridgestoneCommercial_ViewVideoOverlayvideo-0"
+														onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '413282b4-9854-4de6-975d-4ed771f7403d')"
+														muted
+														autoplay
+														loop
+														class="video-video-0"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/video-0.mp4"
+													></video>
 												</div>
-												<img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png" alt="Plant">
-												<img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Presenter_Accent.png" alt="Woman">
+												<img
+													class="inferno-generated-booth-plant"
+													src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png"
+													alt="Plant"
+												/>
+												<img
+													class="inferno-generated-booth-podium-woman"
+													src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Presenter_Accent.png"
+													alt="Woman"
+												/>
 												<div class="inferno-generated-booth-podium">
-													<img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png" alt="Podium "><img id="booth_TheGroupFederatedandPronto_ClickImage_inferno-booth-udf-podium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-podium.jpg" alt="inferno-booth-udf-podium">
+													<img
+														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png"
+														alt="Podium "
+													/><img
+														id="booth_BridgestoneCommercial_ClickImage_inferno-booth-udf-podium"
+														class="inferno-booth-udf-podium"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-podium.jpg"
+														alt="inferno-booth-udf-podium"
+													/>
 												</div>
 												<div class="inferno-generated-booth-banner-one">
-													<img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner One "><img id="booth_TheGroupFederatedandPronto_ClickImage_inferno-booth-udf-banner-one" onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-banner-one_clickResource_4.jpg')" class="inferno-booth-udf-banner-one actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-banner-one.jpg" alt="inferno-booth-udf-banner-one">
+													<img
+														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png"
+														alt="Banner One "
+													/><img
+														id="booth_BridgestoneCommercial_ClickImage_inferno-booth-udf-banner-one"
+														onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-banner-one_clickResource_5.jpg')"
+														class="inferno-booth-udf-banner-one actionable"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-banner-one.jpg"
+														alt="inferno-booth-udf-banner-one"
+													/>
 												</div>
 												<div class="inferno-generated-booth-banner-two">
-													<img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner Two"><img id="booth_TheGroupFederatedandPronto_ClickImage_inferno-booth-udf-banner-two" onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-banner-two_clickResource_5.jpg')" class="inferno-booth-udf-banner-two actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-banner-two.jpg" alt="inferno-booth-udf-banner-two">
+													<img
+														src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png"
+														alt="Banner Two"
+													/><img
+														id="booth_BridgestoneCommercial_ClickImage_inferno-booth-udf-banner-two"
+														onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-banner-two_clickResource_4.jpg')"
+														class="inferno-booth-udf-banner-two actionable"
+														src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-banner-two.jpg"
+														alt="inferno-booth-udf-banner-two"
+													/>
 												</div>
-												<img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_HightopTable_Accent.png" alt="Chairs">
+												<img
+													class="inferno-generated-booth-chairs"
+													src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_HightopTable_Accent.png"
+													alt="Chairs"
+												/>
 											</div>
 											<div class="inferno-generated-booth-right">
 												<!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> -->
 												<div class="inferno-generated-booth-chat">
-													<iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=thegroupfederatedandpronto&chatroomname=thegroupfederatedandpronto"></iframe>
+													<iframe
+														src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=bridgestonecommercial&chatroomname=bridgestonecommercial"
+													></iframe>
 													<h1>Chat</h1>
 												</div>
 											</div>
 										</div>
-										<ul class="inferno-generated-booth-menu with-chat booth-medium" style="background-color: #0d4c93">
-											<li id="booth_TheGroupFederatedandPronto_ViewInfoOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')">
-												<img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info">
+										<ul
+											class="inferno-generated-booth-menu with-chat booth-medium"
+											style="background-color: #231816"
+										>
+											<li
+												id="booth_BridgestoneCommercial_ViewInfoOverlay"
+												onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"
+											>
+												<img
+													src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png"
+													alt="info"
+												/>
 												Info
 											</li>
 											<li>
-												<a id="booth_TheGroupFederatedandPronto_DownloadContactInfo" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact">
-													Contact</a>
+												<a
+													id="booth_BridgestoneCommercial_DownloadContactInfo"
+													href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-contact-info.vcf"
+													target="_blank"
+													><img
+														src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png"
+														alt="contact"
+													/>
+													Contact</a
+												>
 											</li>
-											<!-- UNCOMMENT FOR MEETING LINK <li><a id='booth_TheGroupFederatedandPronto_DownloadMeetingInfo' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png' alt='meeting' /> LiveMeeting</a></li> --><!-- UNCOMMENT FOR CALENDAR LINK <li><a id='booth_TheGroupFederatedandPronto_ViewCalendar' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> -->
-											<li id="booth_TheGroupFederatedandPronto_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')">
-												<img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources">
+											<!-- UNCOMMENT FOR MEETING LINK <li><a id='booth_BridgestoneCommercial_DownloadMeetingInfo' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png' alt='meeting' /> LiveMeeting</a></li> --><!-- UNCOMMENT FOR CALENDAR LINK <li><a id='booth_BridgestoneCommercial_ViewCalendar' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> -->
+											<li
+												id="booth_BridgestoneCommercial_ViewResourcesOverlay"
+												onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"
+											>
+												<img
+													src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png"
+													alt="resources"
+												/>
 												Resources
 											</li>
-											<li onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')">
-												<img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl">
+											<li
+												onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"
+											>
+												<img
+													src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png"
+													alt="fish bowl"
+												/>
 												I was here!
 											</li>
 										</ul>
 										<div class="inferno-generated-booth-overlay-holder">
 											<div class="inferno-generated-booth-overlay">
-												<button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()">
-													<img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close">
+												<button
+													class="inferno-generated-booth-close-btn"
+													onclick="toggleOverlay()"
+												>
+													<img
+														src="https://boothgenerator.nextechar.com/_assets/icons/x.png"
+														alt="close"
+													/>
 												</button>
 												<div class="inferno-generated-booth-info-overlay">
 													<h2>Information</h2>
 													<p>
-														Federated Auto Parts and National Pronto Association
-														merged their efforts and resources in a number of
-														key areas to form the Automotive Parts Services
-														Group or simply, The Group. The goal of The Group is
-														a solid focus on “best in class” in order to provide
-														overall value and support within the auto care
-														industry, build upon the success, cultures and
-														relationships of Pronto and Federated, and work
-														together for a stronger future. Both Pronto and
-														Federated headquarters remain in place and continue
-														to support their respective member’s needs,
-														marketing programs and brands, while moving to
-														shared resources in all areas that offer
-														efficiencies and improvement opportunities to remain
-														competitive in a changing market. The combined
-														organization will operate more than 5,000 locations
-														in North America with estimated member revenue of
-														approximately $7 billion.
+														Bridgestone Americas Tire Operations manufactures
+														and markets a wide range of commercial tires for the
+														original equipment and replacement markets in the
+														United States and Canada. Bridgestone, Firestone and
+														associate-brand truck and bus, agriculture and
+														off-the-road tires are available through more than
+														2,500 certified dealer and partner locations across
+														the U.S. and Canada.
 													</p>
 												</div>
 												<div class="inferno-generated-booth-resources-overlay">
 													<h2>Resources</h2>
 													<ul class="inferno-booth-udf-resources">
 														<li>
-															<a target="_blank" id="booth_TheGroupFederatedandPronto_DownloadResource_1" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/BoothTakeAWays1616601jpg.jpg"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail">
-																<h4>Booth Take A Ways</h4></a>
+															<a
+																target="_blank"
+																id="booth_BridgestoneCommercial_DownloadResource_1"
+																href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/BoothTakeAWays1616601jpg.jpg"
+																><img
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-resource-thumb-1.jpg"
+																	alt=" resource thumbnail"
+																/>
+																<h4>Booth Take A Ways</h4></a
+															>
 														</li>
 														<li>
-															<a target="_blank" id="booth_TheGroupFederatedandPronto_DownloadResource_2" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/ShowSpecials1616701jpg.jpg"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail">
-																<h4>Show Specials 2021</h4></a>
+															<a
+																target="_blank"
+																id="booth_BridgestoneCommercial_DownloadResource_2"
+																href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/ShowSpecials1616701jpg.jpg"
+																><img
+																	src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-resource-thumb-2.jpg"
+																	alt=" resource thumbnail"
+																/>
+																<h4>Show Specials 2021</h4></a
+															>
 														</li>
 													</ul>
 												</div>
-												<div class="inferno-generated-booth-video-overlay"></div>
-												<div class="inferno-generated-booth-external-overlay"></div>
+												<div
+													class="inferno-generated-booth-video-overlay"
+												></div>
+												<div
+													class="inferno-generated-booth-external-overlay"
+												></div>
 												<div class="inferno-generated-booth-fish-bowl-overlay">
 													<h2>Contact share</h2>
 													<h3>Submit your V-card to enter a drawing ticket.</h3>
-													<button class="inferno-confirm-btn" id="booth_TheGroupFederatedandPronto_FishBowlClick" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">
-														Yes, share my contact information.</button><button class="inferno-cancel-btn" onclick="toggleOverlay()">
+													<button
+														class="inferno-confirm-btn"
+														id="booth_BridgestoneCommercial_FishBowlClick"
+														onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')"
+													>
+														Yes, share my contact information.</button
+													><button
+														class="inferno-cancel-btn"
+														onclick="toggleOverlay()"
+													>
 														Cancel
 													</button>
 												</div>
-												<div class="inferno-generated-booth-fish-bowl-overlay-done">
+												<div
+													class="inferno-generated-booth-fish-bowl-overlay-done"
+												>
 													<h2>Thank you!</h2>
 													<h3>Your contact information has been shared.</h3>
 												</div>
 											</div>
 										</div>
-										<div style="display: none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TheGroupFederatedandPronto_1609793075564/inferno-booth-udf-company-logo.jpg"></div></div></inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
+										<div
+											style="display: none"
+											data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BridgestoneCommercial_1610486522347/inferno-booth-udf-company-logo.jpg"
+										></div></div
+								></inferno-snippet-content>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
 
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
 
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
 
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
 
-<script>
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
 
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
 
-  }
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
 
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
 
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
-
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
-
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
-
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
-
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
-
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -1512,30 +1752,27 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->
