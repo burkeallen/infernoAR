@@ -1,486 +1,746 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		let landingPageEl = null;
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function login() {
+			window.addEventListener("load", event => {
+				const projectEl = document.querySelector("#novoProject");
+				const projectName = projectEl ? projectEl.getAttribute("name") : null;
+				const currentProject = projects.filter(project => {
+					return project.name === projectName;
+				})[0];
 
-    function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+				if (!currentProject) {
+					alert(
+						"could not log into Inferno \n\r Check the project name in the login() function"
+					);
+					return;
+				}
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+				authenticate(currentProject);
+			});
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onload="login()"
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-        authenticate(currentProject);
-      });
-    }
+	<!-- Liquid Templating -->
+	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+	<!--  Load Liquid JSON From Local file -->
+	<script>
+		function loadJSON(file, callback) {
+			const xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+		}
 
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+		// processing can potentially interfere with scripts that run on page load.
+		var data = {};
+		loadJSON("../liquid.json", function (response) {
+			// Parse JSON string into object
+			const x = JSON.parse(response);
+			data = x[0];
+		});
+	</script>
 
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
+	<!-- Build out Local Menu on Left Navigation -->
 
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
+		#localTemplateMenu a {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-  </script>
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-  <!-- Build out Local Menu on Left Navigation -->
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    #localTemplateMenu a {
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
-
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        })
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				window.localTemplateMenuItems.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="bfm" onload="login()"></div>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-          
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="d5776103-37d2-4efd-b4cd-407484473fce"><style>img:after {
-    content: none;
-}
-* {
-    box-sizing: border-box;
-}
-.directory-hide {
-    display: none;
-}
-.inferno-generated-booth-company-directory {
-    width: calc(100% + 40px);
-    margin: -20px;
-    display: block;
-    background: #f3f1f0;
-    padding: 0;
-    height: 100%;
-}
-.inferno-generated-booth-company-directory .inferno-generated-booth-company-directory-main {
-    padding: 5vmin;
-    min-height: calc(100vh - 10vmin);
-}
-.inferno-generated-booth-company-directory h1 {
-    font-size: 3vmin;
-    line-height: 3.5vmin;
-    color: #111;
-    margin: 0 0 4vmin;
-    padding: 0;
-    font-weight: 700;
-}
-.inferno-generated-booth-company-directory h5 {
-    font-size: 2.2vmin;
-    line-height: 2.5vmin;
-    color: #999;
-    text-align: center;
-    margin: 0 0 4vmin;
-    padding: 0;
-}
-.inferno-generated-booth-company-directory input {
-    margin: 0;
-    padding: 1vmin;
-    background: #fff;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    font-size: 1.8vmin;
-    line-height: 2vmin;
-    color: #333;
-}
-.inferno-generated-booth-company-directory ul {
-    overflow: hidden;
-    margin: 4vmin auto 0;
-    padding: 0;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
-.inferno-generated-booth-company-directory ul li {
-    width: 24%;
-    list-style: none;
-    margin: 0 1% 3vmin 0;
-    background: #fff;
-    border-radius: 2px;
-    box-shadow: 2px 4px 7px rgba(1, 1, 1, 0.1);
-    padding: 0;
-    text-align: center;
-    transition: all 0.6s ease;
-}
-.inferno-generated-booth-company-directory ul li:hover {
-    cursor: pointer;
-    opacity: 0.8;
-    -ms-transform: translateY(0.5vmin);
-    -webkit-transform: translateY(0.5vmin);
-    transform: translateY(0.5vmin);
-}
-.inferno-generated-booth-company-directory ul li a {
-    text-decoration: none;
-    display: block;
-    padding: 1vmin;
-}
-.inferno-generated-booth-company-directory ul li h2 {
-    color: #000;
-    font-size: 2vmin;
-    line-height: 2.5vmin;
-    margin: 0;
-    padding: 0;
-}
-.inferno-generated-booth-company-directory ul li img {
-    display: block;
-    margin: 0 auto 0.5vmin;
-    height: 10vmin;
-    max-width: 100%;
-    object-fit: contain;
-}
-@media (max-width: 1200px) {
-    .inferno-generated-booth-company-directory ul li {
-        width: 48%;
-    }
-}
-</style><script type="text/javascript">var landingPageEl = landingPageEl || document;
-var _timer;
+	<div style="display: none" id="novoProject" name="bfm" onload="login()"></div>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
+								<span class="mat-button-wrapper">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
+										menu
+									</mat-icon>
+								</span>
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<landing-page class="ng-star-inserted">
+							<div id="landing">
+								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+								<script>
+									landingPageEl = document
+										.querySelector("landing-page")
+										.attachShadow({ mode: "open" });
+									const landing = landingPageEl.appendChild(
+										document.getElementById("landing")
+									);
+									landingPageEl.appendChild(landing);
+									const loginPageEl = landingPageEl;
+								</script>
+								<style type="text/css">
+									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+								</style>
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="ac17869a-c915-4550-b6ea-8599ae28a929"
+									><!-- Script to insert header with marquee and botton nav-->
+									<script>
+										function goPage(id) {
+											const pages = landingPageEl.querySelector(
+												"#category-page-links"
+											);
+											const link = pages.querySelector("#link_" + id);
+											if (link) {
+												link.dispatchEvent(new MouseEvent("click"));
+											} else {
+												alert("link you selected does not exists");
+											}
+										}
 
-function searchCompanies(el) {
-    if (_timer) {
-        clearTimeout(_timer);
-        _timer = null;
-    }
+										var fetchLayout = () => {
+											var elementId = "1f37d468-ac44-4f4c-b571-93f2cd98e686";
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
 
-    if ($(el).val().length === 0) {
-        $(landingPageEl).find(".directory-hide").removeClass("directory-hide");
-        $(landingPageEl).find(".inferno-generated-booth-company-directory").find(".no-results").addClass("hide");
-    } 
-    else {
-        var search = $(el).val().toLowerCase();
-        _timer = setTimeout(function () {
-            doSearch(search);
-        }, 250);
-    }
-}
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
 
-function doSearch(search) {
-    var els = $(landingPageEl).find(".inferno-generated-booth-company-directory").find("ul li");
-    $.each(els, function (key, gridEl) {
-        var data = $(gridEl).data("companyName");
-        if (data.indexOf(search) < 0) {
-            $(gridEl).addClass("directory-hide");
-        } else {
-            $(gridEl).removeClass("directory-hide");
-        }
-    });
-    var noResults = els.length === $(landingPageEl).find(".inferno-generated-booth-company-directory").find("ul li.directory-hide").length;
-    if (noResults) {
-        $(landingPageEl).find(".inferno-generated-booth-company-directory").find(".no-results").removeClass("hide");
-    } else {
-        $(landingPageEl).find(".inferno-generated-booth-company-directory").find(".no-results").addClass("hide");
-    }
-}</script><div class="inferno-generated-booth-company-directory">
-  <div class="inferno-generated-booth-company-directory-main">
-      <h1>Company Directory</h1>
-      <input type="text" onkeyup="searchCompanies(this)" placeholder="Search...">
-      <ul><li id="companyDirectoryClick_BFMGroupInc" data-company-name="bfm group inc."><a href="/videos/7096b88f-5e16-40aa-1ec7-08d89c754dbc/landing/2eeb1a4a-2c3a-4de1-aa73-5139880ea548"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BFMGroupInc_1607624080861/inferno-booth-udf-company-logo.jpg" alt="BFMGroupInc"><h2>BFM Group Inc.</h2></a></li><li id="companyDirectoryClick_TCSTechnologies" data-company-name="tcs technologies"><a href="/videos/1f98392f-dff5-4af9-43eb-08d8a108ce30/landing/efae0e70-3be1-47f5-b209-d8daf9b1ee38"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TCSTechnologies_1608129964135/inferno-booth-udf-company-logo.jpg" alt="TCSTechnologies"><h2>TCS Technologies</h2></a></li></ul>
-      <h5 class="no-results hide">Sorry, we could not find any companies that matched your search.</h5>
-  </div>
-</div></inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </landing-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
+													elementId,
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													var parser = new DOMParser();
+													var doc = parser.parseFromString(res, "text/html");
 
+													var header = doc.getElementById("bfm-header");
+													var menu = doc.getElementById("bottom-nav");
+													//script element for menu navigation
+													var script = doc.getElementById("layout-script");
 
+													//parent element where menu navigation will be inserted into on the page
+													const contentElement = landingPageEl.querySelector(
+														".inferno-generated-booth-company-directory"
+													);
 
+													//checks if the elements have already been inserted into the DOM to avoid duplicate elements
+													if (!landingPageEl.getElementById("bfm-header"))
+														contentElement.insertBefore(
+															header,
+															contentElement.childNodes[0]
+														);
+													if (!landingPageEl.getElementById("bottom-nav"))
+														contentElement.appendChild(menu);
+													eval(script.innerHTML);
+												},
+												error: function (err) {
+													console.error("Error Fetching HTML", err);
+												}
+											});
+										};
 
-<script>
+										fetchLayout();
+									</script>
+									<style>
+										img:after {
+											content: none;
+										}
+										* {
+											box-sizing: border-box;
+										}
+										.directory-hide {
+											display: none;
+										}
+										.inferno-generated-booth-company-directory {
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/lobby/lobby-bg.png");
+											background-attachment: fixed;
+											background-repeat: no-repeat;
+											background-size: cover;
+											background-position: center;
+											min-height: calc(100vh - 114px);
+											margin: -20px;
+											padding: 20px 24px;
+											z-index: 1;
+											font-family: "Helvetica Neue", Arial Narrow, Arial,
+												sans-serif !important;
+										}
+										.inferno-generated-booth-company-directory
+											.inferno-generated-booth-company-directory-main {
+											padding: 5vmin;
+										}
 
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
+										.inferno-generated-booth-company-directory-main-header {
+											background-color: var(--sidebar-bg-color);
+											width: fit-content;
+											height: fit-content;
+											display: flex;
+											align-items: center;
+											font-size: 3vmin;
+											line-height: 3.5vmin;
+											color: var(--sidebar-text-color);
+											font-weight: 700;
+											padding: 2rem 3rem;
+											margin-bottom: 4vmin;
+											border-radius: 5px;
+										}
 
-  }
+										.inferno-generated-booth-company-directory h5 {
+											font-size: 2.2vmin;
+											line-height: 2.5vmin;
+											color: #999;
+											text-align: center;
+											margin: 0 0 4vmin;
+											padding: 0;
+										}
+										.inferno-generated-booth-company-directory input {
+											margin: 0;
+											padding: 1vmin;
+											background: #fff;
+											border: 2px solid #ccc;
+											border-radius: 4px;
+											font-size: 1.8vmin;
+											line-height: 2vmin;
+											color: #333;
+										}
+										.inferno-generated-booth-company-directory ul {
+											overflow: hidden;
+											margin: 4vmin auto 0;
+											padding: 0;
+											width: 100%;
+											display: flex;
+											flex-wrap: wrap;
+										}
+										.inferno-generated-booth-company-directory ul li {
+											width: 24%;
+											list-style: none;
+											margin: 0 1% 3vmin 0;
+											background: #fff;
+											border-radius: 2px;
+											border: 4px solid var(--sidebar-highlight-text-color);
+											border-radius: 20px;
+											box-shadow: 2px 4px 7px rgba(1, 1, 1, 0.1);
+											padding: 0;
+											text-align: center;
+											transition: all 0.6s ease;
+										}
+										.inferno-generated-booth-company-directory ul li:hover {
+											cursor: pointer;
+											opacity: 0.8;
+											-ms-transform: translateY(0.5vmin);
+											-webkit-transform: translateY(0.5vmin);
+											transform: translateY(0.5vmin);
+										}
+										.inferno-generated-booth-company-directory ul li a {
+											text-decoration: none;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: center;
+											padding: 1vmin;
+										}
+										.inferno-generated-booth-company-directory ul li h2 {
+											color: #000;
+											font-size: 2vmin;
+											line-height: 2.5vmin;
+											margin: 0;
+											padding: 0;
+										}
+										.inferno-generated-booth-company-directory ul li img {
+											margin: 0 auto 0.5vmin;
+											height: 10vmin;
+											max-width: 100%;
+											object-fit: contain;
+										}
+										@media (max-width: 1200px) {
+											.inferno-generated-booth-company-directory ul li {
+												width: 48%;
+											}
+										}
+									</style>
+									<script type="text/javascript">
+										landingPageEl = landingPageEl || document;
+										var _timer;
 
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
+										function searchCompanies(el) {
+											if (_timer) {
+												clearTimeout(_timer);
+												_timer = null;
+											}
 
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
+											if ($(el).val().length === 0) {
+												$(landingPageEl)
+													.find(".directory-hide")
+													.removeClass("directory-hide");
+												$(landingPageEl)
+													.find(".inferno-generated-booth-company-directory")
+													.find(".no-results")
+													.addClass("hide");
+											} else {
+												var search = $(el).val().toLowerCase();
+												_timer = setTimeout(function () {
+													doSearch(search);
+												}, 250);
+											}
+										}
 
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
+										function doSearch(search) {
+											var els = $(landingPageEl)
+												.find(".inferno-generated-booth-company-directory")
+												.find("ul li");
+											$.each(els, function (key, gridEl) {
+												var data = $(gridEl).data("companyName");
+												if (data.indexOf(search) < 0) {
+													$(gridEl).addClass("directory-hide");
+												} else {
+													$(gridEl).removeClass("directory-hide");
+												}
+											});
+											var noResults =
+												els.length ===
+												$(landingPageEl)
+													.find(".inferno-generated-booth-company-directory")
+													.find("ul li.directory-hide").length;
+											if (noResults) {
+												$(landingPageEl)
+													.find(".inferno-generated-booth-company-directory")
+													.find(".no-results")
+													.removeClass("hide");
+											} else {
+												$(landingPageEl)
+													.find(".inferno-generated-booth-company-directory")
+													.find(".no-results")
+													.addClass("hide");
+											}
+										}
+									</script>
+									<category-page-links
+										id="category-page-links"
+										style="display: none"
+									>
+										<!--
+                                    these links will allow navigating ot booth pages without page refreshing
+                                    this will print all categories not just the booths, no way around that at the time of this writing
+                                    links generated using liquid get picked up by the Angular Routing mechanism
+                                    links generated by by JS do not and cause a page/app reload
+                                    even when navigating within the app using relative URLS
+                                    -->
+										{% for category in data.Categories %} {% assign page =
+										category.Id | downcase %} {% assign snippet =
+										category.LandingPageSnippetId | downcase %}
+										<a
+											href="/videos/{{ page }}/landing/{{ snippet }}"
+											id="link_{{ page }}"
+											pageid="{{ page }}"
+											>{{ category.Name }}</a
+										>
+										{% endfor %}
+									</category-page-links>
+									<div class="inferno-generated-booth-company-directory">
+										<div class="inferno-generated-booth-company-directory-main">
+											<header
+												class="inferno-generated-booth-company-directory-main-header"
+											>
+												Company Directory
+											</header>
+											<input
+												type="text"
+												onkeyup="searchCompanies(this)"
+												placeholder="Search..."
+											/>
+											<ul>
+												<li
+													id="xtrackx|2|booth|booth_businessmgmt|open_booth|expo_hall|bfmgroupinc"
+													data-company-name="bfm group inc."
+												>
+													<a
+														href="/videos/7096b88f-5e16-40aa-1ec7-08d89c754dbc/landing/2eeb1a4a-2c3a-4de1-aa73-5139880ea548"
+														><img
+															src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BFMGroupInc_1607624080861/inferno-booth-udf-company-logo.jpg"
+															alt="BFMGroupInc"
+														/>
+														<h2>BFM Group Inc.</h2></a
+													>
+												</li>
+												<li
+													id="xtrackx|2|booth|booth_businessmgmt|open_booth|expo_hall|tcstechnologies"
+													data-company-name="tcs technologies"
+												>
+													<a
+														href="/videos/1f98392f-dff5-4af9-43eb-08d8a108ce30/landing/efae0e70-3be1-47f5-b209-d8daf9b1ee38"
+														><img
+															src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TCSTechnologies_1608129964135/inferno-booth-udf-company-logo.jpg"
+															alt="TCSTechnologies"
+														/>
+														<h2>TCS Technologies</h2></a
+													>
+												</li>
+												<li
+													id="xtrackx|2|booth|booth_businessmgmt|open_booth|expo_hall|westcreek"
+													data-company-name="west creek"
+												>
+													<a
+														href="/videos/4e8e8dff-3e85-4b39-2b3d-08d8b43cc98b/landing/4774b796-b444-460c-b54f-548f49a53fe8"
+														><img
+															src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/WestCreek_1610485583485/inferno-booth-udf-company-logo.jpg"
+															alt="WestCreek"
+														/>
+														<h2>West Creek</h2></a
+													>
+												</li>
+												<li
+													id="xtrackx|2|booth|booth_businessmgmt|open_booth|expo_hall|synchrony"
+													data-company-name="synchrony"
+												>
+													<a
+														href="/videos/70d1f571-51b7-4286-3d37-08d8b66654b6/landing/0faa8207-bdd1-41f3-910f-adbd004621c8"
+														><img
+															src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/Synchrony_1610470555990/inferno-booth-udf-company-logo.jpg"
+															alt="Synchrony"
+														/>
+														<h2>Synchrony</h2></a
+													>
+												</li>
+											</ul>
+											<h5 class="no-results hide">
+												Sorry, we could not find any companies that matched your
+												search.
+											</h5>
+										</div>
+									</div>
+									<div
+										id="xtrackx|2|booth|booth_businessmgmt|page_load|"
+										class="page_load"
+									></div
+								></inferno-snippet-content>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</landing-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
 
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
+	<script>
+		// LIQUID PROCESSING (Set the data variable above)
+		function processLiquid() {
+			return new Promise((resolve, reject) => {
+				console.log("PROCESSING LIQUID");
+				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+				// This breaks comparison operators, so we need to convert them back before Liquid processing.
+				const template = landingPageEl
+					.querySelector("inferno-snippet-content")
+					.innerHTML.replace(/&lt;/g, "<")
+					.replace(/&gt;/g, ">")
+					.replace(/&amp;/g, "&");
+				// Select the element itself to replace the content
+				const result = landingPageEl.querySelector("inferno-snippet-content");
+				// Initialize the parsing engine
+				const engine = new liquidjs.Liquid();
+				// Parse and render
+				engine
+					.parseAndRender(template, { data })
+					.then(html => (result.innerHTML = html));
+				resolve();
+			});
+		}
 
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
 
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
 
-  function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
+
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
+
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
+
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
+
+		function populateInfernoElements() {
+			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -492,30 +752,27 @@ function doSearch(search) {
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
-
-</script>
-
-
-
-</body><!-- Menu Collapse Script -->
+		// Wait for liquid processing before handling the rest
+		if (data) {
+			processLiquid().then(mtInitMenu).then(populateInfernoElements);
+		} else {
+			mtInitMenu();
+			populateInfernoElements();
+		}
+	</script>
+</body>
+<!-- Menu Collapse Script -->
