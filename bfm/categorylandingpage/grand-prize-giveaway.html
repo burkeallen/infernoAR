@@ -601,7 +601,7 @@
 
 										var createVideoElements = data => {
 											var videos = data.filter(event =>
-												event.categories[0].name.toLowerCase().includes("grand")
+                        event.categories[0] && event.categories[0].name.toLowerCase().includes("grand")
 											);
 
 											//sort by start time
@@ -677,7 +677,6 @@
 											);
 
 											data.forEach(drawingData => {
-												console.log(drawingData);
 												const clone = drawingTemplate.content.cloneNode(true);
 												const prizeItem = clone.getElementById("prize-item");
 												const prizeImage = clone.getElementById("prize-image");
@@ -769,14 +768,19 @@
 													modalContainer.appendChild(message);
 												}
 											} else {
+
 												document.body.style.overflow = "auto";
 												popupElement.style.display = "none";
 												const iframe = landingPageEl.querySelector(
 													".video-iframe"
 												);
 
+                        const message = landingPageEl.querySelector(
+                          ".modal-message"
+                        );
+
+                        message.remove();
 												iframe.remove();
-												message.remove();
 											}
 										};
 									</script>
