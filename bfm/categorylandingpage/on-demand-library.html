@@ -289,6 +289,21 @@
 								<inferno-snippet-content
 									id="764bb67b-a936-4766-a0f9-a152a3bac575"
 								>
+									<!-- Click Track Landing v2.0 -->
+									<div
+										id="xtrackx|2|non_booth|on_demand_library|page_load"
+										class="page_load"
+									></div>
+									<script>
+										setTimeout(() => {
+											var event = document.createEvent("MouseEvents");
+											event.initEvent("mouseup", true, true);
+											landingPageEl
+												.querySelector(".page_load")
+												.dispatchEvent(event);
+										}, 250);
+									</script>
+									<!-- ./ Click Track Landing v2.0 -->
 									<!-- Script to insert header with marquee and bottom nav-->
 									<script>
 										function goPage(id) {
@@ -524,9 +539,6 @@
 												drop-shadow(0 0.5rem 1rem rgba(255, 82, 0, 0.4));
 										}
 
-										.tabs {
-										}
-
 										.tab {
 											background: transparent;
 											border: solid 1px white;
@@ -651,11 +663,6 @@
 												display: flex;
 												flex-direction: row;
 												flex-wrap: wrap;
-											}
-
-											.col1,
-											.col2,
-											.col3 {
 											}
 
 											.col2 {
@@ -868,6 +875,7 @@
 													const events = sortEventsByDateTime(
 														filterEvents(data)
 													);
+													console.log(events);
 													buildAgenda(events);
 												});
 										}
@@ -903,15 +911,15 @@
 
 												const duration = event.video ? event.video.duration : 0;
 												const startTime = new Date(event.startTime);
-												const endTime = new Date(
-													startTime.setSeconds(duration)
+												const endTime = new Date(event.startTime).setSeconds(
+													duration
 												);
 
 												const day = startTime.getDay();
 												const wed = 3;
 												const thu = 4;
 
-												if (currentTime < endTime) {
+												if (currentTime > endTime) {
 													const item = document.createElement("li");
 													item.setAttribute("id", event.id);
 													var itemTitle =
