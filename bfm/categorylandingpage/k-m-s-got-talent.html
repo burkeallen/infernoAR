@@ -581,6 +581,11 @@
 											margin-top: 15rem;
 										}
 
+										.iframe-container {
+											width: 100%;
+											height: fit-content;
+										}
+
 										.aspect-ratio {
 											position: relative;
 											width: 100%;
@@ -594,6 +599,7 @@
 											height: 100%;
 											left: 0;
 											top: 0;
+											overflow: hidden;
 										}
 
 										.close-popup {
@@ -756,7 +762,9 @@
 										<div id="video-popup">
 											<div class="video-container">
 												<div class="close-popup" onclick="toggleVideo()">X</div>
-												<div class="aspect-ratio"></div>
+												<div class="iframe-container">
+													<div class="aspect-ratio"></div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -862,6 +870,7 @@
 												iframe = document.createElement("iframe");
 												iframe.setAttribute("class", "video-iframe");
 												iframe.setAttribute("id", "talent-video");
+												iframe.setAttribute("frameBorder", "0");
 												iframe.src = "/embed/" + videoId;
 												videoContainer.appendChild(iframe);
 											} else {
