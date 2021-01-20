@@ -708,7 +708,6 @@
 												var dateB = new Date(b.time);
 												return dateB.getTime() > dateA.getTime() ? 1 : -1;
 											});
-											console.log(sortedWinnings);
 
 											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
 											var currentTime = new Date();
@@ -718,7 +717,6 @@
 														"0" +
 														sortedWinnings[i].time.slice(5)
 												);
-												console.log(winningsTime);
 												if (currentTime.getTime() > winningsTime.getTime()) {
 													winningsElement.innerHTML =
 														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
@@ -765,8 +763,12 @@
 										fetchVideos();
 
 										var createVideoElements = data => {
-											var videos = data.filter(event =>
-												event.categories[0].name.toLowerCase().includes("cash")
+											var videos = data.filter(
+												event =>
+													event.categories[0] &&
+													event.categories[0].name
+														.toLowerCase()
+														.includes("cash")
 											);
 
 											//sort by start time
