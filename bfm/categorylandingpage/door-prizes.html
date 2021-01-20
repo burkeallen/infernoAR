@@ -496,7 +496,7 @@
 										#pdf-popup {
 											display: none;
 											position: absolute;
-											top: 50%;
+											top: 30%;
 											left: 50%;
 											transform: translate(-50%, -50%);
 											width: 100%;
@@ -520,6 +520,11 @@
 											flex-direction: column;
 											align-items: center;
 											justify-content: flex-start;
+										}
+
+										.pdf-iframe {
+											width: 90%;
+											height: 90%;
 										}
 
 										.close-popup {
@@ -635,33 +640,61 @@
 										var pdfLinks = [
 											{
 												id: "pdf-1",
-												url: ""
+												url: undefined,
+												drawingTime: "2021-01-20T19:30"
 											},
 											{
 												id: "pdf-2",
-												url: ""
+												url: undefined,
+												drawingTime: "2021-01-21T18:30"
 											}
 										];
 
+										var makeBannerClickable = () => {
+											pdfLinks.forEach(pdf => {
+												var banner = landingPageEl.getElementById(pdf.id);
+												var drawingTime = new Date(pdf.drawingTime);
+												var currentTime = new Date();
+												const link = pdf.url;
+												if (currentTime > drawingTime && link) {
+													banner.style.cursor = "pointer";
+												} else {
+													banner.style.cursor = "default";
+												}
+											});
+										};
+
+										makeBannerClickable();
+
 										//open popup and get pdf
 										var togglePdf = element => {
-											var popupElement = landingPageEl.getElementById(
-												"pdf-popup"
-											);
-											var iframe;
-											if (element) {
-												var videoId = element.id;
-												popupElement.style.display = "block";
-												var pdfContainer = landingPageEl.querySelector(
-													".pdf-container"
+											var videoId = element.id;
+											var prize = pdfLinks.filter(link => videoId == link.id);
+											var link = prize[0].url;
+											var drawingTime = new Date(prize[0].drawingTime);
+											var currentTime = new Date();
+											if (currentTime > drawingTime && link) {
+												var popupElement = landingPageEl.getElementById(
+													"pdf-popup"
 												);
-												iframe = document.createElement("iframe");
-												iframe.setAttribute("class", "pdf-iframe");
-												pdfContainer.appendChild(iframe);
-											} else {
-												popupElement.style.display = "none";
-												iframe = landingPageEl.querySelector(".pdf-iframe");
-												iframe.remove();
+												var iframe;
+												if (element) {
+													window.scrollTo(0, 0);
+
+													popupElement.style.display = "block";
+													var pdfContainer = landingPageEl.querySelector(
+														".pdf-container"
+													);
+													iframe = document.createElement("iframe");
+													iframe.setAttribute("class", "pdf-iframe");
+													iframe.src = link;
+
+													pdfContainer.appendChild(iframe);
+												} else {
+													popupElement.style.display = "none";
+													iframe = landingPageEl.querySelector(".pdf-iframe");
+													iframe.remove();
+												}
 											}
 										};
 									</script>
