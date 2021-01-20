@@ -818,8 +818,15 @@
 											) {
 												parent = landingPageEl;
 											}
+											var timestamp = new Date().toISOString();
 
-											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
+											fetch(
+												"https://km-tradeshow.bfmgroupinc.com/data.json?c=" +
+													timestamp,
+												{
+													cache: "no-cache"
+												}
+											)
 												.then(response => response.json())
 												.then(data => {
 													const tickerElement = parent.getElementById("ticker");
