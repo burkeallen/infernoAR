@@ -749,10 +749,13 @@
 										fetchVideos();
 
 										var createVideoElements = data => {
-											var videos = data.filter(event =>
-												event.categories[0].name
-													.toLowerCase()
-													.includes("bowling")
+											console.log(data);
+											var videos = data.filter(
+												event =>
+													event.categories[0] &&
+													event.categories[0].name
+														.toLowerCase()
+														.includes("bowling")
 											);
 
 											//sort by start time
@@ -761,7 +764,7 @@
 												var dateB = new Date(b.startTime);
 												return dateA.getTime() > dateB.getTime() ? 1 : -1;
 											});
-
+											console.log(sortedVideos);
 											addLabels(sortedVideos);
 										};
 
