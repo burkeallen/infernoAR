@@ -711,11 +711,7 @@
 											//check winnings against the current time.  if the current time is greater than the array time, set the cash value
 											var currentTime = new Date();
 											for (let i = 0; i < sortedWinnings.length; i++) {
-												var winningsTime = new Date(
-													sortedWinnings[i].time.slice(0, 5) +
-														"0" +
-														sortedWinnings[i].time.slice(5)
-												);
+												var winningsTime = new Date(sortedWinnings[i].time);
 												if (currentTime.getTime() > winningsTime.getTime()) {
 													winningsElement.innerHTML =
 														"TOTAL CASH WON: $" + sortedWinnings[i].amount;
