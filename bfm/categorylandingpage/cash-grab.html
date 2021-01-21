@@ -685,7 +685,15 @@
 
 										// Get Cash Winnings
 										function fetchCash() {
-											fetch("https://km-tradeshow.bfmgroupinc.com/data.json")
+											var timestamp = new Date().toISOString();
+
+											fetch(
+												"https://km-tradeshow.bfmgroupinc.com/data.json?c=" +
+													timestamp,
+												{
+													cache: "no-cache"
+												}
+											)
 												.then(response => {
 													return response.json();
 												})
