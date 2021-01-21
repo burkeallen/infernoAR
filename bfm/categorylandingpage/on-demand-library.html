@@ -910,14 +910,13 @@
 
 												const duration = event.video ? event.video.duration : 0;
 												const startTime = new Date(event.startTime);
-												const endTime = new Date(event.startTime).setSeconds(
-													duration
+												const endTime = new Date(
+													new Date(event.startTime).setSeconds(duration)
 												);
 
 												const day = startTime.getDay();
 												const wed = 3;
 												const thu = 4;
-
 												if (currentTime > endTime) {
 													const item = document.createElement("li");
 													item.setAttribute("id", event.id);
