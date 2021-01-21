@@ -496,9 +496,8 @@
 										#pdf-popup {
 											display: none;
 											position: absolute;
-											top: 30%;
-											left: 50%;
-											transform: translate(-50%, -50%);
+											top: 0%;
+											left: 0%;
 											width: 100%;
 											height: 100%;
 											background-color: rgba(0, 0, 0, 0.386);
@@ -510,11 +509,11 @@
 											color: white;
 											font-size: 2.4rem;
 											position: absolute;
-											top: 50%;
+											top: 45rem;
 											left: 50%;
 											transform: translate(-50%, -50%);
-											height: 50%;
-											width: 50%;
+											height: 60%;
+											width: 70%;
 											background-color: rgba(0, 0, 0, 1);
 											display: flex;
 											flex-direction: column;
@@ -551,6 +550,15 @@
 											}
 											.day2 {
 												order: 2;
+											}
+										}
+
+										@media screen and (max-width: 780px) {
+											.pdf-container {
+												width: 90%;
+												height: 60rem;
+												margin-left: 0;
+												margin-top: 6rem;
 											}
 										}
 									</style>
@@ -640,7 +648,8 @@
 										var pdfLinks = [
 											{
 												id: "pdf-1",
-												url: undefined,
+												url:
+													"https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/door-prizes/Door Prize Winners - day one.pdf",
 												drawingTime: "2021-01-20T19:30"
 											},
 											{
@@ -668,19 +677,19 @@
 
 										//open popup and get pdf
 										var togglePdf = element => {
-											var videoId = element.id;
-											var prize = pdfLinks.filter(link => videoId == link.id);
-											var link = prize[0].url;
-											var drawingTime = new Date(prize[0].drawingTime);
-											var currentTime = new Date();
-											if (currentTime > drawingTime && link) {
-												var popupElement = landingPageEl.getElementById(
-													"pdf-popup"
-												);
-												var iframe;
-												if (element) {
+											var popupElement = landingPageEl.getElementById(
+												"pdf-popup"
+											);
+											if (element) {
+												var videoId = element.id;
+												var prize = pdfLinks.filter(link => videoId == link.id);
+												var link = prize[0].url;
+												var drawingTime = new Date(prize[0].drawingTime);
+												var currentTime = new Date();
+												if (currentTime > drawingTime && link) {
 													window.scrollTo(0, 0);
 
+													var iframe;
 													popupElement.style.display = "block";
 													var pdfContainer = landingPageEl.querySelector(
 														".pdf-container"
@@ -690,11 +699,11 @@
 													iframe.src = link;
 
 													pdfContainer.appendChild(iframe);
-												} else {
-													popupElement.style.display = "none";
-													iframe = landingPageEl.querySelector(".pdf-iframe");
-													iframe.remove();
 												}
+											} else {
+												popupElement.style.display = "none";
+												iframe = landingPageEl.querySelector(".pdf-iframe");
+												iframe.remove();
 											}
 										};
 									</script>
