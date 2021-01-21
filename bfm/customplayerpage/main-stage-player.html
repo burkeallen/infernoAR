@@ -1,251 +1,308 @@
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Inferno Snippet Mockup Template</title>
-  <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
-  <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
-  <!--  Local/Client Color Overrides if they file exists -->
-  <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    console.log('***************************************')
-    console.log('"landingPageEl" does not exist on \ncustom player page, use document instead')
-    console.log('***************************************')
-    window.isLocalTemplate = true
-  </script>
-  <!-- Import JQuery -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta
+		name="viewport"
+		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	/>
+	<title>Inferno Snippet Mockup Template</title>
+	<!-- Import Roboto -->
+	<link
+		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+		rel="stylesheet"
+	/>
+	<!-- Import Inferno's Styles -->
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
+	/>
+	<link
+		rel="stylesheet"
+		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
+	/>
+	<!--  Local/Client Color Overrides if they file exists -->
+	<link rel="stylesheet" href="../inferno-client.css" />
+	<script>
+		console.log("***************************************");
+		console.log(
+			'"landingPageEl" does not exist on \ncustom player page, use document instead'
+		);
+		console.log("***************************************");
+		window.isLocalTemplate = true;
+	</script>
+	<!-- Import JQuery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+	<script>
+		function authenticate(project) {
+			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+			// Auth w/ Inferno API
+			const params = {
+				email: project.username,
+				password: project.password,
+				grantType: "password"
+			};
 
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
+			// Set header
+			const headers = { "X-InfernoCore-Domain": project.domain };
 
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
-    }
+			// perform synchronous ajax call so rest of code waits until you are authenticated
+			$.ajax({
+				url: _baseUrl + "token",
+				type: "POST",
+				async: false,
+				accept: "application/json",
+				contentType: "application/json",
+				headers: headers,
+				data: JSON.stringify(params),
+				success: function (res) {
+					sessionStorage.setItem("domain", project.domain);
+					storeUser(JSON.parse(res));
+				},
+				error: function (err) {
+					alert(JSON.stringify(err));
+				},
+				complete: function () {
+					console.log("user was authenticated into ", project.domain);
+				}
+			});
+		}
 
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      //
-      return JSON.parse(jsonPayload);
-    }
+		function parseJwt(token) {
+			var base64Url = token.split(".")[1];
+			var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+			var jsonPayload = decodeURIComponent(
+				atob(base64)
+					.split("")
+					.map(function (c) {
+						return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+					})
+					.join("")
+			);
+			//
+			return JSON.parse(jsonPayload);
+		}
 
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
+		function storeUser(data) {
+			// console.log(data);
+			sessionStorage.setItem("userId", parseJwt(data.AccessToken).sub);
+			sessionStorage.setItem("clientId", data.ClientId);
+			sessionStorage.setItem("token", data.AccessToken);
+			sessionStorage.setItem("refreshToken", data.RefreshToken);
+		}
 
-    function login() {
-        const projectEl = document.querySelector('#novoProject')
-        const projectName = projectEl ? projectEl.getAttribute('name') : null
-        const currentProject = projects.filter(project => {
-          return project.name === projectName
-        })[0]
+		function login() {
+			const projectEl = document.querySelector("#novoProject");
+			const projectName = projectEl ? projectEl.getAttribute("name") : null;
+			const currentProject = projects.filter(project => {
+				return project.name === projectName;
+			})[0];
 
-        if (!currentProject) {
-          alert(
-            'could not log into Inferno \n\r Check the project name in the login() function',
-          )
-          return
-        }
+			if (!currentProject) {
+				alert(
+					"could not log into Inferno \n\r Check the project name in the login() function"
+				);
+				return;
+			}
 
-        authenticate(currentProject)
-    }
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+			authenticate(currentProject);
+		}
+	</script>
+	<!-- store your credentials in a local file -->
+	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+	<script
+		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+		src="/inferno.config.js"
+	></script>
 
-  <!-- Build out Local Menu on Left Navigation -->
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
+	<!-- Build out Local Menu on Left Navigation -->
+	<style>
+		#localTemplateMenu {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 1em;
+		}
 
-    #localTemplateMenu a, #localTemplateMenu details{
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
+		#localTemplateMenu a,
+		#localTemplateMenu details {
+			display: block;
+			margin: 0.25em;
+			background-color: var(--sidebar-bg-color);
+			border: none;
+			border-bottom: solid 1px var(--sidebar-highlight-text-color);
+			color: var(--sidebar-text-color);
+			cursor: pointer;
+			width: 80%;
+			padding: 0.25em 0;
+		}
 
-    #localTemplateMenu details a {
-      margin-left: 1em;
-    }
+		#localTemplateMenu details a {
+			margin-left: 1em;
+		}
 
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
+		#localTemplateMenu a:hover {
+			filter: brightness(80%);
+			text-decoration: none;
+			transform: translateX(-0.3em);
+		}
 
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
+		#localTemplateMenu a.activeMenu {
+			background-color: var(--sidebar-highlight-bg-color);
+			color: var(--sidebar-text-color);
+		}
 
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
+		.aside-collapsed * #localTemplateMenu {
+			margin: 0;
+			padding: 1em 0;
+		}
 
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
+		.aside-collapsed * #localTemplateMenu a {
+			word-wrap: break-word;
+			min-width: 100%;
+			border-radius: 0;
+			border-bottom: 1px solid var(--sidebar-text-color);
+		}
 
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
+		.aside-collapsed * #localTemplateMenu a:hover {
+			transform: none;
+		}
+	</style>
+	<script>
+		function buildLocalMenu() {
+			window.addEventListener("load", event => {
+				const menu = document.getElementById("localTemplateMenu");
+				const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+					return a.name > b.name ? 1 : -1;
+				});
 
-  </style>
-  <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
-          return a.name > b.name ? 1 : -1;
-        });
+				const pages = menuItems.filter(
+					item => !item.name.toLowerCase().includes("booth")
+				);
+				const booths = menuItems.filter(item =>
+					item.name.toLowerCase().includes("booth")
+				);
 
-        const pages = menuItems.filter(item => !item.name.toLowerCase().includes('booth'));
-        const booths = menuItems.filter(item => item.name.toLowerCase().includes('booth'));
+				pages.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					menu.appendChild(menuItem);
+				});
 
-        pages.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        });
+				const boothMenu = document.createElement("details");
+				const summary = document.createElement("summary");
+				summary.innerHTML = "BOOTHS";
+				boothMenu.appendChild(summary);
 
-        const boothMenu = document.createElement("details");
-        const summary = document.createElement("summary");
-        summary.innerHTML = "BOOTHS";
-        boothMenu.appendChild(summary);
+				booths.forEach(item => {
+					const menuItem = document.createElement("a");
+					menuItem.href = "../" + item.file;
+					menuItem.innerHTML = item.name;
+					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+					try {
+						const currentSnippet = landingPageEl.querySelector(
+							"#" + item.snippetID.toString()
+						);
+						if (currentSnippet) {
+							menuItem.classList.toggle("activeMenu");
+						}
+					} catch (e) {
+						// do nothing;
+					}
+					boothMenu.appendChild(menuItem);
+				});
 
-        booths.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          boothMenu.appendChild(menuItem);
-        });
-
-        if (booths.length) {
-          menu.appendChild(boothMenu);
-        }
-
-
-      })
-    }
-  </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+				if (booths.length) {
+					menu.appendChild(boothMenu);
+				}
+			});
+		}
+	</script>
+	<script
+		onload="buildLocalMenu()"
+		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
+		src="../menu.js"
+	></script>
 </head>
 
 <body>
-<div style="display: none" id="novoProject" name="bfm"></div>
-<script>login();</script>
-<app-root class="layout-fixed has-menu">
-  <videos-layout>
-    <div class="wrapper" layout="column">
-      <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+	<div style="display: none" id="novoProject" name="bfm"></div>
+	<script>
+		login();
+	</script>
+	<app-root class="layout-fixed has-menu">
+		<videos-layout>
+			<div class="wrapper" layout="column">
+				<app-header class="topnavbar-wrapper">
+					<mat-toolbar
+						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+						color="primary"
+					>
+						<div class="navbar-header"><a href="/">LOCAL</a></div>
+						<div
+							class="ellipsis ng-star-inserted"
+							flex
+							layout="row"
+							layout-align="start center"
+						>
+							<button
+								class="menu-btn mat-icon-button ng-star-inserted"
+								hide
+								mat-icon-button
+								show-gt-sm
+								trigger-resize
+								onclick="mtTriggerMenu()"
+							>
 								<span class="mat-button-wrapper">
-									<mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+									<mat-icon
+										class="mat-icon material-icons mat-icon-no-color"
+										role="img"
+										aria-hidden="true"
+									>
 										menu
 									</mat-icon>
 								</span>
-            </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">
-              Sample Page Title
-            </div>
-          </div>
-        </mat-toolbar>
-      </app-header>
-      <!-- SIDEBAR -->
-      <videos-sidebar class="aside">
-        <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
-          </nav>
-        </div>
-      </videos-sidebar>
-      <!-- ./ SIDEBAR -->
-      <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
-        <div class="content-wrapper">
-          <videos-detail-page class="ng-star-inserted">
-            <div mutationobserver>
-
-<!-- custom player page does not support liquid
+							</button>
+							<div
+								_ngcontent-inv-c7
+								class="mat-title ellipsis m0"
+								flex
+								title="Page Title"
+							>
+								Sample Page Title
+							</div>
+						</div>
+					</mat-toolbar>
+				</app-header>
+				<!-- SIDEBAR -->
+				<videos-sidebar class="aside">
+					<div class="aside-inner">
+						<nav class="sidebar" sidebar-anyclick-close>
+							<div class="nav" id="localTemplateMenu"></div>
+						</nav>
+					</div>
+				</videos-sidebar>
+				<!-- ./ SIDEBAR -->
+				<!-- LANDING -->
+				<section class="IE-FlexAuto" flex>
+					<div class="content-wrapper">
+						<videos-detail-page class="ng-star-inserted">
+							<div mutationobserver>
+								<!-- custom player page does not support liquid
 
     it does support injecting the following ES6 template strings
     - ${firstName}  - logged in user first name
@@ -257,24 +314,30 @@
 
     to get more details like duration, event id, etc you will need to use the inferno API
 -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="01b0cc4b-d98f-4e1a-a862-0c3d60e7d904">
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- SNIPPET CONTENT START -->
+								<inferno-snippet-content
+									id="01b0cc4b-d98f-4e1a-a862-0c3d60e7d904"
+								>
 									<!-- Click Track Landing v2.0 -->
-									<div id="xtrackx|2|non_booth|main_stage|page_load" class="page_load"></div>
+									<div
+										id="xtrackx|2|non_booth|main_stage|page_load"
+										class="page_load"
+									></div>
 									<script>
 										setTimeout(() => {
 											var event = document.createEvent("MouseEvents");
 											event.initEvent("mouseup", true, true);
-											document
-												.querySelector(".page_load")
-												.dispatchEvent(event);
+											document.querySelector(".page_load").dispatchEvent(event);
 										}, 250);
 									</script>
 									<!-- ./ Click Track Landing v2.0 -->
-									<category-page-links id="category-page-links" style="display: none">
+									<category-page-links
+										id="category-page-links"
+										style="display: none"
+									>
 										<!--
                   these links will allow navigating ot booth pages without page refreshing
                   this will print all categories not just the booths, no way around that at the time of this writing
@@ -282,22 +345,53 @@
                   links generated by by JS do not and cause a page/app reload
                   even when navigating within the app using relative URLS
                   -->
-										<a href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc" ng-href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc" id="link_358079a2-2675-4f09-c090-08d88b301cce" pageid="358079a2-2675-4f09-c090-08d88b301cce">
+										<a
+											href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc"
+											ng-href="/videos/358079a2-2675-4f09-c090-08d88b301cce/landing/52f8e7a0-c244-4c81-b630-215c42c364dc"
+											id="link_358079a2-2675-4f09-c090-08d88b301cce"
+											pageid="358079a2-2675-4f09-c090-08d88b301cce"
+										>
 											Lobby
 										</a>
-										<a href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599" ng-href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599" id="link_984354b4-1e39-4e68-9e87-08d88aff31f5" pageid="984354b4-1e39-4e68-9e87-08d88aff31f5">
+										<a
+											href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599"
+											ng-href="/videos/984354b4-1e39-4e68-9e87-08d88aff31f5/landing/881fe87f-ff5a-4428-94cd-ee1f8f35d599"
+											id="link_984354b4-1e39-4e68-9e87-08d88aff31f5"
+											pageid="984354b4-1e39-4e68-9e87-08d88aff31f5"
+										>
 											Help Desk
 										</a>
-										<a href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805" ng-href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805" id="link_6361459f-1225-4193-7f1e-08d88af68aca" pageid="6361459f-1225-4193-7f1e-08d88af68aca">
+										<a
+											href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
+											ng-href="/videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
+											id="link_6361459f-1225-4193-7f1e-08d88af68aca"
+											pageid="6361459f-1225-4193-7f1e-08d88af68aca"
+										>
 											Lounge
 										</a>
-										<a href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4" ng-href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4" id="link_73bdb75e-8582-4ceb-2da1-08d88b2f297e" pageid="73bdb75e-8582-4ceb-2da1-08d88b2f297e">
+										<a
+											href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4"
+											ng-href="/videos/73bdb75e-8582-4ceb-2da1-08d88b2f297e/landing/7d0eb77a-914e-4eed-aa66-4e2081aef9b4"
+											id="link_73bdb75e-8582-4ceb-2da1-08d88b2f297e"
+											pageid="73bdb75e-8582-4ceb-2da1-08d88b2f297e"
+										>
 											Trade Show
 										</a>
-										<a href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598" ng-href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598" id="link_1664ff67-69c8-49fb-c091-08d88b301cce" pageid="1664ff67-69c8-49fb-c091-08d88b301cce">
+										<a
+											href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598"
+											ng-href="/videos/1664ff67-69c8-49fb-c091-08d88b301cce/landing/c3a22b6f-51bf-4aab-a2d4-21e43a78b598"
+											id="link_1664ff67-69c8-49fb-c091-08d88b301cce"
+											pageid="1664ff67-69c8-49fb-c091-08d88b301cce"
+										>
 											Main Stage
 										</a>
-										<a href="/videos/e3099c98-b980-43e2-a964-08d8bbcd650b/landing/764bb67b-a936-4766-a0f9-a152a3bac575" ng-href="/videos/e3099c98-b980-43e2-a964-08d8bbcd650b/landing/764bb67b-a936-4766-a0f9-a152a3bac575" id="link_e3099c98-b980-43e2-a964-08d8bbcd650b" pageid="e3099c98-b980-43e2-a964-08d8bbcd650b">On Demand Library</a>
+										<a
+											href="/videos/e3099c98-b980-43e2-a964-08d8bbcd650b/landing/764bb67b-a936-4766-a0f9-a152a3bac575"
+											ng-href="/videos/e3099c98-b980-43e2-a964-08d8bbcd650b/landing/764bb67b-a936-4766-a0f9-a152a3bac575"
+											id="link_e3099c98-b980-43e2-a964-08d8bbcd650b"
+											pageid="e3099c98-b980-43e2-a964-08d8bbcd650b"
+											>On Demand Library</a
+										>
 									</category-page-links>
 
 									<!-- Script to insert header with marquee and bottom nav-->
@@ -720,25 +814,45 @@
 												<div class="schedule">
 													<h1>Schedule</h1>
 													<div class="tabs">
-														<button class="tab active" id="tab1" onclick="toggleTab(this)">
+														<button
+															class="tab"
+															id="tab1"
+															onclick="toggleTab(this)"
+														>
 															Wednesday
 														</button>
-														<button class="tab" id="tab2" onclick="toggleTab(this)">
+														<button
+															class="tab active"
+															id="tab2"
+															onclick="toggleTab(this)"
+														>
 															Thursday
 														</button>
 													</div>
-													<div id="panel-tab1" class="panel-1 content-panel">
+													<div
+														id="panel-tab1"
+														class="panel-1 content-panel hidden"
+													>
 														<ul></ul>
 													</div>
 
-													<div id="panel-tab2" class="panel-2 content-panel hidden">
+													<div id="panel-tab2" class="panel-2 content-panel">
 														<ul></ul>
 													</div>
 
 													<div class="takeaway">
-														<a id="takeawayLink" href="https://kmtire.com/takeaways" target="_blank"><img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/takeaway-small.png"></a>
+														<a
+															id="takeawayLink"
+															href="https://kmtire.com/takeaways"
+															target="_blank"
+															><img
+																src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/bfm/main-stage/takeaway-small.png"
+														/></a>
 													</div>
-													<button class="on-demand" onclick="goPage('e3099c98-b980-43e2-a964-08d8bbcd650b')">
+													<button
+														class="on-demand"
+														onclick="goPage('e3099c98-b980-43e2-a964-08d8bbcd650b')"
+													>
 														On Demand Seminars
 													</button>
 												</div>
@@ -746,10 +860,17 @@
 
 											<div class="col2">
 												<div class="ntar-video-container">
-													<div class="ntar-video" id="inferno-video-player"></div>
+													<div
+														class="ntar-video"
+														id="inferno-video-player"
+													></div>
 												</div>
 												<div class="chat-link">
-													<a id="click_chat_with_seminar_speakers" href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805" ng-href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805">
+													<a
+														id="click_chat_with_seminar_speakers"
+														href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
+														ng-href="videos/6361459f-1225-4193-7f1e-08d88af68aca/landing/07231910-4a46-4cf6-b6ce-076952f1a805"
+													>
 														Visit the lounge to chat with seminar speaker
 													</a>
 												</div>
@@ -951,88 +1072,92 @@
 										}
 									</script>
 								</inferno-snippet-content>
-              <!--  SNIPPET CONTENT END  -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-              <!-- ********************* -->
-            </div>
-          </videos-detail-page>
-        </div>
-      </section>
-      <!-- LANDING -->
-      <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
-        Inferno Footer
-      </footer>
-      <!-- ./ FOOTER -->
-    </div>
-  </videos-layout>
-</app-root>
+								<!--  SNIPPET CONTENT END  -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+								<!-- ********************* -->
+							</div>
+						</videos-detail-page>
+					</div>
+				</section>
+				<!-- LANDING -->
+				<!-- FOOTER -->
+				<footer app-footer layout="row" layout-align="start center">
+					Inferno Footer
+				</footer>
+				<!-- ./ FOOTER -->
+			</div>
+		</videos-layout>
+	</app-root>
 
+	<script>
+		console.log("REMINDER ******* Custom Player pages do not support LIQUID");
 
-<script>
+		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+		function mtCollapseMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "collapsed");
+			appRoot.classList.add("aside-collapsed");
+			appRoot.classList.remove("aside-hidden");
+			sideBar.classList.remove("hidden");
+		}
 
-  console.log('REMINDER ******* Custom Player pages do not support LIQUID')
+		function mtHideMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "hidden");
+			appRoot.classList.remove("aside-collapsed");
+			appRoot.classList.add("aside-hidden");
+			sideBar.classList.add("hidden");
+		}
 
-  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-  function mtCollapseMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'collapsed')
-    appRoot.classList.add('aside-collapsed')
-    appRoot.classList.remove('aside-hidden')
-    sideBar.classList.remove('hidden')
-  }
+		function mtExpandMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			window.sessionStorage.setItem("menuState", "expanded");
+			appRoot.classList.remove("aside-hidden");
+			appRoot.classList.remove("aside-collapsed");
+			sideBar.classList.remove("hidden");
+		}
 
-  function mtHideMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'hidden')
-    appRoot.classList.remove('aside-collapsed')
-    appRoot.classList.add('aside-hidden')
-    sideBar.classList.add('hidden')
-  }
+		function mtTriggerMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			if (
+				!appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtCollapseMenu();
+			} else if (
+				appRoot.classList.contains("aside-collapsed") &&
+				!appRoot.classList.contains("aside-hidden")
+			) {
+				mtHideMenu();
+			} else if (appRoot.classList.contains("aside-hidden")) {
+				mtExpandMenu();
+			}
+		}
 
-  function mtExpandMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    window.sessionStorage.setItem('menuState', 'expanded')
-    appRoot.classList.remove('aside-hidden')
-    appRoot.classList.remove('aside-collapsed')
-    sideBar.classList.remove('hidden')
-  }
+		function mtInitMenu() {
+			const appRoot = document.querySelector("app-root");
+			const sideBar = document.querySelector("videos-sidebar");
+			const state = sessionStorage.getItem("menuState");
 
-  function mtTriggerMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtCollapseMenu()
-    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
-      mtHideMenu()
-    } else if (appRoot.classList.contains('aside-hidden')) {
-      mtExpandMenu()
-    }
-  }
+			if (state === "collapsed") {
+				mtCollapseMenu();
+			} else if (state === "hidden") {
+				mtHideMenu();
+			} else if (state === "expanded") {
+				mtExpandMenu();
+			}
+		}
 
-  function mtInitMenu() {
-    const appRoot = document.querySelector('app-root')
-    const sideBar = document.querySelector('videos-sidebar')
-    const state = sessionStorage.getItem('menuState')
-
-    if (state === 'collapsed') {
-      mtCollapseMenu()
-    } else if (state === 'hidden') {
-      mtHideMenu()
-    } else if (state === 'expanded') {
-      mtExpandMenu()
-    }
-  }
-
-  function populateInfernoElements() {
-    const qaDiv = document.querySelector('#inferno-questions-basic')
-    const videoDiv = document.querySelector('#inferno-video-player')
-    if (qaDiv) {
-      $(qaDiv).append(`
+		function populateInfernoElements() {
+			const qaDiv = document.querySelector("#inferno-questions-basic");
+			const videoDiv = document.querySelector("#inferno-video-player");
+			if (qaDiv) {
+				$(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -1044,27 +1169,22 @@
           </div>
         </div>
       </questions>
-      `)
-    }
-    if (videoDiv) {
-      $(videoDiv).append(`
+      `);
+			}
+			if (videoDiv) {
+				$(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
           frameborder="0"
           allowfullscreen">
         </iframe>
-        `)
-    }
-  }
+        `);
+			}
+		}
 
-  mtInitMenu()
-  populateInfernoElements()
-
-
-</script>
-
-
-
-
-</body><!-- Menu Collapse Script -->
+		mtInitMenu();
+		populateInfernoElements();
+	</script>
+</body>
+<!-- Menu Collapse Script -->
