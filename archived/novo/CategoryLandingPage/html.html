@@ -286,108 +286,57 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="faab27f5-866c-4af5-b472-69ba6c5a85ea">
-                  <style>
-                    /* prevent entire screen from going black if you try to reference an image that does not exist*/
-                    /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-                    img::after {
-                      content: none;
+              <inferno-snippet-content id="86456214-9132-4e49-8421-40aa2e7656c9">
+
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadFont(name, url) {
+                    if (document.fonts.check('1em ' + name)) {
+                      return
                     }
+                    const fontFace = new FontFace(name, 'url(' + url + ')')
 
-                    .content {
-                      background-image: url('https://pixabay.com/get/55e0d7424a55ae14f6da8c7dda353678153edce65650774b_1280.jpg');
-                      background-attachment: fixed;
-                      background-repeat: no-repeat;
-                      background-size: cover;
-                      background-position: center;
-                      min-height: calc(100vh - 114px);
-                      margin: -20px;
-                      padding: 20px 24px;
-                      z-index: 1;
-                      font-family: Verdana, sans-serif !important;
-                    }
+                    fontFace.load().then(function (loadedFont) {
+                      document.fonts.add(loadedFont)
+                      console.log('Loaded custom font ', name)
+                    }).catch(function (error) {
+                      // error occurred
+                      console.log('Error loading ', name)
+                    })
 
-                    pre {
-                      color: black;
-                      font-family: 'Lucida Console', Monaco, monospace;
-                      font-size: 1rem;
-                      font-weight: bold;
-                      max-height: 600px;
-                      max-width: 90%;
-                    }
+                  }
 
+                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/indieflower/v12/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2')
 
-                    .grid-container {
-                      display: grid;
-                      grid-template-columns: repeat(auto-fill, minmax(250px, max-content));
-                      grid-auto-rows: auto;
-                      gap: 12px 12px;
-                      background: #d6d6d6;
-                      padding: 20px;
-                      max-width: 90%;
-                      justify-content: center;
-                    }
+                </script>
 
-                    .card {
-                      background-color: white;
-                      border-radius: 12px;
-                      padding: 8px;
-                      box-shadow: 4px 12px 10px 6px rgba(77, 77, 77, .4);
-                    }
+                <style>
+                  /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                  /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                  img::after {
+                    content: none;
+                  }
 
-                    .grid-container img {
-                      max-width: 96px;
-                      border-radius: 50%;
-                      border: solid 1px #999999;
+                  .content {
+                    /* standard inferno static assets url = https://studio304nextechar.freetls.fastly.net/infernoAR/{projectname} */
+                    /* s3 bucket assets url = https://inferno-event-assets.s3-us-west-2.amazonaws.com/{projectname} */
+                    position: relative;
+                    background-image: url('https://via.placeholder.com/1200x800/2A59AE/FFFFFF?text=Custom%20Background');
+                    background-attachment: local;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    padding: 20px 24px;
+                    z-index: 1;
+                    font-family: "CustomFont1", sans-serif !important;
+                  }
+                </style>
 
-                    }
-
-                    .profileImage {
-                      text-align: center;
-                    }
-
-                    .fullName {
-                      font-weight: bold;
-                      text-align: center;
-                      line-height: 1.5em;
-                    }
-
-                    .bio {
-                      font-size: .8em;
-                      padding: 8px;
-                    }
-                  </style>
-
-                  <div class="content">
-
-                    <h2>Liquid Parsing Template</h2>
-                    <div class="grid-container">
-                      {% for user in data.UserProfiles %}
-                      <div class="card">
-                        <div class="profileImage">
-                          <img src="https://ingress.infernocore.jolokia.com/api/ProfileImage/{{user.UserId}}/250/250" onerror="this.src='https://utulsa.edu/wp-content/uploads/2018/08/generic-avatar.jpg'">
-                        </div>
-                        <div class="fullName">{{ user.FirstName }} {{ user.Lastname }}</div>
-                        <div class="bio">{{ user.Bio }}</div>
-                      </div>
-                      {% endfor %}
-                    </div>
-
-                    <h2>This is the data object</h2>
-                    <pre id="novo-liquid">                                       {% for user in data.UserProfiles %}
-
-                    </pre>
-                  </div>
-
-                  <script>
-                    var novoOut = landingPageEl.querySelector('#novo-liquid');
-
-                    // var data = {{data | json}}; // comment out when running locally;
-
-                    novoOut.innerHTML = `${JSON.stringify(data, undefined, 4)}`;
-                  </script>
-
-
+                <div class="content">
+                  <h2 style="color:white">Sample Custom Snippet Page</h2>
+                </div>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->

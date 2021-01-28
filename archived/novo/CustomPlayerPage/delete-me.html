@@ -10,10 +10,14 @@
   <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    console.log('***************************************')
+    console.log('"landingPageEl" does not exist on \ncustom player page, use document instead')
+    console.log('***************************************')
+    window.isLocalTemplate = true
+  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
   <script>
     function authenticate(project) {
@@ -48,71 +52,49 @@
           console.log('user was authenticated into ', project.domain)
         },
       })
+    }
 
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      //
+      return JSON.parse(jsonPayload);
     }
 
     function storeUser(data) {
       // console.log(data);
+      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);      
       sessionStorage.setItem('clientId', data.ClientId)
       sessionStorage.setItem('token', data.AccessToken)
       sessionStorage.setItem('refreshToken', data.RefreshToken)
     }
 
     function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const projectEl = document.querySelector('#novoProject')
+        const projectName = projectEl ? projectEl.getAttribute('name') : null
         const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+          return project.name === projectName
+        })[0]
 
         if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
+          alert(
+            'could not log into Inferno \n\r Check the project name in the login() function',
+          )
+          return
         }
 
-        authenticate(currentProject);
-      });
+        authenticate(currentProject)
     }
-
   </script>
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()" onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
-
-  <!-- Liquid Templating -->
-  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-  <!--  Load Liquid JSON From Local file -->
-  <script>
-    function loadJSON(file, callback) {
-
-      const xobj = new XMLHttpRequest()
-      xobj.overrideMimeType('application/json')
-      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
-      xobj.onreadystatechange = function () {
-        if (xobj.readyState == 4 && xobj.status == '200') {
-          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-          callback(xobj.responseText)
-        }
-      }
-      xobj.send(null)
-    }
-
-    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-    // processing can potentially interfere with scripts that run on page load.
-    var data = {}
-    loadJSON('../liquid.json', function (response) {
-      // Parse JSON string into object
-      const x = JSON.parse(response)
-      data = x[0]
-    })
-
-  </script>
+  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
 
   <!-- Build out Local Menu on Left Navigation -->
-
   <style>
     #localTemplateMenu {
       display: flex;
@@ -122,7 +104,7 @@
       padding: 1em;
     }
 
-    #localTemplateMenu a {
+    #localTemplateMenu a, #localTemplateMenu details{
       display: block;
       margin: .25em;
       background-color: var(--sidebar-bg-color);
@@ -132,6 +114,10 @@
       cursor: pointer;
       width: 80%;
       padding: .25em 0;
+    }
+
+    #localTemplateMenu details a {
+      margin-left: 1em;
     }
 
     #localTemplateMenu a:hover {
@@ -166,7 +152,14 @@
     function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        const pages = menuItems.filter(item => !item.name.toLowerCase().includes('booth'));
+        const booths = menuItems.filter(item => item.name.toLowerCase().includes('booth'));
+
+        pages.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -180,34 +173,60 @@
             // do nothing;
           }
           menu.appendChild(menuItem);
-        })
+        });
+
+        const boothMenu = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.innerHTML = "BOOTHS";
+        boothMenu.appendChild(summary);
+
+        booths.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          boothMenu.appendChild(menuItem);
+        });
+
+        if (booths.length) {
+          menu.appendChild(boothMenu);
+        }
+
+
       })
     }
   </script>
   <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-  <script>
-    let landingPageEl = null;
-    window.isLocalTemplate = true;
-  </script>
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="novo" onload="login()"></div>
+<div style="display: none" id="novoProject" name="novo"></div>
+<script>login();</script>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
         <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header">LOCAL</div>
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
           <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
             <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
-              <span class="mat-button-wrapper">
-                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
-                    menu
-                  </mat-icon>
-              </span>
+								<span class="mat-button-wrapper">
+									<mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+										menu
+									</mat-icon>
+								</span>
             </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">
+              Sample Page Title
+            </div>
           </div>
         </mat-toolbar>
       </app-header>
@@ -217,25 +236,27 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
       <section class="IE-FlexAuto" flex>
         <div class="content-wrapper">
-          <landing-page class="ng-star-inserted">
-            <div id="landing">
-              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-              <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
-                const landing = landingPageEl.appendChild(document.getElementById('landing'));
-                landingPageEl.appendChild(landing);
-                const loginPageEl = landingPageEl;
-              </script>
-              <style type="text/css">
-                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-              </style>
+          <videos-detail-page class="ng-star-inserted">
+            <div mutationobserver>
+
+<!-- custom player page does not support liquid
+
+    it does support injecting the following ES6 template strings
+    - ${firstName}  - logged in user first name
+    - ${lastName}   - logged in user last name
+    - ${email}      - logged in user email address
+    - ${eventName}  - the current event name (is not necessarily unique in the system)
+    - ${eventDescription} - the current event description
+    - ${startTime} - the current event's start time
+
+    to get more details like duration, event id, etc you will need to use the inferno API
+-->
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -246,7 +267,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
             </div>
-          </landing-page>
+          </videos-detail-page>
         </div>
       </section>
       <!-- LANDING -->
@@ -260,27 +281,9 @@
 </app-root>
 
 
-
-
 <script>
 
-  // LIQUID PROCESSING (Set the data variable above)
-  function processLiquid() {
-    return new Promise((resolve, reject) => {
-      console.log('PROCESSING LIQUID')
-      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-      // This breaks comparison operators, so we need to convert them back before Liquid processing.
-      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-      // Select the element itself to replace the content
-      const result = landingPageEl.querySelector('inferno-snippet-content')
-      // Initialize the parsing engine
-      const engine = new liquidjs.Liquid()
-      // Parse and render
-      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
-      resolve()
-    })
-
-  }
+  console.log('REMINDER ******* Custom Player pages do not support LIQUID')
 
   // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
   function mtCollapseMenu() {
@@ -337,8 +340,8 @@
   }
 
   function populateInfernoElements() {
-    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
-    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    const qaDiv = document.querySelector('#inferno-questions-basic')
+    const videoDiv = document.querySelector('#inferno-video-player')
     if (qaDiv) {
       $(qaDiv).append(`
       <questions _nghost-qch-c20="">
@@ -366,15 +369,12 @@
     }
   }
 
-  // Wait for liquid processing before handling the rest
-  if (data) {
-    processLiquid().then(mtInitMenu).then(populateInfernoElements)
-  } else {
-    mtInitMenu()
-    populateInfernoElements()
-  }
+  mtInitMenu()
+  populateInfernoElements()
+
 
 </script>
+
 
 
 

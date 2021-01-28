@@ -1,0 +1,1252 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <script>
+    let landingPageEl = null
+    window.isLocalTemplate = true
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: 'password',
+      }
+
+      // Set header
+      const headers = {'X-InfernoCore-Domain': project.domain}
+
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + 'token',
+        type: 'POST',
+        async: false,
+        accept: 'application/json',
+        contentType: 'application/json',
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem('domain', project.domain)
+          storeUser(JSON.parse(res))
+        },
+        error: function (err) {
+          alert(JSON.stringify(err))
+        },
+        complete: function () {
+          console.log('user was authenticated into ', project.domain)
+        },
+      })
+
+    }
+
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      //
+      return JSON.parse(jsonPayload);
+    }
+
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);      
+      sessionStorage.setItem('clientId', data.ClientId)
+      sessionStorage.setItem('token', data.AccessToken)
+      sessionStorage.setItem('refreshToken', data.RefreshToken)
+    }
+
+    function login() {
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
+
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
+
+        authenticate(currentProject);
+    }
+
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
+
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+
+      const xobj = new XMLHttpRequest()
+      xobj.overrideMimeType('application/json')
+      xobj.open('GET', file, false) // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == '200') {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText)
+        }
+      }
+      xobj.send(null)
+    }
+
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {}
+    loadJSON('../liquid.json', function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response)
+      data = x[0]
+    })
+
+  </script>
+
+  <!-- Build out Local Menu on Left Navigation -->
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
+
+    #localTemplateMenu a, #localTemplateMenu details{
+      display: block;
+      margin: .25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: .25em 0;
+    }
+
+    #localTemplateMenu details a {
+      margin-left: 1em;
+    }
+
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-.3em);
+    }
+
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
+
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
+
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener('load', (event) => {
+        const menu = document.getElementById('localTemplateMenu');
+        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        const pages = menuItems.filter(item => !item.name.toLowerCase().includes('booth'));
+        const booths = menuItems.filter(item => item.name.toLowerCase().includes('booth'));
+
+        pages.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        });
+
+        const boothMenu = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.innerHTML = "BOOTHS";
+        boothMenu.appendChild(summary);
+
+        booths.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          boothMenu.appendChild(menuItem);
+        });
+
+        if (booths.length) {
+          menu.appendChild(boothMenu);
+        }
+
+
+      })
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
+
+</head>
+
+<body>
+<div style="display:none" id="novoProject" name="novo"></div>
+<script>login();</script>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+              <span class="mat-button-wrapper">
+                  <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
+                    menu
+                  </mat-icon>
+              </span>
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+          
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
+                const landing = landingPageEl.appendChild(document.getElementById('landing'))
+                landingPageEl.appendChild(landing)
+                const loginPageEl = landingPageEl
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="ac7f893c-88ec-4eb9-943d-4c1c54a6dab4"><style>img:after {
+    content: none;
+}
+img.actionable:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+.inferno-confirm-btn {
+    display: block;
+    margin: 4vmin auto 2vmin;
+    background: #eee;
+    padding: 1vmin 3vmin;
+    font-size: 2vmin;
+    line-height: 2.4vmin;
+    color: #333;
+    font-weight: 700;
+    border: none;
+    border-radius: 5px;
+}
+.inferno-cancel-btn {
+    display: block;
+    margin: 0 auto;
+    color: #666;
+    font-size: 1.8vmin;
+    line-height: 2vmin;
+    padding: 1vmin;
+    background: 0 0;
+    border: none;
+}
+.inferno-generated-booth-container {
+    display: flex;
+    position: relative;
+    padding: 5vh 2vw 0;
+    align-items: center;
+}
+.inferno-generated-booth-overlay-holder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    display: none;
+    z-index: 9999;
+}
+.inferno-generated-booth-overlay {
+    position: absolute;
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    height: 60vh;
+    background: #fff;
+    z-index: 8888;
+    border-radius: 4px;
+    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+    overflow-y: scroll;
+}
+.inferno-generated-booth-overlay h2 {
+    font-size: 3vmin;
+    line-height: 3.5vmin;
+    color: #000;
+    margin: 4vmin 0 0 4%;
+}
+.inferno-generated-booth-overlay h3 {
+    font-size: 2vmin;
+    line-height: 2.5vmin;
+    color: #333;
+    margin: 4vmin 0 0 4%;
+}
+.inferno-generated-booth-external-overlay,
+.inferno-generated-booth-fish-bowl-overlay,
+.inferno-generated-booth-fish-bowl-overlay-done,
+.inferno-generated-booth-info-overlay,
+.inferno-generated-booth-resources-overlay,
+.inferno-generated-booth-video-overlay {
+    display: none;
+}
+.inferno-generated-booth-external-overlay iframe,
+.inferno-generated-booth-video-overlay iframe {
+    width: 80vmin;
+    display: block;
+    height: 50vmin;
+    margin: 5vh auto 0;
+}
+.inferno-generated-booth-external-overlay img {
+    max-width: 80vmin;
+    max-height: 50vmin;
+    display: block;
+    margin: 5vh auto 0;
+    object-fit: contain;
+}
+.inferno-generated-booth-show {
+    display: block !important;
+}
+.inferno-generated-booth-close-btn {
+    position: absolute;
+    top: 2vh;
+    right: 2vw;
+    margin: 0;
+    padding: 0;
+    z-index: 8889;
+    background: 0 0;
+    border: none;
+}
+.inferno-generated-booth-close-btn img {
+    height: 5vmin;
+    opacity: 0.75;
+}
+.inferno-generated-booth-close-btn:hover {
+    opacity: 0.8;
+}
+.inferno-generated-booth-overlay p {
+    font-size: 2vmin;
+    line-height: 3vmin;
+    color: #333;
+    margin: 4vmin 0 0 4%;
+}
+.inferno-generated-booth-overlay ul {
+    margin: 5vh auto 0;
+    list-style: none;
+    padding: 0;
+    width: 92%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.inferno-generated-booth-overlay ul.list-view {
+    flex-direction: column;
+}
+.inferno-generated-booth-overlay ul.list-view li {
+    width: 100%;
+    margin: 0 0 1vmin;
+    background: transparent;
+    border-radius: 0;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    padding: 0 0 1vmin; 
+}
+.inferno-generated-booth-overlay ul.list-view li:last-child {
+    border: none;
+}
+.inferno-generated-booth-overlay ul.list-view li a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.inferno-generated-booth-overlay ul.list-view li img {
+    height: 5vmin;
+    width: 5vmin;
+    flex: initial;
+    margin: 0 2vmin 0 0;
+}
+.inferno-generated-booth-overlay ul.list-view li a h4 {
+    flex: 1;
+}
+.inferno-generated-booth-overlay ul li {
+    width: 23%;
+    display: block;
+    text-align: center;
+    font-size: 2.3vmin;
+    line-height: 2.5vmin;
+    color: #326de6;
+    background: #eee;
+    margin: 0 1% 2%;
+    border-radius: 4px;
+    padding: 2vmin;
+    outline: 0;
+    box-sizing: border-box;
+}
+.inferno-generated-booth-overlay ul li:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+.inferno-generated-booth-overlay ul li a {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+.inferno-generated-booth-overlay ul li img {
+    height: 10vh;
+    display: block;
+    max-width: 100%;
+    margin: 0 auto .5vmin;
+    object-fit: contain;
+}
+.inferno-generated-booth-menu {
+    position: relative;
+    z-index: 2;
+    display: table;
+    margin: -12.5% auto 15%;
+    border-radius: 60px;
+    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+    text-align: center;
+    background: #326de6;
+    padding: 0 3vmin;
+}
+.inferno-generated-booth-menu.with-chat {
+    margin: 3vh auto;
+}
+.inferno-generated-booth-menu.booth-large {
+    margin: 2.5% auto 15% !important;
+}
+.inferno-generated-booth-menu li {
+    display: inline-block;
+    padding: 2vmin 1vmin;
+    color: #fff;
+    margin: 0;
+    font-size: 1.5vh;
+    text-transform: uppercase;
+    outline: 0;
+}
+.inferno-generated-booth-menu li:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+.inferno-generated-booth-menu li img {
+    height: 6vmin;
+    display: block;
+    margin: 0 auto 1vmin;
+}
+.inferno-generated-booth-menu li a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+.inferno-generated-booth-bg-blur-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% top;
+    filter: blur(12px);
+}
+.inferno-generated-booth {
+    margin: 0 auto;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% top;
+    position: relative;
+    flex: 1;
+    border-radius: 20px;
+    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+}
+.inferno-generated-booth.disable-avatars .inferno-generated-booth-podium-woman,
+.inferno-generated-booth.disable-avatars .inferno-generated-booth-video-woman {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-rack .inferno-generated-booth-resources {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-plants .inferno-generated-booth-plant {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-furniture .inferno-generated-booth-chairs {
+    display: none !important;
+}
+
+.inferno-generated-booth-right {
+    flex-direction: column;
+    position: relative;
+    margin: 0 0 0 50px;
+}
+.inferno-generated-booth-qr {
+    margin-bottom: 32px;
+    border-radius: 20px;
+    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+    padding: 2vh 2vw;
+    flex: 0.25;
+    background: #333;
+    position: relative;
+    margin-left: 2%;
+}
+.inferno-generated-booth-qr h1 {
+    font-size: 2.75vh;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    margin-top: 8px;
+}
+.inferno-booth-qr-img {
+    max-width: 128px;
+    margin: auto;
+}
+.inferno-booth-qr-img img {
+    width: 100%;
+}
+.inferno-generated-booth-chat {
+    border-radius: 20px;
+    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+    padding: 2vh 2vw;
+    flex: 0.25;
+    background: #333;
+    position: relative;
+    z-index: 2;
+    margin: 0 0 0 2%;
+    height: 50vh;
+}
+.inferno-generated-booth-chat h1 {
+    font-size: 2.75vh;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    bottom: 1vh;
+    left: 0;
+    width: 100%;
+}
+.inferno-generated-booth-chat iframe {
+    border: none;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+.inferno-generated-booth img {
+    width: 100%;
+    margin: 0;
+    display: block;
+    object-fit: cover;
+}
+.inferno-generated-booth .inferno-generated-booth-backdrop img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.inferno-generated-booth-resources ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.inferno-generated-booth-resources ul li a {
+    display: block;
+    text-decoration: none;
+    width: 90%;
+    height: 90%;
+    color: inherit;
+    margin: 0 auto;
+    object-fit: contain;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li h4,
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li h4,
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li h4 {
+    display: none;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-bg {
+    position: relative;
+    z-index: 2;
+    width: 55% !important;
+    margin: 0 auto !important;
+    object-fit: fill !important;
+    padding: 5% 0 17%;
+    box-sizing: border-box;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-bg {
+    position: relative;
+    z-index: 2;
+    width: 90% !important;
+    margin: 0 auto !important;
+    object-fit: fill !important;
+    padding: 5% 0 17%;
+    box-sizing: border-box;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-bg {
+    position: relative;
+    z-index: 2;
+    width: 85% !important;
+    margin: 0 auto !important;
+    object-fit: fill !important;
+    padding: 5% 0 17%;
+    box-sizing: border-box;
+}
+.inferno-generated-booth-backdrop,
+.inferno-generated-booth-banner-one,
+.inferno-generated-booth-banner-two,
+.inferno-generated-booth-plant,
+.inferno-generated-booth-podium,
+.inferno-generated-booth-podium-woman,
+.inferno-generated-booth-resources,
+.inferno-generated-booth-short-banner,
+.inferno-generated-booth-tall-banner,
+.inferno-generated-booth-top-banner,
+.inferno-generated-booth-video-one,
+.inferno-generated-booth-video-two {
+    position: absolute;
+    z-index: 2;
+}
+.inferno-generated-booth-chairs,
+.inferno-generated-booth-video-woman {
+    position: absolute;
+    z-index: 3;
+}
+.inferno-generated-booth video {
+    position: absolute;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-top-banner {
+    width: 26.8%;
+    height: 5.7%;
+    left: 28.8%;
+    top: 21%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-top-banner {
+    width: 31.4%;
+    height: 5.7%;
+    left: 45.8%;
+    top: 19.6%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-top-banner {
+    width: 84.9%;
+    height: 8.7%;
+    left: 7.6%;
+    top: 8.3%;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-backdrop {
+    width: 32.5%;
+    height: 39.5%;
+    left: 28.8%;
+    top: 25.5%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-backdrop {
+    width: 31.4%;
+    height: 34.5%;
+    left: 45.8%;
+    top: 23.5%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-backdrop {
+    width: 53.2%;
+    height: 39.5%;
+    left: 23.3%;
+    top: 22.2%;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources {
+    bottom: 21%;
+    left: 8%;
+    width: 9%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources {
+    bottom: 30%;
+    left: 7%;
+    width: 7%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources {
+    bottom: 17%;
+    right: 10%;
+    width: 18%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul {
+    position: absolute;
+    top: 7%;
+    left: 15%;
+    width: 70%;
+    height: 25%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul {
+    position: absolute;
+    top: 6%;
+    left: 15%;
+    width: 70%;
+    height: 56%;
+    display: flex;
+    flex-direction: column;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul {
+    position: absolute;
+    top: 9%;
+    left: 16%;
+    width: 70.5%;
+    height: 70.5%;
+    overflow-y: scroll;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li {
+    font-size: 2.4vmin;
+    color: #3371e3;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li {
+    font-size: 2.2vmin;
+    line-height: 2.5vmin;
+    color: #3371e3;
+    padding: 1vmin 0 0;
+    margin: 0;
+    height: 50%;
+    overflow: hidden;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li {
+    font-size: 1.5vmin;
+    color: #3371e3;
+    padding: 0.5vmin;
+    border-bottom: 1px solid #eee;
+    margin: 0 0 3%;
+    outline: 0;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: 50% 0;
+    display: block;
+    margin: 0 auto 0.5vmin;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li img {
+    display: block;
+    margin: 0 auto;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    object-position: 50% 0;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li img {
+    display: block;
+    margin: 0 auto;
+    width: 40%;
+    object-fit: contain;
+    object-position: 50% 0;
+}
+.inferno-generated-booth .inferno-generated-booth-resources ul li:last-child {
+    border: none;
+}
+.inferno-generated-booth .inferno-generated-booth-resources ul li:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+.inferno-generated-booth .inferno-generated-booth-resources ul li a {
+    text-decoration: none;
+    color: inherit;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-video-one {
+    bottom: 49%;
+    right: 17.7%;
+    width: 26%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-video-one {
+    bottom: 62%;
+    right: 4.7%;
+    width: 16%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-one {
+    bottom: -3%;
+    right: 23.7%;
+    width: 26%;
+}
+.inferno-generated-booth video:hover {
+    cursor: pointer;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-video-one video {
+    top: 6.5%;
+    right: 4.5%;
+    width: 91%;
+    height: 87%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-video-one video {
+    top: 5.5%;
+    right: 4.5%;
+    width: 90%;
+    height: 82.5%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-one video {
+    top: 1%;
+    right: 8%;
+    width: 77%;
+    height: 49%;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-plant {
+    bottom: 32%;
+    left: 54%;
+    width: 7%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-plant {
+    bottom: 39%;
+    left: 65%;
+    width: 15%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-plant {
+    bottom: 36%;
+    left: 16.5%;
+    width: 14%;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium {
+    bottom: 24%;
+    left: 28.5%;
+    width: 18%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium {
+    bottom: 30%;
+    left: 53.5%;
+    width: 15%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium {
+    bottom: 30%;
+    left: 19%;
+    width: 24%;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%;
+    height: 90%;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
+    position: absolute;
+    top: 10%;
+    left: 0;
+    width: 100%;
+    height: 90%;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
+    position: absolute;
+    top: 6%;
+    left: 21%;
+    width: 55.5%;
+    height: 84%;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-banner-one {
+    top: 17%;
+    left: 20.5%;
+    width: 11.5%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-banner-two {
+    top: 17%;
+    left: 32.5%;
+    width: 11.5%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-tall-banner {
+    top: 26%;
+    right: 25.5%;
+    width: 12%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-booth-udf-banner-one,
+.inferno-generated-booth[data-booth-id="medium"] .inferno-booth-udf-banner-two {
+    position: absolute;
+    top: 2%;
+    left: 4.8%;
+    width: 90%;
+    height: 93%;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-tall-banner .inferno-booth-udf-tall-banner {
+    position: absolute;
+    top: 10%;
+    left: 17%;
+    width: 68%;
+    height: 83%;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-chairs {
+    bottom: 29%;
+    left: 22%;
+    width: 20%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-chairs {
+    bottom: 8%;
+    left: 15%;
+    width: 30%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-two {
+    top: 33%;
+    right: 38%;
+    width: 21%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-two video {
+    top: 6.22%;
+    left: 5.3%;
+    width: 90%;
+    height: 82%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-short-banner {
+    bottom: 23%;
+    left: 8%;
+    width: 13%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-short-banner .inferno-booth-udf-short-banner {
+    position: absolute;
+    top: 4.5%;
+    left: 16%;
+    width: 70%;
+    height: 57%;
+    border-radius: 2px;
+    object-fit: cover;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-woman {
+    bottom: 1%;
+    right: 19%;
+    width: 6.7%;
+}
+.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium-woman {
+    top: 43%;
+    left: 34.5%;
+    width: 6.5%;
+}
+.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium-woman {
+    top: 36%;
+    left: 57.5%;
+    width: 6.5%;
+}
+.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium-woman {
+    top: 37.5%;
+    left: 30%;
+    width: 6.5%;
+}
+</style><script type="text/javascript">var landingPageEl = landingPageEl || document; 
+var _lastScrollPos; 
+var _lastScrollEl; 
+
+function init() {
+  // Make sure all overlays are reset
+  $(landingPageEl).find(".inferno-generated-booth-show").removeClass("inferno-generated-booth-show");
+
+  // Activate click track landing
+  setTimeout(function() {
+    var e = document.createEvent("MouseEvents");
+    e.initEvent("mouseup", true, true);
+    if (landingPageEl.querySelector('.page_load')) {
+      landingPageEl.querySelector('.page_load').dispatchEvent(e);
+    }
+  }, 250);
+}
+
+function toggleOverlay(show, typeClass, src, isInternalImage) { 
+  $(landingPageEl).find('.inferno-generated-booth-info-overlay').removeClass('inferno-generated-booth-show');
+  $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay').removeClass('inferno-generated-booth-show'); 
+  $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay-done').removeClass('inferno-generated-booth-show');
+  $(landingPageEl).find('.inferno-generated-booth-resources-overlay').removeClass('inferno-generated-booth-show'); 
+  $(landingPageEl).find('.inferno-generated-booth-video-overlay').removeClass('inferno-generated-booth-show');
+  $(landingPageEl).find('.inferno-generated-booth-external-overlay').removeClass('inferno-generated-booth-show'); 
+
+  var el = $(landingPageEl).find('.inferno-generated-booth-overlay-holder'); 
+  var elTwo = $(landingPageEl).find('.' + typeClass);
+
+  $(el).find('.inferno-generated-booth-video-overlay').empty(); 
+  $(el).find('.inferno-generated-booth-external-overlay').empty(); 
+
+  if (!show) { 
+    $(landingPageEl).find('.inferno-generated-booth-show').removeClass('inferno-generated-booth-show');
+    
+    if (_lastScrollEl && _lastScrollPos) { 
+      _lastScrollEl.scrollTop(_lastScrollPos); 
+    } 
+  } 
+  else { 
+    var bodyEl = $('html,body'); 
+    var layoutEl = $('.layout-fixed'); 
+    var previewEl = $('.booth-final-review-content');
+    var docEl = $(document); 
+
+    if (bodyEl.scrollTop() >0) {
+      _lastScrollPos=bodyEl.scrollTop(); 
+      _lastScrollEl=bodyEl; 
+      bodyEl.scrollTop(0); 
+    } 
+    else if (docEl.scrollTop() >0) {
+      _lastScrollPos = docEl.scrollTop(); 
+      _lastScrollEl = docEl; 
+      docEl.scrollTop(0); 
+    }
+    else if (previewEl && previewEl.scrollTop() > 0) {
+      _lastScrollPos = previewEl.scrollTop();
+      _lastScrollEl = previewEl;
+      previewEl.scrollTop(0);
+    } 
+    else { 
+      _lastScrollPos =layoutEl.scrollTop();
+      _lastScrollEl=layoutEl; 
+      layoutEl.scrollTop(0); 
+    } 
+
+    $(el).addClass('inferno-generated-booth-show'); 
+    $(elTwo).addClass('inferno-generated-booth-show'); 
+
+    if (typeClass === 'inferno-generated-booth-video-overlay') { 
+      $(elTwo).append("<iframe src='/embed/" + src + "' scrolling='no' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
+    } 
+
+    if (typeClass === 'inferno-generated-booth-external-overlay') { 
+      if (isInternalImage) {
+        $(elTwo).append("<img src='" + src + "' alt='external image'/>");
+      }
+      else {
+        $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
+      } 
+    } 
+  } 
+}
+
+$(document).ready(init);</script><div class="inferno-generated-booth-container">
+  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');"></div>
+  <div class="inferno-generated-booth disable-avatars" data-booth-id="small" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');">
+      <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/small/Small_BoothBackground.png">
+      <div class="inferno-generated-booth-top-banner"><img id="booth_TestBooth_ClickImage_inferno-booth-udf-top-banner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-top-banner.png" alt="inferno-booth-udf-top-banner"></div>
+      <div class="inferno-generated-booth-backdrop"><img id="booth_TestBooth_ClickImage_inferno-booth-udf-backdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-backdrop.png" alt="inferno-booth-udf-backdrop"></div>
+      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/small/Small_MagazineRack_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources"><li id="booth_TestBooth_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Test</h4></li></ul></div>
+      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/small/Small_VideoScreen_Accent.png" alt="Video Holder"><video id="booth_TestBooth_ViewVideoOverlayvideo-0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '7e212aa8-73fb-43d3-a380-9f10b0db1db4')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/video-0.mp4"></video></div>
+      <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/small/Small_Plant_Accent.png" alt="Plant">
+      <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/small/Small_Presenter_Accent.png" alt="Woman">
+      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/small/Small_Podium_Accent.png" alt="Podium "><img id="booth_TestBooth_ClickImage_inferno-booth-udf-podium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-podium.png" alt="inferno-booth-udf-podium"></div>
+  </div>
+<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=testbooth&chatroomname=testbooth"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-small" style="background-color: ##006b3"><li id="booth_TestBooth_ViewInfoOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="booth_TestBooth_DownloadContactInfo" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li><li><a id="booth_TestBooth_DownloadMeetingInfo" href="https://us02web.zoom.us/j/7472155259" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a></li><li><a id="booth_TestBooth_ViewCalendar" href="https://calendly.com/taylor-novologic/15min" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png" alt="calendar"> Calendar</a></li><li id="booth_TestBooth_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>Test information</p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources"><li><a target="_blank" id="booth_TestBooth_DownloadResource_1" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/NTARResourcepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Test</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Would you like to share your contact information with this booth?</h3><button class="inferno-confirm-btn" id="booth_TestBooth_FishBowlClick" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/TestBooth_1609975680906/inferno-booth-udf-company-logo.png"></div></inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+
+
+
+<script>
+
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log('PROCESSING LIQUID')
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl.querySelector('inferno-snippet-content').innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector('inferno-snippet-content')
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid()
+      // Parse and render
+      engine.parseAndRender(template, {data}).then(html => result.innerHTML = html)
+      resolve()
+    })
+
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'collapsed')
+    appRoot.classList.add('aside-collapsed')
+    appRoot.classList.remove('aside-hidden')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'hidden')
+    appRoot.classList.remove('aside-collapsed')
+    appRoot.classList.add('aside-hidden')
+    sideBar.classList.add('hidden')
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    window.sessionStorage.setItem('menuState', 'expanded')
+    appRoot.classList.remove('aside-hidden')
+    appRoot.classList.remove('aside-collapsed')
+    sideBar.classList.remove('hidden')
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    if (!appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtCollapseMenu()
+    } else if (appRoot.classList.contains('aside-collapsed') && !appRoot.classList.contains('aside-hidden')) {
+      mtHideMenu()
+    } else if (appRoot.classList.contains('aside-hidden')) {
+      mtExpandMenu()
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector('app-root')
+    const sideBar = document.querySelector('videos-sidebar')
+    const state = sessionStorage.getItem('menuState')
+
+    if (state === 'collapsed') {
+      mtCollapseMenu()
+    } else if (state === 'hidden') {
+      mtHideMenu()
+    } else if (state === 'expanded') {
+      mtExpandMenu()
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector('#inferno-questions-basic')
+    const videoDiv = landingPageEl.querySelector('#inferno-video-player')
+    if (qaDiv) {
+      $(qaDiv).append(`
+      <questions _nghost-qch-c20="">
+        <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
+          <div class="inferno-input-group">
+            <span class="inferno-input-group-addon">Ask A Question</span>
+            <input class="inferno-form-control ng-untouched ng-pristine ng-valid" type="text">
+            <span class="inferno-input-group-btn">
+              <button class="inferno-btn" type="button">Submit</button>
+            </span>
+          </div>
+        </div>
+      </questions>
+      `)
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
+        <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
+          width="640"
+          height="360"
+          frameborder="0"
+          allowfullscreen">
+        </iframe>
+        `)
+    }
+  }
+
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements)
+  } else {
+    mtInitMenu()
+    populateInfernoElements()
+  }
+
+</script>
+
+
+
+</body><!-- Menu Collapse Script -->
