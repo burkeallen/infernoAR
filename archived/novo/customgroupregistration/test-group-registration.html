@@ -19,7 +19,34 @@
 <!-- ********************* -->
 <!-- ********************* -->
 <!-- SNIPPET CONTENT START -->
-<inferno-snippet-content id="ec251dd4-b5ca-4f09-bd7e-dee4873e7215"><h1>test group registration</h1></inferno-snippet-content>
+<inferno-snippet-content id="ec251dd4-b5ca-4f09-bd7e-dee4873e7215">
+
+  <!-- Registration Gateway Start -->
+  <script>
+    const custId = sessionStorage.getItem("custId");
+    const orderId = sessionStorage.getItem("orderId");
+    let registeredOn = new Date().toISOString();
+    $.ajax({
+      url: 'http://novodev.in:3000/api/v1/payment/register/',
+      type: 'post',
+      async: true,
+      contentType: "application/json",
+      data: {custId: custId, orderId: orderId, registeredOn: registeredOn},
+      success: function (res, status, xhr) {
+        console.log('Success: posting registration to the transaction log')
+      },
+      error: function (err) {
+        console.log('Error: posting registration to the transaction log. ' + err.message());
+      }
+    });
+
+  </script>
+  <!-- Registration Gateway End -->
+
+  <h1> Registration Gateway - Group Registration Thank You Page</h1>
+
+
+</inferno-snippet-content>
 <!--  SNIPPET CONTENT END  -->
 <!-- ********************* -->
 <!-- ********************* -->
