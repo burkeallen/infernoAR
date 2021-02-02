@@ -1,0 +1,438 @@
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css">
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- SNIPPET CONTENT START -->
+<inferno-snippet-content id="f9d1d948-b979-4866-b768-c4615c7b371c">
+
+  <style>
+    :root {
+
+      /* background overlay */
+      /*--overlay-color: linear-gradient(to right bottom, rgba(0, 15, 92, 0.57), rgb(0, 161, 224, 0.57));*/
+
+      /* form colours */
+      --main-text-color: #D8D8D7;
+      --link-text-color: #ffffff;
+      --input-text-color: #000000;
+      --valid-input-color: #04a104;
+      --error-input-color: #ff6767;
+      --form-bg-color: rgba(0, 0, 0, 0.7);
+
+      /* button colours */
+      --action-bg-color: rgba(0, 0, 0, 0.25);
+      /* --action-highlight-color also used for link to login page */
+      --action-higlight-color: #B3E5FF;
+    }
+
+    #ntar-bg {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/bkg-registration.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
+
+    }
+
+    #overlay {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      background-image: var(--overlay-color);
+      background-repeat: no-repeat;
+      background-size: cover;
+      overflow-y: auto;
+    }
+
+    .main {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    @media screen and (min-width: 1072px) {
+      .main {
+        height: 100vh;
+      }
+    }
+
+    #logo-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      flex-grow: 2;
+    }
+
+    @media screen and (min-width: 1072px) {
+      #logo-wrapper {
+        height: 100%;
+      }
+    }
+
+    #inferno-logo {
+      height: 5rem;
+      width: auto;
+      margin: 3rem 3rem 0;
+      align-self: flex-start;
+    }
+
+    #logo-space-holder {
+      height: 5rem;
+    }
+
+    #event-logo {
+      width: 56.2rem;
+      max-width: calc(100vw - 8rem);
+      height: auto;
+      margin: 4rem;
+    }
+
+    #register {
+      color: var(--main-text-color);
+      background-color: var(--form-bg-color);
+
+      flex-grow: 1;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @media screen and (max-width: 1071px) {
+      #register {
+        justify-content: flex-start;
+      }
+    }
+
+    #form-wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 4rem;
+    }
+
+    #form-wrapper h1 {
+      align-self: flex-start;
+      font-size: 3rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    input {
+      height: 5rem;
+      margin: 1.25rem 0;
+      padding: 0 1rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--input-text-color);
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    form p {
+      font-size: 1.6rem;
+      color: var(--main-text-color);
+      font-weight: 300;
+      max-width: 35rem;
+    }
+
+    a {
+      color: var(--link-text-color);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    button {
+      height: 5.1rem;
+      background-color: var(--action-bg-color);
+      border: 1.5px solid var(--action-higlight-color);
+      border-radius: 4px;
+      color: var(--action-higlight-color);
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin: 1rem 0;
+      padding: 0 1rem;
+    }
+
+    button:hover {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
+
+    button:focus {
+      outline: none;
+    }
+
+    #sign-in {
+      font-size: 1.8rem;
+      font-weight: 500;
+    }
+
+    #sign-in a {
+      font-weight: 500;
+      color: var(--action-higlight-color);
+    }
+
+    .valid-input {
+      border: 1.5px solid var(--valid-input-color);
+    }
+
+    .error-input {
+      border: 1.5px solid var(--error-input-color);
+    }
+
+    .error-message > * {
+      margin: 0 0 0.5rem !important;
+      line-height: 2rem;
+      font-size: 1.5rem;
+    }
+
+    .error-message p {
+      margin: 0 0 0.5rem !important;
+    }
+
+    .error-message ul {
+      padding-inline-start: 2.75rem;
+    }
+
+    .error-message > *:not(:first-child) {
+      color: var(--error-input-color);
+    }
+  </style>
+
+  <style>
+    .label {
+      float: left;
+    }
+
+    .sub-entry {
+      float: left;
+    }
+
+  </style>
+
+  <div id="ntar-bg">
+    <div id="overlay">
+      <div class="main">
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    var formValidations = {
+      email: {value: "", valid: false},
+      password: {value: "", valid: false},
+      firstName: {value: "", valid: false},
+      lastName: {value: "", valid: false},
+      company: {value: ""}
+    }
+
+    var setInputChangeListeners = () => {
+      let inputs = document.querySelectorAll("input");
+
+      for (let input of inputs) {
+        input.addEventListener("input", validate)
+      }
+
+    }
+
+    var validate = e => {
+      let target = e.currentTarget;
+
+      let element = document.getElementById(target.id);
+
+      if (target.id === "email") {
+
+        formValidations.email.value = target.value;
+
+        let errorMessage = document.getElementById("email-error");
+
+        if (isValidEmail(target.value)) {
+          formValidations.email.valid = true
+          element.className = "valid-input";
+          errorMessage.style.display = "none";
+        } else {
+          formValidations.email.valid = false
+          element.className = "error-input";
+          errorMessage.style.display = "";
+        }
+
+      } else if (target.id === "password") {
+
+        let pw = target.value;
+        formValidations.password.value = pw;
+
+        // get error message elements
+        let errorMessage = document.getElementById("password-error");
+        let minLengthMessage = document.getElementById("length-pw-requirement");
+        let lowerMessage = document.getElementById("lower-pw-requirement");
+        let upperMessage = document.getElementById("upper-pw-requirement");
+        let digitMessage = document.getElementById("digit-pw-requirement");
+        let specialMessage = document.getElementById("special-pw-requirement");
+
+        // check each condition
+        let len = pwMinLength(pw);
+        let upper = pwContainsUpper(pw);
+        let lower = pwContainsLower(pw);
+        let digit = pwContainsDigit(pw);
+        let special = pwContainsSpecial(pw);
+
+        len ? minLengthMessage.style.color = "green" : minLengthMessage.style.color = "";
+        upper ? upperMessage.style.color = "green" : upperMessage.style.color = "";
+        lower ? lowerMessage.style.color = "green" : lowerMessage.style.color = "";
+        digit ? digitMessage.style.color = "green" : digitMessage.style.color = "";
+        special ? specialMessage.style.color = "green" : specialMessage.style.color = "";
+
+        if (len && upper && lower && digit && special) {
+          formValidations.password.valid = true
+          element.className = "valid-input";
+          errorMessage.style.display = "none";
+        } else {
+          formValidations.password.valid = false
+          element.className = "error-input";
+          errorMessage.style.display = "";
+        }
+
+      } else if (target.id === "firstName") {
+
+        formValidations.firstName.value = target.value;
+
+        let errorMessage = document.getElementById("first-name-error");
+
+        if (isValidName(target.value)) {
+          formValidations.firstName.valid = true
+          element.className = "valid-input";
+          errorMessage.style.display = "none";
+        } else {
+          formValidations.firstName.valid = false
+          element.className = "error-input";
+          errorMessage.style.display = "";
+        }
+
+      } else if (target.id === "lastName") {
+
+        formValidations.lastName.value = target.value;
+
+        let errorMessage = document.getElementById("last-name-error");
+
+        if (isValidName(target.value)) {
+          formValidations.lastName.valid = true
+          element.className = "valid-input";
+          errorMessage.style.display = "none";
+        } else {
+          formValidations.lastName.valid = false
+          element.className = "error-input";
+          errorMessage.style.display = "";
+        }
+
+      } else if (target.id === "company") {
+
+        formValidations.company.value = target.value;
+
+      }
+
+      checkValidForm();
+    }
+
+    var isValidEmail = email => {
+      let regex = /\S+@\S+\.\S+/;
+      if (regex.test(email)) {
+        return true;
+      }
+      return false;
+    }
+
+    var pwMinLength = pw => pw.length >= 6;
+    var pwContainsUpper = pw => /[A-Z]/.test(pw);
+    var pwContainsLower = pw => /[a-z]/.test(pw);
+    var pwContainsDigit = pw => /[0-9]/.test(pw);
+    var pwContainsSpecial = pw => /[^A-Za-z0-9]/.test(pw);
+
+    var isValidName = name => {
+      name = name.trim();
+      if (name.length > 0) {
+        return true;
+      }
+      return false;
+    }
+
+    var checkValidForm = () => {
+      let submit = document.getElementById("submit-btn")
+
+      if (formValidations.email.valid && formValidations.password.valid && formValidations.firstName.valid && formValidations.lastName.valid) {
+        submit.disabled = false;
+      } else {
+        submit.disabled = true;
+      }
+    }
+
+    var submitForm = e => {
+
+      // reset form
+      for (let key in formValidations) {
+        formValidations[key].value = ""
+        formValidations[key].valid = false
+      }
+
+      let inputs = document.querySelectorAll("input");
+
+      for (let input of inputs) {
+        input.value = "";
+        input.className = "";
+      }
+
+      document.getElementById("submit-btn").disabled = true;
+
+    }
+
+    setInputChangeListeners();
+
+  </script>
+
+
+</inferno-snippet-content>
+<!--  SNIPPET CONTENT END  -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+
+
+</body>
