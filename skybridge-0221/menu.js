@@ -1,1 +1,0 @@
-window.localTemplateMenuItems = [{"file":"customgroupregistration/registration.html","snippetID":"f9d1d948-b979-4866-b768-c4615c7b371c","name":"Registration"}]
