@@ -286,91 +286,81 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="3e4dca28-37d2-4b56-8c05-2982e51e187e">
-
-                <click-track-landing-v2>
-                  <div id="xtrackx|2|non_booth|breakout_stage|page_load" class="page_load"></div>
-                  <script>
-                    setTimeout(() => {
-                      var event = document.createEvent("MouseEvents");
-                      event.initEvent("mouseup", true, true);
-                      landingPageEl
-                        .querySelector(".page_load")
-                        .dispatchEvent(event);
-                    }, 250);
-                  </script>
-                </click-track-landing-v2>
-
-                <style>
-                  #content {
-                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/breakout-stage/bkg-breakout-stage.jpg");
-                    background-attachment: fixed;
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: "Helvetica Neue", Arial Narrow, Arial,
-                    sans-serif !important;
-                  }
-                </style>
+              <inferno-snippet-content id="31f4999c-7978-42f8-a3c1-7361e17fe5e5">
 
               <div id="content">
-                <h1>Breakout Stage</h1>
-              </div>
-
-              <!-- common scripts-->
-              <script>
-                var fetchLayout = () => {
-                  var elementId = "31f4999c-7978-42f8-a3c1-7361e17fe5e5";
-                  const headers = {
-                    Authorization:
-                      "Bearer " + sessionStorage.getItem("token"),
-                    "X-InfernoCore-Domain":
-                      sessionStorage.getItem("domain") ??
-                      window.location.hostname
-                  };
-
-                  // users accessing with SA credentials
-                  if (window.sessionStorage.overrideId) {
-                    headers["X-InfernoCore-Domain"] =
-                      "jolokia.inferno.jolokia.com";
-                    headers["X-Client-Override"] = sessionStorage.getItem(
-                      "overrideId"
-                    );
-                  }
-
-                  $.ajax({
-                    url:
-                      "https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
-                      elementId,
-                    type: "GET",
-                    async: true,
-                    accept: "application/json",
-                    contentType: "application/json",
-                    headers: headers,
-                    success: function (res, status, xhr) {
-                      var parser = new DOMParser();
-                      var doc = parser.parseFromString(res, "text/html");
-                      var pageFooter = doc.getElementById("page-footer");
-                      const contentElement = landingPageEl.getElementById(
-                        "content"
-                      );
-                      // Avoid duplicate elements
-                      if (!landingPageEl.getElementById("page-footer"))
-                        contentElement.appendChild(pageFooter);
-                    },
-                    error: function (err) {
-                      console.error("Error Fetching HTML", err);
+                <footer id="page-footer">
+                  <style>
+                    footer {
+                      color: white;
+                      font-size: 1.6rem;
+                      background-color: var(--sidebar-bg-color)!important;
+                      padding: 2rem 4rem;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: flex-end;
+                      align-items: center;
+                      width: 100%;
                     }
-                  });
-                };
 
-                fetchLayout();
+                    footer p {
+                      margin: 0;
+                    }
 
-              </script>
+                    footer a {
+                      margin: 0;
+                    }
+
+                    .bottom {
+                      width: 100%;
+                    }
+
+                    .top .info {
+                    }
+
+                    .bottom .info {
+                      width: 100%;
+                      display: flex;
+                      justify-content: space-between;
+                      align-items: flex-end;
+                      flex-wrap: wrap;
+                    }
+
+                    footer .info, footer .info p.supportContact {
+                      font-weight: 500;
+                    }
+
+                    footer .info a {
+                      color: white;
+                      text-decoration: none;
+                    }
+
+                    footer .info p {
+                      font-size: 1.4rem;
+                      font-weight: 300;
+                    }
+
+                    @media screen and (max-width: 1230px){
+                      footer .info p {
+                        margin-bottom: 15px;
+                      }
+                    }
+                  </style>
+                  <div class="bottom">
+                    <div class="info">
+                      <p>PC-SA-101024<br />Copyright © 2021 NexTech AR Solutions Inc.</p>
+                      <p class="supportContact">Experiencing technical difficulties?<br />Contact <a href="mailto:support@nextechar.com">support@nextechar.com</a> or +1.866.330.6655</p>
+                      <div class="info-links"><a href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy" target="_blank">Privacy Policy</a> | <a href="https://www.nextechar.com/terms-of-service" target="_blank">Terms &amp; Conditions</a></div>
+                    </div>
+                  </div>
+                </footer>
+               </div>
+
+                <script id="layout-script">
+
+                </script>
+
+              </inferno-snippet-content>
 
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
