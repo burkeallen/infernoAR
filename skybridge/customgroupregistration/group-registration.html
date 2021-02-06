@@ -34,32 +34,28 @@
 	<inferno-snippet-content id="f9d1d948-b979-4866-b768-c4615c7b371c">
 		<!--  Load custom fonts -->
 		<script type="text/javascript">
-			function loadFont(name, url) {
-				if (document.fonts.check("1em " + name)) {
-					return;
-				}
-				const fontFace = new FontFace(name, "url(" + url + ")");
-
-				fontFace
+			function loadCustomFont(fontName, url) {
+				console.log("Loading " + fontName);
+				var customFont = new FontFace(fontName, "url(" + url + ")");
+				customFont
 					.load()
 					.then(function (loadedFont) {
 						document.fonts.add(loadedFont);
-						console.log("Loaded custom font ", name);
 					})
 					.catch(function (error) {
 						// error occurred
-						console.log("Error loading ", name);
+						console.log("Error loading " + fontName);
 					});
 			}
 
-			loadFont(
-				"ElectricToaster",
-				"https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/fonts/ElectricToaster-4nx.ttf"
-			);
-
-			loadFont(
+			loadCustomFont(
 				"BraveEightyone",
 				"https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/fonts/BraveEightyoneRegular-ZVGvm.ttf"
+			);
+
+			loadCustomFont(
+				"CenturyGothic",
+				"https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/fonts/CenturyGothic.ttf"
 			);
 
 			var script = document.createElement("script");
@@ -94,21 +90,12 @@
 			.contents {
 				position: relative;
 				min-height: 100vh;
-				background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/registration/bkg-registration.png);
+				background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/registration/bkg_registration_no_text.png);
 				background-attachment: fixed;
 				background-repeat: no-repeat;
 				background-size: cover;
-				background-position: left 30px;
+				background-position: top;
 				overflow: hidden;
-			}
-
-			.bg {
-				position: absolute;
-				top: 50px;
-				left: 0;
-				width: 100%;
-				height: auto;
-				z-index: -1;
 			}
 
 			.header {
@@ -116,13 +103,13 @@
 				top: 0;
 				left: 0;
 				width: 100%;
-				height: 10%;
+				height: 80px;
 				display: flex;
-				align-items: flex-end;
+				align-items: center;
 				justify-content: space-between;
 				background-color: white;
 				z-index: 200;
-				padding: 1rem;
+				padding: 0 1rem;
 			}
 
 			.header-left {
@@ -145,7 +132,6 @@
 			}
 
 			.main {
-				margin-top: 20px;
 				width: 100%;
 				height: 100%;
 				display: flex;
@@ -179,17 +165,27 @@
 				color: white;
 			}
 
+			.bottom-text {
+				position: absolute;
+				bottom: -4rem;
+				left: 0;
+			}
+
+			.bottom-text img {
+				opacity: 0.3;
+				filter: brightness(170%);
+			}
+
 			svg {
 				position: absolute;
-				bottom: 4rem;
-				right: 3rem;
+				bottom: 2rem;
+				right: 2rem;
 			}
 		</style>
 
 		<!-- Form Style -->
 		<style>
 			form {
-				margin-top: 80px;
 				border: 2px solid #04c6ff;
 				border-radius: 20px;
 				box-shadow: 0 0 10px #48cef7;
@@ -238,19 +234,20 @@
 			}
 
 			.field input {
+				margin-top: 3px;
 				width: 100%;
 			}
 
-			.field .label {
-				font-family: "ElectricToaster", sans-serif;
+			.label {
+				font-family: "CenturyGothic", sans-serif;
 				font-size: 1.5em;
 				text-shadow: 0 0 5px #04c6ff;
-
+				margin-bottom: 2px;
 				padding: 0;
 			}
 
 			.warning {
-				font-family: "ElectricToaster", sans-serif;
+				font-family: "CenturyGothic", sans-serif;
 				color: red;
 				white-space: normal;
 			}
@@ -258,7 +255,7 @@
 			.field input {
 				height: 50px;
 				color: #777;
-				font-family: "ElectricToaster", sans-serif;
+				font-family: "CenturyGothic", sans-serif;
 				font-size: 1em;
 				padding: 0.2em 10px;
 				border: none;
@@ -283,22 +280,53 @@
 				.form-level {
 					width: 100%;
 				}
-				form {
-					margin-top: -20px;
+				.main {
+					align-items: flex-start;
+				}
+
+				.bottom-text img {
+					width: 90%;
+					height: auto;
 				}
 			}
 
 			@media only screen and (max-width: 1200px) {
 				.main {
-					justify-content: center;
-					margin-bottom: 2rem;
+					margin-bottom: 5rem;
 				}
 				.content-wrapper {
 					width: 80%;
 				}
+
+				.form-title {
+					margin-bottom: 1.8rem;
+				}
+
+				.field input {
+					height: 30px;
+				}
+
+				.field {
+					margin-bottom: 1.4rem;
+				}
+
+				.label {
+					font-size: 1.2em;
+				}
+				.bottom-text img {
+					width: 60%;
+					height: auto;
+				}
+
+				.bottom-text {
+					bottom: -2rem;
+				}
 			}
 
 			@media only screen and (max-width: 950px) {
+				.main {
+					justify-content: center;
+				}
 				.contents {
 					background-position: top;
 					background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/thank-you/bkg_splash.png);
@@ -308,8 +336,7 @@
 					align-items: center;
 				}
 				form {
-					margin-top: 60px;
-					height: 75vh;
+					height: 65vh;
 					overflow-y: scroll;
 					align-items: center;
 					scrollbar-width: thin;
@@ -319,8 +346,20 @@
 
 				.content-wrapper {
 					width: 80%;
-					margin-top: 20px;
+					margin-top: 80px;
 					justify-content: center;
+				}
+				.main {
+					margin-bottom: 3rem;
+				}
+
+				.bottom-text img {
+					width: 50%;
+					min-width: 25rem;
+				}
+
+				.bottom-text {
+					bottom: -2rem;
 				}
 			}
 
@@ -337,6 +376,10 @@
 
 				.form-lower {
 					margin-top: 0px;
+				}
+
+				.bottom-text {
+					bottom: 0rem;
 				}
 			}
 
@@ -359,11 +402,16 @@
 				}
 
 				.main {
-					margin-bottom: 12rem;
+					margin-bottom: 18rem;
 				}
 
 				.content-wrapper {
 					align-items: center;
+				}
+				.bottom-text {
+					left: 50%;
+					bottom: 9rem;
+					transform: translateX(-50%);
 				}
 			}
 		</style>
@@ -380,11 +428,12 @@
 				border: 1px solid #04c6ff;
 				box-shadow: 0 0 10px #48cef7;
 				outline: none;
+
 				text-transform: uppercase;
 				width: 100%;
-				font-family: "ElectricToaster", sans-serif;
-				font-size: 2em;
-				border-radius: 5px;
+				font-family: "CenturyGothic", sans-serif !important;
+				font-size: 1.8em;
+				border-radius: 10px;
 				display: flex;
 				align-items: center;
 				justify-content: space-evenly;
@@ -401,13 +450,13 @@
 
 			h4 {
 				color: #8b8b8b;
-				font-family: "Montserrat", sans-serif;
+				font-family: "CenturyGothic", sans-serif;
 				font-weight: 500;
 				font-size: 1.2em;
 			}
 
 			.h4-bold {
-				font-family: "Montserrat Bold", sans-serif;
+				font-family: "CenturyGothic Bold", sans-serif;
 				font-weight: 700;
 			}
 
@@ -554,7 +603,7 @@
 							</div>
 						</div>
 					</form>
-					<div class="agenda-button">
+					<div class="agenda-button" style="display: none">
 						<a
 							class="agenda-link"
 							href="/videos/1795c50b-3cfa-4726-9633-08d8c8005187/landing/8aadccb2-7f73-47c8-a15b-d3e4165fc9be"
@@ -566,6 +615,11 @@
 						</a>
 					</div>
 				</div>
+			</div>
+			<div class="bottom-text">
+				<img
+					src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/registration/left_text.png"
+				/>
 			</div>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
