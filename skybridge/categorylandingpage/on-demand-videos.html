@@ -289,10 +289,7 @@
               <inferno-snippet-content id="9b47a5da-adf2-4f4f-a98a-0c9f5ce55c98">
 
                 <!-- Click Track Landing v2.0 -->
-                <div
-                  id="xtrackx|2|non_booth|on_demand_videos|page_load"
-                  class="page_load"
-                ></div>
+                <div id="xtrackx|2|non_booth|on_demand_videos|page_load" class="page_load"></div>
                 <script>
                   setTimeout(() => {
                     var event = document.createEvent("MouseEvents");
@@ -404,6 +401,7 @@
                     .logo-bar {
                       bottom: 50px;
                     }
+
                     #content h1 {
                       font-size: 6rem;
                     }
@@ -447,6 +445,11 @@
 
                 <!-- Library Grid-->
                 <style>
+                  .on-demand-session {
+                    width: 100%;
+                    border-bottom: #0b42ea;
+                  }
+
                   .library-grid {
                     display: flex;
                     flex-wrap: wrap;
@@ -573,19 +576,44 @@
                 </div>
 
                 <div id="content">
-                  <h1>On Demand Videos</h1>
+                  <h1>On-Videos</h1>
 
-                  <div id="video-library" class="library-grid">
-                    {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %} {% assign sorted_events = data.Events | sort: "Name" %} {% assign render_count = 0 %} {% for event in sorted_events %} {% if event.VideoDuration > 0 %} {% if view_category_id == event.FirstCategoryId | downcase %} {% assign video_url = "/embed/" | append: event.Id %} {% assign video_name = event.Name |
-                    slice: 7, event.Name.size | strip %} {% assign video_description = event.Description %} {% assign render_count = render_count | plus: 1 %}
-
-                    <div id="{{event.Id}}" class="video-card" onclick="loadVideo('{{video_url}}')">
+                  <div class="on-demand-session"><h1>Session 1</h1></div>
+                  <div id="video-library1" class="library-grid">
+                    {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}
+                    {% assign sorted_events = data.Events | sort: "Name" %}
+                    {% assign render_count = 0 %} {% for event in sorted_events %}
+                    {% if event.VideoDuration > 0 %}
+                    {% if view_category_id == event.FirstCategoryId | downcase %}
+                    {% assign video_url = "/embed/" | append: event.Id %}
+                    {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}
+                    {% assign video_description = event.Description %}
+                    {% assign render_count = render_count | plus: 1 %}
+                    <div id="xtrackx|2|non_booth|on_demand_videos|_{{event.Id}}_1" class="video-card" onclick="loadVideo('{{video_url}}')">
                       <div class="video-card-logo">
                         <img src="{{ event.VideoThumbnail }}" alt="Library Video">
                       </div>
                       <div class="video-card-name">{{event.Name}}</div>
                     </div>
+                    {% endif %} {% endif %} {% endfor %}
+                  </div>
 
+                  <div class="on-demand-session"><h1>Session 2</h1>></div>
+                  <div id="video-library2" class="library-grid">
+                    {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}
+                    {% assign sorted_events = data.Events | sort: "Name" %} {% assign render_count = 0 %}
+                    {% for event in sorted_events %}
+                    {% if event.VideoDuration > 0 %}
+                    {% if view_category_id == event.FirstCategoryId | downcase %}
+                    {% assign video_url = "/embed/" | append: event.Id %} {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}
+                    {% assign video_description = event.Description %}
+                    {% assign render_count = render_count | plus: 1 %}
+                    <div id="xtrackx|2|non_booth|on_demand_videos|{{event.Id}}_2" class="video-card" onclick="loadVideo('{{video_url}}')">
+                      <div class="video-card-logo">
+                        <img src="{{ event.VideoThumbnail }}" alt="Library Video">
+                      </div>
+                      <div class="video-card-name">{{event.Name}}</div>
+                    </div>
                     {% endif %} {% endif %} {% endfor %}
                   </div>
 
