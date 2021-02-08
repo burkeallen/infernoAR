@@ -65,25 +65,25 @@
 
     function storeUser(data) {
       // console.log(data);
-      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);
+      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);      
       sessionStorage.setItem('clientId', data.ClientId)
       sessionStorage.setItem('token', data.AccessToken)
       sessionStorage.setItem('refreshToken', data.RefreshToken)
     }
 
     function login() {
-      const projectEl = document.querySelector('#novoProject');
-      const projectName = projectEl ? projectEl.getAttribute('name') : null;
-      const currentProject = projects.filter(project => {
-        return project.name === projectName;
-      })[0];
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
 
-      if (!currentProject) {
-        alert('could not log into Inferno \n\r Check the project name in the login() function');
-        return;
-      }
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
 
-      authenticate(currentProject);
+        authenticate(currentProject);
     }
 
   </script>
@@ -132,7 +132,7 @@
       padding: 1em;
     }
 
-    #localTemplateMenu a, #localTemplateMenu details {
+    #localTemplateMenu a, #localTemplateMenu details{
       display: block;
       margin: .25em;
       background-color: var(--sidebar-bg-color);
@@ -263,7 +263,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -288,16 +288,15 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="9b47a5da-adf2-4f4f-a98a-0c9f5ce55c98">
 
+
                 <!-- Click Track Landing v2.0 -->
-                <div id="xtrackx|2|non_booth|on_demand_videos|page_load" class="page_load"></div>
+                <div id="xtrackx|2|non_booth|on-demand-videos|page_load" class="page_load"></div>
                 <script>
                   setTimeout(() => {
                     var event = document.createEvent("MouseEvents");
                     event.initEvent("mouseup", true, true);
-                    landingPageEl
-                      .querySelector(".page_load")
-                      .dispatchEvent(event);
-                  }, 250);
+                    landingPageEl.querySelector('.page_load').dispatchEvent(event);
+                  } , 250);
                 </script>
                 <!-- ./ Click Track Landing v2.0 -->
 
@@ -330,373 +329,1054 @@
                     "BraveEightyone",
                     "https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/fonts/BraveEightyoneRegular-ZVGvm.ttf"
                   );
+
+                  loadFont(
+                    "CenturyGothic",
+                    "https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/fonts/CenturyGothic.ttf"
+                  );
                 </script>
 
                 <style>
-                  #content {
+                  img::after {
+                    content: none;
+                  }
+
+                  .snippetContainer {
+                    position: absolute;
                     background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/on-demand/bkg-on-demand.jpg");
-                    /*background-attachment: fixed;*/
+                    background-position: center center;
                     background-repeat: no-repeat;
                     background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 40px;
-                    z-index: 1;
-                    font-family: "Helvetica Neue", Arial Narrow, Arial,
-                    sans-serif !important;
-                  }
 
-                  #content h1 {
-                    color: white;
-                    font-family: "BraveEightyone", sans-serif;
-                    text-shadow: 10px 5px 20px #04c6ff;
-                    font-size: 6.5rem;
-                  }
-                </style>
-
-                <!--  Logo Bar -->
-                <style>
-                  .logo-bar {
-                    position: absolute;
-                    bottom: 10px;
                     left: 0;
-                    width: 100%;
-                    height: 15%;
-                    max-height: 80px;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+
+                    margin-bottom: -60px;
+                    overflow-x: hidden;
+                    overflow-y: auto;
+
                     display: flex;
-                    align-items: flex-end;
+                    flex-direction: column;
                     justify-content: space-between;
-                    background-color: white;
-                    z-index: 200;
-                    padding: 1rem;
                   }
 
-                  .logo-left {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
+                  .eventLibrary {
+                    flex-direction: column;
                     justify-content: flex-start;
+
+                    color: var(--sidebar-bg-color);
+                    padding: 0rem 4rem;
                   }
 
-                  .logo-right {
-                    height: 100%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: flex-end;
-                  }
-
-                  .logo-image {
-                    height: 100%;
-                    width: auto;
-                  }
-
-                  @media only screen and (max-width: 1230px) {
-                    .logo-bar {
-                      bottom: 50px;
-                    }
-                  }
-
-                  @media only screen and (max-width: 1230px) {
-                    .logo-bar {
-                      bottom: 50px;
-                    }
-
-                    #content h1 {
-                      font-size: 6rem;
-                    }
-                  }
-
-                  @media only screen and (max-width: 962px) {
-                    .logo-bar {
-                      bottom: 110px;
-                    }
-
-                    #content h1 {
-                      font-size: 5.5rem;
-                    }
-                  }
-
-                  @media only screen and (max-width: 600px) {
-                    .logo-bar {
-                      justify-content: center;
-                      padding: 1rem 2rem;
-                    }
-
-                    .logo-image {
-                      height: 70%;
-                    }
-
-                    #content h1 {
-                      font-size: 5rem;
-                    }
-                  }
-
-                  @media only screen and (max-width: 420px) {
-                    .logo-bar {
-                      bottom: 120px;
-                    }
-
-                    #content h1 {
-                      font-size: 4rem;
-                    }
-                  }
-                </style>
-
-                <!-- Library Grid-->
-                <style>
-                  .on-demand-session {
-                    width: 100%;
-                    border-bottom: #0b42ea;
-                  }
-
-                  .library-grid {
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-self: center;
-                    justify-content: center;
-                    margin-top: 40px;
-                  }
-
-                  @media (max-width: 767px) {
-                    .library-grid {
-                      flex-direction: column;
-                      align-items: center;
-                    }
-                  }
-
-                  .check-back-message {
+                  .eventLibraryHeader {
                     position: relative;
-                    margin-top: 40px;
-                    color: transparent;
+                    display: flex;
+                    flex-direction: row;
+                    /*justify-content: flex-end;*/
+                    align-items: flex-end;
+                    text-align: center;
+                    /*padding: 0 4rem 2rem 0;*/
+                    padding: 0 4rem 1rem 0;
+                  }
+
+                  .eventLibraryHeader {
+                    font-size: 6rem;
+                    font-weight: bold;
+                    line-height: 4rem;
+                  }
+
+                  .eventLibraryHeader .headerLogo {
+                    width: 300px;
+                  }
+
+                  .eventLibraryHeader .headerLogo img {
+                    width: 100%;
+                  }
+
+                  .eventCategoryContainer {
+                    background-color: rgba(254, 238, 213, 0.56);
+
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+
+                    border-top: 11px solid var(--sidebar-bg-color);
+                  }
+
+                  .eventCategoryContainer .title {
+                    font-size: 4rem;
+                    font-weight: bold;
+                    padding: 0 2rem;
+                  }
+
+                  .eventListings {
+                    display: flex;
+                    flex-direction: row;
+                    /* flex-wrap: wrap; */
+                    justify-content: flex-start;
+                    margin: 0 2rem;
+                    /*height: 100%;*/
+                    /*width: 320px;*/
+                    overflow: hidden;
+                  }
+
+                  .event {
+                    display: flex;
+                    flex-direction: column;
+                    margin: 0.5rem;
+                    width: 366px;
+                    height: 260px;
+                  }
+
+                  .eventThumbnail {
+                    /* width: 100%; */
+                  }
+
+                  .event-thumb {
+                    /* width: 100%; */
+                    height: 206px;
+                    /*max-width: 366px;*/
+                  }
+
+                  .play-icon {
+                    position: relative;
+                    width: 20%;
+                    top: -78%;
+                    left: 36%;
+                    cursor: pointer;
+                  }
+
+                  .play-icon:hover {
+                    transform: scale(1.1);
+                  }
+
+                  .eventTitle {
+                    margin: 15px;
                     font-size: 2.25rem;
                     text-align: center;
+                    /*padding: 2rem;*/
                   }
 
-                </style>
-
-                <!-- Video Card-->
-                <style>
-                  .video-card {
-                    position: relative;
-                    width: 200px;
-                    height: auto;
-                    background-color: #ffffff;
-                    margin: 10px 15px;
-                  }
-
-                  .video-card img {
-                    width: 280px;
-                    height: auto;
-                    filter: grayscale(0%);
-                  }
-
-                  .video-card img:hover {
+                  .event-link {
                     cursor: pointer;
-                    filter: grayscale(100%);
                   }
 
-                  .video-card-logo {
-                    text-align: center;
-                  }
-
-                  .video-card-logo img {
-                    width: 200px;
-                    height: auto;
-                    padding: 2px;
-                  }
-
-                  .video-card-name {
-                    width: 100%;
-                    /*top: 190px;*/
-                    color: #ffffff;
-                    font-size: 1.75rem;
-                    text-align: center;
+                  .chevron.left {
+                    width: 50px;
+                    transform: rotateZ(180deg);
                     position: absolute;
-                  }
-                </style>
-
-                <!-- video Overlay -->
-                <style>
-                  .video-view {
-                    position: absolute;
-                    top: 0px;
-                    left: 0px;
-                    right: 0px;
-                    bottom: 0px;
-                    background-color: rgba(255, 255, 255, 0.8);
-                    z-index: 20;
-                    display: none;
-                  }
-
-                  .video-viewer {
-                    position: absolute;
-                    top: 60px;
-                    left: 30px;
-                    right: 30px;
-                    width: calc(100% - 60px);
-                    max-width: 800px;
-                    margin: 0px auto;
-                    height: calc(100% - 90px);
-                    bottom: 30px;
-                    border: none;
-                  }
-
-                  .dark-button {
-                    background-color: #333 !important;
-                    color: #fff !important;
-                  }
-
-                  a.window-close {
-                    padding: 0.55rem;
-                    width: 11rem;
-                    font-size: 1.3rem;
-                    font-weight: 100;
-                    line-height: 1;
-                    color: #333;
-                    background-color: #fff;
-                    border-radius: 4rem;
-                    text-align: center;
+                    margin: 130px 0 auto 0;
+                    z-index: 2;
+                    left: 8rem;
                     cursor: pointer;
-                    text-decoration: none;
-                    display: inline-block;
-                    margin: 20px 0px 0px 30px;
                   }
 
-                  a.window-close:hover {
-                    color: #333;
-                    text-decoration: none;
-                  }
-                </style>
-
-                <!-- Video Overlays -->
-                <div class="video-view" id="video-blanket">
-                  <a class="window-close dark-button" href="javascript:void(closeVideo());">Close</a>
-                  <iframe class="video-viewer" id="video-frame" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
-                </div>
-
-                <div id="content">
-                  <h1>On-Videos</h1>
-
-                  <div class="on-demand-session"><h1>Session 1</h1></div>
-                  <div id="video-library1" class="library-grid">
-                    {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}
-                    {% assign sorted_events = data.Events | sort: "Name" %}
-                    {% assign render_count = 0 %} {% for event in sorted_events %}
-                    {% if event.VideoDuration > 0 %}
-                    {% if view_category_id == event.FirstCategoryId | downcase %}
-                    {% assign video_url = "/embed/" | append: event.Id %}
-                    {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}
-                    {% assign video_description = event.Description %}
-                    {% assign render_count = render_count | plus: 1 %}
-                    <div id="xtrackx|2|non_booth|on_demand_videos|_{{event.Id}}_1" class="video-card" onclick="loadVideo('{{video_url}}')">
-                      <div class="video-card-logo">
-                        <img src="{{ event.VideoThumbnail }}" alt="Library Video">
-                      </div>
-                      <div class="video-card-name">{{event.Name}}</div>
-                    </div>
-                    {% endif %} {% endif %} {% endfor %}
-                  </div>
-
-                  <div class="on-demand-session"><h1>Session 2</h1>></div>
-                  <div id="video-library2" class="library-grid">
-                    {% assign view_category_id = data.CurrentlyViewedCategory.Id | downcase %}
-                    {% assign sorted_events = data.Events | sort: "Name" %} {% assign render_count = 0 %}
-                    {% for event in sorted_events %}
-                    {% if event.VideoDuration > 0 %}
-                    {% if view_category_id == event.FirstCategoryId | downcase %}
-                    {% assign video_url = "/embed/" | append: event.Id %} {% assign video_name = event.Name | slice: 7, event.Name.size | strip %}
-                    {% assign video_description = event.Description %}
-                    {% assign render_count = render_count | plus: 1 %}
-                    <div id="xtrackx|2|non_booth|on_demand_videos|{{event.Id}}_2" class="video-card" onclick="loadVideo('{{video_url}}')">
-                      <div class="video-card-logo">
-                        <img src="{{ event.VideoThumbnail }}" alt="Library Video">
-                      </div>
-                      <div class="video-card-name">{{event.Name}}</div>
-                    </div>
-                    {% endif %} {% endif %} {% endfor %}
-                  </div>
-
-                  <div class="logo-bar">
-                    <div class="logo-left">
-                      <img class="logo-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/registration/jardiance.png"> <img class="logo-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/registration/synjardy.png"> <img class="logo-image"
-                      src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/registration/trajenta.png">
-                    </div>
-                    <div class="logo-right">
-                      <img class="logo-image" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge-feb/library/boehringer.png">
-                    </div>
-                  </div>
-
-                </div>
-
-                <!-- video overlay scrips-->
-                <script>
-                  function loadVideo(url) {
-                    var x = landingPageEl.getElementById('video-frame');
-                    x.src = url;
-                    var y = landingPageEl.getElementById('video-blanket');
-                    y.style.display = 'block';
+                  .chevron.right {
+                    width: 50px;
+                    position: absolute;
+                    margin: 130px 0 auto 0;
+                    right: 8rem;
+                    z-index: 2;
+                    cursor: pointer;
                   }
 
-                  function closeVideo() {
-                    var y = landingPageEl.getElementById("video-blanket");
-                    y.style.display = "none";
-                    var x = landingPageEl.getElementById("video-frame");
-                    x.src = "";
-                  }
-
-                </script>
-
-                <!-- common scripts-->
-                <script>
-                  var fetchLayout = () => {
-                    var elementId = "31f4999c-7978-42f8-a3c1-7361e17fe5e5";
-                    const headers = {
-                      Authorization:
-                        "Bearer " + sessionStorage.getItem("token"),
-                      "X-InfernoCore-Domain":
-                        sessionStorage.getItem("domain") ??
-                        window.location.hostname
-                    };
-
-                    // users accessing with SA credentials
-                    if (window.sessionStorage.overrideId) {
-                      headers["X-InfernoCore-Domain"] =
-                        "jolokia.inferno.jolokia.com";
-                      headers["X-Client-Override"] = sessionStorage.getItem(
-                        "overrideId"
-                      );
+                  @media only screen and (max-width: 1080px) {
+                    .eventLibraryHeader .headerTitle {
+                      font-size: 4rem;
                     }
 
-                    $.ajax({
-                      url:
-                        "https://ingress.infernocore.jolokia.com/api/Snippets/LatestRevisionHTML/" +
-                        elementId,
-                      type: "GET",
-                      async: true,
-                      accept: "application/json",
-                      contentType: "application/json",
-                      headers: headers,
-                      success: function (res, status, xhr) {
-                        var parser = new DOMParser();
-                        var doc = parser.parseFromString(res, "text/html");
-                        var pageFooter = doc.getElementById("page-footer");
-                        const contentElement = landingPageEl.getElementById(
-                          "content"
-                        );
-                        // Avoid duplicate elements
-                        if (!landingPageEl.getElementById("page-footer"))
-                          contentElement.appendChild(pageFooter);
+                    .eventCategoryContainer .title {
+                      font-size: 3rem;
+                    }
+
+                    .eventTitle {
+                      font-size: 1.5rem;
+                    }
+
+                    .chevron.right {
+                      margin-top: 92px;
+                    }
+
+                    .chevron.left {
+                      margin-top: 92px;
+                    }
+
+                    .event-thumb {
+                      /*height: 150px;*/
+                    }
+
+                    .play-icon {
+                      /*top: -130px;*/
+                    }
+                  }
+
+                  @media only screen and (max-width: 500px) {
+                    .eventCategoryContainer .title {
+                      font-size: 2rem;
+                    }
+
+                    .eventLibraryHeader {
+                      padding-right: 0;
+                    }
+
+                    .eventLibraryHeader .headerLogo img {
+                      width: 125%;
+                      margin-bottom: 2rem;
+                      margin-left: -3rem;
+                    }
+
+                    .event-thumb {
+                      height: 130px;
+                    }
+
+                    .chevron.right {
+                      right: 1rem;
+                      margin-top: 82px;
+                    }
+
+                    .chevron.left {
+                      left: 1rem;
+                      margin-top: 82px;
+                    }
+                  }
+
+                  @media only screen and (max-width: 400px) {
+                    .chevron.right {
+                      margin-top: 70px;
+                    }
+
+                    .chevron.left {
+                      margin-top: 70px;
+                    }
+
+                    .play-icon {
+                      /*top: -125px;*/
+                    }
+                  }
+                </style>
+
+                <div class="snippetContainer">
+                  <style>
+
+                    h1 {
+                      color: white;
+                      font-family: "BraveEightyone", sans-serif;
+                      text-shadow: 10px 5px 20px #04c6ff;
+                      font-size: 6.5rem;
+                    }
+
+                    .jkar-overlay {
+                      position: absolute;
+                      background-color: #00000088;
+                      left: 0;
+                      right: 0;
+                      top: 0;
+                      bottom: 0;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      z-index: 1000;
+                      opacity: 0;
+                      pointer-events: none;
+                      transition: all 222ms;
+                      overflow-y: auto;
+                      height: 100%;
+                    }
+
+                    .jkar-overlay.active {
+                      pointer-events: all;
+                      opacity: 1;
+                    }
+
+                    .jkar-modal {
+                      width: 100%;
+                      max-width: 900px;
+                      height: 100%;
+                      max-height: 600px;
+                      border-radius: 1rem;
+                      overflow: hidden;
+                      position: relative;
+                      transform: scale(0.8);
+                      background: white;
+                      transition: all 222ms;
+                    }
+
+                    .jkar-modal.active {
+                      transform: scale(1);
+                    }
+
+                    .jkar-modal-close {
+                      position: absolute;
+                      right: 0;
+                      top: 0;
+                      width: 48px;
+                      height: 48px;
+                      font-size: 6rem;
+                      background: red;
+                      border-radius: 0 1rem 0 1rem;
+                      cursor: pointer;
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                      transition: all 222ms;
+                    }
+
+                    .jkar-modal-close:hover {
+                      width: 64px;
+                      height: 64px;
+                    }
+
+                    .jkar-iframe {
+                      min-width: 100%;
+                      min-height: 100%;
+                      border: none;
+                      outline: none;
+                    }
+
+                    .jkar-embed {
+                      min-width: 100%;
+                      min-height: 100%;
+                      border: none;
+                      outline: none;
+                    }
+
+                    .snippetContainer.off-top {
+                      overflow: hidden;
+                    }
+                  </style>
+                  <div class="jkar-overlay">
+                    <div class="jkar-modal">
+                      <div class="jkar-modal-close">×</div>
+                      <iframe src class="jkar-iframe"></iframe>
+                      <embed class="jkar-embed" src>
+                    </div>
+                  </div>
+
+                  <!-- event library -->
+                  <div class="eventLibrary">
+                    <div class="eventLibraryHeader">
+                      <h1>On-Demand Videos</h1>
+                    </div>
+                    <div class="eventLibraryStage"></div>
+                  </div>
+
+                  <template id="eventCategoryContainerTemplate" class="eventCategoryContainerTemplate">
+                    <div class="eventCategoryContainer">
+                      <div class="title">Category 2</div>
+                      <div class="eventListings"></div>
+                      <img class="chevron left" id="slideLeft" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge/ild-theatre/arrow.png">
+                      <img class="chevron right" id="slideRight" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge/ild-theatre/arrow.png">
+                    </div>
+                  </template>
+
+                  <template id="eventTemplate" class="eventTemplate">
+                    <div class="event event-item cat-id">
+                      <div class="eventThumbnail overlay-link">
+                        <img class="event-thumb" src>
+                      </div>
+                      <div class="eventTitle event-title">subject title</div>
+                      <img class="play-icon" src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/skybridge/ild-theatre/play.png" alt>
+                    </div>
+                  </template>
+
+                  <!-- event library -->
+<!--                  <style>-->
+<!--                    footer {-->
+<!--                      color: white;-->
+<!--                      font-size: 1.6rem;-->
+<!--                      background-color: #001e55;-->
+<!--                      padding: 2rem 4rem;-->
+<!--                      display: flex;-->
+<!--                      flex-direction: column;-->
+<!--                      justify-content: flex-end;-->
+<!--                      align-items: center;-->
+<!--                      width: 100%;-->
+<!--                    }-->
+
+<!--                    footer p {-->
+<!--                      margin: 0;-->
+<!--                    }-->
+
+<!--                    footer a {-->
+<!--                      margin: 0;-->
+<!--                    }-->
+
+<!--                    .bottom,-->
+<!--                    .top {-->
+<!--                      width: 100%;-->
+<!--                    }-->
+
+<!--                    .top .info {-->
+<!--                    }-->
+
+<!--                    .bottom .info {-->
+<!--                      width: 100%;-->
+<!--                      display: flex;-->
+<!--                      justify-content: space-between;-->
+<!--                      align-items: flex-end;-->
+<!--                      flex-wrap: wrap;-->
+<!--                    }-->
+
+<!--                    footer .info, footer .info p.supportContact {-->
+<!--                      font-weight: 500;-->
+<!--                    }-->
+
+<!--                    footer .info a {-->
+<!--                      color: white;-->
+<!--                      text-decoration: none;-->
+<!--                    }-->
+
+<!--                    footer .info p {-->
+<!--                      font-size: 1.4rem;-->
+<!--                      font-weight: 300;-->
+<!--                    }-->
+<!--                  </style>-->
+<!--                  <footer>-->
+<!--                    <div class="bottom">-->
+<!--                      <div class="info">-->
+<!--                        <p>PC-SA-101024<br>Copyright © 2021 NexTech AR Solutions Inc.</p>-->
+<!--                        <p class="supportContact">Experiencing technical difficulties?<br>Contact <a href="mailto:support@nextechar.com">support@nextechar.com</a> or +1.866.330.6655</p>-->
+<!--                        <div class="info-links"><a href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy" target="_blank">Privacy Policy</a> | <a href="https://www.nextechar.com/terms-of-service" target="_blank">Terms & Conditions</a></div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </footer>-->
+
+                </div>
+
+                <!-- */ Example Design -->
+
+                <!-- Example Build Script /* -->
+                <script type="text/javascript">
+                  // EXAMPLE USE FUNCTIONS
+                  var DOMAIN = "bi-diabetes.infernoar.com/"; // Client Domain
+
+                  async function pageBuild() {
+                    // Called at bottom scripts
+
+                    // Declared CONFIG to be used in renderEvents Function
+                    const config = {
+                      displayCategories: ["35392a66-a27b-4f8b-3903-08d8c84ce6e0"], // Categories to display | OPTIONAL
+                      customSelectors: { ".cat-id": catId, ".overlay-link": overlaySet }, // Custom declared selectors (key) and their callback (value) | OPTIONAL
+                      tracking: {
+                        // REQUIRED
+                        version: 2, // Tracking Version
+                        pageName: "on_demand_video", // Page Name
+                        location: "event_card", // Location Name
                       },
-                      error: function (err) {
-                        console.error("Error Fetching HTML", err);
+                    };
+
+                    const cache = {
+                      // ONLY IF USING getEventsList() FROM BELOW - If not declared, Cache Enabled, Name is from Url, Expiry Time is 3 mins
+                      enable: true, // OPTIONAL | true for live event  - false only if needed during development
+                    };
+
+                    // Declare Events List, how ever it is obtained
+                    const eventsList = await getEventsList(cache);
+
+                    //console.log(eventsList);
+
+                    // Declare the Event Template to be used
+                    const eventTemplate = landingPageEl.querySelector("template.eventTemplate");
+
+                    // Call renderEvents Function to return a documentFragment of all events within delcared fromDate + config.utcOffset range
+                    var events = renderEvents(eventsList, eventTemplate, config);
+
+                    const nodeList = events.querySelectorAll(".event-item");
+                    Array.from(nodeList).forEach((node) => {
+                      // find list and append
+                      const containerElement = landingPageEl.querySelector(".eventCategoryContainer[data-cat-id='" + node.dataset.catId + "']");
+                      if (containerElement) {
+                        const eventListElement = landingPageEl.querySelector(".eventCategoryContainer[data-cat-id='" + node.dataset.catId + "'] .eventListings");
+                        eventListElement.appendChild(node);
+                      }
+                      // if no list create list and append
+                      if (!containerElement) {
+                        const catTemplate = landingPageEl.querySelector("template.eventCategoryContainerTemplate");
+                        const catClone = catTemplate.content.cloneNode(true);
+
+                        scrollLists(catClone, config);
+
+                        let catContainer = catClone.querySelector(".eventCategoryContainer");
+                        catContainer.dataset.catId = node.dataset.catId;
+                        catContainer.dataset.catWeight = node.dataset.catWeight;
+
+                        let catTitle = catClone.querySelector(".title");
+                        catTitle.textContent = node.dataset.catName;
+
+                        let catList = catClone.querySelector(".eventListings");
+                        catList.appendChild(node);
+
+                        const fullListElement = landingPageEl.querySelector(".eventLibraryStage");
+                        fullListElement.appendChild(catClone);
+
+                        // Reorder lists of lists
+                        const nodeList = landingPageEl.querySelectorAll(".eventCategoryContainer");
+
+                        // list sorted by category name
+                        const sortedListsName = Array.from(nodeList).sort(function (a, b) {
+                          if (a.querySelector(".title").textContent.toLowerCase() < b.querySelector(".title").textContent.toLowerCase()) {
+                            return -1;
+                          }
+                          if (a.querySelector(".title").textContent.toLowerCase() > b.querySelector(".title").textContent.toLowerCase()) {
+                            return 1;
+                          }
+                          return 0;
+                        });
+
+                        // list sorted by category weight
+                        const sortedListsWeight = Array.from(nodeList).sort(function (a, b) {
+                          if (a.dataset.catWeight < b.dataset.catWeight) {
+                            return -1;
+                          }
+                          if (a.dataset.catWeight > b.dataset.catWeight) {
+                            return 1;
+                          }
+                          return 0;
+                        });
+
+                        // remove old selected elements
+                        Array.from(nodeList).forEach((node) => node.remove());
+
+                        // append ordered list to grand list element
+                        sortedListsName.forEach((node) => fullListElement.appendChild(node));
                       }
                     });
-                  };
 
-                  fetchLayout();
+                    arrowEvents();
+                  }
+
+                  //example build days
+                </script>
+                <!-- */ Example Build Script -->
+
+                <!-- GS AGENDA - Event Build Function /* -->
+                <script type="text/javascript">
+                  // RENDER EVENTS FUNCTIONS
+
+                  function renderEvents(events, template, config, fromDate = null) {
+                    const renderedEvents = new DocumentFragment();
+                    config["fromDate"] = fromDate;
+
+                    const eventsList = sortEvents(events, config);
+
+                    eventsList.forEach((event) => {
+                      const eventClone = template.content.cloneNode(true);
+
+                      // Object of Usable Selectors and their Function
+                      const eventSelectors = {
+                        ".event-item": eventItemSelector,
+                        ".event-thumb": eventThumbSelector,
+                        ".event-title": eventTitleSelector,
+                        ".event-start-time-12": eventStart12Selector,
+                        ".event-end-time-12": eventEnd12Selector,
+                        ".event-start-time-24": eventStart24Selector,
+                        ".event-end-time-24": eventEnd24Selector,
+                        ".event-duration-hhmm": eventDurationHhMmSelector,
+                        ".event-duration-m": eventDurationMSelector,
+                        ".event-timezone": eventTimezoneSelector,
+                        ".event-desc": eventDescSelector,
+                        ".event-speaker": eventSpeakerSelector,
+                        ".event-link": eventLinkSelector,
+                        ".event-link-external": eventLinkExternalSelector,
+                        ...config.customSelectors,
+                      };
+
+                      Object.entries(eventSelectors).forEach(([selector, callback]) => {
+                        const nodeList = eventClone.querySelectorAll(selector);
+                        Array.from(nodeList).forEach((node) => callback(node, event, config, eventClone));
+                      });
+                      // Append Rendered Event to DocumentFragment
+                      renderedEvents.appendChild(eventClone);
+                    });
+                    // Return DocumentFragment
+                    return renderedEvents;
+                  }
+
+                  function sortEvents(events, config) {
+                    const MSECONDS_IN_24_HOURS = 1000 * 60 * 60 * 24;
+                    const date = new Date(config.fromDate + "T00:00:00.000" + config.utcOffset);
+                    const fromEpoch = date.getTime();
+                    const toEpoch = fromEpoch + MSECONDS_IN_24_HOURS;
+                    const sortedEvents = events
+                      // Sort Events by Event start time
+                      .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
+                      // Filter Events
+                      .filter((event) => {
+                        if (config.fromDate) {
+                          const startEpoch = new Date(event.startTime).getTime();
+                          // Reject events out of time period
+                          if (startEpoch < fromEpoch || startEpoch >= toEpoch) {
+                            return false;
+                          }
+                        }
+
+                        // Check to see if displayCategories is include in config, if so sort
+                        if (config.displayCategories && config.displayCategories.length != 0) {
+                          // Reject Non Categorized events
+                          if (!event.categories || event.categories.length === 0) {
+                            return false;
+                          }
+                          // Reject events out of category filter list
+                          if (event.categories.filter((cat) => config.displayCategories.includes(cat.id)).length === 0) {
+                            return false;
+                          }
+                        }
+                        return true;
+                      });
+                    return sortedEvents;
+                  }
+
+                  function zeroPad(num) {
+                    return ("00" + num.toString()).slice(-2);
+                  }
+
+                  function trackingReplace(name) {
+                    return name.replaceAll(" ", "_").replaceAll(":", "").replaceAll("&", "and").replaceAll("'", "").replaceAll('"', "").replaceAll("+", "plus").replaceAll("=", "equals").replaceAll("/", "and");
+                  }
+
+                  function displayNo(selected) {
+                    selected.style.display = "none";
+                  }
+
+                  function eventItemSelector(selected, event, config) {
+                    selected.dataset.eventid = event.id;
+                  }
+
+                  function eventThumbSelector(selected, event, config) {
+                    if (event.video.thumbnail) {
+                      selected.src = event.video.thumbnail;
+                    } else {
+                      displayNo(selected);
+                    }
+                  }
+
+                  function eventTitleSelector(selected, event, config) {
+                    selected.textContent = event.name;
+                  }
+
+                  function eventStart12Selector(selected, event, config) {
+                    const startTime = new Date(event.startTime);
+                    selected.textContent = startTime.toLocaleString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    });
+                  }
+
+                  function eventEnd12Selector(selected, event, config) {
+                    const startTime = new Date(event.startTime);
+                    const duration = event.video.duration;
+                    const endTime = new Date(startTime.getTime() + duration * 1000);
+                    selected.textContent = endTime.toLocaleString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: true,
+                    });
+                  }
+
+                  function eventStart24Selector(selected, event, config) {
+                    const startTime = new Date(event.startTime);
+                    selected.textContent = startTime.toLocaleString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: false,
+                    });
+                  }
+
+                  function eventEnd24Selector(selected, event, config) {
+                    const startTime = new Date(event.startTime);
+                    const duration = event.video.duration;
+                    const endTime = new Date(startTime.getTime() + duration * 1000);
+                    selected.textContent = endTime.toLocaleString("en-US", {
+                      hour: "numeric",
+                      minute: "numeric",
+                      hour12: false,
+                    });
+                  }
+
+                  function eventDurationHhMmSelector(selected, event, config) {
+                    let hours = event.video.duration / 60 / 60;
+                    let hh = String(hours).split(".")[0];
+                    if (Math.floor(hh) == 0) {
+                      hh = "";
+                    } else {
+                      hh = zeroPad(hh) + "h";
+                    }
+                    let mm = String(event.video.duration / 60 - Math.floor(hours) * 60);
+                    if (Math.floor(mm) == 0) {
+                      mm = "";
+                    } else {
+                      mm = zeroPad(mm) + "m";
+                    }
+                    if (hh + mm != 0) {
+                      selected.textContent = hh + mm;
+                    } else {
+                      displayNo(selected);
+                    }
+                  }
+
+                  function eventDurationMSelector(selected, event, config) {
+                    if (Math.floor(event.video.duration / 60) != 0) {
+                      selected.textContent = Math.floor(event.video.duration / 60) + "m";
+                    } else {
+                      displayNo(selected);
+                    }
+                  }
+
+                  function eventTimezoneSelector(selected, event, config) {
+                    const TIMEZONE_STR = new Date().toLocaleTimeString("en-us", { timeZoneName: "short" }).split(" ")[2];
+                    selected.textContent = TIMEZONE_STR;
+                  }
+
+                  function eventDescSelector(selected, event, config) {
+                    if (event.description.match(/(\[)/g)) {
+                      //Split Description at "["
+                      let eventDes = event.description.trim().replaceAll("\n", "<br>").replaceAll("\r", "<br>").replace("]", "").split("[");
+                      if (eventDes[0] != "") {
+                        // If first: input text or group empty, remove element
+                        selected.innerHTML = eventDes[0];
+                      } else {
+                        displayNo(selected);
+                      }
+                    } else {
+                      // Description Section based on a "Description" layout
+                      if (selected) {
+                        if (event.description != "") {
+                          // If input text or group empty, remove element
+                          selected.innerHTML = event.description.trim().replaceAll("\n", "<br>").replaceAll("\r", "<br>");
+                        } else {
+                          displayNo(selected);
+                        }
+                      }
+                    }
+                  }
+
+                  function eventSpeakerSelector(selected, event, config) {
+                    if (event.description.match(/(\[)/g)) {
+                      let eventDes = event.description.trim().replaceAll("\n", "<br>").replaceAll("\r", "<br>").replace("]", "").split("[");
+                      if (eventDes[1] != "") {
+                        selected.innerHTML = eventDes[1];
+                      } else {
+                        displayNo(selected);
+                      }
+                    } else {
+                      displayNo(selected);
+                    }
+                  }
+
+                  function eventLinkSelector(selected, event, config) {
+                    if (!config.mainstageId) {
+                      const linkFunc = () => window.location.assign("/videos/" + event.categories[0].id + "/detail/" + event.id);
+                      selected.addEventListener("click", linkFunc);
+                    } else {
+                      for (let cat of event.categories) {
+                        if (cat.id == config.mainstageId) {
+                          const linkFunc = () => window.location.assign("/videos/" + config.mainstageId + "/detail/" + event.id);
+                          selected.addEventListener("click", linkFunc);
+                        } else {
+                          const linkFunc = () => window.location.assign("/videos/" + event.categories[0].id + "/detail/" + event.id);
+                          selected.addEventListener("click", linkFunc);
+                        }
+                      }
+                    }
+                    selected.id = "xtrackx|" + config.tracking.version + "|non_booth|" + config.tracking.pageName + "|button_click|" + config.tracking.location + "|link_to_" + trackingReplace(event.name);
+                  }
+
+                  function eventLinkExternalSelector(selected, event, config) {
+                    if (event.eventFeaturesZoomTrackedUrl) {
+                      const linkFunc = () => window.open(event.eventFeaturesZoomTrackedUrl);
+                      selected.addEventListener("click", linkFunc);
+                      selected.id = "xtrackx|" + config.tracking.version + "|non_booth|" + config.tracking.pageName + "|button_click|" + config.tracking.location + "|external_link_from_" + trackingReplace(event.name);
+                    } else {
+                      displayNo(selected);
+                    }
+                  }
+
+                  function exampleEvents() {
+                    const events = [
+                      {
+                        id: "42f555c8-836f-4b3b-919e-aa02b2666524",
+                        name: "Event Name",
+                        description: "Event Description [Speaker]",
+                        clientId: "01457b6e-5b40-4739-1b72-08d89655416b",
+                        categories: [
+                          {
+                            categoryEvents: null,
+                            categoryGroups: null,
+                            client: null,
+                            clientId: "01457b6e-5b40-4739-1b72-08d89655416b",
+                            id: "b80a2e4f-6fd6-474c-e9be-08d8a0e20395",
+                            name: "Agenda",
+                            copyrightMessage: null,
+                            parent: null,
+                            parentId: "c676ecdf-9b29-44d1-faf4-08d8a11991cc",
+                            landingPageSnippet: null,
+                            landingPageSnippetId: null,
+                            weight: 20,
+                            iconId: "3a755135-0982-4d5b-8495-08d8088a3be5",
+                            icon: null,
+                            landingPagePersistent: false,
+                          },
+                        ],
+                        preRoll: "2020-12-14T01:20:00-05:00",
+                        startTime: "2020-12-14T01:20:00-05:00",
+                        secondsToPreRoll: -405188.5727273,
+                        secondsToStartTime: -405188.5727284,
+                        eventFeaturesVoting: false,
+                        eventFeaturesQuestionAndAnswer: false,
+                        eventFeaturesRegistration: false,
+                        eventFeaturesZoomUrl: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/delivery/agenda/space_cat.jpg",
+                        eventFeaturesDisclaimerSnippetId: null,
+                        eventFeaturesCustomPlayerPageOverrideSnippetId: null,
+                        eventFeaturesId: "6284fb06-0ddd-4ee2-9018-d14922b1f8f0",
+                        eventFeaturesZoomTrackedUrl: "https://ingress.infernocore.jolokia.com/api/Links/Zoom/6284fb06-0ddd-4ee2-9018-d14922b1f8f0",
+                        archived: false,
+                        uploadingUserId: "6e67c06c-b880-4932-8a67-cb83fe0f181c",
+                        isLive: false,
+                        video: {
+                          id: "d644c9dc-ba94-4035-1cb4-08d8a11b2f9b",
+                          bandwidthsString: "",
+                          defaultBandwidth: 0,
+                          widthsString: "",
+                          filePath: "",
+                          filenameHLS: null,
+                          filenameSMIL: null,
+                          thumbnail: "https://inferno-event-assets.s3-us-west-2.amazonaws.com/delivery/agenda/cat_thumbnail.jpg",
+                          duration: 300,
+                          m3U8Urls: [],
+                          selectedM3U8: null,
+                          latestJobId: null,
+                          hasCaptions: false,
+                        },
+                        eventFeaturesZoomApiKey: "SECRET",
+                        eventFeaturesZoomApiSecret: "SECRET",
+                        eventFeaturesZoomRoomId: null,
+                        eventFeaturesZoomRoomPassword: null,
+                        eventFeaturesZoomShowEmbeddedMode: false,
+                      },
+                    ];
+
+                    return events;
+                  }
+
+                  function catId(selected, event, config) {
+                    // go through list of categories
+                    for (let cat of event.categories) {
+                      // check to see if event categories have parent and if parent id matches
+                      if (cat.parent && cat.parent.id == "35392a66-a27b-4f8b-3903-08d8c84ce6e0") {
+                        selected.dataset.catName = cat.name;
+                        selected.dataset.catId = "id-" + cat.id;
+                        selected.dataset.catWeight = cat.weight;
+                      }
+                    }
+                  }
+
+                  function scrollLists(clone, config) {
+                    if (!config.catNumber) {
+                      config.catNumber = 0;
+                    }
+                    clone.querySelector(".eventListings").dataset.scrollNumber = config.catNumber;
+                    config.catNumber++;
+                  }
+
+                  function arrowEvents() {
+                    const eventCategoryContainer = landingPageEl.querySelectorAll(".eventCategoryContainer");
+                    Array.from(eventCategoryContainer).forEach((list) => {
+                      const leftArrow = list.querySelector(".chevron.left");
+                      const rightArrow = list.querySelector(".chevron.right");
+                      const scroller = list.querySelector(".eventListings");
+
+                      const scrollSpeed = 30;
+
+                      const leftPress = () => {
+                        const single = scroller.scrollWidth / scroller.querySelectorAll(".event").length;
+                        scroller.style.scrollBehavior = "smooth";
+                        if (window.screen.width < 750) {
+                          scroller.scrollLeft -= single;
+                        } else {
+                          scroller.scrollLeft -= 500;
+                        }
+                        scroller.style.scrollBehavior = "";
+                      };
+
+                      const rightPress = () => {
+                        //console.log("rightPress")
+                        const single = scroller.scrollWidth / scroller.querySelectorAll(".event").length;
+                        scroller.style.scrollBehavior = "smooth";
+                        if (window.screen.width < 750) {
+                          scroller.scrollLeft += single;
+                        } else {
+                          scroller.scrollLeft += 500;
+                        }
+                        scroller.style.scrollBehavior = "";
+                      };
+
+                      leftArrow.addEventListener("click", leftPress);
+                      rightArrow.addEventListener("click", rightPress);
+
+                      scroller.addEventListener(
+                        "mousewheel",
+                        (e) => {
+                          // block if e.deltaY==0
+                          if (!e.deltaY) return;
+                          // Set scrollDirection (-1 = up // 1 = down)
+                          let scrollDirection = e.deltaY > 0 ? 1 : -1;
+                          // convert vertical scroll into horizontal
+                          scroller.scrollLeft += scrollSpeed * scrollDirection;
+                          let scrollLeft = Math.round(scroller.scrollLeft);
+                          // calculate box total vertical scroll
+                          let maxScrollLeft = Math.round(scroller.scrollWidth - scroller.clientWidth);
+                          // if element scroll has not finished scrolling
+                          // prevent window to scroll
+                          if ((scrollDirection === -1 && scrollLeft > 0) || (scrollDirection === 1 && scrollLeft < maxScrollLeft)) e.preventDefault();
+                          // done!
+                          return true;
+                        },
+                        false
+                      );
+                    });
+                  }
+
+                  function overlaySet(selected, event, config) {
+                    const linkFunc = () => {
+                      showModal();
+                      const iframe = landingPageEl.querySelector(".jkar-iframe");
+                      iframe.src = "/embed/" + event.id;
+                      iframe.style.display = "unset";
+                      console.log("active")
+                    };
+                    selected.addEventListener("click", linkFunc);
+                  }
 
                 </script>
+                <!-- */ Event Build Function - GS AGENDA -->
+                <script>
+                  $(document).ready(() => {
+                    //console.log("Ready!");
+                    $(landingPageEl)
+                      .find(".snippetContainer")
+                      .scroll(() => {
+                        $(landingPageEl)
+                          .find(".jkar-overlay")
+                          .css("top", $(landingPageEl).find(".snippetContainer").scrollTop())
+                          .css("bottom", "-" + $(landingPageEl).find(".snippetContainer").scrollTop());
+                      });
+
+                    $(landingPageEl).find(".jkar-iframe").attr("src", "").css("display", "none");
+                    $(landingPageEl).find(".jkar-embed").css("display", "none");
+
+                    $(landingPageEl)
+                      .find(".lobbyAgendaContainer")
+                      .click(() => {
+                        showModal();
+                        $(landingPageEl).find(".jkar-embed").css("display", "unset");
+                      });
+
+                    $(landingPageEl)
+                      .find(".jkar-modal-close")
+                      .click(() => {
+                        hideModal();
+                        $(landingPageEl).find(".jkar-iframe").attr("src", "").css("display", "none");
+                        $(landingPageEl).find(".jkar-embed").css("display", "none");
+                        $(landingPageEl).find(".snippetContainer").removeClass("off-top");
+                      });
+
+                    showModal = () => {
+                      $(landingPageEl).find(".jkar-overlay").addClass("active");
+                      $(landingPageEl).find(".jkar-modal").addClass("active");
+                      $(landingPageEl).find(".snippetContainer").addClass("off-top");
+                    };
+
+                    hideModal = () => {
+                      $(landingPageEl).find(".jkar-overlay").removeClass("active");
+                      $(landingPageEl).find(".jkar-modal").removeClass("active");
+                    };
+
+                    hideTutorialModal = () => {};
+
+                    showTutorialModal = () => {};
+                  });
+                </script>
+
+                <!-- API Functions /* -->
+                <script type="text/javascript">
+                  function createHeaders() {
+                    // Set header
+                    const headers = {
+                      Authorization: "Bearer " + window.sessionStorage.getItem("token"),
+                      "X-InfernoCore-Domain": DOMAIN,
+                    };
+                    if (window.sessionStorage.getItem("overrideId")) {
+                      headers["X-Client-Override"] = window.sessionStorage.getItem("overrideId");
+                      headers["X-InfernoCore-Domain"] = "jolokia.inferno.jolokia.com";
+                    }
+                    return headers;
+                  }
+
+                  // Pull all event listings from cache or API call
+                  async function getEventsList(config = false) {
+                    if (config && config.enable) {
+                      const cacheName = !config || !config.name ? DOMAIN.split(".")[0] : config.name;
+                      const cacheExpiry = !config || !config.expiryTime ? 3 : config.expiryTime;
+                      const localCachedEventList = window.localStorage.getItem(cacheName + "_cached_event_list");
+                      const localCacheExpiry = window.localStorage.getItem(cacheName + "_cached_event_expiry");
+                      // If the cache exists
+                      if (localCachedEventList) {
+                        if (Number(localCacheExpiry) > Number(new Date().getTime())) {
+                          console.log("Event List from cache");
+                          //console.log(JSON.parse(localCachedEventList));
+                          return JSON.parse(localCachedEventList);
+                        }
+                        // Otherwise discard cache and fetch
+                        window.localStorage.removeItem(cacheName + "_cached_event_list");
+                        window.localStorage.removeItem(cacheName + "_cached_event_expiry");
+                      }
+                      const result = await fetchEvents();
+                      console.log("Fetched Events and Cached");
+                      //console.log(result);
+                      window.localStorage.setItem(cacheName + "_cached_event_list", JSON.stringify(result));
+                      // Expire cache in 3 minutes
+                      window.localStorage.setItem(cacheName + "_cached_event_expiry", new Date().getTime() + cacheExpiry * 60 * 1000);
+                      return result;
+                    } else {
+                      const result = await fetchEvents();
+                      console.log("Fetched Events");
+                      return result;
+                    }
+
+                    async function fetchEvents() {
+                      try {
+                        const requestUrl = "https://ingress.infernocore.jolokia.com/api/Events";
+                        const result = await fetch(requestUrl, {
+                          method: "GET",
+                          withCredentials: true,
+                          headers: createHeaders(),
+                        }).then((result) => result.json());
+                        return result;
+                      } catch (error) {
+                        console.log("fetchEvents Error", error);
+                      }
+                    }
+                  }
+
+                  // Remove Events Cache Storage
+                  function clearCache(name) {
+                    window.localStorage.removeItem(name + "_cached_event_list");
+                    window.localStorage.removeItem(name + "_cached_event_expiry");
+                  }
+                </script>
+                <!-- */ API Functions -->
+
+                <script type="text/javascript">
+                  // Get Ball Rolling, Call pageBuild Function
+                  pageBuild();
+                </script>
+                <!-- */ Example Page Functions -->
+
+
+
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -716,6 +1396,8 @@
     </div>
   </videos-layout>
 </app-root>
+
+
 
 
 <script>
@@ -831,6 +1513,7 @@
   }
 
 </script>
+
 
 
 </body><!-- Menu Collapse Script -->
