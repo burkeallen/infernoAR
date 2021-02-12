@@ -305,7 +305,10 @@
 											width: calc(100% + 40px);
 											margin: -20px;
 											display: block;
-											background: #f3f1f0;
+											background-size: cover;
+											background-position: center center;
+											background-attachment: fixed;
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/exhibition-directory-background.jpg");
 											padding: 0;
 											height: 100%;
 										}
@@ -313,10 +316,6 @@
 										.inferno-generated-booth-company-directory
 											.inferno-generated-booth-company-directory-main {
 											min-height: calc(100vh - 10vmin);
-											background-size: cover;
-											background-position: center center;
-											background-attachment: fixed;
-											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/exhibition-directory-background.jpg");
 										}
 
 										.inferno-generated-booth-company-directory h1 {
@@ -486,6 +485,21 @@
 											margin-top: -3px;
 										}
 									</style>
+									<!-- footer -->
+									<style>
+										.page-footer {
+											width: 100%;
+											display: flex;
+											justify-content: flex-end;
+										}
+
+										.seal {
+											width: auto;
+											height: 140px;
+											margin: 20px;
+											padding: 0 5rem;
+										}
+									</style>
 									<script type="text/javascript">
 										var boothData;
 
@@ -530,6 +544,7 @@
 												if (matchingBooth.length === 0) {
 													$(element).addClass("directory-hide");
 												}
+												noResults(boothElements);
 												hideCategories();
 											});
 										}
@@ -635,6 +650,13 @@
 													$(gridEl).removeClass("directory-hide");
 												}
 											});
+											noResults(els);
+											hideCategories();
+										}
+
+										$(document).ready(init);
+										//show no results
+										function noResults(els) {
 											var noResults =
 												els.length ===
 												$(landingPageEl)
@@ -651,11 +673,7 @@
 													.find(".no-results")
 													.addClass("hide");
 											}
-											hideCategories();
 										}
-
-										$(document).ready(init);
-
 										//reset search fields when typing in another search box
 										function resetSearches(element) {
 											var searchFields = $(landingPageEl)
@@ -3108,6 +3126,12 @@
 												search.
 											</h5>
 										</div>
+										<footer class="page-footer">
+											<img
+												class="seal"
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/public/florida-seal.gif"
+											/>
+										</footer>
 									</div>
 									<div
 										id="xtrackx|2|booth|booth_1exhibitiongrandhall|page_load|"
