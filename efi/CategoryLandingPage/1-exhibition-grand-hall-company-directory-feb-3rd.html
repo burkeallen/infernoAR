@@ -529,7 +529,6 @@
 										function doKeywordSearch(keyword) {
 											const filteredBooths = filterBoothsByKeyword(keyword);
 											//get booths from directory
-
 											var boothElements = $(landingPageEl)
 												.find(".inferno-generated-booth-company-directory")
 												.find("ul li");
@@ -540,7 +539,9 @@
 												//check if company name is in filtered booths list
 												const matchingBooth = filteredBooths.filter(
 													booth =>
-														booth.registrationName.toLowerCase() === companyName
+														booth.registrationName.toLowerCase() ===
+															companyName ||
+														booth.boothName.toLowerCase() === companyName
 												);
 												if (matchingBooth.length === 0) {
 													$(element).addClass("directory-hide");
@@ -558,6 +559,7 @@
 
 											$.each(categories, function (key, category) {
 												const companies = $(category).find("li");
+
 												var hasCompanies = false;
 												$.each(companies, function (key, company) {
 													if (!$(company).hasClass("directory-hide")) {
@@ -566,6 +568,7 @@
 														return;
 													}
 												});
+
 												if (!hasCompanies)
 													$(category).addClass("directory-hide");
 											});
