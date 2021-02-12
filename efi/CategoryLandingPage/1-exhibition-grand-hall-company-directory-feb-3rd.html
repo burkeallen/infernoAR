@@ -632,6 +632,7 @@
 												clearTimeout(_timer);
 												_timer = null;
 											}
+											console.log("searchingCompanies");
 
 											if ($(el).val().length === 0) {
 												clearFilters();
@@ -687,14 +688,15 @@
 												.children();
 
 											$.each(searchFields, function (key, searchField) {
-												if ($(searchField).hasClass($(element).attr("class"))) {
-												} else {
-													if ($(searchField).val() === "") return false;
+												if (
+													!$(searchField).hasClass($(element).attr("class"))
+												) {
 													if ($(searchField).hasClass("category-select")) {
 														$(searchField).val("Select a Category");
 													} else {
 														$(searchField).val("");
 													}
+													console.log("clearing filters");
 													clearFilters();
 												}
 											});
