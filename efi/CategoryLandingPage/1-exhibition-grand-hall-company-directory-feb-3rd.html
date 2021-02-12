@@ -312,8 +312,11 @@
 
 										.inferno-generated-booth-company-directory
 											.inferno-generated-booth-company-directory-main {
-											padding: 5vmin;
 											min-height: calc(100vh - 10vmin);
+											background-size: cover;
+											background-position: center center;
+											background-attachment: fixed;
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/exhibition-directory-background.jpg");
 										}
 
 										.inferno-generated-booth-company-directory h1 {
@@ -335,12 +338,11 @@
 										}
 
 										.inferno-generated-booth-company-directory input {
-											margin: 0;
 											padding: 1vmin;
 											background: #fff;
 											border: 2px solid #ccc;
 											border-radius: 4px;
-											font-size: 1.8vmin;
+											font-size: 2.4vmin;
 											line-height: 2vmin;
 											color: #333;
 										}
@@ -348,7 +350,7 @@
 										.inferno-generated-booth-company-directory ul {
 											overflow: hidden;
 											margin: 4vmin auto 0;
-											padding: 0;
+											padding: 0 2rem;
 											width: 100%;
 											display: flex;
 											flex-wrap: wrap;
@@ -396,15 +398,92 @@
 											object-fit: contain;
 										}
 
-										.label {
+										.search-fields {
+											display: flex;
+											flex-wrap: wrap;
+											flex-grow: 1;
+											align-items: center;
+											justify-content: space-evenly;
+											padding: 2rem;
+										}
+
+										.company-search {
+											width: 30rem;
+											margin: 1rem;
+										}
+
+										.keyword-search {
+											width: 48vmin;
+											margin: 1rem;
+										}
+
+										.category-select {
+											padding: 1vmin;
+											background: #fff;
+											border: 2px solid #ccc;
+											border-radius: 4px;
+											font-size: 2.4vmin;
+											line-height: 2vmin;
+											color: #333;
+											margin: 1rem;
+										}
+
+										.category {
+											width: 100%;
+										}
+
+										.category-label {
 											color: #000;
-											font-size: 2rem;
+
+											padding: 0.5rem 1rem;
+											background-color: white;
+										}
+
+										.category-label h2 {
+											font-size: 2.8vmin;
+											font-weight: bold;
 										}
 
 										@media (max-width: 1200px) {
 											.inferno-generated-booth-company-directory ul li {
 												width: 48%;
 											}
+										}
+									</style>
+									<!-- banner -->
+									<style>
+										.banner {
+											width: 100%;
+											padding: -2rem;
+											height: 400px;
+											background-size: cover;
+											background-position: center left;
+											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/exhibition-hall/exhibition-hall-directory-header.jpg");
+										}
+
+										.banner img {
+											z-index: -1;
+											position: relative;
+											width: 100%;
+											height: auto;
+										}
+
+										.banner-info {
+											position: absolute;
+											top: 20px;
+											left: 20px;
+											color: #fff;
+											opacity: 24;
+											text-shadow: 0 0 16px #171718;
+										}
+
+										.banner-text {
+											font-size: 3rem;
+										}
+
+										.banner-sub-text {
+											font-size: 3rem;
+											margin-top: -3px;
 										}
 									</style>
 									<script type="text/javascript">
@@ -451,17 +530,16 @@
 												if (matchingBooth.length === 0) {
 													$(element).addClass("directory-hide");
 												}
-												hideCategoryLabels();
+												hideCategories();
 											});
 										}
 
-										//function to hide category labels if no booths returned in search
-										function hideCategoryLabels() {
+										//function to hide categories if no booths returned in search
+										function hideCategories() {
 											const categories = $(landingPageEl).find(".category");
 
 											$.each(categories, function (key, category) {
 												const companies = $(category).find("li");
-												const label = $(category).find(".label");
 												var hasCompanies = false;
 												$.each(companies, function (key, company) {
 													if (!$(company).hasClass("directory-hide")) {
@@ -482,15 +560,10 @@
 											}
 
 											if ($(el).val().length === 0) {
-												$(landingPageEl)
-													.find(".directory-hide")
-													.removeClass("directory-hide");
-												$(landingPageEl)
-													.find(".inferno-generated-booth-company-directory")
-													.find(".no-results")
-													.addClass("hide");
+												clearFilters();
 											} else {
 												var search = $(el).val().toLowerCase();
+												resetSearches(el);
 												_timer = setTimeout(function () {
 													doKeywordSearch(search);
 												}, 250);
@@ -499,6 +572,7 @@
 
 										function searchCategories(element) {
 											const categories = $(landingPageEl).find(".category");
+											resetSearches(element);
 											$.each(categories, function (key, category) {
 												if (element.value === "Select a Category") {
 													$(category).removeClass("directory-hide");
@@ -539,15 +613,10 @@
 											}
 
 											if ($(el).val().length === 0) {
-												$(landingPageEl)
-													.find(".directory-hide")
-													.removeClass("directory-hide");
-												$(landingPageEl)
-													.find(".inferno-generated-booth-company-directory")
-													.find(".no-results")
-													.addClass("hide");
+												clearFilters();
 											} else {
 												var search = $(el).val().toLowerCase();
+												resetSearches(el);
 												_timer = setTimeout(function () {
 													doSearch(search);
 												}, 250);
@@ -582,51 +651,89 @@
 													.find(".no-results")
 													.addClass("hide");
 											}
-											hideCategoryLabels();
+											hideCategories();
 										}
 
 										$(document).ready(init);
+
+										//reset search fields when typing in another search box
+										function resetSearches(element) {
+											var searchFields = $(landingPageEl)
+												.find(".search-fields")
+												.children();
+											console.log($(element).attr("class"));
+											$.each(searchFields, function (key, searchField) {
+												if ($(searchField).hasClass($(element).attr("class")))
+													return;
+												clearFilters();
+												if ($(searchField).hasClass("category-select")) {
+													$(searchField).val("Select a Category");
+												} else {
+													$(searchField).val("");
+												}
+											});
+										}
+
+										function clearFilters() {
+											$(landingPageEl)
+												.find(".directory-hide")
+												.removeClass("directory-hide");
+											$(landingPageEl)
+												.find(".inferno-generated-booth-company-directory")
+												.find(".no-results")
+												.addClass("hide");
+										}
 									</script>
 									<div class="inferno-generated-booth-company-directory">
+										<div class="banner">
+											<div class="banner-info">
+												<div class="banner-text">Company Directory</div>
+											</div>
+										</div>
 										<div class="inferno-generated-booth-company-directory-main">
-											<h1>Company Directory</h1>
-											<input
-												type="text"
-												onkeyup="searchCompanies(this)"
-												placeholder="Search by Company Name"
-											/>
-											<input
-												type="text"
-												onkeyup="searchKeywords(this)"
-												placeholder="Search by Product Description or Keyword"
-											/>
-											<select
-												id="categorySelect"
-												onchange="searchCategories(this)"
-											>
-												<option default>Select a Category</option>
-												<option>Automotive</option>
-												<option>Aviation and Aerospace</option>
-												<option>Building Materials</option>
-												<option>Chemicals and Petrochemicals</option>
-												<option>Clean Technology</option>
-												<option>Consumer Goods</option>
-												<option>Economic Development Organization</option>
-												<option>Educational Institution</option>
-												<option>Financial and Professional Services</option>
-												<option>Fire and Safety</option>
-												<option>Food Products</option>
-												<option>Industrial Equipment and Supplies</option>
-												<option>Information Technology</option>
-												<option>Infrastructure and Transportation</option>
-												<option>Life Sciences & Medical Technology</option>
-												<option>Marine Products and Technology</option>
-												<option>Not-For-Profit Association</option>
-												<option>Photonics and Optics</option>
-												<option>Transportation Equipment</option>
-											</select>
+											<div class="search-fields">
+												<input
+													class="company-search"
+													type="text"
+													onkeyup="searchCompanies(this)"
+													placeholder="Search by Company Name"
+												/>
+												<input
+													class="keyword-search"
+													type="text"
+													onkeyup="searchKeywords(this)"
+													placeholder="Search by Product Description or Keyword"
+												/>
+												<select
+													class="category-select"
+													id="categorySelect"
+													onchange="searchCategories(this)"
+												>
+													<option default>Select a Category</option>
+													<option>Automotive</option>
+													<option>Aviation and Aerospace</option>
+													<option>Building Materials</option>
+													<option>Chemicals and Petrochemicals</option>
+													<option>Clean Technology</option>
+													<option>Consumer Goods</option>
+													<option>Economic Development Organization</option>
+													<option>Educational Institution</option>
+													<option>Financial and Professional Services</option>
+													<option>Fire and Safety</option>
+													<option>Food Products</option>
+													<option>Industrial Equipment and Supplies</option>
+													<option>Information Technology</option>
+													<option>Infrastructure and Transportation</option>
+													<option>Life Sciences & Medical Technology</option>
+													<option>Marine Products and Technology</option>
+													<option>Not-For-Profit Association</option>
+													<option>Photonics and Optics</option>
+													<option>Transportation Equipment</option>
+												</select>
+											</div>
 											<div class="category" id="automotive">
-												<h2 class="label">Automotive</h2>
+												<div class="category-label"><h2>Automotive</h2></div>
+
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|bugsoffpadsawesomeproductscorp"
@@ -644,7 +751,10 @@
 												</ul>
 											</div>
 											<div id="Aviation and Aerospace" class="category">
-												<h2 class="label">Aviation and Aerospace</h2>
+												<div class="category-label">
+													<h2>Aviation and Aerospace</h2>
+												</div>
+
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|andersonconnectivity"
@@ -739,7 +849,9 @@
 												</ul>
 											</div>
 											<div class="category" id="Building Materials">
-												<h2 class="label">Building Materials</h2>
+												<div class="category-label">
+													<h2>Building Materials</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|alliedsteelbuildings"
@@ -783,7 +895,10 @@
 												</ul>
 											</div>
 											<div id="Chemicals and Petrochemicals" class="category">
-												<h2 class="label">Chemicals and Petrochemicals</h2>
+												<div class="category-label">
+													<h2>Chemicals and Petrochemicals</h2>
+												</div>
+
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|bellperformance"
@@ -830,7 +945,9 @@
 												</ul>
 											</div>
 											<div id="Clean Technology" class="category">
-												<h2 class="label">Clean Technology</h2>
+												<div class="category-label">
+													<h2>Clean Technology</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|airocideairpurifier"
@@ -917,7 +1034,9 @@
 												</ul>
 											</div>
 											<div id="Consumer Goods" class="category">
-												<h2 class="label">Consumer Goods</h2>
+												<div class="category-label">
+													<h2>Consumer Goods</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|ashleyfurnitureindustries"
@@ -1464,9 +1583,9 @@
 												id="Economic Development Organization"
 												class="category"
 											>
-												<h2 class="label">
-													Economic Development Organizations
-												</h2>
+												<div class="category-label">
+													<h2>Economic Development Organizations</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|centralfloridadevelopmentcouncil"
@@ -1575,7 +1694,9 @@
 												</ul>
 											</div>
 											<div id="Educational Institution" class="category">
-												<h2 class="label">Educational Institutions</h2>
+												<div class="category-label">
+													<h2>Educational Institutions</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|browardcollegeinternationaladmissions"
@@ -1852,9 +1973,10 @@
 												id="Financial and Professional Services"
 												class="category"
 											>
-												<h2 class="label">
-													Financial and Professional Services
-												</h2>
+												<div class="category-label">
+													<h2>Financial and Professional Services</h2>
+												</div>
+
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|asarautomatedstorage"
@@ -2046,7 +2168,9 @@
 												</ul>
 											</div>
 											<div id="Fire and Safety" class="category">
-												<h2 class="label">Fire and Safety</h2>
+												<div class="category-label">
+													<h2>Fire and Safety</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|barricadeinternationalinc"
@@ -2103,7 +2227,7 @@
 												</ul>
 											</div>
 											<div id="Food Products" class="category">
-												<h2 class="label">Food Products</h2>
+												<div class="category-label"><h2>Food Products</h2></div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|bigstormbrewery"
@@ -2176,7 +2300,9 @@
 												id="Industrial Equipment and Supplies"
 												class="category"
 											>
-												<h2 class="label">Industrial Equipment and Supplies</h2>
+												<div class="category-label">
+													<h2>Industrial Equipment and Supplies</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|aabacoenvironmentalindustries"
@@ -2402,7 +2528,9 @@
 												</ul>
 											</div>
 											<div id="Information Technology" class="category">
-												<h2 class="label">Information Technology</h2>
+												<div class="category-label">
+													<h2>Information Technology</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|bluetunnelcorp"
@@ -2579,7 +2707,9 @@
 												id="Infrastructure and Transportation"
 												class="category"
 											>
-												<h2 class="label">Infrastructure and Transportation</h2>
+												<div class="category-label">
+													<h2>Infrastructure and Transportation</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|floridaportscouncil"
@@ -2652,9 +2782,9 @@
 												id="Life Sciences & Medical Technology"
 												class="category"
 											>
-												<h2 class="label">
-													Life Sciences & Medical Technology
-												</h2>
+												<div class="category-label">
+													<h2>Life Sciences & Medical Technology</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|anjonholdings"
@@ -2841,7 +2971,9 @@
 												</ul>
 											</div>
 											<div id="Marine Products and Technology" class="category">
-												<h2 class="label">Marine Products and Technology</h2>
+												<div class="category-label">
+													<h2>Marine Products and Technology</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|bobsmachineoutboardaccessories"
@@ -2911,7 +3043,9 @@
 												</ul>
 											</div>
 											<div id="Not-For-Profit Association" class="category">
-												<h2 class="label">Not-For-Profit Association</h2>
+												<div class="category-label">
+													<h2>Not-For-Profit Association</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|associatedindustriesofflorida"
@@ -2929,7 +3063,9 @@
 												</ul>
 											</div>
 											<div id="Photonics and Optics" class="category">
-												<h2 class="label">Photonics and Optics</h2>
+												<div class="category-label">
+													<h2>Photonics and Optics</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|asphericoninc"
@@ -2947,7 +3083,9 @@
 												</ul>
 											</div>
 											<div id="Transportation Equipment" class="category">
-												<h2 class="label">Transportation Equipment</h2>
+												<div class="category-label">
+													<h2>Transportaion Equipment</h2>
+												</div>
 												<ul>
 													<li
 														id="xtrackx|2|booth|booth_1exhibitiongrandhall|open_booth|expo_hall|thegolfcarconnection"
