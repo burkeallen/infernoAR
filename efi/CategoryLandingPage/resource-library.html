@@ -1,97 +1,25 @@
+<!DOCTYPE html>
+<html lang="en"
+  class="bgpositionshorthand bgpositionxy bgrepeatround bgrepeatspace bgsizecover borderradius cssanimations csscalc csstransforms supports csstransforms3d preserve3d csstransitions no-flexboxtweener fontface svg svgasimg svgclippaths svgfilters svgforeignobject inlinesvg smil localstorage sessionstorage websqldatabase multiplebgs"
+  style='--branding-primary:#1e5194; --sidebar-bg-color:#3c5a81;'>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Inferno Snippet Mockup Template</title>
   <!-- Import Roboto -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
+    rel="stylesheet">
   <!-- Import Inferno's Styles -->
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
-  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
+  <link rel="stylesheet"
+    href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css">
+  <link rel="stylesheet"
+    href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css">
   <!--  Local/Client Color Overrides if they file exists -->
   <link rel="stylesheet" href="../inferno-client.css">
-  <script>
-    let landingPageEl = null
-    window.isLocalTemplate = true
-  </script>
   <!-- Import JQuery -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-  <script>
-    function authenticate(project) {
-      const _baseUrl = 'https://ingress.infernocore.jolokia.com/api/'
-      // Auth w/ Inferno API
-      const params = {
-        email: project.username,
-        password: project.password,
-        grantType: 'password',
-      }
-
-      // Set header
-      const headers = {'X-InfernoCore-Domain': project.domain}
-
-      // perform synchronous ajax call so rest of code waits until you are authenticated
-      $.ajax({
-        url: _baseUrl + 'token',
-        type: 'POST',
-        async: false,
-        accept: 'application/json',
-        contentType: 'application/json',
-        headers: headers,
-        data: JSON.stringify(params),
-        success: function (res) {
-          sessionStorage.setItem('domain', project.domain)
-          storeUser(JSON.parse(res))
-        },
-        error: function (err) {
-          alert(JSON.stringify(err))
-        },
-        complete: function () {
-          console.log('user was authenticated into ', project.domain)
-        },
-      })
-
-    }
-
-    function parseJwt(token) {
-      var base64Url = token.split('.')[1];
-      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      }).join(''));
-      //
-      return JSON.parse(jsonPayload);
-    }
-
-    function storeUser(data) {
-      // console.log(data);
-      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);      
-      sessionStorage.setItem('clientId', data.ClientId)
-      sessionStorage.setItem('token', data.AccessToken)
-      sessionStorage.setItem('refreshToken', data.RefreshToken)
-    }
-
-    function login() {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
-
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
-
-        authenticate(currentProject);
-    }
-
-  </script>
-  <!-- store your credentials in a local file -->
-  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
-
   <!-- Liquid Templating -->
   <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
   <!--  Load Liquid JSON From Local file -->
@@ -121,163 +49,57 @@
     })
 
   </script>
-
-  <!-- Build out Local Menu on Left Navigation -->
-  <style>
-    #localTemplateMenu {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 1em;
-    }
-
-    #localTemplateMenu a, #localTemplateMenu details{
-      display: block;
-      margin: .25em;
-      background-color: var(--sidebar-bg-color);
-      border: none;
-      border-bottom: solid 1px var(--sidebar-highlight-text-color);
-      color: var(--sidebar-text-color);
-      cursor: pointer;
-      width: 80%;
-      padding: .25em 0;
-    }
-
-    #localTemplateMenu details a {
-      margin-left: 1em;
-    }
-
-    #localTemplateMenu a:hover {
-      filter: brightness(80%);
-      text-decoration: none;
-      transform: translateX(-.3em);
-    }
-
-    #localTemplateMenu a.activeMenu {
-      background-color: var(--sidebar-highlight-bg-color);
-      color: var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu {
-      margin: 0;
-      padding: 1em 0;
-    }
-
-    .aside-collapsed * #localTemplateMenu a {
-      word-wrap: break-word;
-      min-width: 100%;
-      border-radius: 0;
-      border-bottom: 1px solid var(--sidebar-text-color);
-    }
-
-    .aside-collapsed * #localTemplateMenu a:hover {
-      transform: none;
-    }
-
-  </style>
   <script>
-    function buildLocalMenu() {
-      window.addEventListener('load', (event) => {
-        const menu = document.getElementById('localTemplateMenu');
-        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
-          return a.name > b.name ? 1 : -1;
-        });
-
-        const pages = menuItems.filter(item => !item.name.toLowerCase().includes('booth'));
-        const booths = menuItems.filter(item => item.name.toLowerCase().includes('booth'));
-
-        pages.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          menu.appendChild(menuItem);
-        });
-
-        const boothMenu = document.createElement("details");
-        const summary = document.createElement("summary");
-        summary.innerHTML = "BOOTHS";
-        boothMenu.appendChild(summary);
-
-        booths.forEach(item => {
-          const menuItem = document.createElement('a');
-          menuItem.href = "../" + item.file;
-          menuItem.innerHTML = item.name;
-          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
-          try {
-            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
-            if (currentSnippet) {
-              menuItem.classList.toggle('activeMenu');
-            }
-          } catch (e) {
-            // do nothing;
-          }
-          boothMenu.appendChild(menuItem);
-        });
-
-        if (booths.length) {
-          menu.appendChild(boothMenu);
-        }
-
-
-      })
-    }
+    let landingPageEl = null
   </script>
-  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
-
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="efi"></div>
-<script>login();</script>
-<app-root class="layout-fixed has-menu">
+
+<app-root class='layout-fixed has-menu'>
   <videos-layout>
     <div class="wrapper" layout="column">
       <app-header class="topnavbar-wrapper">
-        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
-          <div class="navbar-header"><a href="/">LOCAL</a></div>
-          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
-            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
+        <mat-toolbar
+          class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
+          color="primary">
+          <div class="navbar-header">LOCAL</div>
+          <div class="ellipsis ng-star-inserted" flex="" layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide="" mat-icon-button="" show-gt-sm=""
+              trigger-resize="" onclick="mtTriggerMenu()">
               <span class="mat-button-wrapper">
                   <mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
                     menu
                   </mat-icon>
               </span>
             </button>
-            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">Sample Page Title</div>
+            <div _ngcontent-inv-c7="" class="mat-title ellipsis m0" flex="" title="Page Title">Sample Page Title</div>
           </div>
         </mat-toolbar>
       </app-header>
       <!-- SIDEBAR -->
       <videos-sidebar class="aside">
         <div class="aside-inner">
-          <nav class="sidebar" sidebar-anyclick-close>
-            <div class="nav" id="localTemplateMenu"></div>
+          <nav class="sidebar" sidebar-anyclick-close="">
+            <ul class="nav">
+              <li><a href="..">Menu</a></li>
+            </ul>
           </nav>
-          
+          </nav>
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
-      <section class="IE-FlexAuto" flex>
+      <section class="IE-FlexAuto" flex="">
         <div class="content-wrapper">
           <landing-page class="ng-star-inserted">
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
               <script>
-                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'})
-                const landing = landingPageEl.appendChild(document.getElementById('landing'))
-                landingPageEl.appendChild(landing)
-                const loginPageEl = landingPageEl
+                landingPageEl = document.querySelector('landing-page').attachShadow({mode: 'open'});
+                const landing = landingPageEl.appendChild(document.getElementById('landing'));
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
               </script>
               <style type="text/css">
                 @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
@@ -288,48 +110,595 @@
               <!-- SNIPPET CONTENT START -->
               <inferno-snippet-content id="b43b671c-a07c-4092-b9f6-32f71b595122">
 
+                <!-- Click Track Landing v2.0 -->
+                <div
+                  id="xtrackx|2|non_booth|resource_library|page_load"
+                  class="page_load"
+                ></div>
+                <script>
+                  setTimeout(() => {
+                    var event = document.createEvent("MouseEvents");
+                    event.initEvent("mouseup", true, true);
+                    landingPageEl
+                      .querySelector(".page_load")
+                      .dispatchEvent(event);
+                  }, 250);
+                </script>
+                <!-- ./ Click Track Landing v2.0 -->
+
+                <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadFont(name, url) {
-                    if (document.fonts.check('1em ' + name)) {
+                    if (document.fonts.check("1em " + name)) {
                       return;
                     }
-                    const fontFace = new FontFace(name, 'url(' + url + ')');
+                    const fontFace = new FontFace(name, "url(" + url + ")");
 
-                    fontFace.load().then(function (loadedFont) {
-                      document.fonts.add(loadedFont);
-                      console.log('Loaded custom font ', name);
-                    }).catch(function (error) {
-                      // error occurred
-                      console.log('Error loading ', name);
-                    });
-
+                    fontFace
+                      .load()
+                      .then(function (loadedFont) {
+                        document.fonts.add(loadedFont);
+                        console.log("Loaded custom font ", name);
+                      })
+                      .catch(function (error) {
+                        // error occurred
+                        console.log("Error loading ", name);
+                      });
                   }
-                  loadFont('CustomFont1', 'https://fonts.gstatic.com/s/oswald/v35/TK3iWkUHHAIjg752GT8G.woff2');
+
+                  loadFont(
+                    "Arial-BoldMT",
+                    "https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/fonts/Arial-BoldMT.otf"
+                  );
                 </script>
 
+                <!-- Container -->
                 <style>
+                  #container {
+                    margin: -20px;
+                    min-height: calc(100vh - 114px);
+                    background-color: #ccc;
+                    font-family: Verdana, sans-serif !important;
+                  }
+
                   img::after {
                     content: none;
                   }
 
-                  .content {
-                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/placeholders/bkg1.jpg');
-                    /*background-attachment: fixed;*/
-                    background-repeat: no-repeat;
-                    background-size: cover;
-                    background-position: center;
-                    min-height: calc(100vh - 114px);
-                    margin: -20px;
-                    padding: 20px 24px;
-                    z-index: 1;
-                    font-family: "CustomFont1", sans-serif !important;
+                  hr {
+                    border: 1px solid rgba(11, 38, 104, 0.32);
+                    margin: 2rem 0;
                   }
                 </style>
 
-                <div class="content">
-                  <h2 style="color:white; padding: 3em;">Resource Library Placeholder</h2>
+                <!-- Banner -->
+                <style>
+                  .banner {
+                    width: 100%;
+                    height: 400px;
+                    background-size: cover;
+                    background-position: bottom center;
+                    background-image: url('https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/resource-library/resource-library-header.jpg');
+                  }
+
+                  .banner img {
+                    z-index: -1;
+                    position: relative;
+                    width: 100%;
+                    height: auto;
+                  }
+
+                  .banner-info {
+                    position: absolute;
+                    top: 20px;
+                    left: 30px;
+                    color: #fff;
+                    letter-spacing: 1px;
+                    text-shadow: 0 0 10px #000;
+                    font-family: "Arial-BoldMT";
+                  }
+
+                  .banner-text {
+                    font-size: 4rem;
+                  }
+
+                  .banner-sub-text {
+                    font-size: 4rem;
+                    margin-top: -10px;
+                  }
+                </style>
+
+                <!-- Library Card Grid -->
+                <style>
+                  .library-section {
+                    padding: 20px 20px;
+                    background-color: #ffffff;
+                  }
+
+                  .library-section-title {
+                    font-weight: bold;
+                    color: var(--branding-primary);
+                    font-size: clamp(1.5rem, 1.75vw, 2rem);
+                  }
+
+                  .library-section-description {
+                    color: #000000;
+                    padding: 20px;
+                    background-color: lightgray;
+                    font-size: clamp(1rem, 1.25vw, 1.5rem);
+                  }
+
+                  .library-grid {
+                    display: flex;
+                    flex-wrap: wrap;
+                    flex-direction: row;
+                    max-width: 100%;
+                    padding: 10px;
+                  }
+
+                  .library-card {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 1em;
+                    margin: 10px;
+                    background-color: #ffffff;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .library-card-thumb {
+                    width: 160px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .library-card-title {
+                    display: flex;
+                    position: absolute;
+                    top: 20px;
+                    height: 40px;
+                    font-size: 1rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .library-card :hover {
+                    cursor: pointer;
+                    transform: scale(1.05);
+                    transition: .5s ease;
+                  }
+
+                </style>
+
+
+                <!-- modal pop-up -->
+                <style>
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
+                  }
+
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
+                  }
+
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
+                  }
+
+                  .modal-window header {
+                    font-weight: bold;
+                  }
+
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: var(--sidebar-text-color);
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+
+                  .modal-close:hover {
+                    filter: brightness(80%);
+                    text-decoration: none;
+                    color: #fff;
+                  }
+
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                </style>
+
+                <!-- on-demand grid-->
+                <style>
+                  .on-demand-grid {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    max-width: 80%;
+                    padding: 10px;
+                  }
+
+                  .on-demand {
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    background-color: rgba(255, 255, 255, .4);
+                    border-radius: 1em;
+                    margin: 10px;
+                    padding: 2px;
+                    -webkit-box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.6);
+                  }
+
+                  .on-demand-thumb {
+                    width: 240px;
+                    height: auto;
+                    padding: 5px;
+                    border-radius: 1em;
+                  }
+
+                  .on-demand-title {
+                    display: flex;
+                    position: absolute;
+                    top: 15px;
+                    height: 40px;
+                    font-size: 1.25rem;
+                    justify-content: center;
+                    text-align: center;
+                    align-items: center;
+                    padding: 0 5px;
+                    color: #ffffff;
+                    width: 100%;
+                    background: rgba(30, 81, 148, 0.8);
+                    box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                    -webkit-box-shadow: 0px 3px 9px 1px rgba(30, 81, 148, 0.6);
+                  }
+
+                  .on-demand img:hover {
+                    cursor: pointer;
+                    transform: scale(1.06);
+                    transition: 1s ease;
+                  }
+
+                </style>
+
+                <!-- PDF  -->
+                <style>
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
+                  }
+
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
+                  }
+
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
+                  }
+
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
+                  }
+                </style>
+
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
                 </div>
 
+                <div class="content">
+
+                  <div id="container">
+                    <div class="banner">
+                      <div class="banner-info">
+                        <div class="banner-text">Resource</div>
+                        <div class="banner-sub-text">Library</div>
+                      </div>
+                    </div>
+
+                    <!-- Documents Section-->
+                    <div class="library-section">
+                      <div class="library-section-title">Documents</div>
+                    </div>
+
+                    <div id="documents-grid" class="library-grid">
+
+                      <template id="documents-template">
+                        <div id="documents-card" class="library-card">
+                          <img id="documents-thumb" class="library-card-thumb"/>
+                          <div id="documents-title" class="library-card-title"/>
+                        </div>
+                      </template>
+
+                      {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                      {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                      {% for event in sortedEvents %}
+                      {% for category in event.Categories %}
+                      {% assign cat = category.Id | downcase %}
+                      {% if cat == currentCat %}
+                      <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">
+                        <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
+                        <div class="on-demand-title">{{event.Name}}</div>
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                      {% endfor %}
+
+                    </div>
+                    <!-- Documents Section-->
+
+                    <!--Video Section -->
+                    <div class="library-section">
+                      <div class="library-section-title">Videos</div>
+                    </div>
+                    
+                    <div class="on-demand-grid">
+                      {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
+                      {% assign sortedEvents = data.Events | sort_natural: "Name" %}
+                      {% for event in sortedEvents %}
+                      {% for category in event.Categories %}
+                      {% assign cat = category.Id | downcase %}
+                      {% if cat == currentCat %}
+                      <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">
+                        <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
+                        <div class="on-demand-title">{{event.Name}}</div>
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                      {% endfor %}
+                    </div>
+
+                  </div>
+                </div>
+
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
+                  </div>
+                </div>
+
+                <template id="template-video-player">
+                  <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true"
+                    mozallowfullscreen="true">
+                  </iframe>
+                </template>
+
+                <!--Toggle Video Model-->
+                <script>
+                  function toggleModal(vidElement) {
+                    const videoWrapper = landingPageEl.querySelector('.videoWrapper');
+                    let video = videoWrapper.querySelector('#video-frame');
+                    const modalClose = landingPageEl.querySelector('.modal-close');
+
+                    modalClose.addEventListener('click', function () {
+                      toggleModal(vidElement);
+                    });
+
+                    if (video) {
+                      video.remove();
+                      landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                      scrollTop();
+                      return;
+                    }
+
+                    const temp = landingPageEl.querySelector('#template-video-player');
+                    const clone = temp.content.cloneNode(true);
+                    video = clone.querySelector('iframe');
+                    video.id = 'video-frame';
+                    video.src = '/embed/' + vidElement.id;
+                    videoWrapper.appendChild(clone);
+                    landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                    scrollTop();
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+                <!-- library build  -->
+                <script>
+
+                  var industryResearchCardData = [
+                    {
+                      "Title": "Live Webinar Agenda",
+                      "FileName": "FITE Webinars Final Agenda_Resource",
+                      "Type": "pdf",
+                      "Thumb": "FITE Webinars Final Agenda_Thumbnail.jpeg"
+                    },
+                    {
+                      "Title": "Florida Tax Advantages",
+                      "FileName": "FloridaTaxAdvantages_Resource",
+                      "Type": "pdf",
+                      "Thumb": "FloridaTaxAdvantages_Thumbnail.png"
+                    },
+                    // {
+                    //   "Title": "We are Enterprise Florida",
+                    //   "FileName": "/embed/75b8504c-01af-4a76-b741-b20723babbf0",
+                    //   "Type": "video",
+                    //   "Thumb": ""
+                    // },
+                    // {
+                    //   "Title": "Florida, the Power of Place",
+                    //   "FileName": "Florida_The Power of Place_Resource",
+                    //   "Type": "video",
+                    //   "Thumb": ""
+                    // },
+                  ]
+
+                  function buildLibrary() {
+                    buildResourceGrid();
+                  }
+
+                  function buildResourceGrid() {
+                    const myLanding = landingPageEl ?? document;
+                    const industryResearchGrid = myLanding.getElementById("documents-grid");
+                    const industryResearchTemplate = myLanding.getElementById("documents-template");
+
+                    for (let cardData of industryResearchCardData) {
+                      const card = industryResearchTemplate.content.cloneNode(true);
+
+                      const industryResearchThumb = card.getElementById("documents-thumb");
+                      industryResearchThumb.onerror = function () {
+                        industryResearchThumb.onerror = null;
+                        this.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/resource-library/pdf/default.jpeg';
+                      }
+                      industryResearchThumb.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/resource-library/pdf/' + cardData.Thumb;
+
+                      const industryResearchTitle = card.getElementById("documents-title");
+                      industryResearchTitle.innerHTML = cardData.Title;
+
+                      const industryResearchCard = card.getElementById("documents-card");
+                      industryResearchCard.onclick = function () {
+                        loadPDF(cardData.FileName);
+                      }
+
+                      // industryResearchGrid.appendChild(card);
+                      industryResearchGrid.insertBefore(card, industryResearchGrid.childNodes[0]);
+                    }
+                  }
+
+                  if (window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('localhost')) {
+                    window.addEventListener('load', (event) => {
+                      buildLibrary();
+                      console.log('The page has fully loaded');
+                    });
+                  } else {
+                    buildLibrary();
+                  }
+                </script>
+
+                <!-- PDF -->
+                <script>
+                  function loadPDF(id) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/resource-library/pdf/" + id + ".pdf?r=021221";
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function loadVideo(url) {
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+                <!-- Inferno Hacks -->
+                <script>
+                  if (!window.whiteHack) {
+                    const css = `jolo-search-box .search-box-container {display: none !important}`;
+                    const head = document.head || document.getElementsByTagName('head')[0];
+                    const style = document.createElement('style');
+                    style.appendChild(document.createTextNode(css));
+                    head.appendChild(style);
+                    window.whiteHack = true;
+                  }
+
+
+                </script>
+
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -340,7 +709,7 @@
       </section>
       <!-- LANDING -->
       <!-- FOOTER -->
-      <footer app-footer layout="row" layout-align="start center">
+      <footer app-footer="" layout="row" layout-align="start center">
         Inferno Footer
       </footer>
       <!-- ./ FOOTER -->
@@ -348,9 +717,9 @@
   </videos-layout>
 </app-root>
 
+</body>
 
-
-
+<!-- Menu Collapse Script -->
 <script>
 
   // LIQUID PROCESSING (Set the data variable above)
@@ -466,5 +835,4 @@
 </script>
 
 
-
-</body><!-- Menu Collapse Script -->
+</html>
