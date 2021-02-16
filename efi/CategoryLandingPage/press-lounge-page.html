@@ -319,6 +319,7 @@
 									<!-- Container -->
 									<style>
 										#container {
+											position: relative;
 											margin: -20px;
 											min-height: calc(100vh - 114px);
 											background-size: cover;
@@ -371,6 +372,42 @@
 											font-size: 3rem;
 											margin-top: -3px;
 										}
+										.search-fields {
+											display: flex;
+											flex-wrap: wrap;
+											flex-grow: 1;
+											align-items: center;
+											justify-content: space-evenly;
+											padding: 2rem;
+										}
+
+										.search-fields input {
+											padding: 1vmin;
+											background: #fff;
+											border: 2px solid #ccc;
+											border-radius: 4px;
+											font-size: 2.4vmin;
+											line-height: 2vmin;
+											color: #333;
+										}
+
+										.keyword-search {
+											width: 48vmin;
+											margin: 1rem;
+										}
+
+										.category-select,
+										.industry-select {
+											cursor: pointer;
+											padding: 1vmin;
+											background: #fff;
+											border: 2px solid #ccc;
+											border-radius: 4px;
+											font-size: 2.4vmin;
+											line-height: 2vmin;
+											color: #333;
+											margin: 1rem;
+										}
 									</style>
 
 									<!-- directory grid section -->
@@ -386,85 +423,50 @@
 											color: var(--branding-primary);
 										}
 
-										.directory-section-description {
-										}
-
-										.directory-grid-container {
-										}
-
 										.directory-grid {
 											display: flex;
 											flex-wrap: wrap;
 											flex-direction: row;
+											justify-content: space-evenly;
 											max-width: 100%;
-											padding: 10px;
+											padding: 1rem 2rem;
+										}
+
+										.category {
+											padding: 0 2rem;
 										}
 
 										.directory-card {
 											display: flex;
 											flex-direction: column;
+											align-items: center;
+											justify-content: space-between;
 											background-color: #ffffff;
 											border-radius: 0.5em;
 											margin: 10px;
-										}
-
-										.directory-item {
 											position: relative;
-											width: 240px;
-											height: 340px;
+											width: 20%;
+											min-width: 25rem;
+											height: 44rem;
+											padding: 2rem 0;
 										}
 
-										.directory-type {
+										.thumbnail-wrapper {
+											display: flex;
+											align-items: center;
+											justify-content: center;
 											width: 100%;
-											padding-top: 10px;
-											text-align: center;
-											font-size: 1.5rem;
-											font-weight: bold;
-											color: var(--branding-primary);
-										}
-
-										.directory-item img {
-											border-radius: 0.5em 0.5rem 0 0;
-											width: 240px;
-											height: auto;
-											transition: filter 0.5s ease-in-out;
-											-webkit-filter: grayscale(0%);
-											filter: grayscale(0%);
-										}
-
-										.directory-item img:hover {
-											-webkit-filter: grayscale(100%);
-											filter: grayscale(100%);
-										}
-									</style>
-
-									<!-- View Hall Button -->
-									<style>
-										.view-hall {
-											position: absolute;
-											bottom: 5%;
-											width: 100%;
-											text-align: center;
-										}
-
-										.view-button {
-											color: #ffffff;
-											font-size: 14px;
-											border-radius: 3px;
-											border: 1px solid #0b2668;
-											display: inline-block;
+											padding: 1rem;
 											cursor: pointer;
-											padding: 6px 24px;
-											text-decoration: none;
-											background: #0b2668
-												linear-gradient(to bottom, #0b2668 5%, #0d2e7f 100%);
 										}
 
-										.view-button:hover {
-											color: #ffffff;
-											text-decoration: none;
-											background: #103796
-												linear-gradient(to bottom, #103796 5%, #123fad 100%);
+										.thumbnail-wrapper:hover {
+											filter: brightness(90%);
+										}
+
+										.thumbnail {
+											width: 100%;
+											height: auto;
 										}
 									</style>
 
@@ -485,6 +487,50 @@
 
 										.hide {
 											display: none;
+										}
+									</style>
+
+									<!-- PDF Overlay -->
+									<style>
+										.pdf-modal {
+											position: absolute;
+											display: flex;
+											flex-direction: column;
+											align-items: center;
+											justify-content: flex-start;
+											top: 0;
+											left: 0;
+											width: 100%;
+											height: 100%;
+											background-color: rgba(0, 0, 0, 0.5);
+										}
+
+										.modal-container {
+											width: 60%;
+											min-width: 30rem;
+											height: 75rem;
+											margin-top: 10rem;
+											background-color: white;
+											border-radius: 10px;
+											padding: 2rem;
+											display: flex;
+											flex-direction: column;
+											justify-content: space-evenly;
+										}
+
+										.iframe-container {
+											width: 100%;
+											height: 90%;
+										}
+
+										iframe {
+											width: 100%;
+											height: 100%;
+										}
+
+										.close {
+											padding: 2rem;
+											text-align: right;
 										}
 									</style>
 
@@ -573,7 +619,21 @@
 									</template>
 									<template id="card">
 										<div class="directory-card directory-item">
+											<div class="thumbnail-wrapper">
+												<img class="thumbnail" />
+											</div>
+
 											<div class="company-name"></div>
+										</div>
+									</template>
+									<template id="pdf">
+										<div class="pdf-modal">
+											<div class="modal-container">
+												<div class="close" onclick="togglePdf()">X</div>
+												<div class="iframe-container">
+													<iframe class="pdf-iframe"></iframe>
+												</div>
+											</div>
 										</div>
 									</template>
 
@@ -623,10 +683,24 @@
 															"#card"
 														);
 														const clone = template.content.cloneNode(true);
+
 														const companyName = clone.querySelector(
 															".company-name"
 														);
 														companyName.innerHTML = item.companyName;
+
+														const thumbnailWrapper = clone.querySelector(
+															".thumbnail-wrapper"
+														);
+														thumbnailWrapper.setAttribute(
+															"onclick",
+															`togglePdf("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/press-room/press-assets/${item.narFileName}.pdf")`
+														);
+														const thumbnail = clone.querySelector(".thumbnail");
+														thumbnail.setAttribute(
+															"src",
+															`https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/press-room/press-assets/${item.thumbnail}.jpeg`
+														);
 
 														const grid = category.querySelector(
 															".directory-grid"
@@ -634,6 +708,22 @@
 														grid.appendChild(clone);
 													});
 												container.appendChild(directoryClone);
+											}
+										}
+
+										function togglePdf(src) {
+											console.log(src);
+											const modal = landingPageEl.querySelector(".pdf-modal");
+											if (modal) modal.remove();
+											if (src) {
+												const content = landingPageEl.querySelector(
+													"#container"
+												);
+												const template = landingPageEl.querySelector("#pdf");
+												const clone = template.content.cloneNode(true);
+												const iframe = clone.querySelector(".pdf-iframe");
+												iframe.setAttribute("src", src);
+												content.appendChild(clone);
 											}
 										}
 
