@@ -1,0 +1,467 @@
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet"/>
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"/>
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"/>
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css"/>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- SNIPPET CONTENT START -->
+<inferno-snippet-content id="9afecc36-2729-4912-89a9-609a2b81f3a2">
+
+  <!--  Load custom fonts -->
+  <script type="text/javascript">
+    function loadCustomFont(fontName, url) {
+      console.log("Loading " + fontName);
+      var customFont = new FontFace(fontName, "url(" + url + ")");
+      customFont
+        .load()
+        .then(function (loadedFont) {
+          document.fonts.add(loadedFont);
+        })
+        .catch(function (error) {
+          console.log("Error loading " + fontName);
+        });
+    }
+
+    var fontUrlBase = "https://studio304nextechar.freetls.fastly.net/infernoAR/becma/common/";
+    loadCustomFont("Montserrat Bold", fontUrlBase + "Montserrat-Bold.ttf");
+    loadCustomFont("Montserrat", fontUrlBase + "Montserrat-Regular.ttf");
+
+    fontUrlBase = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/fonts/";
+    loadCustomFont('GothamMed', fontUrlBase + 'Gotham+Medium+Regular.ttf');
+    loadCustomFont('FuturaMed', fontUrlBase + 'Futura+Medium.otf');
+
+    // var script = document.createElement("script");
+    // script.type = "text/javascript";
+    // script.src = "https://use.fontawesome.com/cc428e0054.js";
+    // document.getElementsByTagName("head")[0].appendChild(script);
+  </script>
+
+  <style>
+    img::after {
+      content: none;
+    }
+
+    *, :after, :before {
+      box-sizing: border-box;
+    }
+
+    :host-context(login-snippet-page) {
+      width: 100%;
+    }
+
+    :root {
+      /* background overlay */
+      /*--overlay-color: linear-gradient(to right bottom, rgba(0, 15, 92, 0.57), rgb(0, 161, 224, 0.57));*/
+
+      /* form colours */
+      --main-text-color: #d8d8d7;
+      --link-text-color: #ffffff;
+      --input-text-color: #000000;
+      --valid-input-color: #04a104;
+      --error-input-color: #ff6767;
+      --form-bg-color: rgba(0, 0, 0, 0.7);
+
+      /* button colours */
+      --action-bg-color: rgba(0, 0, 0, 0.25);
+      /* --action-highlight-color also used for link to login page */
+      --action-higlight-color: #b3e5ff;
+    }
+
+    .contents {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/login-background.jpg);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+
+    }
+
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 150px 0 0 0
+    }
+
+    .content-logo {
+      width: 50%;
+    }
+
+    .content-form {
+      width: 50%;
+      padding: 0 40px;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-flow: column;
+    }
+
+    .logo-container img {
+      width: 100%;
+      padding-left: 150px;
+    }
+
+    .rectangle {
+      margin-top: 40px;
+      height: 80px;
+      width: 100%;
+      border-radius: 0 14px 14px 0;
+      background: linear-gradient(90deg, rgba(0, 100, 154, 1) 35%, rgba(0, 189, 231, 1) 100%);
+    }
+
+  </style>
+
+  <!-- Form Style -->
+  <style>
+    form {
+      border-radius: 0px;
+      box-shadow: 4px 4px 6px #000000A3;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 100%;
+      height: auto;
+      padding: 5rem;
+      background-repeat: no-repeat;
+      background-position: top right;
+      background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/mask-group.png);
+    }
+
+    .form-title {
+      color: #00649a;
+      font-size: 5.2vmin;
+      font-family: "GothamMed";
+    }
+
+    .subtitle {
+      color: #00649a;
+      font-size: 2vmin;
+    }
+
+    .forgot {
+      padding-top: 20px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .forgot a {
+      font-size: 2vmin;
+      color: #00bde7;
+    }
+
+    .field-box {
+      width: 100%;
+    }
+
+    .field {
+      width: 100%;
+      height: 50px;
+      color: #777;
+      font-family: "CenturyGothic", sans-serif;
+      font-size: 1.4em;
+      padding: 0.2em 10px;
+      border: none;
+      outline: none;
+      border: 1px solid #707070;
+      box-sizing: border-box;
+      margin-top: 2rem;
+    }
+
+    form label {
+      font-family: "CenturyGothic", sans-serif;
+      font-size: 1.5em;
+      text-shadow: 0 0 5px #04c6ff;
+      margin-top: 2rem;
+      padding: 0;
+    }
+
+    .form-error,
+    .password-error,
+    .email-error {
+      font-family: "CenturyGothic", sans-serif;
+      color: red;
+      white-space: normal;
+    }
+
+    .field.is-invalid {
+      border-bottom-color: red;
+    }
+
+    .form-button {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .gradient-button {
+      color: white;
+      background: rgb(0, 100, 154);
+      background: linear-gradient(90deg, rgba(0, 100, 154, 1) 35%, rgba(0, 189, 231, 1) 100%);
+      border: 1px solid #707070;
+      margin-top: 2rem;
+      outline: none;
+      min-width: 300px;
+      font-family: "FuturaMed", sans-serif;
+      font-size: 2.25em;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 0.5rem 2rem;
+      cursor: pointer;
+    }
+
+    .gradient-button:hover {
+      filter: brightness(70%);
+    }
+  </style>
+
+  <!-- Form Validation Styles -->
+  <style>
+
+    .field-warning {
+      font-size: 1.2em;
+      color: red;
+      padding-left: 4px;
+    }
+
+    .is-invalid {
+      background-color: rgb(255, 188, 188);
+    }
+
+    .warning-shake {
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+      animation: shake 0.5s;
+
+      /* When the animation is finished, start again */
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translate(1px, 1px) rotate(0deg);
+      }
+
+      10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+      }
+
+      20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+      }
+
+      30% {
+        transform: translate(3px, 2px) rotate(0deg);
+      }
+
+      40% {
+        transform: translate(1px, -1px) rotate(1deg);
+      }
+
+      50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+      }
+
+      60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+      }
+
+      70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+      }
+
+      80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+      }
+
+      90% {
+        transform: translate(1px, 2px) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+      }
+    }
+  </style>
+
+  <!-- Media Queries -->
+  <style>
+    @media only screen and (max-width: 1080px) {
+      .contents {
+        background-position: bottom;
+      }
+
+      .main {
+        width: 100%;
+        padding: 60px 0 0 0;
+
+        justify-content: center;
+      }
+
+      .logo-container {
+        align-items: center;
+      }
+
+      .logo-container img {
+        padding: 0px;
+        width: 50%
+      }
+
+      .rectangle {
+        border-radius: 0;
+      }
+
+      form {
+        padding: 3rem;
+      }
+
+      .form-button {
+        justify-content: center;
+      }
+
+      .gradient-button {
+        min-width: 100%;
+      }
+
+      .content-form {
+        /*width: 50%;*/
+        margin-top: 2rem;
+        align-items: center;
+      }
+
+      .content-logo {
+        /*width: 50%;*/
+        margin-top: 2rem;
+        align-items: center;
+      }
+
+      .subtitle {
+        font-size: 3vmin
+      }
+
+      .forgot a {
+        font-size: 3vmin
+      }
+    }
+
+    @media only screen and (max-width: 768px) {
+      .main {
+        padding: 40px 0 0 0;
+      }
+
+      .content-form {
+        width: 100%;
+        margin-top: 2rem;
+        align-items: center;
+      }
+
+      .content-logo {
+        width: 100%;
+        margin-top: 2rem;
+        align-items: center;
+      }
+
+      .form-title {
+        font-size: 2.3rem;
+      }
+
+      form {
+        margin-left: 0rem;
+      }
+    }
+  </style>
+
+  <div class="contents">
+    <div class="main">
+      <div class="content-logo">
+        <div class="logo-container" >
+          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/leadiant-logo.png">
+        </div>
+        <div class="rectangle"></div>
+      </div>
+      <div class="content-form">
+        <!-- id must be "login" -->
+        <form id="login">
+          <div class="form-title">Log In</div>
+          <p class="subtitle">Please sign in below</p>
+          <!-- optional, not required if events handled with js -->
+          <div class="form-error"></div>
+          <!-- name must be "email" -->
+          <!-- <label for="email">Email</label> -->
+          <div class="field-box">
+            <input type="email" class="field" name="email" placeholder="Email"/><br/>
+          </div>
+
+          <!-- optional, not required if events handled with js -->
+          <div class="email-error"></div>
+          <!-- name must be "password" -->
+          <!-- <label for="password">Password</label> -->
+          <div class="field-box">
+            <input type="password" class="field" name="password" placeholder="Password"/><br/>
+          </div>
+          <!-- optional, not required if events handled with js -->
+          <div class="password-error"></div>
+          <!-- optional, name must be "remember" and type must be checkbox-->
+          <div style="display: none">
+            <input type="checkbox" name="remember"/> Remember me<br/>
+          </div>
+          <div class="forgot m-sm float right">
+            <a href="/forgotpassword">Forgot Password?</a>
+          </div>
+          <div class="form-button">
+            <button class="gradient-button" name="submit">Sign In</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- hack to remove extra height of login page on server  -->
+  <script>
+    var css = `app-login > div {height: auto !important}`;
+    var head = document.head || document.getElementsByTagName("head")[0];
+    var style = document.createElement("style");
+    style.type = "text/css";
+    style.appendChild(document.createTextNode(css));
+    head.appendChild(style);
+  </script>
+
+  <!-- Init LandingElement -->
+  <script type="text/javascript">
+    // Check if landingPageEl is supplied
+    var landingElement;
+    if ("landingPageEl" in window) {
+      landingElement = landingPageEl;
+    } else {
+      landingElement = document;
+    }
+  </script>
+
+</inferno-snippet-content>
+<!--  SNIPPET CONTENT END  -->
+<!-- ********************* -->
+<!-- ********************* -->
+<!-- ********************* -->
+</body>
