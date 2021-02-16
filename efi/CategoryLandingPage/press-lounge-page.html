@@ -399,7 +399,7 @@
 										.category-select,
 										.industry-select {
 											cursor: pointer;
-											padding: 1vmin;
+											padding: 1vmin 2vmin 1vmin 1vmin;
 											background: #fff;
 											border: 2px solid #ccc;
 											border-radius: 4px;
@@ -433,35 +433,43 @@
 										}
 
 										.category {
-											padding: 0 2rem;
+										}
+
+										.category h2 {
+											font-size: 3.6vmin;
+											background-color: white;
+											padding: 0.5rem 1rem;
+											font-size: 2.8vmin;
+											font-weight: bold;
 										}
 
 										.directory-card {
 											display: flex;
 											flex-direction: column;
 											align-items: center;
-											justify-content: space-between;
+											justify-content: flex-start;
 											background-color: #ffffff;
 											border-radius: 0.5em;
 											margin: 10px;
 											position: relative;
-											width: 20%;
-											min-width: 25rem;
-											height: 44rem;
+											width: 33rem;
+											height: 45rem;
 											padding: 2rem 0;
+											font-size: 1.8vmin;
+											cursor: pointer;
+											text-align: center;
+										}
+										.directory-card:hover {
+											filter: brightness(90%);
 										}
 
 										.thumbnail-wrapper {
 											display: flex;
-											align-items: center;
+											align-items: flex-start;
 											justify-content: center;
-											width: 100%;
+											width: 80%;
 											padding: 1rem;
-											cursor: pointer;
-										}
-
-										.thumbnail-wrapper:hover {
-											filter: brightness(90%);
+											margin-top: 1rem;
 										}
 
 										.thumbnail {
@@ -618,12 +626,11 @@
 										</div>
 									</template>
 									<template id="card">
-										<div class="directory-card directory-item">
+										<div class="directory-card">
+											<div class="company-name"></div>
 											<div class="thumbnail-wrapper">
 												<img class="thumbnail" />
 											</div>
-
-											<div class="company-name"></div>
 										</div>
 									</template>
 									<template id="pdf">
@@ -689,10 +696,10 @@
 														);
 														companyName.innerHTML = item.companyName;
 
-														const thumbnailWrapper = clone.querySelector(
-															".thumbnail-wrapper"
+														const directoryCard = clone.querySelector(
+															".directory-card"
 														);
-														thumbnailWrapper.setAttribute(
+														directoryCard.setAttribute(
 															"onclick",
 															`togglePdf("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/press-room/press-assets/${item.narFileName}.pdf")`
 														);
