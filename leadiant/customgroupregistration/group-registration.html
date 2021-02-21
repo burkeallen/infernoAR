@@ -327,9 +327,9 @@
               <input type="password" class="field-input" placeholder="New Password" name="password"/>
             </div>
 
-            <div class="field" id="field-confirm-password">
+            <div class="field" id="field-password2">
               <div><span class="field-warning"></span></div>
-              <input type="password" class="field-input" placeholder="Confirm Password" name="confirmpassword"/>
+              <input type="password" class="field-input" placeholder="Confirm Password" name="password2"/>
             </div>
 
             <div class="field" id="field-npi">
@@ -338,8 +338,18 @@
             </div>
 
             <div class="field" id="field-specialty">
-              <div><span class="field-warning"></span></div>
-              <input type="text" class="field-input" placeholder="Specialty" name="userData2Name"/>
+              <div class="field-warning"></div>
+              <div class="select-field">
+                <select class="field-input" name="userData2Name">
+                  <option selected="selected" value>Specialty</option>
+                  <option value="Ophthalmologist / pediatric ophthalmologist">Ophthalmologist / pediatric ophthalmologist</option>
+                  <option value="Nephrologist / pediatric ophthalmologist">Nephrologist / pediatric ophthalmologist</option>
+                  <option value="Pediatrician">Pediatrician</option>
+                  <option value="Endocrinologist / pediatric endocrinologist">Endocrinologist / pediatric endocrinologist</option>
+                  <option value="Consumer Goods">Geneticist</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
             </div>
 
             <div class="field" id="field-affiliation-practice">
@@ -423,14 +433,14 @@
         warningTextSelector: '#field-firstname .field-warning',
         warningClass: 'is-invalid',
         required: true,
-        minimumCharacters: 3,
+        minimumCharacters: 2,
       },
       {
         fieldSelector: '#field-lastname input',
         warningTextSelector: '#field-lastname .field-warning',
         warningClass: 'is-invalid',
         required: true,
-        minimumCharacters: 3,
+        minimumCharacters: 2,
       },
       {
         fieldSelector: '#field-email input',
@@ -440,48 +450,48 @@
         validation: 'email',
       },
       {
-        fieldSelector: '#field-password input',
-        warningTextSelector: '#field-password .field-warning',
-        warningClass: 'is-invalid',
+        fieldSelector: "#field-password > input",
+        warningTextSelector: "#field-password .field-warning",
+        warningClass: "is-invalid",
         required: true,
-        validation: 'pass',
+        validation: "pass",
         minimumCharacters: 6,
       },
       {
-        fieldSelector: '#field-confirm-password input',
-        warningTextSelector: '#field-confirm-password .field-warning',
-        warningClass: 'is-invalid',
-        required: true,
-        validation: 'pass',
-        minimumCharacters: 6,
+        fieldSelector: "#field-password2 > input",
+        warningTextSelector: "#field-password2 .field-warning",
+        warningClass: "is-invalid",
+        mustMatchSelector: "#field-password > input",
       },
+
+
       {
         fieldSelector: '#field-npi input',
         warningTextSelector: '#field-npi .field-warning',
         warningClass: 'is-invalid',
         required: true,
-        minimumCharacters: 3,
+        minimumCharacters: 2,
       },
       {
-        fieldSelector: '#field-specialty input',
+        fieldSelector: '#field-specialty select',
         warningTextSelector: '#field-specialty .field-warning',
         warningClass: 'is-invalid',
         required: true,
-        minimumCharacters: 3,
+        minimumCharacters: 2,
       },
       {
         fieldSelector: '#field-affiliation-practice input',
         warningTextSelector: '#field-affiliation-practice .field-warning',
         warningClass: 'is-invalid',
         required: true,
-        minimumCharacters: 3,
+        minimumCharacters: 2,
       },
       {
         fieldSelector: '#field-zip input',
         warningTextSelector: '#field-zip .field-warning',
         warningClass: 'is-invalid',
         required: true,
-        minimumCharacters: 3,
+        minimumCharacters: 2,
       },
     ];
   </script>
