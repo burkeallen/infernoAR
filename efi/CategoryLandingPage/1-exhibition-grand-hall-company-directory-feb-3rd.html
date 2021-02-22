@@ -690,7 +690,6 @@
 												clearTimeout(_timer);
 												_timer = null;
 											}
-											console.log("searchingCompanies");
 
 											if ($(el).val().length === 0) {
 												clearFilters();
@@ -741,23 +740,47 @@
 										}
 										//reset search fields when typing in another search box
 										function resetSearches(element) {
-											var searchFields = $(landingPageEl)
-												.find(".search-fields")
-												.children();
+											const companySearch = $(landingPageEl).find(
+												".company-search"
+											);
+											const categorySelect = $(landingPageEl).find(
+												".category-select"
+											);
+											const keywordSearch = $(landingPageEl).find(
+												".keyword-search"
+											);
 
-											$.each(searchFields, function (key, searchField) {
-												if (
-													!$(searchField).hasClass($(element).attr("class"))
-												) {
-													if ($(searchField).hasClass("category-select")) {
-														$(searchField).val("Select a Category");
-													} else {
-														$(searchField).val("");
-													}
-													console.log("clearing filters");
+											if ($(element).hasClass("company-search")) {
+												if (!$(element).hasClass("active")) {
+													$(element).addClass("active");
+
+													$(categorySelect).val("Select a Category");
+													$(categorySelect).removeClass("active");
+													$(keywordSearch).val("");
+													$(keywordSearch).removeClass("active");
 													clearFilters();
 												}
-											});
+											} else if ($(element).hasClass("keyword-search")) {
+												if (!$(element).hasClass("active")) {
+													$(element).addClass("active");
+
+													$(categorySelect).val("Select a Category");
+													$(categorySelect).removeClass("active");
+													$(companySearch).val("");
+													$(companySearch).removeClass("active");
+													clearFilters();
+												}
+											} else if ($(element).hasClass("category-select")) {
+												if (!$(element).hasClass("active")) {
+													$(element).addClass("active");
+
+													$(companySearch).val("");
+													$(companySearch).removeClass("active");
+													$(keywordSearch).val("");
+													$(keywordSearch).removeClass("active");
+													clearFilters();
+												}
+											}
 										}
 
 										function clearFilters() {
