@@ -1,814 +1,790 @@
 <head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta
-		name="viewport"
-		content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-	/>
-	<title>Inferno Snippet Mockup Template</title>
-	<!-- Import Roboto -->
-	<link
-		href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons"
-		rel="stylesheet"
-	/>
-	<!-- Import Inferno's Styles -->
-	<link
-		rel="stylesheet"
-		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"
-	/>
-	<link
-		rel="stylesheet"
-		href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"
-	/>
-	<!--  Local/Client Color Overrides if they file exists -->
-	<link rel="stylesheet" href="../inferno-client.css" />
-	<script>
-		let landingPageEl = null;
-		window.isLocalTemplate = true;
-	</script>
-	<!-- Import JQuery -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
-	<!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
-	<script>
-		function authenticate(project) {
-			const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
-			// Auth w/ Inferno API
-			const params = {
-				email: project.username,
-				password: project.password,
-				grantType: "password"
-			};
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Inferno Snippet Mockup Template</title>
+  <!-- Import Roboto -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Roboto+Mono:400,500|Material+Icons" rel="stylesheet"/>
+  <!-- Import Inferno's Styles -->
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-base-styles.css"/>
+  <link rel="stylesheet" href="https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-extra-styles.css"/>
+  <!--  Local/Client Color Overrides if they file exists -->
+  <link rel="stylesheet" href="../inferno-client.css"/>
+  <script>
+    let landingPageEl = null;
+    window.isLocalTemplate = true;
+  </script>
+  <!-- Import JQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js"></script>
+  <!--  Authenticate into the platform and set session values so you can leverage API calls in your snippets -->
+  <script>
+    function authenticate(project) {
+      const _baseUrl = "https://ingress.infernocore.jolokia.com/api/";
+      // Auth w/ Inferno API
+      const params = {
+        email: project.username,
+        password: project.password,
+        grantType: "password"
+      };
 
-			// Set header
-			const headers = { "X-InfernoCore-Domain": project.domain };
+      // Set header
+      const headers = {"X-InfernoCore-Domain": project.domain};
 
-			// perform synchronous ajax call so rest of code waits until you are authenticated
-			$.ajax({
-				url: _baseUrl + "token",
-				type: "POST",
-				async: false,
-				accept: "application/json",
-				contentType: "application/json",
-				headers: headers,
-				data: JSON.stringify(params),
-				success: function (res) {
-					sessionStorage.setItem("domain", project.domain);
-					storeUser(JSON.parse(res));
-				},
-				error: function (err) {
-					alert(JSON.stringify(err));
-				},
-				complete: function () {
-					console.log("user was authenticated into ", project.domain);
-				}
-			});
-		}
+      // perform synchronous ajax call so rest of code waits until you are authenticated
+      $.ajax({
+        url: _baseUrl + "token",
+        type: "POST",
+        async: false,
+        accept: "application/json",
+        contentType: "application/json",
+        headers: headers,
+        data: JSON.stringify(params),
+        success: function (res) {
+          sessionStorage.setItem("domain", project.domain);
+          storeUser(JSON.parse(res));
+        },
+        error: function (err) {
+          alert(JSON.stringify(err));
+        },
+        complete: function () {
+          console.log("user was authenticated into ", project.domain);
+        }
+      });
+    }
 
-		function parseJwt(token) {
-			var base64Url = token.split(".")[1];
-			var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-			var jsonPayload = decodeURIComponent(
-				atob(base64)
-					.split("")
-					.map(function (c) {
-						return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-					})
-					.join("")
-			);
-			//
-			return JSON.parse(jsonPayload);
-		}
+    function parseJwt(token) {
+      var base64Url = token.split(".")[1];
+      var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      var jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map(function (c) {
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join("")
+      );
+      //
+      return JSON.parse(jsonPayload);
+    }
 
-		function storeUser(data) {
-			// console.log(data);
-			sessionStorage.setItem("userId", parseJwt(data.AccessToken).sub);
-			sessionStorage.setItem("clientId", data.ClientId);
-			sessionStorage.setItem("token", data.AccessToken);
-			sessionStorage.setItem("refreshToken", data.RefreshToken);
-		}
+    function storeUser(data) {
+      // console.log(data);
+      sessionStorage.setItem("userId", parseJwt(data.AccessToken).sub);
+      sessionStorage.setItem("clientId", data.ClientId);
+      sessionStorage.setItem("token", data.AccessToken);
+      sessionStorage.setItem("refreshToken", data.RefreshToken);
+    }
 
-		function login() {
-			const projectEl = document.querySelector("#novoProject");
-			const projectName = projectEl ? projectEl.getAttribute("name") : null;
-			const currentProject = projects.filter(project => {
-				return project.name === projectName;
-			})[0];
+    function login() {
+      const projectEl = document.querySelector("#novoProject");
+      const projectName = projectEl ? projectEl.getAttribute("name") : null;
+      const currentProject = projects.filter(project => {
+        return project.name === projectName;
+      })[0];
 
-			if (!currentProject) {
-				alert(
-					"could not log into Inferno \n\r Check the project name in the login() function"
-				);
-				return;
-			}
+      if (!currentProject) {
+        alert(
+          "could not log into Inferno \n\r Check the project name in the login() function"
+        );
+        return;
+      }
 
-			authenticate(currentProject);
-		}
-	</script>
-	<!-- store your credentials in a local file -->
-	<!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
-	<!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-	<script
-		onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
-		src="/inferno.config.js"
-	></script>
+      authenticate(currentProject);
+    }
+  </script>
+  <!-- store your credentials in a local file -->
+  <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
+  <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
+  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')" src="/inferno.config.js"></script>
 
-	<!-- Liquid Templating -->
-	<script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
-	<!--  Load Liquid JSON From Local file -->
-	<script>
-		function loadJSON(file, callback) {
-			const xobj = new XMLHttpRequest();
-			xobj.overrideMimeType("application/json");
-			xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
-			xobj.onreadystatechange = function () {
-				if (xobj.readyState == 4 && xobj.status == "200") {
-					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
-					callback(xobj.responseText);
-				}
-			};
-			xobj.send(null);
-		}
+  <!-- Liquid Templating -->
+  <script src="https://cdn.jsdelivr.net/npm/liquidjs/dist/liquid.min.js"></script>
+  <!--  Load Liquid JSON From Local file -->
+  <script>
+    function loadJSON(file, callback) {
+      const xobj = new XMLHttpRequest();
+      xobj.overrideMimeType("application/json");
+      xobj.open("GET", file, false); // Replace 'my_data' with the path to your file
+      xobj.onreadystatechange = function () {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+          // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+          callback(xobj.responseText);
+        }
+      };
+      xobj.send(null);
+    }
 
-		// Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
-		// Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
-		// processing can potentially interfere with scripts that run on page load.
-		var data = {};
-		loadJSON("../liquid.json", function (response) {
-			// Parse JSON string into object
-			const x = JSON.parse(response);
-			data = x[0];
-		});
-	</script>
+    // Insert your liquid data here. Remember to convert from JSON to JS Object (use https://json-to-js.com/ or similar)
+    // Set data object to null to skip Liquid processing. You probably want to do this if you're not using liquid as the
+    // processing can potentially interfere with scripts that run on page load.
+    var data = {};
+    loadJSON("../liquid.json", function (response) {
+      // Parse JSON string into object
+      const x = JSON.parse(response);
+      data = x[0];
+    });
+  </script>
 
-	<!-- Build out Local Menu on Left Navigation -->
-	<style>
-		#localTemplateMenu {
-			display: flex;
-			flex-direction: column;
-			justify-content: flex-start;
-			align-items: center;
-			padding: 1em;
-		}
+  <!-- Build out Local Menu on Left Navigation -->
+  <style>
+    #localTemplateMenu {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 1em;
+    }
 
-		#localTemplateMenu a,
-		#localTemplateMenu details {
-			display: block;
-			margin: 0.25em;
-			background-color: var(--sidebar-bg-color);
-			border: none;
-			border-bottom: solid 1px var(--sidebar-highlight-text-color);
-			color: var(--sidebar-text-color);
-			cursor: pointer;
-			width: 80%;
-			padding: 0.25em 0;
-		}
+    #localTemplateMenu a,
+    #localTemplateMenu details {
+      display: block;
+      margin: 0.25em;
+      background-color: var(--sidebar-bg-color);
+      border: none;
+      border-bottom: solid 1px var(--sidebar-highlight-text-color);
+      color: var(--sidebar-text-color);
+      cursor: pointer;
+      width: 80%;
+      padding: 0.25em 0;
+    }
 
-		#localTemplateMenu details a {
-			margin-left: 1em;
-		}
+    #localTemplateMenu details a {
+      margin-left: 1em;
+    }
 
-		#localTemplateMenu a:hover {
-			filter: brightness(80%);
-			text-decoration: none;
-			transform: translateX(-0.3em);
-		}
+    #localTemplateMenu a:hover {
+      filter: brightness(80%);
+      text-decoration: none;
+      transform: translateX(-0.3em);
+    }
 
-		#localTemplateMenu a.activeMenu {
-			background-color: var(--sidebar-highlight-bg-color);
-			color: var(--sidebar-text-color);
-		}
+    #localTemplateMenu a.activeMenu {
+      background-color: var(--sidebar-highlight-bg-color);
+      color: var(--sidebar-text-color);
+    }
 
-		.aside-collapsed * #localTemplateMenu {
-			margin: 0;
-			padding: 1em 0;
-		}
+    .aside-collapsed * #localTemplateMenu {
+      margin: 0;
+      padding: 1em 0;
+    }
 
-		.aside-collapsed * #localTemplateMenu a {
-			word-wrap: break-word;
-			min-width: 100%;
-			border-radius: 0;
-			border-bottom: 1px solid var(--sidebar-text-color);
-		}
+    .aside-collapsed * #localTemplateMenu a {
+      word-wrap: break-word;
+      min-width: 100%;
+      border-radius: 0;
+      border-bottom: 1px solid var(--sidebar-text-color);
+    }
 
-		.aside-collapsed * #localTemplateMenu a:hover {
-			transform: none;
-		}
-	</style>
-	<script>
-		function buildLocalMenu() {
-			window.addEventListener("load", event => {
-				const menu = document.getElementById("localTemplateMenu");
-				const menuItems = window.localTemplateMenuItems.sort((a, b) => {
-					return a.name > b.name ? 1 : -1;
-				});
+    .aside-collapsed * #localTemplateMenu a:hover {
+      transform: none;
+    }
+  </style>
+  <script>
+    function buildLocalMenu() {
+      window.addEventListener("load", event => {
+        const menu = document.getElementById("localTemplateMenu");
+        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+          return a.name > b.name ? 1 : -1;
+        });
 
-				const pages = menuItems.filter(
-					item => !item.name.toLowerCase().includes("booth")
-				);
-				const booths = menuItems.filter(item =>
-					item.name.toLowerCase().includes("booth")
-				);
+        const pages = menuItems.filter(
+          item => !item.name.toLowerCase().includes("booth")
+        );
+        const booths = menuItems.filter(item =>
+          item.name.toLowerCase().includes("booth")
+        );
 
-				pages.forEach(item => {
-					const menuItem = document.createElement("a");
-					menuItem.href = "../" + item.file;
-					menuItem.innerHTML = item.name;
-					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
-					try {
-						const currentSnippet = landingPageEl.querySelector(
-							"#" + item.snippetID.toString()
-						);
-						if (currentSnippet) {
-							menuItem.classList.toggle("activeMenu");
-						}
-					} catch (e) {
-						// do nothing;
-					}
-					menu.appendChild(menuItem);
-				});
+        pages.forEach(item => {
+          const menuItem = document.createElement("a");
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector(
+              "#" + item.snippetID.toString()
+            );
+            if (currentSnippet) {
+              menuItem.classList.toggle("activeMenu");
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          menu.appendChild(menuItem);
+        });
 
-				const boothMenu = document.createElement("details");
-				const summary = document.createElement("summary");
-				summary.innerHTML = "BOOTHS";
-				boothMenu.appendChild(summary);
+        const boothMenu = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.innerHTML = "BOOTHS";
+        boothMenu.appendChild(summary);
 
-				booths.forEach(item => {
-					const menuItem = document.createElement("a");
-					menuItem.href = "../" + item.file;
-					menuItem.innerHTML = item.name;
-					menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
-					try {
-						const currentSnippet = landingPageEl.querySelector(
-							"#" + item.snippetID.toString()
-						);
-						if (currentSnippet) {
-							menuItem.classList.toggle("activeMenu");
-						}
-					} catch (e) {
-						// do nothing;
-					}
-					boothMenu.appendChild(menuItem);
-				});
+        booths.forEach(item => {
+          const menuItem = document.createElement("a");
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute("title", item.file + "\n\r" + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector(
+              "#" + item.snippetID.toString()
+            );
+            if (currentSnippet) {
+              menuItem.classList.toggle("activeMenu");
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          boothMenu.appendChild(menuItem);
+        });
 
-				if (booths.length) {
-					menu.appendChild(boothMenu);
-				}
-			});
-		}
-	</script>
-	<script
-		onload="buildLocalMenu()"
-		onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')"
-		src="../menu.js"
-	></script>
+        if (booths.length) {
+          menu.appendChild(boothMenu);
+        }
+      });
+    }
+  </script>
+  <script onload="buildLocalMenu()" onerror="console.error('../menu.js', 'does not exist, run inferno build {project-name} to generate menu.js file')" src="../menu.js"></script>
 </head>
 
 <body>
-	<div style="display: none" id="novoProject" name="leadiant"></div>
-	<script>
-		login();
-	</script>
-	<app-root class="layout-fixed has-menu">
-		<videos-layout>
-			<div class="wrapper" layout="column">
-				<app-header class="topnavbar-wrapper">
-					<mat-toolbar
-						class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted"
-						color="primary"
-					>
-						<div class="navbar-header"><a href="/">LOCAL</a></div>
-						<div
-							class="ellipsis ng-star-inserted"
-							flex
-							layout="row"
-							layout-align="start center"
-						>
-							<button
-								class="menu-btn mat-icon-button ng-star-inserted"
-								hide
-								mat-icon-button
-								show-gt-sm
-								trigger-resize
-								onclick="mtTriggerMenu()"
-							>
+<div style="display: none" id="novoProject" name="leadiant"></div>
+<script>
+  login();
+</script>
+<app-root class="layout-fixed has-menu">
+  <videos-layout>
+    <div class="wrapper" layout="column">
+      <app-header class="topnavbar-wrapper">
+        <mat-toolbar class="mat-elevation-z3 navbar topnavbar mat-toolbar mat-primary mat-toolbar-single-row ng-star-inserted" color="primary">
+          <div class="navbar-header"><a href="/">LOCAL</a></div>
+          <div class="ellipsis ng-star-inserted" flex layout="row" layout-align="start center">
+            <button class="menu-btn mat-icon-button ng-star-inserted" hide mat-icon-button show-gt-sm trigger-resize onclick="mtTriggerMenu()">
 								<span class="mat-button-wrapper">
-									<mat-icon
-										class="mat-icon material-icons mat-icon-no-color"
-										role="img"
-										aria-hidden="true"
-									>
+									<mat-icon class="mat-icon material-icons mat-icon-no-color" role="img" aria-hidden="true">
 										menu
 									</mat-icon>
 								</span>
-							</button>
-							<div
-								_ngcontent-inv-c7
-								class="mat-title ellipsis m0"
-								flex
-								title="Page Title"
-							>
-								Sample Page Title
-							</div>
-						</div>
-					</mat-toolbar>
-				</app-header>
-				<!-- SIDEBAR -->
-				<videos-sidebar class="aside">
-					<div class="aside-inner">
-						<nav class="sidebar" sidebar-anyclick-close>
-							<div class="nav" id="localTemplateMenu"></div>
-						</nav>
-					</div>
-				</videos-sidebar>
-				<!-- ./ SIDEBAR -->
-				<!-- LANDING -->
-				<section class="IE-FlexAuto" flex>
-					<div class="content-wrapper">
-						<landing-page class="ng-star-inserted">
-							<div id="landing">
-								<!-- CREATE SHADOW DOM AND ATTACH STYLES -->
-								<script>
-									landingPageEl = document
-										.querySelector("landing-page")
-										.attachShadow({ mode: "open" });
-									const landing = landingPageEl.appendChild(
-										document.getElementById("landing")
-									);
-									landingPageEl.appendChild(landing);
-									const loginPageEl = landingPageEl;
-								</script>
-								<style type="text/css">
-									@import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
-								</style>
-								<!-- ********************* -->
-								<!-- ********************* -->
-								<!-- ********************* -->
-								<!-- SNIPPET CONTENT START -->
-								<inferno-snippet-content
-									id="1df6cc2c-352e-4ad3-b6bf-37bdb6c4e7da"
-								>
-									<!-- Click Track Landing v2.0 -->
-									<div
-										id="xtrackx|2|non_booth|speakers|page_load"
-										class="page_load"
-									></div>
-									<script>
-										setTimeout(() => {
-											var event = document.createEvent("MouseEvents");
-											event.initEvent("mouseup", true, true);
-											landingPageEl
-												.querySelector(".page_load")
-												.dispatchEvent(event);
-										}, 250);
-									</script>
-									<!-- ./ Click Track Landing v2.0 -->
+            </button>
+            <div _ngcontent-inv-c7 class="mat-title ellipsis m0" flex title="Page Title">
+              Sample Page Title
+            </div>
+          </div>
+        </mat-toolbar>
+      </app-header>
+      <!-- SIDEBAR -->
+      <videos-sidebar class="aside">
+        <div class="aside-inner">
+          <nav class="sidebar" sidebar-anyclick-close>
+            <div class="nav" id="localTemplateMenu"></div>
+          </nav>
+        </div>
+      </videos-sidebar>
+      <!-- ./ SIDEBAR -->
+      <!-- LANDING -->
+      <section class="IE-FlexAuto" flex>
+        <div class="content-wrapper">
+          <landing-page class="ng-star-inserted">
+            <div id="landing">
+              <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
+              <script>
+                landingPageEl = document
+                  .querySelector("landing-page")
+                  .attachShadow({mode: "open"});
+                const landing = landingPageEl.appendChild(
+                  document.getElementById("landing")
+                );
+                landingPageEl.appendChild(landing);
+                const loginPageEl = landingPageEl;
+              </script>
+              <style type="text/css">
+                @import url("https://studio304nextechar.freetls.fastly.net/infernoAR/_templates/css/inferno-shadow-styles.css");
+              </style>
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- SNIPPET CONTENT START -->
+              <inferno-snippet-content id="1df6cc2c-352e-4ad3-b6bf-37bdb6c4e7da">
+                <!-- Click Track Landing v2.0 -->
+                <div id="xtrackx|2|non_booth|speakers|page_load" class="page_load"></div>
+                <script>
+                  setTimeout(() => {
+                    var event = document.createEvent("MouseEvents");
+                    event.initEvent("mouseup", true, true);
+                    landingPageEl
+                      .querySelector(".page_load")
+                      .dispatchEvent(event);
+                  }, 250);
+                </script>
+                <!-- ./ Click Track Landing v2.0 -->
 
-									<!--  Load custom fonts -->
-									<script type="text/javascript">
-										function loadCustomFont(fontName, url) {
-											console.log("Loading " + fontName);
-											var customFont = new FontFace(
-												fontName,
-												"url(" + url + ")"
-											);
-											customFont
-												.load()
-												.then(function (loadedFont) {
-													document.fonts.add(loadedFont);
-												})
-												.catch(function (error) {
-													console.log("Error loading " + fontName);
-												});
-										}
+                <!--  Load custom fonts -->
+                <script type="text/javascript">
+                  function loadCustomFont(fontName, url) {
+                    console.log("Loading " + fontName);
+                    var customFont = new FontFace(
+                      fontName,
+                      "url(" + url + ")"
+                    );
+                    customFont
+                      .load()
+                      .then(function (loadedFont) {
+                        document.fonts.add(loadedFont);
+                      })
+                      .catch(function (error) {
+                        console.log("Error loading " + fontName);
+                      });
+                  }
 
-										fontUrlBase =
-											"https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/fonts/";
-										loadCustomFont(
-											"GothamBold",
-											fontUrlBase + "GothamBold.ttf"
-										);
-										loadCustomFont(
-											"GothamMed",
-											fontUrlBase + "GothamMedium.ttf"
-										);
-										loadCustomFont(
-											"GothamHTFBlack",
-											fontUrlBase + "GothamHTF-Black.ttf"
-										);
-										loadCustomFont(
-											"FuturaMed",
-											fontUrlBase + "Futura+Medium.otf"
-										);
-									</script>
+                  fontUrlBase =
+                    "https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/fonts/";
+                  loadCustomFont(
+                    "GothamBold",
+                    fontUrlBase + "GothamBold.ttf"
+                  );
+                  loadCustomFont(
+                    "GothamMed",
+                    fontUrlBase + "GothamMedium.ttf"
+                  );
+                  loadCustomFont(
+                    "GothamHTFBlack",
+                    fontUrlBase + "GothamHTF-Black.ttf"
+                  );
+                  loadCustomFont(
+                    "FuturaMed",
+                    fontUrlBase + "Futura+Medium.otf"
+                  );
+                </script>
 
-									<!-- content -->
-									<style>
-										img::after {
-											content: none;
-										}
+                <!-- content -->
+                <style>
+                  img::after {
+                    content: none;
+                  }
 
-										*,
-										:after,
-										:before {
-											box-sizing: border-box;
-										}
+                  *,
+                  :after,
+                  :before {
+                    box-sizing: border-box;
+                  }
 
-										h1,
-										h2,
-										h3,
-										h4,
-										h5 {
-										}
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5 {
+                  }
 
-										.content {
-											min-height: calc(100vh - 114px);
-											background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/bkg-speakers.jpg?1);
-											background-repeat: no-repeat;
-											background-attachment: fixed;
-											background-size: cover;
-											margin: -20px;
-											background-position: center;
-											overflow: hidden;
-											font-family: GothamMed;
-											display: flex;
-											flex-direction: column;
-											justify-content: space-between;
-										}
+                  .content {
+                    position: absolute;
+                    min-height: calc(100vh - 56px);
+                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/speaker-bkg-v3.jpg);
+                    background-repeat: no-repeat;
+                    background-attachment: fixed;
+                    background-size: cover;
+                    margin: -20px;
+                    background-position: center;
+                    overflow: hidden;
+                    font-family: GothamMed;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                  }
 
-										.page-title {
-											padding: 30px;
-											color: #ffffff;
-											font-size: 2.5rem;
-											font-family: GothamHTFBlack;
-										}
+                  .page-title {
+                    margin: 40px;
+                    color: #ffffff;
+                    font-size: 30px;
+                    font-family: GothamHTFBlack;
+                  }
 
-										.speakers-container {
-											display: flex;
-											flex-flow: column;
-											align-items: center;
-											justify-content: center;
-										}
+                  .speakers-container {
+                    display: flex;
+                    flex-flow: column;
+                    align-items: center;
+                    justify-content: center;
+                  }
 
-										.speaker-wrapper {
-											display: flex;
-											flex-flow: row;
-											justify-content: center;
-											margin: 40px 20px;
-										}
+                  .speaker-wrapper {
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: center;
+                    margin: 40px 20px;
+                  }
 
-										.speaker-info {
-											flex-shrink: 0;
-											min-width: 200px;
-											font-family: GothamMed;
-										}
+                  .speaker-info {
+                    flex-shrink: 0;
+                    min-width: 200px;
+                    font-family: GothamMed;
+                  }
 
-										.speaker-image {
-											width: 250px;
-											padding: 0 20px;
-											text-align: center;
-										}
+                  .speaker-image {
+                    padding: 0 20px;
+                    text-align: center;
+                  }
 
-										.speaker-image img {
-											width: 100%;
-										}
+                  .speaker-image img {
+                    width: 400px;
+                    height: auto;
+                  }
 
-										.speaker-top {
-											text-align: right;
-										}
+                  .speaker-top {
+                    text-align: right;
+                  }
 
-										.speaker-bottom {
-											text-align: left;
-										}
+                  .speaker-bottom {
+                    text-align: left;
+                  }
 
-										.speaker-bio {
-											font-size: 1.5rem;
-											color: #ffffff;
-											width: 40%;
-											font-family: GothamMed;
-										}
+                  .speaker-bio {
+                    font-size: 2.4rem;
+                    color: #fff8f8;
+                    width: 40%;
+                    font-weight: normal;
+                    font-family: GothamMed;
+                  }
 
-										.name {
-											color: #ffffff;
-											font-size: 2.25rem;
-											font-weight: bold;
-											font-family: GothamMed;
-										}
+                  .name {
+                    font-size: 3.4rem;
+                    color: #fff8f8;
+                    font-weight: normal;
+                    font-family: GothamMed;
+                  }
 
-										.session {
-											color: #ffffff;
-											font-size: 2rem;
-										}
+                  .designation {
+                    font-size: 2.4rem;
+                    color: #fff8f8;
+                    font-weight: normal;
+                    font-family: GothamMed;
+                  }
 
-										.viewButton {
-											background-color: #fe5000;
-											border-radius: 24px;
-											display: inline-block;
-											cursor: pointer;
-											color: #ffffff;
-											font-family: Arial;
-											font-size: 20px;
-											padding: 10px 15px;
-											text-decoration: none;
-											margin-top: 10px;
-											opacity: 1;
-										}
+                  .session {
+                    color: #ffffff;
+                    font-size: 2rem;
+                  }
 
-										.viewButton:hover {
-											color: #ffffff;
-											opacity: 0.8;
-											text-decoration: none;
-										}
+                  .viewButton {
+                    background-color: #fe5000;
+                    border-radius: 24px;
+                    display: inline-block;
+                    cursor: pointer;
+                    color: #ffffff;
+                    font-family: Arial;
+                    font-size: 20px;
+                    padding: 10px 15px;
+                    text-decoration: none;
+                    margin-top: 10px;
+                    opacity: 1;
+                  }
 
-										.bottom-logo {
-											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/Path 39.png");
-											background-size: 135% 116%;
-											background-position: top;
-											background-repeat: no-repeat;
-											width: 100%;
-											height: 25rem;
-											display: flex;
-											align-items: center;
-											justify-content: flex-end;
-											padding-right: 6%;
-										}
+                  .viewButton:hover {
+                    color: #ffffff;
+                    opacity: 0.8;
+                    text-decoration: none;
+                  }
 
-										.bottom-logo img {
-											height: 65%;
-											width: auto;
-										}
+                  .bottom-logo {
+                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/Path 39.png");
+                    background-size: 135% 116%;
+                    background-position: top;
+                    background-repeat: no-repeat;
+                    width: 100%;
+                    height: 25rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    padding-right: 6%;
+                  }
 
-										@media only screen and (max-width: 1280px) {
-										}
+                  .bottom-logo img {
+                    height: 65%;
+                    width: auto;
+                  }
 
-										@media only screen and (max-width: 1024px) {
-											.speaker-image img {
-												width: 200px;
-											}
+                  @media only screen and (max-width: 1280px) {
+                  }
 
-											.speaker-bio {
-												margin-top: 20px;
-												width: 60%;
-											}
+                  @media only screen and (max-width: 1024px) {
+                    .speaker-image img {
+                      width: 200px;
+                    }
 
-											.speaker-wrapper {
-												align-items: center;
-												flex-flow: column;
-											}
-											.bottom-speaker .speaker-info {
-												order: 1;
-											}
+                    .speaker-bio {
+                      margin-top: 20px;
+                      width: 60%;
+                    }
 
-											.bottom-speaker .speaker-image {
-												order: 2;
-											}
+                    .speaker-wrapper {
+                      align-items: center;
+                      flex-flow: column;
+                    }
 
-											.bottom-speaker .speaker-bio {
-												order: 3;
-											}
-										}
+                    .bottom-speaker .speaker-info {
+                      order: 1;
+                    }
 
-										@media only screen and (max-width: 1024px) {
-											.speaker-wrapper {
-												margin-top: 0px;
-											}
+                    .bottom-speaker .speaker-image {
+                      order: 2;
+                    }
 
-											.speaker-top {
-												text-align: center;
-											}
-											.speaker-bottom {
-												text-align: center;
-											}
+                    .bottom-speaker .speaker-bio {
+                      order: 3;
+                    }
+                  }
 
-											.speaker-image {
-												width: 100%;
-											}
+                  @media only screen and (max-width: 1024px) {
+                    .speaker-wrapper {
+                      margin-top: 0px;
+                    }
 
-											.speaker-image img {
-												margin: 10px 60px;
-											}
+                    .speaker-top {
+                      text-align: center;
+                    }
 
-											.speaker-bio {
-												margin-top: 20px;
-												width: 60%;
-											}
-										}
+                    .speaker-bottom {
+                      text-align: center;
+                    }
 
-										@media only screen and (max-width: 980px) {
-											.bottom-logo {
-												background-size: 150% 116%;
-												height: 20rem;
-											}
+                    .speaker-image {
+                      width: 100%;
+                    }
 
-											.speaker-bio {
-												width: 90%;
-											}
-										}
+                    .speaker-image img {
+                      margin: 10px 60px;
+                    }
 
-										@media only screen and (max-width: 680px) {
-											.bottom-logo {
-												background-size: 150% 116%;
-												height: 10rem;
-											}
-										}
-									</style>
+                    .speaker-bio {
+                      margin-top: 20px;
+                      width: 60%;
+                    }
+                  }
 
-									<div class="content mask">
-										<div class="main">
-											<div class="page-title">Featured Speakers</div>
+                  @media only screen and (max-width: 980px) {
+                    .bottom-logo {
+                      background-size: 150% 116%;
+                      height: 20rem;
+                    }
 
-											<div class="speakers-container">
-												<div class="speaker-wrapper">
-													<div class="speaker-info speaker-top">
-														<div class="name">Faruk Örge MD, FAAO, FAAP</div>
-														<div class="session">April 22nd - 6:30 PM EST</div>
-														<div>
-															<a
-																id="xtrackx|2|non-booth|speakers|button_click|view_presentation|dr_orge"
-																href="videos/6f23aabb-d34d-4eaa-4752-08d8a368dc2c"
-																class="viewButton"
-																>View Presentation</a
-															>
-														</div>
-													</div>
-													<div class="speaker-image">
-														<img
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/dr-orge.png"
-														/>
-													</div>
-													<div class="speaker-bio speaker-bottom">
-														<p>
-															Dr. Faruk Örge has been a part of University
-															Hospitals since 2007 and serves as the Vice Chair
-															of Clinical Affairs, Director and the Fellowship
-															Director of Pediatric Ophthalmology and Adult
-															Strabismus. Dr. Örge was named the William R. and
-															Margaret E. Althans Chair and Professor in
-															Pediatric Ophthalmology in 2012. He sees patients
-															at UH Rainbow Babies and Children’s Hospital,
-															which is a nationally recognized center of
-															excellence in pediatric care.
-														</p>
-													</div>
-												</div>
+                    .speaker-bio {
+                      width: 90%;
+                    }
+                  }
 
-												<div class="speaker-wrapper bottom-speaker">
-													<div class="speaker-bio speaker-top">
-														<p>
-															Since 2009, Dr. Miller has been specializing in
-															pediatric ophthalmology and adult strabismus at
-															Houston Eye Associates, a large ophthalmology
-															practice in Woodlands and Tomball, TX. He is also
-															an Adjunct Assistant Professor of Ophthalmology at
-															the Academic Institute of Houston Methodist, which
-															is affiliated with Weill Cornell College of
-															Medicine. As a representative of the American
-															Academy of Ophthalmology, he routinely travels to
-															Washington D.C. to lobby for maintaining
-															high-quality medical care for patients and
-															improving children’s eye care. He serves as a
-															principle investigator for the Pediatric Eye
-															Disease Investigator Group (PEDIG), the leading
-															children’s eye research group in the country. Dr.
-															Miller created Eyewiki for the American Academy of
-															Ophthalmology.
-														</p>
-													</div>
+                  @media only screen and (max-width: 680px) {
+                    .bottom-logo {
+                      background-size: 150% 116%;
+                      height: 10rem;
+                    }
+                  }
+                </style>
 
-													<div class="speaker-image">
-														<img
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/dr-miller.jpg"
-														/>
-													</div>
-													<div class="speaker-info speaker-bottom">
-														<div class="name">
-															Aaron M. Miller, M.D., F.A.A.P
-														</div>
-														<div class="session">April 29th - 6:30 pM EST</div>
-														<div>
-															<a
-																id="xtrackx|2|non-booth|speakers|button_click|view_presentation|dr_miller"
-																href="videos/6f23aabb-d34d-4eaa-4752-08d8a368dc2c"
-																class="viewButton"
-																>View Presentation</a
-															>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div class="bottom-logo">
-											<img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/bottom-logo.png" />
-										</div>
-									</div>
+                <!--footer -->
+                <style>
+                  footer {
+                    color: white;
+                    font-size: 1.6rem;
+                    background-color: rgb(40, 81, 127);
+                    padding: 2rem;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                  }
 
-								</inferno-snippet-content>
-								<!--  SNIPPET CONTENT END  -->
-								<!-- ********************* -->
-								<!-- ********************* -->
-								<!-- ********************* -->
-							</div>
-						</landing-page>
-					</div>
-				</section>
-				<!-- LANDING -->
-				<!-- FOOTER -->
-				<footer app-footer layout="row" layout-align="start center">
-					Inferno Footer
-				</footer>
-				<!-- ./ FOOTER -->
-			</div>
-		</videos-layout>
-	</app-root>
+                  footer p {
+                    margin: 0;
+                  }
 
-	<script>
-		// LIQUID PROCESSING (Set the data variable above)
-		function processLiquid() {
-			return new Promise((resolve, reject) => {
-				console.log("PROCESSING LIQUID");
-				// We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
-				// This breaks comparison operators, so we need to convert them back before Liquid processing.
-				const template = landingPageEl
-					.querySelector("inferno-snippet-content")
-					.innerHTML.replace(/&lt;/g, "<")
-					.replace(/&gt;/g, ">")
-					.replace(/&amp;/g, "&");
-				// Select the element itself to replace the content
-				const result = landingPageEl.querySelector("inferno-snippet-content");
-				// Initialize the parsing engine
-				const engine = new liquidjs.Liquid();
-				// Parse and render
-				engine
-					.parseAndRender(template, { data })
-					.then(html => (result.innerHTML = html));
-				resolve();
-			});
-		}
+                  footer a {
+                    margin: 0;
+                  }
 
-		// Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
-		function mtCollapseMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			window.sessionStorage.setItem("menuState", "collapsed");
-			appRoot.classList.add("aside-collapsed");
-			appRoot.classList.remove("aside-hidden");
-			sideBar.classList.remove("hidden");
-		}
+                  footer .info {
+                    display: flex;
+                    justify-content: space-between;
+                  }
 
-		function mtHideMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			window.sessionStorage.setItem("menuState", "hidden");
-			appRoot.classList.remove("aside-collapsed");
-			appRoot.classList.add("aside-hidden");
-			sideBar.classList.add("hidden");
-		}
+                  footer .info {
+                    padding: 0 20px;
+                    font-weight: 500;
+                  }
 
-		function mtExpandMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			window.sessionStorage.setItem("menuState", "expanded");
-			appRoot.classList.remove("aside-hidden");
-			appRoot.classList.remove("aside-collapsed");
-			sideBar.classList.remove("hidden");
-		}
+                  footer .info a {
+                    color: white;
+                    text-decoration: none;
+                  }
 
-		function mtTriggerMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			if (
-				!appRoot.classList.contains("aside-collapsed") &&
-				!appRoot.classList.contains("aside-hidden")
-			) {
-				mtCollapseMenu();
-			} else if (
-				appRoot.classList.contains("aside-collapsed") &&
-				!appRoot.classList.contains("aside-hidden")
-			) {
-				mtHideMenu();
-			} else if (appRoot.classList.contains("aside-hidden")) {
-				mtExpandMenu();
-			}
-		}
+                  footer .info p {
+                    font-size: 1.4rem;
+                    font-weight: 300;
+                  }
+                </style>
 
-		function mtInitMenu() {
-			const appRoot = document.querySelector("app-root");
-			const sideBar = document.querySelector("videos-sidebar");
-			const state = sessionStorage.getItem("menuState");
+                <div class="content">
+                  <div class="main">
+                    <div class="page-title">Featured Speakers</div>
+                    <div class="speakers-container">
+                      <div class="speaker-wrapper">
+                        <div class="speaker-info speaker-top">
+                          <div class="name">Faruk Örge MD</div>
+                          <div class="designation">FAAO, FAAP</div>
+                          <div class="session">April 22nd - 6:30 PM EST</div>
+                          <div>
+                            <a id="xtrackx|2|non-booth|speakers|button_click|dr_orge" href="videos/6f23aabb-d34d-4eaa-4752-08d8a368dc2c" class="viewButton">View Presentation</a>
+                          </div>
+                        </div>
+                        <div class="speaker-image">
+                          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/dr-orge.jpg"/>
+                        </div>
+                        <div class="speaker-bio speaker-bottom">
+                          <p>
+                            Dr. Faruk Örge has been a part of University Hospitals since 2007 and serves as the Vice Chair of Clinical Affairs, Director and the Fellowship Director of Pediatric Ophthalmology and Adult Strabismus. Dr. Örge was named the William R. and Margaret E. Althans Chair and Professor in Pediatric Ophthalmology in 2012. He sees patients at UH Rainbow Babies and Children’s
+                            Hospital, which is a nationally recognized center of excellence in pediatric care. </p>
+                        </div>
+                      </div>
 
-			if (state === "collapsed") {
-				mtCollapseMenu();
-			} else if (state === "hidden") {
-				mtHideMenu();
-			} else if (state === "expanded") {
-				mtExpandMenu();
-			}
-		}
+                      <div class="speaker-wrapper bottom-speaker">
+                        <div class="speaker-bio speaker-top">
+                          <p>
+                            Since 2009, Dr. Miller has been specializing in pediatric ophthalmology and adult strabismus at Houston Eye Associates, a large ophthalmology practice in Woodlands and Tomball, TX. He is also an Adjunct Assistant Professor of Ophthalmology at the Academic Institute of Houston Methodist, which is affiliated with Weill Cornell College of Medicine. As a representative of
+                            the American Academy of Ophthalmology, he routinely travels to Washington D.C. to lobby for maintaining high-quality medical care for patients and improving children’s eye care. He serves as a principle investigator for the Pediatric Eye Disease Investigator Group (PEDIG), the leading children’s eye research group in the country. Dr. Miller created Eyewiki for the
+                            American Academy of Ophthalmology. </p>
+                        </div>
 
-		function populateInfernoElements() {
-			const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
-			const videoDiv = landingPageEl.querySelector("#inferno-video-player");
-			if (qaDiv) {
-				$(qaDiv).append(`
+                        <div class="speaker-image">
+                          <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/dr-miller.jpg"/>
+                        </div>
+                        <div class="speaker-info speaker-bottom">
+                          <div class="name">Aaron M. Miller, M.D</div>
+                          <div class="designation">F.A.A.P</div>
+                          <div class="session">April 29th - 6:30 PM EST</div>
+                          <div>
+                            <a id="xtrackx|2|non-booth|speakers|button_click|dr_miller|view_main_stage" href="videos/6f23aabb-d34d-4eaa-4752-08d8a368dc2c" class="viewButton">View Presentation</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bottom-logo">
+                    <a id="xtrackx|2|non-booth|speakers|logo_click|leadiant_website|open_website" target="_blank" href="https://leadiant.com"> <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/bottom-logo.png"/> </a>
+                  </div>
+
+
+                  <footer>
+                    <div class="info">
+                      <div class="info-links">
+                        <a id="xtrackx|2|non_booth|lediant_speakers|button_click|privacy_policy|open_nextech_privacy_policy" href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy">Privacy Policy</a> | <a id="xtrackx|2|non_booth|lediant_speakers|button_click|terms_conditions|open_nextech_terms" href="https://www.nextechar.com/terms-of-service">Terms & Conditions</a>
+                      </div>
+                      <p>Copyright © 2021 NexTech AR Solutions Inc.</p>
+                    </div>
+                  </footer>
+
+                </div>
+
+              </inferno-snippet-content>
+              <!--  SNIPPET CONTENT END  -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+              <!-- ********************* -->
+            </div>
+          </landing-page>
+        </div>
+      </section>
+      <!-- LANDING -->
+      <!-- FOOTER -->
+      <footer app-footer layout="row" layout-align="start center">
+        Inferno Footer
+      </footer>
+      <!-- ./ FOOTER -->
+    </div>
+  </videos-layout>
+</app-root>
+
+<script>
+  // LIQUID PROCESSING (Set the data variable above)
+  function processLiquid() {
+    return new Promise((resolve, reject) => {
+      console.log("PROCESSING LIQUID");
+      // We rip the entire content of the inferno-snippet-content element. InnerHTML returns certain characters such as < and > escaped.
+      // This breaks comparison operators, so we need to convert them back before Liquid processing.
+      const template = landingPageEl
+        .querySelector("inferno-snippet-content")
+        .innerHTML.replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&amp;/g, "&");
+      // Select the element itself to replace the content
+      const result = landingPageEl.querySelector("inferno-snippet-content");
+      // Initialize the parsing engine
+      const engine = new liquidjs.Liquid();
+      // Parse and render
+      engine
+        .parseAndRender(template, {data})
+        .then(html => (result.innerHTML = html));
+      resolve();
+    });
+  }
+
+  // Set the menu initial state here: 'expanded', 'collapsed', or 'hidden'.
+  function mtCollapseMenu() {
+    const appRoot = document.querySelector("app-root");
+    const sideBar = document.querySelector("videos-sidebar");
+    window.sessionStorage.setItem("menuState", "collapsed");
+    appRoot.classList.add("aside-collapsed");
+    appRoot.classList.remove("aside-hidden");
+    sideBar.classList.remove("hidden");
+  }
+
+  function mtHideMenu() {
+    const appRoot = document.querySelector("app-root");
+    const sideBar = document.querySelector("videos-sidebar");
+    window.sessionStorage.setItem("menuState", "hidden");
+    appRoot.classList.remove("aside-collapsed");
+    appRoot.classList.add("aside-hidden");
+    sideBar.classList.add("hidden");
+  }
+
+  function mtExpandMenu() {
+    const appRoot = document.querySelector("app-root");
+    const sideBar = document.querySelector("videos-sidebar");
+    window.sessionStorage.setItem("menuState", "expanded");
+    appRoot.classList.remove("aside-hidden");
+    appRoot.classList.remove("aside-collapsed");
+    sideBar.classList.remove("hidden");
+  }
+
+  function mtTriggerMenu() {
+    const appRoot = document.querySelector("app-root");
+    const sideBar = document.querySelector("videos-sidebar");
+    if (
+      !appRoot.classList.contains("aside-collapsed") &&
+      !appRoot.classList.contains("aside-hidden")
+    ) {
+      mtCollapseMenu();
+    } else if (
+      appRoot.classList.contains("aside-collapsed") &&
+      !appRoot.classList.contains("aside-hidden")
+    ) {
+      mtHideMenu();
+    } else if (appRoot.classList.contains("aside-hidden")) {
+      mtExpandMenu();
+    }
+  }
+
+  function mtInitMenu() {
+    const appRoot = document.querySelector("app-root");
+    const sideBar = document.querySelector("videos-sidebar");
+    const state = sessionStorage.getItem("menuState");
+
+    if (state === "collapsed") {
+      mtCollapseMenu();
+    } else if (state === "hidden") {
+      mtHideMenu();
+    } else if (state === "expanded") {
+      mtExpandMenu();
+    }
+  }
+
+  function populateInfernoElements() {
+    const qaDiv = landingPageEl.querySelector("#inferno-questions-basic");
+    const videoDiv = landingPageEl.querySelector("#inferno-video-player");
+    if (qaDiv) {
+      $(qaDiv).append(`
       <questions _nghost-qch-c20="">
         <div class="ng-untouched ng-pristine ng-valid ng-star-inserted">
           <div class="inferno-input-group">
@@ -821,9 +797,9 @@
         </div>
       </questions>
       `);
-			}
-			if (videoDiv) {
-				$(videoDiv).append(`
+    }
+    if (videoDiv) {
+      $(videoDiv).append(`
         <iframe src="https://jolokia.inferno.jolokia.com/embed/ecd7f4ad-2c0a-4f3f-bfd6-37670cc2edbd"
           width="640"
           height="360"
@@ -831,16 +807,15 @@
           allowfullscreen">
         </iframe>
         `);
-			}
-		}
+    }
+  }
 
-		// Wait for liquid processing before handling the rest
-		if (data) {
-			processLiquid().then(mtInitMenu).then(populateInfernoElements);
-		} else {
-			mtInitMenu();
-			populateInfernoElements();
-		}
-	</script>
-</body>
-<!-- Menu Collapse Script -->
+  // Wait for liquid processing before handling the rest
+  if (data) {
+    processLiquid().then(mtInitMenu).then(populateInfernoElements);
+  } else {
+    mtInitMenu();
+    populateInfernoElements();
+  }
+</script>
+</body><!-- Menu Collapse Script -->
