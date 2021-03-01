@@ -305,24 +305,30 @@
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadCustomFont(fontName, url) {
-                    console.log("Loading " + fontName);
-                    var customFont = new FontFace(fontName, "url(" + url + ")");
+                    // console.log("Loading " + fontName);
+                    var customFont = new FontFace(
+                      fontName,
+                      "url(" + url + ")"
+                    );
                     customFont
                       .load()
                       .then(function (loadedFont) {
                         document.fonts.add(loadedFont);
+                        // console.log(fontName + " Loaded");
                       })
                       .catch(function (error) {
                         console.log("Error loading " + fontName);
                       });
                   }
 
-                  fontUrlBase = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/fonts/";
-                  loadCustomFont('GothamBold', fontUrlBase + 'GothamBold.ttf');
-                  loadCustomFont('GothamBook', fontUrlBase + 'GothamBook.ttf');
-                  loadCustomFont('GothamMed', fontUrlBase + 'Gotham+Medium+Regular.ttf');
-                  loadCustomFont('FuturaMed', fontUrlBase + 'Futura+Medium.otf');
+                  fontUrlBase = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/";
+                  loadCustomFont("GothamBold", fontUrlBase + "Gotham-Bold.otf");
+                  loadCustomFont("GothamBook", fontUrlBase + "Gotham-Book.otf");
+                  loadCustomFont("GothamMed", fontUrlBase + "Gotham-Medium.otf");
+                  loadCustomFont("GothamHTFBlack", fontUrlBase + "GothamHTF-Black.ttf");
+                  loadCustomFont("FuturaMed", fontUrlBase + "Futura+Medium.otf");
                 </script>
+
 
                 <!-- content -->
                 <style>
@@ -384,13 +390,13 @@
 
                   .event-info h2 {
                     color: #000000;
-                    font-size: 3rem;
+                    font-size: 4rem;
                     line-height: 1.2;
                     font-family: "GothamBook";
                   }
 
                   .rectangle {
-                    height: 60px;
+                    height: 80px;
                     width: 100%;
                     border-radius: 0 14px 14px 0;
                     background: linear-gradient(90deg, rgba(0, 100, 154, 1) 35%, rgba(0, 189, 231, 1) 100%);
@@ -414,7 +420,7 @@
                     justify-content: space-around;
                     width: 100%;
                     height: auto;
-                    padding: 3rem;
+                    padding: 2.75rem;
                     background-repeat: no-repeat;
                     background-position: top right;
                     background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/mask-group.png);
@@ -432,6 +438,21 @@
                     font-size: 3.5rem;
                     padding: 10px 0 10px;
                   }
+
+                  .thursday {
+                    white-space: nowrap;
+                  }
+                  .dates {
+                    white-space: nowrap;
+                  }
+
+                  /*.h2-line-1 {*/
+                  /*  padding: 10px 0 0 !important;*/
+                  /*}*/
+
+                  /*.h2-line-2 {*/
+                  /*  padding: 0 0 10px !important;*/
+                  /*}*/
 
                   .message-container h3 {
                     color: #00BDE7;
@@ -455,6 +476,7 @@
 
                 <!-- Media Queries -->
                 <style>
+
                   @media only screen and (max-width: 1080px) {
                     .content {
                       background-position: bottom;
@@ -485,12 +507,7 @@
                     }
 
                     .event-info h2 {
-                      font-size: 2.55rem;
-                    }
-
-                    .message-container {
-                      margin-top: 0;
-                      padding: 3rem;
+                      font-size: 2.50rem;
                     }
 
                     .content-message {
@@ -510,6 +527,14 @@
                       font-size: 2.5rem;
                       padding: 10px 0 10px;
                     }
+
+                    /*.h2-line-1 {*/
+                    /*  padding: 10px 0 10px;*/
+                    /*}*/
+
+                    /*.h2-line-2 {*/
+                    /*  padding: 10px 0 10px;*/
+                    /*}*/
 
                     .message-container h3 {
                       color: #00BDE7;
@@ -571,7 +596,7 @@
 
                     .message-container h2 {
                       color: #00BDE7;
-                      font-size: 3.5rem;
+                      font-size: 3rem;
                       padding: 10px 0 10px;
                     }
 
@@ -580,6 +605,14 @@
                       font-weight: bold;
                       font-size: 2.75rem;
                       font-family: "GothamMed";
+                    }
+
+                    .h2-line-1 {
+                      padding: 10px 0 10px;
+                    }
+
+                    .h2-line-2 {
+                      padding: 10px 0 10px;
                     }
 
                     .message-container {
@@ -603,14 +636,14 @@
 
                     .message-container h2 {
                       color: #00BDE7;
-                      font-size: 2.50rem;
+                      font-size: 2.25rem;
                       padding: 10px 0 10px;
                     }
 
                     .message-container h3 {
                       color: #00BDE7;
                       font-weight: bold;
-                      font-size: 2.25rem;
+                      font-size: 2rem;
                       font-family: "GothamMed";
                     }
 
@@ -644,8 +677,8 @@
                       <div class="message-container">
                         <h1>Thank you</h1>
                         <h1>for registering!</h1>
-                        <h2>We look forward to seeing you on Thursday April 22/April 29</h2>
-                        <h3>Please download the ARtize application to your mobile device prior to the event</h3>
+                        <h2>We look forward to seeing you on<br>Thursday April 22/April 29</h2>
+                        <h3>Please download the ARitize application to your mobile device prior to the event</h3>
                         <div class="app-store-container">
                           <div><a target="_blank" href="https://apps.apple.com/us/app/aritize-3d-augmented-reality/id1403521167">
                             <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/thank-you/apple-store.jpg"></a>

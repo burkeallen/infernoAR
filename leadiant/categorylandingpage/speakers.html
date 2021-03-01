@@ -318,7 +318,7 @@
                 <!--  Load custom fonts -->
                 <script type="text/javascript">
                   function loadCustomFont(fontName, url) {
-                    console.log("Loading " + fontName);
+                    // console.log("Loading " + fontName);
                     var customFont = new FontFace(
                       fontName,
                       "url(" + url + ")"
@@ -327,30 +327,18 @@
                       .load()
                       .then(function (loadedFont) {
                         document.fonts.add(loadedFont);
+                        // console.log(fontName + " Loaded");
                       })
                       .catch(function (error) {
                         console.log("Error loading " + fontName);
                       });
                   }
 
-                  fontUrlBase =
-                    "https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/fonts/";
-                  loadCustomFont(
-                    "GothamBold",
-                    fontUrlBase + "GothamBold.ttf"
-                  );
-                  loadCustomFont(
-                    "GothamMed",
-                    fontUrlBase + "GothamMedium.ttf"
-                  );
-                  loadCustomFont(
-                    "GothamHTFBlack",
-                    fontUrlBase + "GothamHTF-Black.ttf"
-                  );
-                  loadCustomFont(
-                    "FuturaMed",
-                    fontUrlBase + "Futura+Medium.otf"
-                  );
+                  fontUrlBase = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/";
+                  loadCustomFont("GothamBold", fontUrlBase + "Gotham-Bold.otf");
+                  loadCustomFont("GothamMed", fontUrlBase + "Gotham-Medium.otf");
+                  loadCustomFont("GothamHTFBlack", fontUrlBase + "GothamHTF-Black.ttf");
+                  loadCustomFont("FuturaMed", fontUrlBase + "Futura+Medium.otf");
                 </script>
 
                 <!-- content -->
@@ -389,7 +377,7 @@
                   }
 
                   .page-title {
-                    margin: 40px;
+                    margin: 50px 60px;
                     color: #ffffff;
                     font-size: 30px;
                     font-family: GothamHTFBlack;
@@ -494,8 +482,14 @@
                   }
 
                   .bottom-logo img {
-                    height: 65%;
+                    height: 180px;
                     width: auto;
+                  }
+
+                  @media only screen and (max-width: 1366px) {
+                    .speaker-image img {
+                      width: 300px;
+                    }
                   }
 
                   @media only screen and (max-width: 1280px) {
@@ -503,7 +497,8 @@
 
                   @media only screen and (max-width: 1024px) {
                     .speaker-image img {
-                      width: 200px;
+                      width: 300px;
+                      margin: 10px 60px;
                     }
 
                     .speaker-bio {
@@ -512,26 +507,9 @@
                     }
 
                     .speaker-wrapper {
+                      margin-top: 0px;
                       align-items: center;
                       flex-flow: column;
-                    }
-
-                    .bottom-speaker .speaker-info {
-                      order: 1;
-                    }
-
-                    .bottom-speaker .speaker-image {
-                      order: 2;
-                    }
-
-                    .bottom-speaker .speaker-bio {
-                      order: 3;
-                    }
-                  }
-
-                  @media only screen and (max-width: 1024px) {
-                    .speaker-wrapper {
-                      margin-top: 0px;
                     }
 
                     .speaker-top {
@@ -542,17 +520,16 @@
                       text-align: center;
                     }
 
-                    .speaker-image {
-                      width: 100%;
+                    .speaker-2 .speaker-info {
+                      order: 1;
                     }
 
-                    .speaker-image img {
-                      margin: 10px 60px;
+                    .speaker-2 .speaker-image {
+                      order: 2;
                     }
 
-                    .speaker-bio {
-                      margin-top: 20px;
-                      width: 60%;
+                    .speaker-2 .speaker-bio {
+                      order: 3;
                     }
                   }
 
@@ -596,6 +573,7 @@
 
                   footer .info {
                     display: flex;
+                    margin-top: 10px;
                     justify-content: space-between;
                   }
 
@@ -606,13 +584,19 @@
 
                   footer .info a {
                     color: white;
+                    font-size: 14px;
                     text-decoration: none;
                   }
 
                   footer .info p {
-                    font-size: 1.4rem;
+                    font-size: 12px;
                     font-weight: 300;
                   }
+
+                  .info-links {
+                    display: flex;
+                  }
+
                 </style>
 
                 <div class="content">
@@ -638,7 +622,7 @@
                         </div>
                       </div>
 
-                      <div class="speaker-wrapper bottom-speaker">
+                      <div class="speaker-wrapper speaker-2">
                         <div class="speaker-bio speaker-top">
                           <p>
                             Since 2009, Dr. Miller has been specializing in pediatric ophthalmology and adult strabismus at Houston Eye Associates, a large ophthalmology practice in Woodlands and Tomball, TX. He is also an Adjunct Assistant Professor of Ophthalmology at the Academic Institute of Houston Methodist, which is affiliated with Weill Cornell College of Medicine. As a representative of
@@ -652,7 +636,7 @@
                         <div class="speaker-info speaker-bottom">
                           <div class="name">Aaron M. Miller, M.D</div>
                           <div class="designation">F.A.A.P</div>
-                          <div class="session">April 29th - 6:30 PM EST</div>
+                          <div class="session">April 29th - 6:30 PM PST</div>
                           <div>
                             <a id="xtrackx|2|non-booth|speakers|button_click|dr_miller|view_main_stage" href="videos/6f23aabb-d34d-4eaa-4752-08d8a368dc2c" class="viewButton">View Presentation</a>
                           </div>
@@ -665,11 +649,12 @@
                     <a id="xtrackx|2|non-booth|speakers|logo_click|leadiant_website|open_website" target="_blank" href="https://leadiant.com"> <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/bottom-logo.png"/> </a>
                   </div>
 
-
                   <footer>
                     <div class="info">
                       <div class="info-links">
-                        <a id="xtrackx|2|non_booth|lediant_speakers|button_click|privacy_policy|open_nextech_privacy_policy" href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy">Privacy Policy</a> | <a id="xtrackx|2|non_booth|lediant_speakers|button_click|terms_conditions|open_nextech_terms" href="https://www.nextechar.com/terms-of-service">Terms & Conditions</a>
+                        <a target="_blank" id="xtrackx|2|non_booth|lediant_speakers|button_click|privacy_policy|open_nextech_privacy_policy" href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy">Privacy Policy</a>
+                        &nbsp;|&nbsp;
+                        <a target="_blank" id="xtrackx|2|non_booth|lediant_speakers|button_click|terms_conditions|open_nextech_terms" href="https://www.nextechar.com/terms-of-service">Terms & Conditions</a>
                       </div>
                       <p>Copyright © 2021 NexTech AR Solutions Inc.</p>
                     </div>
