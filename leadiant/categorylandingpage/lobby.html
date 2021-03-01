@@ -209,7 +209,12 @@
 </head>
 
 <body>
-	<div style="display: none" id="novoProject" name="efi" onload="login()"></div>
+	<div
+		style="display: none"
+		id="novoProject"
+		name="leadiant"
+		onload="login()"
+	></div>
 	<app-root class="layout-fixed has-menu">
 		<videos-layout>
 			<div class="wrapper" layout="column">
@@ -287,458 +292,412 @@
 								<!-- ********************* -->
 								<!-- SNIPPET CONTENT START -->
 								<inferno-snippet-content
-									id="76a59c54-f553-4061-ad88-b174f8b496b5"
+									id="d3a309d4-4c5f-436f-928b-df62768bd3f2"
 								>
-									<!-- Lobby Page -->
+									<!-- content -->
 									<style>
-										/* prevent entire screen from going black if you try to reference an image that does not exist*/
-										/* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
 										img::after {
 											content: none;
 										}
 
+										*,
+										:after,
+										:before {
+											box-sizing: border-box;
+										}
+
+										h1,
+										h2,
+										h3 {
+											margin: 0;
+											padding: 0;
+										}
+
 										.content {
-											background-attachment: fixed;
 											position: relative;
+											background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/bg-lobby.png);
 											background-repeat: no-repeat;
 											background-size: cover;
-											background-position: center;
+											background-position: 0 40%;
+											margin: -20px -40px;
 											min-height: calc(100vh - 114px);
-											margin: -20px;
-											padding: 20px 24px;
-											z-index: 1;
-											font-family: "Helvetica Neue", Arial Narrow, Arial,
-												sans-serif;
 										}
-										.content img {
+
+										.cystaran {
 											position: absolute;
-											top: 0;
-											left: 0;
-											width: 100%;
-											height: 100%;
+											top: 30vh;
+											left: 50%;
+											transform: translateX(-50%);
+											width: 33%;
+											height: auto;
 										}
 
 										.hotspot {
-											/* background-color: rgba(255, 0, 0, 0.5); */
-											position: absolute;
-											z-index: 99;
 											cursor: pointer;
-
-											display: flex;
-											align-items: center;
-											justify-content: center;
 										}
 
-										.button {
-											background: linear-gradient(
-												0deg,
-												rgba(2, 25, 141, 1) 0%,
-												rgba(2, 35, 198, 1) 100%
-											);
-											border: 2px solid rgb(181, 181, 181);
-											border-radius: 10px;
-										}
-
-										.button:hover {
-											filter: brightness(70%);
-										}
-
-										.hotspot a {
-											text-decoration: none;
-											text-align: center;
-											color: white;
-											font-size: 2.2vmin;
-											font-weight: bolder;
-											text-transform: uppercase;
+										.hotspot:hover .b {
+											fill: rgb(227, 225, 225);
 										}
 
 										.hotspot:hover {
-											background-color: rgba(0, 0, 0, 0.2);
+											filter: brightness(70%);
 										}
 
-										.platinum {
-											clip-path: polygon(7% 1%, 66% 15%, 64% 99%, 5% 97%);
-											left: 10%;
-											top: 13%;
-											height: 40%;
-											width: 20%;
-										}
-
-										.efi {
-											left: 24%;
-											top: 20%;
-											height: 24%;
-											width: 10%;
-											clip-path: polygon(0% 4%, 94% 8%, 94% 102%, 0% 97%);
-										}
-
-										.seal {
-											right: 24%;
-											top: 20%;
-											height: 24%;
-											width: 10%;
-											clip-path: polygon(0% 9%, 97% 2%, 98% 97%, 0% 101%);
-										}
-
-										.gold {
-											height: 22%;
+										.left {
+											position: absolute;
+											top: 50vh;
+											left: 13%;
 											width: 14%;
 										}
 
-										.dec {
-											clip-path: polygon(0% 23%, 81% 0%, 83% 80%, 0% 97%);
-											right: 9%;
-											top: 15%;
+										.left img {
+											width: 100%;
+											height: auto;
 										}
 
-										.ashley {
-											clip-path: polygon(0% 21%, 83% 3%, 85% 85%, 1% 94%);
-											right: 9%;
-											top: 34%;
+										.easel {
+											position: absolute;
+											top: 52vh;
+											right: 31%;
+											width: 12%;
 										}
 
-										.win {
-											clip-path: polygon(1% 27%, 85% 11%, 87% 85%, 3% 94%);
-											right: 9%;
-											top: 30%;
+										.easel svg {
+											width: 100%;
+											height: auto;
 										}
 
-										.networking {
-											left: 10%;
-											top: 53.5% !important;
-											height: 8%;
-											transform: rotate(2deg);
+										path {
+											pointer-events: all;
+											fill: none;
 										}
 
-										.networking div {
-											transform: rotate(-1deg);
+										path:hover {
+											fill: rgba(0, 0, 0, 0.3);
+											cursor: pointer;
 										}
 
-										.button {
-											top: 54.5%;
-											height: 7%;
-											width: 14.5%;
-											font-weight: bolder;
+										.video-player {
+											position: absolute;
+											top: 46vh;
+											right: 4rem;
+											width: 23%;
 										}
 
-										.auditorium {
-											left: 26%;
+										.video-player img {
+											width: 100%;
+											height: auto;
 										}
 
-										.exhibition {
-											left: 43%;
-										}
-
-										.innovation {
-											right: 25.5%;
-										}
-
-										.press {
-											right: 9%;
-											top: 53.5% !important;
-											transform: rotate(-3deg);
-										}
-
-										.info {
-											bottom: 14.5%;
-											left: 10.5%;
-											height: 10%;
-											width: 16.5%;
-										}
-
-										@media only screen and (max-width: 1600px) {
-											.hotspot a {
-												font-size: 1.8vmin;
-											}
-										}
-										@media only screen and (max-width: 980px) {
-											.hotspot a {
-												font-size: 1.4vmin;
-											}
-										}
-									</style>
-
-									/*Video Player */
-									<style>
 										.overlay {
 											position: absolute;
 											top: 0;
 											left: 0;
 											width: 100%;
 											height: 100%;
+											background-color: rgba(0, 0, 0, 0.3);
 											display: flex;
 											align-items: center;
 											justify-content: center;
-											z-index: 100;
-											background-color: rgba(0, 0, 0, 0.5);
 										}
 
-										.overlay-content {
-											width: 50%;
-											min-width: 35rem;
-											display: flex;
-											flex-direction: column;
-											justify-content: space-between;
-										}
-
-										.close-button {
-											cursor: pointer;
-											text-align: right;
-											color: white;
-											font-size: 2.2rem;
-											font-weight: bold;
-										}
-										.video-box {
-											width: 100%;
-											border-radius: 35px;
-										}
-
-										.video-container {
+										.aspect-ratio {
 											position: relative;
 											padding-bottom: 56.5%; /* 16:9 */
 											height: 0;
 										}
 
-										.video-box iframe {
+										.video-iframe {
 											position: absolute;
 											top: 0;
 											left: 0;
 											width: 100%;
 											height: 100%;
-											border-radius: 30px;
+											overflow: hidden;
+										}
+
+										.wrapper {
+											width: 70%;
+											height: max-content;
+											max-height: 80%;
+											background-color: rgba(255, 255, 255, 0.8);
+											border-radius: 15px;
+											display: flex;
+											flex-direction: column;
+											justify-content: flex-start;
+											align-items: center;
+											padding: 2rem;
+										}
+
+										.close-btn {
+											width: 100%;
+											text-align: right;
+											font-size: 3.2rem;
+											font-weight: bold;
+											cursor: pointer;
+											color: rgba(0, 0, 0, 0.3);
+										}
+
+										.close-btn:hover {
+											color: rgba(0, 0, 0, 1);
+										}
+
+										.pdf-iframe {
+											width: 100%;
+											height: 80%;
+										}
+
+										.video-box {
+											width: 90%;
+										}
+
+										@media only screen and (max-width: 1024px) {
+											.left {
+												top: 43vh;
+											}
+
+											.easel {
+												top: 45vh;
+												right: 30%;
+											}
+
+											.video-player {
+												top: 40vh;
+											}
+										}
+
+										@media only screen and (max-width: 970px) {
+											.content {
+												background-repeat: no-repeat;
+												background-size: contain;
+												background-position: center;
+												display: flex;
+												flex-direction: row;
+												flex-wrap: wrap;
+												align-items: center;
+												justify-content: space-evenly;
+											}
+
+											.left {
+												margin-top: 10rem;
+												position: relative;
+												top: initial;
+												left: initial;
+											}
+
+											.easel {
+												margin-top: 20rem;
+												position: relative;
+												top: initial;
+												right: initial;
+											}
+
+											.video-player {
+												margin-top: 10rem;
+												position: relative;
+												top: initial;
+												right: initial;
+											}
+										}
+
+										@media only screen and (max-width: 780px) {
+											.cystaran {
+												top: 38vh;
+											}
 										}
 									</style>
-
 									<div class="content">
-										<img
-											src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/Lobby_2_19_21.png"
-										/>
-										<a
-											class="hotspot platinum research"
-											href="https://www.research-park.org/"
-											target="__blank"
+										<svg
+											class="cystaran"
+											xmlns="http://www.w3.org/2000/svg"
+											xmlns:xlink="http://www.w3.org/1999/xlink"
+											width="694"
+											height="225"
+											viewBox="0 0 694 225"
 										>
-										</a>
-										<a
-											class="hotspot efi"
-											href="https://www.enterpriseflorida.com/"
-											target="__blank"
-										></a>
-										<a
-											class="hotspot seal"
-											href="https://www.enterpriseflorida.com/"
-											target="__blank"
-										></a>
-										<a
-											class="hotspot gold dec"
-											href="https://southfloridadec.com/"
-											target="__blank"
-										></a>
-										<a
-											class="hotspot gold ashley"
-											href="https://www.ashleyfurniture.com/"
-											target="__blank"
-										></a>
-										<div class="hotspot button networking">
-											<a
-												href="/videos/b258cb81-8b53-440e-b029-08d86c522066/landing/629573e9-33d1-4b9d-b092-572a0c5c7bbe"
-											>
-												<div>PlayFlorida Expo</div>
+											<defs>
+												<pattern
+													id="img1"
+													patternUnits="userSpaceOnUse"
+													width="694"
+													height="225"
+												>
+													<image
+														href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/cystaran.png"
+														x="-10"
+														y="-40"
+														width="740"
+														height="240"
+													/>
+												</pattern>
+												<style>
+													.a,
+													.c {
+														fill: url(#img1);
+													}
+													.a {
+														stroke: #988866;
+														stroke-width: 5px;
+													}
+													.b {
+														stroke: none;
+														fill: white;
+														cursor: pointer;
+													}
+
+													.d {
+														filter: url(#a);
+													}
+												</style>
+												<filter
+													id="a"
+													x="0"
+													y="0"
+													width="694"
+													height="225"
+													filterUnits="userSpaceOnUse"
+												>
+													<feOffset dy="3" input="SourceAlpha" />
+													<feGaussianBlur stdDeviation="3" result="b" />
+													<feFlood flood-opacity="0.565" />
+													<feComposite operator="in" in2="b" />
+													<feComposite in="SourceGraphic" />
+												</filter>
+											</defs>
+											<a class="hotspot" href="" target="__blank">
+												<g class="d" transform="matrix(1, 0, 0, 1, 0, 0)">
+													<g class="a" transform="translate(9 6)">
+														<rect class="b" width="676" height="207" rx="14" />
+														<rect
+															class="c"
+															x="2.5"
+															y="2.5"
+															width="671"
+															height="202"
+															rx="11.5"
+														/>
+													</g>
+												</g>
 											</a>
+										</svg>
+										<div class="left">
+											<img
+												class="hotspot"
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/carnitor.png"
+												onclick="togglePdf('carnitor')"
+											/>
+											<img
+												class="hotspot"
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/abelcet.png"
+												onclick="togglePdf('abelcet')"
+											/>
 										</div>
-										<div class="hotspot button auditorium">
-											<a
-												href="/videos/4a246fc4-5caa-419d-58cd-08d86c3cf09a/detail/df2e1fc4-4f33-4e9b-82f0-c889795796b2"
+										<div class="easel">
+											<svg
+												xmlns:dc="http://purl.org/dc/elements/1.1/"
+												xmlns:cc="http://creativecommons.org/ns#"
+												xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+												xmlns:svg="http://www.w3.org/2000/svg"
+												xmlns="http://www.w3.org/2000/svg"
+												xmlns:xlink="http://www.w3.org/1999/xlink"
+												xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+												xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+												sodipodi:docname="easel.svg"
+												inkscape:version="1.0 (4035a4f, 2020-05-01)"
+												id="svg8"
+												version="1.1"
+												viewBox="0 0 189.0889 311.14999"
+												height="311.14999mm"
+												width="189.0889mm"
 											>
-												<div>Auditorium</div></a
-											>
-										</div>
-										<div class="hotspot button exhibition">
-											<a
-												href="/videos/2eb5759b-2501-42e8-58cc-08d86c3cf09a/landing/d38a5729-4621-4322-b85e-67646a649a69"
-												><div>Grand Hall</div></a
-											>
-										</div>
-										<div class="hotspot button innovation">
-											<a
-												href="/videos/7bb297d6-7ac7-47dc-ee80-08d8c3f240c5/landing/b43b671c-a07c-4092-b9f6-32f71b595122"
-												><div>Resource Library</div></a
-											>
-										</div>
-										<div class="hotspot button press">
-											<a
-												href="/videos/c2877484-0580-455a-85da-08d86c6e9162/landing/9c053468-203a-4d46-9f44-02d7c5c58878"
-												><div>Press Room</div></a
-											>
-										</div>
-										<a
-											class="hotspot info"
-											href="/videos/6fc53473-ca40-4181-b028-08d86c522066/landing/68aeef9e-7f54-4a82-8cda-40aed579890f"
-										></a>
+												<defs id="defs2" />
 
-										<!-- Sponsors -->
-										<style>
-											.sponsor-container {
-												position: absolute;
-												bottom: 0;
-												width: 100%;
-												margin: 0 -24px;
-												border: solid 1px #dddddd;
-												background: white;
-											}
-										</style>
-
-										<!-- Flickity carousel/slider  -->
-										<style>
-											.img-container {
-												width: 8rem;
-												height: 8rem;
-												display: block;
-												margin-right: 6em;
-												cursor: pointer;
-											}
-
-											.img-container:hover {
-												filter: brightness(70%);
-											}
-
-											.img-container img {
-												width: 100%;
-												height: auto;
-											}
-
-											/* setting display none cause issues with flickity rendering */
-											/* so we hide it by moving it off the screen */
-											.is-hidden {
-												position: absolute;
-												left: -3000px;
-											}
-
-											/* position dots up a bit */
-											.flickity-page-dots {
-												bottom: -22px !important;
-											}
-
-											/* dots are lines */
-											.flickity-page-dots .dot {
-												height: 4px !important;
-												width: 40px !important;
-												margin: 0 !important;
-												border-radius: 0 !important;
-											}
-
-											/* no circle */
-											.flickity-button {
-												display: none;
-											}
-										</style>
-
-										<div class="sponsor-container is-hidden">
-											<div class="slider">
-												<div class="img-container">
-													<a href="https://africatdc.com/" target="__blank">
-														<img
-															alt="Africa Trade Development Center"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/AfricaTradeDevelopmentCenter_logo.png"
-														/>
-													</a>
-												</div>
-												<div class="img-container">
-													<a href="https://www.aif.com" target="__blank">
-														<img
-															alt="Associated Industries of Florida"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/AssociatedIndustriesofFlorida2_Logo.png"
-														/>
-													</a>
-												</div>
-												<div class="img-container">
-													<a href="https://www.exim.gov" target="__blank">
-														<img
-															alt="Exim Bank"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/EXIM_BANK_LOGO.png"
-														/>
-													</a>
-												</div>
-												<div class="img-container">
+												<g
+													transform="translate(-11.288885,7.40833)"
+													id="layer1"
+													inkscape:groupmode="layer"
+													inkscape:label="Layer 1"
+												>
+													<image
+														sodipodi:absref="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/easel.png"
+														xlink:href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/easel.png"
+														y="-7.40833"
+														x="11.288885"
+														width="189.0889"
+														height="311.14999"
+														preserveAspectRatio="none"
+														style="image-rendering: optimizeQuality"
+														id="image70"
+													/>
+												</g>
+												<g
+													inkscape:label="hotspots"
+													id="layer2"
+													inkscape:groupmode="layer"
+													style="opacity: 1"
+												>
 													<a
-														href="https://fefc.dos.myflorida.com/"
-														target="__blank"
+														href="/videos/6f23aabb-d34d-4eaa-4752-08d8a368dc2c/detail/5228cfdf-d19e-4dda-af03-b849a5da978b"
 													>
-														<img
-															alt="FEFC"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/FEFC_LOGO.png"
+														<path
+															inkscape:label="stage"
+															id="path75"
+															d="M 18.142857,34.017857 171.60119,33.261905 V 72.571427 H 18.142857 Z"
 														/>
 													</a>
-												</div>
-												<div class="img-container">
-													<a href="https://www.flchamber.com/" target="__blank">
-														<img
-															alt="Florida Chamber of Commerce"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/FLORIDA_CHAMBER_LOGO.png"
-														/>
-													</a>
-												</div>
-												<div class="img-container">
 													<a
-														href="https://www.floridamakes.com/"
-														target="__blank"
+														href="videos/3719c5bb-b215-4772-5a6c-08d8b43cfad0/landing/1df6cc2c-352e-4ad3-b6bf-37bdb6c4e7da"
 													>
-														<img
-															alt="Florida Makes"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/FLORIDA_MAKES_LOGO.png"
+														<path
+															inkscape:label="speakers"
+															id="path81"
+															d="M 18.142857,72.571427 V 115.28274 L 171.97916,114.52678 171.60119,72.571427 Z"
 														/>
 													</a>
-												</div>
-												<div class="img-container">
-													<a href="https://flaports.org/" target="__blank">
-														<img
-															alt="Florida Ports"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/FLORIDA_PORTS_LOGO.png"
+													<a href="#">
+														<path
+															inkscape:label="resources"
+															id="path83"
+															d="m 18.142857,115.28274 v 41.95535 H 172.35714 l -0.37798,-42.71131 z"
 														/>
 													</a>
-												</div>
-												<div class="img-container">
-													<a href="https://floridasbdc.org/" target="__blank">
-														<img
-															alt="Florida SBDC"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/FLORIDA_SBDC_LOGO.png"
-														/>
-													</a>
-												</div>
-												<div class="img-container">
 													<a
-														href="https://www.spaceflorida.gov/"
-														target="__blank"
+														href="/videos/fcc32181-af29-402e-a344-08d8a5d08607/landing/0e73b3b1-e309-4c63-9166-bab7dd290ec0"
 													>
-														<img
-															alt="SFL"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/SFL_2770_LOGO.png"
+														<path
+															inkscape:label="faq"
+															id="path85"
+															d="m 18.142857,157.23809 0.377976,33.26191 153.836307,-0.37798 0,-32.88393 z"
 														/>
 													</a>
-												</div>
-												<div class="img-container">
-													<a
-														href="https://www.trade.gov/let-our-experts-help-0"
-														target="__blank"
-													>
-														<img
-															alt="USCS"
-															src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/lobby/sponsor logos/USCS_LOGO.png"
-														/>
-													</a>
-												</div>
-											</div>
+												</g>
+											</svg>
+										</div>
+										<div class="video-player">
+											<img
+												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/lobby/video-player.png"
+											/>
 										</div>
 									</div>
 
-									<template id="template">
-										<div class="overlay">
-											<div class="overlay-content">
-												<div class="close-button" onclick="hideVideo()">X</div>
+									<template id="pdf-popup">
+										<div class="overlay pdf-overlay">
+											<div class="wrapper">
+												<div class="close-btn" onclick="togglePdf()">X</div>
+												<iframe class="pdf-iframe"></iframe>
+											</div>
+										</div>
+									</template>
+									<template id="video-popup">
+										<div class="overlay video-overlay">
+											<div class="wrapper">
+												<div class="close-btn" onclick="toggleVideo()">X</div>
 												<div class="video-box">
-													<div class="video-container">
+													<div class="aspect-ratio">
 														<iframe
-															src="/embed/b9c91412-545c-4974-8aa4-70bf96c6e3b1"
+															class="video-iframe"
+															src="embed/91feb1c7-d2e0-4091-85b0-3599b336c16d"
 														></iframe>
 													</div>
 												</div>
@@ -747,94 +706,72 @@
 									</template>
 
 									<script>
-										function displayWelcomeVideo() {
-											const template = landingPageEl.querySelector("#template");
-											const clone = template.content.cloneNode(true);
-											const content = landingPageEl.querySelector(".content");
-											content.appendChild(clone);
+										function toggleVideo() {
+											const video = landingPageEl.querySelector(
+												".video-overlay"
+											);
+											if (video) {
+												video.remove();
+												embedVideo();
+											} else {
+												const content = landingPageEl.querySelector(".content");
+												const template = landingPageEl.querySelector(
+													"#video-popup"
+												);
+												const clone = template.content.cloneNode(true);
+												content.appendChild(clone);
+											}
 										}
 
-										function hideVideo() {
-											const video = landingPageEl.querySelector(".overlay");
-											if (video) video.remove();
+										function togglePdf(src) {
+											const pdf = landingPageEl.querySelector(".pdf-overlay");
+											if (pdf) {
+												pdf.remove();
+											} else {
+												const content = landingPageEl.querySelector(".content");
+												const template = landingPageEl.querySelector(
+													"#pdf-popup"
+												);
+												const clone = template.content.cloneNode(true);
+												const iframe = clone.querySelector("iframe");
+												if (src) iframe.src = src;
+												content.appendChild(clone);
+											}
 										}
 
+										function embedVideo() {
+											const videoPlayer = landingPageEl.querySelector(
+												".video-player"
+											);
+											const image = videoPlayer.querySelector("img");
+											if (image) image.remove();
+											const container = document.createElement("div");
+											container.setAttribute("class", "aspect-ratio");
+											const video = document.createElement("iframe");
+											video.setAttribute(
+												"src",
+												"embed/91feb1c7-d2e0-4091-85b0-3599b336c16d"
+											);
+											video.setAttribute("class", "video-iframe");
+											container.appendChild(video);
+											videoPlayer.appendChild(container);
+										}
 										//Check whether to play video automatically if first time logging in
 										function checkVisited() {
-											var currentTime = new Date();
+											var visited = window.localStorage.getItem("visited");
 
-											var dayOne = new Date("2021-03-16T09:00:00.000-05:00");
-											var dayTwo = new Date("2021-03-17T09:00:00.000-05:00");
+											if (visited) {
+												//display thumbnail
+												embedVideo();
+											} else {
+												//display video
 
-											if (currentTime > dayTwo) {
-												checkDay("dayTwoVisited");
-											} else if (currentTime > dayOne) {
-												checkDay("dayOneVisited");
+												toggleVideo();
+												window.localStorage.setItem("visited", true);
 											}
 										}
 
 										checkVisited();
-
-										function checkDay(day) {
-											var visited = window.localStorage.getItem(day);
-
-											if (!visited) {
-												displayWelcomeVideo();
-												window.localStorage.setItem(day, true);
-											}
-										}
-									</script>
-
-									<script>
-										function loadFkty() {
-											// add css style sheet
-											const styleTag = document.createElement("link");
-											styleTag.setAttribute("rel", "stylesheet");
-											styleTag.setAttribute("type", "text/css");
-											styleTag.setAttribute(
-												"href",
-												"https://unpkg.com/flickity@2/dist/flickity.min.css"
-											);
-											landingPageEl.appendChild(styleTag);
-
-											if (!window.flktyLoaded) {
-												// add external JS file
-												const scriptTag = document.createElement("script");
-												scriptTag.onload = function (loadEvent) {
-													initFlkty();
-												};
-												scriptTag.type = "text/javascript";
-												scriptTag.src =
-													"https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js";
-												document
-													.getElementsByTagName("head")[0]
-													.appendChild(scriptTag);
-												window.flktyLoaded = true;
-											} else {
-												initFlkty();
-											}
-										}
-
-										function initFlkty() {
-											const elem = landingPageEl.querySelector(".slider");
-											const flkty = new Flickity(elem, {
-												// options
-												cellAlign: "left",
-												freeScroll: true,
-												wrapAround: true,
-												groupCells: 3,
-												autoPlay: 2500,
-												on: {
-													ready: function () {
-														const el = landingPageEl
-															.querySelector(".sponsor-container")
-															.classList.remove("is-hidden");
-													}
-												}
-											});
-										}
-
-										loadFkty();
 									</script>
 								</inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
