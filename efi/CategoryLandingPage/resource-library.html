@@ -491,19 +491,19 @@
                         </div>
                       </template>
 
-                      {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}
-                      {% assign sortedEvents = data.Events | sort_natural: "Name" %}
-                      {% for event in sortedEvents %}
-                      {% for category in event.Categories %}
-                      {% assign cat = category.Id | downcase %}
-                      {% if cat == currentCat %}
-                      <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">
-                        <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
-                        <div class="on-demand-title">{{event.Name}}</div>
-                      </div>
-                      {% endif %}
-                      {% endfor %}
-                      {% endfor %}
+<!--                      {% assign currentCat = data.CurrentlyViewedCategory.Id | downcase %}-->
+<!--                      {% assign sortedEvents = data.Events | sort_natural: "Name" %}-->
+<!--                      {% for event in sortedEvents %}-->
+<!--                      {% for category in event.Categories %}-->
+<!--                      {% assign cat = category.Id | downcase %}-->
+<!--                      {% if cat == currentCat %}-->
+<!--                      <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">-->
+<!--                        <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">-->
+<!--                        <div class="on-demand-title">{{event.Name}}</div>-->
+<!--                      </div>-->
+<!--                      {% endif %}-->
+<!--                      {% endfor %}-->
+<!--                      {% endfor %}-->
 
                     </div>
                     <!-- Documents Section-->
@@ -641,6 +641,7 @@
                       industryResearchTitle.innerHTML = cardData.Title;
 
                       const industryResearchCard = card.getElementById("documents-card");
+                      industryResearchCard.setAttribute("id", "xtrackx|2|non_booth|resource_library|button_click|" + cardData.Title.toLowerCase().replaceAll(" ", "_"))
                       industryResearchCard.onclick = function () {
                         loadPDF(cardData.FileName);
                       }
