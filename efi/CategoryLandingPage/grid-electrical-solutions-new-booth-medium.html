@@ -65,25 +65,25 @@
 
     function storeUser(data) {
       // console.log(data);
-      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);      
+      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);
       sessionStorage.setItem('clientId', data.ClientId)
       sessionStorage.setItem('token', data.AccessToken)
       sessionStorage.setItem('refreshToken', data.RefreshToken)
     }
 
     function login() {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+      const projectEl = document.querySelector('#novoProject');
+      const projectName = projectEl ? projectEl.getAttribute('name') : null;
+      const currentProject = projects.filter(project => {
+        return project.name === projectName;
+      })[0];
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+      if (!currentProject) {
+        alert('could not log into Inferno \n\r Check the project name in the login() function');
+        return;
+      }
 
-        authenticate(currentProject);
+      authenticate(currentProject);
     }
 
   </script>
@@ -132,7 +132,7 @@
       padding: 1em;
     }
 
-    #localTemplateMenu a, #localTemplateMenu details{
+    #localTemplateMenu a, #localTemplateMenu details {
       display: block;
       margin: .25em;
       background-color: var(--sidebar-bg-color);
@@ -263,7 +263,7 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-          
+
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
@@ -286,851 +286,1016 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="db997bad-171f-4a1f-b695-f6ad46df90eb"><style>img:after {
-    content: none;
-}
-img.actionable:hover {
-    cursor: pointer;
-    opacity: 0.9;
-}
-.inferno-confirm-btn {
-    display: block;
-    margin: 4vmin auto 2vmin;
-    background: #eee;
-    padding: 1vmin 3vmin;
-    font-size: 2vmin;
-    line-height: 2.4vmin;
-    color: #333;
-    font-weight: 700;
-    border: none;
-    border-radius: 5px;
-}
-.inferno-cancel-btn {
-    display: block;
-    margin: 0 auto;
-    color: #666;
-    font-size: 1.8vmin;
-    line-height: 2vmin;
-    padding: 1vmin;
-    background: 0 0;
-    border: none;
-}
-.inferno-generated-booth-container {
-    display: flex;
-    position: relative;
-    padding: 5vh 2vw 0;
-    align-items: center;
-}
-.inferno-generated-booth-overlay-holder {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.9);
-    display: none;
-    z-index: 9999;
-}
-.inferno-generated-booth-overlay {
-    position: absolute;
-    top: 10%;
-    left: 10%;
-    width: 80%;
-    height: 60vh;
-    background: #fff;
-    z-index: 8888;
-    border-radius: 4px;
-    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
-    overflow-y: scroll;
-}
-.inferno-generated-booth-overlay h2 {
-    font-size: 3vmin;
-    line-height: 3.5vmin;
-    color: #000;
-    margin: 4vmin 0 0 4%;
-}
-.inferno-generated-booth-overlay h3 {
-    font-size: 2vmin;
-    line-height: 2.5vmin;
-    color: #333;
-    margin: 4vmin 0 0 4%;
-}
-.inferno-generated-booth-external-overlay,
-.inferno-generated-booth-fish-bowl-overlay,
-.inferno-generated-booth-fish-bowl-overlay-done,
-.inferno-generated-booth-info-overlay,
-.inferno-generated-booth-resources-overlay,
-.inferno-generated-booth-video-overlay {
-    display: none;
-}
-.inferno-generated-booth-external-overlay iframe,
-.inferno-generated-booth-video-overlay iframe {
-    width: 80vmin;
-    display: block;
-    height: 50vmin;
-    margin: 5vh auto 0;
-}
-.inferno-generated-booth-external-overlay img {
-    max-width: 80vmin;
-    max-height: 50vmin;
-    display: block;
-    margin: 5vh auto 0;
-    object-fit: contain;
-}
-.inferno-generated-booth-show {
-    display: block !important;
-}
-.inferno-generated-booth-close-btn {
-    position: absolute;
-    top: 2vh;
-    right: 2vw;
-    margin: 0;
-    padding: 0;
-    z-index: 8889;
-    background: 0 0;
-    border: none;
-}
-.inferno-generated-booth-close-btn img {
-    height: 5vmin;
-    opacity: 0.75;
-}
-.inferno-generated-booth-close-btn:hover {
-    opacity: 0.8;
-}
-.inferno-generated-booth-overlay p {
-    font-size: 2vmin;
-    line-height: 3vmin;
-    color: #333;
-    margin: 4vmin 0 0 4%;
-}
-.inferno-generated-booth-overlay ul {
-    margin: 5vh auto 0;
-    list-style: none;
-    padding: 0;
-    width: 92%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-}
-.inferno-generated-booth-overlay ul.list-view {
-    flex-direction: column;
-}
-.inferno-generated-booth-overlay ul.list-view li {
-    width: 100%;
-    margin: 0 0 1vmin;
-    background: transparent;
-    border-radius: 0;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-    padding: 0 0 1vmin; 
-}
-.inferno-generated-booth-overlay ul.list-view li:last-child {
-    border: none;
-}
-.inferno-generated-booth-overlay ul.list-view li a {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-.inferno-generated-booth-overlay ul.list-view li img {
-    height: 5vmin;
-    width: 5vmin;
-    flex: initial;
-    margin: 0 2vmin 0 0;
-}
-.inferno-generated-booth-overlay ul.list-view li a h4 {
-    flex: 1;
-}
-.inferno-generated-booth-overlay ul li {
-    width: 23%;
-    display: block;
-    text-align: center;
-    font-size: 2.3vmin;
-    line-height: 2.5vmin;
-    color: #326de6;
-    background: #eee;
-    margin: 0 1% 2%;
-    border-radius: 4px;
-    padding: 2vmin;
-    outline: 0;
-    box-sizing: border-box;
-}
-.inferno-generated-booth-overlay ul li:hover {
-    cursor: pointer;
-    opacity: 0.8;
-}
-.inferno-generated-booth-overlay ul li a {
-    text-decoration: none;
-    display: block;
-    color: inherit;
-}
-.inferno-generated-booth-overlay ul li img {
-    height: 10vh;
-    display: block;
-    max-width: 100%;
-    margin: 0 auto .5vmin;
-    object-fit: contain;
-}
-.inferno-generated-booth-menu {
-    position: relative;
-    z-index: 2;
-    display: table;
-    margin: -12.5% auto 15%;
-    border-radius: 60px;
-    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
-    text-align: center;
-    background: #326de6;
-    padding: 0 3vmin;
-}
-.inferno-generated-booth-menu.with-chat {
-    margin: 3vh auto;
-}
-.inferno-generated-booth-menu.booth-large {
-    margin: 2.5% auto 15% !important;
-}
-.inferno-generated-booth-menu li {
-    display: inline-block;
-    padding: 2vmin 1vmin;
-    color: #fff;
-    margin: 0;
-    font-size: 1.5vh;
-    text-transform: uppercase;
-    outline: 0;
-}
-.inferno-generated-booth-menu li:hover {
-    cursor: pointer;
-    opacity: 0.8;
-}
-.inferno-generated-booth-menu li img {
-    height: 6vmin;
-    display: block;
-    margin: 0 auto 1vmin;
-}
-.inferno-generated-booth-menu li a {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-}
-.inferno-generated-booth-bg-blur-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% top;
-    filter: blur(12px);
-}
-.inferno-generated-booth {
-    margin: 0 auto;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% top;
-    position: relative;
-    flex: 1;
-    border-radius: 20px;
-    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
-}
-.inferno-generated-booth.disable-avatars .inferno-generated-booth-podium-woman,
-.inferno-generated-booth.disable-avatars .inferno-generated-booth-video-woman {
-    display: none !important;
-}
+              <inferno-snippet-content id="db997bad-171f-4a1f-b695-f6ad46df90eb">
+                <style>img:after {
+                  content: none;
+                }
 
-.inferno-generated-booth.disable-rack .inferno-generated-booth-resources {
-    display: none !important;
-}
+                img.actionable:hover {
+                  cursor: pointer;
+                  opacity: 0.9;
+                }
 
-.inferno-generated-booth.disable-plants .inferno-generated-booth-plant {
-    display: none !important;
-}
+                .inferno-confirm-btn {
+                  display: block;
+                  margin: 4vmin auto 2vmin;
+                  background: #eee;
+                  padding: 1vmin 3vmin;
+                  font-size: 2vmin;
+                  line-height: 2.4vmin;
+                  color: #333;
+                  font-weight: 700;
+                  border: none;
+                  border-radius: 5px;
+                }
 
-.inferno-generated-booth.disable-furniture .inferno-generated-booth-chairs {
-    display: none !important;
-}
+                .inferno-cancel-btn {
+                  display: block;
+                  margin: 0 auto;
+                  color: #666;
+                  font-size: 1.8vmin;
+                  line-height: 2vmin;
+                  padding: 1vmin;
+                  background: 0 0;
+                  border: none;
+                }
 
-.inferno-generated-booth-right {
-    flex-direction: column;
-    position: relative;
-    margin: 0 0 0 50px;
-}
-.inferno-generated-booth-qr {
-    margin-bottom: 32px;
-    border-radius: 20px;
-    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
-    padding: 2vh 2vw;
-    flex: 0.25;
-    background: #333;
-    position: relative;
-    margin-left: 2%;
-}
-.inferno-generated-booth-qr h1 {
-    font-size: 2.75vh;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    margin-top: 8px;
-}
-.inferno-booth-qr-img {
-    max-width: 128px;
-    margin: auto;
-}
-.inferno-booth-qr-img img {
-    width: 100%;
-}
-.inferno-generated-booth-chat {
-    border-radius: 20px;
-    box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
-    padding: 2vh 2vw;
-    flex: 0.25;
-    background: #333;
-    position: relative;
-    z-index: 2;
-    margin: 0 0 0 2%;
-    height: 50vh;
-}
-.inferno-generated-booth-chat h1 {
-    font-size: 2.75vh;
-    color: #fff;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    bottom: 1vh;
-    left: 0;
-    width: 100%;
-}
-.inferno-generated-booth-chat iframe {
-    border: none;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-.inferno-generated-booth img {
-    width: 100%;
-    margin: 0;
-    display: block;
-    object-fit: cover;
-}
-.inferno-generated-booth .inferno-generated-booth-backdrop img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-.inferno-generated-booth-resources ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-.inferno-generated-booth-resources ul li a {
-    display: block;
-    text-decoration: none;
-    width: 90%;
-    height: 90%;
-    color: inherit;
-    margin: 0 auto;
-    object-fit: contain;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li h4,
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li h4,
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li h4 {
-    display: none;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-bg {
-    position: relative;
-    z-index: 2;
-    width: 55% !important;
-    margin: 0 auto !important;
-    object-fit: fill !important;
-    padding: 5% 0 17%;
-    box-sizing: border-box;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-bg {
-    position: relative;
-    z-index: 2;
-    width: 90% !important;
-    margin: 0 auto !important;
-    object-fit: fill !important;
-    padding: 5% 0 17%;
-    box-sizing: border-box;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-bg {
-    position: relative;
-    z-index: 2;
-    width: 85% !important;
-    margin: 0 auto !important;
-    object-fit: fill !important;
-    padding: 5% 0 17%;
-    box-sizing: border-box;
-}
-.inferno-generated-booth-backdrop,
-.inferno-generated-booth-banner-one,
-.inferno-generated-booth-banner-two,
-.inferno-generated-booth-plant,
-.inferno-generated-booth-podium,
-.inferno-generated-booth-podium-woman,
-.inferno-generated-booth-resources,
-.inferno-generated-booth-short-banner,
-.inferno-generated-booth-tall-banner,
-.inferno-generated-booth-top-banner,
-.inferno-generated-booth-video-one,
-.inferno-generated-booth-video-two {
-    position: absolute;
-    z-index: 2;
-}
-.inferno-generated-booth-chairs,
-.inferno-generated-booth-video-woman {
-    position: absolute;
-    z-index: 3;
-}
-.inferno-generated-booth video {
-    position: absolute;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-top-banner {
-    width: 26.8%;
-    height: 5.7%;
-    left: 28.8%;
-    top: 21%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-top-banner {
-    width: 31.4%;
-    height: 5.7%;
-    left: 45.8%;
-    top: 19.6%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-top-banner {
-    width: 84.9%;
-    height: 8.7%;
-    left: 7.6%;
-    top: 8.3%;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-backdrop {
-    width: 32.5%;
-    height: 39.5%;
-    left: 28.8%;
-    top: 25.5%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-backdrop {
-    width: 31.4%;
-    height: 34.5%;
-    left: 45.8%;
-    top: 23.5%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-backdrop {
-    width: 53.2%;
-    height: 39.5%;
-    left: 23.3%;
-    top: 22.2%;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources {
-    bottom: 21%;
-    left: 8%;
-    width: 9%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources {
-    bottom: 30%;
-    left: 7%;
-    width: 7%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources {
-    bottom: 17%;
-    right: 10%;
-    width: 18%;
-    -webkit-transform: translateX(50%);
-    -ms-transform: translateX(50%);
-    transform: translateX(50%);
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul {
-    position: absolute;
-    top: 7%;
-    left: 15%;
-    width: 70%;
-    height: 25%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul {
-    position: absolute;
-    top: 6%;
-    left: 15%;
-    width: 70%;
-    height: 56%;
-    display: flex;
-    flex-direction: column;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul {
-    position: absolute;
-    top: 9%;
-    left: 16%;
-    width: 70.5%;
-    height: 70.5%;
-    overflow-y: scroll;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li {
-    font-size: 2.4vmin;
-    color: #3371e3;
-    padding: 0;
-    margin: 0;
-    height: 100%;
-    overflow: hidden;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li {
-    font-size: 2.2vmin;
-    line-height: 2.5vmin;
-    color: #3371e3;
-    padding: 1vmin 0 0;
-    margin: 0;
-    height: 50%;
-    overflow: hidden;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li {
-    font-size: 1.5vmin;
-    color: #3371e3;
-    padding: 0.5vmin;
-    border-bottom: 1px solid #eee;
-    margin: 0 0 3%;
-    outline: 0;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: 50% 0;
-    display: block;
-    margin: 0 auto 0.5vmin;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li img {
-    display: block;
-    margin: 0 auto;
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    object-position: 50% 0;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li img {
-    display: block;
-    margin: 0 auto;
-    width: 40%;
-    object-fit: contain;
-    object-position: 50% 0;
-}
-.inferno-generated-booth .inferno-generated-booth-resources ul li:last-child {
-    border: none;
-}
-.inferno-generated-booth .inferno-generated-booth-resources ul li:hover {
-    cursor: pointer;
-    opacity: 0.8;
-}
-.inferno-generated-booth .inferno-generated-booth-resources ul li a {
-    text-decoration: none;
-    color: inherit;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-video-one {
-    bottom: 49%;
-    right: 17.7%;
-    width: 26%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-video-one {
-    bottom: 62%;
-    right: 4.7%;
-    width: 16%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-one {
-    bottom: -3%;
-    right: 23.7%;
-    width: 26%;
-}
-.inferno-generated-booth video:hover {
-    cursor: pointer;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-video-one video {
-    top: 6.5%;
-    right: 4.5%;
-    width: 91%;
-    height: 87%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-video-one video {
-    top: 5.5%;
-    right: 4.5%;
-    width: 90%;
-    height: 82.5%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-one video {
-    top: 1%;
-    right: 8%;
-    width: 77%;
-    height: 49%;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-plant {
-    bottom: 32%;
-    left: 54%;
-    width: 7%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-plant {
-    bottom: 39%;
-    left: 65%;
-    width: 15%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-plant {
-    bottom: 36%;
-    left: 16.5%;
-    width: 14%;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium {
-    bottom: 24%;
-    left: 28.5%;
-    width: 18%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium {
-    bottom: 30%;
-    left: 53.5%;
-    width: 15%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium {
-    bottom: 30%;
-    left: 19%;
-    width: 24%;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
-    position: absolute;
-    top: 10%;
-    left: 0;
-    width: 100%;
-    height: 90%;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
-    position: absolute;
-    top: 10%;
-    left: 0;
-    width: 100%;
-    height: 90%;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
-    position: absolute;
-    top: 6%;
-    left: 21%;
-    width: 55.5%;
-    height: 84%;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-banner-one {
-    top: 17%;
-    left: 20.5%;
-    width: 11.5%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-banner-two {
-    top: 17%;
-    left: 32.5%;
-    width: 11.5%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-tall-banner {
-    top: 26%;
-    right: 25.5%;
-    width: 12%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-booth-udf-banner-one,
-.inferno-generated-booth[data-booth-id="medium"] .inferno-booth-udf-banner-two {
-    position: absolute;
-    top: 2%;
-    left: 4.8%;
-    width: 90%;
-    height: 93%;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-tall-banner .inferno-booth-udf-tall-banner {
-    position: absolute;
-    top: 10%;
-    left: 17%;
-    width: 68%;
-    height: 83%;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-chairs {
-    bottom: 29%;
-    left: 22%;
-    width: 20%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-chairs {
-    bottom: 8%;
-    left: 15%;
-    width: 30%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-two {
-    top: 33%;
-    right: 38%;
-    width: 21%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-two video {
-    top: 6.22%;
-    left: 5.3%;
-    width: 90%;
-    height: 82%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-short-banner {
-    bottom: 23%;
-    left: 8%;
-    width: 13%;
-    -webkit-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-short-banner .inferno-booth-udf-short-banner {
-    position: absolute;
-    top: 4.5%;
-    left: 16%;
-    width: 70%;
-    height: 57%;
-    border-radius: 2px;
-    object-fit: cover;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-woman {
-    bottom: 1%;
-    right: 19%;
-    width: 6.7%;
-}
-.inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium-woman {
-    top: 43%;
-    left: 34.5%;
-    width: 6.5%;
-}
-.inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium-woman {
-    top: 36%;
-    left: 57.5%;
-    width: 6.5%;
-}
-.inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium-woman {
-    top: 37.5%;
-    left: 30%;
-    width: 6.5%;
-}
-</style><script type="text/javascript">var landingPageEl = landingPageEl || document; 
-var _lastScrollPos; 
-var _lastScrollEl; 
+                .inferno-generated-booth-container {
+                  display: flex;
+                  position: relative;
+                  padding: 5vh 2vw 0;
+                  align-items: center;
+                }
 
-function init() {
-  // Make sure all overlays are reset
-  $(landingPageEl).find(".inferno-generated-booth-show").removeClass("inferno-generated-booth-show");
+                .inferno-generated-booth-overlay-holder {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  background: rgba(255, 255, 255, 0.9);
+                  display: none;
+                  z-index: 9999;
+                }
 
-  // Activate click track landing
-  setTimeout(function() {
-    var e = document.createEvent("MouseEvents");
-    e.initEvent("mouseup", true, true);
-    if (landingPageEl.querySelector('.page_load')) {
-      landingPageEl.querySelector('.page_load').dispatchEvent(e);
-    }
-  }, 250);
-}
+                .inferno-generated-booth-overlay {
+                  position: absolute;
+                  top: 10%;
+                  left: 10%;
+                  width: 80%;
+                  height: 60vh;
+                  background: #fff;
+                  z-index: 8888;
+                  border-radius: 4px;
+                  box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+                  overflow-y: scroll;
+                }
 
-function toggleOverlay(show, typeClass, src, isInternalImage) { 
-  $(landingPageEl).find('.inferno-generated-booth-info-overlay').removeClass('inferno-generated-booth-show');
-  $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay').removeClass('inferno-generated-booth-show'); 
-  $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay-done').removeClass('inferno-generated-booth-show');
-  $(landingPageEl).find('.inferno-generated-booth-resources-overlay').removeClass('inferno-generated-booth-show'); 
-  $(landingPageEl).find('.inferno-generated-booth-video-overlay').removeClass('inferno-generated-booth-show');
-  $(landingPageEl).find('.inferno-generated-booth-external-overlay').removeClass('inferno-generated-booth-show'); 
+                .inferno-generated-booth-overlay h2 {
+                  font-size: 3vmin;
+                  line-height: 3.5vmin;
+                  color: #000;
+                  margin: 4vmin 0 0 4%;
+                }
 
-  var el = $(landingPageEl).find('.inferno-generated-booth-overlay-holder'); 
-  var elTwo = $(landingPageEl).find('.' + typeClass);
+                .inferno-generated-booth-overlay h3 {
+                  font-size: 2vmin;
+                  line-height: 2.5vmin;
+                  color: #333;
+                  margin: 4vmin 0 0 4%;
+                }
 
-  $(el).find('.inferno-generated-booth-video-overlay').empty(); 
-  $(el).find('.inferno-generated-booth-external-overlay').empty(); 
+                .inferno-generated-booth-external-overlay,
+                .inferno-generated-booth-fish-bowl-overlay,
+                .inferno-generated-booth-fish-bowl-overlay-done,
+                .inferno-generated-booth-info-overlay,
+                .inferno-generated-booth-resources-overlay,
+                .inferno-generated-booth-video-overlay {
+                  display: none;
+                }
 
-  if (!show) { 
-    $(landingPageEl).find('.inferno-generated-booth-show').removeClass('inferno-generated-booth-show');
-    
-    if (_lastScrollEl && _lastScrollPos) { 
-      _lastScrollEl.scrollTop(_lastScrollPos); 
-    } 
-  } 
-  else { 
-    var bodyEl = $('html,body'); 
-    var layoutEl = $('.layout-fixed'); 
-    var previewEl = $('.booth-final-review-content');
-    var docEl = $(document); 
+                .inferno-generated-booth-external-overlay iframe,
+                .inferno-generated-booth-video-overlay iframe {
+                  width: 80vmin;
+                  display: block;
+                  height: 50vmin;
+                  margin: 5vh auto 0;
+                }
 
-    if (bodyEl.scrollTop() >0) {
-      _lastScrollPos=bodyEl.scrollTop(); 
-      _lastScrollEl=bodyEl; 
-      bodyEl.scrollTop(0); 
-    } 
-    else if (docEl.scrollTop() >0) {
-      _lastScrollPos = docEl.scrollTop(); 
-      _lastScrollEl = docEl; 
-      docEl.scrollTop(0); 
-    }
-    else if (previewEl && previewEl.scrollTop() > 0) {
-      _lastScrollPos = previewEl.scrollTop();
-      _lastScrollEl = previewEl;
-      previewEl.scrollTop(0);
-    } 
-    else { 
-      _lastScrollPos =layoutEl.scrollTop();
-      _lastScrollEl=layoutEl; 
-      layoutEl.scrollTop(0); 
-    } 
+                .inferno-generated-booth-external-overlay img {
+                  max-width: 80vmin;
+                  max-height: 50vmin;
+                  display: block;
+                  margin: 5vh auto 0;
+                  object-fit: contain;
+                }
 
-    $(el).addClass('inferno-generated-booth-show'); 
-    $(elTwo).addClass('inferno-generated-booth-show'); 
+                .inferno-generated-booth-show {
+                  display: block !important;
+                }
 
-    if (typeClass === 'inferno-generated-booth-video-overlay') { 
-      $(elTwo).append("<iframe src='/embed/" + src + "' scrolling='no' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
-    } 
+                .inferno-generated-booth-close-btn {
+                  position: absolute;
+                  top: 2vh;
+                  right: 2vw;
+                  margin: 0;
+                  padding: 0;
+                  z-index: 8889;
+                  background: 0 0;
+                  border: none;
+                }
 
-    if (typeClass === 'inferno-generated-booth-external-overlay') { 
-      if (isInternalImage) {
-        $(elTwo).append("<img src='" + src + "' alt='external image'/>");
-      }
-      else {
-        $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
-      } 
-    } 
-  } 
-}
+                .inferno-generated-booth-close-btn img {
+                  height: 5vmin;
+                  opacity: 0.75;
+                }
 
-$(document).ready(init);</script><div class="inferno-generated-booth-container">
-  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');"></div>
-  <div class="inferno-generated-booth" data-booth-id="medium" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');">
-      <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Booth_background.png">
-      <div class="inferno-generated-booth-top-banner"><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudftopbanner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-top-banner.jpg" alt="inferno-booth-udf-top-banner"></div>
-      <div class="inferno-generated-booth-backdrop"><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfbackdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-backdrop.jpg" alt="inferno-booth-udf-backdrop"></div>
-      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources "><li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>GRID Electrical Solutions - Company Profile</h4></li><li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Biomass</h4></li></ul></div>
-      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png" alt="Video Holder"><video id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_video|booth|video0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '932d8254-b2a5-4cb3-b4d1-6b51fef2a4df')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/video-0.mp4"></video></div>
-      <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png" alt="Plant">
-      <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Presenter_Accent.png" alt="Woman">
-      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png" alt="Podium "><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfpodium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-podium.jpg" alt="inferno-booth-udf-podium"></div>
-      <div class="inferno-generated-booth-banner-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner One "><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfbannerone" class="inferno-booth-udf-banner-one" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-banner-one.jpg" alt="inferno-booth-udf-banner-one"></div>
-      <div class="inferno-generated-booth-banner-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner Two"><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfbannertwo" class="inferno-booth-udf-banner-two" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-banner-two.jpg" alt="inferno-booth-udf-banner-two"></div>
-      <img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_HightopTable_Accent.png" alt="Chairs">
-    </div>
-<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=gridelectricalsolutionsnew&chatroomname=gridelectricalsolutionsnew"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-medium" style="background-color: #007A33"><li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_info_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|download_contact_info|menu" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-contact-info.vcf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li><li><a id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|open_meeting_link|menu|httpsteamsmicrosoftcomlmeetupjoin193ameetingmteyndy3njqtywu0oc00mdaxlweyndutogyzzguyzgy3ztbl40threadv20context7b22tid223a22f839d4fb97154a999e7418d4d9f8e1e8222c22oid223a228b711f5dd8744dab8931c454063c145c227d" href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MTEyNDY3NjQtYWU0OC00MDAxLWEyNDUtOGYzZGUyZGY3ZTBl%40thread.v2/0?context=%7b%22Tid%22%3a%22f839d4fb-9715-4a99-9e74-18d4d9f8e1e8%22%2c%22Oid%22%3a%228b711f5d-d874-4dab-8931-c454063c145c%22%7d" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a></li><li><a id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|open_calendar_link|menu|httpscalendlycomfernandoprieto" href="https://calendly.com/fernando-prieto" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png" alt="calendar"> Calendar</a></li><li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resources_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><!-- UNCOMMENT FOR FISH BOWL <li id='xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_fishbowl_prompt|menu' onclick='toggleOverlay(true, "inferno-generated-booth-fish-bowl-overlay")'><img src='https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png' alt='fish bowl' /> I was here!</li> --></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>GRID ELECTRICAL SOLUTIONS (GES) is an American Company with more than 25 years of experience that offers turnkey energy solutions that include the latest generation of renewable energy, electrical distribution, and co-generation/tri-generation.  
+                .inferno-generated-booth-close-btn:hover {
+                  opacity: 0.8;
+                }
 
-GES custom designs Microgrids solutions that integrate renewable and traditional sources of energy into your distribution system with the objective of increasing efficiency, reliability and resiliency of the overall system while reducing cost to the customer. The company also offers other services such as operation and maintenance as well as financial services that include leasing and power purchase agreements (PPA). 
+                .inferno-generated-booth-overlay p {
+                  font-size: 2vmin;
+                  line-height: 3vmin;
+                  color: #333;
+                  margin: 4vmin 0 0 4%;
+                }
 
-GES develops projects in the following sectors: 
+                .inferno-generated-booth-overlay ul {
+                  margin: 5vh auto 0;
+                  list-style: none;
+                  padding: 0;
+                  width: 92%;
+                  display: flex;
+                  flex-direction: row;
+                  flex-wrap: wrap;
+                }
 
-Infrastructure: Telecommunications and utilities companies 
+                .inferno-generated-booth-overlay ul.list-view {
+                  flex-direction: column;
+                }
 
-Commercial: Shopping centers, banks, and intelligent buildings 
+                .inferno-generated-booth-overlay ul.list-view li {
+                  width: 100%;
+                  margin: 0 0 1vmin;
+                  background: transparent;
+                  border-radius: 0;
+                  text-align: left;
+                  border-bottom: 1px solid #eee;
+                  padding: 0 0 1vmin;
+                }
 
-Industrial: Food & beverage 
+                .inferno-generated-booth-overlay ul.list-view li:last-child {
+                  border: none;
+                }
 
-Hospitality:  Hotels and resorts 
+                .inferno-generated-booth-overlay ul.list-view li a {
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+                }
 
-Institutional: Campus, schools, hospitals 
+                .inferno-generated-booth-overlay ul.list-view li img {
+                  height: 5vmin;
+                  width: 5vmin;
+                  flex: initial;
+                  margin: 0 2vmin 0 0;
+                }
 
-Government: Municipalities</p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources "><li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|gridelectricalsolutionscompanyprofile" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/GridElectricalSolutionsCompanyProfilepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>GRID Electrical Solutions - Company Profile</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|biomass" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/ThumbnailBiomassjpg.jpg"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Biomass</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|cogenerationtrigeneration" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/CogenerationTrigenerationpdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-3.jpg" alt=" resource thumbnail"><h4>Cogeneration - Trigeneration</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|smartmicrogrid" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/ThumbnailSmartMicrogridjpg.jpg"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-4.jpg" alt=" resource thumbnail"><h4>Smart Microgrid</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Would you like to share your contact information with this booth?</h3><button class="inferno-confirm-btn" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|fishbowl_confirm_click|fishbowl_prompt" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|fishbowl_cancel_click|fishbowl_prompt" class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-company-logo.jpg"></div><div id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|page_load|" class="page_load"></div></inferno-snippet-content>
+                .inferno-generated-booth-overlay ul.list-view li a h4 {
+                  flex: 1;
+                }
+
+                .inferno-generated-booth-overlay ul li {
+                  width: 23%;
+                  display: block;
+                  text-align: center;
+                  font-size: 2.3vmin;
+                  line-height: 2.5vmin;
+                  color: #326de6;
+                  background: #eee;
+                  margin: 0 1% 2%;
+                  border-radius: 4px;
+                  padding: 2vmin;
+                  outline: 0;
+                  box-sizing: border-box;
+                }
+
+                .inferno-generated-booth-overlay ul li:hover {
+                  cursor: pointer;
+                  opacity: 0.8;
+                }
+
+                .inferno-generated-booth-overlay ul li a {
+                  text-decoration: none;
+                  display: block;
+                  color: inherit;
+                }
+
+                .inferno-generated-booth-overlay ul li img {
+                  height: 10vh;
+                  display: block;
+                  max-width: 100%;
+                  margin: 0 auto .5vmin;
+                  object-fit: contain;
+                }
+
+                .inferno-generated-booth-menu {
+                  position: relative;
+                  z-index: 2;
+                  display: table;
+                  margin: -12.5% auto 15%;
+                  border-radius: 60px;
+                  box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+                  text-align: center;
+                  background: #326de6;
+                  padding: 0 3vmin;
+                }
+
+                .inferno-generated-booth-menu.with-chat {
+                  margin: 3vh auto;
+                }
+
+                .inferno-generated-booth-menu.booth-large {
+                  margin: 2.5% auto 15% !important;
+                }
+
+                .inferno-generated-booth-menu li {
+                  display: inline-block;
+                  padding: 2vmin 1vmin;
+                  color: #fff;
+                  margin: 0;
+                  font-size: 1.5vh;
+                  text-transform: uppercase;
+                  outline: 0;
+                }
+
+                .inferno-generated-booth-menu li:hover {
+                  cursor: pointer;
+                  opacity: 0.8;
+                }
+
+                .inferno-generated-booth-menu li img {
+                  height: 6vmin;
+                  display: block;
+                  margin: 0 auto 1vmin;
+                }
+
+                .inferno-generated-booth-menu li a {
+                  display: block;
+                  text-decoration: none;
+                  color: inherit;
+                }
+
+                .inferno-generated-booth-bg-blur-img {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                  background-repeat: no-repeat;
+                  background-size: cover;
+                  background-position: 50% top;
+                  filter: blur(12px);
+                }
+
+                .inferno-generated-booth {
+                  margin: 0 auto;
+                  background-repeat: no-repeat;
+                  background-size: cover;
+                  background-position: 50% top;
+                  position: relative;
+                  flex: 1;
+                  border-radius: 20px;
+                  box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+                }
+
+                .inferno-generated-booth.disable-avatars .inferno-generated-booth-podium-woman,
+                .inferno-generated-booth.disable-avatars .inferno-generated-booth-video-woman {
+                  display: none !important;
+                }
+
+                .inferno-generated-booth.disable-rack .inferno-generated-booth-resources {
+                  display: none !important;
+                }
+
+                .inferno-generated-booth.disable-plants .inferno-generated-booth-plant {
+                  display: none !important;
+                }
+
+                .inferno-generated-booth.disable-furniture .inferno-generated-booth-chairs {
+                  display: none !important;
+                }
+
+                .inferno-generated-booth-right {
+                  flex-direction: column;
+                  position: relative;
+                  margin: 0 0 0 50px;
+                }
+
+                .inferno-generated-booth-qr {
+                  margin-bottom: 32px;
+                  border-radius: 20px;
+                  box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+                  padding: 2vh 2vw;
+                  flex: 0.25;
+                  background: #333;
+                  position: relative;
+                  margin-left: 2%;
+                }
+
+                .inferno-generated-booth-qr h1 {
+                  font-size: 2.75vh;
+                  color: #fff;
+                  text-align: center;
+                  margin: 0;
+                  padding: 0;
+                  width: 100%;
+                  margin-top: 8px;
+                }
+
+                .inferno-booth-qr-img {
+                  max-width: 128px;
+                  margin: auto;
+                }
+
+                .inferno-booth-qr-img img {
+                  width: 100%;
+                }
+
+                .inferno-generated-booth-chat {
+                  border-radius: 20px;
+                  box-shadow: 4px 8px 12px rgba(1, 1, 1, 0.2);
+                  padding: 2vh 2vw;
+                  flex: 0.25;
+                  background: #333;
+                  position: relative;
+                  z-index: 2;
+                  margin: 0 0 0 2%;
+                  height: 50vh;
+                }
+
+                .inferno-generated-booth-chat h1 {
+                  font-size: 2.75vh;
+                  color: #fff;
+                  text-align: center;
+                  margin: 0;
+                  padding: 0;
+                  position: absolute;
+                  bottom: 1vh;
+                  left: 0;
+                  width: 100%;
+                }
+
+                .inferno-generated-booth-chat iframe {
+                  border: none;
+                  width: 100%;
+                  height: 100%;
+                  margin: 0;
+                  padding: 0;
+                }
+
+                .inferno-generated-booth img {
+                  width: 100%;
+                  margin: 0;
+                  display: block;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth .inferno-generated-booth-backdrop img {
+                  position: absolute;
+                  top: 0;
+                  left: 0;
+                  width: 100%;
+                  height: 100%;
+                }
+
+                .inferno-generated-booth-resources ul {
+                  list-style: none;
+                  margin: 0;
+                  padding: 0;
+                }
+
+                .inferno-generated-booth-resources ul li a {
+                  display: block;
+                  text-decoration: none;
+                  width: 90%;
+                  height: 90%;
+                  color: inherit;
+                  margin: 0 auto;
+                  object-fit: contain;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li h4,
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li h4,
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li h4 {
+                  display: none;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-bg {
+                  position: relative;
+                  z-index: 2;
+                  width: 55% !important;
+                  margin: 0 auto !important;
+                  object-fit: fill !important;
+                  padding: 5% 0 17%;
+                  box-sizing: border-box;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-bg {
+                  position: relative;
+                  z-index: 2;
+                  width: 90% !important;
+                  margin: 0 auto !important;
+                  object-fit: fill !important;
+                  padding: 5% 0 17%;
+                  box-sizing: border-box;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-bg {
+                  position: relative;
+                  z-index: 2;
+                  width: 85% !important;
+                  margin: 0 auto !important;
+                  object-fit: fill !important;
+                  padding: 5% 0 17%;
+                  box-sizing: border-box;
+                }
+
+                .inferno-generated-booth-backdrop,
+                .inferno-generated-booth-banner-one,
+                .inferno-generated-booth-banner-two,
+                .inferno-generated-booth-plant,
+                .inferno-generated-booth-podium,
+                .inferno-generated-booth-podium-woman,
+                .inferno-generated-booth-resources,
+                .inferno-generated-booth-short-banner,
+                .inferno-generated-booth-tall-banner,
+                .inferno-generated-booth-top-banner,
+                .inferno-generated-booth-video-one,
+                .inferno-generated-booth-video-two {
+                  position: absolute;
+                  z-index: 2;
+                }
+
+                .inferno-generated-booth-chairs,
+                .inferno-generated-booth-video-woman {
+                  position: absolute;
+                  z-index: 3;
+                }
+
+                .inferno-generated-booth video {
+                  position: absolute;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-top-banner {
+                  width: 26.8%;
+                  height: 5.7%;
+                  left: 28.8%;
+                  top: 21%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-top-banner {
+                  width: 31.4%;
+                  height: 5.7%;
+                  left: 45.8%;
+                  top: 19.6%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-top-banner {
+                  width: 84.9%;
+                  height: 8.7%;
+                  left: 7.6%;
+                  top: 8.3%;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-backdrop {
+                  width: 32.5%;
+                  height: 39.5%;
+                  left: 28.8%;
+                  top: 25.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-backdrop {
+                  width: 31.4%;
+                  height: 34.5%;
+                  left: 45.8%;
+                  top: 23.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-backdrop {
+                  width: 53.2%;
+                  height: 39.5%;
+                  left: 23.3%;
+                  top: 22.2%;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources {
+                  bottom: 21%;
+                  left: 8%;
+                  width: 9%;
+                  -webkit-transform: translateX(50%);
+                  -ms-transform: translateX(50%);
+                  transform: translateX(50%);
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources {
+                  bottom: 30%;
+                  left: 7%;
+                  width: 7%;
+                  -webkit-transform: translateX(50%);
+                  -ms-transform: translateX(50%);
+                  transform: translateX(50%);
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources {
+                  bottom: 17%;
+                  right: 10%;
+                  width: 18%;
+                  -webkit-transform: translateX(50%);
+                  -ms-transform: translateX(50%);
+                  transform: translateX(50%);
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul {
+                  position: absolute;
+                  top: 7%;
+                  left: 15%;
+                  width: 70%;
+                  height: 25%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul {
+                  position: absolute;
+                  top: 6%;
+                  left: 15%;
+                  width: 70%;
+                  height: 56%;
+                  display: flex;
+                  flex-direction: column;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul {
+                  position: absolute;
+                  top: 9%;
+                  left: 16%;
+                  width: 70.5%;
+                  height: 70.5%;
+                  overflow-y: scroll;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li {
+                  font-size: 2.4vmin;
+                  color: #3371e3;
+                  padding: 0;
+                  margin: 0;
+                  height: 100%;
+                  overflow: hidden;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li {
+                  font-size: 2.2vmin;
+                  line-height: 2.5vmin;
+                  color: #3371e3;
+                  padding: 1vmin 0 0;
+                  margin: 0;
+                  height: 50%;
+                  overflow: hidden;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li {
+                  font-size: 1.5vmin;
+                  color: #3371e3;
+                  padding: 0.5vmin;
+                  border-bottom: 1px solid #eee;
+                  margin: 0 0 3%;
+                  outline: 0;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-resources ul li img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                  object-position: 50% 0;
+                  display: block;
+                  margin: 0 auto 0.5vmin;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-resources ul li img {
+                  display: block;
+                  margin: 0 auto;
+                  height: 100%;
+                  width: 100%;
+                  object-fit: contain;
+                  object-position: 50% 0;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-resources ul li img {
+                  display: block;
+                  margin: 0 auto;
+                  width: 40%;
+                  object-fit: contain;
+                  object-position: 50% 0;
+                }
+
+                .inferno-generated-booth .inferno-generated-booth-resources ul li:last-child {
+                  border: none;
+                }
+
+                .inferno-generated-booth .inferno-generated-booth-resources ul li:hover {
+                  cursor: pointer;
+                  opacity: 0.8;
+                }
+
+                .inferno-generated-booth .inferno-generated-booth-resources ul li a {
+                  text-decoration: none;
+                  color: inherit;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-video-one {
+                  bottom: 49%;
+                  right: 17.7%;
+                  width: 26%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-video-one {
+                  bottom: 62%;
+                  right: 4.7%;
+                  width: 16%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-one {
+                  bottom: -3%;
+                  right: 23.7%;
+                  width: 26%;
+                }
+
+                .inferno-generated-booth video:hover {
+                  cursor: pointer;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-video-one video {
+                  top: 6.5%;
+                  right: 4.5%;
+                  width: 91%;
+                  height: 87%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-video-one video {
+                  top: 5.5%;
+                  right: 4.5%;
+                  width: 90%;
+                  height: 82.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-one video {
+                  top: 1%;
+                  right: 8%;
+                  width: 77%;
+                  height: 49%;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-plant {
+                  bottom: 32%;
+                  left: 54%;
+                  width: 7%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-plant {
+                  bottom: 39%;
+                  left: 65%;
+                  width: 15%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-plant {
+                  bottom: 36%;
+                  left: 16.5%;
+                  width: 14%;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium {
+                  bottom: 24%;
+                  left: 28.5%;
+                  width: 18%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium {
+                  bottom: 30%;
+                  left: 53.5%;
+                  width: 15%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium {
+                  bottom: 30%;
+                  left: 19%;
+                  width: 24%;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
+                  position: absolute;
+                  top: 10%;
+                  left: 0;
+                  width: 100%;
+                  height: 90%;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
+                  position: absolute;
+                  top: 10%;
+                  left: 0;
+                  width: 100%;
+                  height: 90%;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium .inferno-booth-udf-podium {
+                  position: absolute;
+                  top: 6%;
+                  left: 21%;
+                  width: 55.5%;
+                  height: 84%;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-banner-one {
+                  top: 17%;
+                  left: 20.5%;
+                  width: 11.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-banner-two {
+                  top: 17%;
+                  left: 32.5%;
+                  width: 11.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-tall-banner {
+                  top: 26%;
+                  right: 25.5%;
+                  width: 12%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-booth-udf-banner-one,
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-booth-udf-banner-two {
+                  position: absolute;
+                  top: 2%;
+                  left: 4.8%;
+                  width: 90%;
+                  height: 93%;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-tall-banner .inferno-booth-udf-tall-banner {
+                  position: absolute;
+                  top: 10%;
+                  left: 17%;
+                  width: 68%;
+                  height: 83%;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-chairs {
+                  bottom: 29%;
+                  left: 22%;
+                  width: 20%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-chairs {
+                  bottom: 8%;
+                  left: 15%;
+                  width: 30%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-two {
+                  top: 33%;
+                  right: 38%;
+                  width: 21%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-two video {
+                  top: 6.22%;
+                  left: 5.3%;
+                  width: 90%;
+                  height: 82%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-short-banner {
+                  bottom: 23%;
+                  left: 8%;
+                  width: 13%;
+                  -webkit-transform: translateX(-50%);
+                  -ms-transform: translateX(-50%);
+                  transform: translateX(-50%);
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-short-banner .inferno-booth-udf-short-banner {
+                  position: absolute;
+                  top: 4.5%;
+                  left: 16%;
+                  width: 70%;
+                  height: 57%;
+                  border-radius: 2px;
+                  object-fit: cover;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-video-woman {
+                  bottom: 1%;
+                  right: 19%;
+                  width: 6.7%;
+                }
+
+                .inferno-generated-booth[data-booth-id="small"] .inferno-generated-booth-podium-woman {
+                  top: 43%;
+                  left: 34.5%;
+                  width: 6.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="medium"] .inferno-generated-booth-podium-woman {
+                  top: 36%;
+                  left: 57.5%;
+                  width: 6.5%;
+                }
+
+                .inferno-generated-booth[data-booth-id="large"] .inferno-generated-booth-podium-woman {
+                  top: 37.5%;
+                  left: 30%;
+                  width: 6.5%;
+                }
+                </style>
+                <script type="text/javascript">var landingPageEl = landingPageEl || document;
+                var _lastScrollPos;
+                var _lastScrollEl;
+
+                function init() {
+                  // Make sure all overlays are reset
+                  $(landingPageEl).find(".inferno-generated-booth-show").removeClass("inferno-generated-booth-show");
+
+                  // Activate click track landing
+                  setTimeout(function () {
+                    var e = document.createEvent("MouseEvents");
+                    e.initEvent("mouseup", true, true);
+                    if (landingPageEl.querySelector('.page_load')) {
+                      landingPageEl.querySelector('.page_load').dispatchEvent(e);
+                    }
+                  }, 250);
+                }
+
+                function toggleOverlay(show, typeClass, src, isInternalImage) {
+                  $(landingPageEl).find('.inferno-generated-booth-info-overlay').removeClass('inferno-generated-booth-show');
+                  $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay').removeClass('inferno-generated-booth-show');
+                  $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay-done').removeClass('inferno-generated-booth-show');
+                  $(landingPageEl).find('.inferno-generated-booth-resources-overlay').removeClass('inferno-generated-booth-show');
+                  $(landingPageEl).find('.inferno-generated-booth-video-overlay').removeClass('inferno-generated-booth-show');
+                  $(landingPageEl).find('.inferno-generated-booth-external-overlay').removeClass('inferno-generated-booth-show');
+
+                  var el = $(landingPageEl).find('.inferno-generated-booth-overlay-holder');
+                  var elTwo = $(landingPageEl).find('.' + typeClass);
+
+                  $(el).find('.inferno-generated-booth-video-overlay').empty();
+                  $(el).find('.inferno-generated-booth-external-overlay').empty();
+
+                  if (!show) {
+                    $(landingPageEl).find('.inferno-generated-booth-show').removeClass('inferno-generated-booth-show');
+
+                    if (_lastScrollEl && _lastScrollPos) {
+                      _lastScrollEl.scrollTop(_lastScrollPos);
+                    }
+                  } else {
+                    var bodyEl = $('html,body');
+                    var layoutEl = $('.layout-fixed');
+                    var previewEl = $('.booth-final-review-content');
+                    var docEl = $(document);
+
+                    if (bodyEl.scrollTop() > 0) {
+                      _lastScrollPos = bodyEl.scrollTop();
+                      _lastScrollEl = bodyEl;
+                      bodyEl.scrollTop(0);
+                    } else if (docEl.scrollTop() > 0) {
+                      _lastScrollPos = docEl.scrollTop();
+                      _lastScrollEl = docEl;
+                      docEl.scrollTop(0);
+                    } else if (previewEl && previewEl.scrollTop() > 0) {
+                      _lastScrollPos = previewEl.scrollTop();
+                      _lastScrollEl = previewEl;
+                      previewEl.scrollTop(0);
+                    } else {
+                      _lastScrollPos = layoutEl.scrollTop();
+                      _lastScrollEl = layoutEl;
+                      layoutEl.scrollTop(0);
+                    }
+
+                    $(el).addClass('inferno-generated-booth-show');
+                    $(elTwo).addClass('inferno-generated-booth-show');
+
+                    if (typeClass === 'inferno-generated-booth-video-overlay') {
+                      $(elTwo).append("<iframe src='/embed/" + src + "' scrolling='no' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
+                    }
+
+                    if (typeClass === 'inferno-generated-booth-external-overlay') {
+                      if (isInternalImage) {
+                        $(elTwo).append("<img src='" + src + "' alt='external image'/>");
+                      } else {
+                        $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
+                      }
+                    }
+                  }
+                }
+
+                $(document).ready(init);</script>
+                <div class="inferno-generated-booth-container">
+                  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');"></div>
+                  <div class="inferno-generated-booth" data-booth-id="medium" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');">
+                    <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Booth_background.png">
+                    <div class="inferno-generated-booth-top-banner"><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudftopbanner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-top-banner.jpg" alt="inferno-booth-udf-top-banner"></div>
+                    <div class="inferno-generated-booth-backdrop"><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfbackdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-backdrop.jpg" alt="inferno-booth-udf-backdrop"></div>
+                    <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png" alt="Resource Image">
+                      <ul class="inferno-booth-udf-resources ">
+                        <li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>GRID Electrical Solutions - Company
+                          Profile</h4></li>
+                        <li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Biomass</h4></li>
+                      </ul>
+                    </div>
+                    <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png" alt="Video Holder">
+                      <video id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_video|booth|video0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '932d8254-b2a5-4cb3-b4d1-6b51fef2a4df')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/video-0.mp4"></video>
+                    </div>
+                    <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png" alt="Plant"> <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Presenter_Accent.png" alt="Woman">
+                    <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png" alt="Podium "><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfpodium" class="inferno-booth-udf-podium"
+                      src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-podium.jpg" alt="inferno-booth-udf-podium"></div>
+                    <div class="inferno-generated-booth-banner-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner One "><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfbannerone" class="inferno-booth-udf-banner-one"
+                      src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-banner-one.jpg" alt="inferno-booth-udf-banner-one"></div>
+                    <div class="inferno-generated-booth-banner-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner Two"><img id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|image_click|booth|infernoboothudfbannertwo" class="inferno-booth-udf-banner-two"
+                      src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-banner-two.jpg" alt="inferno-booth-udf-banner-two"></div>
+                    <img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_HightopTable_Accent.png" alt="Chairs">
+                  </div>
+                  <div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> -->
+                    <div class="inferno-generated-booth-chat">
+                      <iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=gridelectricalsolutionsnew&chatroomname=gridelectricalsolutionsnew"></iframe>
+                      <h1>Chat</h1></div>
+                  </div>
+                </div>
+                <ul class="inferno-generated-booth-menu with-chat booth-medium" style="background-color: #007A33">
+                  <li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_info_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li>
+                  <li><a id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|download_contact_info|menu" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-contact-info.vcf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li>
+                  <li><a id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|open_meeting_link|menu|httpsteamsmicrosoftcomlmeetupjoin193ameetingmteyndy3njqtywu0oc00mdaxlweyndutogyzzguyzgy3ztbl40threadv20context7b22tid223a22f839d4fb97154a999e7418d4d9f8e1e8222c22oid223a228b711f5dd8744dab8931c454063c145c227d"
+                    href="https://teams.microsoft.com/l/meetup-join/19%3ameeting_MTEyNDY3NjQtYWU0OC00MDAxLWEyNDUtOGYzZGUyZGY3ZTBl%40thread.v2/0?context=%7b%22Tid%22%3a%22f839d4fb-9715-4a99-9e74-18d4d9f8e1e8%22%2c%22Oid%22%3a%228b711f5d-d874-4dab-8931-c454063c145c%22%7d" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a>
+                  </li>
+                  <li><a id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|open_calendar_link|menu|httpscalendlycomfernandoprieto" href="https://calendly.com/fernando-prieto" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png" alt="calendar"> Calendar</a></li>
+                  <li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resources_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li>
+                  <li id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_fishbowl_prompt|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')">
+                    <img src='https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png' alt='fish bowl' /> I was here!</li>
+                  </ul>
+
+
+                <div class="inferno-generated-booth-overlay-holder">
+                  <div class="inferno-generated-booth-overlay">
+                    <button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button>
+                    <div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>GRID ELECTRICAL SOLUTIONS (GES) is an American Company with more than 25 years of experience that offers turnkey energy solutions that include the latest generation of renewable energy, electrical distribution, and co-generation/tri-generation.
+
+                      GES custom designs Microgrids solutions that integrate renewable and traditional sources of energy into your distribution system with the objective of increasing efficiency, reliability and resiliency of the overall system while reducing cost to the customer. The company also offers other services such as operation and maintenance as well as financial services that include
+                      leasing and power purchase agreements (PPA).
+
+                      GES develops projects in the following sectors:
+
+                      Infrastructure: Telecommunications and utilities companies
+
+                      Commercial: Shopping centers, banks, and intelligent buildings
+
+                      Industrial: Food & beverage
+
+                      Hospitality: Hotels and resorts
+
+                      Institutional: Campus, schools, hospitals
+
+                      Government: Municipalities</p></div>
+
+                    <div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2>
+                      <ul class="inferno-booth-udf-resources ">
+                        <li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|gridelectricalsolutionscompanyprofile" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/GridElectricalSolutionsCompanyProfilepdf.pdf"><img
+                          src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>GRID Electrical Solutions - Company Profile</h4></a></li>
+                        <li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|biomass" href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/booth-assets/grid-electrical/Biomass.pdf"><img
+                          src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Biomass</h4></a></li>
+                        <li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|cogenerationtrigeneration" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/CogenerationTrigenerationpdf.pdf"><img
+                          src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-3.jpg" alt=" resource thumbnail"><h4>Cogeneration - Trigeneration</h4></a></li>
+                        <li><a target="_blank" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|view_resource|resource_overlay|smartmicrogrid" href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/booth-assets/grid-electrical/Smart-Microgrid.pdf"><img
+                          src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-resource-thumb-4.jpg" alt=" resource thumbnail"><h4>Smart Microgrid</h4></a></li>
+                      </ul>
+                    </div>
+                    <div class="inferno-generated-booth-video-overlay"></div>
+                    <div class="inferno-generated-booth-external-overlay"></div>
+                    <div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2>
+                      <h3>Would you like to share your contact information with this booth?</h3>
+                      <button class="inferno-confirm-btn" id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|fishbowl_confirm_click|fishbowl_prompt" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button>
+                      <button id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|fishbowl_cancel_click|fishbowl_prompt" class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button>
+                    </div>
+                    <div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>We want to thank you for your interest in Grid Electrical Solutions. Our company is focused on bringing to you the latest technologies and innovations in the area of Microgrids, Renewable Energy and Electrical Distribution. We want to deliver to you integrated solutions that provide more reliability, resiliency and control over your electrical network. Let us invest our resources and engineer for you the solutions best equipped to address your needs. We would love to follow up with you to discuss these opportunities further. Please leave us your contact information and we will reach out to you within the next 10 business days. Thank you again.</h3></div>
+                  </div>
+                </div>
+                <div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/GRIDELECTRICALSOLUTIONSNew_1613061430828/inferno-booth-udf-company-logo.jpg"></div>
+                <div id="xtrackx|2|booth|booth_gridelectricalsolutionsnew|page_load|" class="page_load"></div>
+
+              </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
@@ -1148,8 +1313,6 @@ Government: Municipalities</p></div><div class="inferno-generated-booth-resource
     </div>
   </videos-layout>
 </app-root>
-
-
 
 
 <script>
@@ -1265,7 +1428,6 @@ Government: Municipalities</p></div><div class="inferno-generated-booth-resource
   }
 
 </script>
-
 
 
 </body><!-- Menu Collapse Script -->
