@@ -93,18 +93,13 @@
     }
 
     .content {
-      position: relative;
       min-height: 100vh;
-      width: 100%;
       background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/login-background.jpg);
       background-repeat: no-repeat;
+      background-attachment: fixed;
       background-size: cover;
       background-position: center;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-
     }
 
     .main {
@@ -136,22 +131,23 @@
       padding-bottom: 30px;
     }
 
-    .event-info {
-      display: flex;
-      justify-content: flex-end;
-      line-height: 1.25;
-      color: #000000;
-      font-size: 3.75rem;
-      text-align: right;
-      font-family: "GothamBook";
-    }
-
     .rectangle {
       margin-top: 10px;
       height: 80px;
       width: 100%;
       border-radius: 0 14px 14px 0;
       background: linear-gradient(90deg, rgba(0, 100, 154, 1) 35%, rgba(0, 189, 231, 1) 100%);
+    }
+
+    .event-info {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      font-size: 3.5rem;
+      height: 100%;
+      color: #fff;
+      padding: 20px 10px 0 0;
+      font-family: "GothamBold";
     }
 
   </style>
@@ -174,6 +170,7 @@
     }
 
     .form-title {
+      display: flex;
       color: #00649a;
       font-size: 5.2vmin;
       font-family: "GothamBold";
@@ -186,6 +183,7 @@
     }
 
     .forgot {
+      display: flex;
       padding-top: 20px;
       text-align: left;
       cursor: pointer;
@@ -336,6 +334,14 @@
 
   <!-- Media Queries -->
   <style>
+    @media not all and (min-resolution:.001dpcm) {
+      @supports (-webkit-appearance:none) {
+        .content {
+        }
+
+      }
+    }
+
     @media only screen and (max-width: 1080px) {
       .content {
         background-position: bottom;
@@ -347,11 +353,7 @@
       }
 
       .event-info {
-        font-size: 2.5rem;
-      }
-
-      .rectangle {
-        margin-top: 10px;
+        font-size: 2.75rem;
       }
 
       form {
@@ -394,10 +396,6 @@
         align-items: center;
       }
 
-      .rectangle {
-        margin-top: 10px;
-      }
-
       .content-form {
         width: 100%;
         margin-top: 2rem;
@@ -412,13 +410,18 @@
         border-radius: 0;
       }
 
+      .event-info {
+        font-size: 3rem;
+        justify-content: center;
+      }
+
     }
 
     @media only screen and (max-width: 500px) {
 
       .logo-container img {
-        max-width: 300px;
-        padding-bottom: 30px;
+        padding: 0 0 20px 0;
+        width: 300px
       }
 
       .rectangle {
@@ -431,6 +434,7 @@
 
       .event-info {
         font-size: 2rem;
+        justify-content: center;
       }
     }
 
@@ -441,9 +445,10 @@
       <div class="content-logo">
         <div class="logo-container" >
           <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/leadiant-logo.png">
+        </div>
+        <div class="rectangle">
           <div class="event-info">Cystaran Eye Health Event</div>
         </div>
-        <div class="rectangle"></div>
       </div>
       <div class="content-form">
         <!-- id must be "login" -->
