@@ -65,25 +65,25 @@
 
     function storeUser(data) {
       // console.log(data);
-      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);
+      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);      
       sessionStorage.setItem('clientId', data.ClientId)
       sessionStorage.setItem('token', data.AccessToken)
       sessionStorage.setItem('refreshToken', data.RefreshToken)
     }
 
     function login() {
-      const projectEl = document.querySelector('#novoProject');
-      const projectName = projectEl ? projectEl.getAttribute('name') : null;
-      const currentProject = projects.filter(project => {
-        return project.name === projectName;
-      })[0];
+        const projectEl = document.querySelector('#novoProject');
+        const projectName = projectEl ? projectEl.getAttribute('name') : null;
+        const currentProject = projects.filter(project => {
+          return project.name === projectName;
+        })[0];
 
-      if (!currentProject) {
-        alert('could not log into Inferno \n\r Check the project name in the login() function');
-        return;
-      }
+        if (!currentProject) {
+          alert('could not log into Inferno \n\r Check the project name in the login() function');
+          return;
+        }
 
-      authenticate(currentProject);
+        authenticate(currentProject);
     }
 
   </script>
@@ -132,7 +132,7 @@
       padding: 1em;
     }
 
-    #localTemplateMenu a, #localTemplateMenu details {
+    #localTemplateMenu a, #localTemplateMenu details{
       display: block;
       margin: .25em;
       background-color: var(--sidebar-bg-color);
@@ -263,13 +263,13 @@
           <nav class="sidebar" sidebar-anyclick-close>
             <div class="nav" id="localTemplateMenu"></div>
           </nav>
-
+          
         </div>
       </videos-sidebar>
       <!-- ./ SIDEBAR -->
       <!-- LANDING -->
       <section class="IE-FlexAuto" flex>
-        <div class="column">
+        <div class="content-wrapper">
           <landing-page class="ng-star-inserted">
             <div id="landing">
               <!-- CREATE SHADOW DOM AND ATTACH STYLES -->
@@ -286,11 +286,13 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="913e53ac-7e93-4d80-8d9e-a1ac9f4bf8ed">
+              <inferno-snippet-content id="d7bd0b1f-fa1c-4ecc-b255-3fc21503eea4">
 
                 <!-- Click Track Landing v2.0 -->
-                <div id="xtrackx|2|non_booth|thank_you|page_load" class="page_load"></div>
-
+                <div
+                  id="xtrackx|2|non_booth|resources|page_load"
+                  class="page_load"
+                ></div>
                 <script>
                   setTimeout(() => {
                     var event = document.createEvent("MouseEvents");
@@ -321,371 +323,208 @@
                       });
                   }
 
-                  fontUrlBase = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/";
-                  loadCustomFont("GothamBold", fontUrlBase + "Gotham-Bold.otf");
-                  loadCustomFont("GothamBook", fontUrlBase + "Gotham-Book.otf");
-                  loadCustomFont("GothamMed", fontUrlBase + "Gotham-Medium.otf");
-                  loadCustomFont("GothamHTFBlack", fontUrlBase + "GothamHTF-Black.ttf");
-                  loadCustomFont("FuturaMed", fontUrlBase + "Futura+Medium.otf");
+                  fontUrlBase =
+                    "https://inferno-event-assets.s3-us-west-2.amazonaws.com/fonts/";
+                  loadCustomFont(
+                    "GothamBold",
+                    fontUrlBase + "Gotham-Bold.otf"
+                  );
+                  loadCustomFont(
+                    "GothamMed",
+                    fontUrlBase + "Gotham-Medium.otf"
+                  );
+                  loadCustomFont(
+                    "GothamHTFBlack",
+                    fontUrlBase + "GothamHTF-Black.ttf"
+                  );
+                  loadCustomFont(
+                    "FuturaMed",
+                    fontUrlBase + "Futura+Medium.otf"
+                  );
                 </script>
 
-
-                <!-- content -->
                 <style>
-                  img::after {
-                    content: none;
-                  }
-
-                  *, :after, :before {
-                    box-sizing: border-box;
-                  }
-
-                  h1, h2, h3 {
-                    margin: 0;
-                    padding: 0;
-                  }
-
                   .content {
-                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/login-background.jpg);
+                    position: absolute;
+                    width: 100%;
+                    min-height: calc(100vh - 56px);
+                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/speakers/speaker-bkg-v3.jpg);
                     background-repeat: no-repeat;
+                    background-attachment: fixed;
                     background-size: cover;
-                    background-position: bottom;
-                    margin: -20px -40px;
-                    min-height: calc(100vh - 114px);
+                    margin: -20px;
+                    background-position: center;
+                    overflow: hidden;
+                    font-family: GothamMed;
                     display: flex;
                     flex-direction: column;
-                    justify-content: flex-start;
+                    justify-content: space-between;
                   }
 
-                  .main {
-                    display: flex;
-                    flex-wrap: wrap;
-                    padding: 80px 20px 0 0
+                  .page-title {
+                    margin: 50px 60px;
+                    color: #ffffff;
+                    font-size: 30px;
+                    font-family: GothamHTFBlack;
                   }
-
                 </style>
 
-                <!-- Logo Container -->
+                <!-- PDF  -->
                 <style>
-                  .content-logo {
-                    width: 50%;
+                  .pdf-view {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.8);
+                    z-index: 30;
+                    display: none;
                   }
 
-                  .logo-container {
-                    display: flex;
-                    flex-flow: column;
+                  .pdf-viewer {
+                    position: absolute;
+                    top: 60px;
+                    left: 30px;
+                    right: 30px;
+                    width: calc(100% - 60px);
+                    height: calc(100% - 90px);
+                    bottom: 30px;
+                    border: none;
                   }
 
-                  .logo-container img {
-                    width: 100%;
-                    padding-left: 150px;
+                  a.window-close {
+                    padding: 0.55rem;
+                    width: 11rem;
+                    font-size: 1.3rem;
+                    font-weight: 100;
+                    line-height: 1;
+                    color: #333;
+                    background-color: #fff;
+                    border-radius: 4rem;
+                    text-align: center;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    margin: 20px 0 0 30px;
                   }
 
-                  .rectangle {
-                    margin-top: 10px;
-                    height: 80px;
-                    width: 100%;
-                    border-radius: 0 14px 14px 0;
-                    background: linear-gradient(90deg, rgba(0, 100, 154, 1) 35%, rgba(0, 189, 231, 1) 100%);
+                  a.window-close:hover {
+                    color: #333;
+                    text-decoration: none;
                   }
-
-                  .event-info {
-                    display: flex;
-                    justify-content: flex-end;
-                    align-items: center;
-                    font-size: 3.5rem;
-                    height: 100%;
-                    color: #fff;
-                    padding: 0 10px 0 0;
-                    font-family: "GothamBold";
-                  }
-
-
                 </style>
 
-                <!-- Message Container -->
+                <!-- Modal -->
                 <style>
-                  .content-message {
-                    width: 50%;
-                    padding: 0 40px;
+                  .modal-window {
+                    position: absolute;
+                    background-color: rgba(0, 0, 0, 0.9);
+                    top: 0;
+                    right: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 999;
+                    opacity: 0;
+                    pointer-events: none;
+                    -webkit-transition: all 0.7s;
+                    -moz-transition: all 0.7s;
+                    transition: all 0.7s;
+                    display: none;
                   }
 
-                  .message-container {
-                    margin-top: 20px;
-                    border-radius: 0px;
-                    box-shadow: 4px 4px 6px #000000A3;
-                    background-color: #ffffff;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-                    width: 100%;
-                    height: auto;
-                    padding: 2.75rem;
-                    background-repeat: no-repeat;
-                    background-position: top right;
-                    background-image: url(https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/mask-group.png);
+                  .modal-window.open {
+                    opacity: 1;
+                    pointer-events: auto;
+                    display: inline-block;
+                    z-index: 99;
                   }
 
-                  .message-container h1 {
-                    color: #00649A;
-                    font-size: 5.25rem;
-                    line-height: 1.25;
-                    font-family: "GothamBold";
+                  .modal-window > div {
+                    position: relative;
+                    min-width: 400px;
+                    width: 80%;
+                    margin: 2% auto 15% auto;
+                    padding: 2rem;
+                    background: var(--sidebar-highlight-bg-color);
+                    border-radius: .5em;
+                    color: #444;
                   }
 
-                  .message-container h2 {
-                    color: #00BDE7;
-                    font-size: 3.5rem;
-                    padding: 10px 0 10px;
-                  }
-
-                  .thursday {
-                    white-space: nowrap;
-                  }
-                  .dates {
-                    white-space: nowrap;
-                  }
-
-                  /*.h2-line-1 {*/
-                  /*  padding: 10px 0 0 !important;*/
-                  /*}*/
-
-                  /*.h2-line-2 {*/
-                  /*  padding: 0 0 10px !important;*/
-                  /*}*/
-
-                  .message-container h3 {
-                    color: #00BDE7;
+                  .modal-window header {
                     font-weight: bold;
-                    font-size: 2.75rem;
-                    font-family: "GothamMed";
                   }
 
-                  .app-store-container {
-                    display: flex;
-                    padding-top: 20px;
-                    justify-content: center;
+                  .modal-close {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    color: var(--sidebar-text-color);
+                    font-size: 80%;
+                    width: 70px;
+                    text-align: center;
+                    text-decoration: none;
+                    cursor: pointer;
                   }
 
-                  .app-store-container img {
-                    width: 200px;
-                    padding: 0 20px;
+                  .modal-close:hover {
+                    filter: brightness(80%);
+                    text-decoration: none;
+                    color: #fff;
                   }
 
+                  .modal-window h1 {
+                    font-size: 150%;
+                    margin: 0 0 15px;
+                  }
+
+                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
+                  .videoWrapper {
+                    position: relative;
+                    padding-bottom: 56.5%; /* 16:9 */
+                    height: 0;
+                  }
+
+                  .videoWrapper iframe {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
                 </style>
 
-                <!-- Media Queries -->
-                <style>
+                <!-- PDF -->
+                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
+                </div>
 
-                  @media only screen and (max-width: 1080px) {
-                    .content {
-                      background-position: bottom;
-                    }
-
-                    .main {
-                      width: 100%;
-                      padding: 20px 20px 0 0;
-                      justify-content: center;
-                    }
-
-                    .logo-container {
-                      align-items: flex-end;
-                    }
-
-                    .logo-container img {
-                      padding: 0 0 20px 0;
-                      width: 400px
-                    }
-
-                    .content-logo {
-                      margin-top: 2rem;
-                      align-items: center;
-                    }
-
-                    .content-message {
-                      margin-top: 2rem;
-                      align-items: center;
-                    }
-
-                    .message-container h1 {
-                      color: #00649A;
-                      font-size: 4.25rem;
-                      line-height: 1.25;
-                      font-family: "GothamBold";
-                    }
-
-                    .message-container h2 {
-                      color: #00BDE7;
-                      font-size: 2.5rem;
-                      padding: 10px 0 10px;
-                    }
-
-                    .message-container h3 {
-                      color: #00BDE7;
-                      font-weight: bold;
-                      font-size: 2rem;
-                      font-family: "GothamMed";
-                    }
-
-                    .app-store-container img {
-                      width: 180px;
-                      padding: 0 20px;
-                    }
-
-                    .event-info {
-                      font-size: 2.75rem;
-                    }
-
-                  }
-
-                  @media only screen and (max-width: 768px) {
-                    .main {
-                      padding: 20px;
-                    }
-
-                    .content-message {
-                      width: 100%;
-                      margin-top: 2rem;
-                      align-items: center;
-                    }
-
-                    .content-logo {
-                      width: 100%;
-                      margin-top: 2rem;
-                      align-items: center;
-                    }
-
-                    .logo-container {
-                      align-items: center;
-                    }
-
-                    .logo-container img {
-                      padding: 0 0 20px 0;
-                    }
-
-                    .rectangle {
-                      border-radius: 0;
-                    }
-
-                    .event-info {
-                      font-size: 3rem;
-                      justify-content: center;
-                    }
-
-                    .message-container h1 {
-                      color: #00649A;
-                      font-size: 5.25rem;
-                      line-height: 1.25;
-                      font-family: "GothamBold";
-                    }
-
-                    .message-container h2 {
-                      color: #00BDE7;
-                      font-size: 3rem;
-                      padding: 10px 0 10px;
-                    }
-
-                    .message-container h3 {
-                      color: #00BDE7;
-                      font-weight: bold;
-                      font-size: 2.75rem;
-                      font-family: "GothamMed";
-                    }
-
-                    .h2-line-1 {
-                      padding: 10px 0 10px;
-                    }
-
-                    .h2-line-2 {
-                      padding: 10px 0 10px;
-                    }
-
-                    .message-container {
-                      margin-left: 0rem;
-                    }
-                  }
-
-                  @media only screen and (max-width: 500px) {
-
-                    .logo-container img {
-                      padding: 0 0 20px 0;
-                      width: 300px
-                    }
-
-                    .message-container h1 {
-                      color: #00649A;
-                      font-size: 3.25rem;
-                      line-height: 1.25;
-                      font-family: "GothamBold";
-                    }
-
-                    .message-container h2 {
-                      color: #00BDE7;
-                      font-size: 2.25rem;
-                      padding: 10px 0 10px;
-                    }
-
-                    .message-container h3 {
-                      color: #00BDE7;
-                      font-weight: bold;
-                      font-size: 2rem;
-                      font-family: "GothamMed";
-                    }
-
-                    .rectangle {
-                      height: 50px;
-                    }
-
-                    .event-info {
-                      font-size: 2rem;
-                      justify-content: center;
-                    }
-                    .app-store-container img {
-                      width: 150px;
-                      padding: 0 20px;
-                    }
-
-                  }
-
-                </style>
-
-                <div class="content">
-                  <div class="main">
-
-                    <div class="content-logo">
-                      <div class="logo-container">
-                        <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/leadiant-logo.png">
-                      </div>
-                      <div class="rectangle">
-                        <div class="event-info">Cystaran Eye Health Event</div>
-                      </div>
-                    </div>
-
-                    <div class="content-message">
-                      <div class="message-container">
-                        <h1>Thank you</h1>
-                        <h1>for registering!</h1>
-                        <h2>We look forward to seeing you on<br>Thursday April 22/April 29</h2>
-                        <h3>Please download the ARitize application to your mobile device prior to the event</h3>
-                        <div class="app-store-container">
-                          <div>
-                            <a
-                              id="xtrackx|2|non_both|thank_you|link_click|app_store|apps.apple.com/us/app/aritize-3d-augmented-reality/id1403521167"
-                              target="_blank" href="https://apps.apple.com/us/app/aritize-3d-augmented-reality/id1403521167">
-                            <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/thank-you/apple-store.jpg"></a>
-                          </div>
-                          <div>
-                            <a
-                              id="xtrackx|2|non_both|thank_you|link_click|google_play|play.google.com/store/apps/details?id=com.NexTechAR.ARitize&hl=en_CA"
-                              target="_blank" href="https://play.google.com/store/apps/details?id=com.NexTechAR.ARitize&hl=en_CA">
-                            <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/thank-you/google-play.jpg"></a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                <!-- Modal -->
+                <div id="open-modal" class="modal-window">
+                  <div>
+                    <div title="Close" class="modal-close">CLOSE X</div>
+                    <div class="videoWrapper"></div>
                   </div>
                 </div>
 
+                <div class="content">
+                  <div class="main">
+                  <div class="page-title">Resources</div>
+
+                    <div id="documents-grid" class="library-grid">
+
+                      <template id="documents-template">
+                        <div id="documents-card" class="library-card">
+                          <img id="documents-thumb" class="library-card-thumb"/>
+                          <div id="documents-title" class="library-card-title"/>
+                        </div>
+                      </template>
+
+                    </div>
+
+                </div>
+                </div>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
@@ -705,6 +544,8 @@
     </div>
   </videos-layout>
 </app-root>
+
+
 
 
 <script>
@@ -820,6 +661,7 @@
   }
 
 </script>
+
 
 
 </body><!-- Menu Collapse Script -->

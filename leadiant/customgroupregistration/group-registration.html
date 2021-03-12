@@ -40,7 +40,7 @@
   <!--  Load custom fonts -->
   <script type="text/javascript">
     function loadCustomFont(fontName, url) {
-      console.log("Loading " + fontName);
+      // console.log("Loading " + fontName);
       var customFont = new FontFace(fontName, "url(" + url + ")");
       customFont
         .load()
@@ -93,7 +93,7 @@
 
     .logo-wrapper {
       width: 50%;
-      padding: 80px 40px;
+      padding: 80px 20px 40px 0;
     }
 
     .logo-container {
@@ -108,20 +108,34 @@
     }
 
     .rectangle {
-      height: 80px;
+      margin-top: 10px;
+      height: 90px;
       width: 100%;
       border-radius: 0 14px 14px 0;
       background: linear-gradient(90deg, rgba(0, 100, 154, 1) 35%, rgba(0, 189, 231, 1) 100%);
     }
 
     .event-info {
+      padding-top: 10px;
+      font-family: "GothamBold";
+    }
+
+    .event-info-1 {
       display: flex;
       justify-content: flex-end;
-      line-height: 1.25;
-      color: #000000;
-      font-size: 3.75rem;
-      text-align: right;
-      font-family: "GothamBook";
+      height: 30px;
+      font-size: 2.75rem;
+      color: #fff;
+      padding: 0 10px 0 0;
+    }
+
+    .event-info-2 {
+      display: flex;
+      justify-content: flex-end;
+      height:25px;
+      font-size: 2rem;
+      color: #fff;
+      padding: 0 10px 0 0;
     }
 
     .form-wrapper {
@@ -166,7 +180,20 @@
     }
 
     .field-warning {
-      color: #fff;
+      text-shadow:
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff;
+      color: red;
+    }
+
+    .warning-shake {
+      /* Start the shake animation and make the animation last for 0.5 seconds */
+      animation: shake 0.5s;
+
+      /* When the animation is finished, start again */
+      animation-iteration-count: infinite;
     }
 
     form input, form select, form button {
@@ -187,16 +214,20 @@
       margin-bottom: 2.5rem;
     }
 
-
     input::placeholder {
       color: #696969;
     }
 
     form button {
+      height:70px;
+      padding: 0px;
+      border-radius: 8px;
       background-color: #00BDE7;
       border: solid 1px var(--branding-primary);
-      font-size: 1.25em;
+      font-size: 3.25rem;
+      font-weight: bold;
       color: white;
+      font-family: FuturaMed;
     }
 
     form button:hover {
@@ -204,8 +235,10 @@
     }
 
     .field div {
+      display: flex;
       text-align: left;
     }
+
   </style>
 
   <!-- Media Queries -->
@@ -230,7 +263,14 @@
       }
 
       .event-info {
-        font-size: 2.55rem;
+      }
+
+      .event-info-1 {
+        font-size: 2.25rem;
+      }
+
+      .event-info-2 {
+        font-size: 2rem;
       }
 
       .form-wrapper {
@@ -285,12 +325,21 @@
         padding-left: 0px;
       }
 
-      .event-info {
-        font-size: 2.75rem;
-      }
-
       .rectangle {
         border-radius: 0;
+      }
+
+      .event-info {
+      }
+
+      .event-info-1 {
+        justify-content: center;
+        font-size: 2.5rem;
+      }
+
+      .event-info-2 {
+        justify-content: center;
+        font-size: 2rem;
       }
 
       form {
@@ -308,7 +357,7 @@
       }
 
       .rectangle {
-        height: 50px;
+        height: 80px;
       }
 
       .form-wrapper {
@@ -316,7 +365,18 @@
       }
 
       .event-info {
+        padding-top: 12px;
+        justify-content: center;
+      }
+
+      .event-info-1 {
+        height: 25px;
         font-size: 2rem;
+      }
+
+      .event-info-2 {
+        height: 20px;
+        font-size: 1.5rem;
       }
     }
 
@@ -328,11 +388,14 @@
       <div class="logo-wrapper">
         <div class="logo-container">
           <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/login/leadiant-logo.png">
-          <div class="event-info">Cystaran Eye Health Event</div>
-          <div class="event-info">April 22 at 6:30pm EST</div>
-          <div class="event-info">April 29 at 6:30pm PST</div>
         </div>
-        <div class="rectangle"></div>
+        <div class="rectangle">
+          <div class="event-info">
+            <div class="event-info-1">Cystaran Eye Health Event</div>
+            <div class="event-info-2">April 22 at 6:30pm EST</div>
+            <div class="event-info-2">April 29 at 6:30pm PST</div>
+        </div>
+        </div>
       </div>
 
       <div class="form-wrapper">
@@ -760,7 +823,7 @@
 
     // Return first element found
     function validatorGetEl(selector) {
-      console.log(selector, landingElement);
+      // console.log(selector, landingElement);
       return landingElement.querySelector(selector);
     }
 
@@ -785,7 +848,7 @@
         750
       );
 
-      console.log(field.fieldSelector, element);
+      // console.log(field.fieldSelector, element);
       element.addEventListener('blur', (e) => {
         validatorProcess(field, validationFields);
       });

@@ -286,7 +286,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="ba9980f7-bf8d-43a9-b824-2991aeee2894"><style>img:after {
+              <inferno-snippet-content id="abe0e310-100f-4d0a-8fc5-8da9990dfd8f"><style>img:after {
     content: none;
 }
 img.actionable:hover {
@@ -369,6 +369,13 @@ img.actionable:hover {
     display: block;
     height: 50vmin;
     margin: 5vh auto 0;
+}
+.inferno-generated-booth-external-overlay img {
+    max-width: 80vmin;
+    max-height: 50vmin;
+    display: block;
+    margin: 5vh auto 0;
+    object-fit: contain;
 }
 .inferno-generated-booth-show {
     display: block !important;
@@ -1015,9 +1022,18 @@ var _lastScrollEl;
 function init() {
   // Make sure all overlays are reset
   $(landingPageEl).find(".inferno-generated-booth-show").removeClass("inferno-generated-booth-show");
+
+  // Activate click track landing
+  setTimeout(function() {
+    var e = document.createEvent("MouseEvents");
+    e.initEvent("mouseup", true, true);
+    if (landingPageEl.querySelector('.page_load')) {
+      landingPageEl.querySelector('.page_load').dispatchEvent(e);
+    }
+  }, 250);
 }
 
-function toggleOverlay(show, typeClass, src) { 
+function toggleOverlay(show, typeClass, src, isInternalImage) { 
   $(landingPageEl).find('.inferno-generated-booth-info-overlay').removeClass('inferno-generated-booth-show');
   $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay').removeClass('inferno-generated-booth-show'); 
   $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay-done').removeClass('inferno-generated-booth-show');
@@ -1041,6 +1057,7 @@ function toggleOverlay(show, typeClass, src) {
   else { 
     var bodyEl = $('html,body'); 
     var layoutEl = $('.layout-fixed'); 
+    var previewEl = $('.booth-final-review-content');
     var docEl = $(document); 
 
     if (bodyEl.scrollTop() >0) {
@@ -1052,6 +1069,11 @@ function toggleOverlay(show, typeClass, src) {
       _lastScrollPos = docEl.scrollTop(); 
       _lastScrollEl = docEl; 
       docEl.scrollTop(0); 
+    }
+    else if (previewEl && previewEl.scrollTop() > 0) {
+      _lastScrollPos = previewEl.scrollTop();
+      _lastScrollEl = previewEl;
+      previewEl.scrollTop(0);
     } 
     else { 
       _lastScrollPos =layoutEl.scrollTop();
@@ -1063,46 +1085,56 @@ function toggleOverlay(show, typeClass, src) {
     $(elTwo).addClass('inferno-generated-booth-show'); 
 
     if (typeClass === 'inferno-generated-booth-video-overlay') { 
-      console.log('append iframe');
-      console.log(src); 
       $(elTwo).append("<iframe src='/embed/" + src + "' scrolling='no' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
     } 
 
     if (typeClass === 'inferno-generated-booth-external-overlay') { 
-      console.log('append external iframe'); 
-      console.log(src); 
-      $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
+      if (isInternalImage) {
+        $(elTwo).append("<img src='" + src + "' alt='external image'/>");
+      }
+      else {
+        $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
+      } 
     } 
   } 
 }
 
 $(document).ready(init);</script><div class="inferno-generated-booth-container">
-  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-custom-bg-image.JPG');"></div>
-  <div class="inferno-generated-booth disable-avatars" data-booth-id="large" style="background-image: url('https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-custom-bg-image.JPG');">
+  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-custom-bg-image.jpg');"></div>
+  <div class="inferno-generated-booth" data-booth-id="large" style="background-image: url('https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-custom-bg-image.jpg');">
       <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Main_Booth.png">
-      <div class="inferno-generated-booth-top-banner"><img id="booth_USCommercialService_ClickImage_inferno-booth-udf-top-banner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-top-banner.JPG" alt="inferno-booth-udf-top-banner"></div>
-      <div class="inferno-generated-booth-backdrop"><img id="booth_USCommercialService_ClickImage_inferno-booth-udf-backdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-backdrop.png" alt="inferno-booth-udf-backdrop"></div>
-      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Documents_Wall_Booth_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources"><li id="booth_USCommercialService_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-resource-thumb-1.JPG" alt=" resource thumbnail"><h4>U.S. Commercial Service </h4></li><li id="booth_USCommercialService_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Offices</h4></li></ul></div>
-      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Front_Video_Screen_Booth_Accent.png" alt="Video Holder"><video id="booth_USCommercialService_ViewVideoOverlayvideo-0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', 'c3d4f8bc-b740-47c5-9de7-b51dfa74b66a')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/video-0.mp4"></video></div>
+      <div class="inferno-generated-booth-top-banner"><img id="xtrackx|2|booth|booth_citruswaynailskinsolutions|image_click|booth|infernoboothudftopbanner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-top-banner.jpg" alt="inferno-booth-udf-top-banner"></div>
+      <div class="inferno-generated-booth-backdrop"><img id="xtrackx|2|booth|booth_citruswaynailskinsolutions|image_click|booth|infernoboothudfbackdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-backdrop.jpg" alt="inferno-booth-udf-backdrop"></div>
+      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Documents_Wall_Booth_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources ">
+
+        <li id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resources_overlay|booth1" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Citrusway Sell Sheet</h4></li>
+        <li id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resources_overlay|booth2" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Citrusway Brand Presentation</h4></li>
+        <li id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resources_overlay|booth3" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Citrusway Product Presentation</h4></li>
+
+
+      </ul></div>
+
+    <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Front_Video_Screen_Booth_Accent.png" alt="Video Holder"><video id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_video|booth|video0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '100853e3-2bd5-4795-aff4-f20c645e9249')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/video-0.mov"></video></div>
       <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Plant_Booth_Accent.png" alt="Plant">
       <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Woman2Asian_Booth_Accent.png" alt="Woman">
-      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Podium_Booth_Accent.png" alt="Podium "><img id="booth_USCommercialService_ClickImage_inferno-booth-udf-podium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-podium.JPG" alt="inferno-booth-udf-podium"></div>
-      <div class="inferno-generated-booth-tall-banner"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Pullup_Banner_Booth_Accent.png" alt="Tall Banner "><img id="booth_USCommercialService_ClickImage_inferno-booth-udf-tall-banner" class="inferno-booth-udf-tall-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-tall-banner.JPG" alt="inferno-booth-udf-tall-banner"></div>
+      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Podium_Booth_Accent.png" alt="Podium "><img id="xtrackx|2|booth|booth_citruswaynailskinsolutions|image_click|booth|infernoboothudfpodium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-podium.jpg" alt="inferno-booth-udf-podium"></div>
+      <div class="inferno-generated-booth-tall-banner"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Pullup_Banner_Booth_Accent.png" alt="Tall Banner "><img id="xtrackx|2|booth|booth_citruswaynailskinsolutions|image_click|booth|infernoboothudftallbanner" class="inferno-booth-udf-tall-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-tall-banner.jpg" alt="inferno-booth-udf-tall-banner"></div>
       <img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Table_Chairs_Booth_Accent.png" alt="Chairs">
-      <div class="inferno-generated-booth-video-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_TV_backwall.png" alt="Video Two Holder"><video id="booth_USCommercialService_ViewVideoOverlayvideo-1" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '330daba3-9cc6-44ac-b2c9-52b953727639')" muted autoplay loop class="video-video-1" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/video-1.mp4"></video></div>
-      <div class="inferno-generated-booth-short-banner"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Video_Stand_Booth_Accent.png" alt="Short Banner"><img id="booth_USCommercialService_ClickImage_inferno-booth-udf-short-banner" class="inferno-booth-udf-short-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-short-banner.png" alt="inferno-booth-udf-short-banner"></div>
+      <div class="inferno-generated-booth-video-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_TV_backwall.png" alt="Video Two Holder"><video id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_video|booth|video1" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', 'c52bd222-d769-40ed-bdf5-7e85eccb5072')" muted autoplay loop class="video-video-1" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/video-1.mov"></video></div>
+      <div class="inferno-generated-booth-short-banner"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Video_Stand_Booth_Accent.png" alt="Short Banner"><img id="xtrackx|2|booth|booth_citruswaynailskinsolutions|image_click|booth|infernoboothudfshortbanner" class="inferno-booth-udf-short-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-short-banner.jpg" alt="inferno-booth-udf-short-banner"></div>
       <img class="inferno-generated-booth-video-woman" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Woman1_Booth_Accent.png" alt="Woman">
   </div>
-  <div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=uscommercialservice&chatroomname=uscommercialservice"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-large">
-                <li>
-                  <a id='booth_USCommercialService_DownloadContactInfo'
-                    href='https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/booth-assets/U.S.+Commercial+Services/Contact-Us.pdf'
-                    target='_blank'>
-                    <img src='https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png' alt='contact' />
-                    Contact</a>
-                </li>
+<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=citruswaynailskinsolutions&chatroomname=citruswaynailskinsolutions"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-large" style="background-color: #76bc21"><li id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_info_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="xtrackx|2|booth|booth_citruswaynailskinsolutions|download_contact_info|menu" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li><li><a id="xtrackx|2|booth|booth_citruswaynailskinsolutions|open_meeting_link|menu|httpszoomusj8903905532pwdvkrgstbpsedqqvdhnxpoys9btvlqzz09" href="https://zoom.us/j/8903905532?pwd=VkRGSTBPSEdqQVdhNXpoYS9BTVlqZz09" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a></li>
+                <li><a id='xtrackx|2|booth|booth_citruswaynailskinsolutions|open_calendar_link|menu|sanitizedcalendarlink' href='https://calendly.com/virginia-citrusway' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li>
+                <li id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resources_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_fishbowl_prompt|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>Citrusway® was created out of the idea to bring safe and natural nail fungus and skin products to the ever-growing number of consumers searching for effective alternatives. Our mission includes the intention to educate the consumer of the amazing machine that the human body is and how well it operates without the influence of chemicals. As the integration of natural products is happening in every category, Citrusway is a great addition to a category filled with toxic, chemical-based products</p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2>
 
-                <!-- UNCOMMENT FOR MEETING LINK <li><a id='booth_USCommercialService_DownloadMeetingInfo' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png' alt='meeting' /> LiveMeeting</a></li> --><li><a id="booth_USCommercialService_ViewCalendar" href="https://calendly.com/uscommercialservice-fl" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png" alt="calendar"> Calendar</a></li><li id="booth_USCommercialService_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources"><li><a target="_blank" id="booth_USCommercialService_DownloadResource_1" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/Brochurepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-resource-thumb-1.JPG" alt=" resource thumbnail"><h4>U.S. Commercial Service </h4></a></li><li><a target="_blank" id="booth_USCommercialService_DownloadResource_2" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/OfficeListpdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Offices</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Would you like to share your contact information with this booth?</h3><button class="inferno-confirm-btn" id="booth_USCommercialService_FishBowlClick" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/USCommercialService_1609872639683/inferno-booth-udf-company-logo.JPG"></div></inferno-snippet-content>
+                <ul class="inferno-booth-udf-resources ">
+                  <li><a target="_blank" id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resource|resource_overlay|citruswaysellsheet" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/SellSheet2021pdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Citrusway Sell Sheet</h4></a></li>
+                  <li><a target="_blank" id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resource|resource_overlay|citruswaybrandpresentation" href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/booth-assets/citrusway/Citrusway+brand+presentation.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4> Citrusway Brand Presentation</h4></a></li>
+                  <li><a target="_blank" id="xtrackx|2|booth|booth_citruswaynailskinsolutions|view_resource|resource_overlay|citruswayproductpresentation" href="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/booth-assets/citrusway/Citrusway+product+presentation.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Citrusway Product Presentation</h4></a></li>
+                </ul>
+
+              </div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Enter your company information for further Citrusway information and pricing</h3><button class="inferno-confirm-btn" id="xtrackx|2|booth|booth_citruswaynailskinsolutions|fishbowl_confirm_click|fishbowl_prompt" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button id="xtrackx|2|booth|booth_citruswaynailskinsolutions|fishbowl_cancel_click|fishbowl_prompt" class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/CitruswayNailSkinSolutions_1612104211458/inferno-booth-udf-company-logo.jpg"></div><div id="xtrackx|2|booth|booth_citruswaynailskinsolutions|page_load|" class="page_load"></div></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->
