@@ -343,7 +343,25 @@
                   );
                 </script>
 
+                <!-- main -->
                 <style>
+                  img::after {
+                    content: none;
+                  }
+
+                  *,
+                  :after,
+                  :before {
+                    box-sizing: border-box;
+                  }
+
+                  h1,
+                  h2,
+                  h3,
+                  h4,
+                  h5 {
+                  }
+
                   .content {
                     position: absolute;
                     width: 100%;
@@ -362,169 +380,624 @@
                   }
 
                   .page-title {
-                    margin: 50px 60px;
+                    margin: 50px 60px 20px;
                     color: #ffffff;
                     font-size: 30px;
                     font-family: GothamHTFBlack;
                   }
                 </style>
 
-                <!-- PDF  -->
+                <!-- resource-grid -->
                 <style>
-                  .pdf-view {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    right: 0;
-                    bottom: 0;
-                    background-color: rgba(0, 0, 0, 0.8);
-                    z-index: 30;
-                    display: none;
-                  }
+                    .grid {
+                      display: flex;
+                      flex-direction: row;
+                      flex-wrap: wrap;
+                      justify-content: flex-start;
+                      width: 100%;
+                      margin-left: 50px
+                    }
 
-                  .pdf-viewer {
-                    position: absolute;
-                    top: 60px;
-                    left: 30px;
-                    right: 30px;
-                    width: calc(100% - 60px);
-                    height: calc(100% - 90px);
-                    bottom: 30px;
-                    border: none;
-                  }
+                    .card {
+                      position: relative;
+                      display: flex;
+                      flex-direction: column;
+                      width: 350px;
+                      height: 340px;
+                      background-color: #ffffff;
+                      margin: 15px 10px;
+                      padding: 1%;
+                      color: white;
+                      border: 1px solid #000000;
+                      box-shadow: 5px 10px 8px #222222;
+                      font-family: "GothamHTF-Black", Helvetica, Arial, sans-serif;
+                    }
 
-                  a.window-close {
-                    padding: 0.55rem;
-                    width: 11rem;
-                    font-size: 1.3rem;
-                    font-weight: 100;
-                    line-height: 1;
-                    color: #333;
-                    background-color: #fff;
-                    border-radius: 4rem;
-                    text-align: center;
-                    cursor: pointer;
-                    text-decoration: none;
-                    display: inline-block;
-                    margin: 20px 0 0 30px;
-                  }
+                    .image-wrapper {
+                      justify-content: center;
+                      display: flex;
+                      height: 55%;
+                      background-color: #959595;
+                      padding: 10px;
+                      overflow: hidden;
+                    }
 
-                  a.window-close:hover {
-                    color: #333;
-                    text-decoration: none;
-                  }
-                </style>
+                    .card img {
+                    }
 
-                <!-- Modal -->
+                    .title {
+                      color: #000000;
+                      margin: 1em 0 0;
+                      font-size: 1.15em;
+                      font-weight: bold;
+                    }
+
+                    .description {
+                      color: #000000;
+                      font-size: 1em;
+                    }
+
+                    .download {
+                      position: absolute;
+                      bottom: 0;
+                      width: 94%;
+                      margin: 10px 0;
+                      font-size: 1.25em;
+                      font-weight: normal;
+                      border-radius: 2em;
+                      padding: 3px;
+                      color: white;
+                      text-align: center;
+                      background-color: #FE5001;
+                      border: solid 1px #cccccc;
+                    }
+
+                    .download:hover {
+                      filter: brightness(70%);
+                      cursor: pointer;
+                    }
+                  </style>
+
+                <!-- bottom logo -->
                 <style>
-                  .modal-window {
-                    position: absolute;
-                    background-color: rgba(0, 0, 0, 0.9);
-                    top: 0;
-                    right: 0;
-                    bottom: 0;
-                    left: 0;
-                    z-index: 999;
-                    opacity: 0;
-                    pointer-events: none;
-                    -webkit-transition: all 0.7s;
-                    -moz-transition: all 0.7s;
-                    transition: all 0.7s;
-                    display: none;
-                  }
-
-                  .modal-window.open {
-                    opacity: 1;
-                    pointer-events: auto;
-                    display: inline-block;
-                    z-index: 99;
-                  }
-
-                  .modal-window > div {
-                    position: relative;
-                    min-width: 400px;
-                    width: 80%;
-                    margin: 2% auto 15% auto;
-                    padding: 2rem;
-                    background: var(--sidebar-highlight-bg-color);
-                    border-radius: .5em;
-                    color: #444;
-                  }
-
-                  .modal-window header {
-                    font-weight: bold;
-                  }
-
-                  .modal-close {
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    color: var(--sidebar-text-color);
-                    font-size: 80%;
-                    width: 70px;
-                    text-align: center;
-                    text-decoration: none;
-                    cursor: pointer;
-                  }
-
-                  .modal-close:hover {
-                    filter: brightness(80%);
-                    text-decoration: none;
-                    color: #fff;
-                  }
-
-                  .modal-window h1 {
-                    font-size: 150%;
-                    margin: 0 0 15px;
-                  }
-
-                  /* allows video iframe to be responsive yet scale 16:9 ratio*/
-                  .videoWrapper {
-                    position: relative;
-                    padding-bottom: 56.5%; /* 16:9 */
-                    height: 0;
-                  }
-
-                  .videoWrapper iframe {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
+                  .bottom-logo {
+                    background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/Path 39.png");
+                    background-size: 135% 116%;
+                    background-position: top;
+                    background-repeat: no-repeat;
                     width: 100%;
-                    height: 100%;
+                    height: 26.5rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    padding: 2% 6%;
+                  }
+
+                  .bottom-logo img {
+                    height: 18rem;
+                    width: auto;
                   }
                 </style>
 
-                <!-- PDF -->
-                <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
-                  <a class="window-close" href="javascript:void(closePDF());">Close</a>
-                  <iframe id="pdf-frame" class="pdf-viewer"></iframe>
-                </div>
+                <!--footer -->
+                <style>
+                  footer {
+                    color: white;
+                    font-size: 1.6rem;
+                    background-color: rgb(40, 81, 127);
+                    padding: 2rem;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                  }
 
-                <!-- Modal -->
-                <div id="open-modal" class="modal-window">
-                  <div>
-                    <div title="Close" class="modal-close">CLOSE X</div>
-                    <div class="videoWrapper"></div>
+                  footer p {
+                    margin: 0;
+                  }
+
+                  footer a {
+                    margin: 0;
+                  }
+
+                  footer .info {
+                    display: flex;
+                    margin-top: 10px;
+                    justify-content: space-between;
+                  }
+
+                  footer .info {
+                    padding: 0 20px;
+                    font-weight: 500;
+                  }
+
+                  footer .info a {
+                    color: white;
+                    font-size: 14px;
+                    text-decoration: none;
+                  }
+
+                  footer .info p {
+                    font-size: 12px;
+                    font-weight: 300;
+                  }
+
+                  .info-links {
+                    display: flex;
+                  }
+                </style>
+
+                <pdf-viewer>
+                  <style>
+                    .pdf-view {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      right: 0;
+                      bottom: 0;
+                      background-color: rgba(0, 0, 0, 0.8);
+                      z-index: 30;
+                      display: none;
+                      height: calc(100vh - 55px);
+                    }
+
+                    .pdf-viewer {
+                      position: absolute;
+                      top: 60px;
+                      left: 30px;
+                      right: 30px;
+                      width: calc(100% - 60px);
+                      height: calc(100% - 90px);
+                      bottom: 30px;
+                      border: none;
+                    }
+
+                    a.window-close {
+                      padding: 0.55rem;
+                      width: 11rem;
+                      font-size: 1.3rem;
+                      font-weight: 100;
+                      line-height: 1;
+                      color: #333;
+                      background-color: #fff;
+                      border-radius: 4rem;
+                      text-align: center;
+                      cursor: pointer;
+                      text-decoration: none;
+                      display: inline-block;
+                      margin: 20px 0 0 30px;
+                    }
+
+                    a.window-close:hover {
+                      color: #333;
+                      text-decoration: none;
+                    }
+                  </style>
+
+                  <div id="pdf-blanket" class="pdf-view" onclick="javascript:void(closePDF());">
+                    <a class="window-close" href="javascript:void(closePDF());">Close</a>
+                    <iframe id="pdf-frame" class="pdf-viewer"></iframe>
                   </div>
-                </div>
+
+                  <!-- PDF -->
+                  <script>
+                    function togglePDF(el) {
+                      landingPageEl.getElementById('pdf-frame').src = el.getAttribute('pdf');
+                      landingPageEl.getElementById('pdf-blanket').style.display = 'block';
+                      landingPageEl.querySelector('#pdf-blanket .window-close').scrollIntoView({block: "end", inline: "nearest"});
+                    }
+
+                    function closePDF() {
+                      landingPageEl.getElementById('pdf-frame').src = '';
+                      landingPageEl.getElementById('pdf-blanket').style.display = 'none';
+                    }
+                  </script>
+
+                </pdf-viewer>
+
+                <video-viewer>
+                  <style>
+                    .modal-window {
+                      position: fixed;
+                      background-color: rgba(0, 0, 0, 0.5);
+                      top: 0;
+                      right: 0;
+                      bottom: 0;
+                      left: 0;
+                      opacity: 0;
+                      pointer-events: none;
+                      -webkit-transition: all 0.7s;
+                      -moz-transition: all 0.7s;
+                      transition: all 0.7s;
+                      display: none;
+                    }
+
+                    .modal-window.open {
+                      opacity: 1;
+                      pointer-events: auto;
+                      display: inline-block;
+                      z-index: 99999999;
+                      padding: 5%;
+                    }
+
+                    .modal-window .contentWrapper {
+                      display: flex;
+                      justify-content: center;
+                      width: 100%;
+                      margin-top: 20px;
+                    }
+
+                    .videoWrapper {
+                      position: relative;
+                      padding-bottom: 56.5%;
+                      /* 16:9 */
+                      height: 0;
+                    }
+
+                    .videoWrapper iframe {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                    }
+
+
+                    .modal-window .modal-box {
+                      position: relative;
+                      min-width: 400px;
+                      width: 80%;
+                      margin: 20px auto;
+                      padding: 2rem 0;
+                      background-color: transparent;
+                      border: none;
+                    }
+
+                    .modal-window h1 {
+                      font-size: 150%;
+                      margin: 0 0 15px;
+                    }
+
+                    .modal-window header {
+                      font-weight: bold;
+                    }
+
+                    .modal-close {
+                      position: absolute;
+                      right: 3%;
+                      top: -11px;
+                      color: #fff;
+                      font-size: 1.5em;
+                      text-decoration: none;
+                      font-weight: bold;
+                    }
+
+                    .modal-close:hover {
+                      filter: brightness(130%);
+                      text-decoration: none;
+                      color: #fff;
+                      cursor: pointer;
+                    }
+
+                    .modal-grid {
+                      display: grid;
+                      grid-template-columns: 0.6fr 1.4fr;
+                      grid-template-rows: 1fr;
+                      gap: 0px 20px;
+                      padding: 2%;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      background-color: #5378A7;
+                    }
+
+                    .modal-grid-video {
+                      display: grid;
+                      grid-template-columns: 1fr;
+                      grid-template-rows: 1fr;
+                      gap: 0 0;
+                      color: white;
+                      font-family: "gothamBook", Helvetica, Arial, sans-serif;
+                      background-color: #5378A7;
+                    }
+                  </style>
+
+                  <template id="modalWindow">
+                    <div class="modal-grid">
+                    </div>
+                  </template>
+
+                  <template id="videoFrame">
+                    <iframe src="/embed/" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true">
+                    </iframe>
+                  </template>
+
+                  <script>
+                    function toggleModalVideo(el) {
+                      const id = el.getAttribute('video');
+                      const contentWrapper = landingPageEl.querySelector('.contentWrapper');
+                      contentWrapper.classList.toggle('videoWrapper');
+                      let video = contentWrapper.querySelector('#video-frame');
+                      const modalClose = landingPageEl.querySelector('.modal-close');
+
+                      modalClose.addEventListener('click', function () {
+                        toggleModalVideo(el);
+                      });
+
+                      if (video) {
+                        video.remove();
+                        landingPageEl.querySelector('#open-modal').classList.toggle('open');
+                        return;
+                      }
+
+                      const temp = landingPageEl.querySelector('template#videoFrame');
+                      const clone = temp.content.cloneNode(true);
+                      video = clone.querySelector('iframe');
+                      video.id = 'video-frame';
+                      video.src = '/embed/' + id;
+                      contentWrapper.appendChild(clone);
+                      const modal = landingPageEl.querySelector('#open-modal');
+                      setModalPosition(modal);
+                      modal.classList.toggle('open');
+                    }
+
+                    function setModalPosition(el) {
+                      el.style.left = document.querySelector('videos-sidebar').offsetWidth + "px";
+                    }
+
+                  </script>
+
+                </video-viewer>
 
                 <div class="content">
                   <div class="main">
                   <div class="page-title">Resources</div>
 
-                    <div id="documents-grid" class="library-grid">
-
-                      <template id="documents-template">
-                        <div id="documents-card" class="library-card">
-                          <img id="documents-thumb" class="library-card-thumb"/>
-                          <div id="documents-title" class="library-card-title"/>
+                    <div class="grid"></div>
+                      <template id="library-card">
+                        <div class="card" video id>
+                          <div class="image-wrapper">
+                          <img src>
+                          </div>
+                          <div class="title"></div>
+                          <div class="description"></div>
+                          <div id class="download"></div>
                         </div>
                       </template>
 
+                    <div id="open-modal" class="modal-window">
+                      <div class="modal-box">
+                        <div title="Close" class="modal-close">Close</div>
+                        <div class="contentWrapper"></div>
+                      </div>
                     </div>
 
+                  </div>
+
+
+                  <div class="bottom-logo">
+                    <a id="xtrackx|2|non-booth|faw|logo_click|leadiant_website|open_website" target="_blank" href="https://leadiant.com">
+                      <img src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/misc-assets/bottom-logo.png">
+                    </a>
+                  </div>
+
+                  <footer>
+                    <div class="info">
+                      <div class="info-links">
+                        <a target="_blank" id="xtrackx|2|non_booth|lediant_speakers|button_click|privacy_policy|open_nextech_privacy_policy" href="https://www.nextechar.com/nextech-ar-solutions-privacy-policy">Privacy Policy</a>
+                         | 
+                        <a target="_blank" id="xtrackx|2|non_booth|lediant_speakers|button_click|terms_conditions|open_nextech_terms" href="https://www.nextechar.com/terms-of-service">Terms & Conditions</a>
+                      </div>
+                      <p>Copyright © 2021 NexTech AR Solutions Inc.</p>
+                    </div>
+                  </footer>
+
                 </div>
-                </div>
+
+                <script>
+                  var resourceCardData = [
+                    {
+                      "Title": "Cystaran Eyeball QR Code",
+                      "FileName": "Cystaran+Eyeball+QR+Code.pdf",
+                      "Type": "pdf",
+                      "Action": "View PDF",
+                      "Thumb": ""
+                    },
+                    {
+                      "Title": "Cystaran Eyeball QR Code",
+                      "FileName": "Cystaran Eyeball QR Code.pdf",
+                      "Action": "View PDF",
+                      "Type": "pdf",
+                      "Thumb": ""
+                    },
+                    {
+                      "Title": "Cystaran Eyeball QR Code",
+                      "FileName": "Cystaran Eyeball QR Code.pdf",
+                      "Action": "View PDF",
+                      "Type": "pdf",
+                      "Thumb": ""
+                    }
+                  ]
+
+                    function buildLibrary() {
+                      buildResourceGrid();
+                    }
+
+                    function buildResourceGrid() {
+                      const myLanding = landingPageEl ?? document;
+                      const industryResearchGrid = myLanding.getElementById("documents-grid");
+                      const industryResearchTemplate = myLanding.getElementById("documents-template");
+
+                      for (let cardData of resourceCardData) {
+                        const card = industryResearchTemplate.content.cloneNode(true);
+
+                        const industryResearchThumb = card.getElementById("documents-thumb");
+                        industryResearchThumb.onerror = function () {
+                          industryResearchThumb.onerror = null;
+                          this.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/resource-library/pdf/default.jpeg';
+                        }
+                        industryResearchThumb.src = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/resource-library/pdf/' + cardData.Thumb;
+
+                        const industryResearchTitle = card.getElementById("documents-title");
+                        industryResearchTitle.innerHTML = cardData.Title;
+
+                        const industryResearchCard = card.getElementById("documents-card");
+                        industryResearchCard.setAttribute("id", "xtrackx|2|non_booth|resource_library|button_click|" + cardData.Title.toLowerCase().replaceAll(" ", "_"))
+                        industryResearchCard.onclick = function () {
+                          loadPDF(cardData.FileName);
+                        }
+
+                        // industryResearchGrid.appendChild(card);
+                        industryResearchGrid.insertBefore(card, industryResearchGrid.childNodes[0]);
+                      }
+                    }
+
+                  if (window.location.hostname.includes('127.0.0.1') || window.location.hostname.includes('localhost')) {
+                    window.addEventListener('load', (event) => {
+                      buildLibrary();
+                      console.log('The page has fully loaded');
+                    });
+                  } else {
+                    buildLibrary();
+                  }
+
+                </script>
+
+                <!-- PDF -->
+                <script>
+                  function loadPDF(id) {
+                    scrollTop();
+                    const myLanding = landingPageEl ?? document;
+                    const pdfFrame = myLanding.getElementById('pdf-frame');
+                    pdfFrame.src = "https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/resources/" + id;
+                    const pdfBlanket = myLanding.getElementById('pdf-blanket');
+                    pdfBlanket.style.display = 'block';
+                  }
+
+                  function closePDF() {
+                    var x = landingPageEl.getElementById('pdf-frame');
+                    x.src = '';
+                    var y = landingPageEl.getElementById('pdf-blanket');
+                    y.style.display = 'none';
+                  }
+
+                  function scrollTop() {
+                    window.scroll({
+                      top: 0,
+                      left: 0,
+                      behavior: 'smooth'
+                    });
+                  }
+                </script>
+
+                <!-- Library List -->
+                <script>
+                    function getLibraryList() {
+                      let list = [
+                        {
+                          id: 1,
+                          title: "ABELCET®",
+                          desc: " ABELCET® is a sterile, pyrogen-free suspension for intravenous infusion",
+                          action: "View PDF",
+                          thumb: "pdf-icon.png",
+                          link: "Abelcet.pdf"
+                        },
+                        {
+                          id: 2,
+                          title: "CARNITOR® Injection",
+                          desc: "CARNITOR® (levocarnitine) is a carrier molecule in the transport of long-chain fatty acids across the inner mitochondrial membrane.",
+                          action: "View PDF",
+                          thumb: "pdf-icon.png",
+                          link: "Carnitor-Injection.pdf"
+                        },
+                        {
+                          id: 3,
+                          title: "CARNITOR® (levocarnitine) Tablets",
+                          desc: "CARNITOR® (levocarnitine) is a carrier molecule in the transport of long-chain fatty acids across the inner mitochondrial membrane.",
+                          action: "View PDF",
+                          thumb: "pdf-icon.png",
+                          link: "Carnitor-Tablets.pdf"
+                        },
+                        {
+                          id: 4,
+                          title: "Cystaran Bottle QR Code",
+                          desc: "ARitize is a mobile app that lets you use the best Augmented Reality Technology",
+                          action: "View PDF",
+                          thumb: "pdf-icon.png",
+                          link: "Cystaran-Bottle-QR-Code.pdf"
+                        },
+                        {
+                          id: 5,
+                          title: "Cystaran Eyeball QR Code",
+                          desc: "ARitize is a mobile app that lets you use the best Augmented Reality Technology",
+                          action: "View PDF",
+                          thumb: "pdf-icon.png",
+                          link: "Cystaran-Eyeball-QR-Code.pdf"
+                        }
+                      ];
+
+                      list = list.sort(function (a, b) {
+                        if (a.title.toLowerCase() > b.title.toLowerCase()) {
+                          return 1;
+                        }
+                        if (a.title.toLowerCase() < b.title.toLowerCase()) {
+                          return -1;
+                        }
+                        return 0;
+                      });
+                      return list;
+                    }
+
+                    function buildLibrary() {
+
+                      const list = getLibraryList();
+                      // filter out users who have opted out of sharing their data
+                      const container = landingPageEl.querySelector('.grid');
+                      const template = landingPageEl.querySelector('template#library-card');
+
+                      list.forEach(item => {
+                        const clone = template.content.cloneNode(true);
+                        buildCard(item, clone);
+                        container.appendChild(clone);
+                      });
+
+                    }
+
+                    function buildCard(item, clone) {
+                      const baseUrl = 'https://inferno-event-assets.s3-us-west-2.amazonaws.com/leadiant/resources/';
+                      const card = clone.querySelector('.card');
+                      const image = card.querySelector('img');
+                      const imageSrc = item.thumb ?? 'doc-icon.png';
+                      image.src = baseUrl + imageSrc;
+
+                      card.querySelector('.title').innerHTML = item.title ?? '';
+                      card.querySelector('.description').innerHTML = item.desc ?? '';
+                      card.querySelector('.download').innerHTML = item.action ?? '';
+                      const button = card.querySelector('.download');
+                      button.id = 'xtrackx|2|non_booth|resources|button_click|pdf_view|' + item.title.toLowerCase().replaceAll(' ', '_');
+
+                      if (item.action.toLowerCase().includes('video')) {
+                        button.setAttribute('video', item.link);
+                        button.onclick = function () {
+                          toggleModalVideo(this);
+                        }
+                      } else if (item.action.toLowerCase().includes('pdf')) {
+                        button.setAttribute('pdf', baseUrl + item.link);
+                        button.onclick = function () {
+                          togglePDF(this);
+                        }
+                      } else {
+                        console.log('unknown Library action');
+                      }
+
+                    }
+
+                    if (window.isLocalTemplate) {
+                      window.addEventListener('load', (event) => {
+                        buildLibrary();
+                      });
+                    } else {
+                      buildLibrary();
+                    }
+
+                  </script>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
