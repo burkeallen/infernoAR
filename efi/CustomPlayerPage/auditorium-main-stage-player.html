@@ -306,295 +306,196 @@
                   </script>
                   <!-- ./ Click Track Landing v2.0 -->
 
-									<script>
-										//Add input placeholder text
-										var addPlaceholder = text => {
-											var inputElement = landingPageEl
-												.getElementById("inferno-questions-basic")
-												.querySelector("input");
-											inputElement.placeholder = text;
-										};
 
-										document.addEventListener("DOMContentLoaded", function () {
-											// Handler when the DOM is fully loaded
-											addPlaceholder("Type a Question Here");
-										});
-									</script>
-
-									<style>
-										/* prevent entire screen from going black if you try to reference an image that does not exist*/
-										/* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
-										img::after {
-											content: none;
-										}
+                  <style>
+                    /* prevent entire screen from going black if you try to reference an image that does not exist*/
+                    /* apparently some style or JS that is setting a style do that somewhere else in the inferno system*/
+                    img::after {
+                      content: none;
+                    }
 
                     .content {
-											background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/auditorium/background image_auditorium.jpg");
-											/*background-attachment: fixed;*/
-											background-repeat: no-repeat;
-											background-size: cover;
-											background-position: center;
-											min-height: calc(100vh - 114px);
-											margin: -20px;
-											padding: 20px 24px;
-											z-index: 1;
-											font-family: "Helvetica Neue", Arial Narrow, Arial,
-												sans-serif !important;
-										}
+                      background-image: url("https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/auditorium/background image_auditorium.jpg");
+                      background-repeat: no-repeat;
+                      background-size: cover;
+                      background-position: center;
+                      min-height: calc(100vh - 114px);
+                      margin: -20px;
+                      padding: 20px 24px;
+                      z-index: 1;
+                      font-family: "CustomFont1", sans-serif !important;
+                    }
+                  </style>
 
-										.header {
-											position: absolute;
-											top: 0;
-											left: 0;
-											width: 100%;
-											height: 8rem;
-											background-color: rgba(255, 255, 255, 1);
-											color: #01245b;
-											padding: 0rem 2rem;
-											display: flex;
-											flex-direction: row;
-											justify-content: space-between;
-											align-items: center;
-										}
+                  <!-- Stage Grid -->
+                  <style>
+                    .stage-grid {
+                      display: grid;
+                      grid-template-columns: 2.5fr 1fr;
+                      grid-template-rows: auto;
+                      gap: 0 0;
+                      margin-top: 20px;
 
-										.header-title {
-											font-size: 3.2rem;
-										}
+                    }
 
-										.header-image {
-											height: 3rem;
-											width: auto;
-										}
+                    .leftCol {
+                      display: grid;
+                      grid-template-columns: 1fr;
+                      grid-template-rows: repeat(2, auto);
+                      gap: 0px 0px;
+                    }
 
-										.brand-squares {
-											/*display: flex;*/
-											display: none;
-											flex-direction: column;
-											justify-content: flex-start;
-										}
+                    @media only screen and (max-width: 1020px) {
+                      .stage-grid, .leftCol, .rightCol {
+                        display: block;
+                      }
+                    }
+                  </style>
 
-										.square {
-											height: 4rem;
-											width: 4rem;
-											margin-bottom: 1rem;
-										}
+                  <!-- Video Player -->
+                  <style>
+                    .ntar-video-container {
+                      position: relative;
+                      padding-bottom: 56.25%; /* 16:9 */
+                      height: 0;
+                    }
 
-										.purple {
-											background-color: #952d98;
-										}
+                    #inferno-video-player {
+                      height: auto !important;
+                      max-width: none;
+                    }
 
-										.blue {
-											background-color: #00b9e4;
-										}
+                    #inferno-video-player iframe {
+                      position: absolute;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                      border-radius: .5em .5em 0 0;
+                    }
+                  </style>
 
-										.green {
-											background-color: #7ab800;
-										}
+                  <!-- group chat -->
+                  <style>
+                    .group_chat {
+                      position: relative;
+                      width: 100%;
+                      height: 122.5%;
+                      top: -8px;
+                    }
 
-										.gold {
-											background-color: #f0ab00;
-										}
-									</style>
+                    .group_chat iframe {
+                      position: absolute;
+                      border: none;
+                      top: 0;
+                      left: 0;
+                      width: 100%;
+                      height: 100%;
+                    }
 
-									<!-- Stage Grid -->
-									<style>
-										.stage-grid {
-											display: grid;
-											grid-template-columns: 0.25fr 2.5fr 1fr;
-											grid-template-rows: auto;
-											gap: 0 0;
-											margin-top: 15rem;
-										}
+                    @media only screen and (max-width: 1020px) {
 
-										.col2 {
-											display: grid;
-											grid-template-columns: 1fr;
-											grid-template-rows: repeat(2, auto);
-											gap: 0px 0px;
-										}
+                      .group_chat {
+                        position: relative;
+                        margin-top: 20px;
+                        width: 101%;
+                        height: 400px;
+                      }
 
-										@media only screen and (max-width: 1020px) {
-											.stage-grid,
-											.col2,
-											.col3 {
-												display: block;
-											}
+                      .group_chat iframe {
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                      }
+                    }
+                  </style>
 
-											.col1 {
-												width: 100%;
-												align-items: center;
-											}
+                  <!-- QA Question Box -->
+                  <style>
+                    .question-label {
+                      color: white;
+                      margin-top: 1rem;
+                      font-size: 1.4rem;
+                    }
+                    .inferno-input-group {
+                      margin-top: 1rem;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+                      height: 5rem;
+                      border-radius: 0.5rem;
+                    }
 
-											.brand-squares {
-												justify-content: center;
-												align-items: center;
-												width: 100%;
-												flex-direction: row;
-											}
+                    .inferno-input-group input {
+                      padding-left: 1rem;
+                      border-radius: 0.5rem 0 0 0.5rem;
+                      border: none;
+                      width: 85%;
+                      height: 100%;
+                    }
 
-											.square:not(:last-child) {
-												margin-right: 1rem;
-											}
-										}
-									</style>
+                    ::placeholder {
+                      color: #01245b;
+                    }
 
-									<!-- Video Player -->
-									<style>
-										.ntar-video-container {
-											position: relative;
-											padding-bottom: 56.5%; /* 16:9 */
-											height: 0;
-										}
+                    .inferno-input-group-addon {
+                      display: none;
+                    }
 
-										videos-detail {
-											background-color: black !important;
-											padding: 28%;
-										}
+                    .inferno-input-group-btn {
+                      background-color: var(--branding-primary);
+                      color: white;
+                      height: 100%;
+                      width: 15%;
+                      border: none;
+                      border-radius: 0 0.5rem 0.5rem 0;
+                    }
 
-										#inferno-video-player {
-											height: auto !important;
-											max-width: none;
-										}
+                    .inferno-btn {
+                      background-color: var(--branding-primary);
+                      outline: none;
+                      box-shadow: initial;
+                      border: none;
+                      border-radius: 0 0.5rem 0.5rem 0;
+                      height: 100%;
+                      width: 100%;
+                    }
 
-										#inferno-video-player iframe {
-											position: absolute;
-											top: 0;
-											left: 0;
-											width: 100%;
-											height: 100%;
-											border-radius: 0.5em 0.5em 0 0;
-										}
-									</style>
+                    .inferno-input-group button:hover {
+                      filter: brightness(70%);
+                    }
+                  </style>
 
-									<!-- group chat -->
-									<style>
-										.group_chat {
-											position: relative;
-											width: 100%;
-											height: 70%;
-											top: -8px;
-										}
+                  <div class="content">
+                    <div class="stage-grid">
+                      <div class="leftCol">
+                        <div class="ntar-video-container">
+                          <div class="ntar-video" id="inferno-video-player"></div>
+                        </div>
 
-										.group_chat iframe {
-											position: absolute;
-											border: none;
-											top: 0;
-											left: 0;
-											width: 100%;
-											height: 100%;
-										}
+                        <div class="ntar-qna-container">
+                          <div class="question-label">Ask a Question</div>
+                          <div id="inferno-questions-basic"></div>
+                        </div>
 
-										@media only screen and (max-width: 1020px) {
-											.group_chat {
-												position: relative;
-												margin-top: 20px;
-												width: 101%;
-												height: 400px;
-											}
+                      </div>
 
-											.group_chat iframe {
-												position: relative;
-												width: 100%;
-												height: 100%;
-											}
-										}
-									</style>
+                      <div class="group_chat">
+                        <iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=efi-main-stage-day-1&chatroomname=Enterprise-Florida" class="ntar-chat-iframe"></iframe>
+                      </div>
+                    </div>
 
-									<!-- QA Question Box -->
-									<style>
-										.question-label {
-											color: white;
-											margin-top: 1rem;
-											font-size: 1.4rem;
-										}
-										.inferno-input-group {
-											margin-top: 1rem;
-											display: flex;
-											align-items: center;
-											justify-content: space-between;
-											height: 5rem;
-											border-radius: 0.5rem;
-										}
+                    <div class="sponsors-header">
+                      <h1>Our Sponsors</h1>
+                    </div>
+                    <div id="sponsors-grid" class="sponsors-grid"></div>
+                    <template id="sponsor-template">
+                      <img id="sponsor-logo" src=""/>
+                    </template>
+                  </div>
 
-										.inferno-input-group input {
-											padding-left: 1rem;
-											border-radius: 0.5rem 0 0 0.5rem;
-											border: none;
-											width: 85%;
-											height: 100%;
-										}
 
-										::placeholder {
-											color: #01245b;
-										}
-
-										.inferno-input-group-addon {
-											display: none;
-										}
-
-										.inferno-input-group-btn {
-											background-color: var(--branding-primary);
-											color: white;
-											height: 100%;
-											width: 15%;
-											border: none;
-											border-radius: 0 0.5rem 0.5rem 0;
-										}
-
-										.inferno-btn {
-											background-color: var(--branding-primary);
-											outline: none;
-											box-shadow: initial;
-											border: none;
-											border-radius: 0 0.5rem 0.5rem 0;
-											height: 100%;
-											width: 100%;
-										}
-
-										.inferno-input-group button:hover {
-											filter: brightness(70%);
-										}
-									</style>
-									<div class="content">
-										<div class="header">
-											<h1 class="header-title">Auditorium</h1>
-											<img
-												class="header-image"
-												src="https://inferno-event-assets.s3-us-west-2.amazonaws.com/enterprise-florida/auditorium/EFI_logo_4C.png"
-											/>
-										</div>
-
-										<div class="stage-grid">
-											<div class="col1">
-												<div class="brand-squares">
-													<div class="square purple"></div>
-													<div class="square blue"></div>
-													<div class="square green"></div>
-													<div class="square gold"></div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="ntar-video-container">
-													<div
-														class="ntar-video"
-														id="inferno-video-player"
-													></div>
-												</div>
-												<div class="ntar-qna-container">
-													<div class="question-label">Ask a Question</div>
-													<div id="inferno-questions-basic"></div>
-												</div>
-											</div>
-
-											<div class="group_chat">
-												<iframe
-													class="ntar-chat-iframe"
-													src="https://jolokia.com/chatiframe.html?fullname=${firstName} ${lastName}&chatroomid=efi-main-stage&chatroomname=Enterprise-Florida"
-												></iframe>
-											</div>
-										</div>
-									</div>
-								</inferno-snippet-content>
+                  </inferno-snippet-content>
 								<!--  SNIPPET CONTENT END  -->
 								<!-- ********************* -->
 								<!-- ********************* -->
