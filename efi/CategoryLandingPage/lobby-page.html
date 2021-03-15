@@ -862,6 +862,51 @@
 									</template>
 
 									<script>
+										var fetchVideos = () => {
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
+
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
+
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Events",
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													const filteredVideos = filterEvents(res);
+													console.log(filteredVideos);
+													checkVisited(filterEvents(res));
+												}
+											});
+										};
+
+										fetchVideos();
+
+										function filterEvents(events) {
+											return events.filter(
+												event =>
+													event.categories[0] &&
+													event.categories[0].name === "Lobby"
+											);
+										}
+
 										function displayWelcomeVideo() {
 											const template = landingPageEl.querySelector("#template");
 											const clone = template.content.cloneNode(true);
@@ -875,24 +920,21 @@
 										}
 
 										//Check whether to play video automatically if first time logging in
-										function checkVisited() {
+										function checkVisited(events) {
 											var currentTime = new Date();
+											var currentDay = currentTime.getDate();
 
-											var dayOne = new Date("2021-03-16T09:00:00.000-04:00");
-											var dayTwo = new Date("2021-03-17T09:00:00.000-04:00");
-											// var testDay = new Date("2021-03-15T17:30:00.000-04:00");
+											events.forEach(event => {
+												var eventTime = new Date(event.startTime);
+												var eventDay = eventTime.getDate(eventTime);
 
-											if (currentTime > dayTwo) {
-												checkDay("dayTwoVisited");
-											} else if (currentTime > dayOne) {
-												checkDay("dayOneVisited");
-											}
-											// else if (currentTime > testDay) {
-											// 	checkDay("testDayVisited");
-											// }
+												if (eventDay === currentDay) {
+													if (currentTime > eventTime) {
+														checkDay(event.name);
+													}
+												}
+											});
 										}
-
-										checkVisited();
 
 										function checkDay(day) {
 											var visited = window.localStorage.getItem(day);
