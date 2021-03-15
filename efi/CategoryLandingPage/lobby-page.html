@@ -550,6 +550,7 @@
 										.overlay-content {
 											width: 50%;
 											min-width: 35rem;
+											height: fit-content;
 											display: flex;
 											flex-direction: column;
 											justify-content: space-between;
@@ -562,24 +563,21 @@
 											font-size: 2.2rem;
 											font-weight: bold;
 										}
-										.video-box {
-											width: 100%;
-											border-radius: 35px;
-										}
 
 										.video-container {
 											position: relative;
+											width: 100%;
 											padding-bottom: 56.5%; /* 16:9 */
 											height: 0;
 										}
 
-										.video-box iframe {
+										.video-container iframe {
 											position: absolute;
 											top: 0;
 											left: 0;
 											width: 100%;
 											height: 100%;
-											border-radius: 30px;
+											overflow: hidden;
 										}
 									</style>
 
@@ -852,18 +850,63 @@
 										<div class="overlay">
 											<div class="overlay-content">
 												<div class="close-button" onclick="hideVideo()">X</div>
-												<div class="video-box">
-													<div class="video-container">
-														<iframe
-															src="/embed/b9c91412-545c-4974-8aa4-70bf96c6e3b1"
-														></iframe>
-													</div>
+
+												<div class="video-container">
+													<iframe
+														frameborder="0"
+														src="/embed/b9c91412-545c-4974-8aa4-70bf96c6e3b1"
+													></iframe>
 												</div>
 											</div>
 										</div>
 									</template>
 
 									<script>
+										var fetchVideos = () => {
+											// Set header
+											const headers = {
+												Authorization:
+													"Bearer " + sessionStorage.getItem("token"),
+												"X-InfernoCore-Domain":
+													sessionStorage.getItem("domain") ??
+													window.location.hostname
+											};
+
+											// add a header property for users accessing with SA credentials
+											if (window.sessionStorage.overrideId) {
+												headers["X-InfernoCore-Domain"] =
+													"jolokia.inferno.jolokia.com";
+												headers["X-Client-Override"] = sessionStorage.getItem(
+													"overrideId"
+												);
+											}
+
+											$.ajax({
+												url:
+													"https://ingress.infernocore.jolokia.com/api/Events",
+												type: "GET",
+												async: true,
+												accept: "application/json",
+												contentType: "application/json",
+												headers: headers,
+												success: function (res, status, xhr) {
+													const filteredVideos = filterEvents(res);
+													console.log(filteredVideos);
+													checkVisited(filterEvents(res));
+												}
+											});
+										};
+
+										fetchVideos();
+
+										function filterEvents(events) {
+											return events.filter(
+												event =>
+													event.categories[0] &&
+													event.categories[0].name === "Lobby"
+											);
+										}
+
 										function displayWelcomeVideo() {
 											const template = landingPageEl.querySelector("#template");
 											const clone = template.content.cloneNode(true);
@@ -877,23 +920,21 @@
 										}
 
 										//Check whether to play video automatically if first time logging in
-										function checkVisited() {
+										function checkVisited(events) {
 											var currentTime = new Date();
+											var currentDay = currentTime.getDate();
 
-											var dayOne = new Date("2021-03-16T09:00:00.000-06:00");
-											var dayTwo = new Date("2021-03-17T09:00:00.000-06:00");
-											var dayThree = newDate("2021-03-15T16:30:00.000-06:00");
+											events.forEach(event => {
+												var eventTime = new Date(event.startTime);
+												var eventDay = eventTime.getDate(eventTime);
 
-											if (currentTime > dayTwo) {
-												checkDay("dayTwoVisited");
-											} else if (currentTime > dayOne) {
-												checkDay("dayOneVisited");
-											} else {
-												checkDay("dayThreeVisited");
-											}
+												if (eventDay === currentDay) {
+													if (currentTime > eventTime) {
+														checkDay(event.name);
+													}
+												}
+											});
 										}
-
-										checkVisited();
 
 										function checkDay(day) {
 											var visited = window.localStorage.getItem(day);
