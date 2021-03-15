@@ -33,7 +33,6 @@
 
       // Set header
       const headers = {'X-InfernoCore-Domain': project.domain}
-      sessionStorage.setItem('domain', project.domain);
 
       // perform synchronous ajax call so rest of code waits until you are authenticated
       $.ajax({
@@ -45,7 +44,7 @@
         headers: headers,
         data: JSON.stringify(params),
         success: function (res) {
-          sessionStorage.setItem('domain', project.domain);
+          sessionStorage.setItem('domain', project.domain)
           storeUser(JSON.parse(res))
         },
         error: function (err) {
@@ -58,36 +57,44 @@
 
     }
 
+    function parseJwt(token) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      //
+      return JSON.parse(jsonPayload);
+    }
+
     function storeUser(data) {
       // console.log(data);
+      sessionStorage.setItem('userId', parseJwt(data.AccessToken).sub);
       sessionStorage.setItem('clientId', data.ClientId)
       sessionStorage.setItem('token', data.AccessToken)
       sessionStorage.setItem('refreshToken', data.RefreshToken)
     }
 
     function login() {
-      window.addEventListener('load', (event) => {
-        const projectEl = document.querySelector('#novoProject');
-        const projectName = projectEl ? projectEl.getAttribute('name') : null;
-        const currentProject = projects.filter(project => {
-          return project.name === projectName;
-        })[0];
+      const projectEl = document.querySelector('#novoProject');
+      const projectName = projectEl ? projectEl.getAttribute('name') : null;
+      const currentProject = projects.filter(project => {
+        return project.name === projectName;
+      })[0];
 
-        if (!currentProject) {
-          alert('could not log into Inferno \n\r Check the project name in the login() function');
-          return;
-        }
+      if (!currentProject) {
+        alert('could not log into Inferno \n\r Check the project name in the login() function');
+        return;
+      }
 
-        authenticate(currentProject);
-      });
+      authenticate(currentProject);
     }
 
   </script>
   <!-- store your credentials in a local file -->
   <!-- use to keep credentials out of files in case of committing to REPO or sharing template with someone else.-->
   <!-- projects = [{name: 'anything', username: 'email@address.com', password: '**********', domain: 'novologic.infernoar.com'}]-->
-  <script onload="login()"
-          onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
+  <script onerror="console.error('/inferno.config.js', 'does not exist, can not log into inferno as test user')"
           src="/inferno.config.js"></script>
 
   <!-- Liquid Templating -->
@@ -121,7 +128,6 @@
   </script>
 
   <!-- Build out Local Menu on Left Navigation -->
-
   <style>
     #localTemplateMenu {
       display: flex;
@@ -131,7 +137,7 @@
       padding: 1em;
     }
 
-    #localTemplateMenu a {
+    #localTemplateMenu a, #localTemplateMenu details {
       display: block;
       margin: .25em;
       background-color: var(--sidebar-bg-color);
@@ -141,6 +147,10 @@
       cursor: pointer;
       width: 80%;
       padding: .25em 0;
+    }
+
+    #localTemplateMenu details a {
+      margin-left: 1em;
     }
 
     #localTemplateMenu a:hover {
@@ -175,7 +185,14 @@
     function buildLocalMenu() {
       window.addEventListener('load', (event) => {
         const menu = document.getElementById('localTemplateMenu');
-        window.localTemplateMenuItems.forEach(item => {
+        const menuItems = window.localTemplateMenuItems.sort((a, b) => {
+          return a.name > b.name ? 1 : -1;
+        });
+
+        const pages = menuItems.filter(item => !item.name.toLowerCase().includes('booth'));
+        const booths = menuItems.filter(item => item.name.toLowerCase().includes('booth'));
+
+        pages.forEach(item => {
           const menuItem = document.createElement('a');
           menuItem.href = "../" + item.file;
           menuItem.innerHTML = item.name;
@@ -189,7 +206,34 @@
             // do nothing;
           }
           menu.appendChild(menuItem);
-        })
+        });
+
+        const boothMenu = document.createElement("details");
+        const summary = document.createElement("summary");
+        summary.innerHTML = "BOOTHS";
+        boothMenu.appendChild(summary);
+
+        booths.forEach(item => {
+          const menuItem = document.createElement('a');
+          menuItem.href = "../" + item.file;
+          menuItem.innerHTML = item.name;
+          menuItem.setAttribute('title', item.file + '\n\r' + item.snippetID);
+          try {
+            const currentSnippet = landingPageEl.querySelector('#' + item.snippetID.toString());
+            if (currentSnippet) {
+              menuItem.classList.toggle('activeMenu');
+            }
+          } catch (e) {
+            // do nothing;
+          }
+          boothMenu.appendChild(menuItem);
+        });
+
+        if (booths.length) {
+          menu.appendChild(boothMenu);
+        }
+
+
       })
     }
   </script>
@@ -200,7 +244,8 @@
 </head>
 
 <body>
-<div style="display:none" id="novoProject" name="efi" onload="login()"></div>
+<div style="display:none" id="novoProject" name="efi"></div>
+<script>login();</script>
 <app-root class="layout-fixed has-menu">
   <videos-layout>
     <div class="wrapper" layout="column">
@@ -516,7 +561,7 @@
                         <h2 class="main-header">How to Play</h2>
                         <button id="dropdown-button-rules" class="dropdown-button" onclick="toggleExpand(event)">
                           <span id="dropdown-button-text-rules">Expand</span> <img id="dropdown-button-img-rules"
-                                                                                   src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png"/>
+                                                                                   src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png">
                         </button>
                       </div>
                       <div id="content-rules">
@@ -529,7 +574,7 @@
                           points. The players with the most points at the end of the Expo wins. Some challenges might
                           include, visiting exhibition booths, viewing keynote speaker presentations, etc.
                         </p>
-                        <hr/>
+                        <hr>
                         <h2>
                           1st Prize - $750.00<br>
                           2nd Prize - $500.00<br>
@@ -662,11 +707,11 @@
                         <button id="dropdown-button-leaderboard" class="dropdown-button" onclick="toggleExpand(event)">
                           <span id="dropdown-button-text-leaderboard">Expand</span> <img
                             id="dropdown-button-img-leaderboard"
-                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png"/>
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png">
                         </button>
                       </div>
                       <div id="content-leaderboard">
-                        <hr/>
+                        <hr>
                         <div class="leaderboard-headers">
                           <h3>PLACE</h3>
                           <div class="leaderboard-headers-name-points">
@@ -674,7 +719,7 @@
                             <h3>POINTS</h3>
                           </div>
                         </div>
-                        <hr/>
+                        <hr>
                         <!-- START of leaderboard user list -->
                         <div id="leaderboard-rankings-list" class="leaderboard-rankings-list">
                           <h2 id="leaderboard-loading" class="leaderboard-loading">Calculating Scores...</h2>
@@ -684,7 +729,7 @@
                             <h3 id="player-rank"></h3>
                             <div class="player-info">
                               <div class="player-pic-name-company">
-                                <img id="player-img" class="player-img" src=""/> <span>
+                                <img id="player-img" class="player-img" src> <span>
                           <h3 id="player-name" class="player-name"></h3>
                           <h3 id="player-company" class="player-company"></h3>
                         </span>
@@ -692,7 +737,7 @@
                               <h3 id="player-points" class="player-points"></h3>
                             </div>
                           </div>
-                          <hr/>
+                          <hr>
                         </template>
                         <!-- END of leaderboard user list -->
                       </div>
@@ -727,13 +772,13 @@
 
                     <div id="my-rank" class="my-rank">
                       <h2 class="my-rank-header">My Rank</h2>
-                      <hr/>
+                      <hr>
                       <h2 id="my-rank-loading" class="leaderboard-loading">Calculating Scores...</h2>
                       <div class="player">
                         <h3 id="player-rank"></h3>
                         <div class="player-info">
                           <div class="player-pic-name-company">
-                            <img id="player-img" class="player-img" src=""/>
+                            <img id="player-img" class="player-img" src>
                             <span>
                               <h3 id="player-name" class="player-name"></h3>
                               <h3 id="player-company" class="player-company"></h3>
@@ -742,7 +787,7 @@
                           <h3 id="player-points" class="player-points"></h3>
                         </div>
                       </div>
-                      <hr/>
+                      <hr>
                     </div>
 
                     <!-- Challenges to Complete section -->
@@ -795,7 +840,7 @@
                         <button id="dropdown-button-challenges" class="dropdown-button" onclick="toggleExpand(event)">
                           <span id="dropdown-button-text-challenges">Expand</span> <img
                             id="dropdown-button-img-challenges"
-                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png"/>
+                            src="https://studio304nextechar.freetls.fastly.net/infernoAR/arc2020/assets/chevron-down.png">
                         </button>
                       </div>
                       <div id="content-challenges">
@@ -946,7 +991,7 @@
                       }
                     }
 
-                    var currentUser = window.sessionStorage.getItem("id");
+                    var currentUser = window.sessionStorage.getItem("userId");
                     var currentUserLiquid = {
                       userId: `{{ data.CurrentViewingUser.Id }}`,
                       firstName: `{{ data.CurrentViewingUser.FirstName }}`,
@@ -956,15 +1001,13 @@
                     var myRankButtonId = "xtrackx|2|non_booth|Leaderboard_&_Rules|button_click|Player_List|My_Rank_Button";
 
                     var buildLeaderboard = () => {
-                      console.log("currentUserLiquid: ", currentUserLiquid);
-                      console.log("currentUser: ", currentUser);
+                 //     console.log("currentUser: ", currentUserLiquid);
                       var usersObject = {};
                       for (let user of users) {
                         usersObject[user.userId] = user;
                       }
 
                       var orderedUserList = [];
-
                       for (let player of playerStats) {
                         if (player.userId === currentUserLiquid.userId && !usersObject[player.userId]) {
                           let user = {
@@ -975,7 +1018,7 @@
                           orderedUserList.push(user);
                           if (orderedUserList.length === Object.keys(usersObject).length) break;
                         } else if (usersObject[player.userId] || player.userId === currentUser.userId) {
-                          if (usersObject[player.userId].userGroups.filter((group) => group.name === "leaderboard_OPTOUT").length > 0) {
+                          if (usersObject[player.userId].userGroups.filter((group) => group.name.toLowerCase() === "leaderboard_optout").length > 0) {
                             continue;
                           }
                           if (usersObject[player.userId].hideProfilePrivacyOptOut === false) {
@@ -1048,6 +1091,7 @@
 
                         let name = clone.getElementById("player-name");
                         name.innerHTML = usersObject[player.userId].firstName + " " + usersObject[player.userId].lastname;
+                        name.setAttribute('data-id', player.userId);
 
                         if (usersObject[player.userId].contactInfoCompany) {
                           let company = clone.getElementById("player-company");
@@ -1062,21 +1106,13 @@
                     }
 
                     var calculatePoints = (player) => {
+
                       const offset = leaderBoardOffSet(player.userId);
 
-                      const points = (player.minutesWatched * 50)
+                      return leaderPoints = (player.minutesWatched * 50)
                         + (player.landingPageVisits * 25)
                         + (player.landingPageClicks * 40)
-                        + (player.quizzesTaken * 200);
-
-                      const boardPoints = points - offset;
-
-                      if (boardPoints) {
-                        return boardPoints;
-                      }
-
-                      return 0;
-
+                        - offset;
                     }
 
                     var leaderBoardOffSet = (playerId) => {
@@ -1087,7 +1123,7 @@
                         },
                         {
                           "id": "561ec7a8-c7c6-4ad6-8379-1c648efab55b",
-                          "points": "168115"
+                          "points": "171610"
                         },
                         {
                           "id": "9a4d721a-2113-43cb-b00d-6c87cb3bd099",
@@ -19611,8 +19647,8 @@
                         }
                       ]
                       const user = userBasePoints.filter(item => {
-                        return item.id = playerId;
-                      });
+                        return item.id === playerId;
+                      })[0];
 
                       if (user) {
                         return user.points;
@@ -19735,6 +19771,13 @@
                       }
                     }
                   </style>
+
+
+                  <!--  SNIPPET CONTENT END  -->
+                  <!-- ********************* -->
+                  <!-- ********************* -->
+                  <!-- ********************* -->
+                </div>
 
               </inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
