@@ -286,7 +286,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="9242278e-2ce4-4b9a-bac2-560b914b27e5"><style>img:after {
+              <inferno-snippet-content id="fc390903-dff9-43da-af7b-733baaf0c734"><style>img:after {
     content: none;
 }
 img.actionable:hover {
@@ -369,6 +369,13 @@ img.actionable:hover {
     display: block;
     height: 50vmin;
     margin: 5vh auto 0;
+}
+.inferno-generated-booth-external-overlay img {
+    max-width: 80vmin;
+    max-height: 50vmin;
+    display: block;
+    margin: 5vh auto 0;
+    object-fit: contain;
 }
 .inferno-generated-booth-show {
     display: block !important;
@@ -531,6 +538,14 @@ img.actionable:hover {
 }
 
 .inferno-generated-booth.disable-rack .inferno-generated-booth-resources {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-plants .inferno-generated-booth-plant {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-furniture .inferno-generated-booth-chairs {
     display: none !important;
 }
 
@@ -1007,9 +1022,18 @@ var _lastScrollEl;
 function init() {
   // Make sure all overlays are reset
   $(landingPageEl).find(".inferno-generated-booth-show").removeClass("inferno-generated-booth-show");
+
+  // Activate click track landing
+  setTimeout(function() {
+    var e = document.createEvent("MouseEvents");
+    e.initEvent("mouseup", true, true);
+    if (landingPageEl.querySelector('.page_load')) {
+      landingPageEl.querySelector('.page_load').dispatchEvent(e);
+    }
+  }, 250);
 }
 
-function toggleOverlay(show, typeClass, src) { 
+function toggleOverlay(show, typeClass, src, isInternalImage) { 
   $(landingPageEl).find('.inferno-generated-booth-info-overlay').removeClass('inferno-generated-booth-show');
   $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay').removeClass('inferno-generated-booth-show'); 
   $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay-done').removeClass('inferno-generated-booth-show');
@@ -1033,6 +1057,7 @@ function toggleOverlay(show, typeClass, src) {
   else { 
     var bodyEl = $('html,body'); 
     var layoutEl = $('.layout-fixed'); 
+    var previewEl = $('.booth-final-review-content');
     var docEl = $(document); 
 
     if (bodyEl.scrollTop() >0) {
@@ -1044,6 +1069,11 @@ function toggleOverlay(show, typeClass, src) {
       _lastScrollPos = docEl.scrollTop(); 
       _lastScrollEl = docEl; 
       docEl.scrollTop(0); 
+    }
+    else if (previewEl && previewEl.scrollTop() > 0) {
+      _lastScrollPos = previewEl.scrollTop();
+      _lastScrollEl = previewEl;
+      previewEl.scrollTop(0);
     } 
     else { 
       _lastScrollPos =layoutEl.scrollTop();
@@ -1055,56 +1085,50 @@ function toggleOverlay(show, typeClass, src) {
     $(elTwo).addClass('inferno-generated-booth-show'); 
 
     if (typeClass === 'inferno-generated-booth-video-overlay') { 
-      console.log('append iframe');
-      console.log(src); 
       $(elTwo).append("<iframe src='/embed/" + src + "' scrolling='no' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
     } 
 
     if (typeClass === 'inferno-generated-booth-external-overlay') { 
-      console.log('append external iframe'); 
-      console.log(src); 
-      $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
+      if (isInternalImage) {
+        $(elTwo).append("<img src='" + src + "' alt='external image'/>");
+      }
+      else {
+        $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
+      } 
     } 
   } 
 }
 
 $(document).ready(init);</script><div class="inferno-generated-booth-container">
-  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');"></div>
-  <div class="inferno-generated-booth" data-booth-id="medium" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');">
+  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://boothgenerator.nextechar.com/_assets/future-lobby.jpg');"></div>
+  <div class="inferno-generated-booth disable-avatars disable-plants disable-furniture" data-booth-id="medium" style="background-image: url('https://boothgenerator.nextechar.com/_assets/future-lobby.jpg');">
       <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Booth_background.png">
-      <div class="inferno-generated-booth-top-banner"><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-top-banner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-top-banner.png" alt="inferno-booth-udf-top-banner"></div>
-      <div class="inferno-generated-booth-backdrop"><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-backdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-backdrop.png" alt="inferno-booth-udf-backdrop"></div>
-      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources"><li id="booth_DRVInstituteofManagement_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>DRV Institute of Management Logo</h4></li></ul></div>
-      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png" alt="Video Holder"><video id="booth_DRVInstituteofManagement_ViewVideoOverlayvideo-0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '86c8c913-4490-4a63-a98d-e2a8a4fd16f2')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/video-0.mp4"></video></div>
+      <div class="inferno-generated-booth-top-banner"><a href="https://www.masonvitamins.com/" target="_blank"><img id="xtrackx|2|booth|booth_masonvitaminsinc|image_click|booth|infernoboothudftopbanner" class="inferno-booth-udf-top-banner actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-top-banner.jpg" alt="inferno-booth-udf-top-banner"></a></div>
+      <div class="inferno-generated-booth-backdrop"><a href="https://www.masonvitamins.com/" target="_blank"><img id="xtrackx|2|booth|booth_masonvitaminsinc|image_click|booth|infernoboothudfbackdrop" class="inferno-booth-udf-backdrop actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-backdrop.jpg" alt="inferno-booth-udf-backdrop"></a></div>
+      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources "><li id="xtrackx|2|booth|booth_masonvitaminsinc|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Wellness Guide</h4></li><li id="xtrackx|2|booth|booth_masonvitaminsinc|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Beauty Guide</h4></li></ul></div>
+      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png" alt="Video Holder"><video id="xtrackx|2|booth|booth_masonvitaminsinc|view_video|booth|video0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '2b4af3a6-3588-40d6-b5c2-f8e966c7c32c')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/video-0.mp4"></video></div>
       <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png" alt="Plant">
       <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Presenter_Accent.png" alt="Woman">
-      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png" alt="Podium "><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-podium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-podium.png" alt="inferno-booth-udf-podium"></div>
-      <div class="inferno-generated-booth-banner-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner One "><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-banner-one" class="inferno-booth-udf-banner-one" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-banner-one.png" alt="inferno-booth-udf-banner-one"></div>
-      <div class="inferno-generated-booth-banner-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner Two"><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-banner-two" onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-banner-two_clickResource_4.pdf')" class="inferno-booth-udf-banner-two actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-banner-two.png" alt="inferno-booth-udf-banner-two"></div>
+      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png" alt="Podium "><a href="https://www.masonvitamins.com/" target="_blank"><img id="xtrackx|2|booth|booth_masonvitaminsinc|image_click|booth|infernoboothudfpodium" class="inferno-booth-udf-podium actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-podium.jpg" alt="inferno-booth-udf-podium"></a></div>
+      <div class="inferno-generated-booth-banner-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner One "><a href="https://www.masonvitamins.com/" target="_blank"><img id="xtrackx|2|booth|booth_masonvitaminsinc|image_click|booth|infernoboothudfbannerone" class="inferno-booth-udf-banner-one actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-banner-one.jpg" alt="inferno-booth-udf-banner-one"></a></div>
+      <div class="inferno-generated-booth-banner-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner Two"><a href="https://www.masonvitamins.com/" target="_blank"><img id="xtrackx|2|booth|booth_masonvitaminsinc|image_click|booth|infernoboothudfbannertwo" class="inferno-booth-udf-banner-two actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-banner-two.jpg" alt="inferno-booth-udf-banner-two"></a></div>
       <img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_HightopTable_Accent.png" alt="Chairs">
     </div>
-<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=drvinstituteofmanagement-316&chatroomname=drvinstituteofmanagement"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-medium"><li id="booth_DRVInstituteofManagement_ViewInfoOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="booth_DRVInstituteofManagement_DownloadContactInfo" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li>
+<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=masonvitaminsinc-316&chatroomname=masonvitaminsinc"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-medium" style="background-color: #FFD100"><li id="xtrackx|2|booth|booth_masonvitaminsinc|view_info_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="xtrackx|2|booth|booth_masonvitaminsinc|download_contact_info|menu" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li><li><a id="xtrackx|2|booth|booth_masonvitaminsinc|open_meeting_link|menu|httpsteamsmicrosoftcomlmeetupjoin193a402a1508faf8464d8f36e966b1cc613540threadtacv21611868500814context7b22tid223a22267562045d7a4190aaf0d967f10f3169222c22oid223a22f762db1940fe49afbaafbcb46b8f8360227d" href="https://teams.microsoft.com/l/meetup-join/19%3a402a1508faf8464d8f36e966b1cc6135%40thread.tacv2/1611868500814?context=%7b%22Tid%22%3a%2226756204-5d7a-4190-aaf0-d967f10f3169%22%2c%22Oid%22%3a%22f762db19-40fe-49af-baaf-bcb46b8f8360%22%7d" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a></li>
 
-                <li><a id="booth_DRVInstituteofManagement_DownloadMeetingInfo" href="https://calendly.com/d/dtrk-hkjn/drv-institute-of-management-meeting" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a></li>
+                <li><a id="xtrackx|2|booth|booth_masonvitaminsinc|open_calendar_link|menu|calendlycomdorismason15min" href="https://calendly.com/dorismason/15min" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png" alt="calendar"> Calendar</a></li>
 
-                <!-- UNCOMMENT FOR CALENDAR LINK <li><a id='booth_DRVInstituteofManagement_ViewCalendar' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> --><li id="booth_DRVInstituteofManagement_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>We are global business experts providing expertise & practical
-strategies to help business owners grow. We have a wealth of hands on
-experience in the management field. We teach the relevant
-managerial skills you need to manage your business effectively and
-succeed. Our areas of expertise include customer service training,
-business consulting & coaching, helping entrepreneurs start/relocate
-companies in Florida and how to expand internationally, food safety &
-sanitation, and employee training. We are a team of business
-practitioners (managers) and education professionals with graduate degrees and over 20 years of experience.
-</p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources"><li><a target="_blank" id="booth_DRVInstituteofManagement_DownloadResource_1" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/DRVBrochureFLpdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>DRV Institute of Management Logo</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Are you ready to start a business in Florida or relocate, expand your existing business to Florida? Then, contact me for a complimentary 20-minute consultation on Zoom or over the phone, whichever is more convenient for you! 
-Did you know that customer service is an essential tool you can use in your company to increase sales? For the last 20 years, I’ve been certifying, teaching, and training many business owners and students from different countries. Today, I would like to offer you my services so that you too can benefit from increasing sales and performance in your company through customer service. It is the most important thing you can have in your company if you want to succeed and keep your customers returning for repeat business!
-Dario Vasquez, D.B.A. 
-Founder & President of DRV Institute of Management 
+                <li id="xtrackx|2|booth|booth_masonvitaminsinc|view_resources_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li id="xtrackx|2|booth|booth_masonvitaminsinc|view_fishbowl_prompt|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>About Mason Vitamins
+Quality You Can Trust since 1967
 
-Contact me for your business consulting and training needs! 
-Email: dario@drvinstitute.com 
-Mobile: +1 (954) 534-1813
-</h3><button class="inferno-confirm-btn" id="booth_DRVInstituteofManagement_FishBowlClick" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-company-logo.png"></div></inferno-snippet-content>
+Our Story
+It all started in 1967 with a vision to manufacture high quality products and maintain the best customer service. Our business began in local drugstores, and since then we have expanded our market presence and gained consumer acceptance worldwide. 
+
+We know your family’s health is your number one priority, therefore, over the years we have added over 300 vitamins and supplements to our line to fit your health needs and support your lifestyle.
+
+Our Commitment
+We are committed to our products and your well-being. As part of our mission, we strive to provide the best products for sustaining a healthy lifestyle by using the highest quality ingredients that meet regulatory requirements.</p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources "><li><a target="_blank" id="xtrackx|2|booth|booth_masonvitaminsinc|view_resource|resource_overlay|wellnessguide" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/WellnessGuideImagepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>Wellness Guide</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_masonvitaminsinc|view_resource|resource_overlay|beautyguide" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/Brochure2BeautyGuidepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-2.jpg" alt=" resource thumbnail"><h4>Beauty Guide</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_masonvitaminsinc|view_resource|resource_overlay|masonnutrifaxes" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/MasonNutrifaxesimagepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-3.jpg" alt=" resource thumbnail"><h4>Mason Nutrifaxes</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_masonvitaminsinc|view_resource|resource_overlay|videoloopingproducts" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/VideoLoopingProductsmp4.mp4"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-4.jpg" alt=" resource thumbnail"><h4>Video looping products</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_masonvitaminsinc|view_resource|resource_overlay|videomasonvitamins" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/VideoMasonVitamins1mp4.mp4"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-resource-thumb-5.jpg" alt=" resource thumbnail"><h4>Video Mason Vitamins</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Want to learn more about Mason Vitamins? 
+Drop your information here and we will reach out soon!</h3><button class="inferno-confirm-btn" id="xtrackx|2|booth|booth_masonvitaminsinc|fishbowl_confirm_click|fishbowl_prompt" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button id="xtrackx|2|booth|booth_masonvitaminsinc|fishbowl_cancel_click|fishbowl_prompt" class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/MasonVitaminsInc_1611950105533/inferno-booth-udf-company-logo.jpg"></div><div id="xtrackx|2|booth|booth_masonvitaminsinc|page_load|" class="page_load"></div></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->

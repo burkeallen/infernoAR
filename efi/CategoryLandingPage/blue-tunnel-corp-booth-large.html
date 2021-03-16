@@ -286,7 +286,7 @@
               <!-- ********************* -->
               <!-- ********************* -->
               <!-- SNIPPET CONTENT START -->
-              <inferno-snippet-content id="9242278e-2ce4-4b9a-bac2-560b914b27e5"><style>img:after {
+              <inferno-snippet-content id="41d0debd-0b4f-4769-bca4-0f15751d439c"><style>img:after {
     content: none;
 }
 img.actionable:hover {
@@ -369,6 +369,13 @@ img.actionable:hover {
     display: block;
     height: 50vmin;
     margin: 5vh auto 0;
+}
+.inferno-generated-booth-external-overlay img {
+    max-width: 80vmin;
+    max-height: 50vmin;
+    display: block;
+    margin: 5vh auto 0;
+    object-fit: contain;
 }
 .inferno-generated-booth-show {
     display: block !important;
@@ -531,6 +538,14 @@ img.actionable:hover {
 }
 
 .inferno-generated-booth.disable-rack .inferno-generated-booth-resources {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-plants .inferno-generated-booth-plant {
+    display: none !important;
+}
+
+.inferno-generated-booth.disable-furniture .inferno-generated-booth-chairs {
     display: none !important;
 }
 
@@ -1007,9 +1022,18 @@ var _lastScrollEl;
 function init() {
   // Make sure all overlays are reset
   $(landingPageEl).find(".inferno-generated-booth-show").removeClass("inferno-generated-booth-show");
+
+  // Activate click track landing
+  setTimeout(function() {
+    var e = document.createEvent("MouseEvents");
+    e.initEvent("mouseup", true, true);
+    if (landingPageEl.querySelector('.page_load')) {
+      landingPageEl.querySelector('.page_load').dispatchEvent(e);
+    }
+  }, 250);
 }
 
-function toggleOverlay(show, typeClass, src) { 
+function toggleOverlay(show, typeClass, src, isInternalImage) { 
   $(landingPageEl).find('.inferno-generated-booth-info-overlay').removeClass('inferno-generated-booth-show');
   $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay').removeClass('inferno-generated-booth-show'); 
   $(landingPageEl).find('.inferno-generated-booth-fish-bowl-overlay-done').removeClass('inferno-generated-booth-show');
@@ -1033,6 +1057,7 @@ function toggleOverlay(show, typeClass, src) {
   else { 
     var bodyEl = $('html,body'); 
     var layoutEl = $('.layout-fixed'); 
+    var previewEl = $('.booth-final-review-content');
     var docEl = $(document); 
 
     if (bodyEl.scrollTop() >0) {
@@ -1044,6 +1069,11 @@ function toggleOverlay(show, typeClass, src) {
       _lastScrollPos = docEl.scrollTop(); 
       _lastScrollEl = docEl; 
       docEl.scrollTop(0); 
+    }
+    else if (previewEl && previewEl.scrollTop() > 0) {
+      _lastScrollPos = previewEl.scrollTop();
+      _lastScrollEl = previewEl;
+      previewEl.scrollTop(0);
     } 
     else { 
       _lastScrollPos =layoutEl.scrollTop();
@@ -1055,56 +1085,51 @@ function toggleOverlay(show, typeClass, src) {
     $(elTwo).addClass('inferno-generated-booth-show'); 
 
     if (typeClass === 'inferno-generated-booth-video-overlay') { 
-      console.log('append iframe');
-      console.log(src); 
       $(elTwo).append("<iframe src='/embed/" + src + "' scrolling='no' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
     } 
 
     if (typeClass === 'inferno-generated-booth-external-overlay') { 
-      console.log('append external iframe'); 
-      console.log(src); 
-      $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>"); 
+      if (isInternalImage) {
+        $(elTwo).append("<img src='" + src + "' alt='external image'/>");
+      }
+      else {
+        $(elTwo).append("<iframe src='" + src + "' scrolling='yes' frameborder='0' allowfullscreen='true' webkitallowfullscreen='true' mozallowfullscreen='true'></iframe>");
+      } 
     } 
   } 
 }
 
 $(document).ready(init);</script><div class="inferno-generated-booth-container">
-  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');"></div>
-  <div class="inferno-generated-booth" data-booth-id="medium" style="background-image: url('https://boothgenerator.nextechar.com/_assets/cityscape-1.jpg');">
-      <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Booth_background.png">
-      <div class="inferno-generated-booth-top-banner"><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-top-banner" class="inferno-booth-udf-top-banner" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-top-banner.png" alt="inferno-booth-udf-top-banner"></div>
-      <div class="inferno-generated-booth-backdrop"><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-backdrop" class="inferno-booth-udf-backdrop" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-backdrop.png" alt="inferno-booth-udf-backdrop"></div>
-      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_2Magazine_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources"><li id="booth_DRVInstituteofManagement_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>DRV Institute of Management Logo</h4></li></ul></div>
-      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_TV_Accent.png" alt="Video Holder"><video id="booth_DRVInstituteofManagement_ViewVideoOverlayvideo-0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '86c8c913-4490-4a63-a98d-e2a8a4fd16f2')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/video-0.mp4"></video></div>
-      <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Plant_Booth_Accent.png" alt="Plant">
-      <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Presenter_Accent.png" alt="Woman">
-      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_Podium_Accent.png" alt="Podium "><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-podium" class="inferno-booth-udf-podium" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-podium.png" alt="inferno-booth-udf-podium"></div>
-      <div class="inferno-generated-booth-banner-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner One "><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-banner-one" class="inferno-booth-udf-banner-one" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-banner-one.png" alt="inferno-booth-udf-banner-one"></div>
-      <div class="inferno-generated-booth-banner-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_PullUpBanner_Accent.png" alt="Banner Two"><img id="booth_DRVInstituteofManagement_ClickImage_inferno-booth-udf-banner-two" onclick="toggleOverlay(true, 'inferno-generated-booth-external-overlay', 'https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-banner-two_clickResource_4.pdf')" class="inferno-booth-udf-banner-two actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-banner-two.png" alt="inferno-booth-udf-banner-two"></div>
-      <img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/medium/Medium_HightopTable_Accent.png" alt="Chairs">
-    </div>
-<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=drvinstituteofmanagement-316&chatroomname=drvinstituteofmanagement"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-medium"><li id="booth_DRVInstituteofManagement_ViewInfoOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="booth_DRVInstituteofManagement_DownloadContactInfo" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li>
-
-                <li><a id="booth_DRVInstituteofManagement_DownloadMeetingInfo" href="https://calendly.com/d/dtrk-hkjn/drv-institute-of-management-meeting" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png" alt="meeting"> LiveMeeting</a></li>
-
-                <!-- UNCOMMENT FOR CALENDAR LINK <li><a id='booth_DRVInstituteofManagement_ViewCalendar' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> --><li id="booth_DRVInstituteofManagement_ViewResourcesOverlay" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>We are global business experts providing expertise & practical
-strategies to help business owners grow. We have a wealth of hands on
-experience in the management field. We teach the relevant
-managerial skills you need to manage your business effectively and
-succeed. Our areas of expertise include customer service training,
-business consulting & coaching, helping entrepreneurs start/relocate
-companies in Florida and how to expand internationally, food safety &
-sanitation, and employee training. We are a team of business
-practitioners (managers) and education professionals with graduate degrees and over 20 years of experience.
-</p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources"><li><a target="_blank" id="booth_DRVInstituteofManagement_DownloadResource_1" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/DRVBrochureFLpdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-resource-thumb-1.jpg" alt=" resource thumbnail"><h4>DRV Institute of Management Logo</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>Are you ready to start a business in Florida or relocate, expand your existing business to Florida? Then, contact me for a complimentary 20-minute consultation on Zoom or over the phone, whichever is more convenient for you! 
-Did you know that customer service is an essential tool you can use in your company to increase sales? For the last 20 years, I’ve been certifying, teaching, and training many business owners and students from different countries. Today, I would like to offer you my services so that you too can benefit from increasing sales and performance in your company through customer service. It is the most important thing you can have in your company if you want to succeed and keep your customers returning for repeat business!
-Dario Vasquez, D.B.A. 
-Founder & President of DRV Institute of Management 
-
-Contact me for your business consulting and training needs! 
-Email: dario@drvinstitute.com 
-Mobile: +1 (954) 534-1813
-</h3><button class="inferno-confirm-btn" id="booth_DRVInstituteofManagement_FishBowlClick" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/DRVInstituteofManagement_1608609738690/inferno-booth-udf-company-logo.png"></div></inferno-snippet-content>
+  <div class="inferno-generated-booth-bg-blur-img" style="background-image: url('https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-custom-bg-image.jpg');"></div>
+  <div class="inferno-generated-booth" data-booth-id="large" style="background-image: url('https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-custom-bg-image.jpg');">
+      <img class="inferno-generated-booth-bg" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Main_Booth.png">
+      <div class="inferno-generated-booth-top-banner"><a href="https://bluetunnel.io" target="_blank"><img id="xtrackx|2|booth|booth_bluetunnelcorp|image_click|booth|infernoboothudftopbanner" class="inferno-booth-udf-top-banner actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-top-banner.jpg" alt="inferno-booth-udf-top-banner"></a></div>
+      <div class="inferno-generated-booth-backdrop"><a href="https://bluetunnel.io" target="_blank"><img id="xtrackx|2|booth|booth_bluetunnelcorp|image_click|booth|infernoboothudfbackdrop" class="inferno-booth-udf-backdrop actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-backdrop.jpg" alt="inferno-booth-udf-backdrop"></a></div>
+      <div class="inferno-generated-booth-resources"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Documents_Wall_Booth_Accent.png" alt="Resource Image"><ul class="inferno-booth-udf-resources list-view"><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-1.png" alt=" resource thumbnail"><h4>Blue Tunnel Brochure</h4></li><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-2.png" alt=" resource thumbnail"><h4>TechnoAware Video Analysis</h4></li><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-3.png" alt=" resource thumbnail"><h4>Success Cases</h4></li><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_resources_overlay|booth" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-4.png" alt=" resource thumbnail"><h4>Ateas VMS</h4></li></ul></div>
+      <div class="inferno-generated-booth-video-one"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Front_Video_Screen_Booth_Accent.png" alt="Video Holder"><video id="xtrackx|2|booth|booth_bluetunnelcorp|view_video|booth|video0" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', '222bf4c0-f4e5-4044-b17d-08488bbe143d')" muted autoplay loop class="video-video-0" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/video-0.mp4"></video></div>
+      <img class="inferno-generated-booth-plant" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Plant_Booth_Accent.png" alt="Plant">
+      <img class="inferno-generated-booth-podium-woman" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Woman2Asian_Booth_Accent.png" alt="Woman">
+      <div class="inferno-generated-booth-podium"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Podium_Booth_Accent.png" alt="Podium "><a href="https://bluetunnel.io" target="_blank"><img id="xtrackx|2|booth|booth_bluetunnelcorp|image_click|booth|infernoboothudfpodium" class="inferno-booth-udf-podium actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-podium.jpg" alt="inferno-booth-udf-podium"></a></div>
+      <div class="inferno-generated-booth-tall-banner"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Pullup_Banner_Booth_Accent.png" alt="Tall Banner "><a href="https://bluetunnel.io/btc_web_en/portfolio_en.html" target="_blank"><img id="xtrackx|2|booth|booth_bluetunnelcorp|image_click|booth|infernoboothudftallbanner" class="inferno-booth-udf-tall-banner actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-tall-banner.jpg" alt="inferno-booth-udf-tall-banner"></a></div>
+      <img class="inferno-generated-booth-chairs" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Table_Chairs_Booth_Accent.png" alt="Chairs">
+      <div class="inferno-generated-booth-video-two"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_TV_backwall.png" alt="Video Two Holder"><video id="xtrackx|2|booth|booth_bluetunnelcorp|view_video|booth|video1" onclick="toggleOverlay(true, 'inferno-generated-booth-video-overlay', 'e32c0e8d-d1ef-4e38-ba9c-a55b20e44ac5')" muted autoplay loop class="video-video-1" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/video-1.mp4"></video></div>
+      <div class="inferno-generated-booth-short-banner"><img src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Video_Stand_Booth_Accent.png" alt="Short Banner"><a href="https://bluetunnel.io/btc_web_en/verticals_en.html" target="_blank"><img id="xtrackx|2|booth|booth_bluetunnelcorp|image_click|booth|infernoboothudfshortbanner" class="inferno-booth-udf-short-banner actionable" src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-short-banner.jpg" alt="inferno-booth-udf-short-banner"></a></div>
+      <img class="inferno-generated-booth-video-woman" src="https://boothgenerator.nextechar.com/_assets/booths/large/Large_Woman1_Booth_Accent.png" alt="Woman">
+  </div>
+<div class="inferno-generated-booth-right"> <!-- UNCOMMENT FOR QR <div class='inferno-generated-booth-qr'><div class='inferno-booth-qr-img'><img src='QR CODE IMAGE HERE' alt='QR Code'></div><h1>Scan for ScreenAR</h1></div> --> <div class="inferno-generated-booth-chat"><iframe src="https://jolokia.com/chatiframe.html?fullname=${firstName}%20${lastName}&chatroomid=bluetunnelcorp&chatroomname=bluetunnelcorp"></iframe><h1>Chat</h1></div></div></div><ul class="inferno-generated-booth-menu with-chat booth-large" style="background-color: #001964"><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_info_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-info-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/info_white.png" alt="info"> Info</li><li><a id="xtrackx|2|booth|booth_bluetunnelcorp|download_contact_info|menu" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-contact-info.pdf" target="_blank"><img src="https://boothgenerator.nextechar.com/_assets/icons/message-circle_white.png" alt="contact"> Contact</a></li><!-- UNCOMMENT FOR MEETING LINK <li><a id='xtrackx|2|booth|booth_bluetunnelcorp|open_meeting_link|menu|sanitizedmeetinglink' href='MEETING LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/monitor_white.png' alt='meeting' /> LiveMeeting</a></li> --><!-- UNCOMMENT FOR CALENDAR LINK <li><a id='xtrackx|2|booth|booth_bluetunnelcorp|open_calendar_link|menu|sanitizedcalendarlink' href='CALENDAR LINK GOES HERE' target='_blank'><img src='https://boothgenerator.nextechar.com/_assets/icons/calendar_white.png' alt='calendar' /> Calendar</a></li> --><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_resources_overlay|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-resources-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/download_white.png" alt="resources"> Resources</li><li id="xtrackx|2|booth|booth_bluetunnelcorp|view_fishbowl_prompt|menu" onclick="toggleOverlay(true, 'inferno-generated-booth-fish-bowl-overlay')"><img src="https://boothgenerator.nextechar.com/_assets/icons/bowl_white.png" alt="fish bowl"> I was here!</li></ul><div class="inferno-generated-booth-overlay-holder"><div class="inferno-generated-booth-overlay"><button class="inferno-generated-booth-close-btn" onclick="toggleOverlay()"><img src="https://boothgenerator.nextechar.com/_assets/icons/x.png" alt="close"></button><div class="inferno-generated-booth-info-overlay"><h2>Information</h2><p>BLUE TUNNEL is a US Cyber Security Solutions company to provide the best awesome technologies' products and services to improve security and life quality for people.
+TARGET
+To generate efficient results using Artificial Intelligence (Video Analysis Deep Learning) software over surveillance cameras images to detect and notify events automatically and in real time.
+PORTFOLIO
+The Largest World Portfolio. More than 30 Artificial Intelligence modules for different applications.
+VERTICALS
+Smart Cities, Industry & Critical Infrastructures, Agro Business, Retail & Marketing, Bank & Finance, Transportation, Public Facilities & Buildings, Residential Areas, Environment & Territory.
+HIGHLIGHTS
+SMOKE&FIRE: The only in the world able to detect smoke and/or fire with only one IP camera.
+SLIP&FALL: Detect person slipping and/or falling on risk situation.
+FACE RECOGNITION: Recognizes person, ethnicity, gender, age, etc.
+COVID-19: A package to check people's compliance with the pandemic rules. </p></div><div class="inferno-generated-booth-resources-overlay"><h2>Resources</h2><ul class="inferno-booth-udf-resources list-view"><li><a target="_blank" id="xtrackx|2|booth|booth_bluetunnelcorp|view_resource|resource_overlay|bluetunnelbrochure" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/TechnoAwareBTCBrochurepdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-1.png" alt=" resource thumbnail"><h4>Blue Tunnel Brochure</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_bluetunnelcorp|view_resource|resource_overlay|technoawarevideoanalysis" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/tawds5enspecspdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-2.png" alt=" resource thumbnail"><h4>TechnoAware Video Analysis</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_bluetunnelcorp|view_resource|resource_overlay|successcases" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/tawsuccesscases2019enpdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-3.png" alt=" resource thumbnail"><h4>Success Cases</h4></a></li><li><a target="_blank" id="xtrackx|2|booth|booth_bluetunnelcorp|view_resource|resource_overlay|ateasvms" href="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/ateasaisheetenpdf.pdf"><img src="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-resource-thumb-4.png" alt=" resource thumbnail"><h4>Ateas VMS</h4></a></li></ul></div><div class="inferno-generated-booth-video-overlay"></div><div class="inferno-generated-booth-external-overlay"></div><div class="inferno-generated-booth-fish-bowl-overlay"><h2>Contact share</h2><h3>
+Thanks for coming! We are at your complete disposal to book a call or virtual meeting. Let’s to know us better.
+Tell us what you are looking for and we can suggest the right solution for your need. Do not hesitate to contact us. Take our contact in the “contact” icon or by the QR Code.</h3><button class="inferno-confirm-btn" id="xtrackx|2|booth|booth_bluetunnelcorp|fishbowl_confirm_click|fishbowl_prompt" onclick="toggleOverlay(true,'inferno-generated-booth-fish-bowl-overlay-done')">Yes, share my contact information.</button><button id="xtrackx|2|booth|booth_bluetunnelcorp|fishbowl_cancel_click|fishbowl_prompt" class="inferno-cancel-btn" onclick="toggleOverlay()">Cancel</button></div><div class="inferno-generated-booth-fish-bowl-overlay-done"><h2>Thank you!</h2><h3>Your contact information has been shared.</h3></div></div></div><div style="display:none" data-company-logo="https://nextech-booths.s3-us-west-2.amazonaws.com/booths/BLUETUNNELCorp_1611068485261/inferno-booth-udf-company-logo.png"></div><div id="xtrackx|2|booth|booth_bluetunnelcorp|page_load|" class="page_load"></div></inferno-snippet-content>
               <!--  SNIPPET CONTENT END  -->
               <!-- ********************* -->
               <!-- ********************* -->

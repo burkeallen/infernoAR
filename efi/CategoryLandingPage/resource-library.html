@@ -520,7 +520,7 @@
                       {% for category in event.Categories %}
                       {% assign cat = category.Id | downcase %}
                       {% if cat == currentCat %}
-                      <div class="on-demand" id="{{event.Id}}" onclick="toggleModal(this)">
+                      <div class="on-demand" id="xtrackx|2|non_booth|resource_library|button_click|{{event.Id}}" data-id="{{event.Id}}" onclick="toggleModal(this)">
                         <img class="on-demand-thumb" title="{{event.Name}}" src="{{event.VideoThumbnail}}">
                         <div class="on-demand-title">{{event.Name}}</div>
                       </div>
@@ -567,7 +567,7 @@
                     const clone = temp.content.cloneNode(true);
                     video = clone.querySelector('iframe');
                     video.id = 'video-frame';
-                    video.src = '/embed/' + vidElement.id;
+                    video.src = '/embed/' + vidElement.getAttribute('data-id');
                     videoWrapper.appendChild(clone);
                     landingPageEl.querySelector('#open-modal').classList.toggle('open');
                     scrollTop();
@@ -604,18 +604,6 @@
                       "Type": "pdf",
                       "Thumb": "Speaker Bios_Thumbnail.jpeg"
                     },
-                    // {
-                    //   "Title": "We are Enterprise Florida",
-                    //   "FileName": "/embed/75b8504c-01af-4a76-b741-b20723babbf0",
-                    //   "Type": "video",
-                    //   "Thumb": ""
-                    // },
-                    // {
-                    //   "Title": "Florida, the Power of Place",
-                    //   "FileName": "Florida_The Power of Place_Resource",
-                    //   "Type": "video",
-                    //   "Thumb": ""
-                    // },
                   ]
 
                   function buildLibrary() {
