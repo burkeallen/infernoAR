@@ -536,7 +536,7 @@
 									<style>
 										.overlay {
 											position: absolute;
-											top: 0;
+											top: -4%;
 											left: 0;
 											width: 100%;
 											height: 100%;
@@ -852,10 +852,7 @@
 												<div class="close-button" onclick="hideVideo()">X</div>
 
 												<div class="video-container">
-													<iframe
-														frameborder="0"
-														src="/embed/b9c91412-545c-4974-8aa4-70bf96c6e3b1"
-													></iframe>
+													<iframe frameborder="0"></iframe>
 												</div>
 											</div>
 										</div>
@@ -907,10 +904,12 @@
 											);
 										}
 
-										function displayWelcomeVideo() {
+										function displayWelcomeVideo(video) {
 											const template = landingPageEl.querySelector("#template");
 											const clone = template.content.cloneNode(true);
 											const content = landingPageEl.querySelector(".content");
+											const iframe = clone.querySelector("iframe");
+											iframe.setAttribute("src", "/embed/" + video);
 											content.appendChild(clone);
 										}
 
@@ -930,17 +929,17 @@
 
 												if (eventDay === currentDay) {
 													if (currentTime > eventTime) {
-														checkDay(event.name);
+														checkDay(event.name, event.id);
 													}
 												}
 											});
 										}
 
-										function checkDay(day) {
+										function checkDay(day, video) {
 											var visited = window.localStorage.getItem(day);
 
 											if (!visited) {
-												displayWelcomeVideo();
+												displayWelcomeVideo(video);
 												window.localStorage.setItem(day, true);
 											}
 										}
