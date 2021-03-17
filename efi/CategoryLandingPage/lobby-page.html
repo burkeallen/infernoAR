@@ -550,6 +550,7 @@
 										.overlay-content {
 											width: 50%;
 											min-width: 35rem;
+											height: fit-content;
 											display: flex;
 											flex-direction: column;
 											justify-content: space-between;
@@ -562,24 +563,21 @@
 											font-size: 2.2rem;
 											font-weight: bold;
 										}
-										.video-box {
-											width: 100%;
-											border-radius: 35px;
-										}
 
 										.video-container {
 											position: relative;
+											width: 100%;
 											padding-bottom: 56.5%; /* 16:9 */
 											height: 0;
 										}
 
-										.video-box iframe {
+										.video-container iframe {
 											position: absolute;
 											top: 0;
 											left: 0;
 											width: 100%;
 											height: 100%;
-											border-radius: 30px;
+											overflow: hidden;
 										}
 									</style>
 
@@ -852,12 +850,12 @@
 										<div class="overlay">
 											<div class="overlay-content">
 												<div class="close-button" onclick="hideVideo()">X</div>
-												<div class="video-box">
-													<div class="video-container">
-														<iframe
-															src="/embed/b9c91412-545c-4974-8aa4-70bf96c6e3b1"
-														></iframe>
-													</div>
+
+												<div class="video-container">
+													<iframe
+														frameborder="0"
+														src="/embed/b9c91412-545c-4974-8aa4-70bf96c6e3b1"
+													></iframe>
 												</div>
 											</div>
 										</div>
@@ -880,16 +878,13 @@
 										function checkVisited() {
 											var currentTime = new Date();
 
-											var dayOne = new Date("2021-03-16T09:00:00.000-06:00");
-											var dayTwo = new Date("2021-03-17T09:00:00.000-06:00");
-											var dayThree = newDate("2021-03-15T16:30:00.000-06:00");
+											var dayOne = new Date("2021-03-16T09:00:00.000-04:00");
+											var dayTwo = new Date("2021-03-17T09:00:00.000-04:00");
 
 											if (currentTime > dayTwo) {
 												checkDay("dayTwoVisited");
 											} else if (currentTime > dayOne) {
 												checkDay("dayOneVisited");
-											} else {
-												checkDay("dayThreeVisited");
 											}
 										}
 
