@@ -387,6 +387,11 @@
 											right: 4rem;
 											width: 23%;
 											height: fit-content;
+											cursor: pointer;
+										}
+
+										.video-player:hover {
+											filter: brightness(70%);
 										}
 
 										.video-player img {
@@ -793,7 +798,7 @@
 											);
 											if (video) {
 												video.remove();
-												embedVideo();
+												setThumbnail();
 											} else {
 												const content = landingPageEl.querySelector(".content");
 												const template = landingPageEl.querySelector(
@@ -820,24 +825,17 @@
 											}
 										}
 
-										function embedVideo() {
+										function setThumbnail() {
 											const videoPlayer = landingPageEl.querySelector(
 												".video-player"
 											);
 											const image = videoPlayer.querySelector("img");
-											if (image) image.remove();
-											const container = document.createElement("div");
-											container.setAttribute("class", "aspect-ratio");
-
-											const video = document.createElement("iframe");
-											video.setAttribute(
+											image.setAttribute(
 												"src",
-												"embed/91feb1c7-d2e0-4091-85b0-3599b336c16d"
+												"https://origin.infernocore.jolokia.com/thumb/clients/7677dbee-7c9f-44a1-58fb-08d89deeb4a2/91feb1c7-d2e0-4091-85b0-3599b336c16d/results/encoder/c380d050-b31f-4e5c-86da-c411eb223e61/91feb1c7-d2e0-4091-85b0-3599b336_adaptive6.mp4/thumb-10000.jpg"
 											);
-											video.setAttribute("class", "video-iframe");
-											video.setAttribute("frameborder", "0");
-											container.appendChild(video);
-											videoPlayer.appendChild(container);
+
+											image.setAttribute("onclick", "toggleVideo()");
 										}
 										//Check whether to play video automatically if first time logging in
 										function checkVisited() {
@@ -845,7 +843,7 @@
 
 											if (visited) {
 												//display thumbnail
-												embedVideo();
+												setThumbnail();
 											} else {
 												//display video
 
