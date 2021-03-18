@@ -404,8 +404,8 @@
 											width: 23%;
 											height: fit-content;
 											cursor: pointer;
-                      border: 3px solid #000;
-                      background-color: #000;
+											border: 3px solid #000;
+											background-color: #000;
 										}
 
 										.video-player:hover {
@@ -791,7 +791,7 @@
 									</div>
 
 									<template id="pdf-popup">
-										<div class="overlay pdf-overlay" onclick="togglePdf()">
+										<div class="overlay pdf-overlay" onclick="closePdf()">
 											<div class="wrapper">
 												<div class="close-btn" onclick="togglePdf()">X</div>
 												<iframe class="pdf-iframe"></iframe>
@@ -799,7 +799,7 @@
 										</div>
 									</template>
 									<template id="video-popup">
-										<div class="overlay video-overlay" onclick="toggleVideo()">
+										<div class="overlay video-overlay" onclick="closeVideo()">
 											<div class="wrapper">
 												<div class="close-btn" onclick="toggleVideo()">X</div>
 												<div class="video-box">
@@ -833,6 +833,14 @@
 											}
 										}
 
+										function closeVideo() {
+											const video = landingPageEl.querySelector(
+												".video-overlay"
+											);
+											video.remove();
+											setThumbnail();
+										}
+
 										function togglePdf(src) {
 											const pdf = landingPageEl.querySelector(".pdf-overlay");
 											if (pdf) {
@@ -847,6 +855,11 @@
 												if (src) iframe.src = src;
 												content.appendChild(clone);
 											}
+										}
+
+										function closePdf() {
+											const pdf = landingPageEl.querySelector(".pdf-overlay");
+											pdf.remove();
 										}
 
 										function setThumbnail() {
